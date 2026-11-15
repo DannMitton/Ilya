@@ -1105,7 +1105,7 @@ import LoupeHeader from '$lib/score/LoupeHeader.svelte';
 		   measure's meter as its own panel (N.138), so the page's copy comes off
 		   the clone. Found on the walk of N.139 r1: Sunless 01 m. 2 showed the
 		   panel's 12/8 and then a clipped copy of the page's. DESK DEFAULT. */
-		for (const el of clone.querySelectorAll('[data-meter]')) el.remove();
+		for (const el of clone.querySelectorAll('[data-meter], [data-key-change]')) el.remove();
 		/* THE LOUPE MARKS THE TAKEN NOTE THE WAY THE PAGE DOES, N.113a, ruled by
 		   Dann 2026-09-07 from his walk of `e1bcb67`: "a box on the notehead".
 		   His words on what it replaced: the bar drawn after the notehead is

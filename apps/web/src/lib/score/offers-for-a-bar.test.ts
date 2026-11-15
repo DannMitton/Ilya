@@ -144,7 +144,7 @@ describe('what Ilya can offer for a bar to confirm', () => {
 		expect(o.rejected.join(' ')).toContain('event 4 (quarter) already carries a tuplet');
 	});
 
-	it('(i) a bar whose only fix is a grace note: nothing, because the parser drops the grace note', async () => {
+	it('(i) a bar whose only fix is a grace note: nothing, because a grace note is kept in its own list and never enters the sum of the bar', async () => {
 		// Three quarters and a 32nd, plus a grace note whose length would be the "fix".
 		// Divisions 8: a quarter is 8, a 32nd is 1.
 		const note = (type: string, d: number, grace = false) =>

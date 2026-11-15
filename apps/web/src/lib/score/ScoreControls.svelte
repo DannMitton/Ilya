@@ -6,9 +6,11 @@
 	import type { Language } from '$lib/i18n';
 	import ClefControls from './ClefControls.svelte';
 	import TimeSignatureControls from './TimeSignatureControls.svelte';
+	import KeySignatureCard from './KeySignatureCard.svelte';
 
 	let { language, pages }: { language: Language; pages: readonly string[] | null } = $props();
 </script>
 
 <ClefControls {language} {pages} />
 <TimeSignatureControls {language} {pages} />
+<KeySignatureCard {language} />

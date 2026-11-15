@@ -324,13 +324,14 @@ export function countCrossings(midis: readonly number[], edge: number): number {
 	return n;
 }
 
-function rangeRow(line: Array<VocalLineEvent & { pitch: Pitch }>, profile: VoiceProfileSnapshot): RangeRow {
+/** N.187: a grace note is a sung pitch that takes no time, so it widens the compass and nothing time-weighted. */
+function rangeRow(line: Array<VocalLineEvent & { pitch: Pitch }>, profile: VoiceProfileSnapshot, graces: readonly Pitch[] = []): RangeRow {
 	let low: Pitch | null = null;
 	let high: Pitch | null = null;
-	for (const ev of line) {
-		const m = pitchToMidi(ev.pitch);
-		if (!low || m < pitchToMidi(low)) low = ev.pitch;
-		if (!high || m > pitchToMidi(high)) high = ev.pitch;
+	for (const pitch of [...line.map((ev) => ev.pitch), ...graces]) {
+		const m = pitchToMidi(pitch);
+		if (!low || m < pitchToMidi(low)) low = pitch;
+		if (!high || m > pitchToMidi(high)) high = pitch;
 	}
 	const measured = low && high ? { low, high } : null;
 	const reference = profile.range ? { low: profile.range.lowest, high: profile.range.highest } : null;
@@ -606,6 +607,12 @@ export function tessituragram(
 		spellings.set(midi, known);
 		written.set(spellKey(ev.pitch), (written.get(spellKey(ev.pitch)) ?? 0) + fractionToNumber(soundingFromNotation(ev.duration)) * 8);
 	}
+	// N.187: a compass end that is a grace note can be spelled (spelling only: no time is added to any figure).
+	for (const { pitch } of score.graceNotes ?? []) {
+		const known = spellings.get(pitchToMidi(pitch)) ?? [];
+		if (!known.some((p) => p.step === pitch.step && (p.alter ?? 0) === (pitch.alter ?? 0) && p.octave === pitch.octave)) known.push(pitch);
+		spellings.set(pitchToMidi(pitch), known);
+	}
 
 	const rows: FigureRow[] = [...totals.byPitch]
 		.map(([midi, q]) => {
@@ -753,7 +760,7 @@ export function formatTempo(tempo: TempoResolution, language: 'en' | 'fr'): stri
 /** Build page one's model from seams that already exist. Pure and deterministic. */
 export function buildInsights({ analysisScore, profile, watchList, vowelForEvent, analyzed, readingScore }: InsightsInputs): InsightsModel {
 	const line = pitched(analysisScore);
-	const range = rangeRow(line, profile);
+	const range = rangeRow(line, profile, (analysisScore.graceNotes ?? []).map((g) => g.pitch));
 	const crossings = crossingsRow(line, profile);
 	const tessitura = tessituraRow(analysisScore, line, profile);
 	const gated =

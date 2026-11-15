@@ -36,6 +36,7 @@
 import type {
 	ClefChange,
 	Fraction,
+	GraceNote,
 	KeySignatureChange,
 	Measure,
 	MetricModulation,
@@ -46,7 +47,7 @@ import type {
 	TimeSignatureChange,
 	VocalLineEvent,
 } from '@ilya/score-parser';
-import { applyCorrections, type CorrectionMap, type NoteCorrection } from './correction';
+import { applyCorrections, madeGrace, type CorrectionMap, type NoteCorrection } from './correction';
 
 /** The two layer fields of one record, as the layer reads them. */
 export interface LayerMarks {
@@ -131,9 +132,10 @@ export function effectiveMarks(
 	read: VocalLineEvent[],
 	line: VocalLineEvent[],
 	map: CorrectionMap,
+	graceNotes?: readonly GraceNote[],
 ): Map<string, LayerMarks> {
 	const out = new Map<string, LayerMarks>();
-	const carries = Object.values(map).some((c) => c.deleted && hasLayer(c));
+	const carries = Object.values(map).some((c) => (c.deleted || madeGrace(c)) && hasLayer(c));
 	if (!carries) {
 		for (const ev of line) {
 			const m = marksOf(map[ev.id]);
@@ -144,16 +146,17 @@ export function effectiveMarks(
 	// The line with the deletions undone, so a deleted entry's place is known.
 	const kept: CorrectionMap = {};
 	for (const [id, c] of Object.entries(map)) {
-		if (c.deleted) {
-			const { deleted: _d, ...rest } = c;
+		if (c.deleted || madeGrace(c)) {
+			// N.187: a note made a grace note leaves the line as a deleted one does, so its marks pass on the same way.
+			const { deleted: _d, grace: _g, ...rest } = c;
 			kept[id] = rest;
 		} else kept[id] = c;
 	}
-	const full = applyCorrections(read, kept);
+	const full = applyCorrections(read, kept, graceNotes);
 	let pending: LayerMarks = {};
 	for (const ev of full) {
 		const c = map[ev.id];
-		if (c?.deleted) {
+		if (c?.deleted || madeGrace(c)) {
 			pending = { ...pending, ...marksOf(c) };
 			continue;
 		}
@@ -223,7 +226,7 @@ export function rebar(score: ParsedScore, line: VocalLineEvent[], map: Correctio
 			applied: false,
 		};
 	}
-	const marks = effectiveMarks(score.vocalLine, line, map);
+	const marks = effectiveMarks(score.vocalLine, line, map, score.graceNotes);
 	if (marks.size === 0) {
 		return {
 			score: line === score.vocalLine ? score : { ...score, vocalLine: line },

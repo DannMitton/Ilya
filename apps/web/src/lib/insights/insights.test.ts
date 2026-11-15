@@ -110,6 +110,23 @@ const profile: VoiceProfileSnapshot = {
 	passaggio: { primo: P('F', 3), secondo: P('D', 4) },
 };
 
+describe('N.187 a grace note is a sung pitch that takes no time', () => {
+	const withGrace = (pitch: Pitch): ParsedScore => ({ ...score(line, 3), graceNotes: [{ id: 'j~g1', principalId: 'j', pitch, base: 'eighth' }] } as ParsedScore);
+
+	it('moves the compass and the first note outside the typed range', () => {
+		const m = buildInsights({ analysisScore: withGrace(P('A', 4)), profile, watchList: null });
+		expect(m.range.measured).toEqual({ low: P('A', 2), high: P('A', 4) });
+		expect(m.range.flag).not.toBe('contained');
+	});
+
+	it('leaves the crossings and the tessitura as they were, to the figure', () => {
+		const plain = buildInsights({ analysisScore: score(line, 3), profile, watchList: null });
+		const graced = buildInsights({ analysisScore: withGrace(P('A', 4)), profile, watchList: null });
+		expect(graced.crossings).toEqual(plain.crossings);
+		expect(graced.tessitura).toEqual(plain.tessitura);
+	});
+});
+
 describe('N.127 the fit table', () => {
 	it('reads the compass off the sung line, spelled as the score spells it', () => {
 		const m = buildInsights({ analysisScore: score(line, 3), profile, watchList: null });

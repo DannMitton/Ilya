@@ -192,12 +192,12 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	import {
 		beatOfEntry,
 		measureFill,
-		positionsInMeasure,
 	} from '$lib/score/entry';
 	import { currentPitch, orphanIds } from '$lib/score/correction';
 	import { BarLayer } from '$lib/score/bar-layer';
 	import { barlineUi } from '$lib/score/barline-ui';
 	import { tsUi } from '$lib/score/time-signature-ui.svelte';
+	import { keyUi } from '$lib/score/key-signature-ui.svelte';
 	import { stackLabel } from '$lib/score/undo-history.svelte';
 	import { createUndoHistory } from '$lib/score/undo-wiring.svelte';
 	import { breakControl } from '$lib/text/break-here';
@@ -215,7 +215,9 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	import type { PageProvenance } from '$lib/library/types';
 	import { storedWithReading, type KeptReading } from '$lib/omr/restore';
 	import type { Vowel, CalibratedFormant, VoiceCharacteristics } from '$lib/voice/engine/types';
-	import type { IntakeAnswers } from '@ilya/score-parser';
+	import { isReadScan, type IntakeAnswers } from '@ilya/score-parser';
+	import { lineWithGraceStops } from '$lib/score/grace-layer';
+	import { heldMeasureReads } from '$lib/score/held-measure';
 	// Engine connectivity check
 	const engineReady = typeof transcribeWord === 'function';
 	// Dictionary loading state
@@ -795,7 +797,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	   uses, each a `$derived` read of the class, so what depends on them
 	   re-runs exactly when it did before the move. */
 	const loupePanel = new LoupePanel(() => stationCursor.leaveGap());
-	const stationCursor = new CorrectionCursor(() => correctedLine, () => loupePanel.caretsShown);
+	const stationCursor = new CorrectionCursor(() => stopLine, () => loupePanel.caretsShown);
 	const selectedEventId = $derived(stationCursor.selectedEventId);
 	const gapAfter = $derived(stationCursor.gapAfter);
 	const cursor = $derived(stationCursor.cursor);
@@ -814,6 +816,8 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	   and `currentDuration` read the same answer off either line. */
 	const layer = new BarLayer({ score: () => ingestedScore?.result.score ?? null, corrections: () => doc.corrections });
 	const correctedLine = $derived(layer.line);
+	/** N.187: the line with each grace note standing in it as a stop, for the cursor, the carets, and the verbs (`grace-layer.ts`). */
+	const stopLine = $derived(lineWithGraceStops(layer.line, layer.score?.graceNotes));
 
 	const correctedCount = $derived(Object.keys(doc.corrections).length);
 
@@ -822,7 +826,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	   read, not about the correction, and storing it would freeze an answer the
 	   next re-read may change. Counted against the line as the READER produced
 	   it, so a note the singer deleted by hand is not counted as lost. */
-	const orphanCount = $derived(orphanIds(readLine, doc.corrections).length);
+	const orphanCount = $derived(orphanIds(readLine, doc.corrections, (ingestedScore?.result.score.graceNotes ?? []).map((g) => g.id)).length);
 
 	/** The clef in force, for the middle-line arrival where a part is empty. */
 	const scoreClef = $derived(
@@ -875,8 +879,11 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	const verbs = new CorrectionVerbs({
 		corrections: () => doc.corrections,
 		setCorrections: (next) => (doc.corrections = next),
-		line: () => correctedLine,
+		line: () => stopLine,
 		readLine: () => readLine,
+		graces: () => layer.score?.graceNotes,
+		readGraces: () => ingestedScore?.result.score.graceNotes,
+		slashDefault: () => (ingestedScore ? isReadScan(ingestedScore.result.score) : false),
 		cursor: () => cursor,
 		inGap: () => inGap,
 		selectedEventId: () => selectedEventId,
@@ -889,9 +896,11 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		pushUndo,
 		barlineVerb: (id) => layer.barlineVerb(id),
 		bars: () => layer.bars,
+		keySignature: { held: (id) => layer.heldKey(id), write: (id, spec) => layer.keyWrite(id, spec) },
 		timeSignature: { held: (id) => layer.heldBar(id), write: (id, sig, through, rebar) => layer.signatureWrite(id, sig, through, rebar) },
 	});
 	barlineUi.attach({ mode: () => verbs.barline?.kind ?? null, act: () => verbs.handleBarline() });
+	keyUi.attach({ held: (id) => (id ? layer.heldKey(id) : verbs.heldKey), commit: (spec, id) => verbs.handleKeySignature(spec, id) });
 	tsUi.attach({ held: (id) => (id ? layer.heldBar(id) : verbs.heldBar), commit: (sig, through, id, rebar) => verbs.handleTimeSignature(sig, through, id, rebar) });
 	const selectedEvent = $derived(verbs.selectedEvent);
 	const armedBase = $derived(verbs.armedBase);
@@ -957,6 +966,8 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		dotCell: handleDotCell,
 		deleteNote: handleDeleteNote,
 		durationCell: handleDurationCell,
+		grace: verbs.handleGrace,
+		graceAdd: verbs.handleGraceAdd,
 		dismiss: dismissLoupe,
 	});
 
@@ -1052,34 +1063,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		return layer.labelOf(i);
 	});
 
-	const heldMeasureIds = $derived(
-		heldMeasureIndex === null
-			? []
-			: correctedLine
-					.filter((ev) => ev.type !== 'rest' && ev.measureIndex === heldMeasureIndex)
-					.map((ev) => ev.id),
-	);
-
-	/** The next measure that carries an entry, which bounds the loupe's window. */
-	const nextMeasureIds = $derived.by(() => {
-		if (heldMeasureIndex === null) return [];
-		const later = correctedLine.filter(
-			(ev) => ev.type !== 'rest' && ev.measureIndex > heldMeasureIndex,
-		);
-		const first = later[0];
-		if (!first) return [];
-		return later.filter((ev) => ev.measureIndex === first.measureIndex).map((ev) => ev.id);
-	});
-
-	/* N.92, THE CARETS. The held measure's own run of places, head gap to tail
-	   gap, off `correctedLine` rather than the read: a hand-entered note is a
-	   place the bar can stand exactly as a read one is. `positionsInMeasure`
-	   is `positions` itself, sliced; the loupe draws one caret per `gap` this
-	   carries and reads every `entry` it carries as already spoken for by its
-	   own hit rectangle. */
-	const heldMeasurePositions = $derived(
-		heldMeasureIndex === null ? [] : positionsInMeasure(correctedLine, heldMeasureIndex),
-	);
+	const held = $derived(heldMeasureReads(stopLine, heldMeasureIndex)); // `held-measure.ts`: the held bar's ids, the next bar's, and its carets
 
 	/* THE READOUT, `F3 · quarter · на`. Every part of it is a string the app
 	   already ships, and a part that has no value is absent rather than
@@ -1301,7 +1285,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		   that measure, this one". */
 		if (loupeOpen) {
 			if (isPhone) return;
-			if ((e.target as Element | null)?.closest?.('.loupe, .surface, [data-ts-overlay]')) return;
+			if ((e.target as Element | null)?.closest?.('.loupe, .surface, [data-ts-overlay], [data-ks-overlay]')) return;
 			/* THE PLACING CLICK'S OWN TARGET IS GONE BY THE TIME IT GETS HERE,
 			   and that is why the loupe closed on every placement Dann walked on
 			   `d5a49ff`. RULED BY DANN 2026-09-07: "I expected to see the change
@@ -4488,6 +4472,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 			onrest={handleRest}
 			ontie={handleTie}
 			onrestore={handleRestoreNote}
+			grace={verbs.graceCells}
 			{restoreAvailable}
 			placed={placedSlotCount}
 			total={slotQueue.length}
@@ -4506,8 +4491,8 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		measureLabel={heldMeasureLabel}
 		noteLine={loupeNoteLine}
 		measureIndex={heldMeasureIndex}
-		ownIds={heldMeasureIds}
-		nextIds={nextMeasureIds}
+		ownIds={held.ids}
+		nextIds={held.nextIds}
 		{selectedEventId} {gapAfter}
 		revision={pageRevision}
 		bundle={loupeBundle}
@@ -4515,7 +4500,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		fill={heldFill}
 		meter={heldMeter}
 		onpick={handleLoupePick}
-		positions={heldMeasurePositions}
+		positions={held.positions}
 		onpickgap={handleLoupePickGap}
 		dockInset={loupeInset}
 		{isPhone}

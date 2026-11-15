@@ -16,7 +16,7 @@
    tree on 2026-11-02 (consistency batch 2). Paths are under `apps/web/src/`;
    a prefix is listed with the files that use it most and its key count.
 
-   This file holds 1,246 keys.
+   This file holds 1,269 keys.
 
    A key built at run time (`watch.key.letter.${letter}`, `comment.<register>.<part>`)
    has no literal reference, so a search for the whole key can come back empty
@@ -33,7 +33,7 @@
    collide.        5  routes/+page.svelte
    comment.       40  the note comments: lib/insights/singer-blocks.ts, lib/insights/comment-text.ts, lib/analysis/watchlist.ts
    console.        2  lib/components/Drawer/AnalysisStation.svelte
-   correct.       32  lib/score/CorrectionSurface.svelte, lib/score/correction.ts, lib/score/correction-verbs.svelte.ts
+   correct.       47  lib/score/CorrectionSurface.svelte, lib/score/correction.ts, lib/score/correction-verbs.svelte.ts
    cosmetic.      15  lib/components/Drawer/NotationFields.svelte
    dict.           3  lib/components/Paper/TitlePage.svelte, lib/components/Drawer/AnalysisStation.svelte, lib/one-action.ts
    display.        5  no literal consumer found
@@ -49,7 +49,7 @@
    intake.        54  lib/components/Drawer/IntakePanel.svelte, lib/components/Drawer/IntakeViews.svelte, lib/components/Drawer/PoemLibraryCard.svelte, lib/text/input-line.ts, lib/components/Drawer/bandState.ts
    key.           23  the key ruler: lib/markup/transposition-ruler.ts, lib/markup/TranspositionDock.svelte, lib/markup/TranspositionRuler.svelte
    legend.         7  the legends: lib/provenance.ts, lib/markup/MarkupPane.svelte, lib/tempo/TempoReceipt.svelte
-   loupe.        121  lib/score/CorrectionSurface.svelte, lib/score/Loupe.svelte, lib/score/correction-verbs.svelte.ts, routes/+page.svelte
+   loupe.        129  lib/score/CorrectionSurface.svelte, lib/score/Loupe.svelte, lib/score/correction-verbs.svelte.ts, routes/+page.svelte
    lyrics.         3  lib/components/Drawer/IntakeViews.svelte (the receipt line and the tap note of the join of Poem to a scan's Lyrics)
    meta.          15  lib/components/Drawer/MetadataFields.svelte, lib/components/Paper/TitleHeader.svelte
    notation.      16  lib/score/CorrectionSurface.svelte, lib/components/Drawer/bandState.ts, routes/+page.svelte
@@ -559,6 +559,32 @@ const strings: Record<string, Record<Language, string>> = {
 	// three, and none of them carries behaviour here.
 	'loupe.tuplet':                { en: 'Tuplet',                       fr: 'Nolet' },
 	'loupe.rest':                  { en: 'Rest',                         fr: 'Silence' },
+	/* ── N.187: grace notes in Corrections (cloud-lane-50). ratified on 2026-11-12 at 12:54 by Dann, English and French. One contiguous block. ── */
+	'loupe.grace':                 { en: 'Grace note',                   fr: 'Petite note' },
+	'correct.graceAdd':            { en: 'Add a grace note before the note that follows', fr: 'Ajouter une petite note avant la note qui suit' },
+	'correct.graceMake':           { en: 'Make this a grace note',       fr: 'Transformer cette note en petite note' },
+	'correct.graceFull':           { en: 'Make this a full note again',  fr: 'Redonner à cette note sa pleine valeur' },
+	'loupe.graceSlash':            { en: 'Slash',                        fr: 'Barre oblique' },
+	'correct.graceSlash':          { en: 'Add or remove the slash on this grace note', fr: 'Ajouter ou retirer la barre oblique de cette petite note' },
+	'loupe.undo.graceAdded':       { en: 'grace note added',             fr: 'petite note ajoutée' },
+	'loupe.undo.grace':            { en: 'grace note changed',           fr: 'petite note modifiée' },
+	'loupe.undo.graceSlash':       { en: 'slash changed',                fr: 'barre oblique modifiée' },
+	/* ── N.192: the key signature card in Corrections. ratified on 2026-11-12 at 12:54 by Dann, as the block above. ── */
+	'loupe.keySignature':          { en: 'Key signature',                fr: 'Armure' },
+	'correct.keyChange':           { en: 'Change the key from this bar', fr: 'Changer l’armure à partir de cette mesure' },
+	'correct.keyToNext':           { en: 'To the next key change',       fr: 'Jusqu’au prochain changement d’armure' },
+	'correct.keyToEnd':            { en: 'To the end of the song',       fr: 'Jusqu’à la fin du chant' },
+	'correct.keyFollow':           { en: 'The notes follow the new key', fr: 'Les notes suivent la nouvelle armure' },
+	'correct.keyFollowHelp':       { en: 'A note with no accidental of its own takes the new key’s sharp or flat. Turn this off to keep every pitch as it is.', fr: 'Une note sans altération propre prend le dièse ou le bémol de la nouvelle armure. Désactivez cette option pour garder chaque hauteur telle quelle.' },
+	// The fifteen signatures' labels, the wording the upload question used (ratified before; its keys were removed 2026-11-12 as dead, so the card has its own).
+	'correct.keyNone':             { en: 'No sharps or flats',           fr: 'Aucune altération' },
+	'correct.keySharp':            { en: '1 sharp',                      fr: '1 dièse' },
+	'correct.keySharps':           { en: '%s sharps',                    fr: '%s dièses' },
+	'correct.keyFlat':             { en: '1 flat',                       fr: '1 bémol' },
+	'correct.keyFlats':            { en: '%s flats',                     fr: '%s bémols' },
+	'correct.keyRemove':           { en: 'Remove this key change',       fr: 'Supprimer ce changement d’armure' },
+	'loupe.undo.keyChanged':       { en: 'key changed',                  fr: 'armure modifiée' },
+	'loupe.undo.keyRemoved':       { en: 'key change removed',           fr: 'changement d’armure supprimé' },
 	// ROW 133, ratified by Dann 2026-10-19 23:41 (`docs/sessions/ratified-loupe-dot-words_2026-10-19.md`):
 	// the loupe and a tempo chip name a dotted value in words, and a French rest by its own name.
 	// Whole phrases, not words assembled by grammar, so the French agreement stays as ratified.

@@ -33,6 +33,9 @@ export interface CorrectionKeysDeps {
 	dotCell: () => void;
 	deleteNote: () => void;
 	durationCell: (base: NoteBase) => void;
+	/** N.187: `;` is the Grace note cell; `/` adds a grace note immediately before the taken note. */
+	grace?: () => void;
+	graceAdd?: () => void;
 	dismiss: () => void;
 }
 
@@ -142,6 +145,14 @@ export function createCorrectionKeys(d: CorrectionKeysDeps): (e: KeyboardEvent) 
 				break;
 			case 'Escape':
 				d.dismiss();
+				break;
+			case ';':
+				if (!d.grace) return;
+				d.grace();
+				break;
+			case '/':
+				if (!d.graceAdd || d.inGap()) return;
+				d.graceAdd();
 				break;
 			default:
 				if (DIGIT_BASE[e.key]) d.durationCell(DIGIT_BASE[e.key]);

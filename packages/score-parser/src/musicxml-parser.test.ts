@@ -888,9 +888,11 @@ describe('MusicXmlScoreParser: supplied <note id> attributes (N.97b)', () => {
 		expect(r.score.vocalLine[1].tied).toEqual({ type: 'stop', partnerEventId: 'r0-100' });
 	});
 
-	it('ignores ids on grace notes and chord tones, which never become events', async () => {
-		// Both are skipped by `readNote`, so their ids are not on the vocal line
-		// and a duplicate among them costs the real notes nothing.
+	it('ignores ids on grace notes and chord tones: neither becomes a vocal line event', async () => {
+		// A chord tone is skipped by `readNote`; a grace note is kept in `graceNotes`
+		// under an id of its own (N.187), never its supplied one. Either way their
+		// ids are not on the vocal line and a duplicate among them costs the real
+		// notes nothing.
 		const grace = `<note id="dup"><grace/><pitch><step>D</step><octave>4</octave></pitch><voice>1</voice><type>eighth</type></note>`;
 		const chordTone = `<note id="dup"><chord/><pitch><step>E</step><octave>4</octave></pitch><duration>1</duration><voice>1</voice><type>quarter</type></note>`;
 		const r = await parser.parse(

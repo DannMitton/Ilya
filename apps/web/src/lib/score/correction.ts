@@ -29,6 +29,7 @@ import {
 	pitchToMidi,
 	spellPitch,
 	type Fraction,
+	type GraceNote,
 	type NoteBase,
 	type Pitch,
 	type SpellingContext,
@@ -130,7 +131,45 @@ export interface NoteCorrection {
 	 * entered-note records (`rebar-notes.ts`).
 	 */
 	timeSignature?: { beats: number; beatType: number; through: 'next' | 'end' };
+
+	/* ── GRACE NOTES (N.187) ──────────────────────────────────────────────
+	   One ADDITIVE field. A grace note is a sung pitch that takes no time and
+	   lives in `ParsedScore.graceNotes`, never in the line, so a correction
+	   that moves a note across that boundary has to be a record of its own. */
+
+	/**
+	 * `{ slash }`: this note is a grace note. On a read full note it is the
+	 * singer making a grace note of it (the scan read a grace note as a full
+	 * note): `applyCorrections` leaves it out of the line exactly as it leaves
+	 * out a deleted note, and `grace-layer.ts` puts it in the grace list. On a
+	 * hand-added entry it is the entry itself (`entered.after` the entry it
+	 * follows). On a read grace note it says whether the stroke is drawn.
+	 *
+	 * `'none'`: a grace note the reader found, made a full note again by the
+	 * singer: `applyCorrections` emits it into the line, before its principal,
+	 * with its own `base` as its duration.
+	 */
+	grace?: { slash: boolean } | 'none';
+
+	/* ── KEY CHANGES (N.192, step 6b) ─────────────────────────────────────
+	   One ADDITIVE field, a layer over the reading as the barline and the time
+	   signature are: the kept MusicXML is never touched. It sits on the ENTRY THAT
+	   OPENS THE BAR, applied by `key-signature.ts` where `BarLayer` builds the
+	   corrected score. */
+
+	/**
+	 * The key signature the singer set from the bar this entry opens. `through`
+	 * `'next'` runs to the next change of key (the reading's own or another of the
+	 * singer's); `'end'` runs to the end of the song. `notes` `'follow'` re-spells the
+	 * notes that sat on the old key's altered letters to the new key's (the scan's
+	 * case: the reader applied a misread signature); `'keep'` changes no pitch.
+	 * `'remove'` takes the bar back to the key before it, the notes following.
+	 */
+	keySignature?: { fifths: number; through: 'next' | 'end'; notes: 'follow' | 'keep' } | 'remove';
 }
+
+/** N.187: a correction that makes this (read or entered) note a grace note: it stands out of the line. */
+export const madeGrace = (c: NoteCorrection | undefined): boolean => !!c && c.grace !== undefined && c.grace !== 'none';
 
 /** Corrections by event id, the shape `PairingMap` already established. */
 export type CorrectionMap = Record<string, NoteCorrection>;
@@ -350,7 +389,9 @@ export function withCorrection(
 		entry.tied === undefined &&
 		entry.tuplet === undefined &&
 		entry.barline === undefined &&
-		entry.timeSignature === undefined
+		entry.timeSignature === undefined &&
+		entry.grace === undefined &&
+		entry.keySignature === undefined
 	) {
 		const { [id]: _dropped, ...rest } = next;
 		return rest;
@@ -370,12 +411,13 @@ export function clearCorrection(map: CorrectionMap, id: string): CorrectionMap {
 	const c = map[id];
 	if (!c) return map;
 	const { [id]: _dropped, ...rest } = map;
-	if (c.barline === undefined && c.timeSignature === undefined) return rest;
+	if (c.barline === undefined && c.timeSignature === undefined && c.keySignature === undefined) return rest;
 	return {
 		...rest,
 		[id]: {
 			...(c.barline !== undefined ? { barline: c.barline } : {}),
 			...(c.timeSignature !== undefined ? { timeSignature: c.timeSignature } : {}),
+			...(c.keySignature !== undefined ? { keySignature: c.keySignature } : {}),
 		},
 	};
 }
@@ -383,7 +425,7 @@ export function clearCorrection(map: CorrectionMap, id: string): CorrectionMap {
 /** Whether a record says anything about the NOTE, beyond the bar's own marks. */
 export function amendsNote(c: NoteCorrection | undefined): boolean {
 	if (!c) return false;
-	const { barline: _b, timeSignature: _t, ...rest } = c;
+	const { barline: _b, timeSignature: _t, keySignature: _k, ...rest } = c;
 	return Object.values(rest).some((v) => v !== undefined);
 }
 
@@ -407,9 +449,47 @@ export function amendsNote(c: NoteCorrection | undefined): boolean {
  */
 export function applyCorrections(
 	vocalLine: VocalLineEvent[],
-	map: CorrectionMap
+	map: CorrectionMap,
+	/** N.187: the read grace notes, so one the singer made a full note ('none') can enter the line before its principal. */
+	graceNotes?: readonly GraceNote[]
 ): VocalLineEvent[] {
 	if (Object.keys(map).length === 0) return vocalLine;
+
+	/* N.187. A read grace note made a full note takes its principal's place in
+	   the line, immediately before it (after it, for an after-grace). Where the
+	   principal is itself gone (deleted, or made a grace note) it passes to the
+	   next note that stands. */
+	const madeFull = new Map<string, { before: GraceNote[]; after: GraceNote[] }>();
+	for (const g of graceNotes ?? []) {
+		if (map[g.id]?.grace !== 'none' || map[g.id]?.deleted) continue;
+		const e = madeFull.get(g.principalId) ?? { before: [], after: [] };
+		(g.after ? e.after : e.before).push(g);
+		madeFull.set(g.principalId, e);
+	}
+	let carried: GraceNote[] = [];
+	const asEvent = (g: GraceNote, host: VocalLineEvent): VocalLineEvent => {
+		const c = map[g.id]!;
+		const base = c.base ?? g.base;
+		return {
+			id: g.id,
+			type: 'note',
+			measureIndex: host.measureIndex,
+			rhythmicPosition: { fraction: host.rhythmicPosition.fraction },
+			duration: { base, dots: c.dots ?? 0, fraction: durationFraction(base, c.dots ?? 0) },
+			pitch: c.pitch ?? g.pitch
+		};
+	};
+	const standsAsGrace = madeGrace;
+	/* An entry the singer made in the gap after a READ grace note hangs on that grace note's id, which is in no line: it
+	   stands where the grace note stands, before its principal (after it, for an after-grace), seated in the principal's bar. */
+	const readGraces = new Map<string, { before: GraceNote[]; after: GraceNote[] }>();
+	for (const g of graceNotes ?? []) {
+		if (map[g.id]?.deleted || map[g.id]?.grace === 'none') continue;
+		const e = readGraces.get(g.principalId) ?? { before: [], after: [] };
+		(g.after ? e.after : e.before).push(g);
+		readGraces.set(g.principalId, e);
+	}
+	const stubAt = (host: VocalLineEvent): VocalLineEvent => ({ ...host, duration: { ...host.duration, fraction: { numerator: 0, denominator: 1 } } });
 
 	/* N.92 slice 3. Hand-entered entries, gathered by the entry they follow so
 	   the walk below can emit each one in its place. A chain in one gap is
@@ -442,6 +522,11 @@ export function applyCorrections(
 		for (const id of ids) {
 			const c = map[id];
 			if (!c || c.deleted) continue;
+			// N.187: a hand-added grace note is not in the line; what hangs on it still is.
+			if (standsAsGrace(c)) {
+				emitEntered(id, anchor, depth + 1);
+				continue;
+			}
 			const ev = synthesize(id, c, anchor);
 			out.push(ev);
 			emitEntered(id, ev, depth + 1);
@@ -451,20 +536,32 @@ export function applyCorrections(
 	emitEntered(HEAD, null, 0);
 	for (const ev of vocalLine) {
 		const c = map[ev.id];
+		const standing = !c || !(c.deleted || standsAsGrace(c));
+		const mine = madeFull.get(ev.id);
+		if (standing) {
+			for (const g of [...carried, ...(mine?.before ?? [])]) out.push(asEvent(g, ev));
+			carried = [];
+			for (const g of readGraces.get(ev.id)?.before ?? []) emitEntered(g.id, stubAt(ev), 0);
+		} else if (mine) carried.push(...mine.before, ...mine.after);
 		if (!c) {
 			out.push(ev);
+			if (mine) for (const g of mine.after) out.push(asEvent(g, ev));
 			emitEntered(ev.id, ev, 0);
+			for (const g of readGraces.get(ev.id)?.after ?? []) emitEntered(g.id, ev, 0);
 			continue;
 		}
-		if (c.deleted) {
+		if (!standing) {
 			// The entries hung off a deleted one still stand: the singer deleted
 			// the reader's note, not their own work, and re-anchoring them keeps
-			// them in the line where they were entered.
+			// them in the line where they were entered. A note made a grace note
+			// (N.187) is left out the same way, and its entries stand too.
 			emitEntered(ev.id, ev, 0);
 			continue;
 		}
 		out.push(amend(ev, c));
+		if (mine) for (const g of mine.after) out.push(asEvent(g, ev));
 		emitEntered(ev.id, ev, 0);
+		for (const g of readGraces.get(ev.id)?.after ?? []) emitEntered(g.id, ev, 0);
 	}
 	return reflowOnsets(vocalLine, out, map);
 }
@@ -786,10 +883,11 @@ export function migrateCorrectionIds(map: CorrectionMap): CorrectionMap {
  * not reach a note. What it is not is a defect to fix by dropping the entry,
  * since the same bytes re-read may well bring the note back.
  */
-export function orphanIds(vocalLine: VocalLineEvent[], map: CorrectionMap): string[] {
+export function orphanIds(vocalLine: VocalLineEvent[], map: CorrectionMap, graceIds: readonly string[] = []): string[] {
 	const ids = Object.keys(map);
 	if (ids.length === 0) return [];
-	const live = new Set(vocalLine.map((ev) => ev.id));
+	// N.187: a read grace note's id is live (it is in `graceNotes`, not in the line).
+	const live = new Set([...vocalLine.map((ev) => ev.id), ...graceIds]);
 	/* N.92 slice 3. A HAND-ENTERED ENTRY IS NEVER IN THE READ, so measuring it
 	   against the read would report every one of them lost the moment it was
 	   entered. It is judged by its ANCHOR instead: an entry lands when the

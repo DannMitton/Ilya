@@ -19,6 +19,7 @@
  */
 
 export * from './types';
+export * from './grace';
 export * from './analysis-types';
 
 export { MnxScoreParser } from './mnx-parser';
@@ -218,3 +219,5 @@ export {
   type TempoLanguage,
 } from './tempo-lexicon';
 export * from './ring-geometry';
+export { isReadScan } from './printed-marks';
+export { keySignatureAlter } from './accidental-carry';
