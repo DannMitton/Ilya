@@ -100,3 +100,73 @@ The French has the copyright holder and the year ("© 2026 Dann Mitton") and the
 ### Nothing else needed before Step 1
 
 Nothing new is to be added to `static/`. No word of English or French is needed beyond the ratified strings in `OPEN.md` and the two prototypes. No stop.
+
+## Part 1: the component and its strings
+
+### What was built (all on `cloud-lane-57`)
+
+| file | what |
+|---|---|
+| `apps/web/src/lib/components/Welcome/WelcomeSheet.svelte` | the sheet: portaled `<div role="dialog" aria-modal>` over a scrim, sage head band, plate, text, fixed footer with Begin |
+| `apps/web/src/lib/components/Welcome/WelcomePlate.svelte` | the six images, drawn in code, as SVG layers under a 30-degree `clip-path` wipe |
+| `apps/web/src/lib/components/Welcome/welcome-plate.ts` | the plate's numbers: the vowel space from `computeZones({}, 'bass')`, `fullView`, `project`, `zoneColour`; the staff; the note; the icon |
+| `apps/web/src/lib/components/Welcome/welcome-motion.ts` | the schedule (WIPE 720, HOLD 380, FIRST 700, station map) and the reduced-motion plan |
+| `apps/web/src/lib/welcome-seen.ts` | the flag `ilya:welcomeSeen`, try/catch around the accessor, the read, and the write |
+| `apps/web/src/lib/language-switch.ts` | the language pill's rule, now read by `HeaderBar.svelte` and the sheet |
+| `apps/web/src/lib/i18n.ts` | 8 keys under `welcome.`; the index row; the total 1,270 to 1,278 |
+| `apps/web/src/routes/+page.svelte` | one import and one element, after `HeaderBar` (5508 to 5511 lines; ceiling 5534) |
+| `apps/web/playwright.config.ts`, `apps/web/e2e/returning-browser.storage.json` | the shared returning-browser state |
+| tests | `welcome-strings.test.ts`, `welcome-seen.test.ts`, `language-switch.test.ts`, `welcome-motion.test.ts`, `welcome-plate.test.ts`; `e2e/welcome-sheet.test.ts` (14), `e2e-phone/welcome-sheet.test.ts` (3) |
+
+### The brief's items, one by one
+
+1. **Dialog.** Built the way `KeySignatureCard.svelte` is (portal to `<body>`, scrim, `role="dialog"`, `aria-modal="true"`, `aria-labelledby` the title). Not a native `<dialog>` (the two `ENVIRONMENT.md` traps). Focus moves into the sheet and is trapped (a capture-phase Tab handler plus a `focusin` guard); Escape is stopped and does nothing. While open, `.app-shell` is `inert`, so nothing behind takes a key or a tap. The sheet is z-index 9400, over the install banner (9000) and the cards (9290, 9300). It never prints (`@media print { .overlay { display: none } }`, and a browser test emulates print). It does not delay the dictionary: a browser test shows the intake field enabling while the sheet is up.
+2. **Once per browser.** `ilya:welcomeSeen` = `"1"`, written by Begin. Read at component init (so a returning browser never builds the sheet and a first visit never flashes the app). Storage that throws on the accessor, the read, or the write: the sheet shows, Begin still closes it, no crash (unit tests with stores that throw; a browser test that makes the flag's reads and writes throw and asserts no page error). **Existing tests touched so far: none.** The browser tests start as a returning browser through `use.storageState` in `playwright.config.ts`, for both projects. The question of the two tests with their own contexts is settled in Part 2.
+3. **Language.** The head-band pill reads `languageSwitch(language)` (the same rule as the header's) and calls the page's `handleLanguageChange`. A browser test: it switches the sheet to French, stores `ilya:language` = `fr`, and switches back.
+4. **Strings.** Eight keys under `welcome.` (`band`, `title`, `lead`, `body`, `method`, `maker`, `madeIn`, `licence`), English and French, taken by script from the two prototypes. `welcome-strings.test.ts` pins every pair, and also reads the two prototype files and asserts each string is in them, the licence line first. **Begin reuses `calib.welcome.beginButton`** (en "Begin", fr "Commencer"); no `welcome.begin` was added. Stations reuse `tab.text`, `tab.markedScore`, `tab.insights`. The key index gained its row and the new total; `i18n-index.test.ts` passes.
+5. **The plate.** я in Source Serif 4 Bold; [ɑ] in Lato IPA; the eighth note on a staff in Bravura; the [ɑ] zone; the vowel space; the Илья icon of five equal stripes in the jewel tokens. **The vowel space is computed, not typed, and it reproduces the prototype:** a test reads the prototype's printed ellipses and asserts all ten centres and radii and the [ɑ] dot to a tenth of a unit, and every zone's opacity.
+6. **Motion.** The prototype's numbers, once, 5,350 ms to the last wipe's start and 6,070 ms to its end (the prototype's 700 ms first delay plus 250 ms after load). All text and Begin are usable from the first frame (browser test). `prefers-reduced-motion` shows the final state at once with `transition-duration: 0s` (browser test). The plate is `role="img"` named Илья; its layers and the station list are `aria-hidden`.
+7. **Phone.** The prototype's narrow layout at 700 px and under: plate 76 px beside the title, stations hidden, Begin full width in the footer, which does not scroll (browser test: scroll the body to its end, Begin has not moved).
+
+### Departures and observations, each for Dann or the desk
+
+1. **Bravura, against the engraving default.** `AGENTS.md` says Finale Maestro is the default music font for all renderings. The brief and the prototype name Bravura for this one glyph, and the brief is explicit, so Bravura is used. The file is already served (`static/fonts/bravura/Bravura.woff2`). If the plate's note should be Maestro's, it is a one-word change in `WelcomePlate.svelte` and in the pinned bounding box.
+2. **The glyph is `metNote8thUp`, not `note8thUp`.** U+E1D7 is SMuFL's metronome-mark eighth note (`score/correction.ts:201` and `:208`). The first constant I pinned was for the wrong glyph; the test that holds the constant to `bravura_metadata.json` caught it. Corrected: `glyphBBoxes.metNote8thUp`, NE [2.132, 2.784], SW [0, -0.564].
+3. **The note is not where the prototype put it: NOT ESTABLISHED which is wanted.** The brief says "centred by its bounding box". Centred that way, the glyph's left edge is at about x = 123.4 in the 300-unit box. The prototype has `x="134"`, which puts the notehead, not the whole glyph, near the middle. I followed the brief. The note therefore stands about 10 units left of the prototype's (visible in `desktop-en-mid-wipe.png` and `plate-five-images-and-icon.png`). I could not establish how 134 was derived. The choice is Dann's by eye: one number in `noteX()`.
+4. **Links open in a new tab.** The prototype's links are same-tab. A singer who follows one would leave the sheet unseen, so each link carries `target="_blank" rel="noopener"`, as `footer.attribution`'s do. No word changed; the test says so.
+5. **The shadow.** The prototype's tail layer is `0 20px 44px rgba(46,42,38,.16)`; the app's `--float-shadow` has `.07` there. I used the prototype's four layers literally (the prototype is the spec), so the sheet's shadow is a little heavier than the app's other floats.
+6. **The stations' resting grey `#B9B4AC` has no token.** I kept the literal with a comment. Every other prototype colour is a token of the same value (`--sage-head`, `--sage-wash`, `--sage-jewel`, `--sage-ink`, `--lavender-ink`, `--rose-ink`, `--drawer-bg`, `--paper-light`, `--ink-*`, `--cobalt-jewel`); a test checks the five stripe tokens against the prototype's hexes.
+7. **An accessibility fault in the prototype, not reproduced.** Its phone copy of the made-in and licence lines is `aria-hidden="true"`, and its desktop copy is `display: none` on the phone, so on a phone a screen reader would get neither. The sheet renders both copies without `aria-hidden`; `display: none` already removes the hidden one from the accessibility tree.
+8. **Focus lands on the sheet, not on Begin** (DESK DEFAULT, critique open item 6), so an Enter does not skip the reading. Tab reaches the language pill, the four links, then Begin.
+9. **Begin's key sits in the `calib.` prefix** (said in Part 0): changing the wizard's button changes this one.
+10. **A cold dev server is slow.** The first page load of a fresh `pnpm dev` took about 6 s to show the sheet, over an assertion's default 5 s. The sheet's own tests wait up to 45 s for the dialog; the existing tests already use long waits.
+11. **The new `welcome-plate.test.ts` imports `$lib/score/correction`** (for `LENGTH_CELLS`). It is a test under `components/`, which has no module, so the module ratchet does not apply.
+
+### The pictures (`docs/sessions/report-code-welcome-sheet-pictures/`, looked at one by one)
+
+Taken from the dev server with Playwright at `deviceScaleFactor: 2`, in this sandbox's Chromium, in English and in French. The mid-wipe frame is made repeatable by pausing the plate's `clip-path` transition at 360 ms of 720.
+
+| file | what I saw |
+|---|---|
+| `desktop-en-final.png`, `desktop-fr-final.png` (1280 x 800) | sage head band with WELCOME or BIENVENUE and the language pill; the icon at rest with TEXT, MELODY, INSIGHTS (TEXTE, CHANT, APERÇUS) all grey; the title; the care box with the bold last sentence; Grayson's line under the plate and the maker's line under the text; the footer with the made-in line, the flag, the licence line, and Begin or Commencer |
+| `desktop-en-mid-wipe.png`, `desktop-fr-mid-wipe.png` | the staff and the note half revealed along the diagonal (its fifth line still being drawn), MELODY or CHANT lit in lavender, text and Begin untouched |
+| `phone-en-final.png`, `phone-fr-final.png` (390 x 844) | plate 76 px beside the title, the care box, Grayson's and the maker's lines continuing under the fold, Begin or Commencer full width in the fixed footer |
+| `phone-en-mid-wipe.png`, `phone-fr-mid-wipe.png` | the same, the plate mid-turn on the note |
+| `plate-five-images-and-icon.png` | the plate alone: я, [ɑ], the note on a staff, the vowel space with the [ɑ] dot, the icon, and the icon again. **The fourth image, the enlarged [ɑ] zone, is not in this file:** my second capture's timing skipped it. I saw it in the first capture (a rose ellipse about 90 by 104 units with [ɑ] at its centre) but did not save that frame. |
+
+What the pictures do not show, so it is not claimed: the app behind the scrim at 1280 px is the narrow desk layout (the drawer is a bottom sheet below 1,400 px); nothing here is an iPhone or Safari render; and French and English were looked at in this sandbox's Chromium only.
+
+### The gates after Step 1
+
+| gate | baseline | now |
+|---|---|---|
+| 1 phonology | 462 passed (462) | 462 passed (462) |
+| 2 dictionary | 248 passed (248) | 248 passed (248) |
+| 3 web-check | 0 errors, 12 warnings, 5 files | found 0 errors and 12 warnings in 5 files |
+| 4 web-test | 5817 passed \| 1 skipped (5818) | **5863 passed \| 1 skipped (5864)**, 330 files (+46 tests, +5 files) |
+| 5 score-parser | 842 passed \| 5 skipped (847) | 842 passed \| 5 skipped (847) |
+| 6 blurb | 178 passed (178) | 178 passed (178) |
+| 7 integration | 159 passed (159) | 159 passed (159) |
+| 8 ratchets | OK | ratchets: OK. |
+
+Gate 4's new baseline for the ship script is therefore 5863 passed | 1 skipped (5864), if this lane is merged alone. The Playwright counts (the sheet's 14 and 3, and the full suites) are in Part 2.
