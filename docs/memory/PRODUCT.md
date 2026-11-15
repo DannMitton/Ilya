@@ -1271,3 +1271,7 @@ His words, transcribed as written: *"I feel like Ilya outght ot be able to reson
 4. **The voice type is scaffolding only** (12:34: *"Yes the voice type is scaffoldiong only."*): placeholders before the singer sings, and the drawn zones. Once the singer's own vowels exist, their voice is the reference.
 
 Related, same session: a sample the singer gives is real data and outranks Ilya's placeholders; Ilya is a tool, not an inviolable authority; a mismatched vowel is met once at the summary with keep or sing again, and is never reassigned (`OPEN.md`, N.199, 12:16 to 12:20). Consequence owed in code: the extractor measures without priors, and the plausibility guard stops demoting readings; Insights' use of "plausible or kept" readings changes with it and is measured before it ships.
+
+## THE PAGE IS THE FOCUS SURFACE; THE DRAWER HOLDS THE NECESSARY CONTROLS. Stated by Dann 2026-11-14 08:21
+
+His words, transcribed as written: *"The WYSIWYG is the focus surface, the Drawer are necessary controls."* Occasion (`INBOX.md`, 2026-11-14 08:21): the desk had offered a previous and next pair on the word stack, so that a singer could step through words without returning to the page; Dann: *"Each new word costs a trip back tot he page seems ok to me?"* The desk withdrew the offer. What it means for a design: a control that lets the singer work without looking at the page is weighed against this before it is offered. Not walked: whether the trip costs more on a phone. Homed here by the desk 2026-11-14 19:5x from the phone thread's record.
