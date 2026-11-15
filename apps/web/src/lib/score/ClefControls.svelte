@@ -36,6 +36,8 @@
 		top: number;
 		width: number;
 		height: number;
+		/** Px of the button's right side that a tap does not take (it lies over a note's hit area). */
+		clip?: number;
 	}
 
 	let anchors = $state<Anchor[]>([]);
@@ -56,7 +58,17 @@
 			const r = el.getBoundingClientRect();
 			const width = Math.max(r.width + 8, min);
 			const height = Math.max(r.height + 8, min);
-			return { left: r.left + r.width / 2 - width / 2, top: r.top + r.height / 2 - height / 2, width, height };
+			const left = r.left + r.width / 2 - width / 2;
+			/* ITS TAP AREA STOPS SHORT OF THE FIRST NOTE'S OWN HIT AREA (N.187): at phone width the 44 px floor reaches over the first note, or
+			   the grace note before it, of the system, and took its tap. The button keeps its ruled place and its 44 px box; only the part of it
+			   that lies over that hit area is clipped away (`clip-path` limits where a tap lands), never to less than 16 px (the time signature hit's own floor). */
+			let first = Infinity;
+			for (const h of el.ownerSVGElement?.querySelectorAll<SVGElement>('[data-hit]') ?? []) {
+				const b = h.getBoundingClientRect();
+				if (b.left > r.left + 4 && b.bottom > r.top && b.top < r.bottom) first = Math.min(first, b.left);
+			}
+			const clip = first - 2 - left < width ? width - Math.max(first - 2 - left, 16) : 0;
+			return { left, top: r.top + r.height / 2 - height / 2, width, height, clip };
 		});
 		// The chip recedes when page 1's first clef has scrolled wholly out of view.
 		if (clefUi.chipOpen && anchors[0] && (anchors[0].top + anchors[0].height < 0 || anchors[0].top > viewportH())) clefUi.dismissChip();
@@ -199,7 +211,7 @@
 					aria-haspopup="menu"
 					aria-expanded={clefUi.menuOpen && menuAnchor === i}
 					tabindex={i === 0 ? 0 : -1}
-					style="left:{a.left}px;top:{a.top}px;width:{a.width}px;height:{a.height}px"
+					style="left:{a.left}px;top:{a.top}px;width:{a.width}px;height:{a.height}px{a.clip ? `;clip-path:inset(0 ${a.clip}px 0 0)` : ''}"
 					onclick={(e) => open(i, e)}
 				></button>
 			{/if}
