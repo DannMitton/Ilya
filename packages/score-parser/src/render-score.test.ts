@@ -237,3 +237,14 @@ describe('strophic-tacet-boundary.musicxml', () => {
 		expect([...r.boundaries]).toEqual([4, 8]);
 	});
 });
+
+describe('strophic-repeat-key.musicxml: a key change at a pass boundary', () => {
+	it('shows pass 2 returning to C major after pass 1 ended in F major, from the per-bar snapshots', async () => {
+		const r = renderScoreOf(await load('strophic-repeat-key.musicxml'));
+		const key = (i: number) => r.score.measures[i].keySignature.fifths;
+		expect([key(3), key(5), key(6), key(8)]).toEqual([0, 0, -1, -1]); // pass 1: C until printed bar 7, then F
+		expect([key(9), key(10)]).toEqual([0, 0]); // pass 2 begins in C again
+		expect(r.score.measures[9].keySignature.fifths).not.toBe(r.score.measures[8].keySignature.fifths); // so the change stands at the seam
+		expect(r.bars[9].label).toBe(2);
+	});
+});
