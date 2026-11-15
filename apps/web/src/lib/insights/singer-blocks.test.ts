@@ -223,6 +223,18 @@ describe('placeholders (QUEUE row 69)', () => {
 		expect(v.rows.map((r) => !!r.placeholder)).toEqual([false, true]);
 		expect(v.placeholder).toBe('The turn of [u] rests on a placeholder value, so its bar is drawn dashed.');
 	});
+
+	/* Closing polish lane, step 2 (Amendment 5): the chart's caption on a placeholder page names the generic voice type; with no label it keeps the old line. */
+	it('the vowel figure\u2019s caption names the generic voice type on a placeholder page, and keeps the old line with no label', () => {
+		const turns = { maxShare: 0.6, pastShare: 0.2, rows: [{ vowel: 'a', sung: true, share: 0.6, pastShare: 0.1, seconds: null, past: null, turn: P('E', 4) }] } as unknown as BlockInputs['turns'];
+		const sub = (over: Partial<BlockInputs>, language: 'en' | 'fr' = 'en') =>
+			(singerBlocks(inputs(sc, { turns, language, ...over }), String).map((b) => b.block).find((b) => b.kind === 'vowels') as Extract<Block, { kind: 'vowels' }>).sub;
+		expect(sub({ generic: true, voiceTypeLabel: 'baritone' })).toBe('against where each vowel turns in a generic baritone');
+		expect(sub({ generic: true, voiceTypeLabel: 'octaviste' }, 'fr')).toBe('selon la hauteur où chaque voyelle change de timbre pour une voix type d\u2019octaviste');
+		expect(sub({ generic: true, voiceTypeLabel: 'basse' }, 'fr')).toBe('selon la hauteur où chaque voyelle change de timbre pour une voix type de basse');
+		expect(sub({ generic: true })).toBe(t('insights.r2.vowels.against', 'en'));
+		expect(sub({ generic: false, voiceTypeLabel: 'baritone' })).toBe(t('insights.r2.vowels.against', 'en'));
+	});
 });
 
 describe('the notes are endnotes (QUEUE row 79, rule 7)', () => {

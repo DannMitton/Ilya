@@ -32,7 +32,7 @@ describe('the footer credit', () => {
 
 	it('leaves the Guide thanking LiederNet in both languages', () => {
 		const guide = read('./Reading/GuideContent.svelte');
-		expect(guide).toContain('<strong>Texts.</strong> Test texts were drawn from <a href="https://www.lieder.net"');
-		expect(guide).toContain('<strong>Textes.</strong> Les textes d’essai proviennent du <a href="https://www.lieder.net"');
+		expect(guide).toContain(' Test texts were drawn from <a href="https://www.lieder.net"'); // after the poem-sources sentences that open the paragraph (step 9b)
+		expect(guide).toContain(' Les textes d’essai proviennent du <a href="https://www.lieder.net"');
 	});
 });

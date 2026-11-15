@@ -1,0 +1,10240 @@
+{
+ "(undefined) | none": {
+  "snapshot": {
+   "fR1": {},
+   "fR1Source": {},
+   "label": "golden"
+  },
+  "completeness": {
+   "formants": false,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "(undefined) | i": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 459.1,
+    "ɛ": 506.5,
+    "ɑ": 562,
+    "o": 448.7,
+    "u": 317.2,
+    "ɨ": 404,
+    "ɪ": 473.6,
+    "ʌ": 562,
+    "a": 646.3
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "middle",
+   "steps": {
+    "e": "shift",
+    "ɛ": "shift",
+    "ɑ": "shift",
+    "o": "shift",
+    "u": "shift",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "(undefined) | i,u": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "u": 346,
+    "ɨ": 404,
+    "e": 479.5,
+    "ɛ": 529,
+    "ɑ": 586.9,
+    "o": 468.5,
+    "ɪ": 494.6,
+    "ʌ": 586.9,
+    "a": 674.9
+   },
+   "fR1Source": {
+    "i": "sung",
+    "u": "sung",
+    "ɨ": "derived",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "u": 804,
+    "ɨ": 1101.3,
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "i": "sung",
+    "u": "sung",
+    "ɨ": "derived",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "middle",
+   "steps": {
+    "e": "shift",
+    "ɛ": "shift",
+    "ɑ": "shift",
+    "o": "shift",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "(undefined) | i,e,ɑ": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 381,
+    "ɑ": 617,
+    "ɪ": 393,
+    "a": 709.6,
+    "ɛ": 491,
+    "o": 434.9,
+    "u": 307.5,
+    "ɨ": 404,
+    "ʌ": 617
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɑ": "sung",
+    "ɪ": "derived",
+    "a": "derived",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɑ": 1013,
+    "ɪ": 1599.5,
+    "a": 1114.3,
+    "ɛ": 1311,
+    "o": 826,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ʌ": 1168
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɑ": "sung",
+    "ɪ": "derived",
+    "a": "derived",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "middle",
+   "steps": {
+    "ɛ": "shift",
+    "o": "shift",
+    "u": "shift",
+    "ɨ": "derived",
+    "ʌ": "derived"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "(undefined) | e,ɛ,ɑ,o": {
+  "snapshot": {
+   "fR1": {
+    "e": 381,
+    "ɛ": 577,
+    "ɑ": 617,
+    "o": 489,
+    "ʌ": 617,
+    "a": 709.6,
+    "i": 217.8,
+    "u": 244.4,
+    "ɨ": 297.3,
+    "ɪ": 393
+   },
+   "fR1Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "ʌ": "derived",
+    "a": "derived",
+    "i": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate"
+   },
+   "fR2": {
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "ʌ": 1168,
+    "a": 1114.3,
+    "i": 1705,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5
+   },
+   "fR2Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "ʌ": "derived",
+    "a": "derived",
+    "i": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "middle",
+   "steps": {
+    "i": "shift-and-spread",
+    "u": "shift-and-spread",
+    "ɨ": "derived",
+    "ɪ": "derived"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "(undefined) | six": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 381,
+    "ɛ": 577,
+    "ɑ": 617,
+    "o": 489,
+    "u": 346,
+    "ɨ": 404,
+    "ɪ": 393,
+    "ʌ": 617,
+    "a": 709.6
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "u": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "u": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "middle",
+   "steps": {},
+   "retake": [
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -3.9
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "(undefined) | all ten": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 381,
+    "ɪ": 393,
+    "ɨ": 404,
+    "ɛ": 577,
+    "a": 711,
+    "ɑ": 617,
+    "ʌ": 616,
+    "o": 489,
+    "u": 346
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɪ": "sung",
+    "ɨ": "sung",
+    "ɛ": "sung",
+    "a": "sung",
+    "ɑ": "sung",
+    "ʌ": "sung",
+    "o": "sung",
+    "u": "sung"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɪ": 1600,
+    "ɨ": 1100,
+    "ɛ": 1311,
+    "a": 1113,
+    "ɑ": 1013,
+    "ʌ": 1167,
+    "o": 826,
+    "u": 804
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɪ": "sung",
+    "ɨ": "sung",
+    "ɛ": "sung",
+    "a": "sung",
+    "ɑ": "sung",
+    "ʌ": "sung",
+    "o": "sung",
+    "u": "sung"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "middle",
+   "steps": {},
+   "retake": [
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -3.9
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "(undefined) | bad i (1063), no override": {
+  "snapshot": {
+   "fR1": {
+    "u": 346,
+    "ɑ": 617,
+    "a": 709.6,
+    "i": 323.9,
+    "e": 502.4,
+    "ɛ": 554.2,
+    "o": 490.9,
+    "ɨ": 442.1,
+    "ɪ": 518.2,
+    "ʌ": 617
+   },
+   "fR1Source": {
+    "u": "sung",
+    "ɑ": "sung",
+    "a": "derived",
+    "i": "surrogate",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "fR2": {
+    "u": 804,
+    "ɑ": 1013,
+    "a": 1114.3,
+    "i": 1705,
+    "e": 1532,
+    "ɛ": 1311,
+    "o": 826,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168
+   },
+   "fR2Source": {
+    "u": "sung",
+    "ɑ": "sung",
+    "a": "derived",
+    "i": "surrogate",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "middle",
+   "steps": {
+    "i": "shift",
+    "e": "shift",
+    "ɛ": "shift",
+    "o": "shift",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived"
+   },
+   "retake": [
+    {
+     "vowel": "i",
+     "reason": "implausible"
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "(undefined) | bad i kept, six": {
+  "snapshot": {
+   "fR1": {
+    "e": 381,
+    "ɛ": 577,
+    "ɑ": 617,
+    "o": 489,
+    "u": 346,
+    "i": 1063,
+    "ɨ": 1451,
+    "ɪ": 393,
+    "ʌ": 617,
+    "a": 709.6
+   },
+   "fR1Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "u": "sung",
+    "i": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "fR2": {
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "u": 804,
+    "i": 2250,
+    "ɨ": 1281.2,
+    "ɪ": 1812,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "u": "sung",
+    "i": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "middle",
+   "steps": {},
+   "retake": [
+    {
+     "vowel": "i",
+     "reason": "off-shape",
+     "semitones": 10
+    },
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -4
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "(undefined) | no fR2 on [e]": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "ɑ": 617,
+    "o": 489,
+    "e": 381,
+    "a": 709.6,
+    "ɛ": 553.2,
+    "u": 322.5,
+    "ɨ": 404,
+    "ɪ": 393,
+    "ʌ": 617
+   },
+   "fR1Source": {
+    "i": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "e": "sung",
+    "a": "derived",
+    "ɛ": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "ɑ": 1013,
+    "o": 826,
+    "a": 1114.3,
+    "e": 1532,
+    "ɛ": 1311,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168
+   },
+   "fR2Source": {
+    "i": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "a": "derived",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "middle",
+   "steps": {
+    "e": "shift-and-spread",
+    "ɛ": "shift-and-spread",
+    "u": "shift-and-spread",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived"
+   },
+   "retake": [
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -3.3
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "(undefined) | provisional [u], [ɨ] sung": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "ɨ": 404,
+    "u": 346,
+    "e": 479.5,
+    "ɛ": 529,
+    "ɑ": 586.9,
+    "o": 468.5,
+    "ɪ": 494.6,
+    "ʌ": 586.9,
+    "a": 674.9
+   },
+   "fR1Source": {
+    "i": "sung",
+    "ɨ": "sung",
+    "u": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "ɨ": 1100,
+    "u": 804,
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "i": "sung",
+    "ɨ": "sung",
+    "u": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "middle",
+   "steps": {
+    "e": "shift",
+    "ɛ": "shift",
+    "ɑ": "shift",
+    "o": "shift",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "(undefined) | verdict stored": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 381,
+    "u": 346,
+    "ɑ": 617,
+    "ɛ": 577,
+    "ɨ": 404,
+    "ɪ": 393,
+    "ʌ": 617,
+    "a": 709.6,
+    "o": 491.1
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "sung",
+    "u": "sung",
+    "ɑ": "sung",
+    "ɛ": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived",
+    "o": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "u": 804,
+    "ɑ": 1013,
+    "ɛ": 1311,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3,
+    "o": 826
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "sung",
+    "u": "sung",
+    "ɑ": "sung",
+    "ɛ": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived",
+    "o": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "middle",
+   "steps": {
+    "o": "shift-and-spread"
+   },
+   "retake": [
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -3.7
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ " | none": {
+  "snapshot": {
+   "fR1": {},
+   "fR1Source": {},
+   "label": "golden"
+  },
+  "completeness": {
+   "formants": false,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ " | i": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 459.1,
+    "ɛ": 506.5,
+    "ɑ": 562,
+    "o": 448.7,
+    "u": 317.2,
+    "ɨ": 404,
+    "ɪ": 473.6,
+    "ʌ": 562,
+    "a": 646.3
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "middle",
+   "steps": {
+    "e": "shift",
+    "ɛ": "shift",
+    "ɑ": "shift",
+    "o": "shift",
+    "u": "shift",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ " | i,u": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "u": 346,
+    "ɨ": 404,
+    "e": 479.5,
+    "ɛ": 529,
+    "ɑ": 586.9,
+    "o": 468.5,
+    "ɪ": 494.6,
+    "ʌ": 586.9,
+    "a": 674.9
+   },
+   "fR1Source": {
+    "i": "sung",
+    "u": "sung",
+    "ɨ": "derived",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "u": 804,
+    "ɨ": 1101.3,
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "i": "sung",
+    "u": "sung",
+    "ɨ": "derived",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "middle",
+   "steps": {
+    "e": "shift",
+    "ɛ": "shift",
+    "ɑ": "shift",
+    "o": "shift",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ " | i,e,ɑ": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 381,
+    "ɑ": 617,
+    "ɪ": 393,
+    "a": 709.6,
+    "ɛ": 491,
+    "o": 434.9,
+    "u": 307.5,
+    "ɨ": 404,
+    "ʌ": 617
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɑ": "sung",
+    "ɪ": "derived",
+    "a": "derived",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɑ": 1013,
+    "ɪ": 1599.5,
+    "a": 1114.3,
+    "ɛ": 1311,
+    "o": 826,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ʌ": 1168
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɑ": "sung",
+    "ɪ": "derived",
+    "a": "derived",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "middle",
+   "steps": {
+    "ɛ": "shift",
+    "o": "shift",
+    "u": "shift",
+    "ɨ": "derived",
+    "ʌ": "derived"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ " | e,ɛ,ɑ,o": {
+  "snapshot": {
+   "fR1": {
+    "e": 381,
+    "ɛ": 577,
+    "ɑ": 617,
+    "o": 489,
+    "ʌ": 617,
+    "a": 709.6,
+    "i": 217.8,
+    "u": 244.4,
+    "ɨ": 297.3,
+    "ɪ": 393
+   },
+   "fR1Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "ʌ": "derived",
+    "a": "derived",
+    "i": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate"
+   },
+   "fR2": {
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "ʌ": 1168,
+    "a": 1114.3,
+    "i": 1705,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5
+   },
+   "fR2Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "ʌ": "derived",
+    "a": "derived",
+    "i": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "middle",
+   "steps": {
+    "i": "shift-and-spread",
+    "u": "shift-and-spread",
+    "ɨ": "derived",
+    "ɪ": "derived"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ " | six": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 381,
+    "ɛ": 577,
+    "ɑ": 617,
+    "o": 489,
+    "u": 346,
+    "ɨ": 404,
+    "ɪ": 393,
+    "ʌ": 617,
+    "a": 709.6
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "u": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "u": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "middle",
+   "steps": {},
+   "retake": [
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -3.9
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ " | all ten": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 381,
+    "ɪ": 393,
+    "ɨ": 404,
+    "ɛ": 577,
+    "a": 711,
+    "ɑ": 617,
+    "ʌ": 616,
+    "o": 489,
+    "u": 346
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɪ": "sung",
+    "ɨ": "sung",
+    "ɛ": "sung",
+    "a": "sung",
+    "ɑ": "sung",
+    "ʌ": "sung",
+    "o": "sung",
+    "u": "sung"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɪ": 1600,
+    "ɨ": 1100,
+    "ɛ": 1311,
+    "a": 1113,
+    "ɑ": 1013,
+    "ʌ": 1167,
+    "o": 826,
+    "u": 804
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɪ": "sung",
+    "ɨ": "sung",
+    "ɛ": "sung",
+    "a": "sung",
+    "ɑ": "sung",
+    "ʌ": "sung",
+    "o": "sung",
+    "u": "sung"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "middle",
+   "steps": {},
+   "retake": [
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -3.9
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ " | bad i (1063), no override": {
+  "snapshot": {
+   "fR1": {
+    "u": 346,
+    "ɑ": 617,
+    "a": 709.6,
+    "i": 323.9,
+    "e": 502.4,
+    "ɛ": 554.2,
+    "o": 490.9,
+    "ɨ": 442.1,
+    "ɪ": 518.2,
+    "ʌ": 617
+   },
+   "fR1Source": {
+    "u": "sung",
+    "ɑ": "sung",
+    "a": "derived",
+    "i": "surrogate",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "fR2": {
+    "u": 804,
+    "ɑ": 1013,
+    "a": 1114.3,
+    "i": 1705,
+    "e": 1532,
+    "ɛ": 1311,
+    "o": 826,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168
+   },
+   "fR2Source": {
+    "u": "sung",
+    "ɑ": "sung",
+    "a": "derived",
+    "i": "surrogate",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "middle",
+   "steps": {
+    "i": "shift",
+    "e": "shift",
+    "ɛ": "shift",
+    "o": "shift",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived"
+   },
+   "retake": [
+    {
+     "vowel": "i",
+     "reason": "implausible"
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ " | bad i kept, six": {
+  "snapshot": {
+   "fR1": {
+    "e": 381,
+    "ɛ": 577,
+    "ɑ": 617,
+    "o": 489,
+    "u": 346,
+    "i": 1063,
+    "ɨ": 1451,
+    "ɪ": 393,
+    "ʌ": 617,
+    "a": 709.6
+   },
+   "fR1Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "u": "sung",
+    "i": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "fR2": {
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "u": 804,
+    "i": 2250,
+    "ɨ": 1281.2,
+    "ɪ": 1812,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "u": "sung",
+    "i": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "middle",
+   "steps": {},
+   "retake": [
+    {
+     "vowel": "i",
+     "reason": "off-shape",
+     "semitones": 10
+    },
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -4
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ " | no fR2 on [e]": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "ɑ": 617,
+    "o": 489,
+    "e": 381,
+    "a": 709.6,
+    "ɛ": 553.2,
+    "u": 322.5,
+    "ɨ": 404,
+    "ɪ": 393,
+    "ʌ": 617
+   },
+   "fR1Source": {
+    "i": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "e": "sung",
+    "a": "derived",
+    "ɛ": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "ɑ": 1013,
+    "o": 826,
+    "a": 1114.3,
+    "e": 1532,
+    "ɛ": 1311,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168
+   },
+   "fR2Source": {
+    "i": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "a": "derived",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "middle",
+   "steps": {
+    "e": "shift-and-spread",
+    "ɛ": "shift-and-spread",
+    "u": "shift-and-spread",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived"
+   },
+   "retake": [
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -3.3
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ " | provisional [u], [ɨ] sung": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "ɨ": 404,
+    "u": 346,
+    "e": 479.5,
+    "ɛ": 529,
+    "ɑ": 586.9,
+    "o": 468.5,
+    "ɪ": 494.6,
+    "ʌ": 586.9,
+    "a": 674.9
+   },
+   "fR1Source": {
+    "i": "sung",
+    "ɨ": "sung",
+    "u": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "ɨ": 1100,
+    "u": 804,
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "i": "sung",
+    "ɨ": "sung",
+    "u": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "middle",
+   "steps": {
+    "e": "shift",
+    "ɛ": "shift",
+    "ɑ": "shift",
+    "o": "shift",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ " | verdict stored": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 381,
+    "u": 346,
+    "ɑ": 617,
+    "ɛ": 577,
+    "ɨ": 404,
+    "ɪ": 393,
+    "ʌ": 617,
+    "a": 709.6,
+    "o": 491.1
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "sung",
+    "u": "sung",
+    "ɑ": "sung",
+    "ɛ": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived",
+    "o": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "u": 804,
+    "ɑ": 1013,
+    "ɛ": 1311,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3,
+    "o": 826
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "sung",
+    "u": "sung",
+    "ɑ": "sung",
+    "ɛ": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived",
+    "o": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "middle",
+   "steps": {
+    "o": "shift-and-spread"
+   },
+   "retake": [
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -3.7
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "soprano | none": {
+  "snapshot": {
+   "fR1": {
+    "i": 380.8,
+    "e": 570.6,
+    "ɛ": 604.5,
+    "ɑ": 678.6,
+    "o": 570.6,
+    "u": 415.3,
+    "ɨ": 519.8,
+    "ɪ": 588.6,
+    "ʌ": 678.6,
+    "a": 780.4
+   },
+   "fR1Source": {
+    "i": "surrogate",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 2087,
+    "e": 1875.3,
+    "ɛ": 1604.7,
+    "ɑ": 1240,
+    "o": 1011.1,
+    "u": 984.1,
+    "ɨ": 1348.1,
+    "ɪ": 1957.9,
+    "ʌ": 1429.6,
+    "a": 1364
+   },
+   "fR2Source": {
+    "i": "surrogate",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "soprano",
+   "steps": {
+    "i": "template",
+    "e": "template",
+    "ɛ": "template",
+    "ɑ": "template",
+    "o": "template",
+    "u": "template",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": true
+ },
+ "soprano | i": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 443.5,
+    "ɛ": 469.9,
+    "ɑ": 527.4,
+    "o": 443.5,
+    "u": 322.8,
+    "ɨ": 404,
+    "ɪ": 457.5,
+    "ʌ": 527.4,
+    "a": 606.5
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "soprano",
+   "steps": {
+    "e": "shift",
+    "ɛ": "shift",
+    "ɑ": "shift",
+    "o": "shift",
+    "u": "shift",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "soprano | i,u": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "u": 346,
+    "ɨ": 404,
+    "e": 459.2,
+    "ɛ": 486.5,
+    "ɑ": 546,
+    "o": 459.2,
+    "ɪ": 473.7,
+    "ʌ": 546,
+    "a": 627.9
+   },
+   "fR1Source": {
+    "i": "sung",
+    "u": "sung",
+    "ɨ": "derived",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "u": 804,
+    "ɨ": 1101.3,
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "i": "sung",
+    "u": "sung",
+    "ɨ": "derived",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "soprano",
+   "steps": {
+    "e": "shift",
+    "ɛ": "shift",
+    "ɑ": "shift",
+    "o": "shift",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "soprano | i,e,ɑ": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 381,
+    "ɑ": 617,
+    "ɪ": 393,
+    "a": 709.6,
+    "ɛ": 470.7,
+    "o": 444.2,
+    "u": 323.3,
+    "ɨ": 404,
+    "ʌ": 617
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɑ": "sung",
+    "ɪ": "derived",
+    "a": "derived",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɑ": 1013,
+    "ɪ": 1599.5,
+    "a": 1114.3,
+    "ɛ": 1311,
+    "o": 826,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ʌ": 1168
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɑ": "sung",
+    "ɪ": "derived",
+    "a": "derived",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "soprano",
+   "steps": {
+    "ɛ": "shift",
+    "o": "shift",
+    "u": "shift",
+    "ɨ": "derived",
+    "ʌ": "derived"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "soprano | e,ɛ,ɑ,o": {
+  "snapshot": {
+   "fR1": {
+    "e": 381,
+    "ɛ": 577,
+    "ɑ": 617,
+    "o": 489,
+    "ʌ": 617,
+    "a": 709.6,
+    "i": 195.7,
+    "u": 234,
+    "ɨ": 267.1,
+    "ɪ": 393
+   },
+   "fR1Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "ʌ": "derived",
+    "a": "derived",
+    "i": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate"
+   },
+   "fR2": {
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "ʌ": 1168,
+    "a": 1114.3,
+    "i": 1705,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5
+   },
+   "fR2Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "ʌ": "derived",
+    "a": "derived",
+    "i": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "soprano",
+   "steps": {
+    "i": "shift-and-spread",
+    "u": "shift-and-spread",
+    "ɨ": "derived",
+    "ɪ": "derived"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "soprano | six": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 381,
+    "ɛ": 577,
+    "ɑ": 617,
+    "o": 489,
+    "u": 346,
+    "ɨ": 404,
+    "ɪ": 393,
+    "ʌ": 617,
+    "a": 709.6
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "u": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "u": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "soprano",
+   "steps": {},
+   "retake": [
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -4
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "soprano | all ten": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 381,
+    "ɪ": 393,
+    "ɨ": 404,
+    "ɛ": 577,
+    "a": 711,
+    "ɑ": 617,
+    "ʌ": 616,
+    "o": 489,
+    "u": 346
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɪ": "sung",
+    "ɨ": "sung",
+    "ɛ": "sung",
+    "a": "sung",
+    "ɑ": "sung",
+    "ʌ": "sung",
+    "o": "sung",
+    "u": "sung"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɪ": 1600,
+    "ɨ": 1100,
+    "ɛ": 1311,
+    "a": 1113,
+    "ɑ": 1013,
+    "ʌ": 1167,
+    "o": 826,
+    "u": 804
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɪ": "sung",
+    "ɨ": "sung",
+    "ɛ": "sung",
+    "a": "sung",
+    "ɑ": "sung",
+    "ʌ": "sung",
+    "o": "sung",
+    "u": "sung"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "soprano",
+   "steps": {},
+   "retake": [
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -4
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "soprano | bad i (1063), no override": {
+  "snapshot": {
+   "fR1": {
+    "u": 346,
+    "ɑ": 617,
+    "a": 709.6,
+    "i": 331.5,
+    "e": 496.6,
+    "ɛ": 526.2,
+    "o": 496.6,
+    "ɨ": 452.5,
+    "ɪ": 512.2,
+    "ʌ": 617
+   },
+   "fR1Source": {
+    "u": "sung",
+    "ɑ": "sung",
+    "a": "derived",
+    "i": "surrogate",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "fR2": {
+    "u": 804,
+    "ɑ": 1013,
+    "a": 1114.3,
+    "i": 1705,
+    "e": 1532,
+    "ɛ": 1311,
+    "o": 826,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168
+   },
+   "fR2Source": {
+    "u": "sung",
+    "ɑ": "sung",
+    "a": "derived",
+    "i": "surrogate",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "soprano",
+   "steps": {
+    "i": "shift",
+    "e": "shift",
+    "ɛ": "shift",
+    "o": "shift",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived"
+   },
+   "retake": [
+    {
+     "vowel": "i",
+     "reason": "implausible"
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "soprano | bad i kept, six": {
+  "snapshot": {
+   "fR1": {
+    "e": 381,
+    "ɛ": 577,
+    "ɑ": 617,
+    "o": 489,
+    "u": 346,
+    "i": 1063,
+    "ɨ": 1451,
+    "ɪ": 393,
+    "ʌ": 617,
+    "a": 709.6
+   },
+   "fR1Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "u": "sung",
+    "i": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "fR2": {
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "u": 804,
+    "i": 2250,
+    "ɨ": 1281.2,
+    "ɪ": 1812,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "u": "sung",
+    "i": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "soprano",
+   "steps": {},
+   "retake": [
+    {
+     "vowel": "i",
+     "reason": "off-shape",
+     "semitones": 9.5
+    },
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -4
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "soprano | no fR2 on [e]": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "ɑ": 617,
+    "o": 489,
+    "e": 381,
+    "a": 709.6,
+    "ɛ": 530.2,
+    "u": 329.6,
+    "ɨ": 404,
+    "ɪ": 393,
+    "ʌ": 617
+   },
+   "fR1Source": {
+    "i": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "e": "sung",
+    "a": "derived",
+    "ɛ": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "ɑ": 1013,
+    "o": 826,
+    "a": 1114.3,
+    "e": 1532,
+    "ɛ": 1311,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168
+   },
+   "fR2Source": {
+    "i": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "a": "derived",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "soprano",
+   "steps": {
+    "e": "shift-and-spread",
+    "ɛ": "shift-and-spread",
+    "u": "shift-and-spread",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived"
+   },
+   "retake": [
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -3.3
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "soprano | provisional [u], [ɨ] sung": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "ɨ": 404,
+    "u": 346,
+    "e": 459.2,
+    "ɛ": 486.5,
+    "ɑ": 546,
+    "o": 459.2,
+    "ɪ": 473.7,
+    "ʌ": 546,
+    "a": 627.9
+   },
+   "fR1Source": {
+    "i": "sung",
+    "ɨ": "sung",
+    "u": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "ɨ": 1100,
+    "u": 804,
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "i": "sung",
+    "ɨ": "sung",
+    "u": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "soprano",
+   "steps": {
+    "e": "shift",
+    "ɛ": "shift",
+    "ɑ": "shift",
+    "o": "shift",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "soprano | verdict stored": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 381,
+    "u": 346,
+    "ɑ": 617,
+    "ɛ": 577,
+    "ɨ": 404,
+    "ɪ": 393,
+    "ʌ": 617,
+    "a": 709.6,
+    "o": 512.2
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "sung",
+    "u": "sung",
+    "ɑ": "sung",
+    "ɛ": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived",
+    "o": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "u": 804,
+    "ɑ": 1013,
+    "ɛ": 1311,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3,
+    "o": 826
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "sung",
+    "u": "sung",
+    "ɑ": "sung",
+    "ɛ": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived",
+    "o": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "soprano",
+   "steps": {
+    "o": "shift-and-spread"
+   },
+   "retake": [
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -3.9
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "mezzo-soprano | none": {
+  "snapshot": {
+   "fR1": {
+    "i": 339.3,
+    "e": 570.6,
+    "ɛ": 604.5,
+    "ɑ": 678.6,
+    "o": 538.6,
+    "u": 380.8,
+    "ɨ": 463.1,
+    "ɪ": 588.6,
+    "ʌ": 678.6,
+    "a": 780.4
+   },
+   "fR1Source": {
+    "i": "surrogate",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1998.5,
+    "e": 1795.7,
+    "ɛ": 1536.7,
+    "ɑ": 1187.4,
+    "o": 968.2,
+    "u": 942.4,
+    "ɨ": 1290.9,
+    "ɪ": 1874.8,
+    "ʌ": 1369,
+    "a": 1306.1
+   },
+   "fR2Source": {
+    "i": "surrogate",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "i": "template",
+    "e": "template",
+    "ɛ": "template",
+    "ɑ": "template",
+    "o": "template",
+    "u": "template",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": true
+ },
+ "mezzo-soprano | i": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 497.8,
+    "ɛ": 527.4,
+    "ɑ": 592,
+    "o": 469.9,
+    "u": 332.3,
+    "ɨ": 404,
+    "ɪ": 513.5,
+    "ʌ": 592,
+    "a": 680.8
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "e": "shift",
+    "ɛ": "shift",
+    "ɑ": "shift",
+    "o": "shift",
+    "u": "shift",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "mezzo-soprano | i,u": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "u": 346,
+    "ɨ": 404,
+    "e": 508,
+    "ɛ": 538.2,
+    "ɑ": 604.1,
+    "o": 479.5,
+    "ɪ": 524,
+    "ʌ": 604.1,
+    "a": 694.7
+   },
+   "fR1Source": {
+    "i": "sung",
+    "u": "sung",
+    "ɨ": "derived",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "u": 804,
+    "ɨ": 1101.3,
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "i": "sung",
+    "u": "sung",
+    "ɨ": "derived",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "e": "shift",
+    "ɛ": "shift",
+    "ɑ": "shift",
+    "o": "shift",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "mezzo-soprano | i,e,ɑ": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 381,
+    "ɑ": 617,
+    "ɪ": 393,
+    "a": 709.6,
+    "ɛ": 538.4,
+    "o": 479.7,
+    "u": 339.2,
+    "ɨ": 404,
+    "ʌ": 617
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɑ": "sung",
+    "ɪ": "derived",
+    "a": "derived",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɑ": 1013,
+    "ɪ": 1599.5,
+    "a": 1114.3,
+    "ɛ": 1311,
+    "o": 826,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ʌ": 1168
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɑ": "sung",
+    "ɪ": "derived",
+    "a": "derived",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "ɛ": "shift",
+    "o": "shift",
+    "u": "shift",
+    "ɨ": "derived",
+    "ʌ": "derived"
+   },
+   "retake": [
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -3.3
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "mezzo-soprano | e,ɛ,ɑ,o": {
+  "snapshot": {
+   "fR1": {
+    "e": 381,
+    "ɛ": 577,
+    "ɑ": 617,
+    "o": 489,
+    "ʌ": 617,
+    "a": 709.6,
+    "i": 313.4,
+    "u": 351.8,
+    "ɨ": 427.8,
+    "ɪ": 393
+   },
+   "fR1Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "ʌ": "derived",
+    "a": "derived",
+    "i": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate"
+   },
+   "fR2": {
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "ʌ": 1168,
+    "a": 1114.3,
+    "i": 1705,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5
+   },
+   "fR2Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "ʌ": "derived",
+    "a": "derived",
+    "i": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "i": "shift",
+    "u": "shift",
+    "ɨ": "derived",
+    "ɪ": "derived"
+   },
+   "retake": [
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -3.8
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "mezzo-soprano | six": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 381,
+    "ɛ": 577,
+    "ɑ": 617,
+    "o": 489,
+    "u": 346,
+    "ɨ": 404,
+    "ɪ": 393,
+    "ʌ": 617,
+    "a": 709.6
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "u": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "u": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {},
+   "retake": [
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -4.4
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "mezzo-soprano | all ten": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 381,
+    "ɪ": 393,
+    "ɨ": 404,
+    "ɛ": 577,
+    "a": 711,
+    "ɑ": 617,
+    "ʌ": 616,
+    "o": 489,
+    "u": 346
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɪ": "sung",
+    "ɨ": "sung",
+    "ɛ": "sung",
+    "a": "sung",
+    "ɑ": "sung",
+    "ʌ": "sung",
+    "o": "sung",
+    "u": "sung"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɪ": 1600,
+    "ɨ": 1100,
+    "ɛ": 1311,
+    "a": 1113,
+    "ɑ": 1013,
+    "ʌ": 1167,
+    "o": 826,
+    "u": 804
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɪ": "sung",
+    "ɨ": "sung",
+    "ɛ": "sung",
+    "a": "sung",
+    "ɑ": "sung",
+    "ʌ": "sung",
+    "o": "sung",
+    "u": "sung"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {},
+   "retake": [
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -4.4
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "mezzo-soprano | bad i (1063), no override": {
+  "snapshot": {
+   "fR1": {
+    "u": 346,
+    "ɑ": 617,
+    "a": 709.6,
+    "i": 308.4,
+    "e": 518.6,
+    "ɛ": 549.5,
+    "o": 489.5,
+    "ɨ": 421,
+    "ɪ": 534.9,
+    "ʌ": 617
+   },
+   "fR1Source": {
+    "u": "sung",
+    "ɑ": "sung",
+    "a": "derived",
+    "i": "surrogate",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "fR2": {
+    "u": 804,
+    "ɑ": 1013,
+    "a": 1114.3,
+    "i": 1705,
+    "e": 1532,
+    "ɛ": 1311,
+    "o": 826,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168
+   },
+   "fR2Source": {
+    "u": "sung",
+    "ɑ": "sung",
+    "a": "derived",
+    "i": "surrogate",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "i": "shift",
+    "e": "shift",
+    "ɛ": "shift",
+    "o": "shift",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived"
+   },
+   "retake": [
+    {
+     "vowel": "i",
+     "reason": "implausible"
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "mezzo-soprano | bad i kept, six": {
+  "snapshot": {
+   "fR1": {
+    "e": 381,
+    "ɛ": 577,
+    "ɑ": 617,
+    "o": 489,
+    "u": 346,
+    "i": 1063,
+    "ɨ": 1451,
+    "ɪ": 393,
+    "ʌ": 617,
+    "a": 709.6
+   },
+   "fR1Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "u": "sung",
+    "i": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "fR2": {
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "u": 804,
+    "i": 2250,
+    "ɨ": 1281.2,
+    "ɪ": 1812,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "u": "sung",
+    "i": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {},
+   "retake": [
+    {
+     "vowel": "u",
+     "reason": "off-shape",
+     "semitones": -9.5
+    },
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -6.3
+    },
+    {
+     "vowel": "o",
+     "reason": "off-shape",
+     "semitones": -4.6
+    },
+    {
+     "vowel": "i",
+     "reason": "off-shape",
+     "semitones": 14
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "mezzo-soprano | no fR2 on [e]": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "ɑ": 617,
+    "o": 489,
+    "e": 381,
+    "a": 709.6,
+    "ɛ": 548.6,
+    "u": 335.6,
+    "ɨ": 404,
+    "ɪ": 393,
+    "ʌ": 617
+   },
+   "fR1Source": {
+    "i": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "e": "sung",
+    "a": "derived",
+    "ɛ": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "ɑ": 1013,
+    "o": 826,
+    "a": 1114.3,
+    "e": 1532,
+    "ɛ": 1311,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168
+   },
+   "fR2Source": {
+    "i": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "a": "derived",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "e": "shift-and-spread",
+    "ɛ": "shift-and-spread",
+    "u": "shift-and-spread",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived"
+   },
+   "retake": [
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -3.7
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "mezzo-soprano | provisional [u], [ɨ] sung": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "ɨ": 404,
+    "u": 346,
+    "e": 508,
+    "ɛ": 538.2,
+    "ɑ": 604.1,
+    "o": 479.5,
+    "ɪ": 524,
+    "ʌ": 604.1,
+    "a": 694.7
+   },
+   "fR1Source": {
+    "i": "sung",
+    "ɨ": "sung",
+    "u": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "ɨ": 1100,
+    "u": 804,
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "i": "sung",
+    "ɨ": "sung",
+    "u": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "e": "shift",
+    "ɛ": "shift",
+    "ɑ": "shift",
+    "o": "shift",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "mezzo-soprano | verdict stored": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 381,
+    "u": 346,
+    "ɑ": 617,
+    "ɛ": 577,
+    "ɨ": 404,
+    "ɪ": 393,
+    "ʌ": 617,
+    "a": 709.6,
+    "o": 494.7
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "sung",
+    "u": "sung",
+    "ɑ": "sung",
+    "ɛ": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived",
+    "o": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "u": 804,
+    "ɑ": 1013,
+    "ɛ": 1311,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3,
+    "o": 826
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "sung",
+    "u": "sung",
+    "ɑ": "sung",
+    "ɛ": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived",
+    "o": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "o": "shift-and-spread"
+   },
+   "retake": [
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -4.2
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "mezzo | none": {
+  "snapshot": {
+   "fR1": {},
+   "fR1Source": {},
+   "label": "golden"
+  },
+  "completeness": {
+   "formants": false,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "mezzo | i": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 497.8,
+    "ɛ": 527.4,
+    "ɑ": 592,
+    "o": 469.9,
+    "u": 332.3,
+    "ɨ": 404,
+    "ɪ": 513.5,
+    "ʌ": 592,
+    "a": 680.8
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "e": "shift",
+    "ɛ": "shift",
+    "ɑ": "shift",
+    "o": "shift",
+    "u": "shift",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "mezzo | i,u": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "u": 346,
+    "ɨ": 404,
+    "e": 508,
+    "ɛ": 538.2,
+    "ɑ": 604.1,
+    "o": 479.5,
+    "ɪ": 524,
+    "ʌ": 604.1,
+    "a": 694.7
+   },
+   "fR1Source": {
+    "i": "sung",
+    "u": "sung",
+    "ɨ": "derived",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "u": 804,
+    "ɨ": 1101.3,
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "i": "sung",
+    "u": "sung",
+    "ɨ": "derived",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "e": "shift",
+    "ɛ": "shift",
+    "ɑ": "shift",
+    "o": "shift",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "mezzo | i,e,ɑ": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 381,
+    "ɑ": 617,
+    "ɪ": 393,
+    "a": 709.6,
+    "ɛ": 538.4,
+    "o": 479.7,
+    "u": 339.2,
+    "ɨ": 404,
+    "ʌ": 617
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɑ": "sung",
+    "ɪ": "derived",
+    "a": "derived",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɑ": 1013,
+    "ɪ": 1599.5,
+    "a": 1114.3,
+    "ɛ": 1311,
+    "o": 826,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ʌ": 1168
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɑ": "sung",
+    "ɪ": "derived",
+    "a": "derived",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "ɛ": "shift",
+    "o": "shift",
+    "u": "shift",
+    "ɨ": "derived",
+    "ʌ": "derived"
+   },
+   "retake": [
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -3.3
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "mezzo | e,ɛ,ɑ,o": {
+  "snapshot": {
+   "fR1": {
+    "e": 381,
+    "ɛ": 577,
+    "ɑ": 617,
+    "o": 489,
+    "ʌ": 617,
+    "a": 709.6,
+    "i": 313.4,
+    "u": 351.8,
+    "ɨ": 427.8,
+    "ɪ": 393
+   },
+   "fR1Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "ʌ": "derived",
+    "a": "derived",
+    "i": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate"
+   },
+   "fR2": {
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "ʌ": 1168,
+    "a": 1114.3,
+    "i": 1705,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5
+   },
+   "fR2Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "ʌ": "derived",
+    "a": "derived",
+    "i": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "i": "shift",
+    "u": "shift",
+    "ɨ": "derived",
+    "ɪ": "derived"
+   },
+   "retake": [
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -3.8
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "mezzo | six": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 381,
+    "ɛ": 577,
+    "ɑ": 617,
+    "o": 489,
+    "u": 346,
+    "ɨ": 404,
+    "ɪ": 393,
+    "ʌ": 617,
+    "a": 709.6
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "u": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "u": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {},
+   "retake": [
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -4.4
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "mezzo | all ten": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 381,
+    "ɪ": 393,
+    "ɨ": 404,
+    "ɛ": 577,
+    "a": 711,
+    "ɑ": 617,
+    "ʌ": 616,
+    "o": 489,
+    "u": 346
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɪ": "sung",
+    "ɨ": "sung",
+    "ɛ": "sung",
+    "a": "sung",
+    "ɑ": "sung",
+    "ʌ": "sung",
+    "o": "sung",
+    "u": "sung"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɪ": 1600,
+    "ɨ": 1100,
+    "ɛ": 1311,
+    "a": 1113,
+    "ɑ": 1013,
+    "ʌ": 1167,
+    "o": 826,
+    "u": 804
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɪ": "sung",
+    "ɨ": "sung",
+    "ɛ": "sung",
+    "a": "sung",
+    "ɑ": "sung",
+    "ʌ": "sung",
+    "o": "sung",
+    "u": "sung"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {},
+   "retake": [
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -4.4
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "mezzo | bad i (1063), no override": {
+  "snapshot": {
+   "fR1": {
+    "u": 346,
+    "ɑ": 617,
+    "a": 709.6,
+    "i": 308.4,
+    "e": 518.6,
+    "ɛ": 549.5,
+    "o": 489.5,
+    "ɨ": 421,
+    "ɪ": 534.9,
+    "ʌ": 617
+   },
+   "fR1Source": {
+    "u": "sung",
+    "ɑ": "sung",
+    "a": "derived",
+    "i": "surrogate",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "fR2": {
+    "u": 804,
+    "ɑ": 1013,
+    "a": 1114.3,
+    "i": 1705,
+    "e": 1532,
+    "ɛ": 1311,
+    "o": 826,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168
+   },
+   "fR2Source": {
+    "u": "sung",
+    "ɑ": "sung",
+    "a": "derived",
+    "i": "surrogate",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "i": "shift",
+    "e": "shift",
+    "ɛ": "shift",
+    "o": "shift",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived"
+   },
+   "retake": [
+    {
+     "vowel": "i",
+     "reason": "implausible"
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "mezzo | bad i kept, six": {
+  "snapshot": {
+   "fR1": {
+    "e": 381,
+    "ɛ": 577,
+    "ɑ": 617,
+    "o": 489,
+    "u": 346,
+    "i": 1063,
+    "ɨ": 1451,
+    "ɪ": 393,
+    "ʌ": 617,
+    "a": 709.6
+   },
+   "fR1Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "u": "sung",
+    "i": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "fR2": {
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "u": 804,
+    "i": 2250,
+    "ɨ": 1281.2,
+    "ɪ": 1812,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "u": "sung",
+    "i": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {},
+   "retake": [
+    {
+     "vowel": "u",
+     "reason": "off-shape",
+     "semitones": -9.5
+    },
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -6.3
+    },
+    {
+     "vowel": "o",
+     "reason": "off-shape",
+     "semitones": -4.6
+    },
+    {
+     "vowel": "i",
+     "reason": "off-shape",
+     "semitones": 14
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "mezzo | no fR2 on [e]": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "ɑ": 617,
+    "o": 489,
+    "e": 381,
+    "a": 709.6,
+    "ɛ": 548.6,
+    "u": 335.6,
+    "ɨ": 404,
+    "ɪ": 393,
+    "ʌ": 617
+   },
+   "fR1Source": {
+    "i": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "e": "sung",
+    "a": "derived",
+    "ɛ": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "ɑ": 1013,
+    "o": 826,
+    "a": 1114.3,
+    "e": 1532,
+    "ɛ": 1311,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168
+   },
+   "fR2Source": {
+    "i": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "a": "derived",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "e": "shift-and-spread",
+    "ɛ": "shift-and-spread",
+    "u": "shift-and-spread",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived"
+   },
+   "retake": [
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -3.7
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "mezzo | provisional [u], [ɨ] sung": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "ɨ": 404,
+    "u": 346,
+    "e": 508,
+    "ɛ": 538.2,
+    "ɑ": 604.1,
+    "o": 479.5,
+    "ɪ": 524,
+    "ʌ": 604.1,
+    "a": 694.7
+   },
+   "fR1Source": {
+    "i": "sung",
+    "ɨ": "sung",
+    "u": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "ɨ": 1100,
+    "u": 804,
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "i": "sung",
+    "ɨ": "sung",
+    "u": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "e": "shift",
+    "ɛ": "shift",
+    "ɑ": "shift",
+    "o": "shift",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "mezzo | verdict stored": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 381,
+    "u": 346,
+    "ɑ": 617,
+    "ɛ": 577,
+    "ɨ": 404,
+    "ɪ": 393,
+    "ʌ": 617,
+    "a": 709.6,
+    "o": 494.7
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "sung",
+    "u": "sung",
+    "ɑ": "sung",
+    "ɛ": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived",
+    "o": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "u": 804,
+    "ɑ": 1013,
+    "ɛ": 1311,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3,
+    "o": 826
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "sung",
+    "u": "sung",
+    "ɑ": "sung",
+    "ɛ": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived",
+    "o": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "o": "shift-and-spread"
+   },
+   "retake": [
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -4.2
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "contralto | none": {
+  "snapshot": {
+   "fR1": {},
+   "fR1Source": {},
+   "label": "golden"
+  },
+  "completeness": {
+   "formants": false,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "contralto | i": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 497.8,
+    "ɛ": 527.4,
+    "ɑ": 592,
+    "o": 469.9,
+    "u": 332.3,
+    "ɨ": 404,
+    "ɪ": 513.5,
+    "ʌ": 592,
+    "a": 680.8
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "e": "shift",
+    "ɛ": "shift",
+    "ɑ": "shift",
+    "o": "shift",
+    "u": "shift",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "contralto | i,u": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "u": 346,
+    "ɨ": 404,
+    "e": 508,
+    "ɛ": 538.2,
+    "ɑ": 604.1,
+    "o": 479.5,
+    "ɪ": 524,
+    "ʌ": 604.1,
+    "a": 694.7
+   },
+   "fR1Source": {
+    "i": "sung",
+    "u": "sung",
+    "ɨ": "derived",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "u": 804,
+    "ɨ": 1101.3,
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "i": "sung",
+    "u": "sung",
+    "ɨ": "derived",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "e": "shift",
+    "ɛ": "shift",
+    "ɑ": "shift",
+    "o": "shift",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "contralto | i,e,ɑ": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 381,
+    "ɑ": 617,
+    "ɪ": 393,
+    "a": 709.6,
+    "ɛ": 538.4,
+    "o": 479.7,
+    "u": 339.2,
+    "ɨ": 404,
+    "ʌ": 617
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɑ": "sung",
+    "ɪ": "derived",
+    "a": "derived",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɑ": 1013,
+    "ɪ": 1599.5,
+    "a": 1114.3,
+    "ɛ": 1311,
+    "o": 826,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ʌ": 1168
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɑ": "sung",
+    "ɪ": "derived",
+    "a": "derived",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "ɛ": "shift",
+    "o": "shift",
+    "u": "shift",
+    "ɨ": "derived",
+    "ʌ": "derived"
+   },
+   "retake": [
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -3.3
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "contralto | e,ɛ,ɑ,o": {
+  "snapshot": {
+   "fR1": {
+    "e": 381,
+    "ɛ": 577,
+    "ɑ": 617,
+    "o": 489,
+    "ʌ": 617,
+    "a": 709.6,
+    "i": 313.4,
+    "u": 351.8,
+    "ɨ": 427.8,
+    "ɪ": 393
+   },
+   "fR1Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "ʌ": "derived",
+    "a": "derived",
+    "i": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate"
+   },
+   "fR2": {
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "ʌ": 1168,
+    "a": 1114.3,
+    "i": 1705,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5
+   },
+   "fR2Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "ʌ": "derived",
+    "a": "derived",
+    "i": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "i": "shift",
+    "u": "shift",
+    "ɨ": "derived",
+    "ɪ": "derived"
+   },
+   "retake": [
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -3.8
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "contralto | six": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 381,
+    "ɛ": 577,
+    "ɑ": 617,
+    "o": 489,
+    "u": 346,
+    "ɨ": 404,
+    "ɪ": 393,
+    "ʌ": 617,
+    "a": 709.6
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "u": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "u": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {},
+   "retake": [
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -4.4
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "contralto | all ten": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 381,
+    "ɪ": 393,
+    "ɨ": 404,
+    "ɛ": 577,
+    "a": 711,
+    "ɑ": 617,
+    "ʌ": 616,
+    "o": 489,
+    "u": 346
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɪ": "sung",
+    "ɨ": "sung",
+    "ɛ": "sung",
+    "a": "sung",
+    "ɑ": "sung",
+    "ʌ": "sung",
+    "o": "sung",
+    "u": "sung"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɪ": 1600,
+    "ɨ": 1100,
+    "ɛ": 1311,
+    "a": 1113,
+    "ɑ": 1013,
+    "ʌ": 1167,
+    "o": 826,
+    "u": 804
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɪ": "sung",
+    "ɨ": "sung",
+    "ɛ": "sung",
+    "a": "sung",
+    "ɑ": "sung",
+    "ʌ": "sung",
+    "o": "sung",
+    "u": "sung"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {},
+   "retake": [
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -4.4
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "contralto | bad i (1063), no override": {
+  "snapshot": {
+   "fR1": {
+    "u": 346,
+    "ɑ": 617,
+    "a": 709.6,
+    "i": 308.4,
+    "e": 518.6,
+    "ɛ": 549.5,
+    "o": 489.5,
+    "ɨ": 421,
+    "ɪ": 534.9,
+    "ʌ": 617
+   },
+   "fR1Source": {
+    "u": "sung",
+    "ɑ": "sung",
+    "a": "derived",
+    "i": "surrogate",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "fR2": {
+    "u": 804,
+    "ɑ": 1013,
+    "a": 1114.3,
+    "i": 1705,
+    "e": 1532,
+    "ɛ": 1311,
+    "o": 826,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168
+   },
+   "fR2Source": {
+    "u": "sung",
+    "ɑ": "sung",
+    "a": "derived",
+    "i": "surrogate",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "i": "shift",
+    "e": "shift",
+    "ɛ": "shift",
+    "o": "shift",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived"
+   },
+   "retake": [
+    {
+     "vowel": "i",
+     "reason": "implausible"
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "contralto | bad i kept, six": {
+  "snapshot": {
+   "fR1": {
+    "e": 381,
+    "ɛ": 577,
+    "ɑ": 617,
+    "o": 489,
+    "u": 346,
+    "i": 1063,
+    "ɨ": 1451,
+    "ɪ": 393,
+    "ʌ": 617,
+    "a": 709.6
+   },
+   "fR1Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "u": "sung",
+    "i": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "fR2": {
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "u": 804,
+    "i": 2250,
+    "ɨ": 1281.2,
+    "ɪ": 1812,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "u": "sung",
+    "i": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {},
+   "retake": [
+    {
+     "vowel": "u",
+     "reason": "off-shape",
+     "semitones": -9.5
+    },
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -6.3
+    },
+    {
+     "vowel": "o",
+     "reason": "off-shape",
+     "semitones": -4.6
+    },
+    {
+     "vowel": "i",
+     "reason": "off-shape",
+     "semitones": 14
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "contralto | no fR2 on [e]": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "ɑ": 617,
+    "o": 489,
+    "e": 381,
+    "a": 709.6,
+    "ɛ": 548.6,
+    "u": 335.6,
+    "ɨ": 404,
+    "ɪ": 393,
+    "ʌ": 617
+   },
+   "fR1Source": {
+    "i": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "e": "sung",
+    "a": "derived",
+    "ɛ": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "ɑ": 1013,
+    "o": 826,
+    "a": 1114.3,
+    "e": 1532,
+    "ɛ": 1311,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168
+   },
+   "fR2Source": {
+    "i": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "a": "derived",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "e": "shift-and-spread",
+    "ɛ": "shift-and-spread",
+    "u": "shift-and-spread",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived"
+   },
+   "retake": [
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -3.7
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "contralto | provisional [u], [ɨ] sung": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "ɨ": 404,
+    "u": 346,
+    "e": 508,
+    "ɛ": 538.2,
+    "ɑ": 604.1,
+    "o": 479.5,
+    "ɪ": 524,
+    "ʌ": 604.1,
+    "a": 694.7
+   },
+   "fR1Source": {
+    "i": "sung",
+    "ɨ": "sung",
+    "u": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "ɨ": 1100,
+    "u": 804,
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "i": "sung",
+    "ɨ": "sung",
+    "u": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "e": "shift",
+    "ɛ": "shift",
+    "ɑ": "shift",
+    "o": "shift",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "contralto | verdict stored": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 381,
+    "u": 346,
+    "ɑ": 617,
+    "ɛ": 577,
+    "ɨ": 404,
+    "ɪ": 393,
+    "ʌ": 617,
+    "a": 709.6,
+    "o": 494.7
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "sung",
+    "u": "sung",
+    "ɑ": "sung",
+    "ɛ": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived",
+    "o": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "u": 804,
+    "ɑ": 1013,
+    "ɛ": 1311,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3,
+    "o": 826
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "sung",
+    "u": "sung",
+    "ɑ": "sung",
+    "ɛ": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived",
+    "o": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "o": "shift-and-spread"
+   },
+   "retake": [
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -4.2
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "tenor | none": {
+  "snapshot": {
+   "fR1": {
+    "i": 339.3,
+    "e": 570.6,
+    "ɛ": 604.5,
+    "ɑ": 678.6,
+    "o": 538.6,
+    "u": 380.8,
+    "ɨ": 463.1,
+    "ɪ": 588.6,
+    "ʌ": 678.6,
+    "a": 780.4
+   },
+   "fR1Source": {
+    "i": "surrogate",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1998.5,
+    "e": 1795.7,
+    "ɛ": 1536.7,
+    "ɑ": 1187.4,
+    "o": 968.2,
+    "u": 942.4,
+    "ɨ": 1290.9,
+    "ɪ": 1874.8,
+    "ʌ": 1369,
+    "a": 1306.1
+   },
+   "fR2Source": {
+    "i": "surrogate",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "i": "template",
+    "e": "template",
+    "ɛ": "template",
+    "ɑ": "template",
+    "o": "template",
+    "u": "template",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": true
+ },
+ "tenor | i": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 497.8,
+    "ɛ": 527.4,
+    "ɑ": 592,
+    "o": 469.9,
+    "u": 332.3,
+    "ɨ": 404,
+    "ɪ": 513.5,
+    "ʌ": 592,
+    "a": 680.8
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "e": "shift",
+    "ɛ": "shift",
+    "ɑ": "shift",
+    "o": "shift",
+    "u": "shift",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "tenor | i,u": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "u": 346,
+    "ɨ": 404,
+    "e": 508,
+    "ɛ": 538.2,
+    "ɑ": 604.1,
+    "o": 479.5,
+    "ɪ": 524,
+    "ʌ": 604.1,
+    "a": 694.7
+   },
+   "fR1Source": {
+    "i": "sung",
+    "u": "sung",
+    "ɨ": "derived",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "u": 804,
+    "ɨ": 1101.3,
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "i": "sung",
+    "u": "sung",
+    "ɨ": "derived",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "e": "shift",
+    "ɛ": "shift",
+    "ɑ": "shift",
+    "o": "shift",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "tenor | i,e,ɑ": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 381,
+    "ɑ": 617,
+    "ɪ": 393,
+    "a": 709.6,
+    "ɛ": 538.4,
+    "o": 479.7,
+    "u": 339.2,
+    "ɨ": 404,
+    "ʌ": 617
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɑ": "sung",
+    "ɪ": "derived",
+    "a": "derived",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɑ": 1013,
+    "ɪ": 1599.5,
+    "a": 1114.3,
+    "ɛ": 1311,
+    "o": 826,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ʌ": 1168
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɑ": "sung",
+    "ɪ": "derived",
+    "a": "derived",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "ɛ": "shift",
+    "o": "shift",
+    "u": "shift",
+    "ɨ": "derived",
+    "ʌ": "derived"
+   },
+   "retake": [
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -3.3
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "tenor | e,ɛ,ɑ,o": {
+  "snapshot": {
+   "fR1": {
+    "e": 381,
+    "ɛ": 577,
+    "ɑ": 617,
+    "o": 489,
+    "ʌ": 617,
+    "a": 709.6,
+    "i": 313.4,
+    "u": 351.8,
+    "ɨ": 427.8,
+    "ɪ": 393
+   },
+   "fR1Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "ʌ": "derived",
+    "a": "derived",
+    "i": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate"
+   },
+   "fR2": {
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "ʌ": 1168,
+    "a": 1114.3,
+    "i": 1705,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5
+   },
+   "fR2Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "ʌ": "derived",
+    "a": "derived",
+    "i": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "i": "shift",
+    "u": "shift",
+    "ɨ": "derived",
+    "ɪ": "derived"
+   },
+   "retake": [
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -3.8
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "tenor | six": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 381,
+    "ɛ": 577,
+    "ɑ": 617,
+    "o": 489,
+    "u": 346,
+    "ɨ": 404,
+    "ɪ": 393,
+    "ʌ": 617,
+    "a": 709.6
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "u": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "u": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {},
+   "retake": [
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -4.4
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "tenor | all ten": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 381,
+    "ɪ": 393,
+    "ɨ": 404,
+    "ɛ": 577,
+    "a": 711,
+    "ɑ": 617,
+    "ʌ": 616,
+    "o": 489,
+    "u": 346
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɪ": "sung",
+    "ɨ": "sung",
+    "ɛ": "sung",
+    "a": "sung",
+    "ɑ": "sung",
+    "ʌ": "sung",
+    "o": "sung",
+    "u": "sung"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɪ": 1600,
+    "ɨ": 1100,
+    "ɛ": 1311,
+    "a": 1113,
+    "ɑ": 1013,
+    "ʌ": 1167,
+    "o": 826,
+    "u": 804
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɪ": "sung",
+    "ɨ": "sung",
+    "ɛ": "sung",
+    "a": "sung",
+    "ɑ": "sung",
+    "ʌ": "sung",
+    "o": "sung",
+    "u": "sung"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {},
+   "retake": [
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -4.4
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "tenor | bad i (1063), no override": {
+  "snapshot": {
+   "fR1": {
+    "u": 346,
+    "ɑ": 617,
+    "a": 709.6,
+    "i": 308.4,
+    "e": 518.6,
+    "ɛ": 549.5,
+    "o": 489.5,
+    "ɨ": 421,
+    "ɪ": 534.9,
+    "ʌ": 617
+   },
+   "fR1Source": {
+    "u": "sung",
+    "ɑ": "sung",
+    "a": "derived",
+    "i": "surrogate",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "fR2": {
+    "u": 804,
+    "ɑ": 1013,
+    "a": 1114.3,
+    "i": 1705,
+    "e": 1532,
+    "ɛ": 1311,
+    "o": 826,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168
+   },
+   "fR2Source": {
+    "u": "sung",
+    "ɑ": "sung",
+    "a": "derived",
+    "i": "surrogate",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "i": "shift",
+    "e": "shift",
+    "ɛ": "shift",
+    "o": "shift",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived"
+   },
+   "retake": [
+    {
+     "vowel": "i",
+     "reason": "implausible"
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "tenor | bad i kept, six": {
+  "snapshot": {
+   "fR1": {
+    "e": 381,
+    "ɛ": 577,
+    "ɑ": 617,
+    "o": 489,
+    "u": 346,
+    "i": 1063,
+    "ɨ": 1451,
+    "ɪ": 393,
+    "ʌ": 617,
+    "a": 709.6
+   },
+   "fR1Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "u": "sung",
+    "i": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "fR2": {
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "u": 804,
+    "i": 2250,
+    "ɨ": 1281.2,
+    "ɪ": 1812,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "u": "sung",
+    "i": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {},
+   "retake": [
+    {
+     "vowel": "u",
+     "reason": "off-shape",
+     "semitones": -9.5
+    },
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -6.3
+    },
+    {
+     "vowel": "o",
+     "reason": "off-shape",
+     "semitones": -4.6
+    },
+    {
+     "vowel": "i",
+     "reason": "off-shape",
+     "semitones": 14
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "tenor | no fR2 on [e]": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "ɑ": 617,
+    "o": 489,
+    "e": 381,
+    "a": 709.6,
+    "ɛ": 548.6,
+    "u": 335.6,
+    "ɨ": 404,
+    "ɪ": 393,
+    "ʌ": 617
+   },
+   "fR1Source": {
+    "i": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "e": "sung",
+    "a": "derived",
+    "ɛ": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "ɑ": 1013,
+    "o": 826,
+    "a": 1114.3,
+    "e": 1532,
+    "ɛ": 1311,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168
+   },
+   "fR2Source": {
+    "i": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "a": "derived",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "e": "shift-and-spread",
+    "ɛ": "shift-and-spread",
+    "u": "shift-and-spread",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived"
+   },
+   "retake": [
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -3.7
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "tenor | provisional [u], [ɨ] sung": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "ɨ": 404,
+    "u": 346,
+    "e": 508,
+    "ɛ": 538.2,
+    "ɑ": 604.1,
+    "o": 479.5,
+    "ɪ": 524,
+    "ʌ": 604.1,
+    "a": 694.7
+   },
+   "fR1Source": {
+    "i": "sung",
+    "ɨ": "sung",
+    "u": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "ɨ": 1100,
+    "u": 804,
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "i": "sung",
+    "ɨ": "sung",
+    "u": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "e": "shift",
+    "ɛ": "shift",
+    "ɑ": "shift",
+    "o": "shift",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "tenor | verdict stored": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 381,
+    "u": 346,
+    "ɑ": 617,
+    "ɛ": 577,
+    "ɨ": 404,
+    "ɪ": 393,
+    "ʌ": 617,
+    "a": 709.6,
+    "o": 494.7
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "sung",
+    "u": "sung",
+    "ɑ": "sung",
+    "ɛ": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived",
+    "o": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "u": 804,
+    "ɑ": 1013,
+    "ɛ": 1311,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3,
+    "o": 826
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "sung",
+    "u": "sung",
+    "ɑ": "sung",
+    "ɛ": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived",
+    "o": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "o": "shift-and-spread"
+   },
+   "retake": [
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -4.2
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "countertenor | none": {
+  "snapshot": {
+   "fR1": {},
+   "fR1Source": {},
+   "label": "golden"
+  },
+  "completeness": {
+   "formants": false,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "countertenor | i": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 497.8,
+    "ɛ": 527.4,
+    "ɑ": 592,
+    "o": 469.9,
+    "u": 332.3,
+    "ɨ": 404,
+    "ɪ": 513.5,
+    "ʌ": 592,
+    "a": 680.8
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "e": "shift",
+    "ɛ": "shift",
+    "ɑ": "shift",
+    "o": "shift",
+    "u": "shift",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "countertenor | i,u": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "u": 346,
+    "ɨ": 404,
+    "e": 508,
+    "ɛ": 538.2,
+    "ɑ": 604.1,
+    "o": 479.5,
+    "ɪ": 524,
+    "ʌ": 604.1,
+    "a": 694.7
+   },
+   "fR1Source": {
+    "i": "sung",
+    "u": "sung",
+    "ɨ": "derived",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "u": 804,
+    "ɨ": 1101.3,
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "i": "sung",
+    "u": "sung",
+    "ɨ": "derived",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "e": "shift",
+    "ɛ": "shift",
+    "ɑ": "shift",
+    "o": "shift",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "countertenor | i,e,ɑ": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 381,
+    "ɑ": 617,
+    "ɪ": 393,
+    "a": 709.6,
+    "ɛ": 538.4,
+    "o": 479.7,
+    "u": 339.2,
+    "ɨ": 404,
+    "ʌ": 617
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɑ": "sung",
+    "ɪ": "derived",
+    "a": "derived",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɑ": 1013,
+    "ɪ": 1599.5,
+    "a": 1114.3,
+    "ɛ": 1311,
+    "o": 826,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ʌ": 1168
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɑ": "sung",
+    "ɪ": "derived",
+    "a": "derived",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "ɛ": "shift",
+    "o": "shift",
+    "u": "shift",
+    "ɨ": "derived",
+    "ʌ": "derived"
+   },
+   "retake": [
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -3.3
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "countertenor | e,ɛ,ɑ,o": {
+  "snapshot": {
+   "fR1": {
+    "e": 381,
+    "ɛ": 577,
+    "ɑ": 617,
+    "o": 489,
+    "ʌ": 617,
+    "a": 709.6,
+    "i": 313.4,
+    "u": 351.8,
+    "ɨ": 427.8,
+    "ɪ": 393
+   },
+   "fR1Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "ʌ": "derived",
+    "a": "derived",
+    "i": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate"
+   },
+   "fR2": {
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "ʌ": 1168,
+    "a": 1114.3,
+    "i": 1705,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5
+   },
+   "fR2Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "ʌ": "derived",
+    "a": "derived",
+    "i": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "i": "shift",
+    "u": "shift",
+    "ɨ": "derived",
+    "ɪ": "derived"
+   },
+   "retake": [
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -3.8
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "countertenor | six": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 381,
+    "ɛ": 577,
+    "ɑ": 617,
+    "o": 489,
+    "u": 346,
+    "ɨ": 404,
+    "ɪ": 393,
+    "ʌ": 617,
+    "a": 709.6
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "u": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "u": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {},
+   "retake": [
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -4.4
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "countertenor | all ten": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 381,
+    "ɪ": 393,
+    "ɨ": 404,
+    "ɛ": 577,
+    "a": 711,
+    "ɑ": 617,
+    "ʌ": 616,
+    "o": 489,
+    "u": 346
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɪ": "sung",
+    "ɨ": "sung",
+    "ɛ": "sung",
+    "a": "sung",
+    "ɑ": "sung",
+    "ʌ": "sung",
+    "o": "sung",
+    "u": "sung"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɪ": 1600,
+    "ɨ": 1100,
+    "ɛ": 1311,
+    "a": 1113,
+    "ɑ": 1013,
+    "ʌ": 1167,
+    "o": 826,
+    "u": 804
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɪ": "sung",
+    "ɨ": "sung",
+    "ɛ": "sung",
+    "a": "sung",
+    "ɑ": "sung",
+    "ʌ": "sung",
+    "o": "sung",
+    "u": "sung"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {},
+   "retake": [
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -4.4
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "countertenor | bad i (1063), no override": {
+  "snapshot": {
+   "fR1": {
+    "u": 346,
+    "ɑ": 617,
+    "a": 709.6,
+    "i": 308.4,
+    "e": 518.6,
+    "ɛ": 549.5,
+    "o": 489.5,
+    "ɨ": 421,
+    "ɪ": 534.9,
+    "ʌ": 617
+   },
+   "fR1Source": {
+    "u": "sung",
+    "ɑ": "sung",
+    "a": "derived",
+    "i": "surrogate",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "fR2": {
+    "u": 804,
+    "ɑ": 1013,
+    "a": 1114.3,
+    "i": 1705,
+    "e": 1532,
+    "ɛ": 1311,
+    "o": 826,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168
+   },
+   "fR2Source": {
+    "u": "sung",
+    "ɑ": "sung",
+    "a": "derived",
+    "i": "surrogate",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "i": "shift",
+    "e": "shift",
+    "ɛ": "shift",
+    "o": "shift",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived"
+   },
+   "retake": [
+    {
+     "vowel": "i",
+     "reason": "implausible"
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "countertenor | bad i kept, six": {
+  "snapshot": {
+   "fR1": {
+    "e": 381,
+    "ɛ": 577,
+    "ɑ": 617,
+    "o": 489,
+    "u": 346,
+    "i": 1063,
+    "ɨ": 1451,
+    "ɪ": 393,
+    "ʌ": 617,
+    "a": 709.6
+   },
+   "fR1Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "u": "sung",
+    "i": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "fR2": {
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "u": 804,
+    "i": 2250,
+    "ɨ": 1281.2,
+    "ɪ": 1812,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "u": "sung",
+    "i": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {},
+   "retake": [
+    {
+     "vowel": "u",
+     "reason": "off-shape",
+     "semitones": -9.5
+    },
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -6.3
+    },
+    {
+     "vowel": "o",
+     "reason": "off-shape",
+     "semitones": -4.6
+    },
+    {
+     "vowel": "i",
+     "reason": "off-shape",
+     "semitones": 14
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "countertenor | no fR2 on [e]": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "ɑ": 617,
+    "o": 489,
+    "e": 381,
+    "a": 709.6,
+    "ɛ": 548.6,
+    "u": 335.6,
+    "ɨ": 404,
+    "ɪ": 393,
+    "ʌ": 617
+   },
+   "fR1Source": {
+    "i": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "e": "sung",
+    "a": "derived",
+    "ɛ": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "ɑ": 1013,
+    "o": 826,
+    "a": 1114.3,
+    "e": 1532,
+    "ɛ": 1311,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168
+   },
+   "fR2Source": {
+    "i": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "a": "derived",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "e": "shift-and-spread",
+    "ɛ": "shift-and-spread",
+    "u": "shift-and-spread",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived"
+   },
+   "retake": [
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -3.7
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "countertenor | provisional [u], [ɨ] sung": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "ɨ": 404,
+    "u": 346,
+    "e": 508,
+    "ɛ": 538.2,
+    "ɑ": 604.1,
+    "o": 479.5,
+    "ɪ": 524,
+    "ʌ": 604.1,
+    "a": 694.7
+   },
+   "fR1Source": {
+    "i": "sung",
+    "ɨ": "sung",
+    "u": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "ɨ": 1100,
+    "u": 804,
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "i": "sung",
+    "ɨ": "sung",
+    "u": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "e": "shift",
+    "ɛ": "shift",
+    "ɑ": "shift",
+    "o": "shift",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "countertenor | verdict stored": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 381,
+    "u": 346,
+    "ɑ": 617,
+    "ɛ": 577,
+    "ɨ": 404,
+    "ɪ": 393,
+    "ʌ": 617,
+    "a": 709.6,
+    "o": 494.7
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "sung",
+    "u": "sung",
+    "ɑ": "sung",
+    "ɛ": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived",
+    "o": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "u": 804,
+    "ɑ": 1013,
+    "ɛ": 1311,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3,
+    "o": 826
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "sung",
+    "u": "sung",
+    "ɑ": "sung",
+    "ɛ": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived",
+    "o": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "o": "shift-and-spread"
+   },
+   "retake": [
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -4.2
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "baritone | none": {
+  "snapshot": {
+   "fR1": {
+    "i": 339.3,
+    "e": 508.4,
+    "ɛ": 570.6,
+    "ɑ": 604.5,
+    "o": 508.4,
+    "u": 339.3,
+    "ɨ": 463.1,
+    "ɪ": 524.4,
+    "ʌ": 604.5,
+    "a": 695.2
+   },
+   "fR1Source": {
+    "i": "surrogate",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1850.4,
+    "e": 1662.6,
+    "ɛ": 1422.8,
+    "ɑ": 1099.4,
+    "o": 896.4,
+    "u": 872.6,
+    "ɨ": 1195.3,
+    "ɪ": 1735.8,
+    "ʌ": 1267.6,
+    "a": 1209.3
+   },
+   "fR2Source": {
+    "i": "surrogate",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "baritone",
+   "steps": {
+    "i": "template",
+    "e": "template",
+    "ɛ": "template",
+    "ɑ": "template",
+    "o": "template",
+    "u": "template",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": true
+ },
+ "baritone | i": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 443.5,
+    "ɛ": 497.8,
+    "ɑ": 527.4,
+    "o": 443.5,
+    "u": 296,
+    "ɨ": 404,
+    "ɪ": 457.5,
+    "ʌ": 527.4,
+    "a": 606.5
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "baritone",
+   "steps": {
+    "e": "shift",
+    "ɛ": "shift",
+    "ɑ": "shift",
+    "o": "shift",
+    "u": "shift",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "baritone | i,u": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "u": 346,
+    "ɨ": 404,
+    "e": 479.5,
+    "ɛ": 538.2,
+    "ɑ": 570.2,
+    "o": 479.5,
+    "ɪ": 494.6,
+    "ʌ": 570.2,
+    "a": 655.7
+   },
+   "fR1Source": {
+    "i": "sung",
+    "u": "sung",
+    "ɨ": "derived",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "u": 804,
+    "ɨ": 1101.3,
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "i": "sung",
+    "u": "sung",
+    "ɨ": "derived",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "baritone",
+   "steps": {
+    "e": "shift",
+    "ɛ": "shift",
+    "ɑ": "shift",
+    "o": "shift",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "baritone | i,e,ɑ": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 381,
+    "ɑ": 617,
+    "ɪ": 393,
+    "a": 709.6,
+    "ɛ": 498.6,
+    "o": 444.2,
+    "u": 296.5,
+    "ɨ": 404,
+    "ʌ": 617
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɑ": "sung",
+    "ɪ": "derived",
+    "a": "derived",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɑ": 1013,
+    "ɪ": 1599.5,
+    "a": 1114.3,
+    "ɛ": 1311,
+    "o": 826,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ʌ": 1168
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɑ": "sung",
+    "ɪ": "derived",
+    "a": "derived",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "baritone",
+   "steps": {
+    "ɛ": "shift",
+    "o": "shift",
+    "u": "shift",
+    "ɨ": "derived",
+    "ʌ": "derived"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "baritone | e,ɛ,ɑ,o": {
+  "snapshot": {
+   "fR1": {
+    "e": 381,
+    "ɛ": 577,
+    "ɑ": 617,
+    "o": 489,
+    "ʌ": 617,
+    "a": 709.6,
+    "i": 181.1,
+    "u": 181.1,
+    "ɨ": 247.2,
+    "ɪ": 393
+   },
+   "fR1Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "ʌ": "derived",
+    "a": "derived",
+    "i": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate"
+   },
+   "fR2": {
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "ʌ": 1168,
+    "a": 1114.3,
+    "i": 1705,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5
+   },
+   "fR2Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "ʌ": "derived",
+    "a": "derived",
+    "i": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "baritone",
+   "steps": {
+    "i": "shift-and-spread",
+    "u": "shift-and-spread",
+    "ɨ": "derived",
+    "ɪ": "derived"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "baritone | six": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 381,
+    "ɛ": 577,
+    "ɑ": 617,
+    "o": 489,
+    "u": 346,
+    "ɨ": 404,
+    "ɪ": 393,
+    "ʌ": 617,
+    "a": 709.6
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "u": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "u": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "baritone",
+   "steps": {},
+   "retake": [
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -3.9
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "baritone | all ten": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 381,
+    "ɪ": 393,
+    "ɨ": 404,
+    "ɛ": 577,
+    "a": 711,
+    "ɑ": 617,
+    "ʌ": 616,
+    "o": 489,
+    "u": 346
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɪ": "sung",
+    "ɨ": "sung",
+    "ɛ": "sung",
+    "a": "sung",
+    "ɑ": "sung",
+    "ʌ": "sung",
+    "o": "sung",
+    "u": "sung"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɪ": 1600,
+    "ɨ": 1100,
+    "ɛ": 1311,
+    "a": 1113,
+    "ɑ": 1013,
+    "ʌ": 1167,
+    "o": 826,
+    "u": 804
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɪ": "sung",
+    "ɨ": "sung",
+    "ɛ": "sung",
+    "a": "sung",
+    "ɑ": "sung",
+    "ʌ": "sung",
+    "o": "sung",
+    "u": "sung"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "baritone",
+   "steps": {},
+   "retake": [
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -3.9
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "baritone | bad i (1063), no override": {
+  "snapshot": {
+   "fR1": {
+    "u": 346,
+    "ɑ": 617,
+    "a": 709.6,
+    "i": 346.1,
+    "e": 518.6,
+    "ɛ": 582.1,
+    "o": 518.6,
+    "ɨ": 472.4,
+    "ɪ": 534.9,
+    "ʌ": 617
+   },
+   "fR1Source": {
+    "u": "sung",
+    "ɑ": "sung",
+    "a": "derived",
+    "i": "surrogate",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "fR2": {
+    "u": 804,
+    "ɑ": 1013,
+    "a": 1114.3,
+    "i": 1705,
+    "e": 1532,
+    "ɛ": 1311,
+    "o": 826,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168
+   },
+   "fR2Source": {
+    "u": "sung",
+    "ɑ": "sung",
+    "a": "derived",
+    "i": "surrogate",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "baritone",
+   "steps": {
+    "i": "shift",
+    "e": "shift",
+    "ɛ": "shift",
+    "o": "shift",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived"
+   },
+   "retake": [
+    {
+     "vowel": "i",
+     "reason": "implausible"
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "baritone | bad i kept, six": {
+  "snapshot": {
+   "fR1": {
+    "e": 381,
+    "ɛ": 577,
+    "ɑ": 617,
+    "o": 489,
+    "u": 346,
+    "i": 1063,
+    "ɨ": 1451,
+    "ɪ": 393,
+    "ʌ": 617,
+    "a": 709.6
+   },
+   "fR1Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "u": "sung",
+    "i": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "fR2": {
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "u": 804,
+    "i": 2250,
+    "ɨ": 1281.2,
+    "ɪ": 1812,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "u": "sung",
+    "i": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "baritone",
+   "steps": {},
+   "retake": [
+    {
+     "vowel": "i",
+     "reason": "off-shape",
+     "semitones": 10.7
+    },
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -4
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "baritone | no fR2 on [e]": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "ɑ": 617,
+    "o": 489,
+    "e": 381,
+    "a": 709.6,
+    "ɛ": 570.4,
+    "u": 295.3,
+    "ɨ": 404,
+    "ɪ": 393,
+    "ʌ": 617
+   },
+   "fR1Source": {
+    "i": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "e": "sung",
+    "a": "derived",
+    "ɛ": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "ɑ": 1013,
+    "o": 826,
+    "a": 1114.3,
+    "e": 1532,
+    "ɛ": 1311,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168
+   },
+   "fR2Source": {
+    "i": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "a": "derived",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "baritone",
+   "steps": {
+    "e": "shift-and-spread",
+    "ɛ": "shift-and-spread",
+    "u": "shift-and-spread",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived"
+   },
+   "retake": [
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -3.3
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "baritone | provisional [u], [ɨ] sung": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "ɨ": 404,
+    "u": 346,
+    "e": 479.5,
+    "ɛ": 538.2,
+    "ɑ": 570.2,
+    "o": 479.5,
+    "ɪ": 494.6,
+    "ʌ": 570.2,
+    "a": 655.7
+   },
+   "fR1Source": {
+    "i": "sung",
+    "ɨ": "sung",
+    "u": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "ɨ": 1100,
+    "u": 804,
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "i": "sung",
+    "ɨ": "sung",
+    "u": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "baritone",
+   "steps": {
+    "e": "shift",
+    "ɛ": "shift",
+    "ɑ": "shift",
+    "o": "shift",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "baritone | verdict stored": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 381,
+    "u": 346,
+    "ɑ": 617,
+    "ɛ": 577,
+    "ɨ": 404,
+    "ɪ": 393,
+    "ʌ": 617,
+    "a": 709.6,
+    "o": 506.5
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "sung",
+    "u": "sung",
+    "ɑ": "sung",
+    "ɛ": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived",
+    "o": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "u": 804,
+    "ɑ": 1013,
+    "ɛ": 1311,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3,
+    "o": 826
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "sung",
+    "u": "sung",
+    "ɑ": "sung",
+    "ɛ": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived",
+    "o": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "baritone",
+   "steps": {
+    "o": "shift-and-spread"
+   },
+   "retake": [
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -3.8
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "bass | none": {
+  "snapshot": {
+   "fR1": {
+    "i": 311.1,
+    "e": 440,
+    "ɛ": 538.6,
+    "ɑ": 604.5,
+    "o": 440,
+    "u": 320.2,
+    "ɨ": 424.7,
+    "ɪ": 453.9,
+    "ʌ": 604.5,
+    "a": 695.2
+   },
+   "fR1Source": {
+    "i": "surrogate",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "i": "surrogate",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "bass",
+   "steps": {
+    "i": "template",
+    "e": "template",
+    "ɛ": "template",
+    "ɑ": "template",
+    "o": "template",
+    "u": "template",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": true
+ },
+ "bass | i": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 418.6,
+    "ɛ": 512.4,
+    "ɑ": 575.2,
+    "o": 418.6,
+    "u": 304.7,
+    "ɨ": 404,
+    "ɪ": 431.8,
+    "ʌ": 575.2,
+    "a": 661.5
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "bass",
+   "steps": {
+    "e": "shift",
+    "ɛ": "shift",
+    "ɑ": "shift",
+    "o": "shift",
+    "u": "shift",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "bass | i,u": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "u": 346,
+    "ɨ": 404,
+    "e": 446.1,
+    "ɛ": 546,
+    "ɑ": 612.9,
+    "o": 446.1,
+    "ɪ": 460.2,
+    "ʌ": 612.9,
+    "a": 704.8
+   },
+   "fR1Source": {
+    "i": "sung",
+    "u": "sung",
+    "ɨ": "derived",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "u": 804,
+    "ɨ": 1101.3,
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "i": "sung",
+    "u": "sung",
+    "ɨ": "derived",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "bass",
+   "steps": {
+    "e": "shift",
+    "ɛ": "shift",
+    "ɑ": "shift",
+    "o": "shift",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "bass | i,e,ɑ": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 381,
+    "ɑ": 617,
+    "ɪ": 393,
+    "a": 709.6,
+    "ɛ": 508.3,
+    "o": 415.3,
+    "u": 302.3,
+    "ɨ": 404,
+    "ʌ": 617
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɑ": "sung",
+    "ɪ": "derived",
+    "a": "derived",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɑ": 1013,
+    "ɪ": 1599.5,
+    "a": 1114.3,
+    "ɛ": 1311,
+    "o": 826,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ʌ": 1168
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɑ": "sung",
+    "ɪ": "derived",
+    "a": "derived",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "bass",
+   "steps": {
+    "ɛ": "shift",
+    "o": "shift",
+    "u": "shift",
+    "ɨ": "derived",
+    "ʌ": "derived"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "bass | e,ɛ,ɑ,o": {
+  "snapshot": {
+   "fR1": {
+    "e": 381,
+    "ɛ": 577,
+    "ɑ": 617,
+    "o": 489,
+    "ʌ": 617,
+    "a": 709.6,
+    "i": 288.4,
+    "u": 298.5,
+    "ɨ": 393.7,
+    "ɪ": 393
+   },
+   "fR1Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "ʌ": "derived",
+    "a": "derived",
+    "i": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate"
+   },
+   "fR2": {
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "ʌ": 1168,
+    "a": 1114.3,
+    "i": 1705,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5
+   },
+   "fR2Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "ʌ": "derived",
+    "a": "derived",
+    "i": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "bass",
+   "steps": {
+    "i": "shift-and-spread",
+    "u": "shift-and-spread",
+    "ɨ": "derived",
+    "ɪ": "derived"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "bass | six": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 381,
+    "ɛ": 577,
+    "ɑ": 617,
+    "o": 489,
+    "u": 346,
+    "ɨ": 404,
+    "ɪ": 393,
+    "ʌ": 617,
+    "a": 709.6
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "u": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "u": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "bass",
+   "steps": {},
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "bass | all ten": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 381,
+    "ɪ": 393,
+    "ɨ": 404,
+    "ɛ": 577,
+    "a": 711,
+    "ɑ": 617,
+    "ʌ": 616,
+    "o": 489,
+    "u": 346
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɪ": "sung",
+    "ɨ": "sung",
+    "ɛ": "sung",
+    "a": "sung",
+    "ɑ": "sung",
+    "ʌ": "sung",
+    "o": "sung",
+    "u": "sung"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɪ": 1600,
+    "ɨ": 1100,
+    "ɛ": 1311,
+    "a": 1113,
+    "ɑ": 1013,
+    "ʌ": 1167,
+    "o": 826,
+    "u": 804
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɪ": "sung",
+    "ɨ": "sung",
+    "ɛ": "sung",
+    "a": "sung",
+    "ɑ": "sung",
+    "ʌ": "sung",
+    "o": "sung",
+    "u": "sung"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "bass",
+   "steps": {},
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "bass | bad i (1063), no override": {
+  "snapshot": {
+   "fR1": {
+    "u": 346,
+    "ɑ": 617,
+    "a": 709.6,
+    "i": 326.7,
+    "e": 462,
+    "ɛ": 565.6,
+    "o": 462,
+    "ɨ": 445.9,
+    "ɪ": 476.6,
+    "ʌ": 617
+   },
+   "fR1Source": {
+    "u": "sung",
+    "ɑ": "sung",
+    "a": "derived",
+    "i": "surrogate",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "fR2": {
+    "u": 804,
+    "ɑ": 1013,
+    "a": 1114.3,
+    "i": 1705,
+    "e": 1532,
+    "ɛ": 1311,
+    "o": 826,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168
+   },
+   "fR2Source": {
+    "u": "sung",
+    "ɑ": "sung",
+    "a": "derived",
+    "i": "surrogate",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "bass",
+   "steps": {
+    "i": "shift",
+    "e": "shift",
+    "ɛ": "shift",
+    "o": "shift",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived"
+   },
+   "retake": [
+    {
+     "vowel": "i",
+     "reason": "implausible"
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "bass | bad i kept, six": {
+  "snapshot": {
+   "fR1": {
+    "e": 381,
+    "ɛ": 577,
+    "ɑ": 617,
+    "o": 489,
+    "u": 346,
+    "i": 1063,
+    "ɨ": 1451,
+    "ɪ": 393,
+    "ʌ": 617,
+    "a": 709.6
+   },
+   "fR1Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "u": "sung",
+    "i": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "fR2": {
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "u": 804,
+    "i": 2250,
+    "ɨ": 1281.2,
+    "ɪ": 1812,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "u": "sung",
+    "i": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "bass",
+   "steps": {},
+   "retake": [
+    {
+     "vowel": "i",
+     "reason": "off-shape",
+     "semitones": 11.2
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "bass | no fR2 on [e]": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "ɑ": 617,
+    "o": 489,
+    "e": 381,
+    "a": 709.6,
+    "ɛ": 541.3,
+    "u": 304.7,
+    "ɨ": 404,
+    "ɪ": 393,
+    "ʌ": 617
+   },
+   "fR1Source": {
+    "i": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "e": "sung",
+    "a": "derived",
+    "ɛ": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "ɑ": 1013,
+    "o": 826,
+    "a": 1114.3,
+    "e": 1532,
+    "ɛ": 1311,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168
+   },
+   "fR2Source": {
+    "i": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "a": "derived",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "bass",
+   "steps": {
+    "e": "shift-and-spread",
+    "ɛ": "shift-and-spread",
+    "u": "shift-and-spread",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "bass | provisional [u], [ɨ] sung": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "ɨ": 404,
+    "u": 346,
+    "e": 446.1,
+    "ɛ": 546,
+    "ɑ": 612.9,
+    "o": 446.1,
+    "ɪ": 460.2,
+    "ʌ": 612.9,
+    "a": 704.8
+   },
+   "fR1Source": {
+    "i": "sung",
+    "ɨ": "sung",
+    "u": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "ɨ": 1100,
+    "u": 804,
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "i": "sung",
+    "ɨ": "sung",
+    "u": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "bass",
+   "steps": {
+    "e": "shift",
+    "ɛ": "shift",
+    "ɑ": "shift",
+    "o": "shift",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "bass | verdict stored": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 381,
+    "u": 346,
+    "ɑ": 617,
+    "ɛ": 577,
+    "ɨ": 404,
+    "ɪ": 393,
+    "ʌ": 617,
+    "a": 709.6,
+    "o": 438.1
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "sung",
+    "u": "sung",
+    "ɑ": "sung",
+    "ɛ": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived",
+    "o": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "u": 804,
+    "ɑ": 1013,
+    "ɛ": 1311,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3,
+    "o": 826
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "sung",
+    "u": "sung",
+    "ɑ": "sung",
+    "ɛ": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived",
+    "o": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "bass",
+   "steps": {
+    "o": "shift-and-spread"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "bass-baritone | none": {
+  "snapshot": {
+   "fR1": {},
+   "fR1Source": {},
+   "label": "golden"
+  },
+  "completeness": {
+   "formants": false,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "bass-baritone | i": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 418.6,
+    "ɛ": 512.4,
+    "ɑ": 575.2,
+    "o": 418.6,
+    "u": 304.7,
+    "ɨ": 404,
+    "ɪ": 431.8,
+    "ʌ": 575.2,
+    "a": 661.5
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "bass",
+   "steps": {
+    "e": "shift",
+    "ɛ": "shift",
+    "ɑ": "shift",
+    "o": "shift",
+    "u": "shift",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "bass-baritone | i,u": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "u": 346,
+    "ɨ": 404,
+    "e": 446.1,
+    "ɛ": 546,
+    "ɑ": 612.9,
+    "o": 446.1,
+    "ɪ": 460.2,
+    "ʌ": 612.9,
+    "a": 704.8
+   },
+   "fR1Source": {
+    "i": "sung",
+    "u": "sung",
+    "ɨ": "derived",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "u": 804,
+    "ɨ": 1101.3,
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "i": "sung",
+    "u": "sung",
+    "ɨ": "derived",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "bass",
+   "steps": {
+    "e": "shift",
+    "ɛ": "shift",
+    "ɑ": "shift",
+    "o": "shift",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "bass-baritone | i,e,ɑ": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 381,
+    "ɑ": 617,
+    "ɪ": 393,
+    "a": 709.6,
+    "ɛ": 508.3,
+    "o": 415.3,
+    "u": 302.3,
+    "ɨ": 404,
+    "ʌ": 617
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɑ": "sung",
+    "ɪ": "derived",
+    "a": "derived",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɑ": 1013,
+    "ɪ": 1599.5,
+    "a": 1114.3,
+    "ɛ": 1311,
+    "o": 826,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ʌ": 1168
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɑ": "sung",
+    "ɪ": "derived",
+    "a": "derived",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "bass",
+   "steps": {
+    "ɛ": "shift",
+    "o": "shift",
+    "u": "shift",
+    "ɨ": "derived",
+    "ʌ": "derived"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "bass-baritone | e,ɛ,ɑ,o": {
+  "snapshot": {
+   "fR1": {
+    "e": 381,
+    "ɛ": 577,
+    "ɑ": 617,
+    "o": 489,
+    "ʌ": 617,
+    "a": 709.6,
+    "i": 288.4,
+    "u": 298.5,
+    "ɨ": 393.7,
+    "ɪ": 393
+   },
+   "fR1Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "ʌ": "derived",
+    "a": "derived",
+    "i": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate"
+   },
+   "fR2": {
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "ʌ": 1168,
+    "a": 1114.3,
+    "i": 1705,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5
+   },
+   "fR2Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "ʌ": "derived",
+    "a": "derived",
+    "i": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "bass",
+   "steps": {
+    "i": "shift-and-spread",
+    "u": "shift-and-spread",
+    "ɨ": "derived",
+    "ɪ": "derived"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "bass-baritone | six": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 381,
+    "ɛ": 577,
+    "ɑ": 617,
+    "o": 489,
+    "u": 346,
+    "ɨ": 404,
+    "ɪ": 393,
+    "ʌ": 617,
+    "a": 709.6
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "u": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "u": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "bass",
+   "steps": {},
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "bass-baritone | all ten": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 381,
+    "ɪ": 393,
+    "ɨ": 404,
+    "ɛ": 577,
+    "a": 711,
+    "ɑ": 617,
+    "ʌ": 616,
+    "o": 489,
+    "u": 346
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɪ": "sung",
+    "ɨ": "sung",
+    "ɛ": "sung",
+    "a": "sung",
+    "ɑ": "sung",
+    "ʌ": "sung",
+    "o": "sung",
+    "u": "sung"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɪ": 1600,
+    "ɨ": 1100,
+    "ɛ": 1311,
+    "a": 1113,
+    "ɑ": 1013,
+    "ʌ": 1167,
+    "o": 826,
+    "u": 804
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɪ": "sung",
+    "ɨ": "sung",
+    "ɛ": "sung",
+    "a": "sung",
+    "ɑ": "sung",
+    "ʌ": "sung",
+    "o": "sung",
+    "u": "sung"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "bass",
+   "steps": {},
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "bass-baritone | bad i (1063), no override": {
+  "snapshot": {
+   "fR1": {
+    "u": 346,
+    "ɑ": 617,
+    "a": 709.6,
+    "i": 326.7,
+    "e": 462,
+    "ɛ": 565.6,
+    "o": 462,
+    "ɨ": 445.9,
+    "ɪ": 476.6,
+    "ʌ": 617
+   },
+   "fR1Source": {
+    "u": "sung",
+    "ɑ": "sung",
+    "a": "derived",
+    "i": "surrogate",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "fR2": {
+    "u": 804,
+    "ɑ": 1013,
+    "a": 1114.3,
+    "i": 1705,
+    "e": 1532,
+    "ɛ": 1311,
+    "o": 826,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168
+   },
+   "fR2Source": {
+    "u": "sung",
+    "ɑ": "sung",
+    "a": "derived",
+    "i": "surrogate",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "bass",
+   "steps": {
+    "i": "shift",
+    "e": "shift",
+    "ɛ": "shift",
+    "o": "shift",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived"
+   },
+   "retake": [
+    {
+     "vowel": "i",
+     "reason": "implausible"
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "bass-baritone | bad i kept, six": {
+  "snapshot": {
+   "fR1": {
+    "e": 381,
+    "ɛ": 577,
+    "ɑ": 617,
+    "o": 489,
+    "u": 346,
+    "i": 1063,
+    "ɨ": 1451,
+    "ɪ": 393,
+    "ʌ": 617,
+    "a": 709.6
+   },
+   "fR1Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "u": "sung",
+    "i": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "fR2": {
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "u": 804,
+    "i": 2250,
+    "ɨ": 1281.2,
+    "ɪ": 1812,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "u": "sung",
+    "i": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "bass",
+   "steps": {},
+   "retake": [
+    {
+     "vowel": "i",
+     "reason": "off-shape",
+     "semitones": 11.2
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "bass-baritone | no fR2 on [e]": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "ɑ": 617,
+    "o": 489,
+    "e": 381,
+    "a": 709.6,
+    "ɛ": 541.3,
+    "u": 304.7,
+    "ɨ": 404,
+    "ɪ": 393,
+    "ʌ": 617
+   },
+   "fR1Source": {
+    "i": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "e": "sung",
+    "a": "derived",
+    "ɛ": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "ɑ": 1013,
+    "o": 826,
+    "a": 1114.3,
+    "e": 1532,
+    "ɛ": 1311,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168
+   },
+   "fR2Source": {
+    "i": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "a": "derived",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "bass",
+   "steps": {
+    "e": "shift-and-spread",
+    "ɛ": "shift-and-spread",
+    "u": "shift-and-spread",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "bass-baritone | provisional [u], [ɨ] sung": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "ɨ": 404,
+    "u": 346,
+    "e": 446.1,
+    "ɛ": 546,
+    "ɑ": 612.9,
+    "o": 446.1,
+    "ɪ": 460.2,
+    "ʌ": 612.9,
+    "a": 704.8
+   },
+   "fR1Source": {
+    "i": "sung",
+    "ɨ": "sung",
+    "u": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "ɨ": 1100,
+    "u": 804,
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "i": "sung",
+    "ɨ": "sung",
+    "u": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "bass",
+   "steps": {
+    "e": "shift",
+    "ɛ": "shift",
+    "ɑ": "shift",
+    "o": "shift",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "bass-baritone | verdict stored": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 381,
+    "u": 346,
+    "ɑ": 617,
+    "ɛ": 577,
+    "ɨ": 404,
+    "ɪ": 393,
+    "ʌ": 617,
+    "a": 709.6,
+    "o": 438.1
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "sung",
+    "u": "sung",
+    "ɑ": "sung",
+    "ɛ": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived",
+    "o": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "u": 804,
+    "ɑ": 1013,
+    "ɛ": 1311,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3,
+    "o": 826
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "sung",
+    "u": "sung",
+    "ɑ": "sung",
+    "ɛ": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived",
+    "o": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "bass",
+   "steps": {
+    "o": "shift-and-spread"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "not-sure | none": {
+  "snapshot": {
+   "fR1": {},
+   "fR1Source": {},
+   "label": "golden"
+  },
+  "completeness": {
+   "formants": false,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "not-sure | i": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 459.1,
+    "ɛ": 506.5,
+    "ɑ": 562,
+    "o": 448.7,
+    "u": 317.2,
+    "ɨ": 404,
+    "ɪ": 473.6,
+    "ʌ": 562,
+    "a": 646.3
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "middle",
+   "steps": {
+    "e": "shift",
+    "ɛ": "shift",
+    "ɑ": "shift",
+    "o": "shift",
+    "u": "shift",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "not-sure | i,u": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "u": 346,
+    "ɨ": 404,
+    "e": 479.5,
+    "ɛ": 529,
+    "ɑ": 586.9,
+    "o": 468.5,
+    "ɪ": 494.6,
+    "ʌ": 586.9,
+    "a": 674.9
+   },
+   "fR1Source": {
+    "i": "sung",
+    "u": "sung",
+    "ɨ": "derived",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "u": 804,
+    "ɨ": 1101.3,
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "i": "sung",
+    "u": "sung",
+    "ɨ": "derived",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "middle",
+   "steps": {
+    "e": "shift",
+    "ɛ": "shift",
+    "ɑ": "shift",
+    "o": "shift",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "not-sure | i,e,ɑ": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 381,
+    "ɑ": 617,
+    "ɪ": 393,
+    "a": 709.6,
+    "ɛ": 491,
+    "o": 434.9,
+    "u": 307.5,
+    "ɨ": 404,
+    "ʌ": 617
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɑ": "sung",
+    "ɪ": "derived",
+    "a": "derived",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɑ": 1013,
+    "ɪ": 1599.5,
+    "a": 1114.3,
+    "ɛ": 1311,
+    "o": 826,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ʌ": 1168
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɑ": "sung",
+    "ɪ": "derived",
+    "a": "derived",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "middle",
+   "steps": {
+    "ɛ": "shift",
+    "o": "shift",
+    "u": "shift",
+    "ɨ": "derived",
+    "ʌ": "derived"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "not-sure | e,ɛ,ɑ,o": {
+  "snapshot": {
+   "fR1": {
+    "e": 381,
+    "ɛ": 577,
+    "ɑ": 617,
+    "o": 489,
+    "ʌ": 617,
+    "a": 709.6,
+    "i": 217.8,
+    "u": 244.4,
+    "ɨ": 297.3,
+    "ɪ": 393
+   },
+   "fR1Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "ʌ": "derived",
+    "a": "derived",
+    "i": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate"
+   },
+   "fR2": {
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "ʌ": 1168,
+    "a": 1114.3,
+    "i": 1705,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5
+   },
+   "fR2Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "ʌ": "derived",
+    "a": "derived",
+    "i": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "middle",
+   "steps": {
+    "i": "shift-and-spread",
+    "u": "shift-and-spread",
+    "ɨ": "derived",
+    "ɪ": "derived"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "not-sure | six": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 381,
+    "ɛ": 577,
+    "ɑ": 617,
+    "o": 489,
+    "u": 346,
+    "ɨ": 404,
+    "ɪ": 393,
+    "ʌ": 617,
+    "a": 709.6
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "u": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "u": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "middle",
+   "steps": {},
+   "retake": [
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -3.9
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "not-sure | all ten": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 381,
+    "ɪ": 393,
+    "ɨ": 404,
+    "ɛ": 577,
+    "a": 711,
+    "ɑ": 617,
+    "ʌ": 616,
+    "o": 489,
+    "u": 346
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɪ": "sung",
+    "ɨ": "sung",
+    "ɛ": "sung",
+    "a": "sung",
+    "ɑ": "sung",
+    "ʌ": "sung",
+    "o": "sung",
+    "u": "sung"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɪ": 1600,
+    "ɨ": 1100,
+    "ɛ": 1311,
+    "a": 1113,
+    "ɑ": 1013,
+    "ʌ": 1167,
+    "o": 826,
+    "u": 804
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɪ": "sung",
+    "ɨ": "sung",
+    "ɛ": "sung",
+    "a": "sung",
+    "ɑ": "sung",
+    "ʌ": "sung",
+    "o": "sung",
+    "u": "sung"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "middle",
+   "steps": {},
+   "retake": [
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -3.9
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "not-sure | bad i (1063), no override": {
+  "snapshot": {
+   "fR1": {
+    "u": 346,
+    "ɑ": 617,
+    "a": 709.6,
+    "i": 323.9,
+    "e": 502.4,
+    "ɛ": 554.2,
+    "o": 490.9,
+    "ɨ": 442.1,
+    "ɪ": 518.2,
+    "ʌ": 617
+   },
+   "fR1Source": {
+    "u": "sung",
+    "ɑ": "sung",
+    "a": "derived",
+    "i": "surrogate",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "fR2": {
+    "u": 804,
+    "ɑ": 1013,
+    "a": 1114.3,
+    "i": 1705,
+    "e": 1532,
+    "ɛ": 1311,
+    "o": 826,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168
+   },
+   "fR2Source": {
+    "u": "sung",
+    "ɑ": "sung",
+    "a": "derived",
+    "i": "surrogate",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "middle",
+   "steps": {
+    "i": "shift",
+    "e": "shift",
+    "ɛ": "shift",
+    "o": "shift",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived"
+   },
+   "retake": [
+    {
+     "vowel": "i",
+     "reason": "implausible"
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "not-sure | bad i kept, six": {
+  "snapshot": {
+   "fR1": {
+    "e": 381,
+    "ɛ": 577,
+    "ɑ": 617,
+    "o": 489,
+    "u": 346,
+    "i": 1063,
+    "ɨ": 1451,
+    "ɪ": 393,
+    "ʌ": 617,
+    "a": 709.6
+   },
+   "fR1Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "u": "sung",
+    "i": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "fR2": {
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "u": 804,
+    "i": 2250,
+    "ɨ": 1281.2,
+    "ɪ": 1812,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "u": "sung",
+    "i": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "middle",
+   "steps": {},
+   "retake": [
+    {
+     "vowel": "i",
+     "reason": "off-shape",
+     "semitones": 10
+    },
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -4
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "not-sure | no fR2 on [e]": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "ɑ": 617,
+    "o": 489,
+    "e": 381,
+    "a": 709.6,
+    "ɛ": 553.2,
+    "u": 322.5,
+    "ɨ": 404,
+    "ɪ": 393,
+    "ʌ": 617
+   },
+   "fR1Source": {
+    "i": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "e": "sung",
+    "a": "derived",
+    "ɛ": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "ɑ": 1013,
+    "o": 826,
+    "a": 1114.3,
+    "e": 1532,
+    "ɛ": 1311,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168
+   },
+   "fR2Source": {
+    "i": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "a": "derived",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "middle",
+   "steps": {
+    "e": "shift-and-spread",
+    "ɛ": "shift-and-spread",
+    "u": "shift-and-spread",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived"
+   },
+   "retake": [
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -3.3
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "not-sure | provisional [u], [ɨ] sung": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "ɨ": 404,
+    "u": 346,
+    "e": 479.5,
+    "ɛ": 529,
+    "ɑ": 586.9,
+    "o": 468.5,
+    "ɪ": 494.6,
+    "ʌ": 586.9,
+    "a": 674.9
+   },
+   "fR1Source": {
+    "i": "sung",
+    "ɨ": "sung",
+    "u": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "ɨ": 1100,
+    "u": 804,
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "i": "sung",
+    "ɨ": "sung",
+    "u": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "middle",
+   "steps": {
+    "e": "shift",
+    "ɛ": "shift",
+    "ɑ": "shift",
+    "o": "shift",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   },
+   "retake": []
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ },
+ "not-sure | verdict stored": {
+  "snapshot": {
+   "fR1": {
+    "i": 296,
+    "e": 381,
+    "u": 346,
+    "ɑ": 617,
+    "ɛ": 577,
+    "ɨ": 404,
+    "ɪ": 393,
+    "ʌ": 617,
+    "a": 709.6,
+    "o": 491.1
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "sung",
+    "u": "sung",
+    "ɑ": "sung",
+    "ɛ": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived",
+    "o": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "u": 804,
+    "ɑ": 1013,
+    "ɛ": 1311,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3,
+    "o": 826
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "sung",
+    "u": "sung",
+    "ɑ": "sung",
+    "ɛ": "sung",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived",
+    "o": "surrogate"
+   },
+   "label": "golden"
+  },
+  "standIns": {
+   "bucket": "middle",
+   "steps": {
+    "o": "shift-and-spread"
+   },
+   "retake": [
+    {
+     "vowel": "e",
+     "reason": "off-shape",
+     "semitones": -3.7
+    }
+   ]
+  },
+  "completeness": {
+   "formants": true,
+   "range": false,
+   "tessitura": false,
+   "passaggio": false
+  },
+  "generic": false
+ }
+}

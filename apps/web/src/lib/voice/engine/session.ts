@@ -1,5 +1,5 @@
 /**
- * The live capture-session contract the pacifier depends on.
+ * The live capture-session contract the capture screen depends on.
  *
  * Engine spec v1 §9 is a batch boundary: an AudioBuffer goes in, a
  * CalibratedFormant comes out. The v11 two-beat capture flow needs a live beat
@@ -8,7 +8,7 @@
  * Pulse-Register Detector, and the §9 extraction) and surfaces that beat.
  *
  * Source: Phase 3a brief and Kimi's review §2.2 and §2.5 (2026-06-09). The
- * pacifier is written against this interface; the port injects a stub
+ * capture screen is written against this interface; the port injects a stub
  * implementation, and the real engine drops in behind the same interface later.
  *
  * WIDENED 2026-08-04 for item 1.4a, on Dann's Option A ruling

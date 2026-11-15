@@ -122,11 +122,12 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		OPEN_STATIONS_KEY,
 		STATION_IDS,
 		BAND_IDS,
+		repertoireOpensOnArrival,
 		UNPERSISTED_STATIONS,
 	} from '$lib/components/Drawer/sections.svelte';
 	// N.73 S3: the one predicate for "is this voice calibrated", lifted out of
 	// the wizard so the voice anchor reads the same answer the wizard does.
-	import { hasAnyReadings, type VoiceTypeChoice } from '$lib/voice/profileStore';
+	import { usableReadingCount, type VoiceTypeChoice } from '$lib/voice/profileStore';
 	import { profileSave } from '$lib/voice/profile-save.svelte';
 	// N.115: the ten sung vowels as a value, so Score markup's state line can
 	// count the denominator of "10 of 10" without reading the wizard's queue.
@@ -134,6 +135,8 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	// N.115: what a closed band says, pure and tested. See `bandState.ts`.
 	import {
 		pieceStateLine,
+		repertoireStateLine,
+		analysisStateLine,
 		inputStateLine,
 		notationStateLine,
 		scoreStateLine,
@@ -151,6 +154,8 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		type MetadataState,
 	} from '$lib/metadata-provenance';
 	import NotationFields from '$lib/components/Drawer/NotationFields.svelte';
+	import { countVerifyWords } from '$lib/components/Paper/verify-words';
+	import { shownIpaAt } from '$lib/components/Paper/shown-ipa';
 	import AnalysisStation from '$lib/components/Drawer/AnalysisStation.svelte';
 	import StationHeader from '$lib/components/Drawer/StationHeader.svelte';
 	import Loupe from '$lib/score/Loupe.svelte';
@@ -269,6 +274,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	let transcribeError = $state('');
 	let transcribeMs = $state(0);
 	let selectedWord = $state<WordStackData | null>(null);
+	let revealRequest = $state(0);
 	let lastFocusedWord = $state<{ line: number; word: number } | null>(null);
 	// Drawer state
 	/**
@@ -1614,13 +1620,12 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	 * is invented, and neither behaviour is lost.
 	 */
 	/**
-	 * N.73 S3 ship one. Whether the active voice holds any reading at all.
-	 * ONE predicate, `hasAnyReadings` in `profileStore.ts`, lifted out of
-	 * `CalibrationWizard` so the wizard's opening phase, the voice anchor's
-	 * sentence, and this Print guard cannot give three answers. The guard's
-	 * expression is unchanged in meaning: it read
-	 * `Object.keys(voiceFormants).length === 0` inline, which is the same test
-	 * written a second time.
+	 * Whether the active voice holds a reading the app may use (closing polish
+	 * lane, 2026-11-12). `usableReadingCount` in `profileStore.ts` counts the
+	 * readings the plausibility guard has not refused, so the voice anchor's
+	 * button and the Voice band's count give one answer. The wizard's opening
+	 * phase keeps `hasAnyReadings`, the wider test, on purpose. The Print guard
+	 * this once served is gone (the note below).
 	 */
 	/* `printDisabled` IS GONE, N.65, Dann's ruling of 2026-08-21. It read
 	   `studioDocument === 'markup' ? !ingestedScore && !voiceCalibrated
@@ -1628,7 +1633,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	   sits under the sheet now and IT IS ALWAYS LIVE ON TRANSCRIPTION AND
 	   MARKED SCORE: no disabled state, no greying. `voiceCalibrated` stays,
 	   because the voice anchor reads it. */
-	const voiceCalibrated = $derived(hasAnyReadings(voiceFormants));
+	const voiceCalibrated = $derived(usableReadingCount(voiceFormants) > 0);
 	/**
 	 * N.114b item 8 emptied this of everything but the flag. It used to expand
 	 * the wizard first, because the Q3 collapse could leave a takeover opening
@@ -1713,7 +1718,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		INCLUDE_MARKUP_INSIGHTS
 			? scoreStateLine(
 					voiceName,
-					Object.keys(voiceFormants).length,
+					usableReadingCount(voiceFormants),
 					VOWELS.length,
 					language,
 				)
@@ -2127,6 +2132,12 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		   `drawerRaised` is not read there. This is the same behaviour the
 		   collapsed drawer had, under the state that replaced it. */
 		if (isMobile) drawerRaised = true;
+		/* N.201: a tap OPENS ANALYSIS IN VIEW (ratified 2026-10-31, built now).
+		   `reveal` shuts the other bands on a phone and nothing on a desk, and
+		   leaves ANALYSIS open on a second tap; the counter asks the Drawer to
+		   scroll (`Drawer.svelte`, `revealScrollTop`). */
+		sections.reveal(BAND_IDS.analysis);
+		revealRequest += 1;
 		// Switch to Transcription if clicking a word from another surface
 		if (destination !== 'studio' || studioDocument !== 'text') {
 			destination = 'studio';
@@ -3070,6 +3081,23 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		),
 	);
 
+	/* N.201 step 4: THE TWO NEW CLOSED LINES. REPERTOIRE: the rows the list draws
+	   (`songRows`, the one count the closed line reads; the others are `songs`,
+	   the library pointer's `songCount`, `RootPanel`'s `songs.length > 1` and
+	   `SongList`'s `canDelete`). ANALYSIS: the chosen word and its IPA as the
+	   stack shows it, else the count of VERIFY words on the page, which reads
+	   `effectiveLines`, the lines `Paper` draws, so it follows the shown witness
+	   and is the same on MELODY. */
+	const repertoireStateText = $derived(repertoireStateLine(songRows.length, language));
+	const analysisStateText = $derived(
+		analysisStateLine(
+			selectedWord,
+			selectedWord ? shownIpaAt(effectiveLines, selectedWord.lineIndex, selectedWord.wordIndex, notationPrefs, spotInverts) : null,
+			countVerifyWords(effectiveLines),
+			language,
+		)
+	);
+
 	/**
 	 * Open another song. CLOSE() THEN OPEN(), never a prop change and never a
 	 * reload.
@@ -3110,7 +3138,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 			cancelQuietTimer();
 			orphanedCount = 0;
 			noLyricsFile = null; scanBanners.reset();
-			restoreSource = restoreFrom(bytes, next.source?.page);
+			restoreSource = restoreFrom(bytes);
 			doc = next;
 			await refreshSongs();
 			/* A SWITCH IS NOT A BOOT. The singer just chose this song, so Ilya
@@ -3140,6 +3168,10 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 			return;
 		}
 		libraryError = null;
+		/* N.201: New song folds REPERTOIRE and opens INPUT, only after the
+		   write succeeded (the error line is inside REPERTOIRE's body). */
+		sections.fold(BAND_IDS.repertoire);
+		sections.reveal(BAND_IDS.input);
 		await refreshSongs();
 		await switchSong(created.record.id);
 	}
@@ -3214,7 +3246,13 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		// draws, and every string it draws is handed to it.
 		unreadable: t('song.unreadable', language),
 		newerIlya: t('song.newerIlya', language),
-		onopen: (id: string) => void switchSong(id),
+		/* N.201: a pick folds REPERTOIRE, the song already open included, so
+		   the fold sits here and not in `switchSong` (which returns early for
+		   that song and is also Delete's and `recognize.open`'s). */
+		onopen: (id: string) => {
+			sections.fold(BAND_IDS.repertoire);
+			void switchSong(id);
+		},
 		onnew: () => void handleNewSong(),
 		onrename: handleRenameSong,
 		ondelete: handleDeleteSong,
@@ -3229,10 +3267,10 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	 * What the uploader needs to bring a stored score back.
 	 *
 	 * The stored page's clef and key answers are no longer handed on: they were
-	 * the old page reader's (retired 2026-10-27), and `page` is kept in the
-	 * signature because `SongSource.page` still holds them for older songs.
+	 * the old page reader's (retired 2026-10-27), so the function takes no
+	 * `page`; `SongSource.page` still holds them for older songs.
 	 */
-	function restoreFrom(source: SourceBytes | null, page: PageProvenance | null | undefined) {
+	function restoreFrom(source: SourceBytes | null) {
 		if (!source) return null;
 		return {
 			fileName: source.fileName,
@@ -3244,7 +3282,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	// N.67 step 4b: STATE, because a switch hands the uploader a different
 	// song's bytes. The uploader is keyed on `doc.id`, so it remounts and its
 	// own restore runs, which is the same path a reload takes and no other.
-	let restoreSource = $state(restoreFrom(opened?.source ?? null, opened?.loaded?.record?.source?.page));
+	let restoreSource = $state(restoreFrom(opened?.source ?? null));
 
 	/**
 	 * N.108 increment 2. THE UPLOADER INSTANCE, so the one intake can hand it a
@@ -3603,6 +3641,12 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 			   the width a second time here would put a second opinion about
 			   the layout rule in the tree. */
 			sections.restore(localStorage.getItem(OPEN_STATIONS_KEY), isMobile);
+			/* N.201 ARRIVAL: a desk opens REPERTOIRE at two or more songs, so the
+			   singer sees the files once; fewer, and the stored set stands (a
+			   first run opens INPUT alone). A phone never does. `songs` is
+			   empty here (`refreshSongs` is not awaited), so the count is the
+			   pointer's, read at open. */
+			if (repertoireOpensOnArrival(isMobile, opened?.pointer.songCount ?? 0)) sections.open([BAND_IDS.repertoire]);
 		} catch {
 			// localStorage unavailable
 		}
@@ -3664,11 +3708,6 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	on:pointercancel={(e) => swipe.cancel(e)}
 />
 
-<svelte:head>
-	<link rel="preconnect" href="https://fonts.googleapis.com" />
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
-	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;1,400&family=Noto+Serif:ital,wght@0,400;1,400&display=swap" rel="stylesheet" />
-</svelte:head>
 <!-- N.73 portrait C, ruling 4: THE INTERSTITIAL IS RETIRED. The gate that
      stood here ("Ilya is designed for desktop / Continue anyway") met every
      phone visit and is Fable's audit finding F5. A portrait visit now arrives
@@ -3790,11 +3829,14 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		takeoverActive={calibrating}
 		onexittakeover={exitCalibration}
 		{sections}
+		repertoireState={repertoireStateText}
 		pieceState={pieceStateText}
 		pieceFromScore={doc.fromScoreFields.has('title')}
 		inputState={inputStateText}
+		analysisState={analysisStateText}
 		scoreState={scoreStateText}
 		ontogglepull={handlePullToggle}
+		{revealRequest}
 		gesturesBlocked={loupeOpen}
 		ontabchange={handleTabChange}
 		onheadingnavigate={handleHeadingNavigate}
@@ -3862,12 +3904,10 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 					</div>
 				{/if}
 			{/snippet}
-			<!-- ═══ THE PIECE GROUP (N.108 increment 1, NARROWED BY N.108-5).
-			     Repertoire, Export and import, and the name and Metadata that
-			     the band itself carries. THE INTAKE LEFT for a band of its
-			     own, ruled by Dann 2026-09-07; `RootPanel` is still this
-			     group's contents and nothing else. -->
-			{#snippet pieceGroup()}
+			<!-- ═══ REPERTOIRE'S BODY (N.201): the song list, then Export and
+			     import. It was the Piece group's contents; REPERTOIRE is the
+			     first band now. -->
+			{#snippet repertoireGroup()}
 				<RootPanel
 					{language}
 					onexport={() => void handleExport()}
@@ -3972,114 +4012,69 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 					     syllables is inconvenient, worst on a phone. It lives
 					     in the loupe now (`LoupeSyllables.svelte`, rendered by
 					     `Loupe.svelte`), beside the notes it places onto. -->
-					<!-- ═══ THE TEXT GROUP (N.108 increment 1). Notation and Analysis,
-					     and only those two: the map Dann ruled 2026-09-02 gives Text
-					     exactly them. Both were somewhere else in the N.73 S3 column,
-					     Notation pinned above the scroll and Analysis first inside it,
-					     and neither moved because of anything wrong with where it was.
-					     They are together because they are both text work. -->
-					<!-- N.115 increment 3: THIS IS `notationAndAnalysis` NOW, AND IT
-					     MOVED VERBATIM AGAIN. Increment 2 folded TEXT into INPUT as a
-					     section with an open state of its own; Dann ruled that fold away
-					     2026-09-10 late, so `IntakePanel` renders these two stations
-					     directly under the poem box and each keeps its own id, its own
-					     chevron and its own row. -->
-					{#snippet notationAndAnalysis()}
-						<!-- NOTATION (item N.7). ONE instance, on both of Studio's
-						     documents, and it is the first station in the TEXT group.
-						     It was pinned BELOW the scroll until N.73 S3 and pinned
-						     ABOVE it after (the E.29 shape E.36 §1.4 replaced, ratified
-						     by Dann 2026-08-19). N.108 unpins it: nothing in the drawer
-						     is pinned, and Notation sits with Analysis because both are
-						     text work.
-
-						     THE 2026-08-06 RULING IS UNTOUCHED BY THE MOVE: it is
-						     predictable and within a thumb's reach, and being the first
-						     station of the second group is both.
-						     The state was always document-level and persisted (the notationPrefs and
-						     openSyllabification declarations and their writers) and Markup obeyed it:
-						     both reach MarkupPane through its own props of
-						     those names. Only the CONTROL was tab-scoped, which made its
-						     placement lie about its scope.
-
-						     Rendering it once rather than once per panel is Dann's
-						     improvement on my first pass: two instances sharing state
-						     can drift, and one cannot.
-
-						     THE ACCENT IS SAGE, UNCONDITIONALLY. N.73 S3 ship two settled
-						     it, and the reasoning is in NotationFields' own `accent`
-						     prop comment rather than repeated here. Dann's ruling of
-						     2026-08-06, that the colour follows the tab, is superseded
-						     by two later ones: S2's invariant that nothing in the drawer
-						     changes when the singer flips the pair, and the S0 slate's
-						     ruling 3 of 2026-08-19, which keeps lavender in Studio to
-						     the voice anchor and the calibration surfaces.
-
-						     The stress-acutes toggle reaches Markup since N.119: it marks the
-						     Cyrillic underlay and leaves the IPA line alone. -->
-						<NotationFields
-							{notationPrefs}
-							{showStressDiacritics}
-							openSyllabification={doc.openSyllabification}
-							{language}
-							accent="var(--sage)"
-							onnotationchange={handleNotationChange}
-							onstressdiacriticschange={handleStressDiacriticsChange}
-							onopensyllabificationchange={handleOpenSyllabificationChange}
-							expanded={sections.has(STATION_IDS.notation)}
-							onexpandedchange={() => sections.toggle(STATION_IDS.notation)}
-							changed={notationStateText}
-						/>
-						<AnalysisStation
-							{loaderState}
-							{hasResults}
-							{transcribeMs}
-							{language}
-							{showInspector}
-							expanded={sections.has(STATION_IDS.analysis)}
-							ontoggle={() => sections.toggle(STATION_IDS.analysis)}
-						>
-						{#snippet consoleContent()}
-							{#if selectedWord}
-								{@const wordKey = `${selectedWord.lineIndex}-${selectedWord.wordIndex}`}
-								{@const wordYoToggles = (() => {
-									const prefix = `${wordKey}-`;
-									const m = new Map<number, import('$lib/types').YoToggle>();
-									for (const [k, v] of marks.yo) {
-										if (k.startsWith(prefix)) {
-											const ci = parseInt(k.substring(prefix.length), 10);
-											if (!isNaN(ci)) m.set(ci, v);
-										}
-									}
-									return m;
-								})()}
-								<InspectorPanel
-									word={selectedWord}
-									{language}
-									{notationPrefs}
-									openSyllabification={doc.openSyllabification}
-									{showStressDiacritics}
-									syllableOverride={marks.syllables.get(wordKey) ?? null}
-									spotReconstituted={spotInverts.has(wordKey)}
-									rhymeSetAside={marks.rhyme.has(wordKey)}
-									onrhymetoggle={handleRhymeToggle}
-									promotedFromClitic={marks.stress.get(wordKey)?.promotedFromClitic ?? false}
-									yoCharToggles={wordYoToggles}
-									onspotrecontoggle={handleSpotReconToggle}
-									onstressassign={handleStressAssign}
-									onstressrevert={handleStressRevert}
-									onyochartoggle={handleYoCharToggle}
-									onsyllableoverride={(override) => handleSyllableOverride(selectedWord!.lineIndex, selectedWord!.wordIndex, override)}
-									onsyllableoverrideclear={() => handleSyllableOverride(selectedWord!.lineIndex, selectedWord!.wordIndex, null)}
-									onreset={handleReset}
-									gloss={shownGlosses.get(wordKey)} {glossary} offerScope={`${doc.id}|${wordKey}`}
-									onglossoverride={handleGlossOverride}
-								/>
-							{/if}
-						{/snippet}
-						</AnalysisStation>
-					{/snippet}
 				</IntakePanel>
+			{/snippet}
+			<!-- ═══ ANALYSIS'S BODY (N.201): NOTATION, then the chosen word's
+			     Inspector. It moved out of `inputGroup` verbatim. -->
+			{#snippet analysisGroup()}
+				<!-- NOTATION (item N.7), ANALYSIS's first row (N.201): one
+				     instance on both Studio documents, a station, closed on
+				     arrival and never stored open. The accent is sage
+				     unconditionally (N.73 S3 ship two). The stress-acutes
+				     toggle reaches Markup since N.119. -->
+				<NotationFields
+					{notationPrefs}
+					{showStressDiacritics}
+					openSyllabification={doc.openSyllabification}
+					{language}
+					accent="var(--sage)"
+					onnotationchange={handleNotationChange}
+					onstressdiacriticschange={handleStressDiacriticsChange}
+					onopensyllabificationchange={handleOpenSyllabificationChange}
+					expanded={sections.has(STATION_IDS.notation)}
+					onexpandedchange={() => sections.toggle(STATION_IDS.notation)}
+					changed={notationStateText}
+				/>
+				<AnalysisStation {loaderState} {language} {showInspector}>
+				{#snippet consoleContent()}
+					{#if selectedWord}
+						{@const wordKey = `${selectedWord.lineIndex}-${selectedWord.wordIndex}`}
+						{@const wordYoToggles = (() => {
+							const prefix = `${wordKey}-`;
+							const m = new Map<number, import('$lib/types').YoToggle>();
+							for (const [k, v] of marks.yo) {
+								if (k.startsWith(prefix)) {
+									const ci = parseInt(k.substring(prefix.length), 10);
+									if (!isNaN(ci)) m.set(ci, v);
+								}
+							}
+							return m;
+						})()}
+						<InspectorPanel
+							word={selectedWord}
+							{language}
+							{notationPrefs}
+							openSyllabification={doc.openSyllabification}
+							{showStressDiacritics}
+							syllableOverride={marks.syllables.get(wordKey) ?? null}
+							spotReconstituted={spotInverts.has(wordKey)}
+							rhymeSetAside={marks.rhyme.has(wordKey)}
+							onrhymetoggle={handleRhymeToggle}
+							promotedFromClitic={marks.stress.get(wordKey)?.promotedFromClitic ?? false}
+							yoCharToggles={wordYoToggles}
+							onspotrecontoggle={handleSpotReconToggle}
+							onstressassign={handleStressAssign}
+							onstressrevert={handleStressRevert}
+							onyochartoggle={handleYoCharToggle}
+							onsyllableoverride={(override) => handleSyllableOverride(selectedWord!.lineIndex, selectedWord!.wordIndex, override)}
+							onsyllableoverrideclear={() => handleSyllableOverride(selectedWord!.lineIndex, selectedWord!.wordIndex, null)}
+							onreset={handleReset}
+							gloss={shownGlosses.get(wordKey)} {glossary} offerScope={`${doc.id}|${wordKey}`}
+							onglossoverride={handleGlossOverride}
+						/>
+					{/if}
+				{/snippet}
+				</AnalysisStation>
 			{/snippet}
 			<!-- ═══ THE VOICE GROUP (N.108 increment 1, renamed N.150 from Score
 			     markup; Corrections left it at N.149). It was `shanePanel`, a column of score
@@ -4150,9 +4145,9 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 					     Instrument panel
 					     (`fable-gui-audit-and-spec_r1_2026-08-18.md:41-44`).
 
-					     `voiceCalibrated` is the wizard's own predicate, read from
-					     `profileStore.ts`, so this line and the wizard cannot
-					     disagree. -->
+					     `voiceCalibrated` is true when a reading is usable
+					     (`usableReadingCount`, `profileStore.ts`). The wizard's
+					     opening phase uses a wider test, on purpose. -->
 					<div class="station">
 						<!-- N.150: no StationHeader. The band is named Voice, so the
 						     name is drawn once, there. N.114a (2026-09-09) kept this
@@ -4281,7 +4276,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 			     document. -->
 			{#snippet transcriptionPaper()}
 				{#if witnessDiffer}<TextSourceLine {language} witness={shown} />{/if}
-				<Paper lines={effectiveLines} witness={shown} {notationPrefs} {language} metadata={doc.metadata} pageSize="letter" {isMobile} {showStressDiacritics} spotReconstitution={spotInverts} glossOverrides={shownGlosses} {mutedWords} onwordclick={handleWordClick} emptyNotice={emptyTextNotice(shownText, loaderState)} />
+				<Paper lines={effectiveLines} witness={shown} {notationPrefs} {language} metadata={doc.metadata} pageSize="letter" {isMobile} {showStressDiacritics} spotReconstitution={spotInverts} glossOverrides={shownGlosses} {mutedWords} onwordclick={handleWordClick} selectedKey={selectedWord ? `${selectedWord.lineIndex}-${selectedWord.wordIndex}` : null} emptyNotice={emptyTextNotice(shownText, loaderState)} />
 			{/snippet}
 			{#if isMobile}
 				<!-- N.73 portrait C. The stage holds both views. The one that is
@@ -5028,7 +5023,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		   surface, so it takes its own desk. --lavender-desk is
 		   --lavender tinted 60 percent toward white, parallel to the
 		   other three. It is not --surround-voice, which is the calibration
-		   pacifier band on white and stays where it is. The bar moves with
+		   wheel's band on white, which went with the wheel (N.199 Step 8). The bar moves with
 		   the desk (HeaderBar.svelte, .header-bar.tab-markup). */
 		--desk-fill: var(--lavender-desk);
 	}

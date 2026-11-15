@@ -31,9 +31,13 @@ export interface PoemOpera {
 	composer: string;
 	operaRu: string;
 	operaEn: string;
+	/** The opera's French title (Dann 2026-11-11 22:18), as a French programme prints it. */
+	operaFr: string;
 	/** The role whose lines the text holds. */
 	characterRu: string;
 	characterEn: string;
+	/** The role's French name, with its article where French gives one (« Le Prince »). */
+	characterFr: string;
 	/** The number's English name as the data records it ("Yaroslavna's lament"). */
 	number: string;
 	/** The voice type: soprano, mezzo-soprano, tenor, baritone, or bass. */
@@ -120,7 +124,7 @@ export function decodeOffsets(at: readonly number[]): number[] {
 
 const isText = (v: unknown): v is string => typeof v === 'string' && v !== '';
 
-const OPERA_TEXT_KEYS = ['composer', 'operaRu', 'operaEn', 'characterRu', 'characterEn', 'number', 'voice', 'librettists', 'literarySource'] as const;
+const OPERA_TEXT_KEYS = ['composer', 'operaRu', 'operaEn', 'operaFr', 'characterRu', 'characterEn', 'characterFr', 'number', 'voice', 'librettists', 'literarySource'] as const;
 
 /** A libretto carries every opera field as text; a poem carries none. */
 function kindFits(e: PoemEntry): boolean {

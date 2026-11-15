@@ -77,7 +77,7 @@ test.describe('Text shows the witness there is (rows 109 and 110)', () => {
 		await page.locator('#intake-tab-poem').tap();
 		await page.evaluate((text) => navigator.clipboard.writeText(text), POEM);
 		await page.locator('textarea.text-input').focus();
-		await page.keyboard.press('Control+V');
+		await page.keyboard.press('ControlOrMeta+V');
 		await expect.poll(async () => (await song(page)).seats, { timeout: 30_000 }).toBe(5);
 		expect((await song(page)).lyrics).toBe(POEM);
 	});

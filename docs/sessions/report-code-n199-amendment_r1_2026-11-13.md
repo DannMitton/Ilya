@@ -1,0 +1,78 @@
+# Report, N.199 amendment to Steps 6a, 7, and 6b (Fable: SHIP WITH AMENDMENTS)
+
+2026-11-13, cloud lane, branch `cloud-lane-51`. Eight items, in order; items 1 to 6 are one commit each, item 7 (pictures) and this report are the last commit. `sheet.legend.zones` (`i18n.ts`) was not touched.
+
+## New tip
+
+Pushed to `origin/cloud-lane-51`. The tip is the commit that carries this report; the six amendment commits before it are, in order: 1 `drawings.ts` reads to `</svg>`; 2 the C2PA strip; 3 layout; 4 `FrSym`; 5 the rest guard; 6 Bolla 1981. (`git log --oneline -8` names them.)
+
+## Items
+
+1. **`drawings.ts` reads to `</svg>`** (`voice/chart/drawings.ts`, `groupInner` and `buildSagittal`). `groupInner` now throws `no ${until} after <g id="${id}"> in a sagittal drawing` instead of slicing at -1; the `moving` group is read to `</svg>`; the comments no longer mention metadata. Tests (`drawings.test.ts`): a file that lacks the marker throws (both for `</svg>` and for `<g id="moving">`); and, after the strip, no moving group contains `svg` or `metadata`. **Commit 1 on its own has one red test by construction**: the existing "leaves out the manifest" test fails while the files still carry the manifest, until commit 2 strips it, as the amendment's order required. The gate was run on the tip.
+2. **The C2PA metadata is stripped from 21 files** (the ten in `chart/sagittal/` and the eleven in `docs/sessions/n199-calibrate/drawings-r4/`), with your script, unchanged. **Every md5 matches your list**, in both folders (frame.svg in `drawings-r4` only): 80a906db… frame, dd209a15… a, 7df20ac8… dark-a, 33dd9caa… e, 64fb42d4… i, 5bda14cb… o, 5ba63535… open-e, 03ddd738… smallcap-i, 2d6803b2… turned-v, e7d0d892… u, 86dce6e9… velar-i. **`check.py` re-run in `drawings-r4`, unchanged: exit 0, "OK"**, the fixed group still byte-identical across 11 files (1400 bytes), the pixel test unchanged (e.g. [a] 72.6 percent, [ɑ] 73.2, [ɪ] 29.1), no differing pixel on the frame. I removed its three preview PNGs. **`grep -rl c2pa apps/web/src docs/sessions/n199-calibrate` does not print nothing**: it prints (a) my own test file, which I changed to match `/c2p[a]/` so it no longer contains the word, and (b) **the ten interim PNGs in `docs/sessions/n199-calibrate/interim-sagittal/`**, which carry the manifest in a PNG chunk. They are the desk's archive of the interim drawings (no longer shipped: `static/sagittal` is gone), so I left them. Say if you want them stripped or deleted. `docs/sessions/project-map_r8_2026-10-01.svg` untouched.
+   - **The bundle's SVG byte total: 56,207 bytes raw, 11,258 gzipped** (the ten files concatenated; was 133,947 and 20,376). Source text, not a built chunk; I did not run a production build.
+3. **Layout.** `.cue-row` takes `min-height: 4.75rem`; the fR1 label translates by `width - 5 - labelSize`; `VowelChart.svelte` binds `clientWidth` and passes `labelSize = round(11 * CHART_W / width)`, and `ChartLayers` sets the axis words to `labelSize` (they were `labelSize + 1`); `.actions` wraps and `.stop` is `flex: 1 0 auto; padding: 0 1rem; white-space: nowrap`. **Measured on the phone, French (390 px; chart 320 px wide): the grid numbers and the axis words are 11.2 CSS px; the pause line sits in a 76 px cue row with the buttons at 619 px; « Terminé » and « Tout recommencer » share one row (44 px high).**
+4. **`FrSym`.** A plain capital R at 0.78 em beside the numeral, `font-weight: inherit`, `font-synthesis: none`, no small caps; `role="img"` beside the `aria-label`. Computed on the French roster header: `font-variant-caps` normal, 10.14 px, weight 600, synthesis none. The chart's axis words took the same plain capital (the amendment named only `FrSym.svelte`; the same synthesized R was there).
+5. **The rest guard** (`VowelCapture.svelte`, the phase effect): when a landing ends, `motion.to(model.full, 0)`.
+6. **Bolla's year.** `sources.ts` (`OWED`) now has one entry, `Bolla 1981`, merging the 1980 and 1981 entries; Learn reads "Bolla 1981, 8" in English (`LearnContent.svelte:3382`) and French (`:1352`). `sources.test.ts` and `i18n.test.ts` pass.
+7. **Pictures** (`docs/sessions/report-code-n199-amendment-pictures/`, phone 390 by 844, French, scale 2): `phone-fr-pause.png` (the 13-word line in the pause), `phone-fr-roster-header.png` (after item 4: italic f, capital R and numeral in one weight), `phone-fr-all-ten-chart.png` (after item 3), `phone-fr-tout-recommencer.png` (the buttons row), and `phone-fr-all-ten-screen.png` (the whole screen).
+
+## Gates (the eight), on the tip
+
+| Gate | Baseline | After |
+|---|---|---|
+| 1 phonology | 462 | 462 passed |
+| 2 dictionary | 248 | 248 passed |
+| 3 web-check | 0 errors, 12 warnings | 0 errors, 12 warnings (5 files) |
+| **4 web-test** | 5252 passed, 1 skipped | **5623 passed, 1 skipped** |
+| 5 score-parser | 785 passed, 5 skipped | 785 passed, 5 skipped |
+| 6 blurb | 178 | 178 passed |
+| 7 integration | 155 | 155 passed |
+| 8 ratchets | OK | OK |
+
+Gate 4: 5621 before this amendment, 5623 after: **+2**, both mine (the missing-marker throw test and the no-metadata-in-the-files test); the no-`svg`-or-`metadata`-in-moving-groups check is an added assertion inside an existing test.
+
+## Could not establish
+
+- **The e2e file and the whole chromium project were not re-run** after this amendment (only the unit gates and the pictures). The layout and `FrSym` changes are in CI's scope.
+- **Whether the served Source Sans 3 has no `smcp`**: your statement; I could not load the face here. The change does not depend on it any more.
+- **A production build**, so the bundle figures are of the source text.
+- **The ten interim PNGs still carry the manifest** (above).
+
+## Addendum 1: `sheet.legend.zones`, ratified by Dann at 15:41 (supersedes the 12:00 text)
+
+Seated in `apps/web/src/lib/i18n.ts:2546` character for character, in its own commit after the amendment's. The English and the French are exactly the desk's: U+2019 in « s’attend » and « qu’une » (two), and one U+00A0 before the colon in « [ʌ] : » (checked by script on the file). `voice/chart/ratified-strings.test.ts` pins the new text and its header names the 15:41 supersession (the pin changes with the text, as the file's own rule says). I did not shorten a word.
+
+- EN: "Each coloured area reflects the neighbourhood where Ilya expects a vowel to resonate in a voice like yours. The lavender areas mark [ɪ], [ɨ], [a], and [ʌ]: Ilya can work out these four from your samples of the other six, or you can choose to sample them directly. Overlap between areas (where the colours blend) is normal."
+- FR: « Chaque zone colorée reflète le voisinage où Ilya s’attend à ce qu’une voyelle résonne dans une voix comme la vôtre. Les zones lavande marquent [ɪ], [ɨ], [a] et [ʌ] : Ilya peut déduire ces quatre-là de vos échantillons des six autres, ou vous pouvez choisir de les chanter directement. Le chevauchement entre les zones (là où les couleurs se fondent) est normal. »
+
+**The printed sheet still fits one letter page in both languages** (PDFs in print media: `pdfinfo` Pages 1 for each; `docs/sessions/report-code-n199-addendum-pictures/printed-sheet-en.pdf` and `-fr.pdf`; the French has room to spare). The text is not shorter than the 12:00 text by much; nothing was cut.
+
+Gates after this commit: phonology 462, dictionary 248, web-check 0 errors and 12 warnings, **web-test 5623 passed and 1 skipped (unchanged)**, score-parser 785 and 5 skipped, blurb 178, integration 155, ratchets OK.
+
+## Addendum 2: the resonance symbol follows Titze et al. (2015), Table I (Dann 2026-11-13 15:44)
+
+Titze et al. (2015), as the desk cites it: *Toward a consensus on symbolic notation of harmonics, resonances, and formants in vocalization*, JASA 137(5): 3005-3007, doi 10.1121/1.4919349, Table I: a resonance frequency is f with the subscript R1 (R2, ... Rm), the R a full capital. This supersedes the small-capital R (ruling 14) and the 0.78 em plain capital of amendment 4.
+
+- `apps/web/src/lib/voice/FrSym.svelte`: the subscript is `R{n}`, one run of text, so the R and the numeral share one size and one weight. Removed: the separate weight, `font-synthesis`, and letter-spacing. Kept: the 2026-07-10 rules (italic f, upright subscript at 0.78 em on the `sub`), `role="img"` and the `aria-label` unchanged. The header comment cites Titze et al. 2015, Table I, and Dann's 15:44 ruling; the CSS comment no longer carries the small-capital history.
+- `voice/chart/ChartLayers.svelte`: the axis words' subscript is one tspan `R1` or `R2` at 0.78 em, the letter-spacing removed. **A defect the pictures showed, from Step 6b, fixed here:** the rotated label read "fR1mouth more open" with no space (Svelte trimmed the leading space of the tspan); the words now take `dx="0.4em"`.
+- Not touched: `voiceIntake.acoustics.stem` (`i18n.ts`).
+- Measured (computed style, French and English roster header): the subscript is "R1", 10.14 px, weight 600, `font-variant-caps` normal, letter-spacing normal, no child element.
+- Pictures (`docs/sessions/report-code-n199-titze-pictures/`, phone 390 by 844, scale 3): `phone-en-roster-header.png`, `phone-fr-roster-header.png`, `phone-en-chart-axis.png`, `phone-fr-chart-axis.png`.
+- I did not open the paper; the citation and Table I are the desk's words, not read by me.
+
+Gates after this commit: phonology 462, dictionary 248, web-check 0 errors and 12 warnings, **web-test 5623 passed and 1 skipped (unchanged)**, score-parser 785 and 5 skipped, blurb 178, integration 155, ratchets OK.
+
+## Addendum 3: the rest of the Titze (2015) notation that needs no new words
+
+One commit after addendum 2. Source of the rule: Titze et al. (2015), Table I, as the desk cites it (the audit file `audit-sonnet-titze-2015-notation_r1_2026-11-13.md` is in the desk's clone, not here; I worked from your findings). I did not open the paper.
+
+1. **`lib/insights/text-parts.ts`** (`richParts`): the f of `fR1` is always italic, and the R1 run stays upright whatever the line's emphasis: it now pushes `{ text: 'f', em: true }` and `{ text: 'R1', sub: true }` (the old code spread the line's `em` onto both). The doc comment says so.
+2. **`lib/insights/SingerBlock.svelte`:** a subscript run is `<sub>{p.text}</sub>`; it no longer takes the `em` class, even inside `*…*`. Tests (`insights/text-parts-notation.test.ts`, 3): `richParts` gives an italic f and an upright subscript R1 alone and inside `*…*`; the block's source draws a subscript with no emphasis class.
+3. **`voiceIntake.acoustics.stem` is now drawn with its symbols set**, with no change to a word in either language (`i18n.ts:2220` untouched). `richParts` could not be used as the brief hoped: it lives in `lib/insights`, which `lib/voice` may not import (the module table in `scripts/ratchets.mjs`), and the stem would need `richParts` to learn three more symbols and then be shared across the boundary, which touches more than the component. So the work stays inside the intake's own files: `voice/intake-symbols.ts` (new) splits a stem into text and the four symbols, only inside parentheses, and `voice/InsightsIntake.svelte` draws them: fo (italic f, subscript o), nfo (n, italic f, subscript o), fR1 (italic f, subscript R1, the R a full capital), F1 (italic F, subscript 1), the subscript upright at 0.78 em. The stem is still drawn as markup (`{@html}`) for the text around the symbols, so the other questions' stems and their `<em>` are as they were. **This is not the same code as `richParts`**: it is a second small renderer for the same rule, because of the module table. Say if you would rather move `richParts` somewhere both may import. Tests (`voice/intake-symbols.test.ts`, 6): the four symbols are found in both languages and nothing else; the parts put back together are the stem character for character; a word that contains "fo" or "F1" is untouched; the question draws each symbol as an italic letter with an upright subscript; the other questions' `<em>` stems are as they were. **Looked at in the real page**, both languages: `docs/sessions/report-code-n199-addendum3-pictures/stem-en.png` and `stem-fr.png`.
+4. **`lib/insights/singing-measures.ts`** (the cycle dose's comment): "f0" is "fo" (both places, one with the Titze citation).
+5. **Comments that state the notation** now cite Titze et al. 2015, Table I, and Dann 2026-11-13 15:44, and carry no small capitals: `FrSym.svelte`'s header (its CSS comment already had none), `CalibrationWizard.svelte` (the Typography comment at `:636`), and the axis-words comment in `ChartLayers.svelte`. I searched the app for other mentions of a small-capital resonance symbol: none remain. The other small-caps uses (`TitleHeader`, `RunningHeader`, `LegendItems`, `WordStack`) are running headers and are not this symbol.
+
+**Not touched, as asked:** the four "Formant profile" strings (`i18n.ts:1366, 1489, 1490, 1492`).
+
+Gates after this commit: phonology 462, dictionary 248, web-check 0 errors and 12 warnings, **web-test 5632 passed and 1 skipped** (5623 before: +9, all mine), score-parser 785 and 5 skipped, blurb 178, integration 155, ratchets OK. The e2e file and the whole chromium project were not re-run.

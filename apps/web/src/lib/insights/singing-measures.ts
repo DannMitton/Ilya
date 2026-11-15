@@ -102,11 +102,11 @@ export function centreOfGravity(rows: readonly FigureRow[]): CentreOfGravity | n
 export type CycleDose = { kind: 'point'; cycles: number } | { kind: 'range'; low: number; high: number };
 
 /**
- * THE CYCLE DOSE. The sum over sung time of f0 × seconds, rests out (Dann's
+ * THE CYCLE DOSE. The sum over sung time of fo × seconds, rests out (Dann's
  * ruling, `OPEN.md` §N.123). It is the vocal loading index of Titze, Švec,
  * and Popolo 2003 (*JSLHR* 46(4), pp. 919-932), after Rantala and Vilkman
  * 1999: the number of vocal-fold oscillatory periods, which Rantala and
- * Vilkman read as the number of fold collisions. f0 is each row's sounding
+ * Vilkman read as the number of fold collisions. fo (Titze et al. 2015, Table I) is each row's sounding
  * pitch at A4 = 440 Hz, equal temperament.
  *
  * `price` is the phonation-time section's own (`secondsPerQuaver`), so the

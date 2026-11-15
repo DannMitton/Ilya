@@ -60,7 +60,7 @@
 	import type { OctaveReading, TempoChoice } from '$lib/library/types';
 	import { readingClef } from '$lib/score/clef-choice';
 	import { t, type Language } from '$lib/i18n';
-	import { spokenName } from '$lib/voice/pacifier/Pacifier.svelte';
+	import { spokenName } from '$lib/voice/vowel-names';
 	import type { Vowel, CalibratedFormant, VoiceCharacteristics } from '$lib/voice/engine/types';
 	import { buildMarkupLegend } from '$lib/markup/legend';
 	import {

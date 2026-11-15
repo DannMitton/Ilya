@@ -8,7 +8,7 @@ import { expandStation, waitForDictionary } from './helpers';
  * `docs/sessions/brief-code-poem-library-build1_r3_2026-11-03.md`; the walk is its top section).
  *
  * The Lyrics are the fixtures of `tools/poems/fixtures`: twelve read Lyrics, public-domain poems only.
- * "Row 114 song 2" is «Весёлый час». A paste is a real paste (the clipboard and Control+V), because a keystroke
+ * "Row 114 song 2" is «Весёлый час». A paste is a real paste (the clipboard and ControlOrMeta+V), because a keystroke
  * and a paste reach the page differently (`IntakeViews.svelte`, `arrivalOf`) and the walk depends on it.
  * The strings are Dann's, ratified 2026-11-03 20:21 (D1 to D3 of 20:01 applied, step 7, part 4); the English the tests read is the table's.
  */
@@ -30,12 +30,12 @@ async function open(page: Page): Promise<void> {
 	await waitForDictionary(page);
 }
 
-/** A real paste into Lyrics: the clipboard, then Control+V in the focused field. */
+/** A real paste into Lyrics: the clipboard, then ControlOrMeta+V in the focused field. */
 async function pasteIntoLyrics(page: Page, text: string): Promise<void> {
 	await page.locator('#intake-tab-lyrics').click();
 	await field(page).focus();
 	await page.evaluate((t) => navigator.clipboard.writeText(t), text);
-	await page.keyboard.press('Control+V');
+	await page.keyboard.press('ControlOrMeta+V');
 }
 
 /**
@@ -175,7 +175,7 @@ test.describe('walk 4: she taps Not this poem', () => {
 
 		// Clear Lyrics and paste the same song again: nothing is offered.
 		await field(page).focus();
-		await page.keyboard.press('Control+A');
+		await page.keyboard.press('ControlOrMeta+A');
 		await page.keyboard.press('Delete');
 		await pasteIntoLyrics(page, SONG2);
 		await page.waitForTimeout(4000);

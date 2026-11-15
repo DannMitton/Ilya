@@ -1349,7 +1349,7 @@
 						antérieure de la langue libère l’espace pharyngé, augmentant le volume
 						du résonateur pharyngien et facilitant une production « à gorge
 						ouverte »&#160;: ce que la pédagogie italienne appelle <em>la gola aperta</em>
-						(Mitton 2020, 20, 38; Bolla 1980, 8). Les mesures acoustiques du russe
+						(Mitton 2020, 20, 38; Bolla 1981, 8). Les mesures acoustiques du russe
 						chanté confirment que les effets sur les résonances du conduit vocal
 						sont présents mais subtils&#160;: <em>f</em><sub>R2</sub> s’élève tandis que
 						<em>f</em><sub>R1</sub> s’abaisse, reproduisant le profil acoustique de
@@ -3379,7 +3379,7 @@
 						position vacates the pharyngeal space, increasing the volume of the
 						pharyngeal resonator and facilitating “open-throated” production: what
 						Italian pedagogy calls <em>la gola aperta</em> (Mitton 2020, 20, 38;
-						Bolla 1980, 8). Acoustic measurements of sung Russian confirm that the
+						Bolla 1981, 8). Acoustic measurements of sung Russian confirm that the
 						effects on vocal tract resonances are present but subtle: <em>f</em><sub>R2</sub> raises
 						while <em>f</em><sub>R1</sub> drops, mimicking the acoustic profile of the [i] vowel it
 						simulates (Mitton 2020, 131–32). The singer who palatalizes well is

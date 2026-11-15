@@ -166,6 +166,65 @@ export interface PlausibilityResult {
 
 const st = (a: number, b: number) => 12 * Math.log2(a / b);
 
+/** The guard's margins applied to a band's floor and ceiling, Hz, unrounded. The one place the two ratios are used. */
+export function applyMargins(coreLo: number, coreHi: number): { low: number; high: number } {
+	return { low: coreLo / FLOOR_RATIO, high: coreHi * CEILING_RATIO };
+}
+
+/**
+ * The fR1 stored readings that anchor the four anchor-derived windows: every stored reading that is not an estimate
+ * (a Provisional one still anchors, per the derived-preview ruling). The loop that stood inline in
+ * `CalibrationWizard.svelte`'s `withPlausibility`, named so the chart (`voice/chart/zones.ts`) asks the same question.
+ */
+export function anchorF1sFor(profile: Partial<Record<Vowel, CalibratedFormant>>): Partial<Record<Vowel, number>> {
+	const anchorF1s: Partial<Record<Vowel, number>> = {};
+	for (const [g, f] of Object.entries(profile) as [Vowel, CalibratedFormant][]) {
+		if (f && f.reading !== 'estimated') anchorF1s[g] = f.f1;
+	}
+	return anchorF1s;
+}
+
+/** The guard's window for a vowel: margin applied, Hz, unrounded, and where it came from. */
+export interface GuardWindow {
+	low: number;
+	high: number;
+	anchorSource: 'bozeman' | 'anchors-derived';
+	voiceTypeBucket: VoiceTypeBucket;
+}
+
+/**
+ * THE ONE WINDOW (N.199 Step 1). The six Bozeman vowels: the band fixed by the declared type's bucket (the union
+ * bands when there is no type), margins applied. The other four: centred on the singer's own anchors
+ * (`expectedF1`), margins around the centre. `null` where there is no window: an anchor-derived vowel whose anchor
+ * is not sung (the guard's `unchecked`). `checkPlausibility` and the chart's zones both read this, so the zone a
+ * singer sees is the window the guard applies.
+ */
+export function windowFor(
+	vowel: Vowel,
+	voiceType?: string,
+	anchorF1s?: Partial<Record<Vowel, number>>
+): GuardWindow | null {
+	const voiceTypeBucket = bucketFor(voiceType);
+	let coreLo: number, coreHi: number;
+	let anchorSource: GuardWindow['anchorSource'];
+	if (vowel in UNION_BANDS) {
+		const bands = voiceTypeBucket === 'union' ? UNION_BANDS : CORE_BANDS[voiceTypeBucket];
+		[coreLo, coreHi] = bands[vowel as BozemanVowel];
+		anchorSource = 'bozeman';
+	} else {
+		// Anchor-derived window: centre from the singer's own anchors via the
+		// derivation ratios (single-sourced in derivations.ts). Margin applies
+		// around the centre — there is no band edge to scale (ruled
+		// clarification, 2026-07-11).
+		const centre = expectedF1(vowel, anchorF1s ?? {});
+		if (centre === null || !isFinite(centre) || centre <= 0) return null;
+		coreLo = centre;
+		coreHi = centre;
+		anchorSource = 'anchors-derived';
+	}
+	return { ...applyMargins(coreLo, coreHi), anchorSource, voiceTypeBucket };
+}
+
 /**
  * The guard. Pure: no side effects, no confidence opinion, no blocking.
  * `anchorF1s` are the singer's own stored fR1s (only sung readings are ever
@@ -179,33 +238,16 @@ export function checkPlausibility(
 	anchorF1s?: Partial<Record<Vowel, number>>
 ): PlausibilityResult {
 	const voiceTypeBucket = bucketFor(voiceType);
-
-	let coreLo: number | undefined, coreHi: number | undefined;
-	let anchorSource: PlausibilityResult['anchorSource'] = null;
-
-	if (vowel in UNION_BANDS) {
-		const bands = voiceTypeBucket === 'union' ? UNION_BANDS : CORE_BANDS[voiceTypeBucket];
-		[coreLo, coreHi] = bands[vowel as BozemanVowel];
-		anchorSource = 'bozeman';
-	} else {
-		// Anchor-derived window: centre from the singer's own anchors via the
-		// derivation ratios (single-sourced in derivations.ts). Margin applies
-		// around the centre — there is no band edge to scale (ruled
-		// clarification, 2026-07-11).
-		const centre = expectedF1(vowel, anchorF1s ?? {});
-		if (centre === null || !isFinite(centre) || centre <= 0) {
-			// `unchecked` is a valid, expected outcome, not an error (ruled).
-			// Non-normative note: in v1 it covers both missing anchors and any
-			// roster/window mismatch, resolving to the same enum value.
-			return { plausibility: 'unchecked', anchorSource: null, voiceTypeBucket };
-		}
-		coreLo = centre;
-		coreHi = centre;
-		anchorSource = 'anchors-derived';
+	const w = windowFor(vowel, voiceType, anchorF1s);
+	if (!w) {
+		// `unchecked` is a valid, expected outcome, not an error (ruled).
+		// Non-normative note: in v1 it covers both missing anchors and any
+		// roster/window mismatch, resolving to the same enum value.
+		return { plausibility: 'unchecked', anchorSource: null, voiceTypeBucket };
 	}
-
-	const windowLow = coreLo! / FLOOR_RATIO;
-	const windowHigh = coreHi! * CEILING_RATIO;
+	const windowLow = w.low;
+	const windowHigh = w.high;
+	const anchorSource = w.anchorSource;
 	const inside = f1 >= windowLow && f1 <= windowHigh;
 	// Both edge distances (Kimi's ruling): floor headroom = st above the floor,
 	// ceiling headroom = st below the ceiling. Positive inside, negative when

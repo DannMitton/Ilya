@@ -132,7 +132,9 @@ async function overlaps(page: Page, label: string): Promise<string[]> {
 			if (p.empty < 0) out.push(`${label}, ${media}, page ${n + 1}: content runs ${Math.round(-p.empty * 10) / 10} px into the footer`);
 		});
 	}
-	await page.emulateMedia({ media: 'screen' });
+	/* `null` RESETS the override. `'screen'` left it set, and `page.pdf()` prints with whatever media is set (Playwright: it uses `print` unless the page was
+	   told otherwise), so the PDF the caller then took was a SCREEN-media print: INSIGHTS printed 1 page against its 2 sheets (closing polish lane, step 12). */
+	await page.emulateMedia({ media: null });
 	return out;
 }
 

@@ -35,6 +35,9 @@ importers:
       '@ilya/score-parser':
         specifier: workspace:*
         version: link:../../packages/score-parser
+      '@tesseract.js-data/rus':
+        specifier: 1.0.0
+        version: 1.0.0
       homr-web:
         specifier: file:../../third_party/homr-web/homr-web-0.2.0-ilya.7.tgz
         version: file:third_party/homr-web/homr-web-0.2.0-ilya.7.tgz
@@ -752,6 +755,9 @@ packages:
 
   '@techstark/opencv-js@4.12.0-release.1':
     resolution: {integrity: sha512-LtTaph9v/HqLPXEg3m1xs2h7QJh10pUpuDT0nj8g77lelWnTwwQrehtd+fXElLOdrkqc4Fea6Z/sJBvEJLYPfw==}
+
+  '@tesseract.js-data/rus@1.0.0':
+    resolution: {integrity: sha512-GVOaLultru90gsuVGjXyPCKsg4SMeExnqSnzb8Gb+9zZ0F4wbA6bgWu/metQlcmU7OwTnYVd4UdSH9D4yBMZEA==}
 
   '@types/chai@5.2.3':
     resolution: {integrity: sha512-Mw558oeA9fFbv65/y4mHtXDs9bPnFMZAL/jxdPFUpOHHIXX91mcgEHbS5Lahr+pwZFR8A7GQleRWeI6cGFC2UA==}
@@ -1748,6 +1754,8 @@ snapshots:
       - supports-color
 
   '@techstark/opencv-js@4.12.0-release.1': {}
+
+  '@tesseract.js-data/rus@1.0.0': {}
 
   '@types/chai@5.2.3':
     dependencies:

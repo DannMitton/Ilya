@@ -1,0 +1,55 @@
+# Dann's rulings on the Calibrate redesign, Fable thread of 2026-11-12
+
+Written by the Fable desk at 23:2x for the next desk.
+
+**Limit, stated first.** This thread compacted at about 22:55. The words below are Dann's as preserved in the compaction summary's list of his messages. Where the summary kept his words, they are in quotation marks and are exact as preserved there. Where the summary condensed a long message, the entry is marked CONDENSED and his exact words are NOT AVAILABLE from this desk's context. The full thread, with every word as typed, is at https://claude.ai/chat/b31d51c2-ef8f-4081-946f-6b5d41687036 (131 turns; `read_conversation` can open it). Times come from the memory notes written during the thread; where no note recorded a time, the entry says TIME NOT ESTABLISHED. All times are 2026-11-12, America/Toronto. The order is the order he typed them.
+
+1. TIME NOT ESTABLISHED. "I think I just liked the interface showing the vocal tract in sagittal view and the corresponding realtime formant plotting on a graph. Voce Vista does this. How hard is it to build as a support display for our vocal fry intake?"
+2. TIME NOT ESTABLISHED. "Ok I drew original illustrations for my dissertations based on Bolla's images. Maybe we can collect all those and arrive at new, more defensible illustrations? These can be models for each isolated vowel as the user inputs their fry sample. A graph with target zones could be a nice touch? How hard is it to design two responsive ovoid overlays on our grid like Vennard models in his book? These ovoids would be target formant zones so the user can see in real time how well their fry samples fall into the expected ranges? Critique?"
+3. TIME NOT ESTABLISHED. "We need advice on a reworking of the Calibrate process, GUI, and make sure it's easy elegant and useful."
+4. TIME NOT ESTABLISHED. "Yes: 'If a target zone is on screen during the take, singers will aim for it.' That's why the ovoid overlay targets should be large and vague. It's just a means of confirming that the user is in the right neighbourhood. It should also allow them to practice their velar-I, right?"
+5. TIME NOT ESTABLISHED. "I think I have a copy of Bolla on my mac for your inspection and comparison. I'd like to reproduce more accurate line drawings and I'm hoping you can either modify mine or build prompts so exact that a third party can build them accurately from your prompts"
+6. TIME NOT ESTABLISHED. CONDENSED (a long message). He agreed the ovoid is fR1 and fR2 mapped. The chart must change its frame of reference for voices and voice types (descriptive against prescriptive). He sees confirmation as positive and a reading outside the zone as worth curiosity. The eggs need not separate vowels; overlap is Vennard's point. He wants help modelling fR1 and fR2 with dots in or near ovoids. The Pacifier quadrilateral may retire, perhaps kept as a progress map. The redesign is a new single-vowel screen. Yes to option 1. He does not want Vennard's chart on the summary but a visualization in Ilya's visual language. A Practice mode for any vowel. Exact phrases preserved: "Apple Store aesthetic to a Fortnite aesthetic. Calm Authority"; "Keep asking questions until we have a workable defensible, useful model."; provenance for every source. From the memory note of this message: the quadrilateral "may be ready for retirement"; the eggs as "regions of vowelishness".
+7. TIME NOT ESTABLISHED. CONDENSED. He confirmed the sliding constellation ("Bravo!"); Bozeman's fRn values are in the project files ("Alert me if there are gaps?"); the quadrilateral as a small progress map; the four beats ("any that are not self-evident Ilya must curate"); "You can look in my dissertation, it's also on my mac"; Bolla is a speaking informant, and singers lengthen or shorten the tract.
+8. TIME NOT ESTABLISHED. "You can see my renderings of Bolla are imperfect, I'm eager to see your better, defensible mappings compared to mine."
+9. TIME NOT ESTABLISHED. "I wouldn't mind if this aspect of Ilya became the go-to function even more popular than the transcription engine :)"
+10. TIME NOT ESTABLISHED. CONDENSED. He asked whether the desk can adopt Bolla's alterations onto his renderings, keeping his original oropharynx; lips follow Grayson; he is open to modification of his smallcaps-I. Preserved: "Are you certain that 'no source gives fR2 by vowel by voice type.'? Please execute a deeper web search…"; "Ask me questions until we agree on an articulated approach".
+11. TIME NOT ESTABLISHED. "So the experience is going to see the user watch two dancing dots in or near an ovoid while they phonate in fry, and the LTA will average their three-second sample then lock down two values… Do I have that right?" (The desk's answer: one dot, not two.)
+12. TIME NOT ESTABLISHED. CONDENSED. Linearity Curve is a new skill for him and he wants it curated. The main outcome is a trustworthy profile, the visualizer the draw. One sentence explaining the dot. Play is allowed. Eggs always present as watermarks, the active egg stepped up, the dot dancing until lock. Preserved: "Do you still think this is true?: 'but there is nothing to aim at.'"
+13. TIME NOT ESTABLISHED. "Evaluate the value of telling the user they can look or not look as they sing… I think it's a good idea… helpful curation is helpful. Critique?"
+14. TIME NOT ESTABLISHED. "a finished vowel space sounds great, please make it appropriately attractive and printable :)"
+15. TIME NOT ESTABLISHED. "Yes Vennard says 'low formant frequency plotted on graph from left to right' I take that to mean fR1 on the x axis, and 'Second formant frequency plotted from bottom to top' I take that to mean fR2 on the y axis?"
+16. TIME NOT ESTABLISHED. "Do you think with our design that we should produce our chart as closer to the chart phoneticians usually draw? With an explanation and justification for our departure from Vennard?"
+17. TIME NOT ESTABLISHED. "A reminder that fR2 is f(italics)R2(smallcaps subscript)"
+18. 22:05. CONDENSED. Align the chart with the sagittal orientation and omit the keyboard (memory note: "it looks weird anyway"). Can users choose the orientation or define the axes? Preserved: "Maybe it's too much".
+19. 22:09. CONDENSED. The ovoids obscure the gridlines; raise the transparency; the active ovoid takes a deeper saturation; fuzzy or gradient edges, vague perimeters. (Soft edges superseded by entry 20.)
+20. 22:12. "I'm sort of nonplussed? You delivered exactly what I asked for and it looks like visual mush. I preferred seeing how the perimeters overlapped… What if we colour-coded the vowels? Their overlaps would show combinations... can we try that?"
+21. Between 22:12 and 22:18. "What if no ovoid were outlined in a contrasting perimeter?"
+22. Between 22:12 and 22:18. "Wow they're both great! I'm drawn to B3 because it is colourful. Sage is our Text colour, so this graph should be coded in lavender to reflect Voice anyway"
+23. By 22:18. "I still prefer B3 to B1 or B4. Great job! Are you using the fonts that travel with Ilya?" Then, on Lato IPA: "yes lets see it thank you Claude"
+24. 22:23. Preserved in part: "Looks great! What does an active vowel look like as opposed to this…"; "the chart zooms in so that its ovoid takes the front and centre… dot dance… locks in a value and the chart zooms out again… Can we do that?"
+25. 22:23. "I'm also curious that I don't see ovoids for smallcaps-i or turned-v?" and "Or velar i?"
+26. 22:23. "Are the ovoids you drew accurate to our frequencies that we can confirm? or are they representations that can use refinement? I notice Vennard's ovoids are long and narrow while ours are quite plump?"
+27. 22:27. "wobbling is a feature. the IRT-quality is reassuring to a human user."
+28. Between 22:27 and 22:30. "I'm preoccupied with how this chart necessarily changes to serve basses versus sopranos. Can you explain simply?"
+29. 22:30. "OMG Claude I love what you built. Can the IRL singing also show IRT measurements in grey that consolidate on a final value in black? Maybe in that negative space flush right of 'ready for x'? Critique?"
+30. 22:31. "Yes, the gentle glide between readings is a useful lie that I approve of :)"
+31. Between 22:31 and 22:33. "'Bozeman charts fR1 only.' Are you certain?"
+32. 22:33. "yes, please remind us to tighten the code comment thank you for sure!!"
+33. 22:35. "Ok can you show me Prototype C with the alterations?" then "Its gorgeous and so good. So so good. thank you"
+34. 22:36. "Ok I think we also need two rows of five buttons to reflect the ten vowels in Grayson's sung Russian vowel inventory"
+35. 22:39. "Ok the prototype works with a prescribed order. since we provide buttons that correspond to the vowels I would like the user to be able to manually select the next vowel they want to sample… I want Ilya to be able to adjust to this kind of manual intervention: maintain Calm Authority while accepting user sequencing and promoting a full set of values without being pushy. Can you achieve this?"
+36. Between 22:39 and 22:43. "No opportunity was curated for me to input fry samples of smallcaps i, turned v or the other non-coloured buttons"
+37. By 22:43. "'It suggests sensibly…(DESK DEFAULT).' Yes, I'm not sure your rule is better than the linear approach through the quadrilateral? I guess now that manual control is established, the user can model whatever they like whenever they want, and you will be there to help them complete their vowel area"
+38. After 22:43, TIME NOT ESTABLISHED. "Selecting a button out of sequence should activate and accept values for the fry sample of that vowel. At the moment it doesn't"
+39. TIME NOT ESTABLISHED. "this looks good. I can't wait to see it with a squircle on the top right with the right sagittal section showing. Can you deliver that? Are our sagittal sections aligned with Bolla and ready?"
+40. TIME NOT ESTABLISHED. "Yes when you tap a vowel it takes precedence :)"
+41. TIME NOT ESTABLISHED. "I love it. And when you toggle from vowel to vowel the image changes in situ to highlight the modification!"
+42. TIME NOT ESTABLISHED. "These images are original to me, inspired by Bolla and realized by you."
+43. TIME NOT ESTABLISHED. "Can I ask you to visually centre the vowel inside the feature circle? At the moment the centroid of the vowel is off balance"
+44. TIME NOT ESTABLISHED. "Are the ovoids for turned-v, bright-a, and velar-i accurate? I'm surprised that they occupy so little area"
+45. TIME NOT ESTABLISHED. "The adjustments you made are masterly and the result looks beautiful and balanced thank you Claude. you are a marvel"
+46. About 22:5x. "Yes. Do you have enough to create a brief for Code to build this tonight? Would it be helpful to assign another Fable subagent to review your brief for errors, oversights, insights, and optimizations?"
+47. 23:00. "MAKE IT SO THE NEW ISTANCE KNOW ABOUT OUR WORK"
+
+Not rulings, and left out: his requests to locate Bolla and Vennard on his Mac, the model switch, and the closing exchange about the opener and the commit.

@@ -83,9 +83,9 @@ test('y. a poem pasted into Poem lays Lyrics out in its lines and moves no seat'
 	expect(Object.keys(await seats(page)).sort()).toEqual(Object.keys(before).sort());
 	expect(view(await seats(page))).toEqual(view(before));
 
-	// The field's own undo (section 5, item 6): one Control+Z in Lyrics. Reported, not asserted.
+	// The field's own undo (section 5, item 6): one ControlOrMeta+Z in Lyrics. Reported, not asserted.
 	await page.locator('textarea.text-input').focus();
-	await page.keyboard.press('Control+z');
+	await page.keyboard.press('ControlOrMeta+z');
 	await page.waitForTimeout(800);
 	const undone = await lyrics(page);
 	console.log(`UNDO field: lines after Control+Z = ${lineCount(undone)} (before ${lineCount(after)}); same words = ${undone.split(/\s+/).join(' ') === after.split(/\s+/).join(' ')}`);

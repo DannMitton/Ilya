@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Calibrate one vowel, in the Drawer on desktop</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,600;1,400;1,600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400;1,8..60,600&display=swap">
+<style>
+@font-face{font-family:'Lato IPA';font-style:normal;font-weight:400;font-display:swap;src:url(/_blob/689c54673a6ce97680050766359342a0) format('woff2')}
+body{margin:0}
+a{color:#623F84}a:hover{color:#1a1612}
+button{font-family:inherit}
+</style>
+</helmet>
+<div style="width: 520px; height: 900px; box-sizing: border-box; background: #FAF8F5; color: #1a1612; font-family: 'Source Sans 3', system-ui, sans-serif; display: flex; flex-direction: column; border-radius: 20px; overflow: hidden; border: 1px solid #D8D4C8">
+<div style="height: 40px; flex: none; background: #D4C8E1; color: #623F84; display: flex; align-items: center; justify-content: space-between; padding: 0 18px">
+<span style="font-size: 11.2px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase">Voice</span>
+<button aria-label="Back to the Drawer" style="height: 28px; padding: 0 12px; border-radius: 14px; border: 1.5px solid #623F84; background: transparent; color: #623F84; font-size: 13px; font-weight: 600; cursor: pointer">Back</button>
+</div>
+<div style="flex: 1; min-height: 0; box-sizing: border-box; padding: 6px 18px 14px 18px; display: flex; flex-direction: column; gap: 9px">
+<div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 2px solid #6C4D8C; padding-bottom: 6px">
+<h1 style="margin: 0; font-family: 'Source Serif 4', Georgia, serif; font-size: 22px; font-weight: 600">Your resonances</h1>
+<p style="margin: 0; font-size: 14px; color: #4a4540">{{countText}}</p>
+</div>
+<div style="display: flex; gap: 14px; align-items: center; height: 132px">
+<div style="width: 96px; height: 96px; flex: none; border-radius: 50%; background: #F1EDF5; border: 2px solid #6C4D8C; display: flex; align-items: center; justify-content: center; font-family: 'Lato IPA', 'Source Sans 3', sans-serif; font-size: 52px; line-height: 1"><span style="display: inline-block; transform: translate({{gx}}em, {{gy}}em)">{{glyph}}</span></div>
+<div style="flex: 1; display: flex; flex-direction: column; gap: 6px">
+<p style="margin: 0; font-size: 15px; line-height: 1.35; color: #1a1612">{{vowelName}}</p>
+<p style="margin: 0; font-size: 12px; line-height: 1.4; color: #4a4540">{{credit}}</p>
+</div>
+<div role="img" aria-label="{{drawingAlt}}" style="position: relative; width: 132px; height: 132px; flex: none; box-sizing: border-box; border-radius: 32px; background: #FFFFFF; border: 2px solid #6C4D8C; overflow: hidden">
+<div style="position: absolute; left: 8px; top: 8px; width: 112px; height: 112px">
+<img src="/_blob/028ae059a5c63c75bf227505c8dd507b" alt="" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; opacity: {{o0}}; transition: opacity 0.35s">
+<img src="/_blob/7af6ae6f279702434b41ee3cd0402b27" alt="" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; opacity: {{o1}}; transition: opacity 0.35s">
+<img src="/_blob/c150d97219a31243556546178cd0b508" alt="" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; opacity: {{o2}}; transition: opacity 0.35s">
+<img src="/_blob/64d2d66a73e4948cd562c6aa51355dc5" alt="" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; opacity: {{o3}}; transition: opacity 0.35s">
+<img src="/_blob/5a654e83af098526a1ce478540a8f0f0" alt="" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; opacity: {{o4}}; transition: opacity 0.35s">
+<img src="/_blob/27b4263d3121c24b24e4f6ef86815358" alt="" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; opacity: {{o5}}; transition: opacity 0.35s">
+<img src="/_blob/f388bd56e53cb36a922fab9beceb6c3a" alt="" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; opacity: {{o6}}; transition: opacity 0.35s">
+<img src="/_blob/113761dfea9a9fc18dbf0ef7ae0f0bfe" alt="" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; opacity: {{o7}}; transition: opacity 0.35s">
+<img src="/_blob/9f15cd799b147e01b7eec6fb869784a6" alt="" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; opacity: {{o8}}; transition: opacity 0.35s">
+<img src="/_blob/c7a6725e49cc22b6cd9636847bf04633" alt="" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; opacity: {{o9}}; transition: opacity 0.35s">
+</div>
+</div>
+</div>
+<div style="position: relative; width: 484px; height: 280px; flex: none; background: #FBF9F4; border: 1.25px solid #3A352F; box-sizing: border-box; overflow: hidden">
+<sc-if value="{{showChart}}" hint-placeholder-val="{{ true }}">
+<svg role="img" aria-label="Chart of the vowel zones. It zooms to the vowel being measured, and a dot shows the reading." width="484" height="280" style="display: block; font-family: 'Source Sans 3', system-ui, sans-serif">
+<sc-for list="{{eggs}}" as="e" hint-placeholder-count="6">
+<ellipse cx="{{e.cx}}" cy="{{e.cy}}" rx="{{e.rx}}" ry="{{e.ry}}" style="fill: {{e.fill}}; fill-opacity: {{e.op}}; mix-blend-mode: multiply"></ellipse>
+</sc-for>
+<sc-for list="{{vlines}}" as="l" hint-placeholder-count="6">
+<line x1="{{l.p}}" y1="0" x2="{{l.p}}" y2="280" style="stroke: #D8D4C8; stroke-width: 1"></line>
+</sc-for>
+<sc-for list="{{hlines}}" as="l" hint-placeholder-count="6">
+<line x1="0" y1="{{l.p}}" x2="484" y2="{{l.p}}" style="stroke: #D8D4C8; stroke-width: 1"></line>
+</sc-for>
+<sc-if value="{{showHull}}" hint-placeholder-val="{{ false }}">
+<polygon points="{{hull}}" style="fill: rgba(108,77,140,0.06); stroke: #6C4D8C; stroke-width: 1.5; stroke-linejoin: round; stroke-dasharray: {{hullDash}}"></polygon>
+</sc-if>
+<sc-for list="{{trail}}" as="t" hint-placeholder-count="0">
+<circle cx="{{t.cx}}" cy="{{t.cy}}" r="4" style="fill: #6C4D8C; fill-opacity: {{t.op}}"></circle>
+</sc-for>
+<sc-for list="{{ghosts}}" as="h" hint-placeholder-count="0">
+<circle cx="{{h.cx}}" cy="{{h.cy}}" r="5.5" style="fill: #FBF9F4; stroke: #6C4D8C; stroke-width: 1.5; stroke-dasharray: 2.5 2"></circle>
+</sc-for>
+<sc-for list="{{dots}}" as="d" hint-placeholder-count="0">
+<circle cx="{{d.cx}}" cy="{{d.cy}}" r="6" style="fill: #6C4D8C; stroke: #F5F1E8; stroke-width: 1.5"></circle>
+</sc-for>
+<sc-if value="{{showLive}}" hint-placeholder-val="{{ false }}">
+<circle cx="{{liveX}}" cy="{{liveY}}" r="13" style="fill: none; stroke: #6C4D8C; stroke-width: 1.5; stroke-opacity: 0.45"></circle>
+<circle cx="{{liveX}}" cy="{{liveY}}" r="7" style="fill: #6C4D8C; stroke: #FFFFFF; stroke-width: 2"></circle>
+</sc-if>
+</svg>
+<div aria-hidden="true" style="position: absolute; inset: 0; pointer-events: none">
+<sc-for list="{{axisLabels}}" as="t" hint-placeholder-count="0">
+<div style="position: absolute; left: {{t.x}}px; top: {{t.y}}px; transform: translate(-50%, -50%); font-size: 11px; line-height: 1; color: #6A655F; background: rgba(251,249,244,0.75); padding: 1px 2px; border-radius: 2px">{{t.t}}</div>
+</sc-for>
+<sc-for list="{{glyphLabels}}" as="t" hint-placeholder-count="0">
+<div style="position: absolute; left: {{t.x}}px; top: {{t.y}}px; transform: translate(-50%, -50%); font-family: 'Lato IPA', 'Source Sans 3', sans-serif; font-size: 18px; line-height: 1; color: {{t.c}}">{{t.t}}</div>
+</sc-for>
+</div>
+</sc-if>
+<sc-if value="{{chartHidden}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; text-align: center; padding: 24px; font-size: 15px; color: #4a4540">The chart and the numbers are hidden while you sing. They return when this vowel is captured.</div>
+</sc-if>
+</div>
+<div style="height: 8px; flex: none; background: #E2DAEB; border-radius: 4px; overflow: hidden"><div style="height: 8px; width: {{barPct}}%; background: #6C4D8C"></div></div>
+<div style="display: flex; align-items: center; gap: 12px; height: 46px">
+<p aria-live="polite" style="margin: 0; flex: 1; font-family: 'Source Serif 4', Georgia, serif; font-size: 19px; line-height: 1.25">{{cue}}</p>
+<div aria-hidden="true" style="width: 128px; flex: none; display: flex; flex-direction: column; gap: 1px; font-size: 16px; line-height: 1.3; font-variant-numeric: tabular-nums; color: {{readColor}}; font-weight: {{readWeight}}">
+<sc-if value="{{showRead}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; justify-content: space-between"><span><span style="font-style: italic">f</span><sub style="font-variant-caps: all-small-caps; font-size: 0.78em; letter-spacing: 0.02em">R1</sub></span><span>{{read1}} Hz</span></div>
+<div style="display: flex; justify-content: space-between"><span><span style="font-style: italic">f</span><sub style="font-variant-caps: all-small-caps; font-size: 0.78em; letter-spacing: 0.02em">R2</sub></span><span>{{read2}} Hz</span></div>
+</sc-if>
+</div>
+</div>
+<div role="group" aria-label="The ten vowels" style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px">
+<sc-for list="{{chips}}" as="c" hint-placeholder-count="10">
+<button onClick="{{c.pick}}" aria-label="{{c.aria}}" style="height: 44px; border-radius: 22px; box-sizing: border-box; padding: 0; font-family: 'Lato IPA', 'Source Sans 3', sans-serif; font-size: 18px; cursor: pointer; background: {{c.bg}}; color: {{c.fg}}; border: {{c.bw}} {{c.bs}} {{c.bd}}"><span style="display: inline-block; transform: translate({{c.gx}}em, {{c.gy}}em)">{{c.g}}</span></button>
+</sc-for>
+</div>
+<p style="margin: 0; min-height: 36px; font-size: 13px; line-height: 1.38; color: #4a4540">{{hint}}</p>
+<div style="display: flex; gap: 10px">
+<button onClick="{{start}}" disabled="{{busy}}" style="flex: 2; height: 44px; border-radius: 22px; border: none; background: {{startBg}}; color: #FFFFFF; font-size: 16px; font-weight: 600; cursor: pointer">{{startLabel}}</button>
+<button onClick="{{stop}}" style="flex: 1; height: 44px; border-radius: 22px; border: 1.5px solid #6C4D8C; background: transparent; color: #623F84; font-size: 16px; font-weight: 600; cursor: pointer">{{stopLabel}}</button>
+</div>
+<label style="display: flex; align-items: center; gap: 10px; min-height: 36px; font-size: 15px; color: #1a1612; cursor: pointer">
+<input type="checkbox" checked="{{hideWhileSinging}}" onChange="{{toggleHide}}" style="width: 20px; height: 20px; accent-color: #6C4D8C; margin: 0">
+<span>Hide the chart and numbers while I sing</span>
+</label>
+<p style="margin: 0; font-size: 12px; line-height: 1.3; color: #4a4540">Prototype in the Drawer at 520 px: simulated readings, sample bass data (Mitton 2020).</p>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":520,"height":900}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    var L = Math.log;
+    this.W = 484; this.H = 280;
+    this.full = { u0: L(1900), u1: L(700), v0: L(233.08), v1: L(830.61) };
+    var st = function (n) { return n * L(2) / 12; };
+    var boz = function (g, name, f1, f2, lo, hi, fill, tour) {
+      var a = L(lo) - st(3), b = L(hi) + st(2);
+      return { g: g, name: name, f1: f1, f2: f2, uc: L(f2), vc: (a + b) / 2, hu: st(2.5), hv: (b - a) / 2, fill: fill, tour: tour, needs: [] };
+    };
+    var own = function (g, name, f1, f2, c1, c2, tour, needs) {
+      var lo = L(c1) - st(3), hi = L(c1) + st(2);
+      return { g: g, name: name, f1: f1, f2: f2, uc: L(c2), vc: (lo + hi) / 2, hu: st(2.5), hv: (hi - lo) / 2, fill: '#6C4D8C', tour: tour, needs: needs };
+    };
+    this.V = [
+      boz('i', 'cardinal-i', 296, 1705, 293.66, 329.63, '#4F6FA8', 0),
+      boz('e', 'close-e', 381, 1532, 392.0, 493.88, '#3F8C8C', 1),
+      own('ɪ', 'smallcaps-i', 393, 1600, 1.0315 * 381, 1532 + 0.39 * (1705 - 1532), 8, [1, 0]),
+      own('ɨ', 'velar-i', 404, 1100, 1.365 * 296, 1705 - 0.67 * (1705 - 804), 7, [0, 9]),
+      boz('ɛ', 'open-e', 577, 1311, 493.88, 587.33, '#B07A12', 2),
+      own('a', 'bright-a', 711, 1113, 1.15 * 617, 1.10 * 1013, 3, [6]),
+      boz('ɑ', 'dark-a', 617, 1013, 523.25, 698.46, '#A8606F', 4),
+      own('ʌ', 'turned-v', 616, 1167, 617, 1013 + 0.52 * (1311 - 1013), 9, [6, 4]),
+      boz('o', 'Russian-o', 489, 826, 392.0, 493.88, '#5E8A55', 5),
+      boz('u', 'cardinal-u', 346, 804, 293.66, 349.23, '#4E6478', 6)
+    ];
+    this.tourOrder = this.V.map(function (e, i) { return i; }).sort(function (a, b) { return this.V[a].tour - this.V[b].tour; }.bind(this));
+    this.view = Object.assign({}, this.full);
+    this.phase = 'idle'; this.cur = 0; this.done = []; this.finished = false; this.confirm = false;
+    this.t0 = 0; this.live = null; this.trail = []; this.bar = 0; this.goal = null; this.lastStep = -1;
+    this.state = { hide: false, n: 0 };
+    this.tick = this.tick.bind(this);
+  }
+  componentWillUnmount() { if (this.raf) cancelAnimationFrame(this.raf); }
+  isDone(i) { return this.done.indexOf(i) >= 0; }
+  anchored(i) { var self = this; return this.V[i].needs.every(function (k) { return self.isDone(k); }); }
+  target(i) {
+    var f = this.full, e = this.V[i];
+    var z = Math.min((f.u0 - f.u1) / (2 * e.hu / 0.5), (f.v1 - f.v0) / (2 * e.hv / 0.5));
+    z = Math.max(1.4, Math.min(z, 3.2));
+    var su = (f.u0 - f.u1) / z / 2, sv = (f.v1 - f.v0) / z / 2;
+    return { u0: e.uc + su, u1: e.uc - su, v0: e.vc - sv, v1: e.vc + sv };
+  }
+  mix(a, b, t) {
+    var k = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+    return { u0: a.u0 + (b.u0 - a.u0) * k, u1: a.u1 + (b.u1 - a.u1) * k, v0: a.v0 + (b.v0 - a.v0) * k, v1: a.v1 + (b.v1 - a.v1) * k };
+  }
+  X(u) { return this.W * (this.view.u0 - u) / (this.view.u0 - this.view.u1); }
+  Y(v) { return this.H * (v - this.view.v0) / (this.view.v1 - this.view.v0); }
+  pick(i) {
+    if (this.phase !== 'idle') { if (i === this.cur) this.halt(); return; }
+    this.cur = i; this.finished = false; this.confirm = false;
+    this.begin();
+    this.setState({ n: this.state.n + 1 });
+  }
+  begin() {
+    if (this.phase !== 'idle' || this.finished) return;
+    this.confirm = false; this.phase = 'zoomIn'; this.t0 = performance.now(); this.bar = 0; this.goal = null; this.lastStep = -1;
+    this.raf = requestAnimationFrame(this.tick);
+  }
+  halt() {
+    if (this.raf) cancelAnimationFrame(this.raf);
+    if (this.phase === 'idle') {
+      if (this.done.length && !this.confirm) { this.confirm = true; this.setState({ n: this.state.n + 1 }); return; }
+      this.done = []; this.cur = 0; this.finished = false;
+    }
+    this.confirm = false;
+    this.phase = 'idle'; this.view = Object.assign({}, this.full);
+    this.live = null; this.trail = []; this.bar = 0;
+    this.setState({ n: this.state.n + 1 });
+  }
+  tick(now) {
+    var D = { zoomIn: 800, sing: 1700, hold: 1200, fry: 3000, locked: 1000, zoomOut: 800 };
+    var order = ['zoomIn', 'sing', 'hold', 'fry', 'locked', 'zoomOut'];
+    var t = (now - this.t0) / D[this.phase];
+    var e = this.V[this.cur], tg = this.target(this.cur), self = this;
+    if (this.phase === 'zoomIn') this.view = this.mix(this.full, tg, Math.min(t, 1));
+    if (this.phase === 'zoomOut') this.view = this.mix(tg, this.full, Math.min(t, 1));
+    if (this.phase === 'fry') {
+      var p = Math.min(t, 1); this.bar = p * 100;
+      var step = Math.floor((now - this.t0) / 250);
+      if (step !== this.lastStep) {
+        this.lastStep = step;
+        var amp = 0.085 * Math.pow(1 - p, 1.3) + 0.012;
+        this.goal = { u: Math.log(e.f2) + (Math.random() * 2 - 1) * amp, v: Math.log(e.f1) + (Math.random() * 2 - 1) * amp };
+        if (this.live) { this.trail.push({ u: this.live.u, v: this.live.v }); if (this.trail.length > 6) this.trail.shift(); }
+        if (!this.live) this.live = { u: this.goal.u, v: this.goal.v };
+      }
+      this.live.u += (this.goal.u - this.live.u) * 0.2; this.live.v += (this.goal.v - this.live.v) * 0.2;
+    }
+    if (t >= 1) {
+      var i = order.indexOf(this.phase);
+      if (this.phase === 'fry') { this.live = { u: Math.log(e.f2), v: Math.log(e.f1) }; this.trail = []; if (!this.isDone(this.cur)) this.done.push(this.cur); }
+      if (this.phase === 'locked') { this.live = null; }
+      if (i === order.length - 1) {
+        this.phase = 'idle'; this.bar = 0; this.view = Object.assign({}, this.full);
+        var at = this.tourOrder.indexOf(this.cur), n = this.tourOrder.length, found = -1, q;
+        for (q = 1; q <= n && found < 0; q++) { var k = this.tourOrder[(at + q) % n]; if (!self.isDone(k) && this.V[k].tour < 7) found = k; }
+        for (q = 0; q < n && found < 0; q++) { var k3 = this.tourOrder[q]; if (!self.isDone(k3)) found = k3; }
+        if (found >= 0) this.cur = found; else this.finished = true;
+        this.setState({ n: this.state.n + 1 }); return;
+      }
+      this.phase = order[i + 1]; this.t0 = now; this.lastStep = -1;
+    }
+    this.setState({ n: this.state.n + 1 });
+    this.raf = requestAnimationFrame(this.tick);
+  }
+  renderVals() {
+    var self = this, V = this.V, r1 = function (n) { return Math.round(n * 10) / 10; };
+    var active = this.phase !== 'idle';
+    var zoomed = (this.full.u0 - this.full.u1) / (this.view.u0 - this.view.u1) > 1.6;
+    var eggs = [];
+    V.forEach(function (e, i) {
+      var lit = active && i === self.cur, personal = e.needs.length > 0;
+      eggs.push({ cx: r1(self.X(e.uc)), cy: r1(self.Y(e.vc)), rx: r1(self.W * e.hu / (self.view.u0 - self.view.u1)), ry: r1(self.H * e.hv / (self.view.v1 - self.view.v0)), fill: e.fill, op: lit ? 0.5 : (personal ? (self.anchored(i) ? 0.3 : 0.15) : 0.24) });
+    });
+    var vl = [], hl = [], f;
+    for (f = 700; f <= 1900; f += 100) { if (!zoomed && (f / 100) % 2 === 1) continue; var x = this.X(Math.log(f)); if (x > 24 && x < this.W - 14) vl.push({ p: r1(x), label: String(f) }); }
+    for (f = 250; f <= 800; f += 50) { if (!zoomed && f % 100 !== 0) continue; var y = this.Y(Math.log(f)); if (y > 22 && y < this.H - 8) hl.push({ p: r1(y), label: String(f) }); }
+    var dots = this.done.map(function (i) { var e = V[i]; var cx = self.X(Math.log(e.f2)), cy = self.Y(Math.log(e.f1)); return { cx: r1(cx), cy: r1(cy), lx: r1(cx + 15), ly: r1(cy - 9), g: e.g }; });
+    var pts = this.done.map(function (i) { var e = V[i]; return [self.X(Math.log(e.f2)), self.Y(Math.log(e.f1))]; });
+    var hullOf = function (p) {
+      p = p.slice().sort(function (a, b) { return a[0] - b[0] || a[1] - b[1]; });
+      var cr = function (o, a, b) { return (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]); };
+      var lo = [], up = [], k;
+      for (k = 0; k < p.length; k++) { while (lo.length >= 2 && cr(lo[lo.length - 2], lo[lo.length - 1], p[k]) <= 0) lo.pop(); lo.push(p[k]); }
+      for (k = p.length - 1; k >= 0; k--) { while (up.length >= 2 && cr(up[up.length - 2], up[up.length - 1], p[k]) <= 0) up.pop(); up.push(p[k]); }
+      return lo.slice(0, -1).concat(up.slice(0, -1));
+    };
+    var H = pts.length >= 3 ? hullOf(pts) : [];
+    var cur = V[this.cur], g = '[' + cur.g + ']';
+    var plates = [17, 13, 0, 15, 10, 3, 2, 23, 6, 19];
+    var nudge = [[0, -0.022], [-0.002, -0.133], [0, -0.134], [0, -0.022], [-0.008, -0.133], [0.016, -0.133], [0.014, -0.133], [0, -0.134], [0, -0.133], [0.003, -0.138]];
+    var total = V.length, fin = this.finished;
+    var cues = { idle: fin ? 'All ten captured. This is your vowel space.' : (this.isDone(this.cur) ? g + ' is captured.' : 'Ready for ' + g + '.'), zoomIn: 'Moving in on ' + g + '.', sing: 'Sing ' + g + ' as you usually do.', hold: 'Stop, and keep the shape.', fry: 'Now ' + g + ' in vocal fry.', locked: g + ' captured.', zoomOut: g + ' captured.' };
+    var hiding = this.state.hide && (this.phase === 'sing' || this.phase === 'hold' || this.phase === 'fry');
+    var live = this.phase === 'fry' && this.goal;
+    var left = total - this.done.length, words = ['None', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten'];
+    var needNames = cur.needs.filter(function (k) { return !self.isDone(k); }).map(function (k) { return '[' + V[k].g + ']'; });
+    var hint;
+    if (this.confirm) hint = 'Tap Clear all to clear all your readings.';
+    else if (active) hint = 'Stop, or a second tap on ' + g + ', ends this take. Nothing is saved from it.';
+    else if (fin) hint = 'Tap any vowel to sing it again.';
+    else if (this.isDone(this.cur)) hint = 'A re-take replaces ' + g + ' only if the new reading is as clear.';
+    else if (needNames.length) hint = 'Ilya has placed ' + g + ' from your voice type for now. Its zone moves to fit you once ' + needNames.join(' and ') + (needNames.length > 1 ? ' are' : ' is') + ' sung.';
+    else if (!this.done.length) hint = 'Start follows Ilya’s order. Or tap any vowel to sing that one now.';
+    else {
+      var rest = self.tourOrder.filter(function (k) { return !self.isDone(k); });
+      var allPersonal = rest.every(function (k) { return V[k].needs.length > 0; });
+      var names = rest.map(function (k) { return '[' + V[k].g + ']'; }).join(' ');
+      hint = allPersonal ? words[left] + ' to go: ' + names + '. Ilya has placed them from your voice. Sing each one to replace its estimate.' : words[left] + ' to go, in any order. Ilya estimates the rest until you sing them.';
+    }
+    var axisLabels = vl.map(function (l) { return { x: l.p, y: 9, t: l.label }; }).concat(hl.map(function (l) { return { x: 15, y: l.p, t: l.label }; }));
+    var glyphLabels = [];
+    var ghosts = [];
+    V.forEach(function (e, i) { if (e.needs.length && !self.isDone(i)) { var cx = self.X(e.uc), cy = self.Y(e.vc); ghosts.push({ cx: r1(cx), cy: r1(cy) }); glyphLabels.push({ x: r1(cx + 14), y: r1(cy - 12), t: e.g, c: '#6A655F' }); } });
+    dots.forEach(function (d) { glyphLabels.push({ x: d.lx, y: r1(d.ly - 4), t: d.g, c: '#1a1612' }); });
+    return {
+      o0: this.cur === 0 ? 1 : 0, o1: this.cur === 1 ? 1 : 0, o2: this.cur === 2 ? 1 : 0, o3: this.cur === 3 ? 1 : 0, o4: this.cur === 4 ? 1 : 0, o5: this.cur === 5 ? 1 : 0, o6: this.cur === 6 ? 1 : 0, o7: this.cur === 7 ? 1 : 0, o8: this.cur === 8 ? 1 : 0, o9: this.cur === 9 ? 1 : 0,
+      vowelName: 'The ' + cur.name + ' vowel',
+      credit: 'Interim drawing: Mitton (2020), Fig. 4.3' + (plates[this.cur] ? ', after Bolla (1981), plate ' + plates[this.cur] + '.' : '. Bolla has no plate for this vowel.'),
+      drawingAlt: 'Side view of the mouth and throat for the ' + cur.name + ' vowel',
+      gx: nudge[this.cur][0], gy: nudge[this.cur][1],
+      glyph: cur.g, countText: this.done.length + ' of ' + total,
+      eggs: eggs, vlines: vl, hlines: hl, dots: dots, ghosts: ghosts, hint: hint, axisLabels: axisLabels, glyphLabels: glyphLabels, hullDash: fin ? 'none' : '5 4',
+      trail: this.trail.map(function (t, i) { return { cx: r1(self.X(t.u)), cy: r1(self.Y(t.v)), op: r1(0.08 + 0.07 * i) }; }),
+      showHull: H.length >= 3 && !active, hull: H.map(function (p) { return r1(p[0]) + ',' + r1(p[1]); }).join(' '),
+      showLive: !!this.live, liveX: this.live ? r1(this.X(this.live.u)) : 0, liveY: this.live ? r1(this.Y(this.live.v)) : 0,
+      showChart: !hiding, chartHidden: hiding, barPct: Math.round(this.bar), cue: cues[this.phase],
+      chips: V.map(function (e, i) {
+        var d = self.isDone(i), a = i === self.cur && !fin;
+        return { g: e.g, gx: nudge[i][0], gy: nudge[i][1], aria: e.name + (d ? ', captured' : ', not yet sung') + (a ? ', selected' : ''), bg: d ? '#6C4D8C' : (a ? '#F1EDF5' : 'transparent'), fg: d ? '#FFFFFF' : '#1a1612', bd: a ? '#1a1612' : '#6C4D8C', bw: a ? '2.5px' : '1.5px', bs: (!d && !a && e.needs.length) ? 'dashed' : 'solid', pick: function () { self.pick(i); } };
+      }),
+      busy: active || fin, startBg: (active || fin) ? '#9A8FA6' : '#6C4D8C',
+      startLabel: fin ? 'Done' : (active ? 'Measuring' : (this.isDone(this.cur) ? 'Re-take ' + g : 'Start ' + g)),
+      stopLabel: active ? 'Stop' : (this.confirm ? 'Clear all' : 'Start over'),
+      start: function () { self.begin(); }, stop: function () { self.halt(); },
+      showRead: (!!live && !hiding) || this.phase === 'locked' || this.phase === 'zoomOut',
+      read1: live ? Math.round(Math.exp(this.goal.v)) : cur.f1, read2: live ? Math.round(Math.exp(this.goal.u)) : cur.f2,
+      readColor: this.phase === 'fry' ? '#6A655F' : '#1a1612', readWeight: this.phase === 'fry' ? 400 : 600,
+      hideWhileSinging: this.state.hide, toggleHide: function () { self.setState({ hide: !self.state.hide }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -16,7 +16,7 @@
    tree on 2026-11-02 (consistency batch 2). Paths are under `apps/web/src/`;
    a prefix is listed with the files that use it most and its key count.
 
-   This file holds 1,241 keys.
+   This file holds 1,264 keys.
 
    A key built at run time (`watch.key.letter.${letter}`, `comment.<register>.<part>`)
    has no literal reference, so a search for the whole key can come back empty
@@ -24,10 +24,11 @@
 
    a11y.           4  accessible names: lib/components/Drawer/Drawer.svelte, lib/score/Loupe.svelte, lib/score/CorrectionSurface.svelte, lib/components/Paper/Paper.svelte
    aid.            2  lib/components/ReadingAid.svelte
-   analysis.       5  lib/analysis/analyze-score-adapter.ts (the broad-analysis note)
+   analysis.       7  lib/analysis/analyze-score-adapter.ts (the broad-analysis note), lib/components/Drawer/bandState.ts (ANALYSIS's closed line)
    app.            2  the page's hidden heading, lib/components/HeaderBar.svelte (`app.subtitle` has no literal consumer)
    binder.        10  lib/library/exchange.ts, lib/components/Drawer/RootPanel.svelte
    calib.         99  lib/voice/CalibrationWizard.svelte, lib/voice/ProfileSwitcher.svelte, lib/components/Drawer/VoiceAnchor.svelte
+   capture.       32  the calibration screen: lib/voice/VowelCapture.svelte, lib/voice/chart/screen-logic.ts, lib/voice/chart/VowelChart.svelte
    clitic.         3  no literal consumer found (lib/score/clitic-seat.ts does the seating)
    collide.        5  routes/+page.svelte
    comment.       40  the note comments: lib/insights/singer-blocks.ts, lib/insights/comment-text.ts, lib/analysis/watchlist.ts
@@ -43,18 +44,18 @@
    group.          3  the drawer's band names: lib/components/Drawer/Drawer.svelte (LEGACY KEY: `group.scoreMarkup`)
    guide.          5  lib/components/Reading/GuideSources.svelte, lib/components/Drawer/Drawer.svelte
    input.          8  lib/components/Drawer/IntakePanel.svelte
-   insights.     189  the INSIGHTS document: lib/insights/singer-blocks.ts, lib/insights/InsightsPane.svelte, lib/insights/tessituragram-layout.ts (LEGACY KEYS: `insights.fit.*`)
+   insights.     190  the INSIGHTS document: lib/insights/singer-blocks.ts, lib/insights/InsightsPane.svelte, lib/insights/tessituragram-layout.ts (LEGACY KEYS: `insights.fit.*`)
    inspector.     43  lib/components/Drawer/InspectorPanel.svelte, lib/components/Drawer/Drawer.svelte, lib/components/Drawer/GlossOffer.svelte
    intake.        54  lib/components/Drawer/IntakePanel.svelte, lib/components/Drawer/IntakeViews.svelte, lib/components/Drawer/PoemLibraryCard.svelte, lib/text/input-line.ts, lib/components/Drawer/bandState.ts
    key.           23  the key ruler: lib/markup/transposition-ruler.ts, lib/markup/TranspositionDock.svelte, lib/markup/TranspositionRuler.svelte
    legend.         7  the legends: lib/provenance.ts, lib/markup/MarkupPane.svelte, lib/tempo/TempoReceipt.svelte
-   loupe.        130  lib/score/CorrectionSurface.svelte, lib/score/Loupe.svelte, lib/score/correction-verbs.svelte.ts, routes/+page.svelte
+   loupe.        129  lib/score/CorrectionSurface.svelte, lib/score/Loupe.svelte, lib/score/correction-verbs.svelte.ts, routes/+page.svelte
    lyrics.         3  lib/components/Drawer/IntakeViews.svelte (the receipt line and the tap note of the join of Poem to a scan's Lyrics)
    meta.          15  lib/components/Drawer/MetadataFields.svelte, lib/components/Paper/TitleHeader.svelte
    notation.      16  lib/score/CorrectionSurface.svelte, lib/components/Drawer/bandState.ts, routes/+page.svelte
    notePicker.    10  lib/voice/NotePicker.svelte, lib/analysis/watchlist.ts
    octave.         5  lib/score/clef-ui.svelte.ts, lib/components/OctaveLine.svelte, lib/score/ClefReceipt.svelte, lib/score/ClefControls.svelte
-   pacifier.      17  lib/voice/pacifier/Pacifier.svelte
+   pacifier.      17  lib/voice/capture-ritual.svelte.ts
    paper.          4  lib/components/Paper/TitlePage.svelte, lib/components/Paper/SubsequentPage.svelte, lib/text/text-header.ts, lib/one-action.ts
    placeholder.    8  lib/analysis/placeholder-line.ts
    portrait.       2  lib/components/ReadingAid.svelte, routes/+page.svelte
@@ -65,11 +66,12 @@
    result.         1  no literal consumer found
    ribbon.         6  lib/components/Drawer/InspectorPanel.svelte
    select.         5  lib/components/Drawer/SearchableSelect.svelte
+   sheet.         16  the vowel-space sheet and the capture screen's readings list: lib/voice/chart/VowelSpaceSheet.svelte, lib/voice/VowelCapture.svelte
    shiftLyrics.    5  lib/score/CorrectionSurface.svelte
    song.           2  lib/omr/scan.ts, lib/library/notices.ts, routes/+page.svelte
-   songs.         13  routes/+page.svelte, lib/components/Drawer/SongList.svelte
+   songs.         15  routes/+page.svelte, lib/components/Drawer/SongList.svelte, lib/components/Drawer/bandState.ts
    source.         1  lib/components/Drawer/IntakePanel.svelte, lib/score/ingestion/ingest.ts
-   station.        2  routes/+page.svelte
+   station.        1  routes/+page.svelte
    storage.        8  lib/library/notices.ts, lib/library/library.ts
    stress.         9  `stressSourceLabel`, at the foot of this file
    tab.            5  lib/components/DeskHead.svelte, lib/components/Paper/RunningHeader.svelte, lib/insights/InsightsPane.svelte (LEGACY KEY: `tab.markedScore`)
@@ -78,12 +80,12 @@
    toc.           83  the tables of contents: lib/components/Drawer/Drawer.svelte
    underlay.       1  read only by lib/names.ts, the record of names; no component reads it
    update.         4  routes/+page.svelte
-   upload.        78  lib/score/ScoreUploader.svelte, lib/score/format-label.ts, lib/score/ingestion/ingest.ts, lib/omr/scan.ts
+   upload.        50  lib/score/ScoreUploader.svelte, lib/score/format-label.ts, lib/score/ingestion/ingest.ts, lib/omr/scan.ts
    verify.         1  lib/components/Paper/WordStack.svelte
    voice.          2  lib/components/Drawer/bandState.ts, lib/components/Drawer/Drawer.svelte
    voiceIntake.   60  lib/voice/InsightsIntake.svelte, lib/voice/VoiceTypeIntake.svelte
    voiceType.     42  lib/voice/VoiceTypeIntake.svelte, lib/voice/voiceTypes.ts, lib/voice/VoiceTypeFirst.svelte, lib/voice/OutsideNote.svelte
-   vowel.         11  lib/voice/pacifier/Pacifier.svelte, lib/markup/legend.ts
+   vowel.         11  lib/voice/vowel-names.ts, lib/markup/legend.ts
    wait.           2  lib/components/ReadingWait.svelte, lib/omr/wait.ts, lib/score/ScoreUploader.svelte
    watch.         46  the watch list: lib/analysis/watchlist.ts, lib/analysis/gates.ts, lib/markup/transposition-ruler.ts
    witness.        8  no literal consumer found (its component was removed)
@@ -100,8 +102,8 @@
    - `insights.fit.*` is the INSIGHTS page's measurement table, from when the
      document was shown as Fit. It is read by `lib/insights/FitTable.svelte`,
      which nothing imports; consistency batch 4 decides whether the table and
-     its keys stay. No comment says why these keys kept the name; the heading's
-     comment, above `insights.fit.heading`, records the wording rulings.
+     its keys stay. A comment above `insights.fit.heading` says why they kept the
+     name; the one below it records the wording rulings.
    ═══════════════════════════════════════════════════════════ */
 
 export type Language = 'en' | 'fr';
@@ -189,8 +191,8 @@ const strings: Record<string, Record<Language, string>> = {
 	//    UNUSED SINCE N.114 (Dann's ruling of 2026-09-07: the Underlay station
 	//    leaves Score markup and the syllable line goes under the poem field,
 	//    where the ruling of 2026-09-09 gives it no label at all). Kept and
-	//    marked in place rather than deleted, the way `upload.scanTooltip` is,
-	//    on Dann's ruling of 2026-09-03.
+	//    marked in place rather than deleted, on Dann's ruling of 2026-09-03
+	//    (`upload.scanTooltip`, which was kept the same way, was removed in the closing polish lane).
 	'underlay.heading':            { en: 'UNDERLAY',                     fr: 'PLACEMENT DES PAROLES' },
 	//    VOICE, the station name from E.27 §3.3. The anchor line inside it
 	//    keeps its ratified `calib.anchor.*` strings.
@@ -429,7 +431,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'notation.orphans':            { en: '%s corrections no longer find their note', fr: '%s corrections ne retrouvent plus leur note' },
 	// N.92 second slice, the accidental palette. Approved by Dann 2026-08-24.
 	// `bémol` and `dièse` are ADOPTED from the intake prompt's own French
-	// (`upload.ask.keySharp` and `upload.ask.keyFlat` above); `bécarre` is
+	// (`upload.ask.keySharp` and `upload.ask.keyFlat`, removed 2026-11-12); `bécarre` is
 	// ADOPTED from standard musical usage and is new to the app. Nothing here
 	// is coined.
 	'notation.tool.flat':          { en: 'Flat',                        fr: 'Bémol' },
@@ -443,10 +445,10 @@ const strings: Record<string, Record<Language, string>> = {
 	// ruling of 2026-08-26 asks for.
 	//
 	// ADOPTED, each from a string already shipped in this file: `tiroir`
-	// (drawer.collapse), `mesures` (upload.report.events), `système`
-	// (upload.report.systems), `sur` for "of" (footer.of), `Durée`
-	// (correct.length), `Hauteur` (upload.report.pitchSubs), `Altération`
-	// (notePicker.accidentalAria), `Silence` (upload.report.events), `Texte`
+	// (drawer.collapse), `mesures` (upload.report.events, removed 2026-11-12), `système`
+	// (upload.report.systems, removed), `sur` for "of" (footer.of), `Durée`
+	// (correct.length), `Hauteur` (upload.report.pitchSubs, removed), `Altération`
+	// (notePicker.accidentalAria), `Silence` (upload.report.events, removed), `Texte`
 	// (station.textChanged), `degré` (correct.stepUp), `Supprimer`
 	// (correct.delete), `Annuler` (correct.restore), `Point` (correct.dot),
 	// and the two shift-scope clauses (shiftLyrics.*), reused verbatim.
@@ -505,9 +507,6 @@ const strings: Record<string, Record<Language, string>> = {
 	// ratified across `upload.*`, `binder.*` and `replace.*`.
 	'loupe.redo':                  { en: 'Redo: %s',                     fr: 'Refaire : %s' },
 	'loupe.undo.placed':           { en: 'syllable placed',              fr: 'syllabe placée' },
-	// RULED by Dann 2026-09-16: `station.startOver`'s own English/French pair,
-	// verbatim, for the undo pill after Start placement over.
-	'loupe.undo.startOver':        { en: 'placement started over',       fr: 'placement recommencé' },
 	// N.179 (QUEUE row 14), RULED by Dann 2026-10-01 02:42 and 02:43, French
 	// RATIFIED 02:44 ("ratified"), adopted from the `loupe.lyric.*` and
 	// `loupe.undo.*` families. The brief types the apostrophe straight; the tree
@@ -662,7 +661,6 @@ const strings: Record<string, Record<Language, string>> = {
 	'loupe.lyric.toEnd':           { en: 'Syllables, to the end of the lyric', fr: 'Les syllabes, jusqu\u2019à la fin du texte' },
 	'loupe.lyric.toNextOpen':      { en: 'Syllables, to the next open note',   fr: 'Les syllabes, jusqu\u2019à la prochaine note libre' },
 
-
 	// ── N.92 mobile slice 3: the entry grammar ───────────────
 	// EVERY FRENCH WORD HERE AWAITS DANN'S EYE. The table in
 	// `docs/sessions/memo-mobile-slice3_r1_2026-08-26.md` sets each one beside
@@ -670,9 +668,9 @@ const strings: Record<string, Record<Language, string>> = {
 	//
 	// ADOPTED, from strings already in this file: `mesure` and `entrée` follow
 	// `mes.` and the entry station's « Saisie » from slice 2; `Silence`
-	// (upload.report.events); `Liaison` and `Nolet` (both ratified by Dann
+	// (upload.report.events, removed 2026-11-12); `Liaison` and `Nolet` (both ratified by Dann
 	// 2026-08-26 with the slice 2 table); `Annuler` (correct.restore);
-	// `Hauteur` (upload.report.pitchSubs); `note` and `syllabe` throughout.
+	// `Hauteur` (upload.report.pitchSubs, removed); `note` and `syllabe` throughout.
 	//
 	// COINED, two: « dans l'espace de » for the tuplet definition's ratio
 	// clause, and « prend la hauteur de » for the arrival label.
@@ -844,12 +842,10 @@ const strings: Record<string, Record<Language, string>> = {
 	//    and the French is OWED. That is not a translation and must not be read
 	//    as one. Every key here is listed in the increment 2 memo.
 	//
-	//    WHAT THEY REPLACE, and none of the replaced strings is deleted: the
-	//    French table is not ruled, and a ratified French string is not a
-	//    build's to throw away. `input.placeholder`, `input.clear`,
-	//    `upload.drop.title`, `upload.drop.browse`, `upload.drop.release`,
-	//    `upload.drop.acceptedNow` and `upload.drop.placeholder` are UNUSED as
-	//    of this ship and stay where they are, marked below.
+	//    WHAT THEY REPLACE: `input.placeholder`, `input.clear`, and the five
+	//    `upload.drop.*` strings were unused at this ship and were kept; the
+	//    five `upload.drop.*` keys were removed in the closing polish lane
+	//    (2026-11-12).
 	//
 	//    `intake.placeholder` IS DESIGN'S OWN SENTENCE, from the r2 prototype
 	//    at `:359`, where it is marked a placeholder string. It says the two
@@ -1003,7 +999,6 @@ const strings: Record<string, Record<Language, string>> = {
 	'intake.picture.title':   { en: 'Is this picture the poem, or the score?', fr: 'Cette image est-elle le poème ou la partition?' },
 	'intake.picture.reading': { en: 'Reading the words out of the picture…', fr: 'Lecture des mots de l\u2019image…' },
 
-
 	// ── Word Console placeholder ─────────────────────────────
 	'console.placeholder':         { en: 'ANALYSIS',                     fr: 'ANALYSE' },
 
@@ -1073,6 +1068,9 @@ const strings: Record<string, Record<Language, string>> = {
 	'analysis.broad.itemRange':    { en: 'range guidance',               fr: 'les repères d\u2019ambitus' },
 	'analysis.broad.itemPassaggio': { en: 'positional passaggio flags',   fr: 'le signalement des notes de *passaggio*' },
 	'analysis.broad.join':         { en: 'and',                          fr: 'ni' },
+	// N.201, RATIFIED by Dann 2026-11-14 20:38, English and French (*"Yes I ratify the English and French."*). ANALYSIS's closed line when no word is chosen. Digits in both languages (Dann 2026-11-13 11:52). Fill with `tv`.
+	'analysis.verifyCount.one':    { en: '1 to verify',                  fr: '1 à vérifier' },
+	'analysis.verifyCount.many':   { en: '{n} to verify',                fr: '{n} à vérifier' },
 
 	// ── Textual witnesses (reconciliation shell, piece 3; Kimi Q1/Q2;
 	//    English ruled by Dann 2026-07-16; French pending Dann's validation) ──
@@ -1126,80 +1124,9 @@ const strings: Record<string, Record<Language, string>> = {
 	'engraving.systemSpacing':     { en: 'Between systems',              fr: 'Entre les systèmes' },
 	'engraving.reset':             { en: 'Reset',                        fr: 'Réinitialiser' },
 
-	// ── Score uploader (the ingest widget; Round 9 §2 Items 1, 2, 6; agentless) ──
-	// THE DROP ZONE'S ONE PLACEHOLDER. RULED by Dann 2026-08-20 on his walk
-	// of `3c498aa`: the drop zone showed three stacked lines in three
-	// treatments while the textarea beside it showed one quiet line, and the
-	// two are the pair that must match. The three strings below are what it
-	// recombines, and they are KEPT rather than deleted: they are the
-	// provenance of this one, and reversing the ruling is one edit if he
-	// wants the three lines back.
-	//
-	// THE ENGLISH IS DANN'S, VERBATIM, including "or photograph". That used
-	// to be a difference from 'upload.drop.acceptedNow', which said "a
-	// photograph"; N.65 brought the conjunction back to that key on
-	// 2026-08-21, so the two now agree and there is no difference to name.
-	//
-	// THE FRENCH IS RECOMBINED, NOT TRANSLATED. Every word comes from the two
-	// French strings below, in their order, with three characters added and
-	// nothing else: the space joining the two sentences and the two full
-	// stops. Every format name stands exactly as it did, and the non-breaking
-	// space before the colon is French typography the tree already had.
-	// « ou » CONFIRMED BY DANN 2026-08-20, on his walk of `39d60e0`. The
-	// English gained "or" before the last item and the French now mirrors
-	// it. That is the one word in this string he added rather than the tree,
-	// and it is the only word here that did not come from the three keys
-	// below.
-	'upload.drop.placeholder': { en: 'Drop a score here or click to browse. Accepted now: MNX, MusicXML, .mxl, Finale (.musx), MuseScore (.mscz), PDF, or photograph.', fr: 'Déposez une partition ici ou cliquez pour parcourir. Acceptés maintenant\u00a0: MNX, MusicXML, .mxl, Finale (.musx), MuseScore (.mscz), PDF, ou une photographie.' },
-
-	// N.65 ship B. NO LONGER RENDERED, AND IT SWAPPED PLACES WITH THE THREE
-	// KEYS BELOW. Dann ruled on 2026-08-21 that the score box says only the
-	// first sentence and the format list moves outside it, so
-	// `ScoreUploader` now assembles the placeholder from `.title` and
-	// `.browse` and renders `.acceptedNow` as its own line. This string is
-	// RETAINED rather than deleted, on the treatment those three already
-	// carry: it is the provenance of the collapsed one-sentence version and
-	// it holds the « ou » Dann confirmed by hand on 2026-08-20. Deleting the
-	// one string he added a word to is not a thing this ship was asked to
-	// do.
-	// 'upload.drop.placeholder' is above; the three keys here are LIVE again.
-	// UNUSED SINCE N.108 increment 2 (the drop zone is gone). Kept: ratified French.
-	'upload.drop.title':           { en: 'Drop a score here',            fr: 'Déposez une partition ici' },
-	// UNUSED SINCE N.108 increment 2 (the drop zone is gone). Kept: ratified French.
-	'upload.drop.browse':          { en: 'or click to browse',           fr: 'ou cliquez pour parcourir' },
-	// THE LEAD-IN IS GONE AND THE « ou » IS BACK, N.65, Dann's ruling of
-	// 2026-08-21: "If we remove 'Acceptés maintenant :/ Accepted now:' we let
-	// the remaining French shrink to a single line and it stops the downward
-	// displacement of elements in French. I think it's understood that the
-	// file names are the acceptable formats."
-	//
-	// NO NEW FRENCH IS WRITTEN. Every word here comes from
-	// `upload.drop.placeholder` above, which Dann confirmed by hand on
-	// 2026-08-20, and the tail is that string's own tail: `PDF, or
-	// photograph` and `PDF, ou une photographie`.
-	//
-	// THE « ou » CORRECTS THE DESK, NOT DANN. Ship B wrote `PDF, a
-	// photograph` and `PDF, une photographie` and the desk then told him the
-	// missing conjunction could stay missing. The comment four lines above
-	// `upload.drop.placeholder` says why that was wrong: the conjunction is
-	// the one word in that string he added rather than the tree, and nothing
-	// has reversed it. A word Dann added by hand is a ruling.
-	//
-	// NO TERMINAL FULL STOP. Without a lead-in the line is a bare list, not a
-	// sentence. If Dann wants the stop back it is one character in each
-	// language.
-	// UNUSED SINCE N.108 increment 2 (the drop zone is gone). Kept: ratified French.
-	'upload.drop.acceptedNow': { en: 'MNX, MusicXML, .mxl, Finale (.musx), MuseScore (.mscz), PDF, or photograph', fr: 'MNX, MusicXML, .mxl, Finale (.musx), MuseScore (.mscz), PDF, ou une photographie' },
-	// UNUSED SINCE N.108 increment 2 (the drop zone is gone). Kept: ratified French.
-	'upload.drop.release':         { en: 'Release to add your score',    fr: 'Relâchez pour ajouter votre partition' },
 	// The score intake's watermark. « partition » is DANN'S OWN WORD, not a
 	// translation this desk chose, and no other French ships for it.
 	'upload.watermark':            { en: 'score',                        fr: 'partition' },
-	// UNUSED SINCE N.108 increment 4 (the photograph button is gone; the one
-	// picker takes a photograph like every other kind, and a picture asks in
-	// place which it is). Kept: ratified French. RULED BY DANN 2026-09-03:
-	// the strings are "marked unused in place, not deleted".
-	'upload.scanTooltip':          { en: 'Read a score from a photograph', fr: 'Lire une partition à partir d’une photographie' },
 
 	'upload.status.reading':       { en: 'Reading file…',           fr: 'Lecture du fichier…' },
 	'upload.status.converting':    { en: 'Converting Finale file…',  fr: 'Conversion du fichier Finale…' },
@@ -1214,9 +1141,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'upload.banner.denigma':       { en: 'Converted from Finale format by denigma. Lyric alignment and measure structure are preserved. Verify custom expressions or complex layouts if the score appears unusual.', fr: 'Converti depuis le format Finale par denigma. L’alignement des paroles et la structure des mesures sont préservés. Vérifiez les expressions personnalisées ou les mises en page complexes si la partition semble inhabituelle.' },
 	'upload.banner.dismiss':       { en: 'Dismiss',                      fr: 'Ignorer' },
 
-	'upload.continue':             { en: 'Continue to analysis',         fr: 'Continuer vers l’analyse' },
 	'upload.tryAnother':           { en: 'Try another file',             fr: 'Essayer un autre fichier' },
-
 
 	'upload.soon.mscz':            { en: 'MuseScore (.mscz) import is coming soon.', fr: 'L’import MuseScore (.mscz) arrive bientôt.' },
 	// ── N.59: the page reader ────────────────────────────────────────
@@ -1233,47 +1158,13 @@ const strings: Record<string, Record<Language, string>> = {
 	'upload.format.pdfReader':     { en: 'Format: PDF → MusicXML', fr: 'Format\u00a0: PDF → MusicXML' },
 	'upload.banner.reader':        { en: 'This score is Ilya’s synthesis from an image (scan or photograph). The optical recognition of musical notes and printed text is imperfect, so you should check Ilya’s reading against your original source. You may rectify any errors through the Loupe’s CORRECTIONS pane.', fr: 'Cette partition est la synthèse qu’Ilya a faite à partir d’une image (numérisation ou photographie). La reconnaissance optique des notes de musique et du texte imprimé est imparfaite; vérifiez donc la lecture d’Ilya sur votre source originale. Vous pouvez corriger toute erreur dans le volet CORRECTIONS de la loupe.' },
 
-	'upload.ask.title':            { en: 'Two things Ilya cannot see', fr: 'Deux choses qu’Ilya ne peut pas voir' },
-	'upload.ask.why':              { en: 'Ilya reads the notes off the picture, but not the clef or the key signature. Read those off your own paper.', fr: 'Ilya lit les notes sur l’image, mais ni la clé ni l’armure. Lisez-les sur votre propre partition.' },
 	'upload.ask.clef':             { en: 'Clef', fr: 'Clé' },
 	'upload.ask.clefTreble':       { en: 'Treble', fr: 'Clé de sol' },
 	'upload.ask.clefTrebleOttava': { en: 'Treble, sounding an octave lower', fr: 'Clé de sol, à l’octave inférieure' },
 	'upload.ask.clefBass':         { en: 'Bass', fr: 'Clé de fa' },
-	'upload.ask.key':              { en: 'Key signature', fr: 'Armure' },
-	'upload.ask.keyNone':          { en: 'No sharps or flats', fr: 'Aucune altération' },
-	'upload.ask.keySharp':         { en: '1 sharp', fr: '1 dièse' },
-	'upload.ask.keySharps':        { en: '%s sharps', fr: '%s dièses' },
-	'upload.ask.keyFlat':          { en: '1 flat', fr: '1 bémol' },
-	'upload.ask.keyFlats':         { en: '%s flats', fr: '%s bémols' },
-	'upload.ask.read':             { en: 'Read this page', fr: 'Lire cette page' },
 	'upload.ask.cancel':           { en: 'Cancel', fr: 'Annuler' },
 
-	// N.97. The prompt CONFIRMS what the reader found instead of asking blind.
-	// Only these two frame strings are new; the field labels, the option
-	// labels, and both buttons are `upload.ask.*` above, unchanged, and the
-	// abstention path shows `upload.ask.title` and `upload.ask.why` word for
-	// word. Both rows are Dann's own wording, approved 2026-08-24 and
-	// transcribed verbatim, straight apostrophes included.
-	'upload.confirm.title':        { en: 'Two things Ilya read from the page', fr: "Deux choses qu'Ilya a lues sur la page" },
-	'upload.confirm.why':          { en: 'Ilya read the clef and the key signature off the picture. Check them against your own paper, and change them if it read wrong.', fr: "Ilya a lu la clé et l'armure sur l'image. Vérifiez-les sur votre propre partition, et corrigez-les s'il a mal lu." },
-
-	'upload.report.title':         { en: 'What Ilya read', fr: 'Ce qu’Ilya a lu' },
-	'upload.report.systems':       { en: '%s systems, %s staves', fr: '%s systèmes, %s portées' },
-	'upload.report.spacing':       { en: 'Staff spacing: %s px', fr: 'Interligne\u00a0: %s px' },
-	'upload.report.events':        { en: '%s notes, %s rests, %s measures', fr: '%s notes, %s silences, %s mesures' },
-	'upload.report.seconds':       { en: 'Read in %s s', fr: 'Lu en %s s' },
-	'upload.report.pitchSubs':     { en: 'Pitch assumed on %s notes (measures %s).', fr: 'Hauteur supposée sur %s notes (mesures %s).' },
-	'upload.report.durationSubs':  { en: 'Length assumed on %s notes (measures %s).', fr: 'Durée supposée sur %s notes (mesures %s).' },
-	// N.96 ship 1b. One page raising no longer aborts the whole read, so the
-	// read report names the pages that failed. Both strings are Dann's own
-	// wording, ruled 2026-08-24 and transcribed verbatim with the page number
-	// substituted; the French keeps its straight apostrophe. Rendered ONCE PER
-	// FAILED PAGE rather than pluralized, so no second string is coined.
-	'upload.report.pageFailed':    { en: 'Ilya could not read page %s.', fr: "Ilya n'a pas pu lire la page %s." },
-	'upload.report.staffFallback': { en: 'Ilya could not tell which staff carries the voice in %s systems, and read the top one.', fr: 'Ilya n’a pas pu déterminer quelle portée porte la voix dans %s systèmes, et a lu celle du haut.' },
-
 	'upload.err.readerLoadFailed': { en: 'The page reader could not be loaded. Check your connection and try again.', fr: 'Le lecteur de page n’a pas pu être chargé. Vérifiez votre connexion et réessayez.' },
-	'upload.err.pageReadFailed':   { en: 'Ilya could not read this page. Reading photographs is new and does not yet work on every page. If you have the score as a MusicXML, MNX, or Finale file, Ilya reads those directly.', fr: 'Ilya n’a pas pu lire cette page. La lecture de photographies est nouvelle et ne fonctionne pas encore sur toutes les pages. Si vous avez la partition sous forme de fichier MusicXML, MNX ou Finale, Ilya lit ces formats directement.' },
 	'upload.err.imageUndecodable': { en: 'This browser cannot open that picture. A JPEG or a PNG will work.', fr: 'Ce navigateur ne peut pas ouvrir cette image. Un JPEG ou un PNG fonctionnera.' },
 	// Both RATIFIED by Dann 2026-09-24 20:37 to 20:38 (brief-code-photo-messages_r1).
 	// `imageHeic` replaces `imageUndecodable` only where the picture sniffs as
@@ -1332,7 +1223,7 @@ const strings: Record<string, Record<Language, string>> = {
 	// general Canadian French usage (Dann's reason: it is on the Tim Horton's
 	// Roll Up the Rim cup every year), not from any other slot in this file.
 	// The desk's « Recommencer » was proposed and withdrawn: `station.startOver`
-	// already reads « Recommencer le placement », and collapsing "Re-take" and
+	// (since removed, with no reader) read « Recommencer le placement », and collapsing "Re-take" and
 	// "Start over" into one French word would have lost the distinction between
 	// another attempt and a restart. Written as the infinitive, matching this
 	// file's other buttons (« Rétablir », « Recommencer le placement »), not
@@ -1345,7 +1236,7 @@ const strings: Record<string, Record<Language, string>> = {
 	// UNUSED SINCE N.114b item 8 (Dann's ruling of 2026-09-10: the wizard's
 	// compact collapse row is gone, and this was its spoken label's tail).
 	// Kept and marked in place rather than deleted, with its ratified French,
-	// the way `upload.scanTooltip` and `underlay.heading` are.
+	// the way `underlay.heading` is.
 	'calib.compact.vowelsSampled': { en: 'vowels sampled', fr: 'voyelles échantillonnées' },
 	'calib.log.addedPrefix': { en: 'Added to progress:', fr: 'Ajouté à la progression\u00a0:' },
 	'calib.log.hertz': { en: 'hertz', fr: 'hertz' },
@@ -1400,15 +1291,20 @@ const strings: Record<string, Record<Language, string>> = {
 	'calib.readiness.guidance': { en: 'You can carry on; each vowel asks for the microphone again.', fr: 'Vous pouvez poursuivre\u00a0: chaque voyelle redemande le microphone.' },
 	'calib.readiness.complete': { en: 'Readiness check complete.', fr: 'Vérification préalable terminée.' },
 	'calib.readiness.marginal': { en: 'Your fry is reading near the edge of our range; a little lower or higher may read cleaner.', fr: 'Votre friture se lit près de la limite de notre plage. Un peu plus grave ou plus aigu se lirait plus nettement.' },
+	// UNUSED SINCE N.199 (Step 8, Dann 2026-11-14 21:03): the wheel's capture branch of the wizard (queue, hold banner, Pause) is deleted and nothing reads this key. Kept and marked in place, with its ratified French.
 	'calib.capture.allSet': { en: 'All set.', fr: 'Tout est prêt.' },
 	'calib.capture.cuePrefix': { en: 'Tap the', fr: 'Touchez la voyelle' },
 	// Row 2d part 3: cueSuffix, pacifier.singFirst, pacifier.pause, and
 	// pacifier.beginPhonating RATIFIED by Dann 2026-09-30 21:00, English and
 	// French (`docs/sessions/draft-sing-first-cue_r1_2026-09-30.md`, REVISION 21:05).
 	'calib.capture.cueSuffix': { en: 'vowel to begin. First sing it as you usually do, to set the shape of your vocal tract. Then stop, keep that shape, and begin again in vocal fry. Ilya measures only the fry.', fr: 'pour commencer. Chantez-la d\u2019abord comme d\u2019habitude, pour régler la forme de votre conduit vocal. Puis arrêtez, gardez cette forme et recommencez en friture vocale. Ilya ne mesure que la friture.' },
+	// UNUSED SINCE N.199 (Step 8, Dann 2026-11-14 21:03): the wheel's capture branch of the wizard (queue, hold banner, Pause) is deleted and nothing reads this key. Kept and marked in place, with its ratified French.
 	'calib.capture.paused': { en: 'Paused. Resume when you\'re ready.', fr: 'En pause. Reprenez au moment qui vous convient.' },
+	// UNUSED SINCE N.199 (Step 8, Dann 2026-11-14 21:03): the wheel's capture branch of the wizard (queue, hold banner, Pause) is deleted and nothing reads this key. Kept and marked in place, with its ratified French.
 	'calib.capture.resumeButton': { en: 'Resume', fr: 'Reprendre' },
+	// UNUSED SINCE N.199 (Step 8, Dann 2026-11-14 21:03): the wheel's capture branch of the wizard (queue, hold banner, Pause) is deleted and nothing reads this key. Kept and marked in place, with its ratified French.
 	'calib.capture.hold.captured': { en: ', captured.', fr: ', captée.' },
+	// UNUSED SINCE N.199 (Step 8, Dann 2026-11-14 21:03): the wheel's capture branch of the wizard (queue, hold banner, Pause) is deleted and nothing reads this key. Kept and marked in place, with its ratified French.
 	'calib.capture.hold.rolledBack': { en: 'New sample was less certain, so the previous one was kept.', fr: 'Le nouvel échantillon était moins certain, donc le précédent a été conservé.' },
 	// The implausible hold, its "Try again?", and "Keep my reading" are gone (Dann, 2026-09-30 12:43):
 	// capture asks nothing, and the summary's one note asks once
@@ -1419,7 +1315,9 @@ const strings: Record<string, Record<Language, string>> = {
 	'calib.summary.outside': { en: 'These readings sit outside the values Ilya draws on for {type} voices: {vowels}. Keep them as they are, or sing them again.', fr: 'Ces lectures se situent hors des valeurs sur lesquelles Ilya s’appuie pour les voix de {type} : {vowels}. Gardez-les telles quelles, ou chantez-les de nouveau.' },
 	'calib.summary.outsideNoType': { en: 'These readings sit outside the values Ilya draws on for any voice type: {vowels}. Keep them as they are, or sing them again.', fr: 'Ces lectures se situent hors des valeurs sur lesquelles Ilya s’appuie pour tous les types de voix : {vowels}. Gardez-les telles quelles, ou chantez-les de nouveau.' },
 	'calib.summary.keepAll': { en: 'Keep them', fr: 'Les garder' },
+	// UNUSED SINCE N.199 (Step 8, Dann 2026-11-14 21:03): the wheel's capture branch of the wizard (queue, hold banner, Pause) is deleted and nothing reads this key. Kept and marked in place, with its ratified French.
 	'calib.capture.hold.noted': { en: 'Noted, moving on. You can re-take it from the summary.', fr: 'C\u2019est noté, on poursuit. Vous pourrez la refaire depuis le sommaire.' },
+	// UNUSED SINCE N.199 (Step 8, Dann 2026-11-14 21:03): the wheel's capture branch of the wizard (queue, hold banner, Pause) is deleted and nothing reads this key. Kept and marked in place, with its ratified French.
 	'calib.capture.pauseButton': { en: 'Pause', fr: 'Pause' },
 	'calib.capture.returnToSummary': { en: 'Return to summary', fr: 'Retour au sommaire' },
 	'calib.capture.toast': { en: 'The room sounds a little lively. Your sample is still good, but a quieter space would help.', fr: 'La pièce sonne un peu réverbérante. Votre échantillon reste bon, mais un endroit plus silencieux aiderait.' },
@@ -1453,16 +1351,20 @@ const strings: Record<string, Record<Language, string>> = {
 	//    {v} is the whole phrase from 'vowel.spoken'. Dann ruled on
 	//    2026-08-12 that {v} never opens a French sentence, so the
 	//    French shapes differ from the English deliberately.
+	// UNUSED SINCE N.199 (Step 8, Dann 2026-11-14 21:03): the vowel wheel is deleted and nothing reads this key. Kept and marked in place, with its ratified French, the way this file's other retired strings are.
 	'pacifier.tapToCapture': { en: 'Tap a vowel to capture it.', fr: 'Touchez une voyelle pour la capter.' },
 	// singFirst, pause, and beginPhonating: RATIFIED by Dann 2026-09-30 21:00 (row 2d part 3).
 	'pacifier.singFirst': { en: 'Sing {v} as you usually do. Three.', fr: 'Chantez {v} comme d\u2019habitude. Trois.' },
-	'pacifier.pause': { en: 'Stop, and keep the shape.', fr: 'Arrêtez, et gardez la forme.' },
+	// N.199 Step 7: the pause line, new English (Dann 2026-11-13 01:05) and French (10:30); it replaces "Stop, and keep the shape." (ratified 2026-09-30 21:00).
+	'pacifier.pause': { en: 'Stop singing, but maintain the shape of your vocal tract for that vowel.', fr: 'Arrêtez de chanter, mais gardez la forme de votre conduit vocal pour cette voyelle.' },
 	'pacifier.beginPhonating': { en: 'Now {v} in vocal fry.', fr: 'Maintenant, {v} en friture vocale.' },
 	'pacifier.nowSustain': { en: 'Now sustain. Sample recording.', fr: 'Soutenez maintenant. Échantillon en cours d\u2019enregistrement.' },
 	'pacifier.captured': { en: '{v} captured.', fr: 'Capture de {v} effectuée.' },
 	'pacifier.rolledBack': { en: '{v}: new sample was less certain, so the previous one was kept.', fr: 'Pour {v}, le nouvel échantillon était moins certain, donc le précédent a été conservé.' },
+	// UNUSED SINCE N.199 (Step 8, Dann 2026-11-14 21:03): the vowel wheel is deleted and nothing reads this key. Kept and marked in place, with its ratified French, the way this file's other retired strings are.
 	'pacifier.sampleUncertain': { en: '{v} sample uncertain. Tap to retry.', fr: 'Échantillon incertain pour {v}. Touchez pour réessayer.' },
 	'pacifier.cancelled': { en: 'Capture cancelled.', fr: 'Capture annulée.' },
+	// UNUSED SINCE N.199 (Step 8, Dann 2026-11-14 21:03): the vowel wheel is deleted and nothing reads this key. Kept and marked in place, with its ratified French, the way this file's other retired strings are.
 	'pacifier.skipped': { en: '{v} skipped.', fr: 'Capture ignorée pour {v}.' },
 	'pacifier.error.micPermission': { en: 'Microphone access is needed to hear your fry. Can you allow it and try again?', fr: 'L\u2019accès au microphone est nécessaire pour entendre votre friture. Pouvez-vous l\u2019autoriser et réessayer?' },
 	'pacifier.error.micNotFound': { en: 'No microphone was found. Can you connect one and try again?', fr: 'Aucun microphone n\u2019a été trouvé. Pouvez-vous en brancher un et réessayer?' },
@@ -1471,9 +1373,11 @@ const strings: Record<string, Record<Language, string>> = {
 	'pacifier.error.default': { en: 'That sample could not be read. Can you try that again?', fr: 'Cet échantillon n\u2019a pas pu être lu. Pouvez-vous réessayer?' },
 	// One tap begins (row 2d part 3). Both strings drafted by Code in
 	// report-code-sing-first-then-fry_r1_2026-09-30.md and RATIFIED by Dann
-	// 2026-09-30 22:16. `pacifier.ready` is the wizard's pointer caption; {v}
+	// 2026-09-30 22:16. `pacifier.ready` (UNUSED SINCE N.199) was the wheel's pointer caption; {v}
 	// stays mid-sentence in French, per the 2026-08-12 ruling.
+	// UNUSED SINCE N.199 (Step 8, Dann 2026-11-14 21:03): the vowel wheel is deleted and nothing reads this key. Kept and marked in place, with its ratified French, the way this file's other retired strings are.
 	'pacifier.wheelAria': { en: 'Vowel calibration. Tap a vowel to begin, tap again to cancel, long-press to skip.', fr: 'Calibration des voyelles. Touchez une voyelle pour commencer, touchez-la de nouveau pour annuler, appuyez longuement pour l\u2019ignorer.' },
+	// UNUSED SINCE N.199 (Step 8, Dann 2026-11-14 21:03): the vowel wheel is deleted and nothing reads this key. Kept and marked in place, with its ratified French, the way this file's other retired strings are.
 	'pacifier.ready': { en: 'Tap {v} to begin.', fr: 'Touchez {v} pour commencer.' },
 	'calib.summary.title': { en: 'Profile summary', fr: 'Sommaire du profil' },
 	'calib.summary.savedLede': { en: 'Your profile is saved on this device. You can keep refining any reading below.', fr: 'Votre profil est enregistré sur cet appareil. Vous pouvez continuer à affiner n\u2019importe quelle lecture ci-dessous.' },
@@ -1506,7 +1410,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'profile.subtitleNamed': { en: 'Formant profile: a map of {voice}\u2019s resonances', fr: 'Profil de formants\u00a0: une carte des résonances de la voix \u00ab\u00a0{voice}\u00a0\u00bb' },
 	'profile.subtitleYours': { en: 'Formant profile: a map of your voice\u2019s resonances', fr: 'Profil de formants\u00a0: une carte des résonances de votre voix' },
 	// QUEUE row 166, RATIFIED by Dann 2026-11-10 (12:54 to 12:59): printed in place of the two above when the voice has only placeholder values (`markup/subtitle.ts`).
-	'profile.subtitlePlaceholder': { en: 'Formant profile: placeholder values for a generic {voiceType}, not yet your own resonances.', fr: 'Profil de formants\u00a0: valeurs par défaut pour le type générique {voiceType}, pas encore vos propres résonances.' },
+	'profile.subtitlePlaceholder': { en: 'Formant profile: placeholder values for a generic {voiceType}, not yet your own resonances.', fr: 'Profil de formants\u00a0: valeurs par défaut pour une voix type de {voiceType}, pas encore vos propres résonances.' },
 	'profile.count.1': { en: 'One', fr: 'Une' },
 	'profile.count.2': { en: 'Two', fr: 'Deux' },
 	'profile.count.3': { en: 'Three', fr: 'Trois' },
@@ -1746,7 +1650,6 @@ const strings: Record<string, Record<Language, string>> = {
 	// a binder with no songs is refused as `no-songs` before it gets here.
 	'binder.importedOne': { en: 'One song was added.', fr: 'Un chant a été ajouté.' },
 	'binder.importedMany': { en: '%s songs were added.', fr: '%s chants ont été ajoutés.' },
-	'station.startOver': { en: 'Start placement over', fr: 'Recommencer le placement' },
 	// The count of placements whose note the new score does not contain. They
 	// are KEPT; this only says how many no longer have a note to sit on. %s is
 	// the number. Twins 'station.textChanged' in restraint: a count, not alarm.
@@ -1783,6 +1686,9 @@ const strings: Record<string, Record<Language, string>> = {
 	   only what Dann ruled. */
 	'songs.heading': { en: 'REPERTOIRE', fr: 'RÉPERTOIRE' },
 	'songs.new': { en: 'New song', fr: 'Nouveau chant' },
+	// N.201, RATIFIED by Dann 2026-11-14 20:38, English and French (*"Yes I ratify the English and French."*). REPERTOIRE's closed line. Digits in both languages (Dann 2026-11-13 11:52). Fill with `tv`.
+	'songs.count.one': { en: '1 song', fr: '1 chant' },
+	'songs.count.many': { en: '{n} songs', fr: '{n} chants' },
 	// The word a song is drawn under before it has anything to be named after.
 	// A KEY AND NOT A LITERAL: it was English in the French drawer for exactly as
 	// long as it took to look, because the placeholder is built in plain
@@ -1839,6 +1745,9 @@ const strings: Record<string, Record<Language, string>> = {
 	'insights.identityUncalibrated': { en: 'INSIGHTS for {voice} · {voiceType} · not calibrated', fr: 'APERÇUS pour {voice} · {voiceType} · sans calibration' },
 	'insights.yourVoice':          { en: 'your voice',                   fr: 'votre voix' },
 	'insights.pageAria':           { en: 'Insights, page {n} of {total}', fr: 'Aperçus, page {n} sur {total}' },
+	// WHY `insights.fit.*` KEEPS ITS NAME. INSIGHTS was shown as Fit until 2026-09. N.174 (2026-09-27) renamed the code to Text, Markup, and
+	// Insights and the screen to TEXT, MELODY, and INSIGHTS, but renamed no string key: these keys are cited by name in
+	// `lib/insights/singer-blocks.ts` and in tests, and a key's name is not shown to a singer. A rename is mechanical and changes no word on the screen.
 	// The heading: English ruled by Dann 2026-09-22 (OWED.md "Rulings Dann owes"
 	// item 2), French drafted by the desk and RATIFIED by Dann 2026-09-30 21:30.
 	// « relevés », not « mesures », which also means a bar. It replaces "The
@@ -1908,7 +1817,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'insights.method.silent':      { en: 'Method: no voice has been measured, so nothing on this page is computed from one.', fr: 'Méthode\u00a0: aucune voix n\u2019a été mesurée, donc rien sur cette page n\u2019en est calculé.' },
 	// QUEUE row 166. RATIFIED: the lede, Dann 2026-11-09 16:13, cut to its first sentence by Dann 2026-11-10 12:56 (pinned in `ratified-lines.test.ts`). It is shown only for a
 	// voice declared as one of five types and not calibrated (`analyze-score-adapter.ts`, `generic`); {voiceType} is the label the identity line prints.
-	'insights.generic.lede':       { en: 'These findings use placeholder values for a {voiceType}, not your specific voice.', fr: 'Ces constats reposent sur des valeurs par défaut pour le type {voiceType}, et non sur votre voix en particulier.' },
+	'insights.generic.lede':       { en: 'These findings use placeholder values for a generic {voiceType}, not your specific voice.', fr: 'Ces constats reposent sur des valeurs par défaut pour une voix type de {voiceType}, et non sur votre voix en particulier.' },
 	// RATIFIED by Dann 2026-11-10 (row 166): the method line for those findings, which names no calibration and no date.
 	'insights.method.generic.typed':   { en: 'Method: computed from placeholder values for your voice type, the voice characteristics you typed, and the score as sung, including repeats.', fr: 'Méthode\u00a0: calculé à partir de valeurs par défaut pour votre type de voix, des caractéristiques vocales que vous avez indiquées et de la partition telle que chantée, reprises comprises.' },
 	'insights.method.generic.untyped': { en: 'Method: computed from placeholder values for your voice type and the score as sung, including repeats.', fr: 'Méthode\u00a0: calculé à partir de valeurs par défaut pour votre type de voix et de la partition telle que chantée, reprises comprises.' },
@@ -2048,6 +1957,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'insights.r2.cycles.above':    { en: '{n} above your comfortable working zone',      fr: '{n} au-dessus de votre zone de travail confortable' },
 	// Rows 15 to 20, and a vowel with no fR1.
 	'insights.r2.vowels.against':  { en: 'against where each vowel turns in your voice', fr: 'selon la hauteur où chaque voyelle change de timbre dans votre voix' },
+	'insights.r2.vowels.against.generic': { en: 'against where each vowel turns in a generic {voiceType}', fr: 'selon la hauteur où chaque voyelle change de timbre pour une voix type de {voiceType}' },
 	'insights.r2.vowels.ring':     { en: '{n}% of your singing lies past the turn.', fr: '{n} % de votre chant se situe après le changement de timbre.' },
 	'insights.r2.vowels.before':   { en: 'before the turn',               fr: 'avant le changement de timbre' },
 	'insights.r2.vowels.past':     { en: 'past the turn',                 fr: 'après le changement de timbre' },
@@ -2549,6 +2459,58 @@ const strings: Record<string, Record<Language, string>> = {
 	'select.noResults':            { en: 'No results',                   fr: 'Aucun résultat' },
 	'select.resultCount.one':      { en: '{n} result',                   fr: '{n} résultat' },
 	'select.resultCount.many':     { en: '{n} results',                  fr: '{n} résultats' },
+	// ── N.199: the calibration screen's capture strings and the vowel-space sheet's (RATIFIED by Dann 2026-11-13 10:30 to 12:01; `OPEN.md` section N.199) ──
+	//    Moved here from `voice/chart/draft-strings.ts` in Step 7. `{v}` is the bracketed symbol, `{n}` and `{count}` digits (Dann 11:52), `{name}` a vowel's
+	//    spoken name; fill them with `tv`. French apostrophes are U+2019 and a French colon takes U+00A0 before it.
+	'sheet.title': { en: 'Your vowel space', fr: 'Votre espace vocalique' },
+	'sheet.subtitle': { en: 'The ten vowels of sung Russian, as your voice shapes them', fr: 'Les dix voyelles du russe chanté, telles que votre voix les façonne' },
+	'sheet.readings': { en: 'Your readings', fr: 'Vos lectures' },
+	'sheet.col.vowel': { en: 'Vowel', fr: 'Voyelle' },
+	'sheet.col.fr1': { en: 'Hz and note', fr: 'Hz et note' },
+	'sheet.col.fr2': { en: 'Hz and note', fr: 'Hz et note' },
+	'sheet.legend.sung': { en: 'A vowel you sang, measured in vocal fry.', fr: 'Une voyelle que vous avez chantée, mesurée en friture vocale.' },
+	'sheet.legend.placeholder': { en: 'A placeholder: where Ilya expects a vowel you have not sung yet.', fr: 'Une valeur par défaut : là où Ilya attend une voyelle que vous n’avez pas encore chantée.' },
+	'sheet.legend.zones': { en: 'Each coloured area reflects the neighbourhood where Ilya expects a vowel to resonate in a voice like yours. The lavender areas mark [ɪ], [ɨ], [a], and [ʌ]: Ilya can work out these four from your samples of the other six, or you can choose to sample them directly. Overlap between areas (where the colours blend) is normal.', fr: 'Chaque zone colorée reflète le voisinage où Ilya s’attend à ce qu’une voyelle résonne dans une voix comme la vôtre. Les zones lavande marquent [ɪ], [ɨ], [a] et [ʌ] : Ilya peut déduire ces quatre-là de vos échantillons des six autres, ou vous pouvez choisir de les chanter directement. Le chevauchement entre les zones (là où les couleurs se fondent) est normal.' },
+	'sheet.legend.hull': { en: 'The outline surrounds your sung vowels. It is dashed until all ten are sung.', fr: 'Le contour entoure vos voyelles chantées. Il reste en pointillé jusqu’à ce que les dix soient chantées.' },
+	'sheet.axis.front': { en: 'tongue forward', fr: 'langue avancée' },
+	'sheet.axis.back': { en: 'tongue back', fr: 'langue reculée' },
+	'sheet.axis.open': { en: 'mouth more open', fr: 'bouche plus ouverte' },
+	'sheet.provenance': { en: 'Zones along the first resonance: Bozeman, *Kinesthetic Voice Pedagogy*, 2nd ed. (2021), Figs. 8 to 10; for baritones, Bozeman, “Levels of Acoustic Registration” (kenbozeman.com). The second resonance’s range: Bozeman, *Practical Vocal Acoustics*, 2nd ed. (2025), p. 35. Placeholder values: the centre of each zone for the first resonance, and Mitton (2020), Table 5.3, scaled to your voice type, for the second. Each zone’s width along the second resonance is Ilya’s own estimate.', fr: 'Zones le long de la première résonance : Bozeman, *Kinesthetic Voice Pedagogy*, 2e éd. (2021), fig. 8 à 10; pour les barytons, Bozeman, “Levels of Acoustic Registration” (kenbozeman.com). Étendue de la deuxième résonance : Bozeman, *Practical Vocal Acoustics*, 2e éd. (2025), p. 35. Valeurs par défaut : le centre de chaque zone pour la première résonance, et Mitton (2020), tableau 5.3, ajusté à votre type de voix, pour la deuxième. La largeur de chaque zone le long de la deuxième résonance est une estimation d’Ilya.' },
+	'capture.title': { en: 'Your resonances', fr: 'Vos résonances' },
+	'capture.count': { en: '{n} of 10', fr: '{n} sur 10' },
+	'capture.explain': { en: 'Each dot is one of your vowels: the higher your tongue, the higher the dot; the further forward, the nearer the front edge.', fr: 'Chaque point est l’une de vos voyelles : plus votre langue est haute, plus le point est haut; plus elle est avancée, plus il s’approche du bord avant.' },
+	'capture.cue.ready': { en: 'Ready for {v}.', fr: 'Au tour de {v}.' },
+	'capture.cue.isCaptured': { en: '{v} is captured.', fr: 'Capture de {v} effectuée.' },
+	'capture.cue.allTen': { en: 'All ten captured. This is your vowel space.', fr: 'Les dix voyelles sont captées. Voici votre espace vocalique.' },
+	'capture.start': { en: 'Start {v}', fr: 'Commencer {v}' },
+	'capture.retake': { en: 'Re-take {v}', fr: 'Reprendre {v}' },
+	'capture.inProgress': { en: '{v} in progress', fr: '{v} en cours' },
+	'capture.done': { en: 'Done', fr: 'Terminé' },
+	'capture.stop': { en: 'Stop', fr: 'Arrêter' },
+	'capture.clearAll': { en: 'Clear all', fr: 'Tout effacer' },
+	'capture.hide': { en: 'Hide the chart and the readout while I sing', fr: 'Masquer le graphique et l’affichage pendant que je chante' },
+	'capture.hidden': { en: 'The chart and the readout are hidden while you sing. They return when this vowel is captured.', fr: 'Le graphique et l’affichage sont masqués pendant que vous chantez. Ils réapparaissent quand cette voyelle est captée.' },
+	'capture.hint.first': { en: 'Start follows Ilya’s order. Or tap any vowel to sing that one now.', fr: 'Commencer suit l’ordre d’Ilya. Ou touchez une voyelle pour la chanter tout de suite.' },
+	'capture.hint.active': { en: 'Stop, or a second tap on {v}, ends this take. Nothing is saved from it.', fr: 'Touchez {v} de nouveau, ou Arrêter, pour mettre fin à cette prise. Rien n’en est conservé.' },
+	'capture.hint.retake': { en: 'A re-take replaces {v} only if the new reading is as clear.', fr: 'Une reprise ne remplace {v} que si la nouvelle lecture est aussi nette.' },
+	'capture.hint.placed.typed': { en: 'Ilya has placed {v} from your voice type for now. Its placeholder moves as you sing.', fr: 'Ilya a placé {v} d’après votre type de voix, pour l’instant. Sa valeur par défaut évolue à mesure que vous chantez.' },
+	'capture.hint.placed.untyped': { en: 'Ilya has placed {v} from typical voices for now. Its placeholder moves as you sing.', fr: 'Ilya a placé {v} d’après des voix typiques, pour l’instant. Sa valeur par défaut évolue à mesure que vous chantez.' },
+	'capture.hint.toGo': { en: '{count} to go, in any order. Ilya keeps a placeholder for each until you sing it.', fr: 'Il en reste {count}, dans l’ordre de votre choix. Ilya garde une valeur par défaut pour chaque voyelle jusqu’à ce que vous la chantiez.' },
+	'capture.hint.finished': { en: 'Tap any vowel to sing it again.', fr: 'Touchez une voyelle pour la chanter de nouveau.' },
+	'capture.hint.confirmClear': { en: 'Tap Clear all to clear every reading for this voice.', fr: 'Touchez Tout effacer pour effacer toutes les lectures de cette voix.' },
+	'capture.uncertain': { en: '{v} is noted, though this take was less clear. A re-take can replace it.', fr: '{v} est noté, même si cette prise était moins nette. Une reprise peut le remplacer.' },
+	'capture.button.sung': { en: 'sung', fr: 'chantée' },
+	'capture.button.placed': { en: 'placeholder', fr: 'valeur par défaut' },
+	'capture.button.selected': { en: 'selected', fr: 'sélectionnée' },
+	'capture.bar': { en: 'Progress of this take', fr: 'Progression de cette prise' },
+	'capture.chartAlt': { en: 'Chart of the vowel zones. It moves in on the vowel being measured, and a dot shows the reading.', fr: 'Graphique des zones des voyelles. Il se rapproche de la voyelle mesurée, et un point en montre la lecture.' },
+	'capture.drawingAlt': { en: 'Side view of the mouth and throat for {name}', fr: 'Vue de profil de la bouche et de la gorge pour {name}' },
+	'capture.vowels': { en: 'The ten vowels', fr: 'Les dix voyelles' },
+	'sheet.print': { en: 'Print this sheet', fr: 'Imprimer cette feuille' },
+	'sheet.chartAlt': { en: 'Chart of your vowel space. Each vowel is a coloured zone, a filled dot where you sang it, or a hollow dot where Ilya has placed it for now.', fr: 'Graphique de votre espace vocalique. Chaque voyelle est une zone colorée, un point plein là où vous l’avez chantée, ou un point creux là où Ilya l’a placée pour l’instant.' },
+	// N.199 Step 6b: the drawing credit lines, RATIFIED by Dann 2026-11-13 11:35 ("I ratify these lines."); U+00A0 before the colon in French.
+	'capture.credit.plate': { en: 'Drawing: Dann Mitton, after Bolla (1981), plate {n}.', fr: 'Dessin : Dann Mitton, d’après Bolla (1981), planche {n}.' },
+	'capture.credit.noPlate': { en: 'Drawing: Dann Mitton. Bolla has no plate for this vowel.', fr: 'Dessin : Dann Mitton. Bolla ne donne pas de planche pour cette voyelle.' },
 };
 
 /**
@@ -2560,6 +2522,16 @@ export function t(key: string, lang: Language): string {
 	const entry = strings[key];
 	if (!entry || !entry[lang]) return `[MISSING: ${key}]`;
 	return entry[lang];
+}
+
+/**
+ * `t`, with the `{name}` placeholders filled (N.199 Step 7): `{v}` a bracketed vowel symbol, `{n}` and `{count}` digits, `{name}` a vowel's spoken
+ * name. `t` itself takes no variables. A placeholder with no value is left as written, so a missing variable shows, never vanishes.
+ */
+export function tv(key: string, lang: Language, vars: Record<string, string | number> = {}): string {
+	let s = t(key, lang);
+	for (const [k, v] of Object.entries(vars)) s = s.split(`{${k}}`).join(String(v));
+	return s;
 }
 
 /** Every key in the table, for tests that sweep every string (`i18n.test.ts`). */

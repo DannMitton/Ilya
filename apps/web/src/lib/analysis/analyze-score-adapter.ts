@@ -34,9 +34,12 @@
 import type { IntakeAnswers, VoiceProfileSnapshot } from '@ilya/score-parser';
 import { t, type Language } from '$lib/i18n';
 import type { CalibratedFormant, VoiceCharacteristics, Vowel } from '$lib/voice/engine/types';
-import { DERIV_SOURCE, deriveFrom } from '$lib/voice/engine/derivations';
-import { checkPlausibility, isUsable } from '$lib/voice/engine/plausibility';
-import { fillStandIns, hasPlaceholderProfile, type StandInReport } from '$lib/voice/engine/stand-ins';
+import { resolveVowelValues } from '$lib/voice/engine/resolve-values';
+import type { StandInReport } from '$lib/voice/engine/stand-ins';
+
+// N.199 Step 1: the judging of unjudged readings moved with the value resolution, to `voice/engine/resolve-values.ts`.
+// Kept exported here because the adapter's tests and the older notes name it by this module.
+export { judgeUnchecked } from '$lib/voice/engine/resolve-values';
 
 /**
  * Which analysis dimensions rest on real singer input. Derived from the
@@ -114,51 +117,6 @@ export function completenessOf(s: VoiceProfileSnapshot): AnalysisCompleteness {
  * @param intake N.172's answers, when the singer gave any; carried into the
  *   snapshot for the note comments (`comments.ts`), never read here.
  */
-/** The six vowels the guard judges against Bozeman's bands; the other four are judged against windows derived from these. */
-const BOZEMAN_VOWELS: readonly Vowel[] = ['i', 'e', 'ɛ', 'ɑ', 'o', 'u'];
-
-/**
- * A VERDICT FOR EVERY STORED READING THE GUARD NEVER JUDGED (QUEUE row 11;
- * INBOX "I.N.110 candidate", 2026-09-02). The guard runs once, in the wizard,
- * on a just-captured reading (`CalibrationWizard.svelte`, `withPlausibility`),
- * so a reading stored before it existed, or by a build that dropped its
- * verdict (the E.26 note, b6d2828), carries none and passed every gate: Dann's
- * own [i] at 1063 Hz anchored [ɨ] and [ɪ] and Markup drew turning heads near B4.
- *
- * Here such a reading is judged as the wizard would judge it, with two
- * differences. NO VOICE TYPE: the union bands apply, the widest window, because
- * a declared voice type plays no part in choosing values (Dann, 2026-09-16,
- * INBOX `:179`); the union still fails 1063 Hz for [i]. AND TWO PASSES: the six
- * Bozeman vowels first, then the four anchor-derived ones against anchors that
- * carry a verdict other than implausible, so no derived window rests on an
- * unjudged anchor. A reading the singer kept (`plausibilityOverride`) keeps its
- * stored state and is not re-judged.
- *
- * Returns a judged COPY. Nothing is written to the stored profile: the
- * snapshot is computed per render, as every derived value here is.
- */
-export function judgeUnchecked(formants: Partial<Record<Vowel, CalibratedFormant>>): Partial<Record<Vowel, CalibratedFormant>> {
-	const out: Partial<Record<Vowel, CalibratedFormant>> = { ...formants };
-	const unjudged = (f: CalibratedFormant | undefined): f is CalibratedFormant =>
-		!!f && f.plausibility === undefined && f.plausibilityOverride !== true && typeof f.f1 === 'number' && f.f1 > 0 && f.reading !== 'estimated';
-	for (const vowel of BOZEMAN_VOWELS) {
-		const f = out[vowel];
-		if (unjudged(f)) out[vowel] = { ...f, plausibility: checkPlausibility(f.f1, vowel).plausibility };
-	}
-	const anchorF1s: Partial<Record<Vowel, number>> = {};
-	for (const vowel of BOZEMAN_VOWELS) {
-		const f = out[vowel];
-		if (f && typeof f.f1 === 'number' && f.f1 > 0 && f.reading !== 'estimated' && (f.plausibility === 'plausible' || f.plausibilityOverride === true)) {
-			anchorF1s[vowel] = f.f1;
-		}
-	}
-	for (const [vowel, f] of Object.entries(out) as [Vowel, CalibratedFormant | undefined][]) {
-		if (BOZEMAN_VOWELS.includes(vowel) || !unjudged(f)) continue;
-		out[vowel] = { ...f, plausibility: checkPlausibility(f.f1, vowel, undefined, anchorF1s).plausibility };
-	}
-	return out;
-}
-
 export function buildVoiceProfileSnapshot(
 	sampled: Partial<Record<Vowel, CalibratedFormant>>,
 	characteristics: VoiceCharacteristics | undefined,
@@ -167,128 +125,11 @@ export function buildVoiceProfileSnapshot(
 	/** The declared voice type (Tier 1 id), which picks the stand-ins' starting staff (QUEUE row 17). */
 	voiceType?: string,
 ): AdaptedProfile {
-	// QUEUE row 11: every gate below, and `deriveFrom`, reads the judged copy.
-	const formants = judgeUnchecked(sampled);
-	// fR1 per vowel from the measured formants. A vowel the singer never sang,
-	// or a reading with no usable f1, contributes nothing: the engine already
-	// omits any event whose vowel has no fR1, so silence here is honest.
-	//
-	// §B.4 RULED (Dann, 2026-07-15): the same silence extends to a reading the
-	// plausibility guard judged IMPLAUSIBLE, and to nothing else. Markup will not
-	// build acoustic marks on a number the engine has already decided cannot be
-	// that vowel (the motivating class: fR1 ≈ 1063 Hz extracted for a sung [i]).
-	//
-	// What is deliberately NOT excluded, and why: `reading: 'provisional'` is a
-	// SIGNAL-QUALITY verdict, not a physical one. analyze.ts:30-34 sets it from
-	// `confidence === 'low'`, which means no stable window, a rejected detection,
-	// or SNR under 12 dB. A noisy capture of an honest vowel is still an honest
-	// vowel, and analyze.ts:26-29 records that real-room captures land there
-	// routinely. Excluding on `reading` would silently drop good data for any
-	// singer without a quiet room. Plausibility and confidence are orthogonal by
-	// ruling (engine/types.ts), and only plausibility speaks to whether the
-	// number can be the vowel.
-	//
-	// `plausibility` absent means the guard never ran. Since QUEUE row 11 such a
-	// reading is judged first (`judgeUnchecked`, above), so it reaches this gate
-	// with a verdict. `unchecked`, the guard's own answer where no window exists,
-	// is still kept: the tri-state ruling says absence of a window is not a failure.
-	const fR1: Record<string, number> = {};
-	// QUEUE row 12: where each number came from (`VoiceProfileSnapshot.fR1Source`).
-	const fR1Source: Record<string, 'sung' | 'derived' | 'surrogate'> = {};
-	const fR2Source: Record<string, 'sung' | 'derived' | 'surrogate'> = {};
-	for (const [vowel, formant] of Object.entries(formants) as [Vowel, CalibratedFormant | undefined][]) {
-		if (
-			formant &&
-			typeof formant.f1 === 'number' &&
-			formant.f1 > 0 &&
-			isUsable(formant)
-		) {
-			fR1[vowel] = formant.f1;
-			fR1Source[vowel] = 'sung';
-		}
-	}
-
-	// fR2 per vowel, for the higher-voice second-resonance work. Mirrors the
-	// fR1 gating (a positive number, not judged implausible) plus the f2-specific
-	// quality: an `absent` read contributes nothing. `marginal` is KEPT, parallel
-	// to fR1 keeping `provisional` above (a signal-quality verdict, not a physical
-	// one); tighten this to `clear`-only if smoke shows marginal fR2 misfiring. A
-	// vowel with no usable fR2 is omitted, so any fR2-based mark degrades to
-	// nothing rather than guessing. A low voice may populate fR2 no event reaches:
-	// honest and inert.
-	const fR2: Record<string, number> = {};
-	for (const [vowel, formant] of Object.entries(formants) as [Vowel, CalibratedFormant | undefined][]) {
-		if (
-			formant &&
-			typeof formant.f2 === 'number' &&
-			formant.f2 > 0 &&
-			formant.f2Quality !== 'absent' &&
-			isUsable(formant)
-		) {
-			fR2[vowel] = formant.f2;
-			fR2Source[vowel] = 'sung';
-		}
-	}
-
-	// N.109: the four derivable vowels reach the forecast too.
-	//
-	// The wizard's roster has always shown a derived fR1/fR2 for a challenging
-	// vowel the singer never sang, greyed and labelled Estimated (Dann,
-	// 2026-07-02). Its comment said the analysis layer used the same derive().
-	// It did not: the two loops above read measured formants only, so a singer
-	// who sang [i] and [u] saw an Estimated [ɨ] on the roster and got no
-	// acoustic mark on a single [ɨ] in the score. The roster and the forecast
-	// now read one anchor table and one usability gate (`deriveFrom`,
-	// derivations.ts), so they cannot disagree, and the wizard's comment is
-	// true.
-	//
-	// NOTHING IS WRITTEN TO THE STORED PROFILE. This is computed per snapshot,
-	// from the sampled formants handed in. The standing rule holds unchanged:
-	// the stored profile keeps only what was actually sung (Dann, 2026-07-02;
-	// profileStore.ts's contract note), and a derived value is recomputed on
-	// every render rather than persisted.
-	//
-	// A MEASURED READING ALWAYS WINS. Each channel is filled only where the
-	// loops above left it empty, so a sung [ɨ] is never displaced by a derived
-	// one. `deriveFrom` gates every anchor on a positive f1 and f2 and on the
-	// plausibility guard's verdict, carrying §B.4 inward: the analysis will not build a
-	// derived value on a number the engine has already decided cannot be that
-	// vowel. The derived fR2 is gated as the measured fR2 loop is — the derived
-	// reading carries no f2Quality and no plausibility, both of which mean "not
-	// assessed" and pass, so the live condition is a positive number.
-	//
-	// No anchor is itself derivable, and `formants` is the sampled map, so
-	// nothing here derives from a derived value.
-	for (const vowel of Object.keys(DERIV_SOURCE) as Vowel[]) {
-		if (fR1[vowel] !== undefined && fR2[vowel] !== undefined) continue;
-		const derived = deriveFrom(vowel, formants);
-		if (!derived) continue;
-		if (fR1[vowel] === undefined && typeof derived.f1 === 'number' && derived.f1 > 0) {
-			fR1[vowel] = derived.f1;
-			fR1Source[vowel] = 'derived';
-		}
-		if (fR2[vowel] === undefined && typeof derived.f2 === 'number' && derived.f2 > 0) {
-			fR2[vowel] = derived.f2;
-			fR2Source[vowel] = 'derived';
-		}
-	}
-
-	// QUEUE row 17: no vowel left blank (Dann 2026-09-16; the method ruled 2026-10-01 02:56).
-	// Every gap the loops above left takes a stand-in from Bozeman's staff fitted to the
-	// singer, flagged 'surrogate' (`stand-ins.ts`).
-	//
-	// QUEUE row 166 (Dann ratified 2026-10-31 13:19 to 13:21): with NO vowel sung, a declared
-	// soprano, mezzo-soprano, tenor, baritone, or bass takes the template whole, every vowel
-	// flagged 'surrogate' and `generic` true. Contralto, countertenor, bass-baritone,
-	// "Not sure", and no type keep the page that says nothing was measured: DESK DEFAULT,
-	// which row 167 lifts. Range, tessitura, and passaggio stay as typed, below.
-	const implausible = (Object.entries(formants) as [Vowel, CalibratedFormant | undefined][])
-		.filter(([, f]) => f && !isUsable(f))
-		.map(([v]) => v);
-	const anySung = Object.values(fR1Source).includes('sung');
-	const generic = !anySung && hasPlaceholderProfile(voiceType);
-	const standIns: StandInReport | undefined =
-		anySung || generic ? fillStandIns({ fR1, fR2, fR1Source, fR2Source }, voiceType, implausible) : undefined;
+	// N.199 Step 1: the resolution of every vowel's fR1 and fR2 (judge, sung, derived, stand-in) is one function in
+	// `voice/engine/resolve-values.ts`, shared with the calibration chart. The rules, and the rulings behind them
+	// (QUEUE rows 11, 12, 17, 166; N.109; section B.4), are written there. This adapter asks for today's rule: stand-ins
+	// for a voice that has sung nothing only when its declared type has a placeholder profile.
+	const { fR1, fR2, fR1Source, fR2Source, generic, standIns } = resolveVowelValues(sampled, voiceType, { placeholders: 'declared-types' });
 
 	const c = characteristics;
 	const hasRange = c?.rangeLow !== undefined && c?.rangeHigh !== undefined;

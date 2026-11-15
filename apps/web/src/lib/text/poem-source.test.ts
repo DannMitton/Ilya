@@ -200,7 +200,7 @@ describe('resolveSource: a stored source found again in the library', () => {
 	});
 
 	it('row 182: never names another aria of the opera when the stored aria\'s id is gone, but still finds an aria by its id', () => {
-		const opera = { composer: 'Tchaikovsky, Pyotr', operaRu: 'Пиковая дама', operaEn: 'Pique Dame', characterRu: 'Герман', characterEn: 'Hermann', number: "Hermann's arioso", voice: 'tenor', librettists: 'Модест Ильич Чайковский', literarySource: 'Pushkin, Пиковая дама' };
+		const opera = { composer: 'Tchaikovsky, Pyotr', operaRu: 'Пиковая дама', operaEn: 'Pique Dame', operaFr: 'La Dame de pique', characterRu: 'Герман', characterEn: 'Hermann', characterFr: 'Hermann', number: "Hermann's arioso", voice: 'tenor', librettists: 'Модест Ильич Чайковский', literarySource: 'Pushkin, Пиковая дама' };
 		const aria = (id: string, title: string): PoemEntry => ({ ...koltsov, id, work: 'opera001', title, incipit: title, kind: 'libretto', opera });
 		const lib = { ...library, entries: [...library.entries, aria('aria000001', 'Я имени её не знаю'), aria('aria000002', 'Прости, прелестное создание')] };
 		const gone = { id: 'aria00gone', work: 'opera001', poemHash: library.hash, start: 0, end: 20, answered: true, edited: false };

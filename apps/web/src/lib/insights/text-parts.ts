@@ -46,7 +46,7 @@ export interface RichPart {
 /**
  * A sentence of the round 2 page (QUEUE row 66), split once for every face it
  * sets: `*…*` in italics (`$lib/italics`), IPA in brackets, ♭ and ♯ in the sans,
- * and "fR1" as f with a subscript R1, as the comments print it. Drawn as text
+ * and "fR1" as an italic f with an upright subscript R1 (Titze et al. 2015, Table I), as the comments print it. Drawn as text
  * nodes, never as markup.
  */
 export function richParts(text: string): RichPart[] {
@@ -58,7 +58,8 @@ export function richParts(text: string): RichPart[] {
 		for (const p of body.split(/(\[[^\]]+\]|[♭♯]+|fR1|[\uE000-\uF8FF]+)/)) {
 			if (!p) continue;
 			const run: RichPart = { text: p, ...(em ? { em } : {}) };
-			if (p === 'fR1') out.push({ ...run, text: 'f' }, { ...run, text: 'R1', sub: true });
+			// Titze et al. (2015), Table I: the f of a resonance is always italic and its subscript R1 is upright, whatever the line's emphasis (Dann 2026-11-13 15:44).
+			if (p === 'fR1') out.push({ text: 'f', em: true }, { text: 'R1', sub: true });
 			else if (p.startsWith('[')) out.push({ ...run, ipa: true });
 			else if (/^[♭♯]+$/.test(p)) out.push({ ...run, acc: true });
 			else if (/^[\uE000-\uF8FF]+$/.test(p)) out.push({ ...run, mus: true });

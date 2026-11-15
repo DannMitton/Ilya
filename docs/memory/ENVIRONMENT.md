@@ -15,6 +15,14 @@ The index was added 2026-09-01. Nothing below it was moved, reworded, or removed
 **When you add a section, add its row here.** A trap nobody can find costs the
 next session the same hour it cost the last one.
 
+### Desk error recorded 2026-11-12 (night Fable desk)
+- `THE DESK RULED OUT DANN'S OWN WORK "NOT TONIGHT"` and `git fetch --dry-run IS NOT READ-ONLY ENOUGH` (2026-11-13, same desk; last two sections of this file).
+
+| you are about to, or you are seeing | search for |
+|---|---|
+| a sentence saying no source gives fR2, or "Bozeman charts fR1 only" | `BOZEMAN GIVES fR2` |
+| a helper's report lands while you still have the full text only in the thread | `A HELPER'S REPORT WAS FILED CONDENSED` |
+
 ### Desk errors recorded 2026-10-21 (afternoon desk)
 
 | you are about to, or you are seeing | search for |
@@ -5166,7 +5174,7 @@ Quote the range; cap at its top; add each actual when it lands. Actuals from `ST
 | kind of job | actuals (tokens) | range to quote |
 |---|---|---|
 | Sonnet browser measure on row 114 f1 | 148k, 155k, 158k, 192k, 206k, 208k, 208k, 238k (J2, three arms, 2026-11-09), 257k | 150k to 260k |
-| Fable review of a brief or design | 156k to 315k, most near 200k | 160k to 320k |
+| Fable review of a brief or design | 156k to 315k, most near 200k; 2026-11-13: 212k (N.200 r1), 222k in 6.6 min with 26 tool uses (N.199 readings r2, cap 330k; the brief pasted whole into the prompt, the desk's clone already installed) | 160k to 330k |
 | Fable review of two built lanes (as built, merge-tree, one probe) | 367k (2026-11-09, 46 min, cap 320k) | 300k to 400k |
 | Fable review of three Code briefs (B0, row 166, row 182 with its data file) | 378k (cap 400k), 71 min, 141 tool uses, 2026-11-09; 303k harness count (cap 420k), 13 min, 64 tool uses, 2026-11-12 (polish lane r2, rhyme r2, L17 r2, with a scout packet) | 300k to 420k |
 | Opus review standing in for Fable | 130k, 170k, 171k, 183k, 215k | 130k to 220k |
@@ -5232,3 +5240,37 @@ Learned 2026-11-08: Grayson 2012 (PDF and both Word files) is set in legacy font
 ## LEARNED BY THE 2026-11-12 NIGHT DESK
 
 - Put a question to Dann from the singer's side, in plain words, never in engraver's jargon. Fable's strophic Q1 ("print only as far as its own words go, with the one-line bars printed once") reached him unparseable at 01:45. His rule: Ilya serves the user, and clever notation conventions fail that mission.
+
+## LEARNED BY THE 2026-11-12 DAY DESK (Opus, 01:52 open to 13:4x)
+- A desk reading of a ruling is not the ruling. The night desk wrote 01:45 as "every later verse reprints the whole song"; two briefs (r2, r3) and one Fable review (220k) were built on that reading before Dann saw it (13:40: not what he meant; ruled 13:41 in `OPEN.md`). Before briefing from a ruling the desk worded, read Dann's own words back to him in a picture of what the singer sees.
+- The desk twice turned Dann's principle (13:16 to 13:21) into limits ("never improves it"). He: "I am consistently fighting your drive to nail down barriers that will limit us." Record his words; word no boundary around them.
+- Files the handover says are "in ~/Downloads" may not be: IMG_4547 and 4550 to 4552 (Gould) were in Gmail ("Gould Index and section I TOC", 2026-07-13), and were the table of contents. Search Gmail by `filename:` before asking Dann.
+- Lanes 49 and 50 each passed the `+page.svelte` ratchet alone (5528, 5527 of 5534) and failed it together (5540). Measure the merge, not the lanes.
+- ESTIMATES: Fable brief review (strophic lane A r2) 220k against a 250k cap; desk gate measures in its own workspace cost few tokens (no helper).
+
+## BOZEMAN GIVES fR2 (2026-11-12 23:5x, night Fable desk; Dann's fourth correction of the night)
+
+The false belief had four homes, each now corrected: the comment at `apps/web/src/lib/voice/engine/stand-ins.ts:14` ("Bozeman charts fR1 only"); `gaps_pass01.md` line 70 in the library ("fR2 has no generic value"); the Calibrate handoff, section 7 ("No single source gives fR2 by vowel by voice type"), which later desks shortened to "no source"; and this desk's own reply of 23:5x ("drawn from nothing citable"). Bozeman, *Practical Vocal Acoustics*, 2nd ed. (2025): p. 35, the second resonances "lie between ca. F5 and D7, and mostly between G5 and C7. Within a given voice the second resonance spans the interval of about a 10th."; p. 31, Fig. 5.3, a model of F1 and F2 for nine vowels ([i ɪ e ɛ ɑ ɔ o ʊ u]) on one scale (250 to 2000 Hz). Photographs: `~/Documents/Voice Pedagogy Library/Insights Research/_scans/Bozeman PVA 2nd ed/` (Ch05 p031, p035); extraction rows PVA2-A-016 and PVA2-A-026 in `_extraction/claims_bozeman-PVA2_batch-A.csv`. What Bozeman does not chart is an fR2 band for each vowel by voice type, as his boxed charts do for fR1 (PVA2 App. 2 Fig. 19.1; KVP2 Figs. 8 to 10). The rule is in `CONTRACT.md` section 8. Lesson: a narrow true statement (no per-vowel band by voice type) was repeated in a broad false form (no fR2 at all); quote the narrow form with its pages, or open the pages.
+
+## A HELPER'S REPORT WAS FILED CONDENSED (2026-11-12, night Fable desk)
+
+A subagent's hand-back arrives as text in the thread, not as a file. The scout packet for brief N.199 r4 (226k tokens) was not filed at all; its twelve contradictions are listed in the brief's section 12. The Fable review (328k against a 300k cap) was filed condensed by the desk as `~/Downloads/_desk-2026-11-12/review-fable-brief-n199_r1_2026-11-12.md`. Next time: have the helper write its report to `/mnt/user-data/outputs/` itself and commit it with `device_commit_files` before it hands back. Actuals for ESTIMATES BY KIND OF JOB: Sonnet scout packet for one Code brief 226k, 41 tool uses, 4.6 min (cap 320k); Fable review of one brief with the code read in full 328k, 28 tool uses, 10 min.
+
+## THE DESK RULED OUT DANN'S OWN WORK "NOT TONIGHT" (2026-11-13 00:4x, night Fable desk)
+
+The desk told Dann his walk, the words, and the microphone test would not happen that night. Dann, 00:50: *"Why can't we do my walk of the screen, the English and French words, and five minutes at the microphone for the wrong-vowel test tongiht?"* (as written). When he works is his call (preferences rule 13). The desk states what waits on what (the walk waits on Code; the words and M0 wait on nothing) and stops there. The same night Dann was overwhelmed by the length of a reply (00:03): one consequence in plain words, then stop.
+
+## `git fetch --dry-run` IS NOT READ-ONLY ENOUGH (2026-11-13 01:0x, night Fable desk)
+
+At the close the desk ran `git --no-optional-locks --no-pager fetch --dry-run` through the bridge to read a lane's log. `fetch` is not in `CONTRACT.md` §4's allowed list. It moved no ref, but it downloaded objects, and because the bridge cannot delete, it left three `tmp_obj_*` files under `.git/objects/{55,62,ca}/`. No lock file was left. To read a lane's tip use `ls-remote`; to read its commits, read GitHub in Dann's Chrome or have Dann fetch.
+
+## LEARNED BY THE 2026-11-13 DAY DESK (Opus 5.5, 10:26 to 16:0x)
+
+- **`device_commit_files` adds a C2PA provenance manifest to SVG files** (an `xmlns:c2pa` attribute and a base64 `<metadata>` block, about 7.8 kB per file; PNGs get a chunk). Ten 5.6 kB drawings became 13.4 kB and reached the bundle through lane 51. Write text files to the Mac with `device_bash` (a heredoc, or base64 through `tar`), and check md5s against the originals. The strip that restores the originals byte for byte is in lane 51's amendment.
+- **Code that parses a file can depend on the very metadata you strip.** `drawings.ts:74` ended each drawing at `<metadata>`; stripping it would have broken the drawings silently. Read the parser before changing the file it reads. Fable caught this.
+- **A label in a code comment is not Dann's ruling.** "Dann's locked anchor rule" (`CalibrationWizard.svelte:275-277`) and the brief's `all-small-caps` both turned Dann's words into rules he did not make. Check `OPEN.md` for his words before attributing.
+- **When Dann rejects a clause twice, drop it.** The desk re-inserted "Your own [ɨ] is kept" three times without saying why.
+- **Read the extractor before describing it.** fR1 is a closed-phase all-pole fit when it agrees within 30% of the cepstral envelope; fR2 is always the envelope peak of the recorded sound (`extract.ts:133-179`). The desk described both as resonance estimates first.
+- **`device_request_folder_access` can be refused by the classifier on a first ask.** When Dann says he will grant it, ask again; it went through at 15:53.
+- **Typing into a lane session:** `javascript_tool` with `document.execCommand('insertText', …)` on the `[contenteditable="true"]` box, then Return. Sending while the lane works queues the message.
+- **Estimates, actuals:** Fable as-built lane review 195k (estimated 300k); Sonnet reader-visible notation audit 144k (estimated 150k).

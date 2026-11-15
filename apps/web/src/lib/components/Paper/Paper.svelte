@@ -29,6 +29,8 @@
 		/** Rows 109 and 110: the poem's words the song does not set, as `"lineIndex-wordIndex"`, drawn grey. */
 		mutedWords?: ReadonlySet<string>;
 		onwordclick?: (word: WordStackData) => void;
+		/** N.201: the word the singer tapped, as `"lineIndex-wordIndex"`. The page marks it on screen only; the mark never prints. */
+		selectedKey?: string | null;
 		/** Row 2j: what page 1 says with no lines (`emptyTextNotice`). */
 		emptyNotice?: EmptyTextNotice;
 		/** Which text `lines` is: `shown` in `+page.svelte`, the value `textLines` branches on. The running head names it (`text/text-header.ts`). */
@@ -47,6 +49,7 @@
 		glossOverrides = new Map(),
 		mutedWords,
 		onwordclick,
+		selectedKey = null,
 		emptyNotice = 'enter',
 		witness = 'lyrics',
 	}: Props = $props();
@@ -179,6 +182,7 @@
 				{glossOverrides}
 				{mutedWords}
 				{onwordclick}
+				{selectedKey}
 				{witness}
 				documentHasLines={lines.length > 0}
 				contentTop={contentTopOf(0)}
@@ -202,6 +206,7 @@
 				{glossOverrides}
 				{mutedWords}
 				{onwordclick}
+				{selectedKey}
 				{witness}
 				documentHasLines={lines.length > 0}
 				contentTop={contentTopOf(i)}

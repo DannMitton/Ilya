@@ -1,10 +1,11 @@
 <script lang="ts">
 	import type { WordStackData } from '$lib/types';
 	import type { NotationPreferences } from '@ilya/phonology';
-	import { applyNotationPreferences } from '@ilya/phonology';
 	import { t, type Language } from '$lib/i18n';
 	import { hasProvenanceIcon } from './provenance-icon';
 	import { splitBreakMark } from '$lib/syntactic-break';
+	import { shownIpa, reconActiveFor } from './shown-ipa';
+	import { isCliticWord, isVerifyWord } from './verify-words';
 
 	interface Props {
 		word: WordStackData;
@@ -17,6 +18,8 @@
 		/** Rows 109 and 110: a poem word the song does not set, drawn grey as Input's Poem view draws it. */
 		muted?: boolean;
 		onwordclick?: (word: WordStackData) => void;
+		/** N.201: the singer tapped this word. A screen-only mark, never printed, never on the probe's copy. */
+		selected?: boolean;
 		/**
 		 * THE COPY THE PAGE-FIT PROBE MEASURES (`TextFitProbe.svelte`, step 7, part 1): the same stack, drawn the same, with no
 		 * `data-word-index`, so nothing that looks a word up by it (a test's locator, `[data-word-index="0-0"]`) can find the
@@ -27,41 +30,16 @@
 		probe?: boolean;
 	}
 
-	let { word, notationPrefs, showStressDiacritics = false, language = 'en', spotReconstituted = false, adjacentCliticReconstituted = false, glossOverride, muted = false, onwordclick, probe = false }: Props = $props();
+	let { word, notationPrefs, showStressDiacritics = false, language = 'en', spotReconstituted = false, adjacentCliticReconstituted = false, glossOverride, muted = false, onwordclick, selected = false, probe = false }: Props = $props();
 
 	// Bidirectional XOR: spot always inverts the global setting for this word.
 	// Global OFF + spot ON → reconstituted. Global ON + spot ON → reduced.
 	// Matches InspectorPanel's reconActive logic exactly.
-	const reconActive = $derived(spotReconstituted ? !notationPrefs.reconstitution : notationPrefs.reconstitution);
+	const reconActive = $derived(reconActiveFor(spotReconstituted, notationPrefs));
 
-	// Determine the IPA string to display on the Paper.
-	//
-	// Cases:
-	// 1. Clitic, reconActive false → show pipeline's ipaDisplay ('→' or '←')
-	// 2. Clitic, reconActive true → show own reconstituted IPA (ipaOwnReconstituted)
-	// 3. Host with adjacentCliticReconstituted → show demerged IPA (ipaContent)
-	// 4. Normal word → existing logic (ipaReconstituted or ipaDisplay)
-	const displayIpa = $derived.by(() => {
-		const isCliticWord = word.isProclitic || word.isEnclitic;
-
-		if (isCliticWord) {
-			if (reconActive && word.ipaOwnReconstituted) {
-				return applyNotationPreferences(word.ipaOwnReconstituted, notationPrefs, true);
-			}
-			return word.ipaDisplay || '';
-		}
-
-		if (adjacentCliticReconstituted) {
-			const base = reconActive
-				? (word.ipaOwnReconstituted || word.ipaContent || word.ipaDisplay)
-				: (word.ipaContent || word.ipaDisplay);
-			return base ? applyNotationPreferences(base, notationPrefs, true) : '';
-		}
-
-		const useReconstituted = reconActive && word.ipaReconstituted;
-		const base = useReconstituted ? word.ipaReconstituted : word.ipaDisplay;
-		return base ? applyNotationPreferences(base, notationPrefs, true) : '';
-	});
+	// The IPA the stack draws (`shown-ipa.ts`, N.201: the four cases moved there
+	// unchanged, because the closed ANALYSIS line reads the same string).
+	const displayIpa = $derived(shownIpa(word, notationPrefs, spotReconstituted, adjacentCliticReconstituted));
 
 	// Row 163: a typed # is drawn as its own element a word space after its host, not fused to it.
 	const ipaParts = $derived(splitBreakMark(displayIpa));
@@ -117,7 +95,7 @@
 		return raw;
 	});
 
-	const isClitic = $derived(word.stressSource === 'clitic' || word.isProclitic || word.isEnclitic);
+	const isClitic = $derived(isCliticWord(word));
 
 	// Show provenance icon only for non-standard sources (not dictionary, supplement, clitic)
 	const showProvenance = $derived(
@@ -129,7 +107,7 @@
 	);
 
 	// A Latin word has no Russian stress to verify (`latin.ts`).
-	const isInferred = $derived(word.stressSource === 'inferred' && !isClitic && !word.latin);
+	const isInferred = $derived(isVerifyWord(word));
 
 	// The frame draws only where one of its four icons applies (row 148: no empty circle over a word).
 	const iconed = $derived(showProvenance && hasProvenanceIcon(word.stressSource));
@@ -159,6 +137,7 @@
 	class:is-inferred={isInferred}
 	class:is-latin={word.latin}
 	class:muted
+	class:selected={selected && !probe}
 	role="button"
 	tabindex={word.latin ? -1 : 0}
 	aria-disabled={word.latin || undefined}
@@ -268,6 +247,18 @@
 		border: 1.5px dashed #78716c;
 		border-radius: 3px;
 		pointer-events: none;
+	}
+
+	/* N.201: THE TAPPED WORD'S MARK, on screen only. The focus outline's own
+	   2 px sage, kept on a pointer tap (`:focus-visible` hides it there), and
+	   5 px out on a VERIFY word so the dashed box stays in view. It is not the
+	   rule below, which hides the box. Dann rules its look on his walk. */
+	.word-stack.selected {
+		outline: 2px solid var(--sage);
+		outline-offset: 2px;
+	}
+	.is-inferred.selected {
+		outline-offset: 5px;
 	}
 
 	/* Override focus ring for inferred words: sage ring outside the dashed box */
@@ -414,6 +405,9 @@
 	}
 
 	@media print {
+		.word-stack.selected {
+			outline: none;
+		}
 		.word-stack {
 			cursor: default;
 			background: transparent !important;

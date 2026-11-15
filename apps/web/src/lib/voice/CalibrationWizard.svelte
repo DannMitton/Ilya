@@ -5,22 +5,22 @@
 	 *
 	 * Source of record: shane-calibration-wizard-spec_v1_2026-06-30.md,
 	 * reconciled between Claude and Kimi over two review rounds, recorded in
-	 * handover v27. This wraps the pacifier's locked per-vowel ritual (spec
+	 * handover v27. This wraps the capture ritual (spec
 	 * v11 §3, §4, §6, §7, §8, §11) in four phases — Welcome, Readiness,
-	 * Guided capture, Profile summary — plus the skippable Voice
+	 * Capture, Profile summary — plus the skippable Voice
 	 * characteristics phase behind the summary (E.5 slice 3, Kimi's Q5
-	 * ruling, v39 §A.31) — without altering that ritual; the
-	 * two-tap arming, the 3-2-1 prep, the fixed 3.0 s arc, and the calm
-	 * reset-sigla path all stay exactly as the Pacifier already implements
-	 * them. This wizard only decides *which* vowel is current and moves
-	 * focus between captures.
+	 * ruling, v39 §A.31). N.199 Step 8 (Dann 2026-11-14 21:03): the capture
+	 * phase is `VowelCapture.svelte` for every singer, one vowel at a time.
+	 * The wheel this paragraph once described is deleted. This wizard hands
+	 * the capture screen its opening (`opening`) and the guarded reading
+	 * (`commitReading`), and decides nothing about the take itself.
 	 *
 	 * Locked port order (spec v1 §2): (1) this wizard, built and clickable
 	 * end to end against StubCaptureSession, with the readiness phase as UI
 	 * and permission scaffolding only, its measurements mocked because the
 	 * stub cannot supply live audio; (2) the live CaptureSession, gated on
 	 * Dann's separate go; (3) polish (toast-threshold tuning, copy). Step
-	 * 2's capture side landed 2026-07-02: the Pacifier below now runs
+	 * 2's capture side landed 2026-07-02: the capture screen runs
 	 * against LiveCaptureSession (engine/live.ts), so vowel captures are
 	 * real audio. Step 2's READINESS side landed 2026-08-04 (item 1.4a):
 	 * the quiet second and the throwaway fry are measured through the same
@@ -38,11 +38,17 @@
 	 * saving on every change; first launch asks for a name before the
 	 * Welcome phase; Start over clears the active voice's readings only.
 	 *
-	 * Replaces the earlier placeholder shell (Ilya2006B fold-in), which
-	 * rendered the Pacifier with a static coaching line and nothing else.
+	 * Replaces the earlier placeholder shell (Ilya2006B fold-in).
 	 */
-	import { onMount, tick, untrack } from 'svelte';
-	import Pacifier, { spokenName } from '$lib/voice/pacifier/Pacifier.svelte';
+	import { onMount, untrack } from 'svelte';
+	import { spokenName } from '$lib/voice/vowel-names';
+	import FrSym from '$lib/voice/FrSym.svelte';
+	// N.199: the capture screen and the sheet on the summary, for every singer.
+	import { captureSessionFor } from '$lib/voice/chart/stub-switch';
+	import SummarySheet from '$lib/voice/chart/SummarySheet.svelte';
+	import VowelCapture from '$lib/voice/VowelCapture.svelte';
+	import { addTake, type TakeRecord } from '$lib/voice/takes';
+	import { openChallenging, openRetake, openTour, type Opening } from '$lib/voice/chart/opening';
 	import { t, type Language } from '$lib/i18n';
 	import Italics from '$lib/components/Italics.svelte';
 	import ProfileSwitcher from '$lib/voice/ProfileSwitcher.svelte';
@@ -52,7 +58,6 @@
 	import OutsideNote from '$lib/voice/OutsideNote.svelte';
 	import { outsideVowels } from '$lib/voice/outside';
 	import NotePicker from '$lib/voice/NotePicker.svelte';
-	import { LiveCaptureSession } from '$lib/voice/engine/live';
 	import type { CaptureSession } from '$lib/voice/engine/session';
 	import {
 		READINESS_CAPTURE_MS,
@@ -64,8 +69,7 @@
 	import { pitchToMidi, type IntakeAnswers, type Pitch } from '@ilya/score-parser';
 	import { deriveFrom } from '$lib/voice/engine/derivations';
 	import { applyIghDivergence } from '$lib/voice/engine/divergence';
-	import { checkPlausibility, buildPlausibilityEvent, keepReading } from '$lib/voice/engine/plausibility';
-	import { holdKindFor, holdAnnouncement, type HoldKind } from '$lib/voice/hold';
+	import { anchorF1sFor, checkPlausibility, buildPlausibilityEvent, keepReading } from '$lib/voice/engine/plausibility';
 	import {
 		loadStore,
 		saveStore,
@@ -94,7 +98,7 @@
 	// RENAMED 2026-08-04 on Dann's ruling, and the word mattered enough to move
 	// an identifier: **none of the ten vowels is optional.** All ten are
 	// necessary for sung Russian. Five are the floor the four derivations
-	// consume (`FLOOR_ANCHORS` in `Pacifier.svelte`); seven are what the tour asks;
+	// consume (`FLOOR_ANCHORS`, formerly in the deleted wheel); seven are what the tour asks;
 	// these three are simply the hardest for a new singer to produce on demand,
 	// so Ilya derives them as an assistance until the singer chooses to sing
 	// them. **`OPTIONAL_VOWELS` encoded a claim about importance that is false,
@@ -102,14 +106,6 @@
 	const DEFAULT_VOWELS: Vowel[] = ['i', 'e', 'ɛ', 'a', 'ɑ', 'o', 'u'];
 	const CHALLENGING_VOWELS: Vowel[] = ['ɨ', 'ɪ', 'ʌ'];
 	const ALL_VOWELS: Vowel[] = [...DEFAULT_VOWELS, ...CHALLENGING_VOWELS];
-	// The confirming beat before auto-advance (spec v1 §2 Phase 2), retimed in
-	// the pacing pass of 2026-07-02: the Pacifier reports a capture only after
-	// its 0.9 s completion animation (COMPLETE_MS, pacifier spec v11), so this
-	// hold runs concurrently with the seam rather than stacking on it —
-	// 0.9 s + 1.6 s = 2.5 s total from end of voicing to advance, replacing
-	// the previous 0.9 s + 2.5 s = 3.4 s stack.
-	const HOLD_MS = 1600;
-
 	// The default-name base ("Voice 1", "Voice 2", …), Kimi's ruling:
 	// domain-appropriate, scales to variants and guests without special
 	// pleading. N.22: DEFAULT_NAME_BASE moved below the props destructure
@@ -127,19 +123,16 @@
 
 	interface CalibrationWizardProps {
 		/**
-		 * The auditory input, injectable on the same pattern the Pacifier
-		 * already uses (the `session` prop in `Pacifier.svelte`). Defaults to
-		 * the live session, so
+		 * The auditory input, injectable (the capture screen's `session` is
+		 * this one). Defaults to the live session, so
 		 * the page shell needs no change; a harness can pass a
 		 * StubCaptureSession to drive the readiness and capture paths without a
 		 * microphone. This replaces the retired `readinessOutcome` hook, which
 		 * forced a mocked outcome the gate no longer produces.
 		 */
 		session?: CaptureSession;
-		/** Forwarded from the Pacifier, so a future parent can subscribe. */
+		/** Fires with each guarded reading as it is stored, so a future parent can subscribe. */
 		onVowelCaptured?: (vowel: Vowel, formant: CalibratedFormant) => void;
-		/** Forwarded from the Pacifier, so a future parent can subscribe. */
-		onProfileChange?: (formants: Partial<Record<Vowel, CalibratedFormant>>) => void;
 		/**
 		 * Fires once the singer taps Finish on the Profile summary (spec v1 §2
 		 * Phase 3). The profile persists to device storage continuously
@@ -150,8 +143,8 @@
 		onComplete?: (formants: Partial<Record<Vowel, CalibratedFormant>>) => void;
 		/**
 		 * Fires with the active voice's working profile and name whenever
-		 * either changes, including the paths the Pacifier-forwarded
-		 * onProfileChange cannot see: hydration on mount, voice switching,
+		 * either changes, including the paths a per-capture callback
+		 * cannot see: hydration on mount, voice switching,
 		 * creation, duplication, deletion, rename, and Start over. This is
 		 * the main pane's subscription — the Voice Profile envelope
 		 * (MarkupPane.svelte, handover v30 §C.1) mirrors the
@@ -215,9 +208,8 @@
 		// run opens and releases the microphone itself, so the mic indicator
 		// rests dark between them. Construction touches no browser API;
 		// getUserMedia is requested only inside start() and startReadiness().
-		session: captureSession = new LiveCaptureSession(),
+		session: captureSession = captureSessionFor(),
 		onVowelCaptured,
-		onProfileChange,
 		onComplete,
 		onActiveProfileChange,
 		onOpenLearnNote,
@@ -238,14 +230,13 @@
 	// svelte-ignore state_referenced_locally
 	const INITIAL_NAME_BASE = t('calib.defaultVoiceName', language);
 
-	let pacifierRef: ReturnType<typeof Pacifier> | undefined = $state();
-
 	// ── The voice store (Phase 2b v2, multiple named voices, 2026-07-11) ─────
 	// One read at construction; a v1 single profile migrates transparently
 	// to become the first named voice. All mutations flow through the
 	// functions below and save the whole store, failure-silent.
 	let store = $state<ProfileStore>(loadStore(`${INITIAL_NAME_BASE} 1`));
 	let activeVoice = $derived(store.voices.find((v) => v.id === store.activeId));
+	let opening = $state<Opening>({ start: 'i' }); // where the new capture screen opens, and any list it walks
 	let voiceType = $derived(activeVoice?.voiceType); // Voice type slice A: the guard routes from the stored Tier 1 id.
 	// The smallest unused sequential default, so deletions never cause
 	// name collisions ("Voice 2" existing skips to "Voice 3").
@@ -269,11 +260,8 @@
 	 * the §9 boundary keeps that flag internal, and the resolved reading is
 	 * the whole outcome the UI and the store need.
 	 *
-	 * Known seam, recorded: if the pass downgrades a just-captured [ɨ]
-	 * mid-flow, the roster shows Provisional immediately but the Pacifier's
-	 * node keeps its ✓ until the capture phase next remounts (the locked
-	 * component owns its node state; reconciling live would need a new hook,
-	 * not added unreviewed).
+	 * The capture screen reads the guarded profile this pass writes, so a
+	 * downgraded [ɨ] is drawn as the profile holds it.
 	 */
 	function withIghPass(
 		map: Partial<Record<Vowel, CalibratedFormant>>
@@ -308,11 +296,7 @@
 	 */
 	function withPlausibility(vowel: Vowel, formant: CalibratedFormant): CalibratedFormant {
 		if (formant.source !== 'measured-user') return formant;
-		const anchorF1s: Partial<Record<Vowel, number>> = {};
-		for (const [g, f] of Object.entries(profile) as [Vowel, CalibratedFormant][]) {
-			if (f && f.reading !== 'estimated') anchorF1s[g] = f.f1;
-		}
-		const res = checkPlausibility(formant.f1, vowel, voiceType, anchorF1s);
+		const res = checkPlausibility(formant.f1, vowel, voiceType, anchorF1sFor(profile));
 		const out: CalibratedFormant = { ...formant, plausibility: res.plausibility };
 		if (res.plausibility === 'implausible' && out.reading === 'captured')
 			out.reading = 'provisional';
@@ -347,11 +331,8 @@
 		});
 	});
 
-	let queue = $state<Vowel[]>([...DEFAULT_VOWELS]);
-	let queueIndex = $state(0);
 	let challengingOffered = $state(false);
 	let finished = $state(false);
-	let currentVowel = $derived<Vowel | undefined>(queue[queueIndex]);
 	let capturedCount = $derived(Object.values(profile).filter((f) => !!f).length);
 	let outside = $derived(outsideVowels(profile, ALL_VOWELS)); // The summary's one note (`outside.ts`).
 	// The voice type is asked before the first vowel only if the voice had none on arrival (Dann, 2026-09-30 12:44).
@@ -359,7 +340,7 @@
 	$effect(() => { if (phase === 'welcome' && store.activeId) askTypeFirst = !untrack(() => voiceType); });
 	// The invitation to sing the remaining three waits for a complete default set
 	// (Dann, 2026-07-10): it must not appear when the summary is reached
-	// early by any path (a single-vowel re-take pass, or a queue bug).
+	// early by any path (a single-vowel re-take pass).
 	let defaultsComplete = $derived(DEFAULT_VOWELS.every((g) => !!profile[g]));
 
 	// ── Q3 WIZARD COLLAPSE, GONE (N.114b item 8) ─────────────────────────────
@@ -472,9 +453,8 @@
 	/** Interrupt everything transient and land on the given phase. */
 	function resetFlow(to: Phase) {
 		// A readiness run holds the microphone, so leaving the phase must
-		// release it. Scoped to that phase deliberately: a capture in flight is
-		// the Pacifier's to cancel, and reaching across would change a shipped
-		// path this item does not touch.
+		// release it. A capture in flight is the capture screen's: it ends the
+		// take when it unmounts (`ritual.destroy()`).
 		if (phase === 'readiness') captureSession.cancel();
 		readinessResult = undefined;
 		readinessError = undefined;
@@ -483,14 +463,8 @@
 		readinessProgress = 0;
 		clearReadinessTimers();
 		clearAllTimers();
-		holdTimer = undefined;
-		holdActive = false;
-		holdVowel = undefined;
-		paused = false;
 		confirmingReset = false;
 		toastVisible = false;
-		queue = [...DEFAULT_VOWELS];
-		queueIndex = 0;
 		challengingOffered = false;
 		finished = false;
 		phase = to;
@@ -559,8 +533,8 @@
 	// expect 3-5 seconds to carry out this task." The engine reaches its verdict
 	// in about one second; the step is longer on purpose, so the singer is
 	// counted in and can see when they have given enough. Same shape as the
-	// vowel steps (`pacifier/Pacifier.svelte`'s `beginPrepare`, and its
-	// `SWEEP_MS` arc).
+	// vowel steps (the deleted wheel's `beginPrepare` and its `SWEEP_MS` arc;
+	// the capture screen's count-in is `count-in.ts`).
 	let readinessStep = $state<'quiet' | 'prepare' | 'capture' | 'done' | 'unmeasured'>('quiet');
 	let readinessResult = $state<ReadinessResult | undefined>(undefined);
 	let readinessError = $state<CaptureError | undefined>(undefined);
@@ -576,7 +550,7 @@
 	 * not drive it: both read READINESS_PREP_MS and READINESS_CAPTURE_MS from
 	 * `engine/readiness.ts`, which is the same decoupling the vowel arc uses
 	 * ("a fixed 3.0 s clock that never stalls, independent of the engine's
-	 * delivery time", `SWEEP_MS` in `Pacifier.svelte`). If they disagree, the bar is
+	 * delivery time", `SWEEP_MS` in the deleted wheel). If they disagree, the bar is
 	 * wrong and the measurement is not.
 	 */
 	function clearReadinessTimers() {
@@ -601,13 +575,6 @@
 			readinessError?.code === 'NO_AUDIO_INPUT'
 	);
 
-	// ── Phase 2, the confirming hold (spec v1 §2 Phase 2, §3; retimed, see
-	// HOLD_MS above) ──────────
-	let holdActive = $state(false);
-	let holdVowel = $state<Vowel | undefined>(undefined);
-	let holdKind = $state<HoldKind>('good');
-	let holdTimer: ReturnType<typeof setTimeout> | undefined;
-
 	// ── The resonance roster (Dann's direction, 2026-07-10) ──────────────────
 	// One table, both surfaces: all ten vowels accounted for from the start,
 	// in the canonical order, greyed until a value lands. Columns: vowel
@@ -624,27 +591,16 @@
 	//
 	// Typography (Dann, 2026-07-10, per international mathematical-notation
 	// convention): the resonance symbol is an italic f (a variable) with an
-	// upright roman subscript (a label, not a product of variables), set as
-	// a true subscript slightly smaller than the base — see the frSym
-	// snippet. One source in the code; the convention extends across the
+	// upright roman subscript R1 or R2 (a label, not a product of variables), set as
+	// a true subscript slightly smaller than the base, the R a full capital: Titze et al. (2015), Table I (Dann 2026-11-13 15:44).
+	// See `FrSym.svelte` (lifted from the wizard's snippet, N.199 Step 1). One source in the code; the convention extends across the
 	// whole app as other surfaces are touched.
 	let logAnnounce = $state('');
-	// The hold banner's announcement text; delivered through a persistent
-	// hidden live region (see beginHold and Kimi's review, 2026-07-11).
-	let holdAnnounce = $state('');
 
 	// Start over (Phase 2b): clearing a voice's captures deserves one
 	// deliberate confirmation, phrased as a question naming the action,
 	// never a verdict. It clears readings only; the voice keeps its name.
 	let confirmingReset = $state(false);
-
-	// Pause / resume (spec v1 §3). Best-effort: the Pacifier does not yet
-	// surface a "mid-ritual" signal to a host component, so Pause is offered
-	// whenever the wizard is not itself in the post-capture hold. A singer
-	// would have to tap Pause while actively phonating to find the gap, and
-	// the affordance is small and out of the way, so the risk is low. A
-	// future `onStateChange` hook on the Pacifier would close this precisely.
-	let paused = $state(false);
 
 	// The room-SNR toast (spec v1 §3): once per session, no modal, self-dismissing.
 	let toastVisible = $state(false);
@@ -678,6 +634,12 @@
 		v.readiness = record;
 		touchVoice(v);
 		persistStore();
+	}
+
+	// N.199 Step 5: a take's record, written as `recordReadiness` writes (not `persist()`, which moves the calibration date).
+	function recordTake(rec: TakeRecord) {
+		const v = store.voices.find((x) => x.id === store.activeId);
+		if (v) { addTake(v, rec); persistStore(); }
 	}
 
 	// ── Phase 0 → 1 ────────────────────────────────────────────────────────
@@ -752,12 +714,9 @@
 	}
 
 	// ── Phase 1 → 2 ────────────────────────────────────────────────────────
-	async function beginCapture() {
+	function beginCapture() {
+		opening = openTour(profile);
 		phase = 'capture';
-		queue = [...DEFAULT_VOWELS];
-		queueIndex = 0;
-		await tick(); // let the Pacifier mount before driving it
-		pacifierRef?.activateVowel(queue[0]);
 		if (snrMarginal) maybeShowToast();
 	}
 
@@ -773,157 +732,21 @@
 		toastVisible = false;
 	}
 
-	// ── Capture-completion routing ────────────────────────────────────────
-	// Bug fix (Dann's report, 2026-07-10): the queue previously advanced on
-	// ANY completed capture, without checking which vowel had completed. An
-	// out-of-turn capture (re-taking an earlier vowel mid-flow through the
-	// Pacifier's own two-tap ritual) therefore burned one of the remaining
-	// queue slots per completion, and enough of them exhausted the queue and
-	// opened the summary after only four unique vowels. Now: every capture
-	// updates the profile and the roster, but only a capture of the vowel
-	// the tour is waiting on holds and advances; an out-of-turn capture
-	// hands focus straight back to the current vowel.
-	function handleVowelCaptured(vowel: Vowel, formant: CalibratedFormant) {
+	// ── A reading, from the capture screen ──────────────────────────────────
+	// A reading into the profile (guard, [ɨ] pass, save, announcement): the capture screen's `onCaptured`.
+	function commitReading(vowel: Vowel, formant: CalibratedFormant): CalibratedFormant {
 		const checked = withPlausibility(vowel, formant);
 		profile = withIghPass({ ...profile, [vowel]: checked });
 		persist();
-		// The hold and the announcement use the post-pass reading: a divergent
-		// [ɨ] that the pass resolved to Provisional must not be celebrated as
-		// captured (no capture-time modal, per the locked decision — the
-		// ordinary provisional hold wording carries it).
+		// The announcement uses the post-pass reading: a divergent [ɨ] that the
+		// pass resolved to Provisional must not be announced as captured.
 		const effective = profile[vowel] ?? checked;
-		// The polite data delivery (Kimi, 2026-07-10): the hold banner is the
-		// confirmation, this is the number's first availability to non-visual
-		// users. Speakable name, never the raw glyph (§4.6 discipline).
+		// The polite data delivery (Kimi, 2026-07-10): the number's first
+		// availability to non-visual users. Speakable name, never the raw glyph
+		// (§4.6 discipline).
 		logAnnounce = `${T('calib.log.addedPrefix')} ${spokenName(vowel, language)}, ${Math.round(effective.f1)} ${T('calib.log.hertz')}, ${readingLabel(effective.reading)}.`;
 		onVowelCaptured?.(vowel, effective);
-		if (phase !== 'capture' || paused) return;
-		if (vowel === currentVowel) {
-			beginHold(vowel, holdKindFor(effective)); // `hold.ts`: an implausible take advances like any other.
-		} else if (currentVowel) {
-			// Out of turn: the roster took the value; the tour stays put.
-			pacifierRef?.activateVowel(currentVowel);
-		}
-	}
-
-	/**
-	 * Are these two readings the same extraction?
-	 *
-	 * The Pacifier holds the RAW formant the session handed it
-	 * (`Pacifier.svelte`, `n.formant = formant`), while `profile` holds the
-	 * clone `withPlausibility` returned. They describe one capture and differ
-	 * only in the fields the guard added. Comparing the measured numbers and
-	 * the provenance identifies that pair without trusting either copy's
-	 * verdict, which is the field under dispute.
-	 */
-	function sameExtraction(a?: CalibratedFormant, b?: CalibratedFormant): boolean {
-		return !!a && !!b && a.f1 === b.f1 && a.f2 === b.f2 && a.source === b.source;
-	}
-
-	function handleProfileChange(formants: Partial<Record<Vowel, CalibratedFormant>>) {
-		// The Pacifier now receives the merged map (sung plus derived
-		// previews, for the ≈ badge) and reports its full map back, so
-		// estimated entries must be stripped here or synthetic values would
-		// leak into the stored profile — the only-sung-is-stored rule
-		// (Mitton 2020 §5.3.3 discipline) enforced at the boundary.
-		//
-		// E.26, AND THIS IS A DEFECT FIX RATHER THAN A TIDY-UP. `Pacifier.svelte`
-		// fires onVowelCaptured and onProfileChange back to back in one tick.
-		// The first ran the plausibility guard, wrote its verdict, and demoted
-		// an implausible `captured` to `provisional` (`:275-276`). This function
-		// then rebuilt the profile wholesale from the Pacifier's un-guarded map
-		// and persisted it, **erasing both**. MEASURED, 2026-08-04, build
-		// b6d2828: eight `[voice] plausibility` events fired, one per vowel, and
-		// `plausibility` was `undefined` on every reading in every stored
-		// profile. Dann's [i] was judged `implausible` with `rePromptShown:
-		// true` and was stored as `reading: 'captured'`.
-		//
-		// So: when the Pacifier reports a reading we already hold a guarded copy
-		// of, keep ours. Anything genuinely new (a re-take, a different
-		// extraction) still comes from the Pacifier, and a removal still removes.
-		const direct: Partial<Record<Vowel, CalibratedFormant>> = {};
-		for (const [g, f] of Object.entries(formants) as [Vowel, CalibratedFormant][]) {
-			if (!f || f.reading === 'estimated') continue;
-			const held = profile[g];
-			direct[g] = sameExtraction(held, f) ? (held as CalibratedFormant) : f;
-		}
-		// The [ɨ] pass runs here too: a long-press skip can remove an anchor,
-		// which must resolve a sampled [ɨ] to Provisional (anchor rule).
-		profile = withIghPass(direct);
-		persist();
-		onProfileChange?.(profile);
-	}
-
-	/**
-	 * N.48: the guided tour moves on when the singer skips the vowel it is
-	 * waiting on. ONLY that vowel. A long-press anywhere else on the roster
-	 * is curation, not a decision about the tour, and must not move the
-	 * queue. `defaultsComplete` at the escape hatch is deliberately left
-	 * alone (Dann, 2026-07-10, via Kimi's review): this unsticks the tour
-	 * rather than opening the mid-tour exit that guard exists to prevent.
-	 */
-	function handleVowelSkipped(vowel: Vowel) {
-		if (phase !== 'capture' || holdActive) return;
-		if (vowel !== currentVowel) return;
-		advance();
-	}
-
-	function handleRolledBack(vowel: Vowel) {
-		// Spec v1 §3, the re-take rule: the previous Captured value stands and
-		// the profile did not change, so there is no onVowelCaptured /
-		// onProfileChange to forward (and no roster change, announcement, or
-		// save either; the banner alone explains the rollback). Same
-		// out-of-turn guard as handleVowelCaptured: only the current vowel's
-		// rollback holds and advances the tour.
-		if (phase !== 'capture' || paused) return;
-		if (vowel === currentVowel) {
-			beginHold(vowel, 'rolled-back');
-		} else if (currentVowel) {
-			pacifierRef?.activateVowel(currentVowel);
-		}
-	}
-
-	function beginHold(vowel: Vowel, kind: HoldKind) {
-		holdVowel = vowel;
-		holdKind = kind;
-		holdActive = true;
-		// The hold's announcement goes through the persistent hidden live
-		// region (Kimi's review, 2026-07-11): a live region inserted into the
-		// DOM together with its content is often missed by screen readers, so
-		// the visual banner renders conditionally for sighted users while the
-		// announcement text lands in a region that always exists.
-		holdAnnounce = holdAnnouncement(kind, spokenName(vowel, language), T);
-		holdTimer = after(HOLD_MS, () => {
-			holdActive = false;
-			holdTimer = undefined;
-			advance();
-		});
-	}
-
-	/**
-	 * The tap-catcher's handler (spec v1 §2, the cancel-tap race fix, per
-	 * Kimi's review round 2). This only exists while `holdActive` is true —
-	 * the catcher element in the markup below is conditional on it — so a tap
-	 * arriving after the hold has already ended, by timeout or by an explicit
-	 * Continue/Re-take, never reaches this handler at all and falls straight
-	 * through to the Pacifier's own tap semantics on whatever vowel it lands
-	 * on. A late tap can never be mistaken for a choice about the vowel that
-	 * focus has already left.
-	 */
-	function interruptHold() {
-		if (!holdActive || !holdTimer) return;
-		clearTimeout(holdTimer);
-		holdTimer = undefined;
-		// Stop the clock only. The Continue / Re-take choice was already
-		// visible for the whole hold, so an interrupting tap just leaves it
-		// up for an explicit decision instead of letting it auto-resolve.
-	}
-
-	function holdContinue() {
-		if (holdTimer) clearTimeout(holdTimer);
-		holdTimer = undefined;
-		holdActive = false;
-		advance();
+		return effective;
 	}
 
 	/** The summary's Keep (`outside.ts`): the singer's measured voice outranks an approximate band. */
@@ -939,70 +762,24 @@
 		persist();
 	}
 
-	function holdRetake() {
-		if (holdTimer) clearTimeout(holdTimer);
-		holdTimer = undefined;
-		holdActive = false;
-		const g = holdVowel;
-		holdVowel = undefined;
-		// Hands back cleanly to the Pacifier's own tap-to-arm-a-re-take (spec
-		// v11 §7.1): arming here is the first of that ritual's two taps.
-		if (g) pacifierRef?.activateVowel(g);
-	}
-
-	function advance() {
-		holdVowel = undefined;
-		queueIndex += 1;
-		if (queueIndex >= queue.length) {
-			phase = 'summary';
-			return;
-		}
-		pacifierRef?.activateVowel(queue[queueIndex]);
-	}
-
-	async function addChallengingVowels() {
+	function addChallengingVowels() {
 		challengingOffered = true;
-		queue = [...DEFAULT_VOWELS, ...CHALLENGING_VOWELS];
-		queueIndex = DEFAULT_VOWELS.length; // resume right where the default set ended
+		opening = openChallenging(profile);
 		phase = 'capture';
-		await tick();
-		pacifierRef?.activateVowel(queue[queueIndex]);
 	}
 
-	async function retakeFromSummary(vowel: Vowel, ...more: Vowel[]) {
-		// Re-enter the guided flow for this one vowel; the queue becomes a
-		// single-item pass, so the ritual (and the post-capture hold) still
-		// applies, and finishing it returns to the summary via the normal
-		// advance path.
-		queue = [vowel, ...more]; // `more`: the summary note's Re-take sings every vowel it names.
-		queueIndex = 0;
+	/** The summary's way back into the tour (N.199 Step 8, B3): the next vowel Ilya's order has not got. */
+	function continueTour() {
+		opening = openTour(profile);
 		phase = 'capture';
-		await tick();
-		pacifierRef?.activateVowel(vowel);
 	}
 
-	function togglePause() {
-		paused = !paused;
-	}
-
-	/**
-	 * The escape hatch (Kimi's review, 2026-07-11): the challenging-vowel tail
-	 * and the single-vowel re-take pass both re-enter the capture phase with
-	 * no way back to the summary short of completing every capture — a trap
-	 * door violating the no-dead-ends principle. This quiet affordance shows
-	 * only when the default set is already complete (so the main seven-vowel
-	 * tour is never interrupted by it) and returns to the summary, cancelling
-	 * any capture in flight (the session teardown is fire-and-forget and the
-	 * Pacifier handles the CANCELLED callback gracefully).
-	 */
-	function returnToSummary() {
-		captureSession.cancel();
-		clearAllTimers();
-		holdTimer = undefined;
-		holdActive = false;
-		holdVowel = undefined;
-		paused = false;
-		phase = 'summary';
+	function retakeFromSummary(vowel: Vowel, ...more: Vowel[]) {
+		// A pass over the vowels named (`more`: the summary note's Re-take sings
+		// every vowel it names); the capture screen returns to the summary when
+		// the pass has run out.
+		opening = openRetake([vowel, ...more]);
+		phase = 'capture';
 	}
 
 	function finish() {
@@ -1013,6 +790,8 @@
 
 	// ── Start over: clears the active voice's readings, keeps its name ──────
 	function confirmReset() {
+		const v = store.voices.find((x) => x.id === store.activeId);
+		if (v) delete v.takes; // Start over clears the take record with the readings
 		profile = {};
 		persist();
 		resetFlow('welcome');
@@ -1049,21 +828,6 @@
 		return profile[g] ?? deriveFrom(g, profile);
 	}
 
-	// The chart receives the merged map (Kimi's ruling, 2026-07-11): sung
-	// values plus derived previews, so an estimated node wears its ≈ badge
-	// and "the chart knows what the roster knows." Display-only flow: the
-	// return path strips estimated entries (see handleProfileChange).
-	let pacifierFormants = $derived.by(() => {
-		const m: Partial<Record<Vowel, CalibratedFormant>> = { ...profile };
-		for (const g of CHALLENGING_VOWELS) {
-			if (!m[g]) {
-				const d = displayFormant(g);
-				if (d) m[g] = d;
-			}
-		}
-		return m;
-	});
-
 	// The envelope's mirror (see onActiveProfileChange above): $state.snapshot
 	// reads the profile deeply, and activeVoice?.name is read here too, so
 	// this effect re-runs on every path that can change a reading or the
@@ -1099,18 +863,6 @@
 	>{spokenName(g, language)}{/snippet}
 
 <!--
-	The resonance symbol (Dann, 2026-07-10): italic f (variable), upright
-	roman subscript (label, so it cannot be misread as f × R × 1), subscript
-	set slightly smaller than the base. The single source of this convention
-	in the code. Screen readers announce the aria-label; the styled glyphs
-	are hidden from them because "f" plus a subscript reads as noise.
--->
-{#snippet frSym(n: number)}<span class="fr-sym" aria-label={`f R ${n}`}><em aria-hidden="true"
-			>f</em
-		><sub aria-hidden="true">R{n}</sub></span
-	>{/snippet}
-
-<!--
 	The resonance roster (Dann's direction, 2026-07-10; see the script-side
 	comment for full provenance). One table on both surfaces: the guided
 	flow renders it read-only under the quadrilateral; the summary renders
@@ -1132,6 +884,13 @@
      BOTH STRINGS RATIFIED by Dann 2026-09-30 23:42, as built. The shape was
      ruled before the words. What must not change is that the
      button says what it does, and that nothing here calls a vowel optional. -->
+<!-- A way back into the tour (N.199 Step 8, B3; DESK DEFAULT, Dann's to strike or reword): while fewer than ten are sung, the summary offers to go on with the next vowel in Ilya's order. The word is the existing `calib.common.continue`. -->
+{#snippet continueTourButton()}
+	{#if capturedCount < ALL_VOWELS.length}
+		<button type="button" class="wizard-secondary" onclick={continueTour}>{T('calib.common.continue')}</button>
+	{/if}
+{/snippet}
+
 {#snippet challengingInvite()}
 	{#if !challengingOffered && defaultsComplete}
 		<button type="button" class="wizard-secondary" onclick={addChallengingVowels}>
@@ -1159,8 +918,8 @@
 		<thead>
 			<tr>
 				<th scope="col">{T('calib.common.vowelWord')}</th>
-				<th scope="col">{@render frSym(1)}</th>
-				<th scope="col">{@render frSym(2)}</th>
+				<th scope="col"><FrSym n={1} /></th>
+				<th scope="col"><FrSym n={2} /></th>
 				{#if showActions}
 					<th scope="col"><span class="visually-hidden">{T('calib.roster.actionsHeader')}</span></th>
 				{/if}
@@ -1192,8 +951,7 @@
 								<!-- The derived siglum (Dann, 2026-07-11): ≈ joins the
 								     calibration sigla (✓ captured, ↻ provisional) marking
 								     synthetic values. aria-hidden: the word "Estimated"
-								     already says it for screen readers. The matching
-								     Pacifier node badge is with Kimi for review. -->
+								     already says it for screen readers. -->
 								{#if f.reading === 'estimated'}<span aria-hidden="true">≈&nbsp;</span>{/if}
 								{readingLabel(f.reading)}
 							</span>
@@ -1251,10 +1009,6 @@
 	     Rendered unconditionally so the region exists before its first
 	     update, which some screen readers require to announce reliably. -->
 	<div class="visually-hidden" role="status">{logAnnounce}</div>
-	<!-- The hold banner's persistent live region (Kimi's review, 2026-07-11):
-	     always in the DOM so its first announcement is never missed; the
-	     visual banner below renders conditionally and carries no aria-live. -->
-	<div class="visually-hidden" role="status">{holdAnnounce}</div>
 
 	<!-- THE Q3 COLLAPSE HEADER IS GONE, N.114b item 8, RULED BY DANN 2026-09-10
 	     walking `8278429`. Kimi §A.28 built it to cede the score drawer (then Fit's) to the
@@ -1367,81 +1121,7 @@
 			</div>
 		{:else if phase === 'capture'}
 			<div class="wizard-phase">
-				<div class="wizard-progress" role="status" aria-live="polite">
-					{#if currentVowel}
-						{T('calib.common.vowelWord')} {queueIndex + 1} {T('calib.common.of')} {queue.length} — {@render vowelTag(currentVowel!)}
-					{:else}
-						{T('calib.capture.allSet')}
-					{/if}
-				</div>
-				{#if currentVowel}
-					<p class="wizard-cue">
-						{T('calib.capture.cuePrefix')} {@render vowelTag(currentVowel!)} {T('calib.capture.cueSuffix')}
-					</p>
-				{/if}
-				<div class="wizard-pacifier-wrap">
-					<Pacifier
-						bind:this={pacifierRef}
-						session={captureSession}
-						{voiceType}
-						initialFormants={pacifierFormants}
-						onVowelCaptured={handleVowelCaptured}
-						onProfileChange={handleProfileChange}
-						onRetakeRolledBack={handleRolledBack}
-						onVowelSkipped={handleVowelSkipped}
-						{language}
-					/>
-					{#if paused}
-						<div class="wizard-catcher" role="presentation"></div>
-					{/if}
-					{#if holdActive}
-						<div class="wizard-catcher" role="presentation" onpointerdown={interruptHold}></div>
-					{/if}
-				</div>
-				<!-- The hold slot (Dann's direction, 2026-07-11, evening): the
-				     post-capture banner sits directly beneath the quadrilateral
-				     and above the roster, and the slot's height is reserved
-				     whether or not a banner is showing, so the roster never
-				     shifts when one appears — the same layout-stability
-				     principle the static ten-row roster serves. -->
-				<div class="wizard-hold-slot">
-					{#if paused}
-						<div class="wizard-inline-banner">
-							<p>{T('calib.capture.paused')}</p>
-							<button type="button" class="wizard-primary" onclick={togglePause}>{T('calib.capture.resumeButton')}</button>
-						</div>
-					{:else if holdActive && holdVowel}
-						<div class="wizard-inline-banner">
-							<p>
-								{#if holdKind === 'good'}
-									{@render vowelTag(holdVowel!)}{T('calib.capture.hold.captured')}
-								{:else if holdKind === 'rolled-back'}
-									{T('calib.capture.hold.rolledBack')}
-								{:else}
-									{T('calib.capture.hold.noted')}
-								{/if}
-							</p>
-							<div class="wizard-hold-actions">
-								<button type="button" onclick={holdContinue}>{T('calib.common.continue')}</button>
-								<button type="button" onclick={holdRetake}>{T('calib.common.retake')}</button>
-							</div>
-						</div>
-					{/if}
-				</div>
-				{@render rosterTable(false)}
-				{#if !paused && !(holdActive && holdVowel) && currentVowel}
-					<div class="wizard-quiet-actions">
-						<button type="button" class="wizard-pause" onclick={togglePause}>{T('calib.capture.pauseButton')}</button>
-						{#if defaultsComplete}
-							<!-- The escape hatch (Kimi's review): only offered once the
-							     seven defaults are complete, i.e. during the challenging
-							     tail or a re-take pass, never mid-tour. -->
-							<button type="button" class="wizard-pause" onclick={returnToSummary}>
-								{T('calib.capture.returnToSummary')}
-							</button>
-						{/if}
-					</div>
-				{/if}
+				<!-- The room notice (N.199 Step 8, B2): raised by `beginCapture` when the room read lively, above the screen so it is seen. -->
 				{#if toastVisible}
 					<div class="wizard-toast" role="status">
 						<p>
@@ -1455,6 +1135,8 @@
 						>
 					</div>
 				{/if}
+				<VowelCapture session={captureSession} {language} {voiceType} {profile} startVowel={opening.start} pass={opening.pass}
+					onCaptured={commitReading} onTake={recordTake} onReturn={() => (phase = 'summary')} onClearAll={confirmReset} />
 			</div>
 		{:else if phase === 'summary'}
 			<div class="wizard-phase">
@@ -1469,6 +1151,8 @@
 						{T('calib.summary.savedLede')}
 					</p>
 					{@render rosterTable(true)}
+					<SummarySheet {profile} {voiceType} {language} voiceName={activeVoice?.name} />
+					{@render continueTourButton()}
 					{@render challengingInvite()}
 					{@render characteristicsButton()}
 				{:else}
@@ -1476,6 +1160,8 @@
 						{capturedCount} {T('calib.common.of')} {ALL_VOWELS.length} {T('calib.summary.progressLedeSuffix')}
 					</p>
 					{@render rosterTable(true)}
+					<SummarySheet {profile} {voiceType} {language} voiceName={activeVoice?.name} />
+					{@render continueTourButton()}
 					{@render challengingInvite()}
 					<!-- FILLED FINISH LEADS, N.114b item 9, RULED BY DANN 2026-09-10:
 					     "Filled Finish, ghost Add voice characteristics, ghost Start
@@ -1497,12 +1183,11 @@
 					</div>
 				{:else}
 					<!-- A GHOST PILL, N.114b item 9, RULED BY DANN 2026-09-10. It was
-					     `.wizard-pause`, the underlined text link the capture phase's
-					     Pause and its return-to-summary still wear; on this surface
-					     it is the third action in a column of actions, so it takes
-					     the same `.wizard-secondary` recipe as Add voice
-					     characteristics above it. Same handler, same string; the two
-					     capture-phase links keep `.wizard-pause`. -->
+					     an underlined text link (`.wizard-pause`, deleted with the
+					     wheel, N.199 Step 8); on this surface it is the third action
+					     in a column of actions, so it takes the same
+					     `.wizard-secondary` recipe as Add voice characteristics
+					     above it. Same handler, same string. -->
 					<button type="button" class="wizard-secondary" onclick={() => (confirmingReset = true)}>
 						{T('calib.summary.startOverButton')}
 					</button>
@@ -1659,18 +1344,6 @@
 		border: 0;
 	}
 
-	/* The resonance symbol: italic variable, upright subscript, subscript
-	   slightly smaller than the base (Dann, 2026-07-10). */
-	.fr-sym em {
-		font-style: italic;
-		font-weight: inherit;
-	}
-	.fr-sym sub {
-		font-style: normal;
-		font-size: 0.72em;
-		line-height: 1;
-	}
-
 	/* Drawer kinship (Dann, 2026-07-12): the wizard adopts Ilya's drawer
 	   vocabulary — the phase heading renders in the section-label recipe
 	   (sans smallcaps, 0.12em tracking, the tab's accent colour: sage on
@@ -1813,32 +1486,6 @@
 		background: var(--sage);
 		/* No CSS transition: the width is driven per frame from one clock, so a
 		   transition would add a second, slower clock that disagrees with it. */
-	}
-
-	.wizard-progress {
-		font-family: var(--font-ui, var(--font-sans));
-		font-size: 0.8125rem;
-		letter-spacing: 0.02em;
-		color: var(--ink-tertiary);
-		text-transform: uppercase;
-	}
-	.wizard-cue {
-		margin: 0;
-		font-family: var(--font-ui, var(--font-sans));
-		font-size: 0.9375rem;
-		color: var(--ink-secondary);
-		text-align: center;
-	}
-
-	.wizard-pacifier-wrap {
-		position: relative;
-		width: 100%;
-	}
-	.wizard-catcher {
-		position: absolute;
-		inset: 0;
-		z-index: 2;
-		cursor: default;
 	}
 
 	/* ── The resonance roster (Dann's direction, 2026-07-10) ─────────────────
@@ -2012,28 +1659,6 @@
 		line-height: 1.4;
 	}
 
-	.wizard-quiet-actions {
-		display: flex;
-		gap: 0.75rem;
-		align-items: center;
-		justify-content: center;
-		flex-wrap: wrap;
-	}
-
-	/* The hold slot: space for the post-capture banner is reserved even
-	   while empty (Dann's direction, 2026-07-11, evening), so the roster
-	   below holds still when a banner lands. The min-height covers the
-	   banner's tallest common form (a two-line message plus the
-	   Continue/Re-take row); a rarer taller wrap grows the slot, never
-	   overlaps. */
-	.wizard-hold-slot {
-		width: 100%;
-		min-height: 6.5rem;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
-
 	.wizard-inline-banner {
 		display: flex;
 		flex-direction: column;
@@ -2070,17 +1695,6 @@
 	.wizard-hold-actions button:hover {
 		border-color: var(--sage);
 		color: var(--sage-ink);
-	}
-
-	.wizard-pause {
-		font-family: var(--font-ui, var(--font-sans));
-		font-size: 0.8125rem;
-		color: var(--ink-tertiary);
-		background: transparent;
-		border: none;
-		text-decoration: underline;
-		cursor: pointer;
-		padding: 0.25rem 0.5rem;
 	}
 
 	.wizard-toast {

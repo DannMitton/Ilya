@@ -66,7 +66,7 @@
 	import { inkPng, toGreyscalePng } from '$lib/reader/page-image';
 	import { hasStaves } from '$lib/reader/staff-detect';
 	import { routePdf, type PdfRoute } from '$lib/score/ingestion/first-staved-page';
-	import { readScanAsScore, readingWait } from '$lib/omr/scan';
+	import { photoWorkerArgs, readScanAsScore, readingWait } from '$lib/omr/scan';
 	import { restoreStoredScan, type KeptReading } from '$lib/omr/restore';
 	import { formatLabelKey } from './format-label';
 	import {
@@ -142,10 +142,8 @@
 	   DANN'S RULING OF 2026-08-21 IS NOT REVERSED, IT IS SPENT. It said the
 	   score box says one sentence and the format list sits outside it. There is
 	   no score box: there is one intake, and `RootPanel.svelte` draws it. The
-	   two strings that sentence was assembled from, `upload.drop.title` and
-	   `upload.drop.browse`, stay in `i18n.ts` unused, as does
-	   `upload.drop.acceptedNow`, because the French table is not ruled yet and a
-	   ratified French string is not this ship's to delete.
+	   strings that sentence was assembled from (`upload.drop.*`) were removed
+	   from `i18n.ts` in the closing polish lane, 2026-11-12.
 
 	   N.70'S RULING TRAVELLED WITH THE PICKER IT GOVERNS. `RootPanel` holds the
 	   two file inputs now and carries the whole reasoning: iOS matches `accept`
@@ -370,7 +368,7 @@
 		let ocrText = '';
 		try {
 			const { createWorker } = await import('tesseract.js');
-			const worker = await createWorker('rus');
+			const worker = await createWorker(...photoWorkerArgs(location.origin));
 			const { data: { text } } = await worker.recognize(file);
 			await worker.terminate();
 			ocrText = text;

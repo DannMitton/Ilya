@@ -25,8 +25,14 @@ describe('READER_STAMP', () => {
 	   vowel's ink, and no syllable for a grace note or a chord tone). If it were left at 4, a scan kept before this build would be reused and its
 	   syllables never seated again. */
 	it('is the fifth underlay reader, B0 and B0g, and a scan kept under the fourth is stale', () => {
-		expect(UNDERLAY_READER).toBe('underlay@5');
 		expect(READER_STAMP).not.toBe(`homr-web@${HOMR_WEB_VERSION}/${OMR_MODEL}+underlay@4`);
+	});
+
+	/* Closing polish lane, step 0b: the reader's files are served from this build. A scan kept under `underlay@5` was kept while they were not,
+	   so it has no words and is read again once (Dann 2026-11-11 23:37). */
+	it('is the sixth underlay reader, the files served, and a scan kept under the fifth is stale', () => {
+		expect(UNDERLAY_READER).toBe('underlay@6');
+		expect(READER_STAMP).not.toBe(`homr-web@${HOMR_WEB_VERSION}/${OMR_MODEL}+underlay@5`);
 	});
 
 	it('carries the underlay reader: joining them re-reads every stored scan once', () => {

@@ -96,7 +96,7 @@ test('the page runs the frame, the conclusion, then the moments, the totals, and
 	await openInsights(page, 'en');
 	// Round 2's order (QUEUE row 66; `PRODUCT.md`, "How an Insights page is organized").
 	const text = (await page.locator('.insights-container').innerText()).replace(/\s+/g, ' ');
-	const order = ['Ilya does not invent advice', 'How this key sits for you', 'The measures behind these reasons'].map((w) => text.indexOf(w));
+	const order = ['Ilya’s advice is drawn from the intersection of your voice', 'How this key sits for you', 'The measures behind these reasons'].map((w) => text.indexOf(w));
 	expect(order.every((i) => i >= 0), JSON.stringify(order)).toBe(true);
 	expect([...order].sort((a, b) => a - b)).toEqual(order);
 	const moments = text.indexOf('Where this piece meets your voice');

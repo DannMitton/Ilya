@@ -116,8 +116,8 @@ search, page layout, and `staff-renderer.ts`, which engraves a staff as SVG.
 - `src/lib/voice/` is the singer's voice. `CalibrationWizard.svelte` is the calibration wizard ("Your
   Resonances"), `profileStore.ts` keeps the saved voices (still under the
   `shane.profiles.v2` key, by invariant 10), `engine/` is the microphone
-  capture and its signal processing, and `pacifier/` is the capture's
-  visual timer.
+  capture and its signal processing, and `VowelCapture.svelte` with `capture-ritual.svelte.ts` is the
+  capture screen (N.199; the vowel wheel, `pacifier/`, is deleted).
 - `src/lib/text/` is the TEXT document's own logic: where lines break (`break-*.ts`),
   which of the song's two texts, Lyrics or Poem, is shown (`input-views.svelte.ts`),
   what each shows (`witness-lines.ts`, `word-marks.svelte.ts`), and how the poem is

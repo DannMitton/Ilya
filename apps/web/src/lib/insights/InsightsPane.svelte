@@ -82,7 +82,7 @@
 	import { breakOffsets, lineBoxes } from '$lib/insights/line-breaks';
 	import { paginate, type Segment } from '$lib/insights/paginate';
 	import { browserStore, rangeOfferDeclined, recordRangeOfferDecline } from '$lib/insights/range-offer-decline';
-	import { composeIdentityLine, genericLede, methodLineKey, restsOnSamples } from '$lib/insights/identity';
+	import { composeIdentityLine, genericLede, methodLineKey, placeholderLabel, restsOnSamples } from '$lib/insights/identity';
 	import { isUsable } from '$lib/voice/engine/plausibility';
 	import type { VoiceTypeChoice } from '$lib/voice/profileStore';
 
@@ -373,7 +373,7 @@
 						: null,
 				cycles: model.figure?.cycles ?? null,
 				turns: vowelResolver ? vowelTurns(analysisScore, adapted.snapshot, vowelResolver) : null,
-				placeholders, generic: adapted.generic,
+				placeholders, generic: adapted.generic, voiceTypeLabel: placeholderLabel(adapted.generic, voiceType, language),
 				method: methodLine,
 				footnote: model.tessitura.measured ? T('insights.footnote.tessitura') : null,
 			},

@@ -89,10 +89,10 @@ export function putBack(metadata: SongMetadata, emptied: FieldValues): { metadat
 
 /**
  * What the card prints beside an aria's title (Dann, 2026-11-09 22:13: the role and the opera sit in their own fields, in Russian and
- * English, and the card shows them in the interface language). English: «Yeletsky · Pique Dame (Пиковая дама)». French: the data
- * holds no French name for a role or an opera, and one is not made up here, so French prints the Russian names: «Елецкий · Пиковая дама».
- * No words are added, so there is no string to ratify: a middle dot and a pair of parentheses.
+ * English, and the card shows them in the interface language). English: «Yeletsky · Pique Dame (Пиковая дама)». French takes the English
+ * shape with the French names (ratified by Dann 2026-11-11 22:18, `operaFr` and `characterFr` in the data): «Yeletski · La Dame de pique
+ * (Пиковая дама)». No words are added, so there is no string to ratify: a middle dot and a pair of parentheses.
  */
 export function operaLine(opera: PoemOpera, language: Language): string {
-	return language === 'en' ? `${opera.characterEn} \u00b7 ${opera.operaEn} (${opera.operaRu})` : `${opera.characterRu} \u00b7 ${opera.operaRu}`;
+	return language === 'en' ? `${opera.characterEn} \u00b7 ${opera.operaEn} (${opera.operaRu})` : `${opera.characterFr} \u00b7 ${opera.operaFr} (${opera.operaRu})`;
 }

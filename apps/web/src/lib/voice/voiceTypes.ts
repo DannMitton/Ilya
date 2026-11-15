@@ -95,3 +95,17 @@ export function voiceTypePrint(choice: VoiceTypeChoice | undefined, language: La
 	const label = t(key, language);
 	return KEEPS_CAPITAL[language].has(id) ? label : label.charAt(0).toLocaleLowerCase(language) + label.slice(1);
 }
+
+/** A French label that begins with a vowel letter (a, e, i, o, u, y and their accented forms), never h: « d’octaviste », not « de octaviste ». */
+const VOWEL_LETTER = /^[aeiouy]/;
+const startsWithVowelLetter = (label: string) => VOWEL_LETTER.test(label.normalize('NFD').toLowerCase());
+
+/**
+ * Fills `{voiceType}` with the label `voiceTypePrint` gives. In French the « de » before it elides to « d’ » when the label begins with a vowel
+ * letter (« d’octaviste », « de basse », « de heldentenor »). One helper for the three fills (MELODY's subtitle, INSIGHTS' lede, and the
+ * vowel chart's caption), so they cannot disagree. Closing polish lane, step 2, desk default 2026-11-11.
+ */
+export function fillVoiceType(template: string, label: string, language: Language): string {
+	if (language === 'fr' && startsWithVowelLetter(label)) template = template.replace('de {voiceType}', 'd\u2019{voiceType}');
+	return template.replace('{voiceType}', label);
+}

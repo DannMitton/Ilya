@@ -27,6 +27,8 @@
 		/** Rows 109 and 110: the poem's words the song does not set, as `"lineIndex-wordIndex"`, drawn grey. */
 		mutedWords?: ReadonlySet<string>;
 		onwordclick?: (word: WordStackData) => void;
+		/** N.201: the word the singer tapped, as `"lineIndex-wordIndex"`. The page marks it on screen only; the mark never prints. */
+		selectedKey?: string | null;
 		/** Which text the page prints, `shown` in `+page.svelte`; the running head's tab name follows it (`text/text-header.ts`). */
 		witness?: InputView;
 		/** Whether the document prints any line at all; with none the tab name is the bare `tab.text`. */
@@ -53,6 +55,7 @@
 		glossOverrides,
 		mutedWords,
 		onwordclick,
+		selectedKey = null,
 		witness = 'lyrics',
 		documentHasLines = true,
 		contentTop,
@@ -86,7 +89,7 @@
 	>
 		{#each lines as line (line.lineNumber)}
 			<div class="verse-row">
-				<VerseLine words={line.words} {notationPrefs} {showStressDiacritics} {language} {spotReconstitution} {glossOverrides} {mutedWords} {onwordclick} />
+				<VerseLine words={line.words} {notationPrefs} {showStressDiacritics} {language} {spotReconstitution} {glossOverrides} {mutedWords} {onwordclick} {selectedKey} />
 			</div>
 		{/each}
 	</div>

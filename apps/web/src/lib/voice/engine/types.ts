@@ -3,7 +3,7 @@
  *
  * Source of record: shane-extraction-engine-spec_v1_2026-06-09.md §1. These
  * types are shared by the calibration UI now and the analytical engine later,
- * so they live at the engine boundary rather than inside the pacifier.
+ * so they live at the engine boundary rather than inside the capture component.
  */
 
 import type { Pitch } from '@ilya/score-parser';
@@ -20,7 +20,7 @@ import type { Pitch } from '@ilya/score-parser';
  * the type is declared.
  *
  * THE WIZARD IS NOT REWIRED. Its `DEFAULT_VOWELS` and `CHALLENGING_VOWELS`
- * keep their own order, which drives a rendered list and a queue; this array
+ * keep their own order, which drives the roster and the summary's invitation; this array
  * is the type's order and is only ever counted, never walked for display.
  */
 export const VOWELS = ['i', 'e', 'ɪ', 'ɨ', 'ɛ', 'a', 'ɑ', 'ʌ', 'o', 'u'] as const;
@@ -86,6 +86,12 @@ export interface CalibratedFormant {
 	 * estimated values, which were never measured in a room at all.
 	 */
 	noiseFloor?: 'measured' | 'unmeasured';
+	/**
+	 * N.199 Step 5: what the singer could see while singing this reading: `hidden` (the chart and numbers were hidden) or `zone` (the
+	 * chart and its zones were shown; Phase 2 adds `live`). Optional and additive: absent on every reading taken before it, and on
+	 * every reading taken by the wheel. A record of how the reading was taken, never a judgement of it.
+	 */
+	visibility?: 'hidden' | 'zone';
 	source:
 		| 'measured-user'
 		| 'derived-retracted-i'

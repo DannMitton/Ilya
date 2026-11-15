@@ -19,7 +19,6 @@
 	 */
 	import { tick } from 'svelte';
 	import { t, type Language } from '$lib/i18n';
-	import StationHeader from './StationHeader.svelte';
 	import type { SongRow } from '$lib/library/songs';
 
 	interface Props {
@@ -42,14 +41,6 @@
 		onnew: () => void;
 		onrename: (id: string, name: string) => void;
 		ondelete: (id: string) => void;
-		/**
-		 * N.65 ship B. REPERTOIRE retracts, like every other header. Handed
-		 * in rather than held here, for the same reason this file holds no
-		 * logic: the open set is one object in `+page.svelte` and every
-		 * station reads the same one.
-		 */
-		expanded: boolean;
-		ontoggle: () => void;
 	}
 
 	let {
@@ -64,8 +55,6 @@
 		onnew,
 		onrename,
 		ondelete,
-		expanded,
-		ontoggle,
 	}: Props = $props();
 
 	let renamingId = $state<string | null>(null);
@@ -111,14 +100,11 @@
 	}
 </script>
 
+<!-- N.201: THE BAND HEAD REPLACES THE STATION HEADER. REPERTOIRE is a band now
+     (`Drawer.svelte`), which draws the name and the chevron and holds this list
+     as its body, so the `StationHeader` this file drew is gone and the open
+     state is the band's. -->
 <div class="station song-list">
-	<StationHeader
-		label={t('songs.heading', language)}
-		expanded={expanded}
-		ontoggle={ontoggle}
-		controls="station-songs"
-	/>
-
 	<!-- N.65 ship one. THE BODY IS ITS OWN FLEX COLUMN. `.song-list` used to
 	     be the column, so its 6px gap landed between the header and the list
 	     ON TOP of the header's own 0.4rem, and SONGS measured 12.39px to its
@@ -126,7 +112,6 @@
 	     ruling 2, and this is where it was broken. The 6px between the list,
 	     the error, and New song is unchanged; it just belongs to the body
 	     now instead of to the whole station. -->
-	{#if expanded}
 	<div class="station-body" id="station-songs">
 	<ul class="songs">
 		{#each songs as song (song.id)}
@@ -155,13 +140,18 @@
 					>
 						{song.label}
 					</button>
-					<button type="button" class="song-btn" onclick={() => void startRename(song)}>
-						{t('songs.rename', language)}
-					</button>
-					{#if canDelete}
-						<button type="button" class="song-btn" onclick={() => ondelete(song.id)}>
-							{t('songs.delete', language)}
+					<!-- N.201: Rename and Delete show on the song in hand only; the
+					     other rows read as titles. A row that cannot be read keeps
+					     both (its recorded reason, below). -->
+					{#if song.id === activeId || song.readFailure}
+						<button type="button" class="song-btn" onclick={() => void startRename(song)}>
+							{t('songs.rename', language)}
 						</button>
+						{#if canDelete}
+							<button type="button" class="song-btn" onclick={() => ondelete(song.id)}>
+								{t('songs.delete', language)}
+							</button>
+						{/if}
 					{/if}
 				{/if}
 			</li>
@@ -191,7 +181,6 @@
 		</div>
 	{/if}
 	</div>
-	{/if}
 </div>
 
 <style>

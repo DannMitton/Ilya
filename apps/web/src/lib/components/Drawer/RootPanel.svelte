@@ -107,9 +107,9 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 	// this tab. This panel no longer sees notationPrefs at all.
 </script>
 
-<!-- ── REPERTOIRE. N.108: the first station in the Piece group, and the
-     group's band above it is its boundary, so it draws no rule of its own.
-     Its own arrangement is untouched. -->
+<!-- ── REPERTOIRE'S BODY, N.201: this panel is the first band's contents, the
+     song list and then EXPORT AND IMPORT as a station inside it. The band head
+     above is the boundary, so the list draws no rule of its own. -->
 <SongList
 	{language}
 	songs={songLibrary.songs}
@@ -122,8 +122,6 @@ import { STATION_IDS, type SectionSet } from './sections.svelte';
 	onnew={songLibrary.onnew}
 	onrename={songLibrary.onrename}
 	ondelete={songLibrary.ondelete}
-	expanded={sections.has(STATION_IDS.repertoire)}
-	ontoggle={() => sections.toggle(STATION_IDS.repertoire)}
 />
 
 

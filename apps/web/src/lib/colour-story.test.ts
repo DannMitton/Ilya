@@ -4,7 +4,6 @@
  * Half one: no retired colour comes back. Every *.svelte, *.ts, *.css, *.html, *.js, and *.webmanifest under
  * apps/web/src, apps/web/static, and each package src folder is read (excluding __approved__/ and this file), and any
  * case-insensitive, word-bounded match of a retired hex, or of a retired decimal triplet inside rgb( / rgba(, fails.
- * `--surround-voice` (#D8D0E0) is not retired and is not on the list.
  *
  * Half two: the token pairs that carry words clear WCAG 2.2 AA, computed from app.css and never from literals.
  */

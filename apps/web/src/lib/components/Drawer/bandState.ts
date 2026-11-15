@@ -22,7 +22,7 @@
  * D) and the tree's own habit at `inspector.unknownStress`.
  */
 
-import { t, type Language } from '$lib/i18n';
+import { t, tv, type Language } from '$lib/i18n';
 
 /** The one separator. Plates B, C and D. */
 const DOT = ' · ';
@@ -227,7 +227,9 @@ export function stackActions(
  * line already uses, for the same reason: it reads "Voice: {voice}" and its
  * French is ratified. A voice with readings but no name falls out of the line
  * rather than printing an empty pair of guillemets, which is `VoiceAnchor`'s
- * own rule and this is the second reader of it.
+ * own rule and this is the second reader of it. The count is of USABLE
+ * readings (`usableReadingCount`), as the anchor's "calibrated" is; a voice
+ * whose readings were all refused prints the name with no count.
  *
  * NO VOICE RETURNS '', band and nothing under it. The export keeps its name
  * `scoreStateLine`: the band id is still `scoreMarkup`, a wire value.
@@ -247,4 +249,45 @@ export function scoreStateLine(
 					.replace('%s', String(totalVowels))
 			: null,
 	]);
+}
+
+/**
+ * REPERTOIRE's closed line, N.201 step 4: `1 song`, `16 songs`, « 1 chant »,
+ * « 16 chants », and NO LINE AT ZERO. The count is `songRows.length`
+ * (`+page.svelte`), the rows the list draws. Two keys, as
+ * `select.resultCount` has two; French would take the singular at 0 (see
+ * `countText`), which the ratified `.one` string cannot draw, so a library
+ * with nothing in it says nothing.
+ */
+export function repertoireStateLine(songCount: number, language: Language): string {
+	if (songCount <= 0) return '';
+	return songCount === 1
+		? t('songs.count.one', language)
+		: tv('songs.count.many', language, { n: songCount });
+}
+
+/** `1 to verify`, `3 to verify`, « 1 à vérifier »; nothing at zero. */
+export function verifyCountLine(verifyCount: number, language: Language): string {
+	if (verifyCount <= 0) return '';
+	return verifyCount === 1
+		? t('analysis.verifyCount.one', language)
+		: tv('analysis.verifyCount.many', language, { n: verifyCount });
+}
+
+/**
+ * ANALYSIS's closed line, N.201 step 4 (Fable's board review, offers c and f).
+ * With a word chosen: that word and its IPA, as the word stack shows them (the
+ * caller passes `shownIpaAt`'s string), joined by the band lines' own
+ * separator and with no new string. With none chosen: the count of words
+ * labelled "verify" on the page, or nothing at zero. A chosen word with no IPA
+ * shows the word alone.
+ */
+export function analysisStateLine(
+	chosen: { cyrillic: string } | null,
+	shownIpa: string | null,
+	verifyCount: number,
+	language: Language,
+): string {
+	if (chosen) return joinParts([chosen.cyrillic, shownIpa]);
+	return verifyCountLine(verifyCount, language);
 }

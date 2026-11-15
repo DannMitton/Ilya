@@ -34,8 +34,10 @@
  * bump already queued).
  */
 import type { IntakeAnswers } from '@ilya/score-parser';
+import type { TakeRecord } from './takes';
 import type { Vowel, CalibratedFormant, VoiceCharacteristics, VoiceType } from './engine/types';
 import type { FryRangeVerdict } from './engine/readiness';
+import { isUsable } from './engine/plausibility';
 import type { Outcome } from '$lib/library/types';
 import { profileSave } from './profile-save.svelte';
 
@@ -129,6 +131,12 @@ export interface StoredVoice {
 	 * which reads as every question skipped.
 	 */
 	intake?: IntakeAnswers;
+	/**
+	 * N.199 Step 5 (written for every singer since Step 8): a record of the takes on the new capture screen, 50 a vowel, oldest dropped
+	 * (`takes.ts`). Optional and additive, the same discipline as the fields above. Start over clears it; a full store drops it
+	 * before it refuses the profile (`saveStore`).
+	 */
+	takes?: TakeRecord[];
 }
 
 /** Voice type slice A: the three fields the voice-type intake writes together. */
@@ -167,13 +175,26 @@ export interface ProfileStore {
  * Whether a working profile holds any reading at all.
  *
  * LIFTED here from CalibrationWizard.svelte by N.73 S3, unchanged. It decides
- * two things that must never disagree: which phase the wizard opens on, and
- * what the drawer's voice anchor says about the voice. Two copies of this
- * predicate would be two answers to "is this voice calibrated," so there is
- * one, and it lives beside the store whose shape it reads.
+ * which phase the wizard opens on. It no longer decides what the drawer's voice
+ * anchor says: the anchor follows `usableReadingCount`, because a voice whose
+ * readings were all refused has nothing the app can use and the button must say
+ * Calibrate. The wizard keeps this wider test on purpose, so that a singer whose
+ * readings were all refused still opens on the summary, where each reading can
+ * be retaken. The two differ by design (desk default, 2026-11-12).
  */
 export function hasAnyReadings(f: Partial<Record<Vowel, CalibratedFormant>>): boolean {
 	return Object.keys(f).length > 0;
+}
+
+/**
+ * How many of a working profile's readings the app may use: not refused by the
+ * plausibility guard, or refused and kept by the singer (`isUsable`,
+ * `voice/engine/plausibility.ts`). The Drawer's voice anchor says "calibrated"
+ * when this is above zero, and the Voice band's state line prints it as its
+ * count. The wizard does not use it (see `hasAnyReadings`).
+ */
+export function usableReadingCount(f: Partial<Record<Vowel, CalibratedFormant>>): number {
+	return Object.values(f).filter((r) => r !== undefined && isUsable(r)).length;
 }
 
 /** A collision-safe id; crypto.randomUUID with a time-random fallback. */
@@ -291,7 +312,12 @@ export function loadStore(migratedName: string): ProfileStore {
  * session store stands.
  */
 export function saveStore(store: ProfileStore): Outcome {
-	const outcome = write(store);
+	let outcome = write(store);
+	// N.199 Step 5: the take record is the first thing a full store gives up, before it refuses the singer's profile.
+	if (!outcome.ok && outcome.reason === 'quota-exceeded' && store.voices.some((v) => v.takes?.length)) {
+		for (const v of store.voices) delete v.takes;
+		outcome = write(store);
+	}
 	profileSave.failure = outcome.ok ? null : outcome.reason;
 	return outcome;
 }

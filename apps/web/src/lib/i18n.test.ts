@@ -57,8 +57,7 @@ describe("the loupe's French", () => {
 			'loupe.lyric.melisma':   { en: 'This note sustains the syllable',   fr: 'Cette note prolonge la syllabe' },
 			'calib.common.retake':   { en: 'Re-take',                           fr: 'Réessayer' },
 			'loupe.beat':            { en: 'beat %b',                          fr: 'temps %b' },
-			'loupe.beatPulse':       { en: 'beat %b, pulse %p',                 fr: 'temps %b, division %p' },
-			'loupe.undo.startOver':  { en: 'placement started over',           fr: 'placement recommencé' }
+			'loupe.beatPulse':       { en: 'beat %b, pulse %p',                 fr: 'temps %b, division %p' }
 		};
 
 		for (const [key, expected] of Object.entries(ratified)) {
