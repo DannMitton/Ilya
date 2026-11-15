@@ -20,6 +20,7 @@
 	import FrSym from '../FrSym.svelte';
 	import ChartLayers from './ChartLayers.svelte';
 	import { buildChartModel } from './model';
+	import { labelSizeFor } from './geometry';
 	import { readingRows } from './readings';
 	import { zoneColour } from './colours';
 
@@ -45,6 +46,11 @@
 	/** Shorter on paper: the ratified legend and provenance lines are longer than the drafts were, and one letter sheet holds the sheet (measured, Step 6b). */
 	const H = $derived(forPrint ? 360 : 420);
 
+	// The grid's numbers: on screen the SVG scales to its container, so a size in chart units shrinks with it; they are sized to hold 11 CSS px at
+	// any width (as `VowelChart.svelte` does), and `ChartLayers` leaves out a number that would meet another (Step 2). Print is a second instance
+	// (`print-sheet.ts`) in a root that is `display: none` on screen, so it is chosen by `forPrint`, never by a measured width: it keeps 12 units.
+	let chartWidth = $state(0);
+	const labelSize = $derived(forPrint ? 12 : labelSizeFor(W, chartWidth));
 	const model = $derived(buildChartModel(profile, voiceType));
 	const rows = $derived(readingRows(profile, language));
 	const allTen = $derived(model.allTen);
@@ -68,7 +74,7 @@
 			<span class="axis-sym"><FrSym n={1} /></span>
 			<span>{tv('sheet.axis.open', language)}</span>
 		</div>
-		<svg class="sheet-chart" viewBox="0 0 {W} {H}" role="img" aria-label={tv('sheet.chartAlt', language)} preserveAspectRatio="xMidYMid meet">
+		<svg class="sheet-chart" bind:clientWidth={chartWidth} viewBox="0 0 {W} {H}" role="img" aria-label={tv('sheet.chartAlt', language)} preserveAspectRatio="xMidYMid meet">
 			<rect x="0" y="0" width={W} height={H} class="chart-ground" />
 			<ChartLayers
 				view={model.full}
@@ -79,7 +85,7 @@
 				sung={model.sung}
 				hullDashed={!allTen}
 				symbolSize={22}
-				labelSize={12}
+				{labelSize}
 			/>
 			<rect x="0.6" y="0.6" width={W - 1.2} height={H - 1.2} class="chart-frame" />
 		</svg>

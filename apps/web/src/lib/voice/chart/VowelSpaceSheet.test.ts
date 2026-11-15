@@ -90,3 +90,11 @@ describe('the sheet', () => {
 		expect(html({ voiceName: 'Dann' })).toContain('Dann');
 	});
 });
+
+describe('the sheet’s grid numbers (readings brief, Step 4)', () => {
+	const numbersSize = (h: string) => h.match(/<g class="numbers[^"]*"[^>]*font-size="(\d+)"/)?.[1];
+	it('on screen are sized by the rendered width (the frame’s own width before it is measured), and in print are 12 units whatever is measured', () => {
+		expect(numbersSize(html({ profile: pick('i') }))).toBe('11');
+		expect(numbersSize(html({ profile: pick('i'), forPrint: true }))).toBe('12');
+	});
+});

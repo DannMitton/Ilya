@@ -33,3 +33,20 @@ The brief gives a baseline for gate 4 only; the other counts are as run here.
 **Picture** (looked at): `report-code-n199-readings-pictures/step2-phone-fr-pause.png` and `step2-phone-en-pause.png`, phone 390 by 844 at 3x, mid-take on [i] in the dev server on the stub. French: the columns read 2200, 2000, 1800, 1600, 1400 with clear space between them (the earlier picture read "190018001700"); the rows read 250, 300, 350, 400; the 450 row's number is not drawn and its line is, so it no longer meets "langue avancée"; the turned axis word at the right is clear of the numbers. The page was scrolled with the sticky stage up, as in the earlier picture.
 
 **Not looked at.** The estimate's widths against the served face (Source Sans 3) on every one of the 410 views; I looked at one view in two languages. The sheet's numbers are pictured under Step 4.
+
+Gates after Step 2: 1 462, 2 248, 3 0 errors and 12 warnings, **4 5640 passed, 1 skipped (5641)**, 5 785 and 5 skipped, 6 178, 7 155, 8 OK. All eight pass. Gate 4: 5632 before, 5640 after.
+
+## Step 4: the sheet's numbers hold a readable size on screen
+
+**Built** (`VowelSpaceSheet.svelte`). The grid numbers' size is `forPrint ? 12 : labelSizeFor(720, chartWidth)`. On screen `chartWidth` is `bind:clientWidth` on the sheet's `<svg>`, so the numbers hold 11 CSS px at any width, as `VowelChart.svelte` does; before the first measure it is the frame's own width (11 units). The choice is by `forPrint`, not by a measured width: print is a second instance in a root that is `display: none` on screen (`print-sheet.ts:28`, `VowelSpaceSheet.svelte` print root), where a measured width would be 0. Print keeps 12 units as today, and Step 2's rule applies to both (`grid-numbers.test.ts` covers the sheet at 300, 430, and 720 px on screen and at 720 by 360 in print). The `sheet.` gloss at `i18n.ts:69` gains a consumer only in Step 1, so it is updated there.
+
+**Test** (`VowelSpaceSheet.test.ts`, 1 new): on the server the numbers group is `font-size="11"` on screen and `12` for print. Gate 4: 5641 after this step (5640 before).
+
+**Printed sheet** (`pdfinfo`, from the dev server, `window.print` stubbed, the print root mounted, `page.pdf` at Letter, `emulateMedia` print): **Pages: 1** in English and in French (`step4-print-en.pdf`, `step4-print-fr.pdf`). This is Chromium's headless PDF of the page with the print root, not the browser's print dialogue.
+
+**Pictures** (looked at, all six), `report-code-n199-readings-pictures/`:
+- `step4-sheet-desk-en.png`, `step4-sheet-desk-fr.png`: the Drawer on a 1440 by 900 window at 2x, ten vowels sung. The numbers are small and legible; "1300 1200 1100" is the tightest run, with a gap of a few pixels, not touching.
+- `step4-sheet-phone-en.png`, `step4-sheet-phone-fr.png`: 390 by 844 at 3x. Columns read 1900 1700 1500, 1200, 1000 900 800 700; rows 300 to 800. No number meets another or an axis word.
+- `step4-sheet-mid-en.png`, `step4-sheet-mid-fr.png`: 430 by 900 at 2x, four vowels sung, the other six placeholders. Clear.
+
+**Not established for Step 4.** That 11 CSS px is the size on the user's own screen: the pictures are in headless Chromium at the scale named. Whether `bind:clientWidth` on an `<svg>` reports a width in every browser Ilya supports (the brief's list); it did in this Chromium, and in Safari and Firefox I did not look.
