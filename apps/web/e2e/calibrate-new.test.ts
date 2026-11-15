@@ -372,7 +372,7 @@ test.describe('the main and stop buttons hold one line (Step 8c.2)', () => {
 	const FOUR = { i: READING(296, 1705), e: READING(381, 1532), u: READING(346, 804), a: READING(600, 1250) };
 	for (const lang of ['en', 'fr'] as const) {
 		for (const w of [320, 375, 390]) {
-			test(`${lang} at ${w} px: Start and Re-take, Start over and Stop, each on one line`, async ({ page }) => {
+			test(`${lang} at ${w} px: the main and stop buttons each on one line, at rest and during a take`, async ({ page }) => {
 				test.setTimeout(90_000);
 				await page.setViewportSize({ width: w, height: 800 });
 				await open(page, { lang });

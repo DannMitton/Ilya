@@ -142,3 +142,36 @@ Every main and stop label is 44 px tall (one line) in both languages at 320, 375
 `e2e/calibrate-new.test.ts` gains, for 8c.1, two tests (390 by 844 and 375 by 667: the stage is `sticky` with the list closed, `static` open at rest, every one of ten rows wholly in view and clear of the stage at some scroll position, `sticky` during a take, `static` again at idle, `sticky` when the list is closed again), and, for 8c.2, eight (English and French, each at 320, 375, and 390: Start and Stop on one line, with a take running; and, in each, Re-take on one line at 375). The helper `open()` takes a `lang`. Gate 4 is unchanged by 8c (**5597**): the new tests are browser tests. **The eight gates on the 8c tree:** 462; 248; 0 errors, 12 warnings; 5597 passed, 1 skipped; 785, 5 skipped; 178; 155; ratchets OK.
 
 **The whole of `e2e/calibrate-new.test.ts` on the 8c tree:** one invocation, chromium project, no switch in the address, `PW_CHROMIUM_PATH=/opt/pw-browsers/chromium`, `--trace off`: **27 passed (8.5 m)** (the 17 from 8a, two for 8c.1, eight for 8c.2).
+
+## The merge with `Shane`, and lane 54
+
+`git fetch origin Shane` at the end: `origin/Shane` is still `e8f91ee7`, the commit this branch was cut from. It has not moved, so there was no merge to make and no second round of gates to run after one. The gates of record for the tip are the 8c run above (the last code change; after it only this report and four test titles changed, and `svelte-check` was re-run: 0 errors, 12 warnings).
+
+Lane 54 (`cloud-lane-54`) has not reached `Shane`. For Dann's merge, read-only: its branch is at `4ea05c5` ("N.201: report r1 and the 43 pictures (steps 1 to 5)"), cut from `463290e1`. A trial merge of it into this branch, in a throwaway worktree that I removed, **merged with no conflict** (`i18n.ts` and `routes/+page.svelte` auto-merged; this lane edits `i18n.ts` at the index lines `:58` and `:88` and above twelve keys at `:1318` to `:1460`; lane 54 edits it at `:16`, `:24`, `:69`, `:1055`, `:1769`). `scripts/ratchets.json`: lane 54's branch makes no change to it, so only this lane's wizard ceiling (2124 to 1727) is in play. **The gates on that merged tree were NOT RUN.** Whoever ships second should merge `Shane` and run all eight.
+
+## Done-when, checked
+
+- All eight gates pass on the tip; gate 4: **5662 before, 5657 after 8a, 5597 after 8b, 5597 after 8c**.
+- The whole of `e2e/calibrate-new.test.ts` on the chromium project with no switch in the address: **27 passed** in one invocation.
+- This report and its pictures, `report-code-n199-step8-pictures/` (36 for 8a and 8b, 17 for 8c, each looked at).
+- `grep` over `apps`, `packages`, `scripts` for an import from `pacifier/`: **0**; for `calibrateNewOn` or `calibrate-switch`: **0**; `lib/voice/pacifier/` does not exist.
+- The branch pushed: `cloud-lane-55`.
+
+## For Dann's walk (not built, from the brief)
+
+- **Removing one vowel's reading.** The wheel's long press went with the wheel; the new screen has Clear all and Re-take only. Not covered until N.200 builds "use Ilya's estimate for now".
+- **Whether the stage sticks at rest at all** (8c.1 is the narrow version of this question).
+- **B3's Continue next to the existing invitation** from seven sung (two buttons, one destination), and **B2's notice moving the screen down about 70 px for five seconds**.
+- Whether release may go without single-vowel removal if N.200 slips (the review's third question).
+
+## What you could not establish
+
+- **Any behaviour in Safari or Firefox**, and in particular the rendered effect of 8c.1 and 8c.2 on a phone in Safari (the desk's own open item). Every picture and measure is headless Chromium on the development server, with touch emulation; Chromium's button padding is what the widths include.
+- **The microphone path.** Every browser test and picture runs on `StubCaptureSession`. Nothing here exercised `LiveCaptureSession` on the new screen, so a take from a real voice, a real room, or a denied microphone was not seen.
+- **How the 8c.1 jump feels on a real phone**, and where it is largest in practice (see its section).
+- **Whether the room notice and the summary's Continue are right for singers**: both are DESK DEFAULTS built from the review, seen only in pictures.
+- **Whether a test should pin the new screen's screen-reader announcement.** The two assertions removed with `hold.ts` guarded the wheel's; `commitReading` still sets `logAnnounce`, but no test reads it.
+- **The printed sheet from the browser's own print dialogue**, and anything on the summary I did not change.
+- **Gates on the merge with lane 54**: not run (above).
+- **Whether other Playwright projects** (the rest of `chromium`, and `phone`) **still pass.** I ran only `e2e/calibrate-new.test.ts`. A grep found no other e2e or phone test that opens the wheel or the capture screen (Step 0), but I did not run them.
+- Lines this lane's report cites in `CalibrationWizard.svelte` before 8a (the desk's numbers from `62dc2b2f`) were re-read at `e8f91ee7` before each use; any line number in the older briefs that I did not need was not re-checked.
