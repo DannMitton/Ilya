@@ -109,7 +109,7 @@ Ilya is free software: you can redistribute it and/or modify it under the terms 
 
 Additional term under section 7(e) of the licence: the name *Ilya* and its icon are not licensed. The licence grants no right to use them, so a changed or redistributed copy must carry another name and icon.
 
-Versions of Ilya published before 2026-11-15 were released with Ilya's own code under the MIT licence; copies obtained under those terms keep them. Third-party components keep their own licences. See [NOTICES.md](./NOTICES.md).
+Third-party components keep their own licences. See [NOTICES.md](./NOTICES.md).
 
 ## Acknowledgements
 
