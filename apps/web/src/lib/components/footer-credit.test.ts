@@ -5,7 +5,8 @@
  */
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { t } from '$lib/i18n';
+import { t, tv } from '$lib/i18n';
+import { ILYA_VERSION } from '$lib/version';
 
 const read = (p: string) => readFileSync(new URL(p, import.meta.url), 'utf8');
 
@@ -19,6 +20,22 @@ describe('the footer credit', () => {
 		}
 		expect(t('footer.attribution', 'en')).toContain('CC BY-SA 4.0</a>). Made with love');
 		expect(t('footer.attribution', 'fr')).toContain('CC BY-SA 4.0</a>). Fait avec cœur');
+	});
+
+	it('carries one {version} placeholder in each language, and the footer fills it from the version module', () => {
+		for (const lang of ['en', 'fr'] as const) {
+			expect(t('footer.attribution', lang).split('{version}').length - 1, lang).toBe(1);
+		}
+		const src = read('./Paper/PageFooter.svelte');
+		expect(src).toContain("tv('footer.attribution', language, { version: ILYA_VERSION })");
+		expect(src).toContain("from '$lib/version'");
+	});
+
+	it('prints the ratified sentence with the version, in each language', () => {
+		const NB = '\u00a0';
+		const lead = (lang: 'en' | 'fr') => tv('footer.attribution', lang, { version: ILYA_VERSION }).split(' Stress data')[0].split(' Données')[0];
+		expect(lead('en')).toBe(`Free and open source, <em>Ilya</em>${NB}2026b operationalizes Craig Grayson\u2019s <em>Russian Lyric Diction</em> (University of Washington, 2012).`);
+		expect(lead('fr')).toBe(`Gratuit et à code ouvert, <em>Ilya</em>${NB}2026b met en \u0153uvre <em>Russian Lyric Diction</em> de Craig Grayson (University of Washington, 2012).`);
 	});
 
 	it('is passed to no footer as an override: every PageFooter prints the string as it is', () => {
