@@ -11,7 +11,7 @@
  *      suspicion;
  *   4. writes one table: file, asked, sung, each picker's fR1 and fR2, status, the evidence marks, and the reference.
  *
- * Until Step 3 lands there is one picker, `shipped` (the prior-led picker the app uses today). Step 3 adds `open` to `PICKERS`.
+ * There are two pickers, `shipped` (the prior-led picker the app has used) and `open` (N.200 Step 3).
  */
 import { readdirSync, readFileSync, existsSync, statSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
@@ -93,25 +93,34 @@ export interface PickerReading {
 	method: string | null;
 	steadySpread: number | null;
 	setAside: boolean | null;
+	/** The open picker's evidence marks, as one string: estimators for fR1 and fR2, comb count, runner-up, R3 and whether it is resolved. */
+	evidence: string | null;
 	note: string | null;
 }
 
 type PickerFn = (y: Float64Array, sr: number, asked: Vowel, trace: Partial<ExtractTrace>) => CaptureOutcome;
-/** Step 3 adds `open` here. */
+/** `shipped` is the prior-led picker the app has used; `open` is the agnostic picker (`?measure=open`, N.200 Step 3). */
 export const PICKERS: Record<string, PickerFn> = {
 	shipped: (y, sr, asked, trace) => runCapture(y, sr, asked, undefined, trace),
+	open: (y, sr, asked, trace) => runCapture(y, sr, asked, undefined, trace, 'open'),
 };
+
+function evidenceOf(trace: Partial<ExtractTrace>): string | null {
+	const e = trace.chosen?.evidence;
+	if (!e) return null;
+	return `f1:${e.fR1 ?? '-'};f2:${e.fR2 ?? '-'};comb:${e.comb};rival:${e.runnerUp ? 1 : 0};r3:${e.r3 ? `${Math.round(e.r3.f)}${e.r3.resolved ? 'r' : 'm'}` : '-'};cpAbstained:${e.closedPhaseAbstained ? 1 : 0}`;
+}
 
 function readingOf(o: CaptureOutcome, trace: Partial<ExtractTrace>): PickerReading {
 	if (o.outcome === 'reading') {
 		return {
 			outcome: 'reading', f1: round(o.formant.f1, 1), f2: o.formant.f2 === undefined ? null : round(o.formant.f2, 1),
 			confidence: o.formant.confidence, reading: o.formant.reading, f2Quality: o.formant.f2Quality ?? null,
-			method: trace.chosen?.method ?? null, steadySpread: o.steadiness.spread, setAside: trace.closedPhaseSetAside ?? null, note: null,
+			method: trace.chosen?.method ?? null, steadySpread: o.steadiness.spread, setAside: trace.closedPhaseSetAside ?? null, evidence: evidenceOf(trace), note: null,
 		};
 	}
 	const note = o.outcome === 'error' ? o.error.code : `not-fry: ${o.failed.join(',')}`;
-	return { outcome: o.outcome, f1: null, f2: null, confidence: null, reading: null, f2Quality: null, method: null, steadySpread: null, setAside: null, note };
+	return { outcome: o.outcome, f1: null, f2: null, confidence: null, reading: null, f2Quality: null, method: null, steadySpread: null, setAside: null, evidence: null, note };
 }
 
 // --- reference ---
@@ -203,14 +212,14 @@ export const kindOf = (r: Row): Kind => (r.sung === null ? 'unstated' : r.sung =
 
 export function tableCsv(rows: Row[]): string {
 	const names = Object.keys(PICKERS);
-	const head = ['file', 'asked', 'sung', 'kind', 'build', 'recorded_fR1', 'recorded_fR2', ...names.flatMap((n) => [`${n}_fR1`, `${n}_fR2`, `${n}_status`, `${n}_f2Quality`, `${n}_confidence`, `${n}_method`, `${n}_steadySpread`, `${n}_setAside`, `${n}_note`, `${n}_fR1_ok`, `${n}_fR2_ok`]), 'comb', 'ref_source', 'ref_fR1', 'ref_fR2'];
+	const head = ['file', 'asked', 'sung', 'kind', 'build', 'recorded_fR1', 'recorded_fR2', ...names.flatMap((n) => [`${n}_fR1`, `${n}_fR2`, `${n}_status`, `${n}_f2Quality`, `${n}_confidence`, `${n}_method`, `${n}_steadySpread`, `${n}_setAside`, `${n}_evidence`, `${n}_note`, `${n}_fR1_ok`, `${n}_fR2_ok`]), 'comb', 'ref_source', 'ref_fR1', 'ref_fR2'];
 	const q = (s: unknown) => { const t = s === null || s === undefined ? '' : String(s); return /[",\n]/.test(t) ? `"${t.replace(/"/g, '""')}"` : t; };
 	const lines = [head.join(',')];
 	for (const r of rows) {
 		const cells: unknown[] = [r.file, r.asked, r.sung, kindOf(r), r.build, r.recorded?.f1, r.recorded?.f2];
 		for (const n of names) {
 			const p = r.pickers[n];
-			cells.push(p.f1, p.f2, p.reading, p.f2Quality, p.confidence, p.method, p.steadySpread, p.setAside, p.note, within(p.f1, r.reference.f1, BAR_F1), within(p.f2, r.reference.f2, BAR_F2));
+			cells.push(p.f1, p.f2, p.reading, p.f2Quality, p.confidence, p.method, p.steadySpread, p.setAside, p.evidence, p.note, within(p.f1, r.reference.f1, BAR_F1), within(p.f2, r.reference.f2, BAR_F2));
 		}
 		cells.push(r.candidates?.comb, r.reference.source, r.reference.f1, r.reference.f2);
 		lines.push(cells.map(q).join(','));

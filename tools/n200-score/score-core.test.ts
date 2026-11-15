@@ -52,6 +52,8 @@ describe('scoreTake dumps every candidate', () => {
 		const row = scoreTake(fry('i'), SYNTH_SR, 'i', { file: 'x.wav', sung: 'i' });
 		expect(Object.keys(row.pickers)).toEqual(Object.keys(PICKERS));
 		const p = row.pickers.shipped;
+		expect(row.pickers.open.evidence).toMatch(/^f1:/);
+		expect(p.evidence).toBeNull();
 		expect(p.outcome).toBe('reading');
 		expect(['captured', 'provisional']).toContain(p.reading);
 		expect(p.method).not.toBeNull();
@@ -84,6 +86,7 @@ describe('scoreFolder, on files in the recorder`s own format', () => {
 		expect(wrong.reference).toEqual({ f1: 270, f2: 700, source: 'manual' });
 		const csv = tableCsv(rows).split('\n');
 		expect(csv[0]).toMatch(/^file,asked,sung,kind,build,recorded_fR1,recorded_fR2,shipped_fR1,shipped_fR2,shipped_status/);
+		expect(csv[0]).toContain('open_fR1,open_fR2,open_status');
 		expect(csv.filter(Boolean)).toHaveLength(4);
 		const s = summaryText(rows);
 		expect(s).toContain('Picker shipped');

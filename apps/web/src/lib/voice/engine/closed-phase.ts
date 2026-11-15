@@ -186,7 +186,7 @@ export function closedPhaseResonances(y: Float64Array, sr: number): ClosedPhaseR
 
 /** Below this bandwidth a pole is a steady tone (hum, a harmonic), not a resonance of the tract. JUDGEMENT:
  *  on the synthetic set any floor from 20 to 30 Hz gives the same result; 25 sits in the middle. */
-const MIN_BW = 25, MAX_BW = 400;
+export const MIN_BW = 25, MAX_BW = 400;
 
 /** The closed-phase first resonance: the pole in `window` nearest `prior`, or null when the module abstains. */
 export function closedPhaseF1(cp: ClosedPhaseResult | null, prior: number, window: [number, number]): number | null {

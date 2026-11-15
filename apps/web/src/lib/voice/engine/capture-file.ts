@@ -10,7 +10,7 @@
  *     of this file.
  *   - the same name with `.json`: the outcome, the guard's verdict, and the extractor's trace (the prior,
  *     the envelope peaks with their prominence, the closed-phase poles, the LPC answer, and what was chosen),
- *     with the asked vowel (`vowel`), the sung vowel (`sung`), and the build (`build`).
+ *     with the asked vowel (`vowel`), the sung vowel (`sung`), the build (`build`), and the picker (`picker`).
  * One tap on the panel's Save button downloads every held take as one ZIP, so the browser sees one
  * download from one gesture, not two files per take fired seconds after the last tap.
  *
@@ -101,6 +101,8 @@ export interface CaptureRecord {
 	sampleRate: number;
 	/** Seconds trimmed from each end of the sweep before this buffer. */
 	trimS: number;
+	/** Which picker made the reading (`?measure=open` selects `open`), from N.200 Step 3. */
+	picker?: 'shipped' | 'open';
 	outcome: CaptureOutcome | { outcome: 'threw'; message: string };
 	trace: ExtractTrace | null;
 }
@@ -143,7 +145,7 @@ export function holdCapture(y: Float64Array, rec: CaptureRecord): void {
 		const stamp = new Date().toISOString().replace(/[:.]/g, '-');
 		const s = sungVowel();
 		const base = takeBase(rec.vowel, s, stamp);
-		const json = JSON.stringify({ file: `${base}.wav`, samples: y.length, asked: rec.vowel, sung: s, build: __ILYA_BUILD__, ...rec }, null, 1);
+		const json = JSON.stringify({ file: `${base}.wav`, samples: y.length, asked: rec.vowel, sung: s, build: __ILYA_BUILD__, picker: rec.picker ?? 'shipped', ...rec }, null, 1);
 		held.push({ base, wav: wavBytes(y, rec.sampleRate), json });
 		refreshPanel();
 	} catch (e) {

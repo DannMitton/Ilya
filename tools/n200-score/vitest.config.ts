@@ -29,7 +29,7 @@ export default {
 	},
 	test: {
 		root: here,
-		include: ['score-core.test.ts', 'score.run.ts'],
+		include: ['score-core.test.ts', 'score.run.ts', 'synth-gate.run.ts'],
 		testTimeout: 30 * 60 * 1000,
 		hookTimeout: 30 * 60 * 1000,
 	},

@@ -95,7 +95,7 @@ import {
 	READINESS_PREP_MS,
 	roomSnrDb
 } from './readiness';
-import { runCapture, type CaptureOutcome } from './analyze';
+import { runCapture, type CaptureOutcome, type Picker } from './analyze';
 import { captureFileEnabled, holdCapture } from './capture-file';
 import type { ExtractTrace } from './extract';
 
@@ -193,6 +193,8 @@ function mapMicError(e: unknown): CaptureError {
 }
 
 export class LiveCaptureSession implements CaptureSession {
+	/** Which picker reads the take (`?measure=open`, `chart/measure-switch.ts`). */
+	constructor(private readonly picker: Picker = 'shipped') {}
 	/** Generation counter: every async continuation checks it, so a cancel
 	 * or a superseding start silences stale callbacks (same pattern as the
 	 * stub's `active` flag, extended to real async boundaries). */
@@ -683,14 +685,14 @@ export class LiveCaptureSession implements CaptureSession {
 		// build but the recorder's own deployment, so the bundler drops these branches and `capture-file.ts` with them.
 		const trace: Partial<ExtractTrace> | undefined = __ILYA_RECORDER__ && captureFileEnabled() ? {} : undefined;
 		try {
-			outcome = runCapture(y, sr, vowel, voiceType, trace);
+			outcome = runCapture(y, sr, vowel, voiceType, trace, this.picker);
 		} catch (e) {
-			if (__ILYA_RECORDER__ && trace) holdCapture(y, { vowel, sampleRate: sr, trimS: TRIM_S, outcome: { outcome: 'threw', message: String(e) }, trace: null });
+			if (__ILYA_RECORDER__ && trace) holdCapture(y, { vowel, sampleRate: sr, trimS: TRIM_S, picker: this.picker, outcome: { outcome: 'threw', message: String(e) }, trace: null });
 			handlers?.onError({ code: 'EXTRACTION_FAILED', message: 'Analysis failed unexpectedly.', cause: e });
 			return;
 		}
 		dbg('outcome:', JSON.stringify(outcome));
-		if (__ILYA_RECORDER__ && trace) holdCapture(y, { vowel, sampleRate: sr, trimS: TRIM_S, outcome, trace: trace.chosen ? (trace as ExtractTrace) : null });
+		if (__ILYA_RECORDER__ && trace) holdCapture(y, { vowel, sampleRate: sr, trimS: TRIM_S, picker: this.picker, outcome, trace: trace.chosen ? (trace as ExtractTrace) : null });
 		if (outcome.outcome === 'reading') handlers?.onComplete(outcome.formant);
 		else if (outcome.outcome === 'reprompt')
 			handlers?.onError({

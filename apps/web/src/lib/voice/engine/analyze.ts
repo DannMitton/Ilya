@@ -2,7 +2,19 @@ import type { CalibratedFormant, Vowel, VoiceType } from './types';
 import type { CaptureError } from './errors';
 import { detect } from './detector';
 import { guard, type GuardResult } from './guard';
-import { extractFormants, type ExtractTrace } from './extract';
+import { extractFormants, type ExtractTrace, type ExtractResult } from './extract';
+import { extractOpen, COMB_MAX, PROM_DB } from './open-extract';
+
+/**
+ * Which picker reads the resonances (N.200 Step 3). `shipped` is the picker the app has used, which looks for the asked vowel's
+ * expected peaks (`extract.ts`, `MITTON`). `open` takes no vowel (`open-extract.ts`). `?measure=open` selects it
+ * (`chart/measure-switch.ts`); a reading taken under it carries `picker: 'open'`.
+ */
+export type Picker = 'shipped' | 'open';
+
+function extractWith(picker: Picker, y: Float64Array, sr: number, vowel: Vowel, trace?: Partial<ExtractTrace>): ExtractResult {
+	return picker === 'open' ? extractOpen(y, sr, trace) : extractFormants(y, sr, vowel, trace);
+}
 
 /**
  * Row 2d, 2026-09-30. What makes a take Provisional is now evidence that its reading
@@ -25,19 +37,34 @@ import { extractFormants, type ExtractTrace } from './extract';
  */
 const T_HALVES_F1 = 0.08;
 
-/** fR1 read from each half of the analysed stretch, and whether the halves agree. */
+/**
+ * fR1 and fR2 read from each half of the analysed stretch, with the picker the reading used, and whether the halves agree.
+ * `spread2` and `steady2` (N.200 Step 3, item 9) are the same for fR2; `steady2` is null when either half gave no fR2.
+ */
 export interface Steadiness {
 	halvesF1: [number | null, number | null];
 	/** |a - b| over their mean, three places; null when either half gave no fR1. */
 	spread: number | null;
 	steady: boolean;
+	halvesF2: [number | null, number | null];
+	spread2: number | null;
+	steady2: boolean | null;
 }
 
-export function f1Steadiness(y: Float64Array, sr: number, vowel: Vowel): Steadiness {
+/** JUDGEMENT, illustrative: fR2 is read from a weaker peak than fR1, so its halves are held to a wider bar. */
+const T_HALVES_F2 = 0.12;
+
+export function f1Steadiness(y: Float64Array, sr: number, vowel: Vowel, picker: Picker = 'shipped'): Steadiness {
 	const mid = y.length >> 1;
-	const a = extractFormants(y.subarray(0, mid), sr, vowel).f1, b = extractFormants(y.subarray(mid), sr, vowel).f1;
+	const ra = extractWith(picker, y.subarray(0, mid), sr, vowel), rb = extractWith(picker, y.subarray(mid), sr, vowel);
+	const a = ra.f1, b = rb.f1;
 	const spread = a && b ? Math.abs(a - b) / ((a + b) / 2) : null;
-	return { halvesF1: [a, b], spread: spread === null ? null : Math.round(spread * 1000) / 1000, steady: spread !== null && spread < T_HALVES_F1 };
+	const a2 = ra.f2, b2 = rb.f2;
+	const spread2 = a2 && b2 ? Math.abs(a2 - b2) / ((a2 + b2) / 2) : null;
+	return {
+		halvesF1: [a, b], spread: spread === null ? null : Math.round(spread * 1000) / 1000, steady: spread !== null && spread < T_HALVES_F1,
+		halvesF2: [a2, b2], spread2: spread2 === null ? null : Math.round(spread2 * 1000) / 1000, steady2: spread2 === null ? null : spread2 < T_HALVES_F2
+	};
 }
 
 // SILENCE_RMS recalibrated 2026-07-01 on Dann's ACCEPT, from live iMac console
@@ -66,6 +93,18 @@ function f2Quality(f2: number | null, f1: number | null, prom: number, guardPass
 }
 
 /**
+ * fR2's quality under the open picker, from evidence alone: `clear` needs both estimators, a split-half steady fR2, a prominence of at
+ * least `PROM_DB`, a gap of 200 Hz from fR1, and no unresolved neighbour above it (R2 and R3 merged is `marginal`; resolved is
+ * `clear`, N.200 Step 3 item 6). Today no reader tells `clear` from `marginal` (`resolve-values.ts` excludes only `absent`).
+ */
+function openF2Quality(ex: ExtractResult, st: Steadiness): CalibratedFormant['f2Quality'] {
+	if (ex.f2 === null) return 'absent';
+	const sep = ex.f2 - (ex.f1 ?? 0), ev = ex.evidence;
+	if (ev?.fR2 === 'both' && st.steady2 !== false && ex.f2Prom >= PROM_DB && sep >= 200 && !ev.f2Merged) return 'clear';
+	return 'marginal';
+}
+
+/**
  * §9 batch core: samples + vowel -> CalibratedFormant. Pure; the [ɨ] pass is separate.
  *
  * N.80: `outerGuard` carries the verdict the caller already computed on the WHOLE
@@ -75,15 +114,15 @@ function f2Quality(f2: number | null, f1: number | null, prom: number, guardPass
  * steadiness the singer never made. Absent the parameter the guard runs on `y` as
  * it always has, so every existing caller is unchanged.
  */
-export function analyze(y: Float64Array, sr: number, vowel: Vowel, _voiceType?: VoiceType, outerGuard?: GuardResult, trace?: Partial<ExtractTrace>): CalibratedFormant {
-	return grade(y, sr, vowel, outerGuard, trace).formant;
+export function analyze(y: Float64Array, sr: number, vowel: Vowel, _voiceType?: VoiceType, outerGuard?: GuardResult, trace?: Partial<ExtractTrace>, picker: Picker = 'shipped'): CalibratedFormant {
+	return grade(y, sr, vowel, outerGuard, trace, picker).formant;
 }
 
-function grade(y: Float64Array, sr: number, vowel: Vowel, outerGuard?: GuardResult, trace?: Partial<ExtractTrace>): { formant: CalibratedFormant; steadiness: Steadiness } {
+function grade(y: Float64Array, sr: number, vowel: Vowel, outerGuard?: GuardResult, trace?: Partial<ExtractTrace>, picker: Picker = 'shipped'): { formant: CalibratedFormant; steadiness: Steadiness } {
 	const det = detect(y, sr);
 	const g = outerGuard ?? guard(y, sr);
-	const ex = extractFormants(y, sr, vowel, trace);
-	const st = f1Steadiness(y, sr, vowel);
+	const ex = extractWith(picker, y, sr, vowel, trace);
+	const st = f1Steadiness(y, sr, vowel, picker);
 	// Confidence tiers recalibrated 2026-07-01 on Dann's ACCEPT: the old flat
 	// (snrDb < 20 -> low) rule stamped every real-room capture Provisional even
 	// when the gate passed it. Graded on the same evidence as the c8 recalibration:
@@ -96,18 +135,24 @@ function grade(y: Float64Array, sr: number, vowel: Vowel, outerGuard?: GuardResu
 	// quality grade.
 	const snrLow = det.snrDb !== null && det.snrDb < 12;
 	const snrHigh = det.snrDb !== null && det.snrDb > 18;
+	// The open picker's status comes from the measurement's own evidence, never from an expected value (N.200 Step 3): besides the
+	// evidence above, both estimators must have seen fR1, the envelope must not show the source (comb), and no rival for "lowest" may
+	// be as strong as the chosen peak.
+	const ev = ex.evidence;
+	const evidencePoor = picker === 'open' && !!ev && (ev.fR1 !== 'both' || ev.comb > COMB_MAX || ev.runnerUp);
 	const confidence: CalibratedFormant['confidence'] =
-		!st.steady || !det.accept || snrLow ? 'low'
+		!st.steady || !det.accept || snrLow || evidencePoor ? 'low'
 		: snrHigh && g.fullWindow ? 'high'
 		: 'medium';
 	const reading: CalibratedFormant['reading'] = confidence === 'low' ? 'provisional' : 'captured';
 	const out: CalibratedFormant = {
 		f1: ex.f1 ?? 0,
 		confidence, reading, source: 'measured-user',
-		f2Quality: f2Quality(ex.f2, ex.f1, ex.f2Prom, g.reading === 'Captured'),
+		f2Quality: picker === 'open' ? openF2Quality(ex, st) : f2Quality(ex.f2, ex.f1, ex.f2Prom, g.reading === 'Captured'),
 		noiseFloor: det.snrDb === null ? 'unmeasured' : 'measured',
 	};
 	if (ex.f2 !== null) out.f2 = ex.f2;
+	if (picker === 'open') out.picker = 'open';
 	return { formant: out, steadiness: st };
 }
 
@@ -122,7 +167,7 @@ export type CaptureOutcome =
 
 /** The capture pipeline: structural checks, the live gate, then the §9 core. */
 /** `trace`, when passed, is filled with what the extractor saw and chose (the dev-only capture file). */
-export function runCapture(y: Float64Array, sr: number, vowel: Vowel, _voiceType?: VoiceType, trace?: Partial<ExtractTrace>): CaptureOutcome {
+export function runCapture(y: Float64Array, sr: number, vowel: Vowel, _voiceType?: VoiceType, trace?: Partial<ExtractTrace>, picker: Picker = 'shipped'): CaptureOutcome {
 	const durMs = (y.length / sr) * 1000;
 	if (durMs < MIN_BUFFER_S * 1000)
 		return { outcome: 'error', error: { code: 'SAMPLE_TOO_SHORT', message: 'buffer too short', actualMs: durMs, minimumMs: MIN_BUFFER_S * 1000 } };
@@ -141,7 +186,7 @@ export function runCapture(y: Float64Array, sr: number, vowel: Vowel, _voiceType
 	const yw = g.segmentS ? y.subarray(Math.round(g.segmentS[0] * sr), Math.round(g.segmentS[1] * sr)) : y;
 	const det = detect(yw, sr);
 	if (!det.accept) return { outcome: 'reprompt', reason: 'not-fry', failed: det.failed, guard: g };
-	const { formant: cf, steadiness } = grade(yw, sr, vowel, g, trace);
+	const { formant: cf, steadiness } = grade(yw, sr, vowel, g, trace, picker);
 	if (!cf.f1) return { outcome: 'error', error: { code: 'EXTRACTION_FAILED', message: 'no formants recovered' }, guard: g };
 	return { outcome: 'reading', formant: cf, guard: g, steadiness };
 }
