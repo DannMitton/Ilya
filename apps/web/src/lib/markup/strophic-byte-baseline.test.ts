@@ -19,13 +19,14 @@ import { execFileSync } from 'node:child_process';
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { analyzeScore, MusicXmlScoreParser, paginateScore, type ParsedScore } from '@ilya/score-parser';
+import { analyzeScore, MusicXmlScoreParser, type ParsedScore } from '@ilya/score-parser';
+import { paginateMelody } from './melody-pages';
 import { parseXml } from '$lib/score/ingestion/mini-dom';
 import { ENGRAVING_DEFAULTS } from '$lib/score/engraving';
 
 const ROOT = fileURLToPath(new URL('../../../../../', import.meta.url));
 const BASELINE = fileURLToPath(new URL('./strophic-byte-baseline.json', import.meta.url));
-const GEOMETRY = { pageWidth: 624, pageHeight: 727, marginTop: 0, marginBottom: 0, marginLeft: 0, marginRight: 0, ...ENGRAVING_DEFAULTS };
+const PAGE = { pageWidth: 624, pageHeight: 727 };
 
 /** The lane's own new fixtures (Step 1). Not in the baseline by construction. */
 export const FIXTURES_ADDED_BY_THE_LANE: readonly string[] = [
@@ -51,11 +52,11 @@ async function parse(path: string): Promise<ParsedScore> {
 	return res.score;
 }
 
-/** The pages as MELODY draws them today: the notated score, one `paginateScore` call. */
+/** The pages as MELODY draws them: through the function the page calls (`paginateMelody`), with no later verse built. */
 async function hashOf(rel: string): Promise<string> {
 	const parsed = await parse(join(ROOT, rel));
 	const analyzed = analyzeScore(parsed, { fR1: {} }, () => undefined, { generatedAt: '2026-10-11T00:00:00.000Z' });
-	const { pages } = paginateScore(parsed, analyzed, GEOMETRY);
+	const { pages } = paginateMelody({ score: parsed, analyzed, ...PAGE, laterPageHeight: PAGE.pageHeight, engraving: ENGRAVING_DEFAULTS, channels: {} });
 	return createHash('sha256').update(pages.join('\u0000')).digest('hex');
 }
 

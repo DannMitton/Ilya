@@ -64,12 +64,12 @@
 	import type { Vowel, CalibratedFormant, VoiceCharacteristics } from '$lib/voice/engine/types';
 	import { buildMarkupLegend } from '$lib/markup/legend';
 	import {
-		paginateScore,
 		analyzeScore,
 		shiftVocalOctave,
 		scoreInPerformanceOrder,
 		chooseClef,
 	} from '@ilya/score-parser';
+	import { paginateMelody } from './melody-pages';
 	import TranspositionRuler from './TranspositionRuler.svelte';
 	import { rulerOpening } from './transposition-ruler';
 	import type { TranspositionRulerState } from './transposition-ruler-state.svelte';
@@ -852,26 +852,16 @@
 
 	const paginated = $derived(
 		readingScore && analyzed
-			? paginateScore(readingScore, analyzed, {
-					...(reading.clef ? { clef: reading.clef } : {}),
+			? paginateMelody({
+					score: readingScore,
+					analyzed,
+					clef: reading.clef,
 					pageWidth: contentWidth,
 					pageHeight: page1WindowHeight,
 					laterPageHeight: dims.height - subsequentTop - contentBottom, // row 79: later pages pack against their own, taller window
-					marginTop: 0,
-					marginBottom: 0,
-					marginLeft: 0,
-					marginRight: 0,
-					lineGap: engraving.lineGap,
-					pxPerWhole: engraving.pxPerWhole,
-					minGap: engraving.minGap,
-					systemGap: engraving.systemGap,
-					leftMargin: engraving.leftMargin,
-					...(ipaPreview ? { ipaPreview } : {}),
-					...(withheldIpa ? { withheldIpa } : {}),
-					...(cyrPreview ? { cyrPreview } : {}),
-					...(sylTypePreview ? { sylTypePreview } : {}),
-					...(melismaPreview ? { melismaPreview } : {}),
-					...(notationFont ? { font: notationFont.prepared, fontFamily: notationFont.family } : {}),
+					engraving,
+					channels: { ipaPreview, withheldIpa, cyrPreview, sylTypePreview, melismaPreview },
+					font: notationFont ? { prepared: notationFont.prepared, family: notationFont.family } : undefined,
 				})
 			: null,
 	);

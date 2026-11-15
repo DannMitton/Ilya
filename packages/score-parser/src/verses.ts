@@ -60,7 +60,7 @@ function versesOn(syl: SyllableInfo | undefined): number[] {
 }
 
 /** Per bar: the sung verses that carry words in it. Bars with no words are absent. */
-function sungVersesByBar(parsed: ParsedScore, sung: ReadonlySet<number>): Map<number, Set<number>> {
+export function sungVersesByBar(parsed: ParsedScore, sung: ReadonlySet<number>): Map<number, Set<number>> {
 	const out = new Map<number, Set<number>>();
 	for (const ev of parsed.vocalLine) {
 		for (const v of versesOn(ev.syllable)) {
