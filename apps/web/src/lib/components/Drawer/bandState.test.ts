@@ -229,3 +229,49 @@ describe('countText: a count takes the singular (walk finding 2026-09-24, "1 lin
 		expect(countText(8, 'word', 'fr')).toBe('8 mots');
 	});
 });
+
+/**
+ * N.201 step 4: REPERTOIRE's and ANALYSIS's closed lines. The strings are the
+ * four Dann ratified 2026-11-14 20:38, written out here in both languages and
+ * not read back from the table.
+ */
+import { repertoireStateLine, verifyCountLine, analysisStateLine } from './bandState';
+
+describe('N.201 repertoireStateLine', () => {
+	it('says nothing at zero, in both languages', () => {
+		expect(repertoireStateLine(0, 'en')).toBe('');
+		expect(repertoireStateLine(0, 'fr')).toBe('');
+	});
+	it('takes the singular at exactly one, digits in both languages', () => {
+		expect(repertoireStateLine(1, 'en')).toBe('1 song');
+		expect(repertoireStateLine(1, 'fr')).toBe('1 chant');
+	});
+	it('takes the plural from two', () => {
+		expect(repertoireStateLine(2, 'en')).toBe('2 songs');
+		expect(repertoireStateLine(16, 'en')).toBe('16 songs');
+		expect(repertoireStateLine(16, 'fr')).toBe('16 chants');
+	});
+});
+
+describe('N.201 verifyCountLine and analysisStateLine', () => {
+	it('says nothing at zero', () => {
+		expect(verifyCountLine(0, 'en')).toBe('');
+		expect(analysisStateLine(null, null, 0, 'fr')).toBe('');
+	});
+	it('counts the words to verify', () => {
+		expect(verifyCountLine(1, 'en')).toBe('1 to verify');
+		expect(verifyCountLine(3, 'en')).toBe('3 to verify');
+		expect(verifyCountLine(1, 'fr')).toBe('1 à vérifier');
+		expect(verifyCountLine(3, 'fr')).toBe('3 à vérifier');
+	});
+	it('shows the chosen word and its IPA, and not the count, once a word is chosen', () => {
+		expect(analysisStateLine({ cyrillic: 'шумного' }, 'ˈʃum nʌ vʌ', 5, 'en')).toBe('шумного · ˈʃum nʌ vʌ');
+	});
+	it('shows the chosen word alone when the stack shows no IPA', () => {
+		expect(analysisStateLine({ cyrillic: 'шумного' }, null, 5, 'en')).toBe('шумного');
+		expect(analysisStateLine({ cyrillic: 'шумного' }, '', 5, 'en')).toBe('шумного');
+	});
+	it('shows the count when no word is chosen', () => {
+		expect(analysisStateLine(null, null, 2, 'en')).toBe('2 to verify');
+	});
+});

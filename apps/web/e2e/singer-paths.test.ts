@@ -125,14 +125,13 @@ test.describe('the library', () => {
 	});
 
 	test('a song saves to the library and reopens after a reload', async ({ page }) => {
-		// SONGS lives under the collapsed "Piece" band as "Repertoire"
-		// (`songs.heading`, i18n.ts:1411), inside `SongList.svelte`. There is
+		// SONGS is the REPERTOIRE band (N.201: it left Piece for the first
+		// band; `songs.heading`), its body is `SongList.svelte`. There is
 		// no explicit Save: every song autosaves as the singer types (the
 		// legacy single-song driver has no New song button; the current
 		// driver does, once there is more than one song,
 		// SongList.svelte:190-192, `plural`).
 		await transcribe(page, 'молоко');
-		await expandStation(page, 'Piece');
 		await expandStation(page, 'Repertoire');
 
 		await page.locator('.new-btn').click();
@@ -150,7 +149,6 @@ test.describe('the library', () => {
 		await page.waitForSelector('[data-word-index="0-0"]', { timeout: 10_000 });
 		await expect(page.locator('textarea.text-input')).toHaveValue('вода');
 
-		await expandStation(page, 'Piece');
 		await expandStation(page, 'Repertoire');
 		const rows = page.locator('.song-open');
 		await expect(rows).toHaveCount(2);
