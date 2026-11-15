@@ -204,6 +204,8 @@
 	const hiding = $derived(hideWhileSinging && active);
 	const states = $derived(buttonStates(sungSet));
 	const cue = $derived(running ? cueText(ritual.cue, language) : cueText(notice ?? idleCue(selected, sungSet), language));
+	/** The readings list is open and nothing is running: the stage does not stick, so the list's rows never slide under it (Step 8c.1; DESK DEFAULT, Dann's to strike). A take and its landing stick it again, so the dot is seen. */
+	const stageFlows = $derived(listOpen && ritual.phase === 'idle');
 	const hint = $derived(hintText(hintsFor({ active, confirmingClear, selected, sung: sungSet, voiceType }), language));
 	const main = $derived(mainButton(running, sungSet, selected, language));
 	const showExplain = $derived(!tookAny && sungSet.size === 0);
@@ -289,7 +291,7 @@
 		</div>
 	</div>
 
-	<div class="stage">
+	<div class="stage" class:flows={stageFlows}>
 		<div class="chart-box">
 			{#if hiding}
 				<p class="hidden-note">{tv('capture.hidden', language)}</p>
@@ -509,6 +511,10 @@
 		padding: 0.35rem 0 0.5rem;
 		background: var(--drawer-bg, #faf8f5);
 	}
+	/* The readings list is open at rest: the stage scrolls away with the page like anything else (same flow, so nothing moves when it changes). */
+	.stage.flows {
+		position: static;
+	}
 	.chart-box {
 		position: relative;
 		width: 100%;
@@ -644,8 +650,12 @@
 		font-weight: 600;
 		cursor: pointer;
 	}
+	/* One line in both languages (Step 8c.2): the label never wraps, and the row wraps as a whole where the two do not fit (320 px). The padding keeps
+	   the longest French label off the button's edge. */
 	.main {
 		flex: 2;
+		white-space: nowrap;
+		padding: 0 0.9rem;
 		border: none;
 		background: var(--lavender-jewel);
 		color: #ffffff;

@@ -77,3 +77,68 @@ That is 12 keys, 12 comment lines in `i18n.ts`. No word was written; the comment
 **Gate 4: 5657 before, 5597 after (-60).** One file went: `pacifier/contrast.test.ts` (45 `it` sites by grep; 60 tests by the runner's count, since some are `.each`). It guarded the wheel's colour pairs (every locked state combination of the wheel's band, arc and sigla cleared WCAG, every owned exception was in fact sub-threshold), WCAG's own maths against reference values, and that its `PALETTE` matched `app.css` literally (R20). With the wheel and its three tokens gone, nothing is left for it to guard. `colour-story.test.ts` guards the word-carrying pairs the new screen and the rest of the app use.
 
 **The eight gates on the 8b tree:** 462; 248; 0 errors, 12 warnings; 5597 passed, 1 skipped; 785, 5 skipped; 178; 155; ratchets OK. No ceiling other than the wizard's (8a) moved because of this lane's work.
+
+## Step 8c. Two layout repairs from lane 53's pictures (one commit)
+
+Both are in `VowelCapture.svelte`; no word changed.
+
+### 8c.1 The readings list under the sticky stage
+
+**What changed.** `.stage` gets `class:flows={stageFlows}` with `stageFlows = listOpen && ritual.phase === 'idle'`, and `.stage.flows { position: static }`. DESK DEFAULT, Dann's to strike on his walk (brief 8c.1; review A8). `ritual.phase` is `idle` only when no take runs and no landing plays, so a take and its landing stay sticky and the dot is seen. Static and sticky leave the stage in the same place in the flow, so changing between them moves nothing at rest and the scroll position holds. The brief's clause "the closed line is clear of the stage at 375 by 667" is struck, as the review's A8 ruled: a rule acting on an open list cannot change a closed one.
+
+**Measured** (Chromium, touch, dev server, four vowels sung and six placeholders, the list open, scrolled in 10 px steps through the takeover's whole length; "before" is the old rule forced back with injected CSS on the same page; a row counts as clear when it is wholly in view and no part of it lies behind the stage; `m8c.cjs`, the same numbers in English and in French):
+
+| window | rows reachable clear at some scroll, before | at the end of the scroll: clear / behind the stage, before | same, after |
+|---|---|---|---|
+| 390 by 844 | 10 | 6 / 4 | **10 / 0** |
+| 375 by 667 | 10 | **0 / 10** | **10 / 0** |
+| desktop 1440 by 900 | 10 | 7 / 3 | **10 / 0** |
+
+(Before the change every row was reachable at some scroll position by scrolling back up, so that clause held already; what failed was the end of the scroll, where the singer stops, and at 375 by 667 all ten rows lay behind the stage. After: all ten wholly in view and none behind the stage, at every window, both languages.) The stage's `position` reads `sticky` with the list closed, `static` with it open at rest.
+
+**A take started while scrolled, the list open, the hide toggle off.** The stage's top against the top of the scrolling area, in px, at rest, 500 ms into the take, and back at idle (the same in English and French; the scroll position was 150, 300, or 400 px and did not change at the tap or at idle in any row):
+
+| window | scroll | at rest | during the take | back at idle |
+|---|---|---|---|---|
+| 390 by 844 | 150 | 111 | 111 (moves 0) | 111 |
+| 390 by 844 | 300 | -39 | 4 (moves 43 down) | -39 |
+| 390 by 844 | 400 | -139 | 4 (moves 143) | -139 |
+| 375 by 667 | 150 / 300 / 400 | 106 / -44 / -144 | 106 / 4 / 4 | 106 / -44 / -144 |
+| desktop | 150 / 300 / 400 | 133 / -17 / -117 | 133 / 4 / 4 | 133 / -17 / -117 |
+
+So: while the stage's own place is still below the top of the screen, nothing moves at the tap; once it has scrolled partly out, the tap brings it to the top, by as much as it had scrolled out (43 px at a scroll of 300 on a 375-wide phone, 143 px at 400); at idle it returns to its place in the flow by the same amount. Where the 300 and 400 rows were measured, the Start button was clicked by script: a thumb cannot reach it when the stage is mostly off screen, so the largest jump a singer can cause by a tap is the part of the stage above the top while Start is still on screen. NOT ESTABLISHED: where the jump is largest in practice on a real phone, and how it feels.
+
+**Pictures:** `8c1-before-phone{375,390}-{en,fr}.png` and `8c1-after-phone{375,390}-{en,fr}.png` (the list open, scrolled to its end; before, the rows are behind the stage, 375 by 667 shows none; after, all ten show), and `8c1-during-take-phone375-en.png` (a take at a scroll of 300: the stage sticks, the dot is seen). All nine looked at by me.
+
+### 8c.2 « Commencer [i] » and « Reprendre [i] » on two lines
+
+**What changed.** `.main` gets `white-space: nowrap` and `padding: 0 0.9rem`. `.actions` already wraps (`flex-wrap: wrap`) and `.stop` is already `nowrap`, so where the pair does not fit the row wraps as a whole. The padding was added after I looked at the first picture: with `nowrap` alone the longest label sat about 5 px from the button's edge at 375 and 390, legible but cramped. The brief's mechanism ("for example `white-space: nowrap`") needed it for the singer's finger and eye; it changes no word.
+
+**Before** (the 8b version of the component, measured and pictured; capture width 307 at 375, 322 at 390, 252 at 320):
+
+| language, window | label | main button | stop button |
+|---|---|---|---|
+| fr 390 | « Commencer [i] » | 100 by **48** (two lines) | « Tout recommencer » 213 |
+| fr 390 | « Reprendre [i] » | 100 by 44 (one line) | 213 |
+| fr 375 | « Commencer [i] » | 90 by **48** | 208 |
+| fr 375 | « Reprendre [i] » | 90 by **48** | 208 |
+
+The review's claim that « Reprendre [i] » wraps at 390 is not borne out here: it wraps at 375, not at 390. At 320 the French row wrapped as a whole already (the pair needs more than the 252 px).
+
+**After** (measured on the shipped code, every label, both languages, one line is 44 px tall; `main` width by `stop` width in px):
+
+| window (capture width) | Start [i] / Start over | [i] in progress / Stop | Re-take [i] / Start over | « Commencer [i] » / « Tout recommencer » | « [i] en cours » / « Arrêter » | « Reprendre [i] » / « Tout recommencer » |
+|---|---|---|---|---|---|---|
+| 320 (252) | 104 / 139, one row | 127 / 115, one row | 104 / 139, one row | **252 / 252, two rows** | 116 / 126, one row | **252 / 252, two rows** |
+| 375 (307) | 140 / 157 | 164 / 133 | 140 / 157 | 130 / 168, one row | 153 / 144 | 119 / 179, one row |
+| 390 (322) | 150 / 162 | 174 / 138 | 150 / 162 | 130 / 183, one row | 163 / 149 | 119 / 194, one row |
+
+Every main and stop label is 44 px tall (one line) in both languages at 320, 375, and 390. At 320 the French pair does not fit in one row (252 px against 129 + the label's width + padding and gap), so the row wraps as a whole: « Commencer [i] » on one line, full width, and « Tout recommencer » on one line below it. English holds one row at all three. The English widths moved by up to 10 px with the padding.
+
+**Pictures** (all looked at by me): `8c2-before-390-fr-start.png`, `8c2-before-375-fr-retake.png` (two lines, the defect); `8c2-after-390-fr-start.png`, `8c2-after-390-fr-retake.png`, `8c2-after-375-fr-start.png`, `8c2-after-375-fr-retake.png`, `8c2-after-320-fr-start.png`, `8c2-after-320-fr-retake.png` (the wrapped row at 320), `8c2-after-390-en-retake.png`.
+
+### Tests (A11) and gates
+
+`e2e/calibrate-new.test.ts` gains, for 8c.1, two tests (390 by 844 and 375 by 667: the stage is `sticky` with the list closed, `static` open at rest, every one of ten rows wholly in view and clear of the stage at some scroll position, `sticky` during a take, `static` again at idle, `sticky` when the list is closed again), and, for 8c.2, eight (English and French, each at 320, 375, and 390: Start and Stop on one line, with a take running; and, in each, Re-take on one line at 375). The helper `open()` takes a `lang`. Gate 4 is unchanged by 8c (**5597**): the new tests are browser tests. **The eight gates on the 8c tree:** 462; 248; 0 errors, 12 warnings; 5597 passed, 1 skipped; 785, 5 skipped; 178; 155; ratchets OK.
+
+**The whole of `e2e/calibrate-new.test.ts` on the 8c tree:** one invocation, chromium project, no switch in the address, `PW_CHROMIUM_PATH=/opt/pw-browsers/chromium`, `--trace off`: **27 passed (8.5 m)** (the 17 from 8a, two for 8c.1, eight for 8c.2).

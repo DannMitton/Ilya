@@ -10,20 +10,20 @@ import { test, expect, type Page } from '@playwright/test';
 const STORE_KEY = 'shane.profiles.v2';
 const READING = (f1: number, f2: number) => ({ f1, f2, confidence: 'high', f2Quality: 'clear', reading: 'captured', source: 'measured-user', plausibility: 'plausible' });
 
-async function open(page: Page, opts: { formants?: Record<string, unknown>; voiceType?: string; next?: string[]; url?: string; room?: string } = {}) {
+async function open(page: Page, opts: { formants?: Record<string, unknown>; voiceType?: string; next?: string[]; url?: string; room?: string; lang?: 'en' | 'fr' } = {}) {
 	const now = new Date().toISOString();
 	const store = { version: 2, activeId: 'v', voices: [{ id: 'v', name: 'Dann', createdAt: now, updatedAt: now, calibratedAt: now, formants: opts.formants ?? {}, voiceType: opts.voiceType ?? 'bass' }] };
-	await page.addInitScript(([s, next, room]) => {
-		localStorage.setItem('ilya:language', 'en');
+	await page.addInitScript(([s, next, room, lang]) => {
+		localStorage.setItem('ilya:language', lang);
 		localStorage.setItem('shane.profiles.v2', s);
 		(window as unknown as { __ilyaStubNext?: string[] }).__ilyaStubNext = next;
 		if (room) (window as unknown as { __ilyaStubReadiness?: string }).__ilyaStubReadiness = room;
-	}, [JSON.stringify(store), opts.next ?? [], opts.room ?? ''] as const);
+	}, [JSON.stringify(store), opts.next ?? [], opts.room ?? '', opts.lang ?? 'en'] as const);
 	await page.goto(opts.url ?? '/?capture=stub');
 	await expect(page.locator('textarea.text-input')).toBeEnabled({ timeout: 45_000 });
 	// Below the desk layout (1400) the Drawer is a bottom sheet, closed until its pull is pressed.
-	if ((page.viewportSize()?.width ?? 1440) < 1400) await page.getByRole('button', { name: /drawer/i }).first().click();
-	await page.getByRole('button', { name: /^voice$/i }).click();
+	if ((page.viewportSize()?.width ?? 1440) < 1400) await page.getByRole('button', { name: /drawer|tiroir/i }).first().click();
+	await page.getByRole('button', { name: /^(voice|voix)$/i }).click();
 }
 /** From nothing sung: Calibrate, Begin, the readiness wait, Continue. Lands on the capture screen. */
 async function toCapture(page: Page) {
@@ -316,4 +316,86 @@ test.describe('the readings list', () => {
 		expect(await list.evaluate((e) => (e as HTMLElement).inert)).toBe(false);
 		expect(await list.evaluate((e) => (e as HTMLDetailsElement).open)).toBe(false);
 	});
+});
+
+/** N.199 Step 8c.1: the readings list under the sticky stage. The stage does not stick while the list is open and nothing runs; a take sticks it again. */
+test.describe('the stage and the open readings list (Step 8c.1)', () => {
+	const FOUR = { i: READING(296, 1705), e: READING(381, 1532), u: READING(346, 804), a: READING(600, 1250) };
+	const position = (page: Page) => page.locator('.stage').evaluate((e) => getComputedStyle(e).position);
+	for (const [w, h] of [[390, 844], [375, 667]] as const) {
+		test(`at ${w} by ${h}: sticky with the list closed, static with it open, every row in view and none under the stage at some scroll, sticky again during a take`, async ({ page }) => {
+			test.setTimeout(90_000);
+			await page.setViewportSize({ width: w, height: h });
+			await open(page, { formants: FOUR });
+			await page.getByRole('button', { name: /re-calibrate/i }).click();
+			await page.getByRole('button', { name: /^continue$/i }).click();
+			await expect(page.locator('.capture')).toBeVisible();
+			await expect.poll(() => position(page)).toBe('sticky');
+			await page.locator('details.readings summary').click();
+			await expect.poll(() => position(page)).toBe('static');
+			// Scroll the takeover through its length: each of the ten rows is wholly in view and clear of the stage at some position.
+			const clear = await page.locator('.capture').evaluate((cap) => {
+				let sc: HTMLElement | null = cap.parentElement;
+				while (sc && !(['auto', 'scroll'].includes(getComputedStyle(sc).overflowY) && sc.scrollHeight > sc.clientHeight + 1)) sc = sc.parentElement;
+				if (!sc) return -1;
+				const box = sc.getBoundingClientRect();
+				const stage = cap.querySelector('.stage')!;
+				const rows = [...cap.querySelectorAll('details.readings tbody tr')];
+				const ok = new Set<number>();
+				for (let y = 0; y <= sc.scrollHeight - sc.clientHeight; y += 10) {
+					sc.scrollTop = y;
+					const sr = stage.getBoundingClientRect();
+					rows.forEach((r, i) => {
+						const b = r.getBoundingClientRect();
+						const under = b.bottom > sr.top && b.top < sr.bottom && sr.bottom > box.top && sr.top < box.bottom;
+						if (b.top >= box.top && b.bottom <= box.bottom && !under) ok.add(i);
+					});
+				}
+				return ok.size;
+			});
+			expect(clear).toBe(10);
+			// A take sticks the stage again, and it is static again at idle.
+			await page.locator('.main').evaluate((e) => (e as HTMLElement).click());
+			await page.waitForTimeout(400);
+			await expect.poll(() => position(page)).toBe('sticky');
+			await page.locator('.stop').evaluate((e) => (e as HTMLElement).click());
+			await expect(page.locator('.main')).toBeEnabled({ timeout: 20_000 });
+			await expect.poll(() => position(page)).toBe('static');
+			await page.locator('details.readings summary').click();
+			await expect.poll(() => position(page)).toBe('sticky');
+		});
+	}
+});
+
+/** N.199 Step 8c.2: the main button's label holds one line in both languages from 320 px up, and the row wraps as a whole where the two buttons do not fit. */
+test.describe('the main and stop buttons hold one line (Step 8c.2)', () => {
+	const FOUR = { i: READING(296, 1705), e: READING(381, 1532), u: READING(346, 804), a: READING(600, 1250) };
+	for (const lang of ['en', 'fr'] as const) {
+		for (const w of [320, 375, 390]) {
+			test(`${lang} at ${w} px: Start and Re-take, Start over and Stop, each on one line`, async ({ page }) => {
+				test.setTimeout(90_000);
+				await page.setViewportSize({ width: w, height: 800 });
+				await open(page, { lang });
+				await page.getByRole('button', { name: /^(calibrate|calibrer)$/i }).click();
+				await page.getByRole('button', { name: /^(begin|commencer)$/i }).click();
+				await page.getByRole('button', { name: /^(continue|continuer)$/i }).click({ timeout: 30_000 });
+				await expect(page.locator('.capture')).toBeVisible();
+				const oneLine = async () => {
+					for (const sel of ['.main', '.stop']) expect((await page.locator(sel).boundingBox())!.height, `${sel} on one line`).toBeLessThan(46);
+				};
+				await oneLine(); // Start [i], Start over
+				await page.locator('.main').evaluate((e) => (e as HTMLElement).click());
+				await page.waitForTimeout(600);
+				await oneLine(); // [i] in progress, Stop
+			});
+		}
+		test(`${lang} at 375 px: Re-take [i] on one line`, async ({ page }) => {
+			await page.setViewportSize({ width: 375, height: 800 });
+			await open(page, { lang, formants: FOUR });
+			await page.getByRole('button', { name: /re-calibrate|recalibrer/i }).click();
+			await page.getByRole('button', { name: /^(re-take|réessayer)$/i }).first().click();
+			await expect(page.locator('.capture')).toBeVisible();
+			expect((await page.locator('.main').boundingBox())!.height).toBeLessThan(46);
+		});
+	}
 });
