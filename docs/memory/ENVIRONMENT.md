@@ -15,6 +15,9 @@ The index was added 2026-09-01. Nothing below it was moved, reworded, or removed
 **When you add a section, add its row here.** A trap nobody can find costs the
 next session the same hour it cost the last one.
 
+### Learned 2026-11-15 (Fable desk: lanes 50 and 52)
+- `LEARNED BY THE 2026-11-15 FABLE DESK` (last section of this file): how long the desk's own gate runs take, the `i18n.ts` key-count conflict between two lanes and its resolver, a blocked `javascript_tool` result, checking a build flag in the page, re-citing a brief by script, the Vercel usage figure as page text.
+
 ### Learned 2026-11-15 (the Ilya page on GoDaddy)
 - `THE ILYA PAGE ON GODADDY` (last section of this file): building and publishing dannmitton.com/ilya, and capturing Ilya pages as images.
 
@@ -5292,3 +5295,14 @@ The page is https://dannmitton.com/ilya, built in GoDaddy Website Builder (Urban
 **Capturing one Ilya page as an image.** In the Ilya tab, clone the page into a fixed overlay scaled to the viewport's height, with the paper colour `rgb(240, 235, 224)` behind it, and screenshot at scale 1: the TEXT page is `div.paper-page`; MELODY and INSIGHTS are `article.paper-page` (find the visible element 816 px wide). Remove the overlay after. The voice that Ilya draws is `localStorage['shane.profiles.v2'].activeId` (Dann's voice "Dann" is `df4d0fda-e50b-441b-9d40-6ebb53226f2d`; the alias test voice "M0 test (delete after)" is `47df04f0-f5b1-442e-b9cc-8e67da3a3169`); Ilya's Voice panel shows no switcher. Set it, reload, capture, and set it back.
 
 **Desk error, 2026-11-15 02:1x.** `resize_window` resizes the window that holds the tab named, and Ilya and GoDaddy shared one window: the desk shrank Dann's window to 820 by 1150 (GoDaddy's editor collapsed to its phone layout), then set it to 1720 by 1110, not to its earlier size, which was not read. Read the window's size before resizing, and set it back exactly.
+
+## LEARNED BY THE 2026-11-15 FABLE DESK (02:34 on; lanes 50 and 52)
+
+- **The desk's gate measure, timed.** A fresh clone of `Shane` took 7 s and the install 4 s (pnpm 10.28). One run of the eight gates took 10.5 minutes on the workspace's two cores, gate 4 alone 9.6 (577 s). Three runs in series (lane 50's merge, the `Shane` control, both lanes merged) took 30 minutes and no helper. The control (`Shane` alone) read all eight ship-script baselines; that is what lets a one-count difference from a lane's own report be read as the lane's and not the instrument's. Harness: `~/Downloads/_desk-2026-11-15/desk-harness_2026-11-15.tgz` (README inside).
+- **Two lanes that each add keys to `i18n.ts` conflict on one line, the key count** ("This file holds N keys."); the per-prefix rows merged by themselves. The true total is `Shane`'s count plus each lane's added keys (1,246 + 23 + 1 = 1,270 on 2026-11-15), and `i18n-index.test.ts` confirms it. For Dann's merge the desk writes a small resolver that refuses unless the result's md5 equals the file the desk measured (`resolve-i18n-count.sh`, in the harness), and the paste chains `git add` and `git commit --no-edit` after it with `&&`.
+- **`javascript_tool` refuses a result that contains the page's address with its query string** ("[BLOCKED: Cookie/query string data]"). Return the host and paths, never `location.href`.
+- **A lane's build flag is checked in the page, not by fetching chunks into the thread:** one script in the tab fetches every chunk the page references and returns only the paths that hold the marker string (40 chunks, 14.8 million characters read; one line came back).
+- **`device_commit_files` delivered three new files to `~/Downloads` with matching md5s** (two `.md`, one `.tgz`). The C2PA note of 2026-11-13 concerns SVG and PNG.
+- **Vercel's usage page gives the Deployment Storage figure as page text** (`document.body.innerText`; the number follows the words "Deployment Storage"); press Escape first for the reminder dialog. 6.78 GB at 2026-11-15 03:1x.
+- **Re-citing a brief after other lanes land is a script, not a helper:** `recite.py` (in the harness) maps each cited line by its exact text from the tree it was read at to the new tree and prints only what moved (Fable's strophic review: 93 cites, 52 unchanged, the rest mapped or flagged in under a minute).
+- **Estimates, actuals:** no helper ran in this thread up to 03:20; the as-built read of two lanes (17 reports, 9 pictures, targeted diffs) was the desk's own.
