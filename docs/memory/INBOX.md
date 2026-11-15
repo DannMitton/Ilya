@@ -711,3 +711,7 @@ Format: `I.nn | YYYY-MM-DD | one line, in Dann's words where possible`
 - 2026-11-14 20:36, Dann RULED N.201 into the task list, displacing nothing: *"We puched teh release dat back one week so I feel comfortable inserting 201 into our task list. It needs displace nothing."* `OPEN.md`, N.201.
 - 2026-11-14 20:37, Dann: the release stays Friday 2026-11-20. 20:38: RATIFIED the four count strings EN and FR. `OPEN.md`, N.201.
 - 2026-11-14 21:03, Dann RULED: *"the new screen is no longer behind the switch. Integrate it now."* N.199 Step 8 now. `OPEN.md`, N.199.
+- 2026-11-14 21:19, Dann RULED: release without single-vowel removal (the wheel's long press goes). `OPEN.md`, N.199.
+- 2026-11-14 21:22, Dann RATIFIED the four "Resonance profile" strings EN and FR. `OPEN.md`, N.199.
+- 2026-11-14 21:26, Dann RATIFIED the fRn and Fn sentence EN and FR, with his amendments. `OPEN.md`, N.199.
+- 2026-11-14 21:28, Dann RULED « Reprendre » for the summary's Re-take button (`calib.common.retake`). `OPEN.md`, N.199.
