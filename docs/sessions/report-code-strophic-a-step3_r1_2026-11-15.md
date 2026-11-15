@@ -32,7 +32,7 @@ I ran `renderScoreOf` over every `.musicxml` that git tracks (all 213, the lane'
 
 ## Gates (after Step 3)
 
-RESULT_TABLE
+Step 3's code and the 4a extraction were committed together, so their gates are in `report-code-strophic-a-step4a_r1_2026-11-15.md`. At Step 3 the score-parser suite read 890 passed with the render-score tests in it. The full web run for Step 3 alone was cut off while a slow voice test file was still importing, so it is not separately recorded.
 
 ## Pictures
 

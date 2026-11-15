@@ -30,7 +30,18 @@ I lengthened fixture 1's introduction from two bars to three, as the brief's Ste
 
 ## Gates (after Step 4a)
 
-GATE_TABLE
+| Gate | Count |
+| --- | --- |
+| phonology | 462 passed (462) |
+| dictionary | 248 passed (248) |
+| svelte-check | found 0 errors and 12 warnings in 5 files (the first run found 5 errors, all one use of `paginated` before its declaration in `MarkupPane.svelte`; the legend lines now sit below it) |
+| web unit | 6042 passed, 1 failed, 1 skipped (6044). The failure is `open-extract.test.ts` "gives the same reading whichever vowel is asked", a 5000 ms timeout that measured 5.0 to 6.1 s here; it passes alone and is not this lane's (see the Step 1 report). The full run preceded the legend move, which changes no test; `src/lib/markup` and `loupe.test.ts` were rerun after it and pass (563). |
+| score-parser | 890 passed, 5 skipped (895) |
+| blurb | 178 passed (178) |
+| root integration | 159 passed (159) |
+| ratchets | OK |
+
+Also run, not among the eight: Playwright `strophic-melody` desktop (3 passed) and phone (1 passed), and `key-change-melody` desktop (1 passed). In this sandbox `voice/engine/analyze.test.ts` spends about 400 s in its import (synthetic audio built at collection), so a full web run takes about 10 minutes.
 
 ## Pictures (looked at)
 
