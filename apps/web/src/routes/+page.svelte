@@ -267,6 +267,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	let transcribeError = $state('');
 	let transcribeMs = $state(0);
 	let selectedWord = $state<WordStackData | null>(null);
+	let revealRequest = $state(0);
 	let lastFocusedWord = $state<{ line: number; word: number } | null>(null);
 	// Drawer state
 	/**
@@ -2143,6 +2144,12 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		   `drawerRaised` is not read there. This is the same behaviour the
 		   collapsed drawer had, under the state that replaced it. */
 		if (isMobile) drawerRaised = true;
+		/* N.201: a tap OPENS ANALYSIS IN VIEW (ratified 2026-10-31, built now).
+		   `reveal` shuts the other bands on a phone and nothing on a desk, and
+		   leaves ANALYSIS open on a second tap; the counter asks the Drawer to
+		   scroll (`Drawer.svelte`, `revealScrollTop`). */
+		sections.reveal(BAND_IDS.analysis);
+		revealRequest += 1;
 		// Switch to Transcription if clicking a word from another surface
 		if (destination !== 'studio' || studioDocument !== 'text') {
 			destination = 'studio';
@@ -3811,6 +3818,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		inputState={inputStateText}
 		scoreState={scoreStateText}
 		ontogglepull={handlePullToggle}
+		{revealRequest}
 		gesturesBlocked={loupeOpen}
 		ontabchange={handleTabChange}
 		onheadingnavigate={handleHeadingNavigate}
@@ -4250,7 +4258,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 			     document. -->
 			{#snippet transcriptionPaper()}
 				{#if witnessDiffer}<TextSourceLine {language} witness={shown} />{/if}
-				<Paper lines={effectiveLines} witness={shown} {notationPrefs} {language} metadata={doc.metadata} pageSize="letter" {isMobile} {showStressDiacritics} spotReconstitution={spotInverts} glossOverrides={shownGlosses} {mutedWords} onwordclick={handleWordClick} emptyNotice={emptyTextNotice(shownText, loaderState)} />
+				<Paper lines={effectiveLines} witness={shown} {notationPrefs} {language} metadata={doc.metadata} pageSize="letter" {isMobile} {showStressDiacritics} spotReconstitution={spotInverts} glossOverrides={shownGlosses} {mutedWords} onwordclick={handleWordClick} selectedKey={selectedWord ? `${selectedWord.lineIndex}-${selectedWord.wordIndex}` : null} emptyNotice={emptyTextNotice(shownText, loaderState)} />
 			{/snippet}
 			{#if isMobile}
 				<!-- N.73 portrait C. The stage holds both views. The one that is

@@ -4,6 +4,7 @@
 	import type { NotationPreferences } from '@ilya/phonology';
 	import type { Language } from '$lib/i18n';
 	import WordStack from './WordStack.svelte';
+	import { adjacentCliticReconFlags as adjacentReconFlags, displayedWords } from './shown-ipa';
 
 	interface Props {
 		words: WordStackData[];
@@ -14,59 +15,26 @@
 		glossOverrides?: Map<string, ResolvedGloss>;
 		mutedWords?: ReadonlySet<string>;
 		onwordclick?: (word: WordStackData) => void;
+		/** N.201: the tapped word's `"lineIndex-wordIndex"`; its stack draws the screen-only mark. */
+		selectedKey?: string | null;
 		/** The page-fit probe's copy of the line: its stacks carry no identity (`WordStack.svelte`). */
 		probe?: boolean;
 	}
 
-	let { words, notationPrefs, showStressDiacritics = false, language = 'en', spotReconstitution, glossOverrides, mutedWords, onwordclick, probe = false }: Props = $props();
+	let { words, notationPrefs, showStressDiacritics = false, language = 'en', spotReconstitution, glossOverrides, mutedWords, onwordclick, selectedKey = null, probe = false }: Props = $props();
 
 	// Render words containing Cyrillic, and Latin words (`latin.ts`), which keep
 	// their place in the line. A punctuation-only token never becomes a word
 	// (`splitIntoPreLines`), and this filter would drop one if it did.
-	const displayWords = $derived(
-		words.filter(w => w.latin || /[А-Яа-яЁё]/.test(w.cyrillic || ''))
+	const displayWords = $derived(displayedWords(words));
+
+	// For each host word, whether an adjacent clitic has reconstitution active.
+	// N.201: the rule moved to `shown-ipa.ts`, which the closed ANALYSIS line
+	// also reads, so the stack and the line cannot disagree. A derived, so it
+	// updates when `spotReconstitution` or `notationPrefs` change.
+	const adjacentCliticReconFlags = $derived(
+		adjacentReconFlags(displayWords, notationPrefs, spotReconstitution)
 	);
-
-	// Check if reconstitution is active for a given word index in displayWords.
-	// Bidirectional XOR: spot inverts global, matching WordStack/InspectorPanel.
-	function isReconActiveAt(idx: number): boolean {
-		const w = displayWords[idx];
-		const key = `${w.lineIndex}-${w.wordIndex}`;
-		const isSpot = spotReconstitution?.has(key) ?? false;
-		return isSpot ? !notationPrefs.reconstitution : notationPrefs.reconstitution;
-	}
-
-	// For each host word, check if any adjacent clitic has reconstitution active.
-	// Computed as a derived so it updates when spotReconstitution or notationPrefs change.
-	const adjacentCliticReconFlags = $derived.by((): boolean[] => {
-		// Read spotReconstitution directly to ensure Svelte tracks the dependency
-		const spotMap = spotReconstitution;
-		const globalRecon = notationPrefs.reconstitution;
-
-		return displayWords.map((word, i) => {
-			if (word.isProclitic || word.isEnclitic) return false;
-
-			// Check preceding proclitics
-			for (let j = i - 1; j >= 0 && displayWords[j].isProclitic; j--) {
-				const cw = displayWords[j];
-				const cKey = `${cw.lineIndex}-${cw.wordIndex}`;
-				const isSpot = spotMap?.has(cKey) ?? false;
-				const reconActive = isSpot ? !globalRecon : globalRecon;
-				if (reconActive) return true;
-			}
-
-			// Check following enclitics
-			for (let j = i + 1; j < displayWords.length && displayWords[j].isEnclitic; j++) {
-				const cw = displayWords[j];
-				const cKey = `${cw.lineIndex}-${cw.wordIndex}`;
-				const isSpot = spotMap?.has(cKey) ?? false;
-				const reconActive = isSpot ? !globalRecon : globalRecon;
-				if (reconActive) return true;
-			}
-
-			return false;
-		});
-	});
 </script>
 
 <div class="verse-line">
@@ -82,6 +50,7 @@
 			glossOverride={glossOverrides?.get(wordKey)?.text}
 			muted={mutedWords?.has(wordKey) ?? false}
 			{onwordclick}
+			selected={selectedKey === wordKey}
 			{probe}
 		/>
 	{/each}

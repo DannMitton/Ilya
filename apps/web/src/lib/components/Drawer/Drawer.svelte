@@ -1,7 +1,9 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import { t, type Language } from '$lib/i18n';
+	import { tick, untrack } from 'svelte';
 	import { SectionSet, BAND_IDS } from './sections.svelte';
+	import { revealScrollTop } from './reveal-scroll';
 	import { readSwipe } from './gesture';
 	import type { Destination, TabId } from '$lib/destinations';
 
@@ -144,6 +146,12 @@
 		 */
 		ontogglepull: () => void;
 		/**
+		 * N.201: a counter that goes up on each word tap, the `calibrationRequest`
+		 * shape. The page has already revealed ANALYSIS; this asks the Drawer to
+		 * scroll it into view (`reveal-scroll.ts`). Ignored during the takeover.
+		 */
+		revealRequest?: number;
+		/**
 		 * The loupe has the screen, so the swipe must not fire. Dann's ruling
 		 * names it. The press still works: the pull is a control and the dock
 		 * covers it rather than disabling it.
@@ -153,7 +161,7 @@
 		onheadingnavigate: (id: string) => void;
 	}
 
-	let { width, raised, isMobile, language, destination, activeTab, activeHeadingId = null, repertoireGroup, inputGroup, analysisGroup, scoreGroup, metadataBody, sections, repertoireState = '', pieceState = '', pieceFromScore = false, inputState = '', analysisState = '', scoreState = '', voiceTakeover, takeoverActive = false, onexittakeover, ontogglepull, gesturesBlocked = false, ontabchange, onheadingnavigate }: Props = $props();
+	let { width, raised, isMobile, language, destination, activeTab, activeHeadingId = null, repertoireGroup, inputGroup, analysisGroup, scoreGroup, metadataBody, sections, repertoireState = '', pieceState = '', pieceFromScore = false, inputState = '', analysisState = '', scoreState = '', voiceTakeover, takeoverActive = false, onexittakeover, ontogglepull, revealRequest = 0, gesturesBlocked = false, ontabchange, onheadingnavigate }: Props = $props();
 
 	/* ── THE SILHOUETTE AND THE BOOKMARK TAB ARE GONE (N.108 increment 1a) ──
 	   Ruled by Dann 2026-09-02: the desk has no pull, chevron or collapsed
@@ -335,11 +343,12 @@
 	   element still has its layout. The RESTORE is the mirror case and has to
 	   wait for the layout to come back, so it is deferred one frame.
 
-	   THE ONE SELF-SCROLL IN THE WHOLE DRAWER, N.108 increment 3, and it
-	   rides in the same effect. N.108 §2: "the drawer never scrolls itself,
-	   except once, on entry to the calibration takeover." The singer must
-	   land on the ritual and not part-way down it, and the drawer's own
-	   scroll is held and given back on exit so they land where they were.
+	   THE TAKEOVER'S SELF-SCROLL, N.108 increment 3, rides in the same
+	   effect. N.108 §2: "the drawer never scrolls itself, except once, on
+	   entry to the calibration takeover." N.201 ADDS ONE MORE, the word tap's
+	   (the effect below): the singer asked for that word's analysis, so the
+	   tap may bring ANALYSIS into view. The takeover's own scroll is held and
+	   given back on exit so the singer lands where they were.
 
 	   IT IS WRITTEN ON THE WAY OUT, NOT ON THE WAY IN, AND THAT WAS MEASURED
 	   RATHER THAN CHOSEN. The prototype sets `takeoverBody.scrollTop = 0` on
@@ -375,6 +384,32 @@
 				el.scrollTop = stowedScrollTop;
 			});
 		}
+	});
+
+	/* N.201: A WORD TAP SCROLLS THE DRAWER, the one exception beside the
+	   takeover's. The page has revealed ANALYSIS and bumped `revealRequest`;
+	   after the DOM settles, `revealScrollTop` decides (phone: the top; desk:
+	   only when ANALYSIS's head is outside the window). Skipped while the
+	   takeover holds the scroll (`stowedScrollTop`). */
+	let revealSeen = 0;
+	$effect(() => {
+		const n = revealRequest;
+		if (n === revealSeen) return;
+		revealSeen = n;
+		void tick().then(() => {
+			const el = drawerContentEl;
+			if (!el || untrack(() => takeoverActive)) return;
+			const head = el.querySelector('[data-band-head="analysis"]');
+			const win = el.getBoundingClientRect();
+			const box = head?.getBoundingClientRect();
+			const to = revealScrollTop({
+				phone: isMobile,
+				scrollTop: el.scrollTop,
+				window: { top: win.top, bottom: win.bottom },
+				head: box ? { top: box.top, bottom: box.bottom } : null,
+			});
+			if (to !== null) el.scrollTop = to;
+		});
 	});
 
 	function isActive(id: string): boolean {
@@ -452,7 +487,7 @@
 					     costs no height. -->
 					{#snippet bandHead(id: string, label: string, state: string, fromScore: boolean)}
 						{@const open = sections.has(id)}
-						<h2 class="group-band">
+						<h2 class="group-band" data-band-head={id}>
 							<button
 								type="button"
 								class="band-toggle"
@@ -952,12 +987,13 @@
 	}
 
 
-	/* THE ONE SCROLL. N.108: the drawer never scrolls itself, except once, on
-	   entry to the calibration takeover, and that one call is the takeover's
-	   (increment 3). Nothing in this file calls `scrollTo` on this box; the
-	   only thing that touches its `scrollTop` is the takeover's stow and
-	   restore below, which gives the singer back the position they had. A
-	   station opens IN PLACE. Do not add a scroll here. */
+	/* THE TWO SCROLLS. N.108: the drawer never scrolls itself, except on entry
+	   to the calibration takeover (increment 3: its stow and restore give the
+	   singer back the position they had). N.201 names the second exception: a
+	   word tap, which the singer made to see that word's analysis, brings
+	   ANALYSIS into view (`revealScrollTop`, the effect above). A station
+	   opening, a band opening, or a pick still opens IN PLACE. Do not add a
+	   third scroll here. */
 	.drawer-content {
 		flex: 1;
 		min-height: 0;
