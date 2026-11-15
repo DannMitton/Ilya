@@ -5,7 +5,7 @@
  */
 import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
-import { analyzeScore, demoProfile, MusicXmlScoreParser, verseView, type ParsedScore } from '@ilya/score-parser';
+import { analyzeScore, demoProfile, MusicXmlScoreParser, paginateScore, verseView, type ParsedScore } from '@ilya/score-parser';
 import { parseXml } from '$lib/score/ingestion/mini-dom';
 import { ENGRAVING_DEFAULTS } from '$lib/score/engraving';
 import { buildUnderlayResolvers } from '$lib/score/vowel-resolver';
@@ -19,7 +19,7 @@ async function load(name: string): Promise<ParsedScore> {
 }
 
 /** MELODY's call for a score: verse 1's live channels as the page derives them (no pairings), then `paginateMelody`. */
-function melody(score: ParsedScore): MelodyPages {
+function melody(score: ParsedScore, language: 'en' | 'fr' = 'en'): MelodyPages {
 	const analyzed = analyzeScore(score, demoProfile, (e) => buildUnderlayResolvers(score, 1, {}).vowel(e), { generatedAt: '2026-11-15T00:00:00.000Z' });
 	const r = buildUnderlayResolvers(score, 1, {});
 	const ipa: Record<string, string> = {};
@@ -36,6 +36,7 @@ function melody(score: ParsedScore): MelodyPages {
 		engraving: ENGRAVING_DEFAULTS,
 		channels: { ipaPreview: ipa },
 		verses: { profile: demoProfile, notationPrefs: prefs, openSyllabification: false },
+		language,
 	});
 }
 
@@ -147,5 +148,90 @@ describe('one-verse scores are untouched by the module', () => {
 		expect(m.render.score).toBe(s);
 		expect(m.systems.every((x) => x.attr === undefined)).toBe(true);
 		expect(markup(m)).not.toContain('data-verse');
+	});
+});
+
+describe('Step 4b: the label, the tag, and the multibar rest', () => {
+	const labels = (svg: string) => [...svg.matchAll(/<text data-verse-label="(\d+)" x="([-\d.]+)" y="([-\d.]+)"[^>]*>([^<]*)<\/text>/g)].map((x) => ({ k: Number(x[1]), x: Number(x[2]), y: Number(x[3]), text: x[4] }));
+	const numbers = (svg: string) => [...svg.matchAll(/<text data-bar-number="([^"]*)" x="([-\d.]+)"[^>]*text-anchor="(\w+)"[^>]*>([^<]*)<\/text>/g)].map((x) => ({ bar: x[1], x: Number(x[2]), anchor: x[3], shown: x[4] }));
+
+	it('stands the label above the first bar of passes 2 and 3 only, in both languages', async () => {
+		const s = await load('strophic-repeat.musicxml');
+		for (const [lang, word] of [['en', 'Verse'], ['fr', 'Couplet']] as const) {
+			const m = melody(s, lang);
+			const found = m.systems.flatMap((sys) => labels(sys.svg));
+			expect(found.map((l) => [l.k, l.text])).toEqual([[2, `${word} 2`], [3, `${word} 3`]]);
+			// it stands at the bar's first note: the left of that note's own group
+			for (const l of found) {
+				const id = `${s.vocalLine.filter((e) => e.measureIndex === 3)[0].id}~v${l.k}`;
+				const sys = m.systems.find((x) => x.svg.includes(`data-verse-event-id="${id}"`))!;
+				const g = sys.svg.slice(sys.svg.indexOf(`data-verse-event-id="${id}"`));
+				const cx = Number(/<ellipse cx="([-\d.]+)" cy="[-\d.]+" rx="([-\d.]+)"/.exec(g)![1]);
+				const rx = Number(/<ellipse cx="[-\d.]+" cy="[-\d.]+" rx="([-\d.]+)"/.exec(g)![1]);
+				expect(l.x).toBeCloseTo(cx - rx, 1);
+			}
+		}
+	});
+
+	it('grows the system to hold the label, so it cannot part from its bar at a page foot', async () => {
+		const s = await load('strophic-repeat.musicxml');
+		const m = melody(s);
+		const withLabel = m.systems.filter((sys) => labels(sys.svg).length > 0);
+		expect(withLabel).toHaveLength(2);
+		for (const sys of withLabel) {
+			const vb = /viewBox="0 ([-\d.]+) ([\d.]+) ([\d.]+)"/.exec(sys.svg)!;
+			expect(sys.minY).toBe(Number(vb[1]));
+			expect(sys.height).toBe(Number(vb[3]));
+			expect(labels(sys.svg)[0].y).toBeGreaterThan(sys.minY);
+		}
+		// the systems are packed with their grown height: none is taller than the window it is placed in
+		for (const sys of m.systems) expect(sys.height).toBeLessThanOrEqual(727);
+	});
+
+	it('tags the bar number only at a later-pass system start that does not open on the label', async () => {
+		const s = await load('strophic-repeat.musicxml');
+		const m = melody(s);
+		const bars = m.render.bars;
+		let tagged = 0;
+		for (const sys of m.systems) {
+			const first = bars[sys.fromMeasure];
+			const n = numbers(sys.svg);
+			if (sys.fromMeasure === 0) {
+				expect(n).toEqual([]);
+				continue;
+			}
+			expect(n.length).toBeGreaterThan(0);
+			const printed = m.render.score.measures[sys.fromMeasure].number;
+			if (first.later && first.label === undefined) {
+				tagged++;
+				expect(n[0].shown).toBe(`${printed} \u00b7 verse ${first.place}`);
+				expect(n[0].bar).toBe(printed); // the handle still carries the bare number
+			} else {
+				expect(n[0].shown).toBe(printed);
+			}
+		}
+		expect(tagged).toBeGreaterThan(0);
+		const fr = melody(s, 'fr').systems.flatMap((sys) => numbers(sys.svg)).filter((x) => x.shown !== x.bar).map((x) => x.shown);
+		expect(fr.every((t) => /^\d+ \u00b7 couplet \d$/.test(t))).toBe(true);
+	});
+
+	it('keeps a long tag off the left edge by anchoring it at x = 0', async () => {
+		const m = melody(await load('strophic-repeat.musicxml'), 'fr');
+		const tags = m.systems.flatMap((sys) => numbers(sys.svg)).filter((x) => x.shown !== x.bar);
+		expect(tags.length).toBeGreaterThan(0);
+		for (const t of tags) {
+			expect(t.anchor === 'start' ? t.x : t.x - (t.shown.length * 0.62 * 12.5) / 2).toBeGreaterThanOrEqual(0);
+		}
+	});
+
+	it('a multibar rest stops at a pass boundary', async () => {
+		const s = await load('strophic-tacet-boundary.musicxml');
+		const m = melody(s);
+		expect(m.render.boundaries.has(4)).toBe(true);
+		const counts = (svg: string) => [...svg.matchAll(/data-tacet-count="(\d+)"/g)].map((x) => Number(x[1]));
+		expect(m.systems.flatMap((sys) => counts(sys.svg)).every((n) => n === 1)).toBe(true);
+		// without the boundary the interlude of one pass and the introduction of the next are one rest
+		const joined = paginateScore(m.render.score, m.analyzed, { pageWidth: 624, pageHeight: 727, laterPageHeight: 727, marginTop: 0, marginBottom: 0, marginLeft: 0, marginRight: 0, ...ENGRAVING_DEFAULTS });
+		expect(joined.systems.flatMap((sys) => counts(sys.svg))).toContain(2);
 	});
 });

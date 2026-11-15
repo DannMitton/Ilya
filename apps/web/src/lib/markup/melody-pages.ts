@@ -36,6 +36,7 @@ import { applyNotationPreferences, type NotationPreferences } from '@ilya/phonol
 import { buildUnderlayResolvers } from '$lib/score/vowel-resolver';
 import { resolveAdvice } from '$lib/analysis/advice-resolver';
 import type { EngravingValues } from '$lib/score/engraving';
+import { t, type Language } from '$lib/i18n';
 
 /** Verse 1's five channels to the renderer, as `MarkupPane.svelte` derives them. */
 export interface MelodyChannels {
@@ -67,6 +68,8 @@ export interface MelodyPagesInput {
 	font?: { prepared: StaffRenderOptions['font']; family: string };
 	/** Present when the page can build later verses; absent, a later pass would carry no vowel. */
 	verses?: VerseBuild;
+	/** The language of the verse label and tag (ratified strings, `markup.verseLabel` and `markup.verseTag`). */
+	language?: Language;
 }
 
 export interface MelodyPages extends PaginatedScore {
@@ -119,6 +122,7 @@ export function paginateMelody(i: MelodyPagesInput): MelodyPages {
 		...(i.font ? { font: i.font.prepared, fontFamily: i.font.family } : {}),
 	};
 	const c = i.channels;
+	const lang = i.language ?? 'en';
 	if (render.path === 'notated' || !i.verses) {
 		const out = paginateScore(i.score, i.analyzed, {
 			...base,
@@ -149,7 +153,11 @@ export function paginateMelody(i: MelodyPagesInput): MelodyPages {
 		...(withheld.size > 0 ? { withheldIpa: withheld } : {}),
 		...(c.sylTypePreview ? { sylTypePreview: c.sylTypePreview } : {}),
 		...(c.melismaPreview ? { melismaPreview: c.melismaPreview } : {}),
-		seam: systemSeam(render.bars),
+		breakRunsAt: render.boundaries,
+		seam: systemSeam(render.bars, {
+			label: (place) => t('markup.verseLabel', lang).replace('%s', String(place)),
+			tag: (bar, place) => t('markup.verseTag', lang).replace('%m', bar).replace('%v', String(place)),
+		}),
 	});
 	return { ...out, render, analyzed: { ...i.analyzed, events }, withheld: withheld.size > 0 ? withheld : undefined };
 }

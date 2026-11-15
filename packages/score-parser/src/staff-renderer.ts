@@ -370,6 +370,8 @@ export interface StaffRenderOptions {
    * scale. A standalone render leaves it 0, which is the truth there.
    */
   measureOffset?: number;
+  /** Strophic lane A, D7: printed bar indices (of the whole score) at which a multibar rest must not run on from the bar before. */
+  breakRunsAt?: ReadonlySet<number>;
   /**
    * The sung line's accidental state at the END of the measure before this
    * slice's first measure (N.102 increment 1b), keyed as `measureAcc` keys it.
@@ -434,7 +436,7 @@ export interface StaffRenderOptions {
 // `finalBarline` joins font/clef/ipaPreview in the Omit: it is read straight
 // off `options` rather than defaulted here, and leaving it out of the Omit
 // makes `Required` demand a default that would be meaningless.
-const DEFAULTS: Required<Omit<StaffRenderOptions, 'font' | 'clef' | 'ipaPreview' | 'withheldIpa' | 'cyrPreview' | 'sylTypePreview' | 'melismaPreview' | 'finalBarline' | 'targetWidth' | 'incomingAccidentals' | 'incomingTimeSignature' | 'outgoingKeySignature' | 'outgoingDoubleBar' | 'runOnTieSp' | 'printedSlurs' | 'slurAcross' | 'slurThrough'>> = {
+const DEFAULTS: Required<Omit<StaffRenderOptions, 'font' | 'clef' | 'ipaPreview' | 'withheldIpa' | 'cyrPreview' | 'sylTypePreview' | 'melismaPreview' | 'finalBarline' | 'breakRunsAt' | 'targetWidth' | 'incomingAccidentals' | 'incomingTimeSignature' | 'outgoingKeySignature' | 'outgoingDoubleBar' | 'runOnTieSp' | 'printedSlurs' | 'slurAcross' | 'slurThrough'>> = {
   staffMidY: 96,
   lineGap: 12,
   // N.139: the stave's own left edge, flush with the system's. DESK DEFAULT.
@@ -751,7 +753,7 @@ export interface TacetRun {
  * A score whose `measures` array is empty yields no runs, so a caller that
  * renders a bare vocal line gets exactly the layout it got before N.104.
  */
-export function tacetRuns(parsed: ParsedScore): TacetRun[] {
+export function tacetRuns(parsed: ParsedScore, breakAt?: ReadonlySet<number>, offset = 0): TacetRun[] {
   if (parsed.measures.length === 0) return [];
   const sung = new Set<number>();
   for (const ev of parsed.vocalLine) sung.add(ev.measureIndex);
@@ -761,7 +763,7 @@ export function tacetRuns(parsed: ParsedScore): TacetRun[] {
     const open = runs[runs.length - 1];
     // N.139: a change of meter opens a new run, so the change draws at its own
     // barline rather than vanishing inside a consolidated rest. DESK DEFAULT. N.192: so does a change of key.
-    if (open && open.toMeasure === m.index - 1 && !meterDeclaredAt(parsed, m.index) && !keyDeclaredAt(parsed, m.index)) {
+    if (open && open.toMeasure === m.index - 1 && !meterDeclaredAt(parsed, m.index) && !keyDeclaredAt(parsed, m.index) && !breakAt?.has(m.index + offset)) { // strophic lane A, D7: a pass boundary ends the run
       open.toMeasure = m.index;
       open.count += 1;
     } else {
@@ -1540,7 +1542,7 @@ export function layoutColumns(
 ): { columns: LayoutColumn[]; trailing: number } {
   const lineGap = options.lineGap ?? DEFAULTS.lineGap;
   const runWidth = TACET_REST.measureSp * lineGap;
-  const runs = tacetRuns(parsed).filter((r) => r.toMeasure >= fromMeasure && r.fromMeasure <= toMeasure).map((r) => clipRun(r, fromMeasure, toMeasure));
+  const runs = tacetRuns(parsed, options.breakRunsAt, options.measureOffset ?? 0).filter((r) => r.toMeasure >= fromMeasure && r.fromMeasure <= toMeasure).map((r) => clipRun(r, fromMeasure, toMeasure));
   const events = parsed.vocalLine.filter(
     (e) => e.measureIndex >= fromMeasure && e.measureIndex <= toMeasure,
   );

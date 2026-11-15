@@ -18,6 +18,7 @@
  * `data-verse-system`, with printed indices.
  */
 import type { RenderBar } from './render-score';
+import { BAR_NUMBER, CYR_FONT_FAMILY, CYR_FONT_SIZE } from './staff-renderer';
 
 export interface SeamResult {
 	/** The system's markup, renamed. */
@@ -47,12 +48,82 @@ export function renameLaterPassAttributes(svg: string): string {
 	});
 }
 
+/** The two ratified strings, handed in by the page (this package holds no copy of its own). */
+export interface SeamText {
+	/** "Verse 2": the label above the first bar of a later pass. */
+	label: (place: number) => string;
+	/** "12 · verse 2": the bar number's tag at a system start inside a later pass. */
+	tag: (bar: string, place: number) => string;
+}
+
+const esc = (t: string): string => t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const round2 = (v: number): number => Math.round(v * 100) / 100;
+/** An upper bound on an italic serif string's width in em per character, so the tag never passes the left edge. JUDGEMENT; e2e measures the real ink. */
+const EM_PER_CHAR = 0.62;
+
+/** The x of the leftmost ink of the group that is `id`'s own, not counting its hit rectangle. Undefined where there is no such group. */
+function groupLeft(svg: string, id: string): number | undefined {
+	const open = svg.search(new RegExp(`<g data-(?:verse-)?event-id="${id.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}"`));
+	if (open < 0) return undefined;
+	const body = svg.slice(open, svg.indexOf('</g>', open));
+	const xs: number[] = [];
+	for (const m of body.matchAll(/<ellipse cx="([-\d.]+)" cy="[-\d.]+" rx="([-\d.]+)"/g)) xs.push(Number(m[1]) - Number(m[2]));
+	for (const m of body.matchAll(/<text [^>]*?\bx="([-\d.]+)"/g)) xs.push(Number(m[1])); // a notehead drawn as a font glyph starts at its x
+	return xs.length > 0 ? Math.min(...xs) : undefined;
+}
+
+/** The x of a tacet group's left end, `local` being the slice-relative bar index it opens. */
+function tacetLeft(svg: string, local: number): number | undefined {
+	const open = svg.search(new RegExp(`<g data-tacet="${local}-`));
+	if (open < 0) return undefined;
+	const body = svg.slice(open, svg.indexOf('</g>', open));
+	const xs = [...body.matchAll(/\s(?:x|x1)="([-\d.]+)"/g)].map((m) => Number(m[1]));
+	return xs.length > 0 ? Math.min(...xs) : undefined;
+}
+
+/** D7: the label above each bar of this system that opens a later pass, the system's box grown to hold it. */
+function withLabels(svg: string, slice: readonly RenderBar[], text: SeamText): string {
+	const labelled = slice.map((b, i) => ({ b, i })).filter((x) => x.b.label !== undefined);
+	if (labelled.length === 0) return svg;
+	const vb = /viewBox="0 ([-\d.]+) ([\d.]+) ([\d.]+)"/.exec(svg);
+	if (!vb) return svg;
+	const [minY, width, height] = [Number(vb[1]), Number(vb[2]), Number(vb[3])];
+	const fs = CYR_FONT_SIZE;
+	const baseline = round2(minY - 0.35 * fs);
+	const band = round2(1.4 * fs);
+	const marks = labelled.map(({ b, i }) => {
+		const x = (b.first ? groupLeft(svg, b.first) : undefined) ?? tacetLeft(svg, i) ?? 0;
+		return `<text data-verse-label="${b.label}" x="${round2(x)}" y="${baseline}" text-anchor="start" font-size="${fs}" font-family="${CYR_FONT_FAMILY}" fill="${BAR_NUMBER.fill}">${esc(text.label(b.label!))}</text>`;
+	});
+	const grown = svg
+		.replace(vb[0], `viewBox="0 ${round2(minY - band)} ${width} ${round2(height + band)}"`)
+		.replace(/^(<svg[^>]*?) height="[\d.]+"/, `$1 height="${round2(height + band)}"`);
+	return grown.replace(/<\/svg>\s*$/, `${marks.join('\n')}\n</svg>`);
+}
+
+/** D7: at a system start inside a later pass, the bar number carries the tag, kept off the left edge. */
+function withTag(svg: string, first: RenderBar, text: SeamText): string {
+	if (!first.later || first.label !== undefined) return svg;
+	return svg.replace(/<text data-bar-number="([^"]*)" x="([-\d.]+)" y="([-\d.]+)" text-anchor="middle"([^>]*)>([^<]*)<\/text>/, (whole, bar: string, x: string, y: string, rest: string, shown: string) => {
+		if (shown !== bar) return whole; // the bracketed courtesy number after a long rest takes no tag
+		const tag = text.tag(bar, first.place);
+		const half = (tag.length * EM_PER_CHAR * CYR_FONT_SIZE) / 2;
+		const left = Number(x) - half < 0;
+		return `<text data-bar-number="${bar}" x="${left ? 0 : x}" y="${y}" text-anchor="${left ? 'start' : 'middle'}"${rest}>${esc(tag)}</text>`;
+	});
+}
+
 /** The seam for one render score's bars. */
-export function systemSeam(bars: readonly RenderBar[]): SystemSeam {
+export function systemSeam(bars: readonly RenderBar[], text?: SeamText): SystemSeam {
 	return (svg, fromMeasure, toMeasure) => {
 		const held = bars.slice(fromMeasure, toMeasure + 1);
 		const own = held.filter((b) => !b.later).map((b) => b.source);
 		const attr = own.length > 0 ? `data-system="${Math.min(...own)}-${Math.max(...own)}"` : `data-verse-system="${fromMeasure}-${toMeasure}"`;
-		return { svg: renameLaterPassAttributes(svg), attr };
+		let out = renameLaterPassAttributes(svg);
+		if (text) {
+			out = withTag(out, held[0], text);
+			out = withLabels(out, held, text);
+		}
+		return { svg: out, attr };
 	};
 }

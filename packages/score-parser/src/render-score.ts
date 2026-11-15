@@ -32,6 +32,8 @@ export interface RenderBar {
 	later: boolean;
 	/** The verse place whose label stands above this bar (the first later bar of a later pass), where it is one. */
 	label?: number;
+	/** The id (as printed) of the bar's first event; absent for a bar with none (a tacet bar). The seam finds the bar's drawn position by it. */
+	first?: string;
 }
 
 export interface RenderScore {
@@ -332,6 +334,8 @@ function build(parsed: ParsedScore, sung: number[], plan: Plan, path: RenderScor
 	};
 	delete score.accompaniment; // not drawn by MELODY, and keyed by notated bars
 
+	const firstOf = new Map<number, string>();
+	for (const f of flat) if (!firstOf.has(f.bar)) firstOf.set(f.bar, f.ev.id);
 	const boundaries = new Set<number>();
 	printed.forEach((p, i) => {
 		const before = printed[i - 1];
@@ -339,7 +343,7 @@ function build(parsed: ParsedScore, sung: number[], plan: Plan, path: RenderScor
 	});
 	return {
 		score,
-		bars: printed.map((p) => ({ source: p.source, place: p.place, later: p.later, ...(p.label ? { label: p.label } : {}) })),
+		bars: printed.map((p, i) => ({ source: p.source, place: p.place, later: p.later, ...(p.label ? { label: p.label } : {}), ...(firstOf.has(i) ? { first: firstOf.get(i) } : {}) })),
 		verses: sung.slice(0, places),
 		path,
 		boundaries,

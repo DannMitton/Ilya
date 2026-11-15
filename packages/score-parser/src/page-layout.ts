@@ -188,7 +188,7 @@ export function sliceWidth(
 }
 
 function viewBoxOf(svg: string): { minY: number; width: number; height: number } {
-  const m = svg.match(/viewBox="0 ([\d.]+) ([\d.]+) ([\d.]+)"/);
+  const m = svg.match(/viewBox="0 (-?[\d.]+) ([\d.]+) ([\d.]+)"/); // strophic lane A: a label can lift a system above y = 0
   return { minY: Number(m?.[1] ?? 0), width: Number(m?.[2] ?? 0), height: Number(m?.[3] ?? 0) };
 }
 
@@ -289,7 +289,7 @@ export function paginateScore(
   /* A tacet run is one unit and a system never ends inside it (row 141): a run
      of seven empty bars is one multimeasure rest, not six and one. A unit wider
      than a fresh system still goes alone on its own. */
-  const runs = tacetRuns(parsed);
+  const runs = tacetRuns(parsed, options.breakRunsAt);
   let from = 0;
   while (from < measureCount) {
     let to = unitEnd(runs, from);

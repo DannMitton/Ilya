@@ -38,7 +38,7 @@ export { modificationTarget, type ModificationTarget } from './modification-engi
 export { isLongSustain, SUSTAIN_SECONDS_THRESHOLD } from './sustain';
 export { sungVerseNumbers, verseView, verseGapBars } from './verses';
 export { renderScoreOf, derivedId, type RenderScore, type RenderBar } from './render-score';
-export { systemSeam, renameLaterPassAttributes, type SystemSeam } from './render-seam';
+export { systemSeam, renameLaterPassAttributes, type SystemSeam, type SeamText } from './render-seam';
 export {
   resolveTempoTerm,
   TEMPO_TIER_BANDS,

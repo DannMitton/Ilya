@@ -859,7 +859,7 @@
 					engraving,
 					channels: { ipaPreview, withheldIpa, cyrPreview, sylTypePreview, melismaPreview },
 					font: notationFont ? { prepared: notationFont.prepared, family: notationFont.family } : undefined,
-					verses: { profile: adapted.snapshot, notationPrefs, openSyllabification },
+					verses: { profile: adapted.snapshot, notationPrefs, openSyllabification }, language,
 				})
 			: null,
 	);

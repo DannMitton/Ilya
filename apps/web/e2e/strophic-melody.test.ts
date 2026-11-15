@@ -61,6 +61,23 @@ test.describe('MELODY unfolds a strophic song', () => {
 		expect(systems.some((s) => s.verse !== null && s.own === null && s.hits.length === 0)).toBe(true);
 		expect(systems.some((s) => s.own !== null && s.vhits.length > 0 && s.hits.length > 0)).toBe(true);
 		for (const s of systems) expect((s.own === null) !== (s.verse === null)).toBe(true);
+		// Step 4b: the labels stand at the two later passes, and no bar number or tag has ink left of its system's edge
+		const ink = await page.evaluate(() => ({
+			labels: [...document.querySelectorAll('.score-page [data-verse-label]')].map((l) => l.textContent),
+			left: [...document.querySelectorAll('.score-page [data-bar-number]')].map((n) => ({ text: n.textContent, x: (n as SVGGraphicsElement).getBBox().x })),
+		}));
+		expect(ink.labels).toEqual(['Verse 2', 'Verse 3']);
+		// each label stands at the left of its pass's first note (the notehead glyph's x), not at the system's edge
+		const over = await page.evaluate(() =>
+			[2, 3].map((k) => {
+				const label = [...document.querySelectorAll('.score-page [data-verse-label]')].find((l) => l.getAttribute('data-verse-label') === String(k))!;
+				const glyph = document.querySelector(`.score-page [data-verse-event-id="m3-0-1~v${k}"] text`)!;
+				return { label: Number(label.getAttribute('x')), glyph: Number(glyph.getAttribute('x')) };
+			}),
+		);
+		for (const o of over) expect(o.label).toBeCloseTo(o.glyph, 1);
+		expect(ink.left.filter((n) => n.x < -0.01), 'bar numbers or tags with ink left of the system edge').toEqual([]);
+		expect(ink.left.some((n) => /\u00b7 verse \d/.test(n.text ?? ''))).toBe(true);
 	});
 
 	test('pageMetrics: the frame\'s above and below with three verses against the one-verse copy', async ({ page }) => {
