@@ -15,6 +15,9 @@ The index was added 2026-09-01. Nothing below it was moved, reworded, or removed
 **When you add a section, add its row here.** A trap nobody can find costs the
 next session the same hour it cost the last one.
 
+### Learned 2026-11-15 (the Ilya page on GoDaddy)
+- `THE ILYA PAGE ON GODADDY` (last section of this file): building and publishing dannmitton.com/ilya, and capturing Ilya pages as images.
+
 ### Desk error recorded 2026-11-12 (night Fable desk)
 - `THE DESK RULED OUT DANN'S OWN WORK "NOT TONIGHT"` and `git fetch --dry-run IS NOT READ-ONLY ENOUGH` (2026-11-13, same desk; last two sections of this file).
 
@@ -5274,3 +5277,18 @@ At the close the desk ran `git --no-optional-locks --no-pager fetch --dry-run` t
 - **`device_request_folder_access` can be refused by the classifier on a first ask.** When Dann says he will grant it, ask again; it went through at 15:53.
 - **Typing into a lane session:** `javascript_tool` with `document.execCommand('insertText', …)` on the `[contenteditable="true"]` box, then Return. Sending while the lane works queues the message.
 - **Estimates, actuals:** Fable as-built lane review 195k (estimated 300k); Sonnet reader-visible notation audit 144k (estimated 150k).
+
+## THE ILYA PAGE ON GODADDY (learned 2026-11-15, Opus desk)
+
+The page is https://dannmitton.com/ilya, built in GoDaddy Website Builder (Urban theme) in Dann's Chrome. Dann logs in himself; the desk never types his password.
+- **Publish publishes the whole site**, and asks "Choose where to publish" (dannmitton.com is preselected), then offers a social post: decline it ("Not Now"). Nothing is published without Dann's explicit yes.
+- **To copy a section**, use its toolbar's "..." menu, then "Duplicate Section"; the copy lands under the original; move it with the down arrow, one place per click. "Move Section" moves it to another page, not within this one.
+- **Images in a three-group section** need the layout "Feature categories with images" (section, Layout). Then click the image, its pencil, then "Change image": the picker's upload control is a hidden file input (find it with the find tool, "hidden file input inside Add images"; upload a screenshot ID with `upload_image`).
+- **A replaced image resets to Panoramic.** After every insert, open the image's pencil again and choose the last shape, "Fit Image", or the page is cropped to a strip.
+- **Crop in GoDaddy's own editor:** in the picker, Edit, then Crop, then 3:4 (Ilya's page is 816 by 1056 CSS px, about 3:4), Done, Continue, Insert.
+- **The editor draws buttons without links;** check hrefs in the preview (the eye icon), where they are anchors.
+- **Rich text (Draft.js):** to italicize or link a phrase, select it with a small page helper (`window.__sel(phrase)`, made by the desk in the editor tab; it does not survive a reload) and use the sidebar's italic and link buttons.
+
+**Capturing one Ilya page as an image.** In the Ilya tab, clone the page into a fixed overlay scaled to the viewport's height, with the paper colour `rgb(240, 235, 224)` behind it, and screenshot at scale 1: the TEXT page is `div.paper-page`; MELODY and INSIGHTS are `article.paper-page` (find the visible element 816 px wide). Remove the overlay after. The voice that Ilya draws is `localStorage['shane.profiles.v2'].activeId` (Dann's voice "Dann" is `df4d0fda-e50b-441b-9d40-6ebb53226f2d`; the alias test voice "M0 test (delete after)" is `47df04f0-f5b1-442e-b9cc-8e67da3a3169`); Ilya's Voice panel shows no switcher. Set it, reload, capture, and set it back.
+
+**Desk error, 2026-11-15 02:1x.** `resize_window` resizes the window that holds the tab named, and Ilya and GoDaddy shared one window: the desk shrank Dann's window to 820 by 1150 (GoDaddy's editor collapsed to its phone layout), then set it to 1720 by 1110, not to its earlier size, which was not read. Read the window's size before resizing, and set it back exactly.
