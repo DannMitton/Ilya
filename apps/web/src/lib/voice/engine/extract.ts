@@ -90,7 +90,7 @@ export function lpcFormants(y: Float64Array, sr: number, vowel: string): { f1: n
 export function cents(meas: number, known: number): number { return 1200 * Math.log2(meas / known); }
 
 // --- full extraction with f2 prominence, LPC fallback, agreement (for assembly) ---
-function ltasEnvExport(y: Float64Array, sr: number) {
+export function ltasEnvExport(y: Float64Array, sr: number) {
 	const ye = preemph(y);
 	const fl = Math.floor((FRAME_MS / 1000) * sr), hop = fl >> 1, w = hann(fl);
 	const half = NFFT / 2 + 1, avg = new Float64Array(half); let nf = 0;
