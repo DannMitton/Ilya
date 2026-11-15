@@ -211,3 +211,44 @@ describe('a song with no key change renders as it did before this lane', () => {
 		expect(keyChanges(renderAnalyzedStaff(score, analyse(score), OPTS))).toEqual([]);
 	});
 });
+
+describe('the barline at a key change is the one the source prints (Gould p. 92)', () => {
+	const load = async (edit: (xml: string) => string): Promise<ParsedScore> => {
+		const xml = edit(readFileSync(new URL('./fixtures/key-changes.musicxml', import.meta.url), 'utf8'));
+		return (await new MusicXmlScoreParser().parse({ format: 'musicxml', data: parseXml(xml) as unknown as Document } as never)).score;
+	};
+	const DOUBLE = '<barline location="right"><bar-style>light-light</bar-style></barline>';
+	/** Bar 4's closing barline, in the source (the fixture's bar 5 changes key). */
+	const withDouble = (xml: string): string => xml.replace(/(<measure number="4">[\s\S]*?)(<\/measure>)/, `$1${DOUBLE}$2`);
+	const strokes = (svg: string): number => [...svg.matchAll(/<line x1="([\d.-]+)" y1="[\d.-]+" x2="\1" y2="/g)].length;
+	it('reads light-light on a right barline, and on a left one, as a double before the next bar', async () => {
+		expect((await load(withDouble)).measures.map((m) => m.doubleBarBefore === true)).toEqual([false, false, false, false, true, false, false, false, false, false, false, false]);
+		const left = await load((x) => x.replace('<measure number="5">', '<measure number="5"><barline location="left"><bar-style>light-light</bar-style></barline>'));
+		expect(left.measures[4].doubleBarBefore).toBe(true);
+	});
+	it('draws a double before a key change at a source double barline, and a single at a plain one', async () => {
+		const plain = await load((x) => x);
+		const dbl = await load(withDouble);
+		expect(plain.measures.some((m) => m.doubleBarBefore)).toBe(false);
+		const draw = (s: ParsedScore) => renderSystemSlice(s, analyse(s), OPTS, 3, 7, { finalBarline: false, courtesy: false });
+		expect(strokes(draw(dbl))).toBe(strokes(draw(plain)) + 1);
+		expect(keyChanges(draw(dbl))).toEqual(keyChanges(draw(plain))); // the same signature, the same naturals
+		expect(glyphsIn(draw(dbl))).toEqual(glyphsIn(draw(plain)));
+		expect(widthOf(draw(dbl))).toBeGreaterThan(widthOf(draw(plain)));
+	});
+	it('gives sliceWidth the same width as the drawing in both cases', async () => {
+		for (const s of [await load((x) => x), await load(withDouble)]) {
+			const a = analyse(s);
+			for (const [f, t] of [[3, 7], [0, 3]] as const) expect(widthOf(renderSystemSlice(s, a, OPTS, f, t, { finalBarline: false }))).toBeCloseTo(sliceWidth(s, f, t, OPTS, a), 1);
+		}
+	});
+	it('closes the system before the change with a double only where the source prints one; the courtesy is drawn either way', async () => {
+		const plain = await load((x) => x);
+		const dbl = await load(withDouble);
+		const close = (s: ParsedScore) => renderSystemSlice(s, analyse(s), OPTS, 0, 3, { finalBarline: false });
+		expect(keyChanges(close(plain))).toEqual(['2>-1']);
+		expect(keyChanges(close(dbl))).toEqual(['2>-1']);
+		expect(glyphsIn(close(dbl))).toEqual(glyphsIn(close(plain)));
+		expect(strokes(close(dbl))).toBe(strokes(close(plain)) + 1);
+	});
+});

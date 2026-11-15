@@ -254,7 +254,6 @@ export interface VocalPart {
 export interface Measure {
   /** 0-based sequential index. The canonical reference used by events. */
   index: number;
-
   /**
    * Display number from the source. Usually `String(index + 1)` but may
    * differ for pickup measures, repeats, or annotated numbering.
@@ -268,7 +267,7 @@ export interface Measure {
 
   /** Active key signature for this measure, snapshotted from changes. */
   keySignature: KeySignature;
-
+  doubleBarBefore?: true; // N.192: the source prints a light-light double barline before this bar
   /**
    * Active printed clef for this measure, snapshotted from `clefs`.
    * Undefined when the source carries no clef information.

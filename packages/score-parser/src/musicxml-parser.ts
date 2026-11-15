@@ -78,6 +78,7 @@ import type {
 } from './types';
 import { adoptPickupMeter } from './pickup';
 import { pairSlurs, readNoteNotations } from './notations';
+import { markDoubleBars } from './barline-style';
 import { graceField, keepGrace, type RawGrace } from './grace';
 
 // ── Minimal DOM surface the parser reads ───────────────────────────
@@ -657,6 +658,7 @@ export class MusicXmlScoreParser implements ScoreParser {
 		const workMetadata = readWorkMetadata(scorePartwise);
 		const cyrillic = vocalLine.some((e) => e.syllable && e.syllable.verseNumber === 1 && /[Ѐ-ӿ]/.test(e.syllable.text));
 
+		markDoubleBars(measureEls, measures);
 		const score: ParsedScore = {
 			source: {
 				format: 'musicxml',

@@ -407,6 +407,8 @@ export interface StaffRenderOptions {
   incomingTimeSignature?: TimeSignature;
   /** N.192: the fifths of the key the NEXT system opens on, where it differs from this one's last bar; this system then closes with a double barline and a courtesy signature. */
   outgoingKeySignature?: number;
+  /** N.192: the source prints a light-light double barline at that break; only then does the closing barline double. */
+  outgoingDoubleBar?: boolean;
   /**
    * N.188. Whether the whole vocal line carries a printed slur that found its
    * partner (`ParsedScore.carriesPrintedSlurs`). Computed once by the parser and
@@ -432,7 +434,7 @@ export interface StaffRenderOptions {
 // `finalBarline` joins font/clef/ipaPreview in the Omit: it is read straight
 // off `options` rather than defaulted here, and leaving it out of the Omit
 // makes `Required` demand a default that would be meaningless.
-const DEFAULTS: Required<Omit<StaffRenderOptions, 'font' | 'clef' | 'ipaPreview' | 'withheldIpa' | 'cyrPreview' | 'sylTypePreview' | 'melismaPreview' | 'finalBarline' | 'targetWidth' | 'incomingAccidentals' | 'incomingTimeSignature' | 'outgoingKeySignature' | 'runOnTieSp' | 'printedSlurs' | 'slurAcross' | 'slurThrough'>> = {
+const DEFAULTS: Required<Omit<StaffRenderOptions, 'font' | 'clef' | 'ipaPreview' | 'withheldIpa' | 'cyrPreview' | 'sylTypePreview' | 'melismaPreview' | 'finalBarline' | 'targetWidth' | 'incomingAccidentals' | 'incomingTimeSignature' | 'outgoingKeySignature' | 'outgoingDoubleBar' | 'runOnTieSp' | 'printedSlurs' | 'slurAcross' | 'slurThrough'>> = {
   staffMidY: 96,
   lineGap: 12,
   // N.139: the stave's own left edge, flush with the system's. DESK DEFAULT.
@@ -1592,7 +1594,7 @@ export function layoutColumns(
     /* N.192. A key declared here draws between the barline and the meter: barline, the light double's
        second stroke, the signature, `METER_KEY_CLEAR_SP`, then the digits. */
     const kd = keyDeclaredAt(parsed, measureIndex);
-    const key = kd ? keyChangeLayout(kd.from, kd.to, keyStep) : undefined;
+    const key = kd ? keyChangeLayout(kd.from, kd.to, keyStep, parsed.measures[measureIndex]?.doubleBarBefore) : undefined;
     if ((!meter || !mi) && !key) return { meterRoom: 0 };
     const keyEnd = key ? keyChangeRoom(key, lineGap, thin) : 0;
     const lead = (key ? keyEnd : METER_BARLINE_CLEAR_SP * lineGap) + (meter && mi ? (key ? METER_KEY_CLEAR_SP * lineGap : 0) + mi.width : 0);
@@ -2167,8 +2169,9 @@ export function renderAnalyzedStaff(
     parts.push(stroke(barX));
     let at = barX + sp(METER_BARLINE_CLEAR_SP);
     if (key) {
-      const second = barX + doubleBarExtraPx(o.lineGap, thin);
-      parts.push(stroke(second));
+      // A light double only where the source prints one (Gould p. 92); else the single barline stands.
+      const second = barX + (key.double ? doubleBarExtraPx(o.lineGap, thin) : 0);
+      if (key.double) parts.push(stroke(second));
       at = second + sp(KEY_CHANGE_CLEAR_SP);
       parts.push(keyChangeMarks(key, at));
       at += key.width + sp(METER_KEY_CLEAR_SP);
@@ -3379,7 +3382,7 @@ export function renderAnalyzedStaff(
     // N.192: before a change of key at the next system, the closing barline is a light double, inside the width, and the courtesy follows it.
     if (courtesy) {
       const x1 = round2(endBarX - doubleBarExtraPx(o.lineGap, thin));
-      parts.push(`<line x1="${x1}" y1="${staffTop}" x2="${x1}" y2="${staffBottom}" stroke="#3a352f" stroke-width="${endBarT}"/>`);
+      if (options.outgoingDoubleBar) parts.push(`<line x1="${x1}" y1="${staffTop}" x2="${x1}" y2="${staffBottom}" stroke="#3a352f" stroke-width="${endBarT}"/>`);
       parts.push(keyChangeMarks(courtesy, contentRight + sp(KEY_CHANGE_CLEAR_SP)));
     }
   }

@@ -2,7 +2,7 @@
  * A key signature that changes inside the piece, as printed (N.192).
  *
  * Where a bar's key differs from the bar before it, the new signature is drawn
- * after a light double barline, with cancelling naturals first where the new key
+ * after the barline the source prints (a light double only where the MusicXML marks one, `bar-style` light-light; else a single, Gould p. 92, Dann 2026-11-12), with cancelling naturals first where the new key
  * gives up sharps or flats of the old one, and a courtesy signature closes the
  * system before a change that falls at a system break. This file holds the
  * arithmetic and the markup, so `staff-renderer.ts` (at its ratchet ceiling)
@@ -18,7 +18,7 @@
  *   cancelled. A change to more of the same kind cancels nothing and draws the
  *   new signature in full.
  * - JUDGEMENT: no gap between the naturals and the new signature beyond the
- *   glyph step the head uses; a light double barline, its two strokes half a
+ *   glyph step the head uses; a light double barline where one is printed, its two strokes half a
  *   stave-space apart (the figure Gould's r96 gives between a thin and a thick
  *   stroke); one stave-space between the barline and the signature (the head's
  *   own `METER_BARLINE_CLEAR_SP`).
@@ -63,12 +63,14 @@ export interface KeyChangeLayout {
 	glyphs: KeyChangeGlyph[];
 	/** The signature's width, in px: the sum of each glyph's step. */
 	width: number;
+	/** The source prints a light-light double barline here: only then is one drawn (Gould p. 92; Dann 2026-11-12). */
+	double?: true;
 }
 
 /** The layout of a change, or nothing where there is none. `stepOf` is one glyph's width plus the head's 1 px. */
-export function keyChangeLayout(from: number, to: number, stepOf: (kind: KeyChangeGlyph['kind']) => number): KeyChangeLayout | undefined {
+export function keyChangeLayout(from: number, to: number, stepOf: (kind: KeyChangeGlyph['kind']) => number, double?: boolean): KeyChangeLayout | undefined {
 	const glyphs = keyChangeGlyphs(from, to);
-	return glyphs.length ? { from, to, glyphs, width: glyphs.reduce((t, g) => t + stepOf(g.kind), 0) } : undefined;
+	return glyphs.length ? { from, to, glyphs, width: glyphs.reduce((t, g) => t + stepOf(g.kind), 0), ...(double ? { double: true as const } : {}) } : undefined;
 }
 
 /** The thin stroke's width in px: the font's engraving default, or 1 where no font is loaded. */
@@ -83,7 +85,7 @@ export const doubleBarExtraPx = (lineGap: number, thin: number): number => lineG
  * double barline is drawn inside the width the system already has), so it is `courtesy: true`.
  */
 export function keyChangeRoom(layout: KeyChangeLayout, lineGap: number, thin: number, courtesy = false): number {
-	return (courtesy ? 0 : doubleBarExtraPx(lineGap, thin)) + lineGap * KEY_CHANGE_CLEAR_SP + layout.width;
+	return (courtesy || !layout.double ? 0 : doubleBarExtraPx(lineGap, thin)) + lineGap * KEY_CHANGE_CLEAR_SP + layout.width;
 }
 
 /**

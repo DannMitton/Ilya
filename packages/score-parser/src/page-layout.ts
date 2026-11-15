@@ -247,7 +247,7 @@ export function renderSystemSlice(
     // Nothing carries across a change of key (N.192), so a system that opens on one inherits none.
     incomingAccidentals: keyDeclaredAt(parsed, fromMeasure) ? {} : accidentalStateAtEndOf(parsed, fromMeasure - 1, fifths),
     // N.192: a change that falls at this system's end closes it with a courtesy signature.
-    ...(outgoing !== undefined && extra.courtesy !== false ? { outgoingKeySignature: outgoing } : {}),
+    ...(outgoing !== undefined && extra.courtesy !== false ? { outgoingKeySignature: outgoing, outgoingDoubleBar: parsed.measures[toMeasure + 1]?.doubleBarBefore === true } : {}),
     // N.139: the meter that bar counted in, so a change on this system's
     // first measure draws at its head.
     incomingTimeSignature: parsed.measures[fromMeasure - 1]?.timeSignature,
