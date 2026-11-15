@@ -33,6 +33,8 @@
 
 import { describe, it, expect } from 'vitest';
 import {
+	SectionSet,
+	carryVersion3,
 	migrateOpenStations,
 	parseOpenSections,
 	readStoredOpenSet,
@@ -57,19 +59,29 @@ describe('N.108 the open set migrates once', () => {
 		expect(migrateOpenStations(['songs'], false)).toEqual([]);
 		expect(migrateOpenStations(['shiftLyrics'], false)).toEqual([]);
 		expect(migrateOpenStations(['metadata'], false)).toEqual([]);
+		/* N.201: `analysis` is a BAND now and still survives under its own name. */
 		expect(migrateOpenStations(['analysis'], false)).toEqual(['analysis']);
 	});
 
 	/* N.115. The bands are members of the same set, so each survives a round
 	   trip under its own name. N.115 increment 2: THREE, "PIECE, INPUT, SCORE
 	   MARKUP" (brief §1). */
-	it('keeps each of the three band ids', () => {
-		expect(Object.values(BAND_IDS)).toEqual(['piece', 'input', 'scoreMarkup']);
-		expect(migrateOpenStations(['piece', 'input', 'scoreMarkup'], false)).toEqual([
+	/* N.201: FIVE BANDS, in the Drawer's order (brief r2, "The order"). */
+	it('keeps each of the five band ids, in the Drawer’s order', () => {
+		expect(Object.values(BAND_IDS)).toEqual([
+			'repertoire',
 			'piece',
 			'input',
+			'analysis',
 			'scoreMarkup',
 		]);
+		expect(
+			migrateOpenStations(['repertoire', 'piece', 'input', 'analysis', 'scoreMarkup'], false)
+		).toEqual(['repertoire', 'piece', 'input', 'analysis', 'scoreMarkup']);
+	});
+
+	it('leaves binder and notation as the only stations', () => {
+		expect(Object.values(STATION_IDS)).toEqual(['binder', 'notation']);
 	});
 
 	it('knows a band id from a station id', () => {
@@ -82,12 +94,15 @@ describe('N.108 the open set migrates once', () => {
 	   fold's body rendered, as the two stations they already are". So a
 	   stored `text` names no door and drops, and the two are ordinary
 	   stations: on a phone the first of them survives beside a band. */
-	it('drops the deleted Text fold and keeps Notation and Analysis as stations', () => {
+	it('drops the deleted Text fold; Notation is a station and Analysis a band (N.201)', () => {
 		expect(Object.values(STATION_IDS)).not.toContain('text');
 		expect(migrateOpenStations(['input', 'text'], false)).toEqual(['input']);
 		expect(tierOf('input')).toBe('band');
 		expect(tierOf('notation')).toBe('station');
-		expect(tierOf('analysis')).toBe('station');
+		expect(tierOf('analysis')).toBe('band');
+		expect(tierOf('repertoire')).toBe('band');
+		expect(tierOf('binder')).toBe('station');
+		/* One survivor per tier on a phone: the first band, the first station. */
 		expect(migrateOpenStations(['input', 'text', 'notation', 'analysis'], true)).toEqual([
 			'input',
 			'notation',
@@ -125,19 +140,22 @@ describe('N.108 the open set migrates once', () => {
 			'piece',
 			'repertoire',
 		]);
+		expect(migrateOpenStations(['binder', 'piece', 'notation'], false)).toEqual([
+			'binder',
+			'piece',
+			'notation',
+		]);
 	});
 
 	/* N.115. ONE SURVIVOR PER TIER on a phone, which was one survivor
 	   altogether while every id named a station. A band contains stations, so
 	   keeping the band and dropping the station inside it would reopen the
 	   band onto a station the singer had left open. */
-	it('keeps the first band and the first station on a phone', () => {
-		expect(migrateOpenStations(['analysis', 'piece', 'repertoire'], true)).toEqual([
-			'analysis',
-			'piece',
-		]);
+	it('keeps the first band and the first station on a phone (N.201: five bands)', () => {
+		expect(migrateOpenStations(['analysis', 'piece', 'repertoire'], true)).toEqual(['analysis']);
 		expect(migrateOpenStations(['piece', 'scoreMarkup'], true)).toEqual(['piece']);
 		expect(migrateOpenStations(['analysis', 'repertoire'], true)).toEqual(['analysis']);
+		expect(migrateOpenStations(['binder', 'piece', 'notation'], true)).toEqual(['binder', 'piece']);
 	});
 
 	/* `source` is dropped BEFORE the phone takes the first one, so a phone
@@ -152,7 +170,7 @@ describe('N.108 the open set migrates once', () => {
 	   return the same array or the key would be rewritten on every boot, which
 	   is the second silent save site N.27 forbids while it is open. */
 	it('returns an already-migrated set unchanged', () => {
-		const migrated = ['piece', 'repertoire', 'analysis'];
+		const migrated = ['piece', 'repertoire', 'analysis', 'binder'];
 		expect(migrateOpenStations(migrated, false)).toEqual(migrated);
 		expect(migrateOpenStations(migrated, false)).toEqual(
 			migrateOpenStations(migrateOpenStations(migrated, false), false)
@@ -223,6 +241,8 @@ describe('N.108 increment 1a the stored shape says who wrote it', () => {
 			version: 3,
 			open: ['input'],
 		});
+		/* N.201: version 3 is carried, not reset (see below). */
+		expect(readStoredOpenSet('{"v":3,"open":["input"]}').version).toBeLessThan(OPEN_STATIONS_VERSION);
 	});
 
 	/* A returning singer whose set is already NEW still has to be reset once,
@@ -235,8 +255,9 @@ describe('N.108 increment 1a the stored shape says who wrote it', () => {
 	});
 
 	it('marks the current build’s own write as needing no reset', () => {
-		const stored = readStoredOpenSet('{"v":3,"open":["repertoire"]}');
+		const stored = readStoredOpenSet('{"v":4,"open":["repertoire"]}');
 		expect(stored.version).toBe(OPEN_STATIONS_VERSION);
+		expect(OPEN_STATIONS_VERSION).toBe(4);
 	});
 
 	/* Absent, corrupt, and wrong-typed all read as version 0, so they are
@@ -278,13 +299,16 @@ describe('N.108 increment 1a the stored shape says who wrote it', () => {
 			'repertoire',
 			'analysis',
 		]);
+		/* N.201: both are bands, so a phone keeps the first. */
 		expect(migrateOpenStations(['repertoire', 'analysis'], true)).toEqual(['repertoire']);
 	});
 
 	/* N.115. A band and a station together survive a phone, because they are
-	   different tiers; two bands do not, and neither do two stations. */
-	it('keeps a band and the station inside it on a phone', () => {
-		expect(migrateOpenStations(['piece', 'repertoire'], true)).toEqual(['piece', 'repertoire']);
+	   different tiers; two bands do not, and neither do two stations. N.201:
+	   the station is now `binder`, which lives inside REPERTOIRE. */
+	it('keeps a band and a station on a phone', () => {
+		expect(migrateOpenStations(['repertoire', 'binder'], true)).toEqual(['repertoire', 'binder']);
+		expect(migrateOpenStations(['binder', 'notation'], true)).toEqual(['binder']);
 	});
 
 	/* N.114a ruling 1. The Voice station is always expanded and has no chevron,
@@ -292,5 +316,165 @@ describe('N.108 increment 1a the stored shape says who wrote it', () => {
 	it('drops `voice`, whose station N.114a stopped collapsing', () => {
 		expect(migrateOpenStations(['voice'], false)).toEqual([]);
 		expect(migrateOpenStations(['piece', 'voice'], false)).toEqual(['piece']);
+	});
+});
+
+/**
+ * N.201 step 1: THE VERSION 3 TO 4 CARRY, AND WHAT EACH STORED SET LANDS ON.
+ *
+ * The expectations are the brief review's table (`review-fable-brief-n201_r1`,
+ * blocker 2), written out: a version 3 build stored `repertoire` and
+ * `analysis` as stations that could sit invisible inside a closed band, so
+ * as bands they must not open by themselves. Each case also says where a
+ * singer expects to land.
+ */
+describe('N.201 the version 3 set is carried, never reset', () => {
+	/* Dann's own set. REPERTOIRE was stored but PIECE was not, so he never
+	   saw it open: it stays shut, and VOICE stays open. */
+	it('["repertoire","scoreMarkup"] lands on VOICE open alone, desk and phone', () => {
+		expect(carryVersion3(['repertoire', 'scoreMarkup'])).toEqual(['scoreMarkup']);
+		expect(migrateOpenStations(carryVersion3(['repertoire', 'scoreMarkup']), false)).toEqual(['scoreMarkup']);
+		expect(migrateOpenStations(carryVersion3(['repertoire', 'scoreMarkup']), true)).toEqual(['scoreMarkup']);
+	});
+
+	it('["input"] lands on INPUT open alone, unchanged', () => {
+		expect(carryVersion3(['input'])).toEqual(['input']);
+		expect(migrateOpenStations(carryVersion3(['input']), true)).toEqual(['input']);
+	});
+
+	/* `analysis` was stored with PIECE open, not INPUT, so it was invisible. */
+	it('["piece","analysis"] lands on PIECE open alone, desk and phone', () => {
+		expect(carryVersion3(['piece', 'analysis'])).toEqual(['piece']);
+		expect(migrateOpenStations(carryVersion3(['piece', 'analysis']), false)).toEqual(['piece']);
+		expect(migrateOpenStations(carryVersion3(['piece', 'analysis']), true)).toEqual(['piece']);
+	});
+
+	it('["input","analysis"] keeps both: the singer saw ANALYSIS open under INPUT', () => {
+		expect(carryVersion3(['input', 'analysis'])).toEqual(['input', 'analysis']);
+	});
+
+	it('["piece","repertoire"] keeps both: the singer saw REPERTOIRE open under PIECE', () => {
+		expect(carryVersion3(['piece', 'repertoire'])).toEqual(['piece', 'repertoire']);
+	});
+
+	/* Desk: all three open, REPERTOIRE now a band and `binder` open inside
+	   it. Phone: the first band (PIECE, stored first) and the station. */
+	it('["piece","repertoire","binder"] lands on all three on a desk, PIECE and binder on a phone', () => {
+		expect(migrateOpenStations(carryVersion3(['piece', 'repertoire', 'binder']), false)).toEqual([
+			'piece',
+			'repertoire',
+			'binder',
+		]);
+		expect(migrateOpenStations(carryVersion3(['piece', 'repertoire', 'binder']), true)).toEqual([
+			'piece',
+			'binder',
+		]);
+	});
+
+	it('keeps every other id as it is, and an empty set empty', () => {
+		expect(carryVersion3(['scoreMarkup', 'binder', 'notation'])).toEqual(['scoreMarkup', 'binder', 'notation']);
+		expect(carryVersion3([])).toEqual([]);
+	});
+});
+
+/* `SectionSet` itself. Its header says vitest's `node` environment has no
+   `$state` and no `localStorage`; the module compiles in server mode, where
+   `$state` is a plain assignment and `#write` swallows the missing storage,
+   so the class runs here. The localStorage double below lets the writes be
+   read back. */
+describe('N.201 SectionSet: reveal, fold, restore', () => {
+	function stub() {
+		const store = new Map<string, string>();
+		(globalThis as { localStorage?: unknown }).localStorage = {
+			getItem: (k: string) => store.get(k) ?? null,
+			setItem: (k: string, v: string) => void store.set(k, v),
+		};
+		return store;
+	}
+	const KEY = 'ilya:openStations';
+	const make = (open: string[], exclusive: boolean) => {
+		const set = new SectionSet({ open, storageKey: KEY, unpersisted: ['notation'] });
+		set.exclusive = exclusive;
+		return set;
+	};
+
+	it('reveal opens a closed id and does nothing to an open one', () => {
+		const store = stub();
+		const set = make(['input'], false);
+		set.reveal('analysis');
+		expect(set.has('analysis')).toBe(true);
+		expect(set.has('input')).toBe(true);
+		set.reveal('analysis');
+		expect(set.has('analysis')).toBe(true);
+		expect(JSON.parse(store.get(KEY)!)).toEqual({ v: 4, open: ['input', 'analysis'] });
+	});
+
+	it('reveal on a phone shuts the other open band and leaves ANALYSIS open on a second tap', () => {
+		stub();
+		const set = make(['input', 'repertoire'], true);
+		set.reveal('analysis');
+		expect(set.has('analysis')).toBe(true);
+		expect(set.has('input')).toBe(false);
+		expect(set.has('repertoire')).toBe(false);
+		set.reveal('analysis');
+		expect(set.has('analysis')).toBe(true);
+	});
+
+	it('reveal on a phone leaves an open station alone (a different tier)', () => {
+		stub();
+		const set = make(['input', 'binder'], true);
+		set.reveal('analysis');
+		expect(set.has('binder')).toBe(true);
+	});
+
+	it('reveal writes nothing when the id is already open', () => {
+		const store = stub();
+		const set = make(['analysis'], false);
+		set.reveal('analysis');
+		expect(store.has(KEY)).toBe(false);
+	});
+
+	it('fold closes an open id, writes through the one site, and ignores a closed id', () => {
+		const store = stub();
+		const set = make(['repertoire', 'input'], false);
+		set.fold('repertoire');
+		expect(set.has('repertoire')).toBe(false);
+		expect(JSON.parse(store.get(KEY)!)).toEqual({ v: 4, open: ['input'] });
+		store.delete(KEY);
+		set.fold('repertoire');
+		expect(store.has(KEY)).toBe(false);
+	});
+
+	it('restore carries a version 3 set and writes version 4 back', () => {
+		const store = stub();
+		const set = make(['input'], false);
+		set.restore('{"v":3,"open":["repertoire","scoreMarkup"]}', true);
+		expect(set.has('repertoire')).toBe(false);
+		expect(set.has('scoreMarkup')).toBe(true);
+		expect(JSON.parse(store.get(KEY)!)).toEqual({ v: 4, open: ['scoreMarkup'] });
+	});
+
+	it('restore keeps REPERTOIRE when PIECE was stored with it, on a desk', () => {
+		stub();
+		const set = make(['input'], false);
+		set.restore('{"v":3,"open":["piece","repertoire","analysis"]}', false);
+		expect(['piece', 'repertoire'].every((id) => set.has(id))).toBe(true);
+		expect(set.has('analysis')).toBe(false);
+	});
+
+	it('restore lands a version 2 or older set on the first-run default, as before', () => {
+		stub();
+		const set = make(['input'], false);
+		set.restore('{"v":2,"open":["repertoire","analysis"]}', false);
+		expect(set.has('input')).toBe(true);
+		expect(set.has('repertoire')).toBe(false);
+	});
+
+	it('restore of a version 4 set writes nothing', () => {
+		const store = stub();
+		const set = make(['input'], false);
+		set.restore('{"v":4,"open":["repertoire"]}', false);
+		expect(set.has('repertoire')).toBe(true);
+		expect(store.has(KEY)).toBe(false);
 	});
 });

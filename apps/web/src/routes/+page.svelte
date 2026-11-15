@@ -3878,12 +3878,10 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 					</div>
 				{/if}
 			{/snippet}
-			<!-- ═══ THE PIECE GROUP (N.108 increment 1, NARROWED BY N.108-5).
-			     Repertoire, Export and import, and the name and Metadata that
-			     the band itself carries. THE INTAKE LEFT for a band of its
-			     own, ruled by Dann 2026-09-07; `RootPanel` is still this
-			     group's contents and nothing else. -->
-			{#snippet pieceGroup()}
+			<!-- ═══ REPERTOIRE'S BODY (N.201): the song list, then Export and
+			     import. It was the Piece group's contents; REPERTOIRE is the
+			     first band now. -->
+			{#snippet repertoireGroup()}
 				<RootPanel
 					{language}
 					onexport={() => void handleExport()}
@@ -3988,114 +3986,69 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 					     syllables is inconvenient, worst on a phone. It lives
 					     in the loupe now (`LoupeSyllables.svelte`, rendered by
 					     `Loupe.svelte`), beside the notes it places onto. -->
-					<!-- ═══ THE TEXT GROUP (N.108 increment 1). Notation and Analysis,
-					     and only those two: the map Dann ruled 2026-09-02 gives Text
-					     exactly them. Both were somewhere else in the N.73 S3 column,
-					     Notation pinned above the scroll and Analysis first inside it,
-					     and neither moved because of anything wrong with where it was.
-					     They are together because they are both text work. -->
-					<!-- N.115 increment 3: THIS IS `notationAndAnalysis` NOW, AND IT
-					     MOVED VERBATIM AGAIN. Increment 2 folded TEXT into INPUT as a
-					     section with an open state of its own; Dann ruled that fold away
-					     2026-09-10 late, so `IntakePanel` renders these two stations
-					     directly under the poem box and each keeps its own id, its own
-					     chevron and its own row. -->
-					{#snippet notationAndAnalysis()}
-						<!-- NOTATION (item N.7). ONE instance, on both of Studio's
-						     documents, and it is the first station in the TEXT group.
-						     It was pinned BELOW the scroll until N.73 S3 and pinned
-						     ABOVE it after (the E.29 shape E.36 §1.4 replaced, ratified
-						     by Dann 2026-08-19). N.108 unpins it: nothing in the drawer
-						     is pinned, and Notation sits with Analysis because both are
-						     text work.
-
-						     THE 2026-08-06 RULING IS UNTOUCHED BY THE MOVE: it is
-						     predictable and within a thumb's reach, and being the first
-						     station of the second group is both.
-						     The state was always document-level and persisted (the notationPrefs and
-						     openSyllabification declarations and their writers) and Markup obeyed it:
-						     both reach MarkupPane through its own props of
-						     those names. Only the CONTROL was tab-scoped, which made its
-						     placement lie about its scope.
-
-						     Rendering it once rather than once per panel is Dann's
-						     improvement on my first pass: two instances sharing state
-						     can drift, and one cannot.
-
-						     THE ACCENT IS SAGE, UNCONDITIONALLY. N.73 S3 ship two settled
-						     it, and the reasoning is in NotationFields' own `accent`
-						     prop comment rather than repeated here. Dann's ruling of
-						     2026-08-06, that the colour follows the tab, is superseded
-						     by two later ones: S2's invariant that nothing in the drawer
-						     changes when the singer flips the pair, and the S0 slate's
-						     ruling 3 of 2026-08-19, which keeps lavender in Studio to
-						     the voice anchor and the calibration surfaces.
-
-						     The stress-acutes toggle reaches Markup since N.119: it marks the
-						     Cyrillic underlay and leaves the IPA line alone. -->
-						<NotationFields
-							{notationPrefs}
-							{showStressDiacritics}
-							openSyllabification={doc.openSyllabification}
-							{language}
-							accent="var(--sage)"
-							onnotationchange={handleNotationChange}
-							onstressdiacriticschange={handleStressDiacriticsChange}
-							onopensyllabificationchange={handleOpenSyllabificationChange}
-							expanded={sections.has(STATION_IDS.notation)}
-							onexpandedchange={() => sections.toggle(STATION_IDS.notation)}
-							changed={notationStateText}
-						/>
-						<AnalysisStation
-							{loaderState}
-							{hasResults}
-							{transcribeMs}
-							{language}
-							{showInspector}
-							expanded={sections.has(STATION_IDS.analysis)}
-							ontoggle={() => sections.toggle(STATION_IDS.analysis)}
-						>
-						{#snippet consoleContent()}
-							{#if selectedWord}
-								{@const wordKey = `${selectedWord.lineIndex}-${selectedWord.wordIndex}`}
-								{@const wordYoToggles = (() => {
-									const prefix = `${wordKey}-`;
-									const m = new Map<number, import('$lib/types').YoToggle>();
-									for (const [k, v] of marks.yo) {
-										if (k.startsWith(prefix)) {
-											const ci = parseInt(k.substring(prefix.length), 10);
-											if (!isNaN(ci)) m.set(ci, v);
-										}
-									}
-									return m;
-								})()}
-								<InspectorPanel
-									word={selectedWord}
-									{language}
-									{notationPrefs}
-									openSyllabification={doc.openSyllabification}
-									{showStressDiacritics}
-									syllableOverride={marks.syllables.get(wordKey) ?? null}
-									spotReconstituted={spotInverts.has(wordKey)}
-									rhymeSetAside={marks.rhyme.has(wordKey)}
-									onrhymetoggle={handleRhymeToggle}
-									promotedFromClitic={marks.stress.get(wordKey)?.promotedFromClitic ?? false}
-									yoCharToggles={wordYoToggles}
-									onspotrecontoggle={handleSpotReconToggle}
-									onstressassign={handleStressAssign}
-									onstressrevert={handleStressRevert}
-									onyochartoggle={handleYoCharToggle}
-									onsyllableoverride={(override) => handleSyllableOverride(selectedWord!.lineIndex, selectedWord!.wordIndex, override)}
-									onsyllableoverrideclear={() => handleSyllableOverride(selectedWord!.lineIndex, selectedWord!.wordIndex, null)}
-									onreset={handleReset}
-									gloss={shownGlosses.get(wordKey)} {glossary} offerScope={`${doc.id}|${wordKey}`}
-									onglossoverride={handleGlossOverride}
-								/>
-							{/if}
-						{/snippet}
-						</AnalysisStation>
-					{/snippet}
 				</IntakePanel>
+			{/snippet}
+			<!-- ═══ ANALYSIS'S BODY (N.201): NOTATION, then the chosen word's
+			     Inspector. It moved out of `inputGroup` verbatim. -->
+			{#snippet analysisGroup()}
+				<!-- NOTATION (item N.7), ANALYSIS's first row (N.201): one
+				     instance on both Studio documents, a station, closed on
+				     arrival and never stored open. The accent is sage
+				     unconditionally (N.73 S3 ship two). The stress-acutes
+				     toggle reaches Markup since N.119. -->
+				<NotationFields
+					{notationPrefs}
+					{showStressDiacritics}
+					openSyllabification={doc.openSyllabification}
+					{language}
+					accent="var(--sage)"
+					onnotationchange={handleNotationChange}
+					onstressdiacriticschange={handleStressDiacriticsChange}
+					onopensyllabificationchange={handleOpenSyllabificationChange}
+					expanded={sections.has(STATION_IDS.notation)}
+					onexpandedchange={() => sections.toggle(STATION_IDS.notation)}
+					changed={notationStateText}
+				/>
+				<AnalysisStation {loaderState} {language} {showInspector}>
+				{#snippet consoleContent()}
+					{#if selectedWord}
+						{@const wordKey = `${selectedWord.lineIndex}-${selectedWord.wordIndex}`}
+						{@const wordYoToggles = (() => {
+							const prefix = `${wordKey}-`;
+							const m = new Map<number, import('$lib/types').YoToggle>();
+							for (const [k, v] of marks.yo) {
+								if (k.startsWith(prefix)) {
+									const ci = parseInt(k.substring(prefix.length), 10);
+									if (!isNaN(ci)) m.set(ci, v);
+								}
+							}
+							return m;
+						})()}
+						<InspectorPanel
+							word={selectedWord}
+							{language}
+							{notationPrefs}
+							openSyllabification={doc.openSyllabification}
+							{showStressDiacritics}
+							syllableOverride={marks.syllables.get(wordKey) ?? null}
+							spotReconstituted={spotInverts.has(wordKey)}
+							rhymeSetAside={marks.rhyme.has(wordKey)}
+							onrhymetoggle={handleRhymeToggle}
+							promotedFromClitic={marks.stress.get(wordKey)?.promotedFromClitic ?? false}
+							yoCharToggles={wordYoToggles}
+							onspotrecontoggle={handleSpotReconToggle}
+							onstressassign={handleStressAssign}
+							onstressrevert={handleStressRevert}
+							onyochartoggle={handleYoCharToggle}
+							onsyllableoverride={(override) => handleSyllableOverride(selectedWord!.lineIndex, selectedWord!.wordIndex, override)}
+							onsyllableoverrideclear={() => handleSyllableOverride(selectedWord!.lineIndex, selectedWord!.wordIndex, null)}
+							onreset={handleReset}
+							gloss={shownGlosses.get(wordKey)} {glossary} offerScope={`${doc.id}|${wordKey}`}
+							onglossoverride={handleGlossOverride}
+						/>
+					{/if}
+				{/snippet}
+				</AnalysisStation>
 			{/snippet}
 			<!-- ═══ THE VOICE GROUP (N.108 increment 1, renamed N.150 from Score
 			     markup; Corrections left it at N.149). It was `shanePanel`, a column of score

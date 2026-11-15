@@ -53,34 +53,23 @@
 		   went and what stayed. `+page.svelte` keeps the state, because
 		   `.main-content` still reads it. */
 		/**
-		 * ── THE THREE GROUPS (N.108 increment 1) ──────────────────────────
-		 *
-		 * `rootPanel`, `shanePanel`, `notationPanel`, `pieceAnchor` and
-		 * `voiceAnchor` ARE GONE, and what replaced them is not a rename. The
-		 * five named REGIONS of the N.73 S3 column: a pinned top holding Piece
-		 * and Notation, a scroll holding two panels, and a pinned bottom
-		 * holding the voice. Dann ruled the column into three FRAMES on
-		 * 2026-09-02, choice 2 of `drawing-n108-three-choices_r1_2026-09-02.png`,
-		 * "frames, no fold", and the frames cut across every one of those
-		 * regions: Notation left the pinned top for Text, Analysis left
-		 * `rootPanel` for Text, the voice left the pinned bottom for Score
-		 * markup, and the score work left `shanePanel` for the same group.
-		 *
-		 * NOTHING IS PINNED ANY MORE. All three groups scroll together, which
-		 * is what makes "the opening state is the map of everything, and it
-		 * fits without scrolling" a claim about ONE box rather than three. The
-		 * two anchors' sage and lavender rules go with them; the band above
-		 * each group is the boundary now.
-		 *
-		 * Snippets, as the five were, so the state stays in `+page.svelte` and
-		 * nothing is drilled through here.
+		 * ── THE BAND BODIES (N.108 increment 1, N.201) ──
+		 * Snippets, so the state stays in `+page.svelte` and nothing is
+		 * drilled through here. Nothing is pinned: every band scrolls in the
+		 * one box (Dann 2026-09-02, "frames, no fold").
 		 */
-		pieceGroup?: Snippet;
+		/**
+		 * N.201: REPERTOIRE'S BODY (the song list and EXPORT AND IMPORT), the
+		 * first band. It was `pieceGroup`, the Piece band's contents.
+		 */
+		repertoireGroup?: Snippet;
 		/**
 		 * N.108-5, RULED BY DANN 2026-09-07. The intake's own group, between
 		 * Piece and Text. It holds the whole intake frame and nothing else.
 		 */
 		inputGroup?: Snippet;
+		/** N.201: ANALYSIS'S BODY, its own band after INPUT: NOTATION first, then the word. */
+		analysisGroup?: Snippet;
 		/* `textGroup` IS GONE, N.115 increment 2: TEXT folded into INPUT. Its
 		   contents are `IntakePanel`'s `notationAndAnalysis` since increment 3
 		   deleted the fold that held them. */
@@ -118,10 +107,12 @@
 		 * tests; the values come from `+page.svelte`, which holds every count
 		 * they read.
 		 */
+		repertoireState?: string;
 		pieceState?: string;
 		/** Whether Piece's title came from a score header. Draws the tag. */
 		pieceFromScore?: boolean;
 		inputState?: string;
+		analysisState?: string;
 		/* `textState` IS GONE, N.115 increment 2. The count it carried is on the
 		   NOTATION station's own row since increment 3 deleted the fold that
 		   held it; see `NotationFields`. */
@@ -162,32 +153,15 @@
 		onheadingnavigate: (id: string) => void;
 	}
 
-	let { width, raised, isMobile, language, destination, activeTab, activeHeadingId = null, pieceGroup, inputGroup, scoreGroup, metadataBody, sections, pieceState = '', pieceFromScore = false, inputState = '', scoreState = '', voiceTakeover, takeoverActive = false, onexittakeover, ontogglepull, gesturesBlocked = false, ontabchange, onheadingnavigate }: Props = $props();
+	let { width, raised, isMobile, language, destination, activeTab, activeHeadingId = null, repertoireGroup, inputGroup, analysisGroup, scoreGroup, metadataBody, sections, repertoireState = '', pieceState = '', pieceFromScore = false, inputState = '', analysisState = '', scoreState = '', voiceTakeover, takeoverActive = false, onexittakeover, ontogglepull, gesturesBlocked = false, ontabchange, onheadingnavigate }: Props = $props();
 
 	/* ── THE SILHOUETTE AND THE BOOKMARK TAB ARE GONE (N.108 increment 1a) ──
-	   Ruled by Dann 2026-09-02 on his walk of `2c1cecf`: the desk has no pull,
-	   no chevron and no collapsed state, and the phone's pull is a horizontal
-	   bar on the bottom edge instead of a tab on the right.
-
-	   WHAT LEFT WITH THEM, and every one of these was ruled once: `LIP_W` 20
-	   and `LIP_H` 152 (2026-08-19, 2026-08-21), the one-outline silhouette
-	   drawn at `docs/sessions/lip-handle-silhouette_r1_2026-08-20.html` with
-	   its mitred junctions and its squircle cubic (2026-08-20), the drawer's
-	   `bind:clientHeight`, which existed only so that path could have user
-	   units, the drop-shadow lift the outline needed, the `--lip-grey`, the
-	   coarse-pointer touch extension, the two measured optical nudges of the
-	   chevron, and the vertical DRAWER label increment 1 built on the tab four
-	   hours ago.
-
-	   NONE OF IT IS A DEFECT BEING FIXED. It was right for a drawer that slid
-	   in from the left and had to show a handle when it was gone. The desk's
-	   drawer never goes now, so it needs no handle; the phone's comes from the
-	   bottom, so its handle is a bar across the bottom. The reasoning is kept
-	   here rather than in the file's history because the shape may come back
-	   if the motion ever does.
-
-	   `docs/sessions/drawing-n108-pull_r2_2026-09-02.png` is the drawing this
-	   replaces it with, and `_r3` is the alternative Dann rejected. */
+	   Ruled by Dann 2026-09-02: the desk has no pull, chevron or collapsed
+	   state, and the phone's pull is a horizontal bar on the bottom edge. The
+	   lip handle (`LIP_W`, `LIP_H`, the one-outline silhouette) was right for a
+	   drawer that slid in from the left and is not a defect fixed; its drawing
+	   is `docs/sessions/lip-handle-silhouette_r1_2026-08-20.html` and the
+	   replacement is `drawing-n108-pull_r2_2026-09-02.png`. */
 
 	/* ── THE SWIPE (N.108 increment 1a) ──────────────────────────────────
 	   "A vertical swipe in the motion's direction is a second way, and it must
@@ -425,14 +399,10 @@
 >
 	<div class="drawer-clip">
 	<div class="drawer-body" id="drawer-body" style="{isMobile ? '' : `width: ${width}px`}">
-		<!-- THE TWO PINNED ANCHORS ARE GONE, N.108 increment 1. A pinned top
-		     carrying Piece and Notation and a pinned bottom carrying the voice
-		     were the N.73 S3 column, ratified 2026-08-19. The three frames
-		     replace them: Notation is in Text, the voice is in Score markup,
-		     and everything in the drawer scrolls in one box, which is what
-		     lets the opening state be measured as one height. Their two rules,
-		     the sage down-facing one and the lavender up-facing one, go with
-		     them; the group bands are the boundaries now. -->
+		<!-- NOTHING IS PINNED (N.108 increment 1): the pinned top and bottom
+		     anchors are gone and everything scrolls in one box, so the
+		     opening state is one measurable height. The group bands are the
+		     boundaries. -->
 		<!-- N.73 S3 ship two. THE DRAWER IS NOT A TABPANEL, and it stopped
 		     being one at S2. This box carried `role="tabpanel"`,
 		     `id="tabpanel-{activeTab}"` and `aria-labelledby="tab-{activeTab}"`
@@ -512,12 +482,22 @@
 					     every other band carries a bare chevron; the fields show
 					     whenever Piece is open now, and collapsing Piece is the
 					     collapse. `.band-link` and `metadataOpen` went with it. -->
+					<!-- N.201, THE ORDER: REPERTOIRE, PIECE, INPUT, ANALYSIS, VOICE.
+					     REPERTOIRE left Piece for the first band (cobalt, as Piece),
+					     and ANALYSIS left Input for its own band (sage). The band head
+					     replaces the station header the two bodies used to draw, so
+					     no name is drawn twice. -->
+					<section class="group group-repertoire">
+						{@render bandHead(BAND_IDS.repertoire, t('songs.heading', language), repertoireState, false)}
+						{#if sections.has(BAND_IDS.repertoire)}
+							<div class="band-body" id="band-repertoire">{@render repertoireGroup?.()}</div>
+						{/if}
+					</section>
 					<section class="group group-piece">
 						{@render bandHead(BAND_IDS.piece, t('group.piece', language), pieceState, pieceFromScore)}
 						{#if sections.has(BAND_IDS.piece)}
 							<div class="band-body" id="band-piece">
 								{#if metadataBody}<div class="band-inset">{@render metadataBody()}</div>{/if}
-								{@render pieceGroup?.()}
 							</div>
 						{/if}
 					</section>
@@ -541,11 +521,16 @@
 							<div class="band-body" id="band-input">{@render inputGroup?.()}</div>
 						{/if}
 					</section>
-					<!-- ═══ TEXT IS NOT A BAND, AND ITS FOLD IS GONE TOO. Increment 2
-					     folded Notation and Analysis into INPUT under the poem box;
-					     increment 3 deleted the fold on Dann's ruling of 2026-09-10
-					     late, so the two are `IntakePanel`'s own stations and no id of
-					     TEXT's survives anywhere. -->
+					<!-- ═══ ANALYSIS, N.201. Its own band after INPUT. NOTATION is its
+					     first row (a station, closed on arrival, never stored open)
+					     and the chosen word's analysis follows. A word tap reveals
+					     this band (`+page.svelte`, `revealAnalysis`). -->
+					<section class="group group-analysis">
+						{@render bandHead(BAND_IDS.analysis, t('console.placeholder', language), analysisState, false)}
+						{#if sections.has(BAND_IDS.analysis)}
+							<div class="band-body" id="band-analysis">{@render analysisGroup?.()}</div>
+						{/if}
+					</section>
 					<!-- ═══ VOICE (N.150; the key and the id stay `scoreMarkup`, which
 					     are wire values). Lavender, one step down. Holds the Voice
 					     station only: Corrections moved to the loupe (N.149). -->
@@ -1090,6 +1075,7 @@
 		text-overflow: ellipsis;
 	}
 
+	.group-repertoire .group-band,
 	.group-piece .group-band {
 		background: var(--cobalt-head);
 		color: var(--cobalt-ink);
@@ -1100,7 +1086,8 @@
 	   text)". The intake takes text in, so it is the text hue. `.group-text`
 	   and its rule are gone with the band, N.115 increment 2; Text is a fold
 	   inside this band now. */
-	.group-input .group-band {
+	.group-input .group-band,
+	.group-analysis .group-band {
 		background: var(--sage-head);
 		color: var(--sage-ink);
 	}
@@ -1257,7 +1244,9 @@
 	   contents turn out to be, the rule is the same one this drawer has used
 	   since 2026-08-27 for its station rules: one rule per boundary, drawn by
 	   the thing below it, and none above the first. */
-	.group-band + :global(.station) {
+	.group-band + :global(.station),
+	.group-repertoire .band-body > :global(.station:first-child),
+	.group-analysis .band-body > :global(.station:first-child) {
 		border-top: none;
 	}
 

@@ -38,8 +38,10 @@ export async function transcribe(page: Page, text: string): Promise<void> {
 }
 
 /**
- * Expand a drawer station by its StationHeader label ("Notation",
- * "Analysis", ...), if it is not already expanded. Both stations render
+ * Expand a drawer band or station by its label ("Repertoire", "Analysis",
+ * "Notation", ...), if it is not already expanded. N.201: REPERTOIRE and
+ * ANALYSIS are bands now, and a word tap opens ANALYSIS by itself, so this
+ * leaves it alone when it is open. Notation renders
  * their content only `{#if expanded}` (NotationFields.svelte, and
  * AnalysisStation.svelte:73), and both start collapsed in a fresh browser
  * context, so a test that needs the toggle switches (Notation) or the

@@ -122,20 +122,6 @@ import ClefReceipt from '$lib/score/ClefReceipt.svelte';
 		   worst on a phone. This band keeps the source text only now; the row
 		   lives in the loupe (`LoupeSyllables.svelte`, rendered by
 		   `Loupe.svelte`), beside the notes it places onto. */
-		/**
-		 * NOTATION AND ANALYSIS, N.115 increment 3. RULED BY DANN 2026-09-10
-		 * late: the Text fold is deleted, "as a child of Input it adds no
-		 * value except to bottleneck access to Notation and Analysis." The
-		 * two stations stand here, under the poem box, as the two plain rows
-		 * they always were, each with its own id and its own chevron.
-		 *
-		 * A SNIPPET, for `sourceScore`'s reason: Notation's and Analysis's
-		 * wiring is all in `+page.svelte`, and moving them did not move one
-		 * prop of it. It was `textSection` inside a fold with its own open
-		 * state; the fold and its three props went, and the name went with
-		 * them because it named the fold.
-		 */
-		notationAndAnalysis?: Snippet;
 	}
 
 	let {
@@ -161,7 +147,6 @@ import ClefReceipt from '$lib/score/ClefReceipt.svelte';
 		poemDerived = false,
 		onfile,
 		onclearscore,
-		notationAndAnalysis,
 	}: Props = $props();
 
 	/* ONE OWNER FOR "THE SOURCE FIELD IS EMPTY". It bound the watermark and
@@ -509,20 +494,8 @@ import ClefReceipt from '$lib/score/ClefReceipt.svelte';
 	     about a file that arrived at the frame directly above. -->
 	{@render sourceScore?.()}
 
-	<!-- ── NOTATION AND ANALYSIS. N.115 increment 3, RULED BY DANN 2026-09-10
-	     late: the fold that stood here is deleted, "as a child of Input it
-	     adds no value except to bottleneck access to Notation and Analysis."
-	     The two stations render where the fold's body rendered, closed by
-	     default, each with the station row, the chevron and the hairline
-	     every other station in the drawer has.
-
-	     BELOW THE SCORE ENGINE'S ANSWERS AND ABOVE TRANSCRIBE AND FIT (the old button), which
-	     is where the fold stood and is a DESK DEFAULT the fold carried: the
-	     primary stays last in the band, and the uploader's answers stay
-	     directly under the frame they are about. -->
-	{#if notationAndAnalysis}
-		<div class="intake-stations">{@render notationAndAnalysis()}</div>
-	{/if}
+	<!-- NOTATION AND ANALYSIS LEFT THIS BAND, N.201: ANALYSIS is its own band
+	     after INPUT, with NOTATION as its first row (`Drawer.svelte`). -->
 
 	<!-- ── THE ONE TRANSCRIBE IS REMOVED, 2026-09-16 (N.145). Dann: "yes,
 	     remove the button." `input.transcribe` and `input.transcribeLoading`
@@ -783,24 +756,6 @@ import ClefReceipt from '$lib/score/ClefReceipt.svelte';
 	   Export-Import row would align column for column. Print left that row
 	   for Output, so there is no second row to align against and the grid
 	   has nothing left to do. */
-
-	/* ── NOTATION AND ANALYSIS, N.115 increment 3 ────────────
-	   THE TWO STATIONS LOSE THEIR SIDE INSET, and only that. The drawer insets
-	   every `.station` 18 px from the group's edge; these two already stand
-	   inside the intake, which took that 18 px, so a second one would push
-	   them 36 px in. Their hairlines, headers, bodies and motion stay the
-	   drawer's, which is what makes them the two plain rows the ruling asks
-	   for. Two classes deep, so the rule outranks the drawer's
-	   `.group .station` whatever order the bundle loads the two sheets in.
-
-	   THE FOLD'S OWN RULES WENT WITH IT: its hairline, its state-line recipe,
-	   and its copy of the drawer's motion. The hairline above Notation is the
-	   drawer's own station hairline now, drawn by the station rather than by a
-	   wrapper. */
-	.station-intake .intake-stations :global(.station) {
-		margin-left: 0;
-		margin-right: 0;
-	}
 
 	/* `.intake-transcribe` IS REMOVED, 2026-09-16 (N.145), with the row it
 	   laid out: Transcribe and fit is gone. */

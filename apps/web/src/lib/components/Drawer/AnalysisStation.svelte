@@ -1,111 +1,64 @@
 <script lang="ts">
 	/**
-	 * ANALYSIS — the transcription's own console, as a station in the Text
-	 * group (N.108 increment 1).
-	 *
-	 * EXTRACTED, NOT WRITTEN FRESH. Every line below was `.console-section` in
-	 * `RootPanel.svelte`, and it is here because the three groups cut across
-	 * the panels: Analysis belongs with Notation in Text, and `RootPanel` is
-	 * the Piece group's contents now. Svelte scopes a rule to the file that
-	 * writes the markup, so the five rules came with it, value for value.
-	 *
-	 * THE 2026-08-27 RULING IS WHAT PUT IT WITH THE TEXT, and it is not
-	 * reversed by the move. Dann: the score work grew, so "the bottom is the
-	 * MUSIC half and the top is the TEXT half", and Analysis is the
-	 * transcription's own console. The groups make that structural instead of
-	 * positional: it is in Text because it is text work, and it stays there
-	 * however the drawer is scrolled.
-	 *
-	 * THE RESULT SUMMARY IS STILL INSIDE IT, N.65 ship one's decision on the
-	 * ratified r1 mockup (`fable-gui-mockup_r1_2026-08-18.html:322-324`): what
-	 * it reports is a READING of the text rather than an act on it, so it sits
-	 * with the reading.
-	 *
-	 * N.108 INCREMENT 2 TOOK THE WORD COUNT OFF IT, and left the timing. Ruled
-	 * 2026-09-02: "the word count and Clear live on the intake's receipt line."
-	 * The line read `13 words in 14ms` and it reads `14ms` now, because the
-	 * count moved and the timing did not.
-	 *
-	 * WHERE THE TIMING BELONGS IS NOT ESTABLISHED. Design's revision 3 memo
-	 * left it open in as many words: "Whether the word count keeps its
-	 * instrument. The receipt carries the count and not the timing, because the
-	 * timing did not fit. Whether the singer should still see it, and where, is
-	 * open." So it stays exactly where it was rather than being moved on a
-	 * guess or deleted on one. Dann's to rule.
+	 * ANALYSIS's body, the transcription's own console. N.201: ANALYSIS is its
+	 * own band after INPUT (`Drawer.svelte`), so this draws no header, and the
+	 * "171ms" timing that sat at its head is gone. NOTATION is the band's
+	 * first row (`NotationFields`), drawn by `+page.svelte`'s `analysisGroup`.
+	 * The dictionary loading bar stays here.
 	 */
 	import type { Snippet } from 'svelte';
 	import type { LoaderState } from '$lib/loader';
 	import { t, type Language } from '$lib/i18n';
-	import StationHeader from './StationHeader.svelte';
 
 	interface Props {
 		loaderState: LoaderState;
-		hasResults: boolean;
-		transcribeMs: number;
 		language: Language;
 		/** Whether a word is selected, so the inspector has something to draw. */
 		showInspector: boolean;
 		/** The inspector, wired in `+page.svelte` where its state lives. */
 		consoleContent?: Snippet;
-		expanded: boolean;
-		ontoggle: () => void;
 	}
 
 	let {
 		loaderState,
-		hasResults,
-		transcribeMs,
 		language,
 		showInspector,
 		consoleContent,
-		expanded,
-		ontoggle,
 	}: Props = $props();
 </script>
 
+<!-- N.201: THE BAND HEAD REPLACES THE STATION HEADER, and "171ms" LEAVES
+     (brief r2 step 4.3; the machine's term, CONTRACT section 3 tether 22). ANALYSIS is
+     a band after INPUT; this is its body, drawn under NOTATION. The
+     dictionary loading bar stays here. -->
 <div class="station console-section">
-	<StationHeader
-		label={t('console.placeholder', language)}
-		{expanded}
-		{ontoggle}
-		controls="station-analysis"
-	/>
-	{#if expanded}
-		<div class="station-body" id="station-analysis">
-			<p class="result-summary" class:result-hidden={!hasResults}>
-				{#if hasResults}
-					{transcribeMs}ms
-				{:else}
-					&nbsp;
-				{/if}
-			</p>
-			{#if showInspector && consoleContent}
-				{@render consoleContent()}
-			{:else}
-				<div class="console-placeholder-body">
-					{#if loaderState.isLoading}
-						<div class="dict-progress">
-							<span class="dict-progress-text">{t('dict.loading', language)}</span>
-							<div class="dict-progress-track">
-								{#if loaderState.progress >= 0}
-									<div
-										class="dict-progress-fill"
-										style="width: {Math.round(loaderState.progress * 100)}%"
-									></div>
-								{:else}
-									<div class="dict-progress-fill indeterminate"></div>
-								{/if}
-							</div>
+	<div class="station-body" id="station-analysis">
+		{#if showInspector && consoleContent}
+			{@render consoleContent()}
+		{:else}
+			<div class="console-placeholder-body">
+				{#if loaderState.isLoading}
+					<div class="dict-progress">
+						<span class="dict-progress-text">{t('dict.loading', language)}</span>
+						<div class="dict-progress-track">
+							{#if loaderState.progress >= 0}
+								<div
+									class="dict-progress-fill"
+									style="width: {Math.round(loaderState.progress * 100)}%"
+								></div>
+							{:else}
+								<div class="dict-progress-fill indeterminate"></div>
+							{/if}
 						</div>
-					{:else}
-						<p class="placeholder-hint">
-							{t('console.selectWord', language)}
-						</p>
-					{/if}
-				</div>
-			{/if}
-		</div>
-	{/if}
+					</div>
+				{:else}
+					<p class="placeholder-hint">
+						{t('console.selectWord', language)}
+					</p>
+				{/if}
+			</div>
+		{/if}
+	</div>
 </div>
 
 <style>
@@ -124,22 +77,6 @@
 	   `.group :global(.station)` now. */
 	.console-section {
 		overflow: visible;
-	}
-
-	/* N.65 ship one. `margin-top: -4px` is gone. It pulled this line up
-	   against the uploader that used to sit above it; it is the first entry
-	   under ANALYSIS's header now, where a negative margin would eat the gap. */
-	.result-summary {
-		font-size: 0.75rem;
-		color: var(--sage-ink);
-		font-family: var(--font-sans);
-		margin: 0;
-		min-height: 1.2em;
-		text-align: right;
-	}
-
-	.result-hidden {
-		visibility: hidden;
 	}
 
 	.console-placeholder-body {

@@ -68,10 +68,10 @@ export const UNPERSISTED_STATIONS: readonly string[] = ['notation'];
  * warning about `ilya:activeTab` for the same reason.
  */
 export const STATION_IDS = {
-	repertoire: 'repertoire',
 	binder: 'binder',
 	notation: 'notation',
-	analysis: 'analysis',
+	/* `repertoire` AND `analysis` LEFT FOR `BAND_IDS`, N.201 step 1. Their
+	   strings are unchanged; only the tier moved. */
 	/* `corrections` IS GONE, N.149, RULED BY DANN 2026-09-20: it moved to
 	   the loupe, so a stored `corrections` names no door and
 	   `migrateOpenStations` drops it like `text`, with no version bump.
@@ -101,8 +101,14 @@ export const STATION_IDS = {
  * lowered, this is the line that breaks.
  */
 export const BAND_IDS = {
+	/* N.201: FIVE BANDS, in the Drawer's order. `repertoire` and `analysis`
+	   were stations; their strings are the same wire values, so what changed
+	   is the tier, and `OPEN_STATIONS_VERSION` 4 carries a stored set across
+	   (see `carryVersion3`). */
+	repertoire: 'repertoire',
 	piece: 'piece',
 	input: 'input',
+	analysis: 'analysis',
 	scoreMarkup: 'scoreMarkup',
 } as const;
 
@@ -236,7 +242,25 @@ function sameOrder(a: readonly string[], b: readonly string[]): boolean {
  * `restoreSurface`. A corrupt value reads as version 0, so it is reset with
  * everything else rather than being trusted.
  */
-export const OPEN_STATIONS_VERSION = 3;
+export const OPEN_STATIONS_VERSION = 4;
+
+/**
+ * THE VERSION 3 TO 4 CARRY, N.201 step 1. It resets nothing.
+ *
+ * At version 3 `repertoire` and `analysis` were stations, drawn only inside
+ * an open band (`piece`, `input`), so a stored id could be invisible. As
+ * bands they open by themselves. A version 3 set therefore keeps
+ * `repertoire` only if `piece` was stored (the singer saw it open) and
+ * `analysis` only if `input` was stored; every other id is kept as it is.
+ * Versions below 3 land on the first-run default, as before.
+ */
+export function carryVersion3(stored: readonly string[]): string[] {
+	return stored.filter(
+		(id) =>
+			(id !== BAND_IDS.repertoire || stored.includes(BAND_IDS.piece)) &&
+			(id !== BAND_IDS.analysis || stored.includes(BAND_IDS.input))
+	);
+}
 
 /* VERSION 3 IS N.115, and it is the same device for the same reason. The MAP
    changed: the four bands became doors and took ids, `metadata` stopped being
@@ -386,6 +410,29 @@ export class SectionSet {
 	}
 
 	/**
+	 * N.201 "reveal": open `id` if it is closed, shutting the other open id
+	 * of its tier when `exclusive`; do nothing if it is open. A word tap
+	 * calls this on ANALYSIS: `toggle` would shut it on the second tap. It
+	 * writes through `#write` like every other change.
+	 */
+	reveal(id: string): void {
+		if (!this.#open.has(id)) this.toggle(id);
+	}
+
+	/**
+	 * N.201 "fold": close `id` if it is open, and do nothing if it is not.
+	 * REPERTOIRE folds on a pick and on New song; the fold is here so no open
+	 * state is changed outside this file. Writes through `#write`.
+	 */
+	fold(id: string): void {
+		if (!this.#open.has(id)) return;
+		const next = new Set(this.#open);
+		next.delete(id);
+		this.#open = next;
+		this.#write();
+	}
+
+	/**
 	 * Open sections without shutting any. The table of contents' two bulk
 	 * cases: a click that opens a heading's parents, and the auto-expand that
 	 * follows the active heading. IT RETURNS EARLY WHEN NOTHING CHANGES, which
@@ -440,9 +487,9 @@ export class SectionSet {
 	restore(raw: string | null, onPhone = false): void {
 		const stored = readStoredOpenSet(raw);
 		const next =
-			stored.version < OPEN_STATIONS_VERSION
+			stored.version < 3
 				? migrateOpenStations([...this.#firstRun], onPhone)
-				: migrateOpenStations(stored.open, onPhone);
+				: migrateOpenStations(stored.version === 3 ? carryVersion3(stored.open) : stored.open, onPhone);
 		this.#open = new Set(next);
 		if (stored.version < OPEN_STATIONS_VERSION || !sameOrder(stored.open, next)) this.#write();
 	}
