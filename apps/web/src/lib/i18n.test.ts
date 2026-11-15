@@ -55,7 +55,7 @@ describe("the loupe's French", () => {
 			'loupe.undo.melismaOff': { en: 'melisma cleared',                   fr: 'mélisme effacé' },
 			'loupe.melisma':         { en: 'Melisma',                           fr: 'Mélisme' },
 			'loupe.lyric.melisma':   { en: 'This note sustains the syllable',   fr: 'Cette note prolonge la syllabe' },
-			'calib.common.retake':   { en: 'Re-take',                           fr: 'Réessayer' },
+			'calib.common.retake':   { en: 'Re-take',                           fr: 'Reprendre' },
 			'loupe.beat':            { en: 'beat %b',                          fr: 'temps %b' },
 			'loupe.beatPulse':       { en: 'beat %b, pulse %p',                 fr: 'temps %b, division %p' }
 		};

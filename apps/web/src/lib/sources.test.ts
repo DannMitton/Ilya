@@ -51,7 +51,10 @@ function citedPairs(): Set<string> {
 	return out;
 }
 
-const registered = new Set(Object.values(WORKS).map((w) => `${w.author.split(' ')[0]} ${w.year}`));
+/** Every surname a work's short citation names: "Titze, Maxfield, and Walker" registers all three, so "Walker 2017" and "Maxfield 2017" are known. */
+const registered = new Set(
+	Object.values(WORKS).flatMap((w) => w.author.split(/,\s*(?:and\s+)?|\s+and\s+/).filter(Boolean).map((a) => `${a.split(' ')[0]} ${w.year}`)),
+);
 
 describe('the registry of works', () => {
 	it('knows every work the app cites by author and year, or names it as owed', () => {
@@ -108,6 +111,19 @@ describe('a full reference', () => {
 		expect(runs.find((r) => r.title)?.text).toBe('Journal of Singing');
 	});
 
+	it('prints the 2017 article with three authors, its pages, and its DOI (N.200 Step 7)', () => {
+		const runs = fullReference('titze2017');
+		expect(runs.map((r) => r.text).join('')).toBe(
+			'Titze, Ingo R., Lynn M. Maxfield, and Megan C. Walker. “A Formant Range Profile for Singers.” Journal of Voice 31, no. 3 (2017): 382.e9\u2013382.e13. https://doi.org/10.1016/j.jvoice.2016.08.014.'
+		);
+		expect(runs.find((r) => r.title)?.text).toBe('Journal of Voice');
+	});
+
+	it('prints the first edition of Practical Vocal Acoustics (N.200 Step 7)', () => {
+		expect(text('bozeman2013')).toBe('Bozeman, Kenneth. Practical Vocal Acoustics: Pedagogic Applications for Teachers and Singers, 1st ed. Hillsdale, NY: Pendragon Press, 2013.');
+		expect(text('bozeman2025')).toBe('Bozeman, Kenneth. Practical Vocal Acoustics, 2nd ed. New York: Bloomsbury, 2025. ISBN 979-8-7651-6228-6.');
+	});
+
 	it('prints a book as Insights always has', () => {
 		expect(text('richter2002')).toBe('Richter, Laurence R. Mussorgsky’s Complete Song Texts. Geneseo, NY: Leyerle Publications, 2002. ISBN 1-878617-31-1.');
 		expect(text('reid1975')).toBe('Reid, Cornelius L. Voice: Psyche and Soma. New York: Joseph Patelson Music House, 1975, third printing 1999. ISBN 0-915282-00-3.');
@@ -131,6 +147,13 @@ describe('a full reference in French', () => {
 		expect(fr('howell2025')).toBe('HOWELL, Ian. Hearing Singing, Lanham (MD), Rowman & Littlefield, 2025.');
 		expect(fr('bozeman2025')).toBe('BOZEMAN, Kenneth. Practical Vocal Acoustics, 2e éd., New York, Bloomsbury, 2025. ISBN 979-8-7651-6228-6.');
 		expect(fr('mckinney1994')).toBe('McKINNEY, James C. The Diagnosis and Correction of Vocal Faults, Waveland, 1994, réédition, 2005.');
+	});
+
+	it('prints the 2017 article and the 2013 book as OQLF notices, every author\'s surname in capitals (N.200 Step 7)', () => {
+		expect(fr('titze2017')).toBe(
+			'TITZE, Ingo R., Lynn M. MAXFIELD, et Megan C. WALKER. «\u00a0A Formant Range Profile for Singers\u00a0», Journal of Voice, vol. 31, no 3, 2017, p.\u00a0382.e9\u2013382.e13. https://doi.org/10.1016/j.jvoice.2016.08.014.'
+		);
+		expect(fr('bozeman2013')).toBe('BOZEMAN, Kenneth. Practical Vocal Acoustics: Pedagogic Applications for Teachers and Singers, 1re éd., Hillsdale (NY), Pendragon Press, 2013.');
 	});
 
 	it('prints a thesis with « Thèse » and its degree', () => {

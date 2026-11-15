@@ -16,7 +16,7 @@
    tree on 2026-11-02 (consistency batch 2). Paths are under `apps/web/src/`;
    a prefix is listed with the files that use it most and its key count.
 
-   This file holds 1,246 keys.
+   This file holds 1,247 keys.
 
    A key built at run time (`watch.key.letter.${letter}`, `comment.<register>.<part>`)
    has no literal reference, so a search for the whole key can come back empty
@@ -27,7 +27,7 @@
    analysis.       7  lib/analysis/analyze-score-adapter.ts (the broad-analysis note), lib/components/Drawer/bandState.ts (ANALYSIS's closed line)
    app.            2  the page's hidden heading, lib/components/HeaderBar.svelte (`app.subtitle` has no literal consumer)
    binder.        10  lib/library/exchange.ts, lib/components/Drawer/RootPanel.svelte
-   calib.         99  lib/voice/CalibrationWizard.svelte, lib/voice/ProfileSwitcher.svelte, lib/components/Drawer/VoiceAnchor.svelte
+   calib.        100  lib/voice/CalibrationWizard.svelte, lib/voice/ProfileSwitcher.svelte, lib/components/Drawer/VoiceAnchor.svelte
    capture.       32  the calibration screen: lib/voice/VowelCapture.svelte, lib/voice/chart/screen-logic.ts, lib/voice/chart/VowelChart.svelte
    clitic.         3  no literal consumer found (lib/score/clitic-seat.ts does the seating)
    collide.        5  routes/+page.svelte
@@ -1199,16 +1199,14 @@ const strings: Record<string, Record<Language, string>> = {
 	'calib.common.continue': { en: 'Continue', fr: 'Continuer' },
 	// « Refaire » MOVED OFF THIS KEY, RULED by Dann 2026-09-14
 	// (`docs/sessions/spec-loupe-french_r1_2026-09-14.md`): `loupe.redo` needed
-	// it and this key lost it as B's stated cost. « Réessayer » is ADOPTED from
-	// general Canadian French usage (Dann's reason: it is on the Tim Horton's
-	// Roll Up the Rim cup every year), not from any other slot in this file.
-	// The desk's « Recommencer » was proposed and withdrawn: `station.startOver`
-	// (since removed, with no reader) read « Recommencer le placement », and collapsing "Re-take" and
-	// "Start over" into one French word would have lost the distinction between
-	// another attempt and a restart. Written as the infinitive, matching this
-	// file's other buttons (« Rétablir », « Recommencer le placement »), not
-	// the imperative « Réessayez » the cup itself uses.
-	'calib.common.retake': { en: 'Re-take', fr: 'Réessayer' },
+	// it and this key lost it as B's stated cost. « Réessayer » was then adopted
+	// here (2026-09-14, from general Canadian French usage), and it is SUPERSEDED:
+	// Dann ruled « Reprendre » on 2026-11-14 21:28 (`docs/memory/OPEN.md`, "« REPRENDRE » FOR
+	// THE SUMMARY'S RE-TAKE"), matching `capture.retake` « Reprendre {v} » and the terms
+	// « prise » and « reprise » fixed 2026-11-13. The reason the 2026-09-14 entry gave still
+	// holds: a re-take stays distinct from « Recommencer » (a restart). `calib.roster.tryAgain`
+	// keeps « Réessayer ».
+	'calib.common.retake': { en: 'Re-take', fr: 'Reprendre' },
 	'calib.common.of': { en: 'of', fr: 'sur' },
 	'calib.common.vowels': { en: 'vowels', fr: 'voyelles' },
 	'calib.common.vowelWord': { en: 'Vowel', fr: 'Voyelle' },
@@ -1252,7 +1250,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'calib.characteristics.editButton': { en: 'Edit voice characteristics', fr: 'Modifier les caractéristiques vocales' },
 	'calib.characteristics.addButton': { en: 'Add voice characteristics', fr: 'Ajouter des caractéristiques vocales' },
 	'calib.welcome.title': { en: 'Finding Your Resonances', fr: 'Trouver vos résonances' },
-	'calib.welcome.lede': { en: 'Ilya will measure your voice to build a formant profile, which is a map of your voice\'s resonances that will be applied to your repertoire to determine how well it suits your voice. Follow the prompts. This wizard assumes you read IPA. Your device needs a working mic and you should be in a quiet space for the best capture of your resonances.', fr: 'Ilya mesurera votre voix afin de constituer un profil de formants, c\u2019est-à-dire une carte des résonances de votre voix, qui sera ensuite appliquée à votre répertoire pour en évaluer la correspondance. Suivez les indications. Cet assistant présume que vous lisez l\u2019API. Votre appareil doit disposer d\u2019un microphone fonctionnel, et vous devriez vous trouver dans un endroit calme pour bien capter vos résonances.' },
+	'calib.welcome.lede': { en: 'Ilya will measure your voice to build a resonance profile, which is a map of your voice\'s resonances that will be applied to your repertoire to determine how well it suits your voice. Follow the prompts. This wizard assumes you read IPA. Your device needs a working mic and you should be in a quiet space for the best capture of your resonances.', fr: 'Ilya mesurera votre voix afin de constituer un profil de résonances, c\u2019est-à-dire une carte des résonances de votre voix, qui sera ensuite appliquée à votre répertoire pour en évaluer la correspondance. Suivez les indications. Cet assistant présume que vous lisez l\u2019API. Votre appareil doit disposer d\u2019un microphone fonctionnel, et vous devriez vous trouver dans un endroit calme pour bien capter vos résonances.' },
 	'calib.welcome.fryQuestion': { en: 'What is vocal fry?', fr: 'Qu\u2019est-ce que la friture vocale?' },
 	'calib.welcome.fryAnswer': { en: 'A low, creaky voice register, easy to sustain and gentle on the voice. Ilya reads its resonances rather than your sung pitch, so comfort matters more than pitch here.', fr: 'Un registre vocal grave et grésillant, facile à tenir et doux pour la voix. Ilya en lit les résonances plutôt que la hauteur de votre chant, donc le confort importe ici davantage que la hauteur.' },
 	'calib.welcome.beginButton': { en: 'Begin', fr: 'Commencer' },
@@ -1294,6 +1292,9 @@ const strings: Record<string, Record<Language, string>> = {
 	'calib.voiceTypeFirst.hint': { en: 'This helps Ilya read your voice against the right values. “Not sure” is a fine answer.', fr: 'Cela aide Ilya à lire votre voix selon les bonnes valeurs. « Je ne sais pas » est une bonne réponse.' },
 	'calib.summary.outside': { en: 'These readings sit outside the values Ilya draws on for {type} voices: {vowels}. Keep them as they are, or sing them again.', fr: 'Ces lectures se situent hors des valeurs sur lesquelles Ilya s’appuie pour les voix de {type} : {vowels}. Gardez-les telles quelles, ou chantez-les de nouveau.' },
 	'calib.summary.outsideNoType': { en: 'These readings sit outside the values Ilya draws on for any voice type: {vowels}. Keep them as they are, or sing them again.', fr: 'Ces lectures se situent hors des valeurs sur lesquelles Ilya s’appuie pour tous les types de voix : {vowels}. Gardez-les telles quelles, ou chantez-les de nouveau.' },
+	// The far-off [ɨ] message, RATIFIED by Dann 2026-11-13 15:29 (`docs/memory/OPEN.md`, "THE FAR-OFF [ɨ] MESSAGE"). Shown at the summary beside
+	// "use Ilya's estimate for now". NO READER YET: the summary's third choice for [ɨ] is N.200 Step 5.10, and until it is built nothing prints this.
+	'calib.summary.outsideIgh': { en: 'Your current [ɨ] sits away from where your [i] and [u] would likely place it. For now, Ilya has an estimate ready, built from your own [i] and [u], so you can carry on. You can offer new vowel samples anytime.', fr: 'Votre [ɨ] actuel ne se trouve pas tout à fait là où vos [i] et [u] le placeraient probablement. Pour l’instant, Ilya a une estimation prête, calculée à partir de vos propres [i] et [u] : vous pouvez donc continuer. Vous pouvez fournir de nouveaux échantillons de voyelles à tout moment.' },
 	'calib.summary.keepAll': { en: 'Keep them', fr: 'Les garder' },
 	// UNUSED SINCE N.199 (Step 8, Dann 2026-11-14 21:03): the wheel's capture branch of the wizard (queue, hold banner, Pause) is deleted and nothing reads this key. Kept and marked in place, with its ratified French.
 	'calib.capture.hold.noted': { en: 'Noted, moving on. You can re-take it from the summary.', fr: 'C\u2019est noté, on poursuit. Vous pourrez la refaire depuis le sommaire.' },
@@ -1387,10 +1388,10 @@ const strings: Record<string, Record<Language, string>> = {
 	// ── Voice profile pane (N.22 extraction; French placeholder = English
 	//    verbatim except profile.withheld.*, which carries Dann's own French,
 	//    migrated verbatim from the old inline WITHHELD_COPY object) ──────
-	'profile.subtitleNamed': { en: 'Formant profile: a map of {voice}\u2019s resonances', fr: 'Profil de formants\u00a0: une carte des résonances de la voix \u00ab\u00a0{voice}\u00a0\u00bb' },
-	'profile.subtitleYours': { en: 'Formant profile: a map of your voice\u2019s resonances', fr: 'Profil de formants\u00a0: une carte des résonances de votre voix' },
+	'profile.subtitleNamed': { en: 'Resonance profile: a map of {voice}\u2019s resonances', fr: 'Profil de résonances\u00a0: une carte des résonances de la voix \u00ab\u00a0{voice}\u00a0\u00bb' },
+	'profile.subtitleYours': { en: 'Resonance profile: a map of your voice\u2019s resonances', fr: 'Profil de résonances\u00a0: une carte des résonances de votre voix' },
 	// QUEUE row 166, RATIFIED by Dann 2026-11-10 (12:54 to 12:59): printed in place of the two above when the voice has only placeholder values (`markup/subtitle.ts`).
-	'profile.subtitlePlaceholder': { en: 'Formant profile: placeholder values for a generic {voiceType}, not yet your own resonances.', fr: 'Profil de formants\u00a0: valeurs par défaut pour une voix type de {voiceType}, pas encore vos propres résonances.' },
+	'profile.subtitlePlaceholder': { en: 'Resonance profile: placeholder values for a generic {voiceType}, not yet your own resonances.', fr: 'Profil de résonances\u00a0: valeurs par défaut pour une voix type de {voiceType}, pas encore vos propres résonances.' },
 	'profile.count.1': { en: 'One', fr: 'Une' },
 	'profile.count.2': { en: 'Two', fr: 'Deux' },
 	'profile.count.3': { en: 'Three', fr: 'Trois' },
