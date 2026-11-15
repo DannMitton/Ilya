@@ -103,9 +103,13 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md) for contributor guidelines and the dict
 
 ## Licence
 
-Copyright (c) 2026 Dann Mitton. MIT. See [LICENSE](./LICENSE).
+Copyright (c) 2026 Dann Mitton.
 
-Ilya includes homr's music reader, which is licensed under the AGPL-3.0, so Ilya as a whole is distributed under the AGPL-3.0. Code written for Ilya remains MIT. See [NOTICES.md](./NOTICES.md).
+Ilya is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License, version 3 only, as published by the Free Software Foundation. It is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See [LICENSE](./LICENSE) for the full text.
+
+Additional term under section 7(e) of the licence: the name *Ilya* and its icon are not licensed. The licence grants no right to use them, so a changed or redistributed copy must carry another name and icon.
+
+Versions of Ilya published before 2026-11-15 were released with Ilya's own code under the MIT licence; copies obtained under those terms keep them. Third-party components keep their own licences. See [NOTICES.md](./NOTICES.md).
 
 ## Acknowledgements
 

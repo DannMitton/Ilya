@@ -1,5 +1,9 @@
 # Notices
 
+## Ilya's licence
+
+Copyright (c) 2026 Dann Mitton. Ilya is licensed under the GNU Affero General Public License, version 3 only (AGPL-3.0-only); the full text is in [LICENSE](./LICENSE). Under section 7(e) of that licence, the name *Ilya* and its icon are not licensed: the licence grants no right to use them. Versions published before 2026-11-15 were released with Ilya's own code under the MIT licence, and copies obtained under those terms keep them.
+
 ## Scholarly Authority
 
 Ilya's phonological engine implements the rules described in:

@@ -715,3 +715,5 @@ Format: `I.nn | YYYY-MM-DD | one line, in Dann's words where possible`
 - 2026-11-14 21:22, Dann RATIFIED the four "Resonance profile" strings EN and FR. `OPEN.md`, N.199.
 - 2026-11-14 21:26, Dann RATIFIED the fRn and Fn sentence EN and FR, with his amendments. `OPEN.md`, N.199.
 - 2026-11-14 21:28, Dann RULED « Reprendre » for the summary's Re-take button (`calib.common.retake`). `OPEN.md`, N.199.
+- 2026-11-14 23:56 Dann, walking the alias: the score-reading box could be a splash screen (Canada, licensing, consent, fallibility, about Dann and Grayson). Desk critique 23:5x: wrong vehicle (shown only while a scan is read, once); recommended a first-visit welcome sheet, once per browser, reopenable from GUIDE; fallibility statement drafted (EN). OPEN: in Friday's release or after (asked).
+- 2026-11-15 00:05 Dann RULED: the welcome sheet goes into Friday's release, built tonight with him; illustration by a ChatGPT image prompt the desk drafts from a dialogue. CORRECTED ERROR (desk 23:5x): 'an illustration is design work the Friday date can't absorb' was wrong; owned. Dann's fallibility draft 00:05 received; Grayson studio page: none found in two searches.

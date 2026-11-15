@@ -280,7 +280,7 @@
 							<div class="band-deck">Chaque composante distribuée avec Ilya, reconnue en un seul endroit, afin qu'aucune reconnaissance due ne soit enfouie.</div>
 						</div>
 
-						<p><em>Ilya</em> est gratuit et à code ouvert. Son propre code est publié sous licence MIT, © 2026 Dann Mitton. Comme <em>Ilya</em> intègre le lecteur de partitions homr, l’application dans son ensemble est distribuée selon les termes de la licence publique générale GNU Affero, version 3. Il repose sur la générosité des contributrices et contributeurs qui font la recherche, créent les polices, entretiennent les données et maintiennent les logiciels libres. Chaque composante distribuée avec <em>Ilya</em> est reconnue ici, en un seul endroit, afin qu’aucune reconnaissance due ne soit enfouie.</p>
+						<p><em>Ilya</em> est gratuit et à code ouvert, © 2026 Dann Mitton, et publié selon les termes de la licence publique générale GNU Affero, version 3. Le nom <em>Ilya</em> et son icône ne sont pas visés par cette licence. Il repose sur la générosité des contributrices et contributeurs qui font la recherche, créent les polices, entretiennent les données et maintiennent les logiciels libres. Chaque composante distribuée avec <em>Ilya</em> est reconnue ici, en un seul endroit, afin qu’aucune reconnaissance due ne soit enfouie.</p>
 
 						<p><strong>Recherche savante.</strong> Le moteur phonologique met en œuvre <em>Russian Lyric Diction</em> de Craig Grayson (University of Washington, 2012), principale autorité phonologique d’<em>Ilya</em>, utilisée avec le généreux consentement de Grayson. Le CHANT et les APERÇUS mettent en œuvre un balisage des timbres ouvert et fermé, vos hauteurs de bascule du timbre, une analyse des croisements <em>f</em><sub>R1</sub>/<em>f</em><sub>o</sub> et des conseils de modification vocalique.</p>
 
@@ -576,7 +576,7 @@
 							<div class="band-deck">Everything Ilya ships with, acknowledged in one place, so that nothing owed is buried.</div>
 						</div>
 
-						<p><em>Ilya</em> is free and open source. Its own code is released under the MIT License, © 2026 Dann Mitton. Because <em>Ilya</em> includes the homr score reader, the app as a whole is distributed under the terms of the GNU Affero General Public License, version 3. It stands on the generosity of scholars, font designers, data curators, and open-source maintainers. Every component <em>Ilya</em> ships with is acknowledged here, in one place, so that nothing owed is buried.</p>
+						<p><em>Ilya</em> is free and open source, © 2026 Dann Mitton, and released under the GNU Affero General Public License, version 3. The name <em>Ilya</em> and its icon are not licensed under it. It stands on the generosity of scholars, font designers, data curators, and open-source maintainers. Every component <em>Ilya</em> ships with is acknowledged here, in one place, so that nothing owed is buried.</p>
 
 						<p><strong>Scholarship.</strong> The phonological engine operationalizes Craig Grayson’s <em>Russian Lyric Diction</em> (University of Washington, 2012), <em>Ilya</em>’s main phonological authority, used with Grayson’s generous consent. MELODY and INSIGHTS implement an open and close timbre markup, your pitches of turning, an <em>f</em><sub>R1</sub>/<em>f</em><sub>o</sub> crossing analysis, and sung-vowel modification advice.</p>
 
