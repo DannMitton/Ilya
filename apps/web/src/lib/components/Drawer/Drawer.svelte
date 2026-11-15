@@ -438,53 +438,34 @@
 		     anchors are gone and everything scrolls in one box, so the
 		     opening state is one measurable height. The group bands are the
 		     boundaries. -->
-		<!-- N.73 S3 ship two. THE DRAWER IS NOT A TABPANEL, and it stopped
-		     being one at S2. This box carried `role="tabpanel"`,
-		     `id="tabpanel-{activeTab}"` and `aria-labelledby="tab-{activeTab}"`
-		     from the four-tab shape, where each destination had its own drawer.
-		     S2 merged Studio's two, so the pair's two members now share this
-		     box byte for byte, and a panel that does not change when the tab
-		     changes is not that tab's panel. Only one id was ever in the DOM,
-		     so the inactive pair member's `aria-controls` pointed at nothing.
-		     The drawer is what its own outer element already says it is: an
-		     `<aside>` named `a11y.drawer`, a complementary landmark that
-		     stands beside the desk on every destination. `aria-controls` is
-		     optional on a `tab` in ARIA 1.2, and an absent reference beats a
-		     broken one. `DeskHead` drops its half in the same ship. -->
+		<!-- N.73 S3 ship two. THE DRAWER IS NOT A TABPANEL (since S2): Studio's
+		     two documents share this box byte for byte, so a panel that does
+		     not change with the tab is not that tab's panel. It is the
+		     `<aside>` named `a11y.drawer`, a complementary landmark; an absent
+		     `aria-controls` beats a broken one (optional on a `tab`, ARIA 1.2). -->
 		<div
 			class="drawer-content"
 			class:stowed={takeoverActive}
 			bind:this={drawerContentEl}
 		>
-				<!-- N.73 S2. ONE Studio drawer. Both panels render, always, in this
-				     order, on both of Studio's documents, so nothing in the drawer
-				     appears, disappears, or moves when the singer flips the pair.
-				     Their own {#if} guards still suppress score-only content, and
-				     the score group carries its own INCLUDE_MARKUP_INSIGHTS gate. Learn and Guide
-				     are untouched. -->
+				<!-- N.73 S2. ONE Studio drawer, rendered the same on both of Studio's
+				     documents, so nothing in it moves when the singer flips the
+				     pair. The score group carries its own INCLUDE_MARKUP_INSIGHTS
+				     gate. Learn and Guide are untouched. -->
 				{#if isStudio}
-					<!-- ═══ THE PATH. N.115, RULED BY DANN 2026-09-10: "The drawer
-					     is a path read top to bottom: Piece, Input, Text, Score
-					     markup. Each band opens and closes." N.115 increment 2,
-					     ruled 2026-09-10 22:00 on trial: THREE, with Text folded
-					     into Input under the poem box.
+					<!-- ═══ THE PATH. N.115, RULED BY DANN 2026-09-10: "The drawer is a
+					     path read top to bottom ... Each band opens and closes."
+					     N.201 makes it five bands.
 
-					     THE BAND IS THE TOGGLE, all 40 px of it, with a bare
-					     chevron at its right end (ruled 2026-08-19), up when open
-					     and down when closed, on every band alike. That is the
-					     station row's own glyph and its own two rotations, so one
-					     chevron means one thing at both tiers of the drawer.
+					     THE BAND IS THE TOGGLE, all 40 px, with a bare chevron at
+					     its right end (ruled 2026-08-19), up when open, down when
+					     closed. `bandHead` is one snippet, not five copies, so the
+					     recipe cannot drift (the reason `StationHeader.svelte`
+					     exists).
 
-					     ONE RECIPE, THREE CALLS. `bandHead` below is the band, and
-					     it is a snippet rather than four copies for the reason
-					     `StationHeader.svelte` exists: consistency kept by hand
-					     drifts, and Dann catches the drift.
-
-					     A CLOSED BAND SHOWS ITS STATE LINE AND AN OPEN ONE SHOWS
-					     ITS CONTENT, which is the ruling in full: "an open band
-					     shows its content, and the content is the state." An empty
-					     state line draws no element, so a band with nothing to say
-					     costs no height. -->
+					     A CLOSED BAND SHOWS ITS STATE LINE AND AN OPEN ONE ITS
+					     CONTENT: "an open band shows its content, and the content
+					     is the state." An empty state line draws no element. -->
 					{#snippet bandHead(id: string, label: string, state: string, fromScore: boolean)}
 						{@const open = sections.has(id)}
 						<h2 class="group-band" data-band-head={id}>
