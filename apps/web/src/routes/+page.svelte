@@ -122,6 +122,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		OPEN_STATIONS_KEY,
 		STATION_IDS,
 		BAND_IDS,
+		repertoireOpensOnArrival,
 		UNPERSISTED_STATIONS,
 	} from '$lib/components/Drawer/sections.svelte';
 	// N.73 S3: the one predicate for "is this voice calibrated", lifted out of
@@ -134,6 +135,8 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	// N.115: what a closed band says, pure and tested. See `bandState.ts`.
 	import {
 		pieceStateLine,
+		repertoireStateLine,
+		analysisStateLine,
 		inputStateLine,
 		notationStateLine,
 		scoreStateLine,
@@ -151,6 +154,8 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		type MetadataState,
 	} from '$lib/metadata-provenance';
 	import NotationFields from '$lib/components/Drawer/NotationFields.svelte';
+	import { countVerifyWords } from '$lib/components/Paper/verify-words';
+	import { shownIpaAt } from '$lib/components/Paper/shown-ipa';
 	import AnalysisStation from '$lib/components/Drawer/AnalysisStation.svelte';
 	import StationHeader from '$lib/components/Drawer/StationHeader.svelte';
 	import Loupe from '$lib/score/Loupe.svelte';
@@ -3093,6 +3098,23 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		),
 	);
 
+	/* N.201 step 4: THE TWO NEW CLOSED LINES. REPERTOIRE: the rows the list draws
+	   (`songRows`, the one count the closed line reads; the others are `songs`,
+	   the library pointer's `songCount`, `RootPanel`'s `songs.length > 1` and
+	   `SongList`'s `canDelete`). ANALYSIS: the chosen word and its IPA as the
+	   stack shows it, else the count of VERIFY words on the page, which reads
+	   `effectiveLines`, the lines `Paper` draws, so it follows the shown witness
+	   and is the same on MELODY. */
+	const repertoireStateText = $derived(repertoireStateLine(songRows.length, language));
+	const analysisStateText = $derived(
+		analysisStateLine(
+			selectedWord,
+			selectedWord ? shownIpaAt(effectiveLines, selectedWord.lineIndex, selectedWord.wordIndex, notationPrefs, spotInverts) : null,
+			countVerifyWords(effectiveLines),
+			language,
+		)
+	);
+
 	/**
 	 * Open another song. CLOSE() THEN OPEN(), never a prop change and never a
 	 * reload.
@@ -3163,6 +3185,10 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 			return;
 		}
 		libraryError = null;
+		/* N.201: New song folds REPERTOIRE and opens INPUT, only after the
+		   write succeeded (the error line is inside REPERTOIRE's body). */
+		sections.fold(BAND_IDS.repertoire);
+		sections.reveal(BAND_IDS.input);
 		await refreshSongs();
 		await switchSong(created.record.id);
 	}
@@ -3237,7 +3263,13 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		// draws, and every string it draws is handed to it.
 		unreadable: t('song.unreadable', language),
 		newerIlya: t('song.newerIlya', language),
-		onopen: (id: string) => void switchSong(id),
+		/* N.201: a pick folds REPERTOIRE, the song already open included, so
+		   the fold sits here and not in `switchSong` (which returns early for
+		   that song and is also Delete's and `recognize.open`'s). */
+		onopen: (id: string) => {
+			sections.fold(BAND_IDS.repertoire);
+			void switchSong(id);
+		},
 		onnew: () => void handleNewSong(),
 		onrename: handleRenameSong,
 		ondelete: handleDeleteSong,
@@ -3626,6 +3658,12 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 			   the width a second time here would put a second opinion about
 			   the layout rule in the tree. */
 			sections.restore(localStorage.getItem(OPEN_STATIONS_KEY), isMobile);
+			/* N.201 ARRIVAL: a desk opens REPERTOIRE at two or more songs, so the
+			   singer sees the files once; fewer, and the stored set stands (a
+			   first run opens INPUT alone). A phone never does. `songs` is
+			   empty here (`refreshSongs` is not awaited), so the count is the
+			   pointer's, read at open. */
+			if (repertoireOpensOnArrival(isMobile, opened?.pointer.songCount ?? 0)) sections.open([BAND_IDS.repertoire]);
 		} catch {
 			// localStorage unavailable
 		}
@@ -3813,9 +3851,11 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		takeoverActive={calibrating}
 		onexittakeover={exitCalibration}
 		{sections}
+		repertoireState={repertoireStateText}
 		pieceState={pieceStateText}
 		pieceFromScore={doc.fromScoreFields.has('title')}
 		inputState={inputStateText}
+		analysisState={analysisStateText}
 		scoreState={scoreStateText}
 		ontogglepull={handlePullToggle}
 		{revealRequest}

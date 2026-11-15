@@ -210,6 +210,18 @@ export function migrateOpenStations(stored: readonly string[], onPhone: boolean)
 	return out.filter((id) => kept.get(tierOf(id)) === id);
 }
 
+/**
+ * N.201 ARRIVAL: whether REPERTOIRE opens by itself after `restore`. A desk
+ * opens it when the library holds two or more songs, so the singer sees the
+ * files once and they recede after a pick; a list of one offers no choice,
+ * and a phone never opens it (sixteen open rows would push every other band
+ * off the raised Drawer). The count is the library pointer's: `songs` is
+ * still empty when `restore` runs.
+ */
+export function repertoireOpensOnArrival(onPhone: boolean, songCount: number): boolean {
+	return !onPhone && songCount >= 2;
+}
+
 /** Whether two open sets, in order, are the same array. */
 function sameOrder(a: readonly string[], b: readonly string[]): boolean {
 	return a.length === b.length && a.every((id, i) => id === b[i]);

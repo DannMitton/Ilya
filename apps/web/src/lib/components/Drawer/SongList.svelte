@@ -140,13 +140,18 @@
 					>
 						{song.label}
 					</button>
-					<button type="button" class="song-btn" onclick={() => void startRename(song)}>
-						{t('songs.rename', language)}
-					</button>
-					{#if canDelete}
-						<button type="button" class="song-btn" onclick={() => ondelete(song.id)}>
-							{t('songs.delete', language)}
+					<!-- N.201: Rename and Delete show on the song in hand only; the
+					     other rows read as titles. A row that cannot be read keeps
+					     both (its recorded reason, below). -->
+					{#if song.id === activeId || song.readFailure}
+						<button type="button" class="song-btn" onclick={() => void startRename(song)}>
+							{t('songs.rename', language)}
 						</button>
+						{#if canDelete}
+							<button type="button" class="song-btn" onclick={() => ondelete(song.id)}>
+								{t('songs.delete', language)}
+							</button>
+						{/if}
 					{/if}
 				{/if}
 			</li>

@@ -16,7 +16,7 @@
    tree on 2026-11-02 (consistency batch 2). Paths are under `apps/web/src/`;
    a prefix is listed with the files that use it most and its key count.
 
-   This file holds 1,271 keys.
+   This file holds 1,275 keys.
 
    A key built at run time (`watch.key.letter.${letter}`, `comment.<register>.<part>`)
    has no literal reference, so a search for the whole key can come back empty
@@ -24,7 +24,7 @@
 
    a11y.           4  accessible names: lib/components/Drawer/Drawer.svelte, lib/score/Loupe.svelte, lib/score/CorrectionSurface.svelte, lib/components/Paper/Paper.svelte
    aid.            2  lib/components/ReadingAid.svelte
-   analysis.       5  lib/analysis/analyze-score-adapter.ts (the broad-analysis note)
+   analysis.       7  lib/analysis/analyze-score-adapter.ts (the broad-analysis note), lib/components/Drawer/bandState.ts (ANALYSIS's closed line)
    app.            2  the page's hidden heading, lib/components/HeaderBar.svelte (`app.subtitle` has no literal consumer)
    binder.        10  lib/library/exchange.ts, lib/components/Drawer/RootPanel.svelte
    calib.         99  lib/voice/CalibrationWizard.svelte, lib/voice/ProfileSwitcher.svelte, lib/components/Drawer/VoiceAnchor.svelte
@@ -69,7 +69,7 @@
    sheet.         16  the vowel-space sheet and the capture screen's readings list: lib/voice/chart/VowelSpaceSheet.svelte, lib/voice/VowelCapture.svelte
    shiftLyrics.    5  lib/score/CorrectionSurface.svelte
    song.           2  lib/omr/scan.ts, lib/library/notices.ts, routes/+page.svelte
-   songs.         13  routes/+page.svelte, lib/components/Drawer/SongList.svelte
+   songs.         15  routes/+page.svelte, lib/components/Drawer/SongList.svelte, lib/components/Drawer/bandState.ts
    source.         1  lib/components/Drawer/IntakePanel.svelte, lib/score/ingestion/ingest.ts
    station.        2  routes/+page.svelte
    storage.        8  lib/library/notices.ts, lib/library/library.ts
@@ -1055,6 +1055,9 @@ const strings: Record<string, Record<Language, string>> = {
 	'analysis.broad.itemRange':    { en: 'range guidance',               fr: 'les repères d\u2019ambitus' },
 	'analysis.broad.itemPassaggio': { en: 'positional passaggio flags',   fr: 'le signalement des notes de *passaggio*' },
 	'analysis.broad.join':         { en: 'and',                          fr: 'ni' },
+	// N.201, RATIFIED by Dann 2026-11-14 20:38, English and French (*"Yes I ratify the English and French."*). ANALYSIS's closed line when no word is chosen. Digits in both languages (Dann 2026-11-13 11:52). Fill with `tv`.
+	'analysis.verifyCount.one':    { en: '1 to verify',                  fr: '1 à vérifier' },
+	'analysis.verifyCount.many':   { en: '{n} to verify',                fr: '{n} à vérifier' },
 
 	// ── Textual witnesses (reconciliation shell, piece 3; Kimi Q1/Q2;
 	//    English ruled by Dann 2026-07-16; French pending Dann's validation) ──
@@ -1766,6 +1769,9 @@ const strings: Record<string, Record<Language, string>> = {
 	   only what Dann ruled. */
 	'songs.heading': { en: 'REPERTOIRE', fr: 'RÉPERTOIRE' },
 	'songs.new': { en: 'New song', fr: 'Nouveau chant' },
+	// N.201, RATIFIED by Dann 2026-11-14 20:38, English and French (*"Yes I ratify the English and French."*). REPERTOIRE's closed line. Digits in both languages (Dann 2026-11-13 11:52). Fill with `tv`.
+	'songs.count.one': { en: '1 song', fr: '1 chant' },
+	'songs.count.many': { en: '{n} songs', fr: '{n} chants' },
 	// The word a song is drawn under before it has anything to be named after.
 	// A KEY AND NOT A LITERAL: it was English in the French drawer for exactly as
 	// long as it took to look, because the placeholder is built in plain

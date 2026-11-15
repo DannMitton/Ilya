@@ -36,6 +36,7 @@ import {
 	SectionSet,
 	carryVersion3,
 	migrateOpenStations,
+	repertoireOpensOnArrival,
 	parseOpenSections,
 	readStoredOpenSet,
 	isBandId,
@@ -476,5 +477,22 @@ describe('N.201 SectionSet: reveal, fold, restore', () => {
 		set.restore('{"v":4,"open":["repertoire"]}', false);
 		expect(set.has('repertoire')).toBe(true);
 		expect(store.has(KEY)).toBe(false);
+	});
+});
+
+/* N.201 step 3.1 and 3.2, the brief's own words: a desk opens REPERTOIRE at two
+   or more songs, with fewer the stored set stands, and a phone never does. */
+describe('N.201 REPERTOIRE on arrival', () => {
+	it('opens on a desk at two or more songs, including sixteen', () => {
+		expect(repertoireOpensOnArrival(false, 2)).toBe(true);
+		expect(repertoireOpensOnArrival(false, 16)).toBe(true);
+	});
+	it('does not open on a desk with one song or none', () => {
+		expect(repertoireOpensOnArrival(false, 1)).toBe(false);
+		expect(repertoireOpensOnArrival(false, 0)).toBe(false);
+	});
+	it('never opens on a phone, whatever the count', () => {
+		expect(repertoireOpensOnArrival(true, 16)).toBe(false);
+		expect(repertoireOpensOnArrival(true, 2)).toBe(false);
 	});
 });
