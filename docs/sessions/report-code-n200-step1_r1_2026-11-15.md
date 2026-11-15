@@ -21,7 +21,8 @@ Cloud lane 52, branch `cloud-lane-52`. Brief: `brief-code-n200-voice-as-it-is_r3
 
 ## The URL Dann opens
 
-NOT ESTABLISHED until the deployment builds. The project is `ilya` in team `dannmittons-projects` (read from Vercel: its domains include `ilya-git-main-dannmittons-projects.vercel.app`). By that pattern the branch URL should be `https://ilya-git-cloud-lane-52-dannmittons-projects.vercel.app/?harness=1&sung=u`. See the final line of this report for what Vercel showed after the push.
+**Established from Vercel's API (read-only, 2026-11-15):** pushing `e3ecc7b` created deployment `dpl_9uvLUPKgKkav5PvTo3CAcHeiUj3Y` for `githubCommitRef: cloud-lane-52`, URL `https://ilya-mj0ezv499-dannmittons-projects.vercel.app`, state READY (inspector: `https://vercel.com/dannmittons-projects/ilya/9uvLUPKgKkav5PvTo3CAcHeiUj3Y`). The deployment exists only because of the `cloud-lane-52` line in `vercel.json`. **NOT ESTABLISHED:** that the recorder is inside that bundle, that is, that Vercel passes `VERCEL_GIT_COMMIT_REF` to this project's build. The sandbox cannot reach `vercel.app`, so I could not look. Dann's check, one step: open `https://ilya-mj0ezv499-dannmittons-projects.vercel.app/?harness=1&sung=u`, Voice, Calibrate, Begin, Continue. A black bar at the bottom right reading "Recorder. Sung vowel" means the flag took; no bar means it did not, and the fix is to set `PUBLIC_RECORDER=1` for the Preview environment of that branch in Vercel's settings.
+Older note on the address pattern, not verified: The project is `ilya` in team `dannmittons-projects` (read from Vercel: its domains include `ilya-git-main-dannmittons-projects.vercel.app`). By that pattern the branch URL should be `https://ilya-git-cloud-lane-52-dannmittons-projects.vercel.app/?harness=1&sung=u`.
 
 ## The eight gates after Step 1
 
@@ -29,5 +30,5 @@ NOT ESTABLISHED until the deployment builds. The project is `ilya` in team `dann
 
 ## Could not establish
 
-- Chrome stable on a Mac; a real microphone; that Vercel exposes `VERCEL_GIT_COMMIT_REF` to this project's builds (see the deployment line below).
+- Chrome stable on a Mac; a real microphone; that Vercel exposes `VERCEL_GIT_COMMIT_REF` to this project's builds (see the URL section).
 - `static/sw.js:124-133` was read: the page is network-first with a cached fallback, so a stale bundle is possible; the `build` field in every JSON is the guard, and Dann should compare it with the commit he expects.
