@@ -1,5 +1,5 @@
 /**
- * N.199 Step 6: the new capture screen, in a browser, on `StubCaptureSession` (`?calibrate=new&capture=stub`, development server only).
+ * N.199 Step 6: the new capture screen, in a browser, on `StubCaptureSession` (`?capture=stub`, development server only). Since N.199 Step 8 the screen is the capture phase for every singer: no switch is in the address.
  * A full tour (ten captures), a manual pick, a cancel in each phase, a rolled-back re-take and an error, Return to summary after one
  * vowel, Start over's two taps, hidden mode, and a soprano's view. Real time: the count-in is 6 s and the stub's sweep 3.5 to 4 s,
  * so these tests are long by design. The stub gives clean readings, so what is asserted is the screen's behaviour and what it keeps,
@@ -10,15 +10,16 @@ import { test, expect, type Page } from '@playwright/test';
 const STORE_KEY = 'shane.profiles.v2';
 const READING = (f1: number, f2: number) => ({ f1, f2, confidence: 'high', f2Quality: 'clear', reading: 'captured', source: 'measured-user', plausibility: 'plausible' });
 
-async function open(page: Page, opts: { formants?: Record<string, unknown>; voiceType?: string; next?: string[] } = {}) {
+async function open(page: Page, opts: { formants?: Record<string, unknown>; voiceType?: string; next?: string[]; url?: string; room?: string } = {}) {
 	const now = new Date().toISOString();
 	const store = { version: 2, activeId: 'v', voices: [{ id: 'v', name: 'Dann', createdAt: now, updatedAt: now, calibratedAt: now, formants: opts.formants ?? {}, voiceType: opts.voiceType ?? 'bass' }] };
-	await page.addInitScript(([s, next]) => {
+	await page.addInitScript(([s, next, room]) => {
 		localStorage.setItem('ilya:language', 'en');
 		localStorage.setItem('shane.profiles.v2', s);
 		(window as unknown as { __ilyaStubNext?: string[] }).__ilyaStubNext = next;
-	}, [JSON.stringify(store), opts.next ?? []] as const);
-	await page.goto('/?calibrate=new&capture=stub');
+		if (room) (window as unknown as { __ilyaStubReadiness?: string }).__ilyaStubReadiness = room;
+	}, [JSON.stringify(store), opts.next ?? [], opts.room ?? ''] as const);
+	await page.goto(opts.url ?? '/?capture=stub');
 	await expect(page.locator('textarea.text-input')).toBeEnabled({ timeout: 45_000 });
 	// Below the desk layout (1400) the Drawer is a bottom sheet, closed until its pull is pressed.
 	if ((page.viewportSize()?.width ?? 1440) < 1400) await page.getByRole('button', { name: /drawer/i }).first().click();
@@ -169,6 +170,16 @@ test.describe('the new capture screen on the stub', () => {
 		await expect(page.getByText('2 of 10 vowels sampled').first()).toBeVisible({ timeout: 40_000 });
 	});
 
+	test('the summary offers Continue while fewer than ten are sung, and it opens the capture screen on the next vowel in Ilya’s order (B3)', async ({ page }) => {
+		await open(page, { formants: { i: READING(296, 1705), e: READING(381, 1532), u: READING(346, 804) } });
+		await page.getByRole('button', { name: /re-calibrate/i }).click();
+		await expect(page.getByText('3 of 10 vowels sampled').first()).toBeVisible();
+		await page.getByRole('button', { name: /^continue$/i }).click();
+		await expect(page.locator('.capture')).toBeVisible();
+		expect(await selected(page)).toBe('ɛ');
+		await expect(cue(page)).toHaveText('Ready for [ɛ].');
+	});
+
 	test('Start over takes two taps, then clears the readings and the take record', async ({ page }) => {
 		test.setTimeout(120_000);
 		await open(page, { formants: { i: READING(296, 1705), e: READING(381, 1532), u: READING(346, 804) } });
@@ -198,6 +209,24 @@ test.describe('the new capture screen on the stub', () => {
 		const v = await stored(page);
 		expect(v.formants.i.visibility).toBe('hidden');
 		expect(v.takes[0].visible).toBe('hidden');
+	});
+
+	test('there is no wheel, and an address still carrying the retired ?calibrate=new loads the same screen and breaks nothing', async ({ page }) => {
+		await open(page, { url: '/?calibrate=new&capture=stub' });
+		await toCapture(page);
+		expect(await page.locator('.vowel-btn').count()).toBe(10);
+		expect(await page.locator('.pacifier, [class*="pacifier"]').count()).toBe(0);
+		await expect(page.locator('.hint')).toHaveText('Start follows Ilya’s order. Or tap any vowel to sing that one now.');
+	});
+
+	test('a lively room raises the room notice on the capture screen, and it can be dismissed (B2)', async ({ page }) => {
+		await open(page, { room: 'marginal-snr' });
+		await toCapture(page);
+		const toast = page.locator('.wizard-toast');
+		await expect(toast).toContainText('The room sounds a little lively.');
+		await page.getByRole('button', { name: /^dismiss$/i }).click();
+		await expect(toast).toHaveCount(0);
+		await expect(page.locator('.capture')).toBeVisible();
 	});
 
 	test('a soprano sees ten zones and ten placeholders, and the first-move hint', async ({ page }) => {

@@ -131,7 +131,7 @@ export interface StoredVoice {
 	 */
 	intake?: IntakeAnswers;
 	/**
-	 * N.199 Step 5 (`?calibrate=new` only): a record of the takes on the new capture screen, 50 a vowel, oldest dropped
+	 * N.199 Step 5 (written for every singer since Step 8): a record of the takes on the new capture screen, 50 a vowel, oldest dropped
 	 * (`takes.ts`). Optional and additive, the same discipline as the fields above. Start over clears it; a full store drops it
 	 * before it refuses the profile (`saveStore`).
 	 */

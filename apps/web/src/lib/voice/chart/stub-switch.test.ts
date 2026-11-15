@@ -9,8 +9,8 @@ describe('?capture=stub', () => {
 	it('is off with no query and for any other value, and on only for stub (the test runner is a development build)', () => {
 		expect(captureStubOn('')).toBe(false);
 		expect(captureStubOn('?capture=live')).toBe(false);
-		expect(captureStubOn('?calibrate=new')).toBe(false);
-		expect(captureStubOn('?calibrate=new&capture=stub')).toBe(true);
+		expect(captureStubOn('?calibrate=new')).toBe(false); // the retired switch does nothing
+		expect(captureStubOn('?calibrate=new&capture=stub')).toBe(true); // and does not get in the stub's way
 	});
 	it('gives the live session unless the switch is on', () => {
 		expect(captureSessionFor('')).toBeInstanceOf(LiveCaptureSession);

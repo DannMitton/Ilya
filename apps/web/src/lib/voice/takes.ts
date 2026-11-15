@@ -1,5 +1,5 @@
 /**
- * WHAT ILYA KEEPS OF EACH TAKE (N.199 Step 5; `?calibrate=new` only). Per voice, for every take on the new capture screen: when, how
+ * WHAT ILYA KEEPS OF EACH TAKE (N.199 Step 5; written for every singer since Step 8, `CalibrationWizard.svelte` `onTake={recordTake}`). Per voice, for every take on the new capture screen: when, how
  * it ended, the engine's raw reading with its `confidence` and `f2Quality` (absent on a failed take, which has no numbers), the declared
  * voice type at the time, and what the singer could see (`hidden | zone`; Phase 2 adds `live`). It answers a question the desk has:
  * does showing a zone change what a singer sings (brief section 4, item 6). It is a measurement, never shown to the singer, and never

@@ -4,7 +4,7 @@
  * microphone. A production build replaces `import.meta.env.DEV` with false and drops this, as `engine/capture-file.ts` does for its
  * own switch. A test scripts a take through `window.__ilyaStubNext`, an array of outcomes taken one per take.
  */
-import { StubCaptureSession, type StubOutcome } from '../engine/stub';
+import { StubCaptureSession, type StubOutcome, type StubReadinessOutcome } from '../engine/stub';
 import { LiveCaptureSession } from '../engine/live';
 import type { CaptureSession } from '../engine/session';
 
@@ -17,10 +17,12 @@ export function captureStubOn(search: string = here()): boolean {
 declare global {
 	interface Window {
 		__ilyaStubNext?: StubOutcome[];
+		/** The room the stub's readiness reports (default `clear`); `marginal-snr` raises the room notice (N.199 Step 8, B2). */
+		__ilyaStubReadiness?: StubReadinessOutcome;
 	}
 }
 
 export function captureSessionFor(search: string = here()): CaptureSession {
 	if (!captureStubOn(search)) return new LiveCaptureSession();
-	return new StubCaptureSession(undefined, 'clear', () => (typeof window === 'undefined' ? undefined : window.__ilyaStubNext?.shift()));
+	return new StubCaptureSession(undefined, (typeof window === 'undefined' ? undefined : window.__ilyaStubReadiness) ?? 'clear', () => (typeof window === 'undefined' ? undefined : window.__ilyaStubNext?.shift()));
 }
