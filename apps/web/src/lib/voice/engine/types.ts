@@ -71,6 +71,11 @@ export interface CalibratedFormant {
 	 */
 	plausibilityOverride?: true;
 	/**
+	 * Which picker read this reading's resonances (N.200 Step 3): `open` when `?measure=open` was in the address, absent for the picker the
+	 * app has always used. A record of how the reading was taken, never a judgement of it.
+	 */
+	picker?: 'open';
+	/**
 	 * Whether the room's noise floor could be measured for this sample (item
 	 * 1.4b; engine spec §3's c8 condition, `detector.ts`).
 	 *

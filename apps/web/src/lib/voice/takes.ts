@@ -25,7 +25,7 @@ export interface TakeRecord {
 	/** The session's error code, for a failed take. */
 	errorCode?: string;
 	/** The engine's reading as it came, before the guard: absent on a failed or cancelled take. */
-	raw?: { f1: number; f2?: number; confidence: CalibratedFormant['confidence']; f2Quality?: CalibratedFormant['f2Quality'] };
+	raw?: { f1: number; f2?: number; confidence: CalibratedFormant['confidence']; f2Quality?: CalibratedFormant['f2Quality']; picker?: 'open' };
 	/** The declared voice type at the time; null when none. */
 	voiceType: string | null;
 	visible: TakeVisibility;
@@ -35,7 +35,8 @@ const rawOf = (f: CalibratedFormant): NonNullable<TakeRecord['raw']> => ({
 	f1: f.f1,
 	...(typeof f.f2 === 'number' ? { f2: f.f2 } : {}),
 	confidence: f.confidence,
-	...(f.f2Quality ? { f2Quality: f.f2Quality } : {})
+	...(f.f2Quality ? { f2Quality: f.f2Quality } : {}),
+	...(f.picker ? { picker: f.picker } : {})
 });
 
 interface Context {

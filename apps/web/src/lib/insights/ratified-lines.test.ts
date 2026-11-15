@@ -407,8 +407,8 @@ describe('row 166: the six ratified placeholder strings', () => {
 		expect(t('insights.generic.lede', 'fr')).toBe('Ces constats reposent sur des valeurs par défaut pour une voix type de {voiceType}, et non sur votre voix en particulier.');
 	});
 	it('the MELODY subtitle for a placeholder voice', () => {
-		expect(t('profile.subtitlePlaceholder', 'en')).toBe('Formant profile: placeholder values for a generic {voiceType}, not yet your own resonances.');
-		expect(t('profile.subtitlePlaceholder', 'fr')).toBe('Profil de formants\u00a0: valeurs par défaut pour une voix type de {voiceType}, pas encore vos propres résonances.');
+		expect(t('profile.subtitlePlaceholder', 'en')).toBe('Resonance profile: placeholder values for a generic {voiceType}, not yet your own resonances.');
+		expect(t('profile.subtitlePlaceholder', 'fr')).toBe('Profil de résonances\u00a0: valeurs par défaut pour une voix type de {voiceType}, pas encore vos propres résonances.');
 	});
 	it('the vowel chart\u2019s caption for a placeholder page, EN and FR (closing polish lane, step 2; Dann 2026-11-11 13:23)', () => {
 		expect(t('insights.r2.vowels.against.generic', 'en')).toBe('against where each vowel turns in a generic {voiceType}');

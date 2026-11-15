@@ -1,9 +1,32 @@
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vitest/config';
 import { defaultClientConditions } from 'vite';
+import { execSync } from 'node:child_process';
 
-export default defineConfig({
+/**
+ * THE RECORDER'S BUILD FLAG (N.200 Step 1). `__ILYA_RECORDER__` is true on the development server, and in a build only when
+ * `PUBLIC_RECORDER=1` is set for that build AND the build is not Vercel's production environment. Everywhere else it is the
+ * literal `false`, so the bundler drops `engine/capture-file.ts` and the three calls in `engine/live.ts` from the singers'
+ * bundle. `vercel.json` sets the variable for one branch only. `__ILYA_BUILD__` is the commit the bundle was built from,
+ * stamped into every recording, because the service worker can serve a stale page (`static/sw.js`, `networkFirstPage`).
+ */
+function buildId(): string {
+	if (process.env.VERCEL_GIT_COMMIT_SHA) return process.env.VERCEL_GIT_COMMIT_SHA.slice(0, 8);
+	try {
+		return execSync('git rev-parse --short=8 HEAD', { stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim();
+	} catch {
+		return 'unknown';
+	}
+}
+
+export default defineConfig(({ command }) => ({
 plugins: [sveltekit()],
+define: {
+__ILYA_RECORDER__: JSON.stringify(
+command === 'serve' || (process.env.PUBLIC_RECORDER === '1' && process.env.VERCEL_ENV !== 'production')
+),
+__ILYA_BUILD__: JSON.stringify(buildId())
+},
 // Expose PUBLIC_-prefixed env vars on import.meta.env (alongside Vite's
 // default VITE_). The Markup and Insights gate in $lib/wall reads
 // import.meta.env.PUBLIC_INCLUDE_MARKUP_INSIGHTS, which Vite only populates
@@ -39,4 +62,4 @@ test: {
 include: ['src/**/*.{test,spec}.{js,ts}'],
 exclude: ['e2e/**', 'node_modules/**']
 }
-});
+}));

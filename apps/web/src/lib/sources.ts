@@ -37,7 +37,7 @@ export interface Work {
 	/** A thesis's degree, "D.M.A.", printed before its university (`publisher`). */
 	degree: string | null;
 	/** An article's journal and its volume and issue as printed; the title then sits in quotation marks. */
-	container: { title: string; volume: string } | null;
+	container: { title: string; volume: string; pages?: string } | null;
 	url: string | null;
 	/** What the work does for Ilya: the Guide's Sources groups it by this. */
 	group: SourceGroup;
@@ -290,6 +290,47 @@ export const WORKS: Record<string, Work> = {
 		url: null,
 		record: 'Insights Research/long-works-toc-screen_r1_2026-09-23.md, §6; the imprint from the title and copyright pages, PDF pp. 1 to 8 (desk, 2026-09-30)',
 	},
+	titze2017: {
+		key: 'titze2017',
+		author: 'Titze, Maxfield, and Walker',
+		authorFull: 'Titze, Ingo R., Lynn M. Maxfield, and Megan C. Walker',
+		shortTitle: 'A Formant Range Profile for Singers',
+		fullTitle: 'A Formant Range Profile for Singers',
+		year: 2017,
+		edition: null,
+		place: null,
+		publisher: null,
+		printing: null,
+		isbn: null,
+		degree: null,
+		container: { title: 'Journal of Voice', volume: '31, no. 3', pages: '382.e9\u2013382.e13' },
+		url: 'https://doi.org/10.1016/j.jvoice.2016.08.014',
+		group: 'voice',
+		// The title, journal, volume, issue, and pages are Dann's ruling of 2026-11-13 16:05 and the OWED line of 2026-11-14 21:3x (`OPEN.md`, "RESONANCE PROFILE",
+		// PATH 1; "THE fRn AND Fn SENTENCE"). The first names and the DOI are from the ratified Guide essay's reference list (`draft-guide-fry-essay_r1_2026-09-30.md`
+		// line 20, "Checked 2026-09-30"); the DOI was not opened in this session.
+		record: '`docs/memory/OPEN.md`, "THE fRn AND Fn SENTENCE" (2026-11-14 21:26) for the citation; first names and DOI from `docs/sessions/draft-guide-fry-essay_r1_2026-09-30.md` line 20',
+	},
+	bozeman2013: {
+		key: 'bozeman2013',
+		author: 'Bozeman',
+		authorFull: 'Bozeman, Kenneth',
+		shortTitle: 'Practical Vocal Acoustics',
+		fullTitle: 'Practical Vocal Acoustics: Pedagogic Applications for Teachers and Singers',
+		year: 2013,
+		// The FIRST edition, which carries the footnote at p. 11, n. 7 that the Guide cites. The second edition (`bozeman2025`) paginates differently, and its page for
+		// this note is NOT ESTABLISHED. The Vox Musicæ series number (9) is on the record and has no field here.
+		edition: '1st ed.',
+		place: 'Hillsdale, NY',
+		publisher: 'Pendragon Press',
+		printing: null,
+		isbn: null,
+		group: 'voice',
+		degree: null,
+		container: null,
+		url: null,
+		record: '`docs/memory/OPEN.md`, "THE fRn AND Fn SENTENCE" (2026-11-14 21:26): the author\'s publications page, the Holy Cross library catalogue, and WorldCat read 2026-11-14 21:36 (first edition, print, Pendragon Press, Hillsdale, NY, 2013); Dann owns both editions (21:31)',
+	},
 	howell2025: {
 		key: 'howell2025',
 		author: 'Howell',
@@ -367,7 +408,7 @@ export function fullReference(workKey: string, language: 'en' | 'fr' = 'en'): Ru
 	const tail = `${w.isbn ? ` ISBN ${w.isbn}.` : ''}${w.url ? ` ${w.url}.` : ''}`;
 	// An article: the title in quotation marks, then the journal in italics (Pacheco's form in `i18n.ts`).
 	if (w.container)
-		return [author, { text: `“${w.fullTitle}.” ` }, { text: w.container.title, title: true }, { text: ` ${w.container.volume} (${w.year}).${tail}` }];
+		return [author, { text: `“${w.fullTitle}.” ` }, { text: w.container.title, title: true }, { text: ` ${w.container.volume} (${w.year})${w.container.pages ? `: ${w.container.pages}` : ''}.${tail}` }];
 	const imprint = [w.degree, w.place && w.publisher ? `${w.place}: ${w.publisher}` : w.publisher, String(w.year), w.printing]
 		.filter((s): s is string => !!s)
 		.join(', ');
@@ -401,15 +442,20 @@ export function fullReference(workKey: string, language: 'en' | 'fr' = 'en'): Ru
 const capitals = (surname: string) =>
 	/^Mc/.test(surname) ? `Mc${surname.slice(2).toLocaleUpperCase('fr-CA')}` : surname.toLocaleUpperCase('fr-CA');
 
-/** "Grayson, Craig M." to « GRAYSON, Craig M. »; a second author « et Prénom NOM ». */
+/** "Grayson, Craig M." to « GRAYSON, Craig M. »; a second author « et Prénom NOM »; a middle author, "Given Surname", gets the same capitals. */
 function frenchAuthor(full: string): string {
 	// The trailing period is the notice's own, added after, as in English.
 	const [first, second] = full.replace(/\.$/, '').split(', and ');
 	const comma = first.indexOf(', ');
-	const lead = comma === -1 ? capitals(first) : `${capitals(first.slice(0, comma))}${first.slice(comma)}`;
+	const surnameLast = (name: string) => {
+		const space = name.lastIndexOf(' ');
+		return `${name.slice(0, space)} ${capitals(name.slice(space + 1))}`;
+	};
+	// After the first author's surname: his or her given names, then any further authors as "Given Surname".
+	const rest = comma === -1 ? [] : first.slice(comma + 2).split(', ');
+	const lead = comma === -1 ? capitals(first) : [`${capitals(first.slice(0, comma))}`, rest[0], ...rest.slice(1).map(surnameLast)].join(', ');
 	if (!second) return lead;
-	const space = second.lastIndexOf(' ');
-	return `${lead}, et ${second.slice(0, space)} ${capitals(second.slice(space + 1))}`;
+	return `${lead}, et ${surnameLast(second)}`;
 }
 
 /** "2nd ed." to « 2e éd. », as the OQLF's « 3e éd. ». */
@@ -446,7 +492,7 @@ function frenchReference(workKey: string): Run[] {
 			author,
 			{ text: `«\u00a0${w.fullTitle}\u00a0», ` },
 			{ text: w.container.title, title: true },
-			{ text: `, ${frenchVolume(w.container.volume)}, ${w.year}.${tail}` },
+			{ text: `, ${frenchVolume(w.container.volume)}, ${w.year}${w.container.pages ? `, p.\u00a0${w.container.pages}` : ''}.${tail}` },
 		];
 	const parts = [
 		w.edition ? frenchEdition(w.edition) : null,

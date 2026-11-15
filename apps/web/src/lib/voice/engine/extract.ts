@@ -1,5 +1,6 @@
 import { rfftMag, cepstralEnvelopeDb, hann, findPeaks, autocorr, levinson, polyRoots, resampleTo } from './dsp';
 import { closedPhaseF1, closedPhaseResonances, type ClosedPhaseResult } from './closed-phase';
+import type { OpenEvidence } from './open-extract';
 
 export const MITTON: Record<string, [number, number]> = {
 	i: [296, 1705], e: [381, 1532], ɪ: [393, 1600], ɨ: [404, 1100], ɛ: [577, 1311],
@@ -35,7 +36,7 @@ function ltasEnvelope(y: Float64Array, sr: number) {
 	return { env, freqs };
 }
 
-function parabolic(env: Float64Array, freqs: Float64Array, k: number): number {
+export function parabolic(env: Float64Array, freqs: Float64Array, k: number): number {
 	if (k > 0 && k < env.length - 1) {
 		const a = env[k - 1], b = env[k], c = env[k + 1], d = a - 2 * b + c;
 		const delta = d !== 0 ? (0.5 * (a - c)) / d : 0;
@@ -90,7 +91,7 @@ export function lpcFormants(y: Float64Array, sr: number, vowel: string): { f1: n
 export function cents(meas: number, known: number): number { return 1200 * Math.log2(meas / known); }
 
 // --- full extraction with f2 prominence, LPC fallback, agreement (for assembly) ---
-function ltasEnvExport(y: Float64Array, sr: number) {
+export function ltasEnvExport(y: Float64Array, sr: number) {
 	const ye = preemph(y);
 	const fl = Math.floor((FRAME_MS / 1000) * sr), hop = fl >> 1, w = hann(fl);
 	const half = NFFT / 2 + 1, avg = new Float64Array(half); let nf = 0;
@@ -122,7 +123,11 @@ export interface ExtractTrace {
 	chosen: ExtractResult;
 }
 
-export interface ExtractResult { f1: number | null; f2: number | null; f2Prom: number; method: 'closed-phase' | 'ltas' | 'lpc-fallback'; agreement: [number, number] | null; }
+/**
+ * `agreement` (the cents between the cepstral and the LPC readings) was removed in N.200 Step 3 (item 10): it was computed from an
+ * LPC reading picked by the prior, and nothing read it but the recorder's JSON. `evidence` is set by the open picker only.
+ */
+export interface ExtractResult { f1: number | null; f2: number | null; f2Prom: number; method: 'closed-phase' | 'ltas' | 'lpc-fallback' | 'open'; evidence?: OpenEvidence; }
 
 export function extractFormants(y: Float64Array, sr: number, vowel: string, trace?: Partial<ExtractTrace>): ExtractResult {
 	const r = extractCore(y, sr, vowel, trace);
@@ -163,11 +168,8 @@ function extractCore(y: Float64Array, sr: number, vowel: string, trace?: Partial
 	if (lf1 === null || lf2 === null) {
 		const p = lpcFormants(y, sr, vowel);
 		if (trace) trace.lpc = p;
-		if (cf1 !== null) return { f1: cf1, f2: p.f2 !== null && p.f2 > cf1 + 80 ? p.f2 : null, f2Prom: 0, method: 'closed-phase', agreement: null };
-		return { f1: p.f1, f2: p.f2, f2Prom: 0, method: 'lpc-fallback', agreement: null };
+		if (cf1 !== null) return { f1: cf1, f2: p.f2 !== null && p.f2 > cf1 + 80 ? p.f2 : null, f2Prom: 0, method: 'closed-phase' };
+		return { f1: p.f1, f2: p.f2, f2Prom: 0, method: 'lpc-fallback' };
 	}
-	const p = lpcFormants(y, sr, vowel);
-	if (trace) trace.lpc = p;
-	const agreement: [number, number] | null = (p.f1 && p.f2) ? [Math.abs(cents(lf1, p.f1)), Math.abs(cents(lf2, p.f2))] : null;
-	return { f1: lf1, f2: lf2, f2Prom, method: cf1 !== null ? 'closed-phase' : 'ltas', agreement };
+	return { f1: lf1, f2: lf2, f2Prom, method: cf1 !== null ? 'closed-phase' : 'ltas' };
 }
