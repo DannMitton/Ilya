@@ -28,7 +28,14 @@ const BASELINE = fileURLToPath(new URL('./strophic-byte-baseline.json', import.m
 const GEOMETRY = { pageWidth: 624, pageHeight: 727, marginTop: 0, marginBottom: 0, marginLeft: 0, marginRight: 0, ...ENGRAVING_DEFAULTS };
 
 /** The lane's own new fixtures (Step 1). Not in the baseline by construction. */
-export const FIXTURES_ADDED_BY_THE_LANE: readonly string[] = [];
+export const FIXTURES_ADDED_BY_THE_LANE: readonly string[] = [
+	'packages/score-parser/src/fixtures/repeat-one-verse.musicxml',
+	'packages/score-parser/src/fixtures/strophic-repeat.musicxml',
+	'packages/score-parser/src/fixtures/strophic-stacked.musicxml',
+	'packages/score-parser/src/fixtures/strophic-tacet-boundary.musicxml',
+	'packages/score-parser/src/fixtures/strophic-volta-from-top.musicxml',
+	'packages/score-parser/src/fixtures/strophic-volta.musicxml',
+];
 
 function trackedScores(): string[] {
 	const out = execFileSync('git', ['ls-files', '-z', '--', '*.musicxml'], { cwd: ROOT, encoding: 'utf8' });
