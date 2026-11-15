@@ -19,8 +19,8 @@ import { t, type Language } from '$lib/i18n';
 // the dictionary, so both take the active language. `spokenName` keeps the
 // old Record's shape as a lookup; the keys are 'vowel.name.<glyph>'.
 //
-// N.199 Step 1: MOVED from `pacifier/Pacifier.svelte`'s module script, so the new capture
-// screen need not import the wheel it replaces. Both importers are repointed.
+// N.199 Step 1: MOVED from the vowel wheel's module script, so the new capture
+// screen need not import the wheel it replaced (deleted in Step 8).
 export const spokenName = (g: Vowel, lang: Language): string => t(`vowel.name.${g}`, lang);
 export const spoken = (g: Vowel, lang: Language): string =>
 	t('vowel.spoken', lang).replace('{name}', spokenName(g, lang));

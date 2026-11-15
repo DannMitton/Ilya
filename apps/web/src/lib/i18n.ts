@@ -55,7 +55,7 @@
    notation.      16  lib/score/CorrectionSurface.svelte, lib/components/Drawer/bandState.ts, routes/+page.svelte
    notePicker.    10  lib/voice/NotePicker.svelte, lib/analysis/watchlist.ts
    octave.         5  lib/score/clef-ui.svelte.ts, lib/components/OctaveLine.svelte, lib/score/ClefReceipt.svelte, lib/score/ClefControls.svelte
-   pacifier.      17  lib/voice/pacifier/Pacifier.svelte
+   pacifier.      17  lib/voice/capture-ritual.svelte.ts
    paper.          4  lib/components/Paper/TitlePage.svelte, lib/components/Paper/SubsequentPage.svelte, lib/text/text-header.ts, lib/one-action.ts
    placeholder.    8  lib/analysis/placeholder-line.ts
    portrait.       2  lib/components/ReadingAid.svelte, routes/+page.svelte
@@ -85,7 +85,7 @@
    voice.          2  lib/components/Drawer/bandState.ts, lib/components/Drawer/Drawer.svelte
    voiceIntake.   60  lib/voice/InsightsIntake.svelte, lib/voice/VoiceTypeIntake.svelte
    voiceType.     42  lib/voice/VoiceTypeIntake.svelte, lib/voice/voiceTypes.ts, lib/voice/VoiceTypeFirst.svelte, lib/voice/OutsideNote.svelte
-   vowel.         11  lib/voice/pacifier/Pacifier.svelte, lib/markup/legend.ts
+   vowel.         11  lib/voice/vowel-names.ts, lib/markup/legend.ts
    wait.           2  lib/components/ReadingWait.svelte, lib/omr/wait.ts, lib/score/ScoreUploader.svelte
    watch.         46  the watch list: lib/analysis/watchlist.ts, lib/analysis/gates.ts, lib/markup/transposition-ruler.ts
    witness.        8  no literal consumer found (its component was removed)
@@ -1382,15 +1382,20 @@ const strings: Record<string, Record<Language, string>> = {
 	'calib.readiness.guidance': { en: 'You can carry on; each vowel asks for the microphone again.', fr: 'Vous pouvez poursuivre\u00a0: chaque voyelle redemande le microphone.' },
 	'calib.readiness.complete': { en: 'Readiness check complete.', fr: 'Vérification préalable terminée.' },
 	'calib.readiness.marginal': { en: 'Your fry is reading near the edge of our range; a little lower or higher may read cleaner.', fr: 'Votre friture se lit près de la limite de notre plage. Un peu plus grave ou plus aigu se lirait plus nettement.' },
+	// UNUSED SINCE N.199 (Step 8, Dann 2026-11-14 21:03): the wheel's capture branch of the wizard (queue, hold banner, Pause) is deleted and nothing reads this key. Kept and marked in place, with its ratified French.
 	'calib.capture.allSet': { en: 'All set.', fr: 'Tout est prêt.' },
 	'calib.capture.cuePrefix': { en: 'Tap the', fr: 'Touchez la voyelle' },
 	// Row 2d part 3: cueSuffix, pacifier.singFirst, pacifier.pause, and
 	// pacifier.beginPhonating RATIFIED by Dann 2026-09-30 21:00, English and
 	// French (`docs/sessions/draft-sing-first-cue_r1_2026-09-30.md`, REVISION 21:05).
 	'calib.capture.cueSuffix': { en: 'vowel to begin. First sing it as you usually do, to set the shape of your vocal tract. Then stop, keep that shape, and begin again in vocal fry. Ilya measures only the fry.', fr: 'pour commencer. Chantez-la d\u2019abord comme d\u2019habitude, pour régler la forme de votre conduit vocal. Puis arrêtez, gardez cette forme et recommencez en friture vocale. Ilya ne mesure que la friture.' },
+	// UNUSED SINCE N.199 (Step 8, Dann 2026-11-14 21:03): the wheel's capture branch of the wizard (queue, hold banner, Pause) is deleted and nothing reads this key. Kept and marked in place, with its ratified French.
 	'calib.capture.paused': { en: 'Paused. Resume when you\'re ready.', fr: 'En pause. Reprenez au moment qui vous convient.' },
+	// UNUSED SINCE N.199 (Step 8, Dann 2026-11-14 21:03): the wheel's capture branch of the wizard (queue, hold banner, Pause) is deleted and nothing reads this key. Kept and marked in place, with its ratified French.
 	'calib.capture.resumeButton': { en: 'Resume', fr: 'Reprendre' },
+	// UNUSED SINCE N.199 (Step 8, Dann 2026-11-14 21:03): the wheel's capture branch of the wizard (queue, hold banner, Pause) is deleted and nothing reads this key. Kept and marked in place, with its ratified French.
 	'calib.capture.hold.captured': { en: ', captured.', fr: ', captée.' },
+	// UNUSED SINCE N.199 (Step 8, Dann 2026-11-14 21:03): the wheel's capture branch of the wizard (queue, hold banner, Pause) is deleted and nothing reads this key. Kept and marked in place, with its ratified French.
 	'calib.capture.hold.rolledBack': { en: 'New sample was less certain, so the previous one was kept.', fr: 'Le nouvel échantillon était moins certain, donc le précédent a été conservé.' },
 	// The implausible hold, its "Try again?", and "Keep my reading" are gone (Dann, 2026-09-30 12:43):
 	// capture asks nothing, and the summary's one note asks once
@@ -1401,7 +1406,9 @@ const strings: Record<string, Record<Language, string>> = {
 	'calib.summary.outside': { en: 'These readings sit outside the values Ilya draws on for {type} voices: {vowels}. Keep them as they are, or sing them again.', fr: 'Ces lectures se situent hors des valeurs sur lesquelles Ilya s’appuie pour les voix de {type} : {vowels}. Gardez-les telles quelles, ou chantez-les de nouveau.' },
 	'calib.summary.outsideNoType': { en: 'These readings sit outside the values Ilya draws on for any voice type: {vowels}. Keep them as they are, or sing them again.', fr: 'Ces lectures se situent hors des valeurs sur lesquelles Ilya s’appuie pour tous les types de voix : {vowels}. Gardez-les telles quelles, ou chantez-les de nouveau.' },
 	'calib.summary.keepAll': { en: 'Keep them', fr: 'Les garder' },
+	// UNUSED SINCE N.199 (Step 8, Dann 2026-11-14 21:03): the wheel's capture branch of the wizard (queue, hold banner, Pause) is deleted and nothing reads this key. Kept and marked in place, with its ratified French.
 	'calib.capture.hold.noted': { en: 'Noted, moving on. You can re-take it from the summary.', fr: 'C\u2019est noté, on poursuit. Vous pourrez la refaire depuis le sommaire.' },
+	// UNUSED SINCE N.199 (Step 8, Dann 2026-11-14 21:03): the wheel's capture branch of the wizard (queue, hold banner, Pause) is deleted and nothing reads this key. Kept and marked in place, with its ratified French.
 	'calib.capture.pauseButton': { en: 'Pause', fr: 'Pause' },
 	'calib.capture.returnToSummary': { en: 'Return to summary', fr: 'Retour au sommaire' },
 	'calib.capture.toast': { en: 'The room sounds a little lively. Your sample is still good, but a quieter space would help.', fr: 'La pièce sonne un peu réverbérante. Votre échantillon reste bon, mais un endroit plus silencieux aiderait.' },
@@ -1435,6 +1442,7 @@ const strings: Record<string, Record<Language, string>> = {
 	//    {v} is the whole phrase from 'vowel.spoken'. Dann ruled on
 	//    2026-08-12 that {v} never opens a French sentence, so the
 	//    French shapes differ from the English deliberately.
+	// UNUSED SINCE N.199 (Step 8, Dann 2026-11-14 21:03): the vowel wheel is deleted and nothing reads this key. Kept and marked in place, with its ratified French, the way this file's other retired strings are.
 	'pacifier.tapToCapture': { en: 'Tap a vowel to capture it.', fr: 'Touchez une voyelle pour la capter.' },
 	// singFirst, pause, and beginPhonating: RATIFIED by Dann 2026-09-30 21:00 (row 2d part 3).
 	'pacifier.singFirst': { en: 'Sing {v} as you usually do. Three.', fr: 'Chantez {v} comme d\u2019habitude. Trois.' },
@@ -1444,8 +1452,10 @@ const strings: Record<string, Record<Language, string>> = {
 	'pacifier.nowSustain': { en: 'Now sustain. Sample recording.', fr: 'Soutenez maintenant. Échantillon en cours d\u2019enregistrement.' },
 	'pacifier.captured': { en: '{v} captured.', fr: 'Capture de {v} effectuée.' },
 	'pacifier.rolledBack': { en: '{v}: new sample was less certain, so the previous one was kept.', fr: 'Pour {v}, le nouvel échantillon était moins certain, donc le précédent a été conservé.' },
+	// UNUSED SINCE N.199 (Step 8, Dann 2026-11-14 21:03): the vowel wheel is deleted and nothing reads this key. Kept and marked in place, with its ratified French, the way this file's other retired strings are.
 	'pacifier.sampleUncertain': { en: '{v} sample uncertain. Tap to retry.', fr: 'Échantillon incertain pour {v}. Touchez pour réessayer.' },
 	'pacifier.cancelled': { en: 'Capture cancelled.', fr: 'Capture annulée.' },
+	// UNUSED SINCE N.199 (Step 8, Dann 2026-11-14 21:03): the vowel wheel is deleted and nothing reads this key. Kept and marked in place, with its ratified French, the way this file's other retired strings are.
 	'pacifier.skipped': { en: '{v} skipped.', fr: 'Capture ignorée pour {v}.' },
 	'pacifier.error.micPermission': { en: 'Microphone access is needed to hear your fry. Can you allow it and try again?', fr: 'L\u2019accès au microphone est nécessaire pour entendre votre friture. Pouvez-vous l\u2019autoriser et réessayer?' },
 	'pacifier.error.micNotFound': { en: 'No microphone was found. Can you connect one and try again?', fr: 'Aucun microphone n\u2019a été trouvé. Pouvez-vous en brancher un et réessayer?' },
@@ -1454,9 +1464,11 @@ const strings: Record<string, Record<Language, string>> = {
 	'pacifier.error.default': { en: 'That sample could not be read. Can you try that again?', fr: 'Cet échantillon n\u2019a pas pu être lu. Pouvez-vous réessayer?' },
 	// One tap begins (row 2d part 3). Both strings drafted by Code in
 	// report-code-sing-first-then-fry_r1_2026-09-30.md and RATIFIED by Dann
-	// 2026-09-30 22:16. `pacifier.ready` is the wizard's pointer caption; {v}
+	// 2026-09-30 22:16. `pacifier.ready` (UNUSED SINCE N.199) was the wheel's pointer caption; {v}
 	// stays mid-sentence in French, per the 2026-08-12 ruling.
+	// UNUSED SINCE N.199 (Step 8, Dann 2026-11-14 21:03): the vowel wheel is deleted and nothing reads this key. Kept and marked in place, with its ratified French, the way this file's other retired strings are.
 	'pacifier.wheelAria': { en: 'Vowel calibration. Tap a vowel to begin, tap again to cancel, long-press to skip.', fr: 'Calibration des voyelles. Touchez une voyelle pour commencer, touchez-la de nouveau pour annuler, appuyez longuement pour l\u2019ignorer.' },
+	// UNUSED SINCE N.199 (Step 8, Dann 2026-11-14 21:03): the vowel wheel is deleted and nothing reads this key. Kept and marked in place, with its ratified French, the way this file's other retired strings are.
 	'pacifier.ready': { en: 'Tap {v} to begin.', fr: 'Touchez {v} pour commencer.' },
 	'calib.summary.title': { en: 'Profile summary', fr: 'Sommaire du profil' },
 	'calib.summary.savedLede': { en: 'Your profile is saved on this device. You can keep refining any reading below.', fr: 'Votre profil est enregistré sur cet appareil. Vous pouvez continuer à affiner n\u2019importe quelle lecture ci-dessous.' },

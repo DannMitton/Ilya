@@ -1,8 +1,8 @@
 /**
  * THE CAPTURE RITUAL, WRITTEN FRESH (N.199 Step 3; brief r5, Fable review amendment 2). One vowel's take, from the tap to the
  * reading: sing it on a count of three, a silent pause, then the fry, a wait for stable fry, a 3.0 s sweep, and the reading.
- * It is written against `CaptureSession` (`engine/session.ts`) and `count-in.ts`, not cut out of `pacifier/Pacifier.svelte`,
- * whose version of this is tangled through its per-vowel `nodes` state and has no test. `Pacifier.svelte` is not touched.
+ * It is written against `CaptureSession` (`engine/session.ts`) and `count-in.ts`, not cut out of the vowel wheel, whose version of this was tangled
+ * through its per-vowel `nodes` state and had no test. The wheel (`pacifier/Pacifier.svelte`) is deleted (Step 8).
  *
  * WHAT IT HOLDS: the phase, the vowel, the sweep's progress, and the cue. It holds no formant map and emits no profile; the
  * screen draws from the wizard's `profile`, so `handleProfileChange` and `sameExtraction` lose their caller in Step 8a. It
@@ -32,9 +32,9 @@ import type { CaptureSession } from './engine/session';
 import type { CaptureError } from './engine/errors';
 import type { CalibratedFormant, Vowel } from './engine/types';
 
-/** The fixed sweep, which the bar paces (`engine/live.ts` `SWEEP_S`; `Pacifier.svelte` `SWEEP_MS`, both 3.0 s). */
+/** The fixed sweep, which the bar paces (`engine/live.ts` `SWEEP_S`, 3.0 s). */
 export const SWEEP_MS = 3000;
-/** How long the reading's landing lasts before the screen is idle again (`Pacifier.svelte` `COMPLETE_MS`). None under reduced motion. */
+/** How long the reading's landing lasts before the screen is idle again (the deleted wheel's `COMPLETE_MS`, 0.9 s). None under reduced motion. */
 export const LANDING_MS = 900;
 /** The bar's update step, and its coarser step under reduced motion (it still advances). */
 export const PROGRESS_STEP_MS = 50;
@@ -46,7 +46,7 @@ export type RitualPhase = 'idle' | 'sing' | 'pause' | 'listening' | 'sweep' | 'l
  * What the screen should say: a key and the vowel it is about. Keys are the tree's (`pacifier.singFirst`,
  * `calib.readiness.countTwo`, `calib.readiness.countOne`, `pacifier.pause`, `pacifier.beginPhonating`, `pacifier.nowSustain`,
  * `pacifier.captured`, `pacifier.rolledBack`, `pacifier.cancelled`, `pacifier.error.*`) and one proposed, `capture.uncertain`,
- * which replaces the tree's `pacifier.sampleUncertain` ("Tap to retry" is false once the selection has moved).
+ * which replaced the wheel's `pacifier.sampleUncertain` (UNUSED SINCE N.199) ("Tap to retry" is false once the selection has moved).
  */
 export interface RitualCue {
 	key: string;

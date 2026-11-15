@@ -5043,7 +5043,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		   surface, so it takes its own desk. --lavender-desk is
 		   --lavender tinted 60 percent toward white, parallel to the
 		   other three. It is not --surround-voice, which is the calibration
-		   pacifier band on white and stays where it is. The bar moves with
+		   wheel's band on white, which went with the wheel (N.199 Step 8). The bar moves with
 		   the desk (HeaderBar.svelte, .header-bar.tab-markup). */
 		--desk-fill: var(--lavender-desk);
 	}

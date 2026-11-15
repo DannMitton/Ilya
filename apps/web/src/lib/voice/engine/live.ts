@@ -1,5 +1,5 @@
 /**
- * Live CaptureSession: the real auditory input behind the pacifier.
+ * Live CaptureSession: the real auditory input behind the capture screen.
  *
  * Implements the CaptureSession contract (session.ts; Phase 3a brief and
  * Kimi's review §2.2/§2.5, 2026-06-09) over getUserMedia and the §9 batch
@@ -17,7 +17,7 @@
  *      listening, only the trailing 2.0 s is retained, so a slow start can
  *      never overflow the 5 s recording ceiling.
  *   3. Stable fry confirmed -> onStableFry() (the second beat of the
- *      two-beat split; the pacifier starts its 3.0 s arc), and recording
+ *      two-beat split; the capture screen starts its 3.0 s bar), and recording
  *      proper begins: the 0.5 s already buffered before the confirm is kept
  *      (the gate-settling window in the spec's §2 arithmetic) plus the
  *      3.0 s sweep, about 3.5 s recorded in all.
@@ -73,7 +73,7 @@
  *     `cause`. Likewise a post-hoc 'reprompt' outcome (runCapture judged
  *     the recorded sample not-fry) maps to EXTRACTION_FAILED: the error
  *     vocabulary is locked (errors.ts, no invented codes), and the
- *     pacifier's existing default caption reads honestly for both. Wiring
+ *     capture screen's default error cue reads honestly for both. Wiring
  *     the engine spec §3 re-prompt line ("...more like a sung tone than
  *     vocal fry...") to these cases is a copy decision, deferred to Dann.
  *   - Analysis (runCapture) runs on the main thread: one blocking call of
@@ -107,7 +107,7 @@ const GATE_WINDOW_S = 1.0;
 const GATE_HOP_MS = 250;
 /** Audio kept from before the stable-fry confirm (the gate-settling window, spec §2). */
 const PREROLL_S = 0.5;
-/** The fixed sweep the pacifier's arc paces (spec §2). */
+/** The fixed sweep the capture screen's bar paces (spec §2). */
 const SWEEP_S = 3.0;
 /** Fixed trim from each end of the recorded buffer at analysis time (spec §2). */
 const TRIM_S = 0.5;

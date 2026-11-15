@@ -1,5 +1,5 @@
 /**
- * The Pacifier's count-in: sing the vowel first, pause, then fry.
+ * The capture's count-in: sing the vowel first, pause, then fry.
  *
  * Row 2d part 3, `docs/sessions/brief-code-sing-first-then-fry_r1_2026-09-30.md`.
  * The flow and its strings were RATIFIED by Dann 2026-09-30 21:00. His reason
@@ -8,16 +8,16 @@
  * vocal tract; nothing is captured until the fry step, and the live gate, the
  * sweep, and the engine are unchanged.
  *
- * Kept out of `Pacifier.svelte` so the order and the intervals are testable
- * without mounting the component.
+ * Kept out of the component so the order and the intervals are testable
+ * without mounting it.
  */
 
 /** DESK DEFAULT 2026-09-30: one beat of the sung count. Was 700 ms. */
 export const SING_BEAT_MS = 1000;
 /**
  * DESK DEFAULT 2026-09-30: the silent moment between the sung vowel and the fry. Was 2000 ms; 3000 ms from N.199 Step 7 (DESK DEFAULT 2026-11-13,
- * Dann's to strike) so the 13-word pause line, "Stop singing, but maintain the shape of your vocal tract for that vowel.", can be read. It reaches the
- * wheel too (`pacifier/count-in.ts` re-exports this), so every singer's count-in is six seconds at the ship.
+ * Dann's to strike) so the 13-word pause line, "Stop singing, but maintain the shape of your vocal tract for that vowel.", can be read. Every singer's count-in
+ * is six seconds at the ship (the wheel's re-export, `pacifier/count-in.ts`, went with the wheel in N.199 Step 8).
  */
 export const PAUSE_MS = 3000;
 
