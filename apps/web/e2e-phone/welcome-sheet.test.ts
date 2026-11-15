@@ -40,7 +40,7 @@ test('phone: the made-in line and the licence line show once, inside the body', 
 	await visit(page);
 	await expect(page.locator('.sheet .fines.m')).toBeVisible();
 	await expect(page.locator('.foot .fines')).toBeHidden();
-	await expect(page.locator('.sheet .fines.m')).toContainText('Free and open source under the GNU Affero General Public License');
+	await expect(page.locator('.sheet .fines.m')).toContainText('Ilya is free and open source, © 2026 Dann Mitton, and released under the GNU Affero General Public License');
 });
 
 test('phone: Begin closes the sheet and writes the flag; the pill switches to French', async ({ page }) => {

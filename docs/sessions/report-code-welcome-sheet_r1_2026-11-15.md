@@ -218,3 +218,37 @@ No test file that existed before this lane was edited. The one shared setup (`us
 - Branch `cloud-lane-57` is pushed. No pull request, nothing on `Shane` or `main`, nothing under `docs/memory/`, no brief edited.
 - New gate 4 baseline for the ship script, if this lane merges alone: 5863 passed | 1 skipped (5864).
 - Owed to Dann: (1) the note's horizontal place (Part 1, departure 3); (2) Bravura against Maestro for that one glyph (departure 1); (3) the shadow's tail (departure 5); (4) a control to reopen the sheet and the app icon files are outside this lane, as the brief says.
+
+## Amendment: the English licence line
+
+Ruled by Dann 2026-11-15 13:20, sent to this session by the desk while Part 2's Playwright runs were going; made after Part 2 was pushed, as its own commit. **Parts 0 to 2 above describe the lane before this amendment.** Where they say the English and French licence lines differ in having the copyright, or that gate 4 is 5863, this section supersedes them.
+
+### What changed
+
+- `apps/web/src/lib/i18n.ts`, key `welcome.licence`, English only:
+  `<em>Ilya</em> is free and open source, © 2026 Dann Mitton, and released under the GNU Affero General Public License, version 3. The name <em>Ilya</em> and its icon are not licensed under it.`
+  These are the first two sentences of the GUIDE's English paragraph at `GuideContent.svelte:579`, with both "Ilya" in `<em>` as the French line has them, and the no-break space before the 3 as the prototype's line has it (the GUIDE itself has a plain space there). The French line is untouched.
+- This supersedes, for English only, the `OPEN.md` bullet that says to copy the licence line from the prototype. `OPEN.md` and the prototypes were not edited.
+- `welcome-strings.test.ts`: the English pin moved to the new line. A new test reads `GuideContent.svelte`, takes the first two sentences of that paragraph, and asserts the sheet's English line equals them character for character except for the no-break space. The test that said the English line has no "2026" now says both lines carry "© 2026 Dann Mitton". The prototype-copy test still checks every other string and the French licence line against the prototypes, and skips only the English licence line.
+- `e2e/welcome-sheet.test.ts` and `e2e-phone/welcome-sheet.test.ts`: the one assertion each that quoted the old English line now quotes the new one. The sheet's 14 desktop and 3 phone browser tests pass on the amended tree.
+
+### Does the longer line change the layout? Desktop: a little. Phone: not in the footer.
+
+- **Desktop, 1280 x 800** (`desktop-en-final.png`, `desktop-en-mid-wipe.png`, retaken). The line is longer than the footer's text column, so it now wraps to two lines and the made-in line above it makes three. The footer is therefore about one line taller (read off the pictures: about 71 px before, about 84 px now; I did not measure it in the browser). The sheet is correspondingly taller and its top edge moved up by about the same amount; nothing else moved. **Begin is whole in the footer**, vertically centred against the three lines, with the licence text ending before it. The sheet still fits the 800 px viewport.
+- **Phone, 390 x 844.** The licence text is not in the footer on the phone: it is in the scrolling body (Part 1, departure 7). The footer is unchanged, 366 x 71 at (12, 761), with Begin 326 x 46 inside it, whole (measured in the browser). The longer line wraps to three lines in the body, under the maker's line and above the footer, and is visible when the body is scrolled to its end (`phone-en-final-scrolled-to-end.png`). `phone-en-final.png` and `phone-en-mid-wipe.png` were retaken and are byte-identical to the old ones, because the first screen does not reach that text.
+- I looked at `desktop-en-final.png`, `phone-en-final.png`, and `phone-en-final-scrolled-to-end.png` after the change. The two French pictures were not retaken because the French line did not change.
+
+### The eight gates on the final tree
+
+| gate | baseline | now |
+|---|---|---|
+| 1 phonology | 462 passed (462) | 462 passed (462) |
+| 2 dictionary | 248 passed (248) | 248 passed (248) |
+| 3 web-check | 0 errors, 12 warnings, 5 files | found 0 errors and 12 warnings in 5 files |
+| 4 web-test | 5817 passed \| 1 skipped (5818) | **5864 passed \| 1 skipped (5865)**, 330 files (+47 tests over the baseline: Part 1's 46 and this amendment's GUIDE test) |
+| 5 score-parser | 842 passed \| 5 skipped (847) | 842 passed \| 5 skipped (847) |
+| 6 blurb | 178 passed (178) | 178 passed (178) |
+| 7 integration | 159 passed (159) | 159 passed (159) |
+| 8 ratchets | OK | ratchets: OK. |
+
+**The new gate 4 baseline for the ship script, if this lane merges alone, is 5864 passed | 1 skipped (5865)** (Part 2 said 5863; it is superseded). The full Playwright suites were run before this amendment; after it I re-ran only the sheet's own browser tests (17 passed), because the amendment changes one string and no other code.

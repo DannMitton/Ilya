@@ -39,7 +39,7 @@ test.describe('a first visit', () => {
 		const vp = page.viewportSize()!;
 		expect(box.y + box.height).toBeLessThanOrEqual(vp.height);
 		await expect(sheetBox(page)).toContainText('Made with love in Canada, in English and French');
-		await expect(sheetBox(page)).toContainText('Free and open source under the GNU Affero General Public License, version 3.');
+		await expect(sheetBox(page)).toContainText('Ilya is free and open source, © 2026 Dann Mitton, and released under the GNU Affero General Public License, version 3.');
 	});
 
 	test('Escape does nothing, and Tab never leaves the sheet', async ({ page }) => {
