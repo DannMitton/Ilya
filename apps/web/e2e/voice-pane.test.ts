@@ -73,6 +73,18 @@ test.describe('the VOICE pane at rest', () => {
 		await expect(page.locator('.capture')).toBeVisible();
 	});
 
+	test('with the six anchors stored the pane says Ilya works out the rest (line 5b)', async ({ page }) => {
+		const SIX = { i: R(296, 1705), e: R(381, 1532), 'ɛ': R(577, 1311), 'ɑ': R(617, 1013), o: R(489, 826), u: R(346, 804) };
+		await open(page, [{ id: 'v', name: 'Dann', voiceType: 'bass', formants: SIX }]);
+		await expect(sentence(page)).toHaveText('You have recorded 6 of the 10 vowels. Ilya works out the other 4 from your own vowels.');
+	});
+
+	test('with five of the six anchors stored the pane says Ilya fills the rest, not works it out', async ({ page }) => {
+		const FIVE = { i: R(296, 1705), e: R(381, 1532), 'ɛ': R(577, 1311), 'ɑ': R(617, 1013), o: R(489, 826) };
+		await open(page, [{ id: 'v', name: 'Dann', voiceType: 'bass', formants: FIVE }]);
+		await expect(sentence(page)).toHaveText('You have recorded 5 of the 10 vowels. Ilya fills the other 5 from what you have recorded so far.');
+	});
+
 	test('a request from rest lands on the asked screen even though the wizard was left stowed on the capture screen; Finish returns to the pane and writes nothing', async ({ page }) => {
 		await open(page, [{ id: 'v', name: 'Dann', voiceType: 'bass', formants: NINE }]);
 		await door(page, /^carry on recording$/i).click();
