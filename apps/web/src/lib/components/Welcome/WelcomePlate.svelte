@@ -4,7 +4,7 @@
 	 * eighth note on a staff, the [ɑ] zone, the vowel space, the Илья icon. Each turn is the same 30-degree edge sweeping top to bottom; the sheet
 	 * decides when (`welcome-motion.ts`), this component only shows the first `turned + 1` layers. The numbers are `welcome-plate.ts`'s.
 	 *
-	 * The plate is `role="img"` named Илья, and its layers are hidden from a screen reader: the sheet's words say everything the pictures say.
+	 * The plate is `role="img"` named Илья (`lang="ru"`, so a screen reader says the Russian name in either interface language), and its layers are hidden from a screen reader: the sheet's words say everything the pictures say.
 	 * Its contents are in `--ink-stave` (the stave's furniture) and the paper's own cream; the plate is "a page", so it keeps paper's colour while the
 	 * sheet around it is the app's (`--drawer-bg`).
 	 */
@@ -21,7 +21,7 @@
 	const centre = BOX / 2;
 </script>
 
-<div class="plate" class:still={!animate} role="img" aria-label={ICON_WORD} style:--wipe="{WIPE_MS}ms" style:--ease={WIPE_EASE}>
+<div class="plate" class:still={!animate} role="img" lang="ru" aria-label={ICON_WORD} style:--wipe="{WIPE_MS}ms" style:--ease={WIPE_EASE}>
 	<!-- 0: я -->
 	<div class="layer base" aria-hidden="true">
 		<svg viewBox="0 0 {BOX} {BOX}"><text class="serif" x={centre} y="195" text-anchor="middle" font-size="176" fill="var(--ink-primary)">я</text></svg>

@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { LENGTH_CELLS } from '$lib/score/correction';
-import { ACTIVE, BOX, FRAME, ICON_STRIPES, NOTE_BBOX, NOTE_GLYPH, NOTE_FONT_SIZE, STAFF, activeZoneEnlarged, noteBaselineY, noteX, staffLineYs, vowelSpace } from './welcome-plate';
+import { ACTIVE, BOX, FRAME, ICON_STRIPES, ICON_WORD, NOTE_BBOX, NOTE_GLYPH, NOTE_FONT_SIZE, STAFF, activeZoneEnlarged, noteBaselineY, noteX, staffLineYs, vowelSpace } from './welcome-plate';
 
 const proto = readFileSync(new URL('../../../../../../docs/sessions/welcome-sheet/ilya-welcome-draft-17.html', import.meta.url), 'utf8').replace(/base64,[A-Za-z0-9+/=]{200,}/g, 'base64,');
 
@@ -104,5 +104,16 @@ describe('the icon', () => {
 		const token = (n: string) => css.match(new RegExp(`--${n}-jewel:\\s*(#[0-9A-Fa-f]{6})`))![1].toLowerCase();
 		const hex = [...proto.matchAll(/<i style="background:(#[0-9A-Fa-f]{6})"><\/i>/g)].map((m) => m[1].toLowerCase());
 		expect(hex).toEqual(['sage', 'lavender', 'rose', 'slate', 'cobalt'].map(token));
+	});
+});
+
+describe('the plate\'s name', () => {
+	it('is the Russian Илья, on an element that says it is Russian, so a screen reader pronounces it in either interface language', () => {
+		const svelte = readFileSync(new URL('./WelcomePlate.svelte', import.meta.url), 'utf8');
+		const plate = svelte.match(/<div class="plate"[^>]*>/)![0];
+		expect(plate).toContain('role="img"');
+		expect(plate).toContain('lang="ru"');
+		expect(plate).toContain('aria-label={ICON_WORD}');
+		expect(ICON_WORD).toBe('Илья');
 	});
 });

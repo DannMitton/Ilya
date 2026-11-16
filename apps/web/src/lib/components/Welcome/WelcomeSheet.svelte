@@ -18,8 +18,9 @@
 	 *
 	 * THE LANGUAGE follows the app's. The pill is the header pill's rule (`language-switch.ts`) and calls the page's one `handleLanguageChange`.
 	 * THE PLATE is `WelcomePlate.svelte`; the motion is `welcome-motion.ts`, once, about 5.5 s, all text readable and Begin usable from the first frame.
-	 * DESK DEFAULT: focus lands on the sheet itself (not on Begin), so the first Enter does not skip the reading (critique, open item 6); Tab reaches
-	 * the language pill, the links, then Begin.
+	 * DESK DEFAULT: focus lands on the SCROLLING TEXT (`.body`, `tabindex="-1"`), not on Begin, so the first Enter does not skip the reading (critique, open
+	 * item 6) and the arrow keys, Space, Page Down, and End scroll the text at once. It used to land on the sheet, which is not the scroller: at 1280 x 600 the text
+	 * overflows and no key scrolled it (the desk's review, 2026-11-16). Tab reaches the links, then Begin; Shift+Tab reaches the language pill.
 	 */
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
@@ -91,6 +92,8 @@
 			sheetEl
 				? [...sheetEl.querySelectorAll<HTMLElement>('button, a[href], [tabindex]:not([tabindex="-1"])')].filter((el) => el.getClientRects().length > 0)
 				: [];
+		/** Where focus lives: the scrolling text, so the keys that scroll work at once; the sheet itself if that is not found. */
+		const home = (): HTMLElement | undefined => sheetEl?.querySelector<HTMLElement>('.body') ?? sheetEl;
 		const onKey = (e: KeyboardEvent) => {
 			if (e.key === 'Escape') {
 				e.preventDefault();
@@ -117,11 +120,11 @@
 			}
 		};
 		const onFocusIn = (e: FocusEvent) => {
-			if (sheetEl && e.target instanceof Node && !sheetEl.contains(e.target)) sheetEl.focus();
+			if (sheetEl && e.target instanceof Node && !sheetEl.contains(e.target)) home()?.focus();
 		};
 		window.addEventListener('keydown', onKey, true);
 		document.addEventListener('focusin', onFocusIn, true);
-		queueMicrotask(() => sheetEl?.focus());
+		queueMicrotask(() => home()?.focus());
 		return () => {
 			window.removeEventListener('keydown', onKey, true);
 			document.removeEventListener('focusin', onFocusIn, true);
@@ -152,7 +155,7 @@
 					<span>{T('welcome.band')}</span>
 					<button type="button" class="pill" lang={sw.other} onclick={() => onlanguagechange(sw.other)}>{sw.label}</button>
 				</div>
-				<div class="body">
+				<div class="body" tabindex="-1">
 					<div class="side">
 						<WelcomePlate {turned} {animate} />
 						<ul class="stations" class:done={station < 0} aria-hidden="true">
@@ -271,6 +274,7 @@
 		flex: 1;
 		min-height: 0;
 		overflow: auto;
+		outline: none;
 		display: grid;
 		grid-template-columns: 208px 1fr;
 		column-gap: 40px;

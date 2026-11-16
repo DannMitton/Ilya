@@ -189,3 +189,40 @@ test.describe('motion', () => {
 		await expect(page.locator('.stations')).toHaveAttribute('aria-hidden', 'true');
 	});
 });
+
+test.describe('a short window (1280 x 600): the text overflows, and the keyboard reaches all of it', () => {
+	test.use({ viewport: { width: 1280, height: 600 } });
+	const scrollTop = (page: Page) => page.locator('.sheet .body').evaluate((el) => el.scrollTop);
+
+	test('focus lands where the keys scroll, and the arrow keys, Space, Page Down, and End move the text', async ({ page }) => {
+		await visit(page);
+		const dims = await page.locator('.sheet .body').evaluate((el) => ({ scroll: el.scrollHeight, client: el.clientHeight }));
+		expect(dims.scroll, 'the text overflows at this height, or this test proves nothing').toBeGreaterThan(dims.client);
+		await expect.poll(() => page.evaluate(() => document.activeElement?.classList.contains('body'))).toBe(true);
+		expect(await scrollTop(page)).toBe(0);
+		// Each key from the top: the overflow at this height is only a few dozen pixels, so one key can use it all.
+		for (const key of ['ArrowDown', 'Space', 'PageDown', 'End']) {
+			await page.keyboard.press('Home');
+			await expect.poll(() => scrollTop(page), { message: 'Home returns to the top' }).toBe(0);
+			await page.keyboard.press(key);
+			await expect.poll(() => scrollTop(page), { message: `${key} scrolls the text` }).toBeGreaterThan(0);
+		}
+		await page.keyboard.press('End');
+		await expect.poll(() => scrollTop(page)).toBe(dims.scroll - dims.client);
+		await page.keyboard.press('ArrowUp');
+		await expect.poll(() => scrollTop(page)).toBeLessThan(dims.scroll - dims.client);
+		// Begin was on screen the whole time.
+		await expect(page.getByRole('button', { name: 'Begin' })).toBeInViewport();
+	});
+
+	test('a link inside the text keeps the arrow keys working, and Tab still reaches Begin', async ({ page }) => {
+		await visit(page);
+		await page.keyboard.press('Tab');
+		expect(await page.evaluate(() => document.activeElement?.tagName)).toBe('A');
+		const before = await scrollTop(page);
+		await page.keyboard.press('ArrowDown');
+		await expect.poll(() => scrollTop(page)).toBeGreaterThan(before);
+		for (let i = 0; i < 8; i++) await page.keyboard.press('Tab');
+		expect(await page.evaluate(() => document.activeElement?.closest('.sheet[role="dialog"]') !== null)).toBe(true);
+	});
+});
