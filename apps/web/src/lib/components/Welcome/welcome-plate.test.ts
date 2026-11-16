@@ -94,6 +94,13 @@ describe('the staff and the note', () => {
 		expect(svelte).not.toContain('Bravura.woff2');
 	});
 
+	it('holds the note back until Maestro arrives: `font-display: block`, so the staff stands empty rather than the browser drawing a fallback for a private-use code point', () => {
+		const svelte = readFileSync(new URL('./WelcomePlate.svelte', import.meta.url), 'utf8');
+		const face = svelte.match(/@font-face \{[^}]*Finale Maestro[^}]*\}/)![0];
+		expect(face).toMatch(/font-display:\s*block;/);
+		expect(face).not.toMatch(/font-display:\s*swap/);
+	});
+
 	it('sits the notehead on the middle of the plate: its centre, from Maestro\'s noteheadBlack, is within a unit of the middle line\'s x', () => {
 		const meta = JSON.parse(readFileSync(new URL('../../../../static/fonts/finale-maestro/FinaleMaestro.json', import.meta.url), 'utf8'));
 		const head = meta.glyphBBoxes.noteheadBlack;

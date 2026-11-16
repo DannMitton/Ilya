@@ -74,7 +74,8 @@
 	@font-face {
 		font-family: 'Finale Maestro';
 		src: url('/fonts/finale-maestro/FinaleMaestro.otf') format('opentype');
-		font-display: swap;
+		/* `block`, not `swap`: U+E1D7 is a private-use code point, and what a fallback face would draw for it is not established. Until the file arrives the staff stands empty. */
+		font-display: block;
 	}
 	.plate {
 		position: relative;
