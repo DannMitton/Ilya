@@ -1,8 +1,8 @@
-# SCHEDULE: the checklist to Friday 2026-11-20
+# SCHEDULE: the checklist to Friday 2026-11-27
 
 r4, written by the desk (Opus 5.5) 2026-11-14 21:4x, at the day desk's close debt and Dann's "Proceed" of 21:30. It replaces r3 (the checklist to 2026-10-30), which is in `SCHEDULE-archive.md` verbatim. Floor: `e8f91ee7`.
 
-**The date.** The release is Friday 2026-11-20 (Dann 2026-11-13 00:47; confirmed 2026-11-14 20:37: *"No our dat is Nov 20 nbext Friday."*). On that day `main` moves to `Shane`, and the public site becomes the new Ilya. Until then the public site does not change (`STATE.md`, the share table, item 12).
+**The date.** The release is Friday 2026-11-27 (Dann 2026-11-15 23:54, transcribed as written: *"Let's make it Fri Now 27, 2026 for the new release date and work towards that. I am not extending our of capriciousness. this work needs to be done and every time we finish a chucnk i feel prouder of the app. Make me proud."*; it moved from Friday 2026-11-20, ruled 2026-11-13 00:47). DESK DEFAULT freeze: Thursday 2026-11-26 12:00. The N.203 sequence is plan r4 section 12 (`../sessions/n203-voice-intake/plan-voice-in-the-drawer_r4_2026-11-15.md`). On that day `main` moves to `Shane`, and the public site becomes the new Ilya. Until then the public site does not change (`STATE.md`, the share table, item 12).
 
 **How it is kept.** Four metas, in the order they finish. Each item says what it is, where it stands, and what Dann does. Tick at every close with the commit or file that closes it (README, closing step 3). Quality over speed: when work and date disagree, the date moves (`CONTRACT.md` section 1 item 7).
 
@@ -47,7 +47,7 @@ r4, written by the desk (Opus 5.5) 2026-11-14 21:4x, at the day desk's close deb
 - [ ] **Freeze the interface.** After lanes 54 and 55 and the Meta A lanes ship, and Dann has walked them. Proposed: Tuesday 2026-11-17 evening. After it, only what would tell a singer something false or lose a singer's work joins (the freeze rule of r3).
 - [ ] **Review packet and known-issues line** (share table item 10). Desk drafts; Dann ratifies.
 - [ ] **Format walk, print walk, N.83 end to end, both languages** (item 11). Desk, Thursday 2026-11-19.
-- [ ] **Release.** Frozen build; `main` moved to `Shane`; invitations. Dann, Friday 2026-11-20. With the move (N.202, Dann 2026-11-15 13:31): the version reads 2026b on the commit `main` moves to; a git tag and a GitHub release named 2026b on that commit (Dann's command); `CITATION.cff` takes `date-released`; the 2026b announcement, drafted by the desk and ratified by Dann, goes out the same day and says once that Ilya is now under the AGPL.
+- [ ] **Release.** Frozen build; `main` moved to `Shane`; invitations. Dann, Friday 2026-11-27. With the move (N.202, Dann 2026-11-15 13:31): the version reads 2026b on the commit `main` moves to; a git tag and a GitHub release named 2026b on that commit (Dann's command); `CITATION.cff` takes `date-released`; the 2026b announcement, drafted by the desk and ratified by Dann, goes out the same day and says once that Ilya is now under the AGPL.
 
 ---
 
@@ -55,3 +55,4 @@ r4, written by the desk (Opus 5.5) 2026-11-14 21:4x, at the day desk's close deb
 
 - r4, 2026-11-14 21:4x: re-planned to 2026-11-20 from `STATE.md`, `QUEUE.md`, `OPEN.md`, and `git log --since=2026-11-11` (read this session). Found while re-planning: lanes 48 and 50 are finished on their branches and not in `Shane`.
 - 2026-11-15 12:2x (Fable desk, at its close): ticked from `git log --since="2026-11-15 02:34"` (`87dd16e6`, `eba49310`, `25c4a369`, `93bf8394`). Every lane of Meta A is shipped; none is walked.
+- r5, 2026-11-16 02:2x: the release date moved to Friday 2026-11-27 (Dann 2026-11-15 23:54); lanes 56 and 57 shipped (`bd4af89a`, `16922501`); lanes 59 and 60 running; lane 58 on Step 4.
