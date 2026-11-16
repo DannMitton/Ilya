@@ -39,7 +39,7 @@
 	import SagittalDrawing from './chart/SagittalDrawing.svelte';
 	import { failedTake, readingTake, type TakeRecord, type TakeVisibility } from './takes';
 	import {
-		GLYPH_NUDGE, bracket, buttonLabel, buttonStates, cueText, firstTimeExplanation, hintText, hintsFor, idleCue, mainButton, staysAfterTake, stopLabel, tapEffect
+		GLYPH_NUDGE, bracket, buttonLabel, buttonStates, cueText, firstTimeExplanation, hintText, hintsFor, idleCue, mainButton, staysAfterTake, stopLabel, tapEffect, focusFromDwell
 	} from './chart/screen-logic';
 
 	let {
@@ -234,7 +234,9 @@
 		if (effect === 'ignore') return;
 		if (effect === 'endDwellAndFocus') {
 			ritual.endDwell();
-			pendingSelected = null;
+			// The dwell's queued moves go with it: the next vowel and, at the end of a re-take pass, the return to the summary.
+			({ selected, pendingSelected, returnWhenIdle } = focusFromDwell(v));
+			return;
 		}
 		selected = v;
 	}

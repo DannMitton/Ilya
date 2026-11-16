@@ -251,6 +251,20 @@ test.describe('the new capture screen on the stub', () => {
 		await expect(page.getByText('2 of 10 vowels sampled').first()).toBeVisible({ timeout: 40_000 });
 	});
 
+	test('a tap during the dwell at the end of a re-take pass keeps the screen: it does not return to the summary under the singer (follow-up fix 4)', async ({ page }) => {
+		test.setTimeout(90_000);
+		await open(page, { formants: { i: READING(296, 1705), u: READING(346, 804) }, next: ['captured'] });
+		await page.getByRole('button', { name: /re-calibrate/i }).click();
+		await page.getByRole('button', { name: /^re-take$/i }).first().click(); // a pass of one
+		await page.locator('.main').click();
+		await expect(cue(page)).toHaveText('[i] captured.', { timeout: 40_000 }); // the dwell has begun
+		await btn(page, /^close-e/).click();
+		expect(await selected(page)).toBe('e');
+		await page.waitForTimeout(2500); // past the dwell, and past where the return would have fired
+		await expect(page.locator('.capture')).toBeVisible();
+		expect(await selected(page)).toBe('e');
+	});
+
 	test('the summary offers Continue while fewer than ten are sung, and it opens the capture screen on the next vowel in Ilya’s order (B3)', async ({ page }) => {
 		await open(page, { formants: { i: READING(296, 1705), e: READING(381, 1532), u: READING(346, 804) } });
 		await page.getByRole('button', { name: /re-calibrate/i }).click();

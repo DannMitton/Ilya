@@ -88,6 +88,15 @@ export function tapEffect(phase: RitualPhase): 'focus' | 'endDwellAndFocus' | 'i
 	return phase === 'landing' ? 'endDwellAndFocus' : 'ignore';
 }
 
+/**
+ * What a tap on a vowel during the dwell leaves behind (follow-up fix 4): the focus is the tapped vowel, and both things the dwell had queued are cleared, the
+ * vowel Ilya's rule would have moved to, and the return to the summary that ends a re-take pass. Cleared together, so the screen does not leave under a
+ * singer who has just chosen a vowel.
+ */
+export function focusFromDwell(tapped: Vowel): { selected: Vowel; pendingSelected: null; returnWhenIdle: false } {
+	return { selected: tapped, pendingSelected: null, returnWhenIdle: false };
+}
+
 /** What the secondary button reads: Stop while a take runs, "Clear all" once Start over is tapped, "Start over" otherwise. */
 export function stopLabel(active: boolean, confirmingClear: boolean, language: Language): string {
 	if (active) return tv('capture.stop', language);

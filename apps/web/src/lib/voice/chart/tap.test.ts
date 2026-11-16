@@ -8,7 +8,7 @@ import { buildChartModel } from './model';
 import { project, zoomTarget } from './geometry';
 import { CHART_W, CHART_H } from './model';
 import { chartPoint, vowelForTap, zoneEllipse } from './tap';
-import { tapEffect } from './screen-logic';
+import { focusFromDwell, tapEffect } from './screen-logic';
 import type { CalibratedFormant, Vowel } from '../engine/types';
 
 const READING = (f1: number, f2: number): CalibratedFormant => ({ f1, f2, confidence: 'high', f2Quality: 'clear', reading: 'captured', source: 'measured-user', plausibility: 'plausible' }) as CalibratedFormant;
@@ -91,5 +91,11 @@ describe('what a tap on a vowel does, from the button or the chart', () => {
 	});
 	it.each(['breathe', 'sing', 'shape', 'listening', 'sweep'] as const)('does nothing during a take (%s)', (phase) => {
 		expect(tapEffect(phase)).toBe('ignore');
+	});
+});
+
+describe('a tap during the dwell at the end of a re-take pass (follow-up fix 4)', () => {
+	it('focuses the vowel and clears both the queued move and the queued return to the summary', () => {
+		expect(focusFromDwell('o')).toEqual({ selected: 'o', pendingSelected: null, returnWhenIdle: false });
 	});
 });
