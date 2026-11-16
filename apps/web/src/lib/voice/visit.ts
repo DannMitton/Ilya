@@ -86,3 +86,13 @@ export function createVisit(deps: VisitDeps): Visit {
 		}
 	};
 }
+
+/**
+ * What the capture screen does when it unmounts (follow-up fix 7). The ritual ends first, silently (`destroy()` fires no event), and the visit closes after:
+ * `visit.destroy()` ends a take through `ritual.cancel()`, which reports a CANCELLED take, and an unmounting screen may already belong to another voice, so a
+ * take record written then could land on the wrong voice. Closing the visit with Back keeps the cancel as built: that is the same voice and the same screen.
+ */
+export function leaveScreen(visit: Visit, ritual: { destroy(): void }): void {
+	ritual.destroy();
+	visit.destroy();
+}

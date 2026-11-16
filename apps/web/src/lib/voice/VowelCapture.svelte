@@ -25,7 +25,7 @@
 	import { createCaptureRitual, GLIDE_MS, type RitualCue } from './capture-ritual.svelte';
 	import TakeLine from './TakeLine.svelte';
 	import { TAKE_PART_IDS, TAKE_WEIGHTS } from './take-line';
-	import { createVisit } from './visit';
+	import { createVisit, leaveScreen } from './visit';
 	import { resetScrollAncestors } from './scroll-top';
 	import { finishEarlyState, finishEarlyText } from './chart/finish-early';
 	import { spokenName } from './vowel-names';
@@ -177,8 +177,7 @@
 		return () => {
 			mq.removeEventListener('change', change);
 			motion.stop();
-			visit.destroy();
-			ritual.destroy();
+			leaveScreen(visit, ritual); // the ritual ends silently, then the visit closes: no CANCELLED take record is written on the way out
 		};
 	});
 

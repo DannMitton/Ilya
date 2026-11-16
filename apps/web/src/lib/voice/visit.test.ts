@@ -3,7 +3,9 @@
  * first (nothing kept), then the session's visit closes, then the tick's context closes; the visit opens again when wanted again.
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { createVisit, type Visit } from './visit';
+import { createVisit, leaveScreen, type Visit } from './visit';
+import { createCaptureRitual } from './capture-ritual.svelte';
+import type { CaptureSession } from './engine/session';
 
 function rig() {
 	const calls: string[] = [];
@@ -108,5 +110,45 @@ describe('the visit helper', () => {
 		r.state.wanted = false;
 		r.visit.sync();
 		expect(r.calls).toEqual([]);
+	});
+});
+
+describe('leaving the screen (follow-up fix 7)', () => {
+	function screen() {
+		const calls: string[] = [];
+		const failed: string[] = [];
+		const session = {
+			start() {},
+			startReadiness() {},
+			cancel: () => calls.push('session.cancel'),
+			openVisit: () => calls.push('open'),
+			closeVisit: () => calls.push('close')
+		} as CaptureSession;
+		const ritual = createCaptureRitual({ session, voiceType: () => 'bass', previous: () => undefined, reducedMotion: () => false, ticks: false, onFailed: (v, e) => failed.push(`${v}:${e.code}`) });
+		const visit = createVisit({ session, endTake: () => ritual.cancel(), closeTicks: () => ritual.closeTicks(), wanted: () => true, pageVisible: () => true });
+		visit.sync();
+		return { ritual, visit, calls, failed };
+	}
+	beforeEach(() => vi.useFakeTimers());
+	afterEach(() => vi.useRealTimers());
+
+	it('ends a take in progress silently: no CANCELLED take is reported, and the visit still closes', () => {
+		const s = screen();
+		s.ritual.begin('i');
+		vi.advanceTimersByTime(1000);
+		leaveScreen(s.visit, s.ritual);
+		expect(s.failed).toEqual([]);
+		expect(s.calls).toContain('close');
+		expect(s.ritual.phase).toBe('idle');
+		live = null;
+	});
+
+	it('is why the order matters: closing the visit first reports the cancel', () => {
+		const s = screen();
+		s.ritual.begin('i');
+		vi.advanceTimersByTime(1000);
+		s.visit.destroy();
+		s.ritual.destroy();
+		expect(s.failed).toEqual(['i:CANCELLED']);
 	});
 });
