@@ -33,6 +33,7 @@ const PAGE = { pageWidth: 624, pageHeight: 727 };
 export const FIXTURES_ADDED_BY_THE_LANE: readonly string[] = [
 	'packages/score-parser/src/fixtures/repeat-one-verse.musicxml',
 	'packages/score-parser/src/fixtures/strophic-repeat-key.musicxml',
+	'packages/score-parser/src/fixtures/strophic-repeat-meter.musicxml',
 	'packages/score-parser/src/fixtures/strophic-repeat.musicxml',
 	'packages/score-parser/src/fixtures/strophic-stacked.musicxml',
 	'packages/score-parser/src/fixtures/strophic-tacet-boundary.musicxml',

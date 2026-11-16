@@ -113,3 +113,35 @@ test.describe('MELODY unfolds a strophic song', () => {
 		expect(tag).toMatch(new RegExp(`(system|système) ${pageIndex} (of|sur) ${systems.length}`));
 	});
 });
+
+test.describe('the page\'s time-signature controls and taps in a strophic song (follow-up fixes 3 and 4)', () => {
+	test.setTimeout(180_000);
+	const METER = path.resolve(process.cwd(), '../../packages/score-parser/src/fixtures/strophic-repeat-meter.musicxml');
+	const VOLTA = path.resolve(process.cwd(), '../../packages/score-parser/src/fixtures/strophic-volta.musicxml');
+	const strip = (id: string | null) => (id ?? '').replace(/~v\d+$/, '');
+
+	test('fix 3: a time signature drawn at a later-pass bar binds its control to that bar\'s source bar', async ({ page }) => {
+		await raise(page, METER);
+		// for each drawn meter: the first note or rest to its right on its system, live or later-pass, named by its source id
+		const expected = await page.evaluate(() => {
+			const out: string[] = [];
+			for (const el of document.querySelectorAll<SVGGElement>('.markup-paper-container .score-page [data-meter]')) {
+				const r = el.getBoundingClientRect();
+				const svg = el.ownerSVGElement!;
+				let best: { id: string; dx: number } | null = null;
+				for (const h of svg.querySelectorAll<SVGElement>('[data-hit], [data-verse-hit]')) {
+					const b = h.getBoundingClientRect();
+					const dx = b.left - r.right;
+					if (dx < -2 || b.bottom < r.top - 40 || b.top > r.bottom + 40) continue;
+					if (!best || dx < best.dx) best = { id: h.getAttribute('data-hit') ?? h.getAttribute('data-verse-hit') ?? '', dx };
+				}
+				if (best) out.push(best.id);
+			}
+			return out;
+		});
+		expect(expected.some((id) => id.includes('~v')), 'the fixture draws a meter at a later-pass bar').toBe(true);
+		const bound = await page.locator('[data-ts-hit]').evaluateAll((els) => els.map((e) => e.getAttribute('data-ts-hit')));
+		for (const id of expected.filter((i) => i.includes('~v'))) expect(bound, `a control for the meter before ${id}`).toContain(strip(id));
+		expect(bound.every((id) => !(id ?? '').includes('~v'))).toBe(true);
+	});
+});
