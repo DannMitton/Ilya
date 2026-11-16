@@ -88,10 +88,12 @@ describe('the staff and the note', () => {
 		expect(NOTE_GLYPH).toBe('\uE1D7');
 	});
 
-	it('centres the glyph\'s bounding box on the box\'s middle', () => {
-		const left = noteX();
-		const right = left + NOTE_BBOX.ne[0] * STAFF.gap;
-		expect((left + right) / 2).toBeCloseTo(BOX / 2, 0);
+	it('puts the note where the ratified prototype put it: x = 134, so the notehead sits on the middle of the staff', () => {
+		// The prototype's own text element for the note (line 84): `<text x="134" y="150" ... font-size="100" ...>&#xE1D7;</text>`.
+		const x = Number(proto.match(/<text x="([\d.]+)" y="150" font-family="Bravura" font-size="100"[^>]*>&#xE1D7;<\/text>/)![1]);
+		expect(x).toBe(134);
+		expect(noteX()).toBe(x);
+		expect(noteBaselineY()).toBe(150);
 	});
 });
 

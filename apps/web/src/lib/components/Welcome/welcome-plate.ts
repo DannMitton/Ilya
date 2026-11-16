@@ -107,10 +107,14 @@ export const NOTE_FONT_SIZE = STAFF.gap * 4;
  */
 export const NOTE_BBOX = { sw: [0.0, -0.564], ne: [2.132, 2.784] } as const;
 
-/** The note's left edge, in box units, so that the glyph's bounding box is centred on the box's middle (SMuFL origin: the glyph's left at x = 0). */
+/**
+ * The note's left edge, in box units: the ratified prototype's own `x = 134` (`ilya-welcome-draft-17.html`, line 84), so that the NOTEHEAD, not the whole
+ * glyph with its flag, sits on the middle of the staff, as in the design Dann ratified. JUDGEMENT, the desk's amendment of 2026-11-16 (item 2). The first
+ * build centred the glyph's bounding box instead (the brief's wording), which put the notehead about ten units left of the middle; the desk ruled for the
+ * prototype's place. `NOTE_BBOX` stays as the pinned record of the glyph's box.
+ */
 export function noteX(): number {
-	const centreStaffSpaces = (NOTE_BBOX.sw[0] + NOTE_BBOX.ne[0]) / 2;
-	return r1(BOX / 2 - centreStaffSpaces * STAFF.gap);
+	return 134;
 }
 
 /** The note's baseline: Bravura's noteheads sit on the baseline, so the middle line is the baseline. */
