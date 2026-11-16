@@ -29,7 +29,7 @@ describe('the hint', () => {
 		expect(hintText(hintsFor(base), 'en')).toBe('Tap a vowel to focus on it. Tap Start to record it.');
 	});
 	it('says what ends a take while one runs, and only that', () => {
-		expect(hintsFor({ ...base, active: true, sung: S('i') })).toEqual([{ key: 'capture.hint.active', vars: { v: '[i]' } }]);
+		expect(hintsFor({ ...base, active: true, sung: S('i') })).toEqual([{ key: 'capture.hint.active', vars: {} }]);
 		expect(hintText(hintsFor({ ...base, active: true }), 'en')).toBe('Stop ends this take and sets it aside.');
 	});
 	it('asks for the second tap on Clear all, and only that', () => {

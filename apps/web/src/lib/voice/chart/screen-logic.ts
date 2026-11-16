@@ -52,7 +52,7 @@ export interface Hint {
 export function hintsFor(h: HintInput): Hint[] {
 	const v = { v: bracket(h.selected) };
 	if (h.confirmingClear) return [{ key: 'capture.hint.confirmClear', vars: {} }];
-	if (h.active) return [{ key: 'capture.hint.active', vars: v }];
+	if (h.active) return [{ key: 'capture.hint.active', vars: {} }]; // the sheet's sentence has no {v} (Step 7)
 	const all = h.sung.size === VOWELS.length;
 	if (all) return [{ key: 'capture.hint.finished', vars: {} }];
 	if (h.sung.size === 0) return [{ key: 'capture.hint.first', vars: {} }];

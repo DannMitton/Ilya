@@ -136,6 +136,16 @@ describe('the count-in and the fry', () => {
 		expect(r.ritual.take!.within).toBe(1);
 	});
 
+	it('does not rewrite the take line while it holds: the same object stands through the whole wait for steady fry (follow-up fix 8)', () => {
+		const r = rig();
+		r.ritual.begin('i');
+		vi.advanceTimersByTime(FRY_AT + 1200); // the quarter has filled; the line is holding
+		const held = r.ritual.take;
+		expect(held).toEqual({ part: 'fry', within: 0.25, holding: true });
+		vi.advanceTimersByTime(6000);
+		expect(r.ritual.take).toBe(held);
+	});
+
 	it('is idle with no take line when nothing runs', () => {
 		expect(rig().ritual.take).toBeNull();
 	});

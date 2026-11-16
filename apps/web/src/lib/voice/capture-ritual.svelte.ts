@@ -188,17 +188,22 @@ export function createCaptureRitual(deps: CaptureRitualDeps): CaptureRitual {
 	}
 
 	/** The take line and the sweep's progress, from the clock. One timer runs from the tap to the delivery of the reading. */
+	/** Assigns the take line only when it changed: the hold at the first quarter of Fry, which can last 10 s, would otherwise rewrite an equal value 20 times a second. */
+	function setTake(next: TakeProgress) {
+		if (take && take.part === next.part && take.within === next.within && take.holding === next.holding) return;
+		take = next;
+	}
 	function update(id: number) {
 		if (id !== takeId) return;
 		const now = Date.now();
 		if (phase === 'breathe' || phase === 'sing' || phase === 'shape') {
-			take = { part: phase, within: Math.min(1, Math.max(0, (now - partStartedAt) / PART_MS[phase])), holding: false };
+			setTake({ part: phase, within: Math.min(1, Math.max(0, (now - partStartedAt) / PART_MS[phase])), holding: false });
 		} else if (phase === 'listening') {
 			const within = Math.min(WAIT_QUARTER, ((now - fryStartedAt) / WAIT_FILL_MS) * WAIT_QUARTER);
-			take = { part: 'fry', within, holding: within >= WAIT_QUARTER };
+			setTake({ part: 'fry', within, holding: within >= WAIT_QUARTER });
 		} else if (phase === 'sweep') {
 			progress = Math.min(1, (now - sweepStartedAt) / SWEEP_MS);
-			take = { part: 'fry', within: WAIT_QUARTER + (1 - WAIT_QUARTER) * progress, holding: false };
+			setTake({ part: 'fry', within: WAIT_QUARTER + (1 - WAIT_QUARTER) * progress, holding: false });
 		}
 	}
 	function startTicker(id: number) {
