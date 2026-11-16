@@ -26,4 +26,4 @@ Phone English and French, desk English: before the tap (ɨ in focus, seven recor
 ## What I could not establish
 
 - A real finger on a real phone: not available here.
-- Whether the tap's `click` is reliable on iOS Safari for an SVG `rect` with a transparent fill: Safari delivers clicks to a transparent fill that is `fill: transparent`; I have not run WebKit.
+- Whether the tap's `click` is reliable on iOS Safari for an SVG `rect` with a transparent fill: NOT ESTABLISHED: I have not run WebKit, and I did not check how Safari treats a `fill: transparent` rect.
