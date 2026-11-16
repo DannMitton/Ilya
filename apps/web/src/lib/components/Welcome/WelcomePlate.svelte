@@ -68,7 +68,9 @@
 	/*
 	 * The fonts are the app's own files: Source Serif 4 (the Cyrillic subset is in google-families.css), Lato IPA (app.css), and Finale Maestro (below).
 	 * THE NOTE IS FINALE MAESTRO, the app's default music font (`AGENTS.md`, Engraving constraints; `score/notation-fonts.ts`, `DEFAULT_NOTATION_FONT_ID`), by the
-	 * same family name and file URL the score renderer registers, so the browser reuses one file. The desk's amendment of 2026-11-16, item 5; the first build
+	 * same family name and file URL the score renderer registers. That makes it one URL, not one fetch: two face objects name it (this `@font-face` and `loadNotationFont`'s `new FontFace`, `notation-fonts.ts:52-55`),
+	 * `vercel.json` sets no `Cache-Control` for `/fonts`, and the service worker revalidates each hit in the background (`sw.js:129-141`). At most one download plus revalidations is what the code supports.
+	 * Svelte does not scope `@font-face`, so every element that already names 'Finale Maestro' (for example `tempo/TempoControl.svelte:256`) can now load the face without `loadNotationFont()`. The desk's amendment of 2026-11-16, item 5; the first build
 	 * used Bravura because the brief and prototype named it. `welcome-plate.test.ts` holds the family and URL to `notation-fonts.ts`.
 	 */
 	@font-face {
