@@ -5,7 +5,8 @@
  * One hash per tracked `.musicxml` of `paginateScore`'s pages at
  * `markup-pages.test.ts`'s geometry, taken on the lane's base commit
  * (`fb9d829e`, `Shane`, before any change of this lane). Every one-verse
- * score must stay byte-identical. The committed file is
+ * score must stay byte-identical. Eight hashes were re-taken on 2026-11-16 (strophic lane A follow-up, fix 1): the tacet-sliver fix
+ * changed those eight measure fixtures' pages on purpose (`docs/sessions/report-code-strophic-a-followup_r1_2026-11-16.md`). The committed file is
  * `strophic-byte-baseline.json`; it was written by running this test with
  * `UPDATE_STROPHIC_BASELINE=1` on the base commit and never again.
  *
