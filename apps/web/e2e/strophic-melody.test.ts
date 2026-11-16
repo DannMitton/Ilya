@@ -109,5 +109,7 @@ test.describe('MELODY unfolds a strophic song', () => {
 		const pageIndex = systems.findIndex((s) => s.hits.some((h) => h.id === 'm9-0-1')) + 1;
 		console.log('LOUPE TAG', JSON.stringify(tag.split('\n').find((l) => /system|système/.test(l)) ?? tag.slice(0, 120)), 'page system', pageIndex, 'of', systems.length);
 		expect(pageIndex).toBeGreaterThan(0);
+		// the Loupe counts every system on the page, the ones of later-pass bars only included
+		expect(tag).toMatch(new RegExp(`(system|système) ${pageIndex} (of|sur) ${systems.length}`));
 	});
 });
