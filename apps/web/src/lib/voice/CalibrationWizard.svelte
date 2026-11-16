@@ -925,7 +925,7 @@
 					</div>
 				{/if}
 				{#key captureKey}<VowelCapture session={captureSession} {language} {voiceType} {profile} startVowel={opening.start} pass={opening.pass}
-					onCaptured={commitReading} onTake={recordTake} onReturn={() => (phase = 'summary')} onClearAll={confirmReset} {takeoverVisible} {visit} onVisitHooks={(h) => (visitHooks = h)} />{/key}
+					onCaptured={commitReading} onTake={recordTake} onReturn={() => (phase = 'summary')} onClearAll={confirmReset} {takeoverVisible} {visit} onVisitHooks={(h, was) => { if (h) visitHooks = h; else if (visitHooks === was) visitHooks = null; }} />{/key}
 			</div>
 			{:else if phase === 'summary'}
 				<!-- YOUR VOWEL SPACE (N.203 lane 60, Step 5; plan r4 section 4.5). The sheet is the whole summary: the note on readings outside Ilya's values, then the chart, the one table with the roster's marks in it, the legend, the sources, and Print (`VowelSpaceSheet.svelte`). Finish is filled and leads; the way back to the ten vowels and Start over are quiet (Dann 2026-09-10, "Filled Finish ... in that order"). Finish writes nothing: every reading was saved when it was captured, so a singer who only looked must not re-date them. -->

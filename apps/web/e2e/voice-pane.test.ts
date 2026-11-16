@@ -160,3 +160,30 @@ test.describe('the VOICE pane at rest', () => {
 		});
 	});
 });
+
+test.describe('a take is never orphaned by a remount (fix 1 of the review of 38ec37c2)', () => {
+	test('four readings stored: door, Back, the door again (the screen remounts), Start, Back mid-take: the take ends, is recorded as cancelled, and nothing runs on behind the Drawer', async ({ page }) => {
+		test.setTimeout(90_000);
+		const FOUR = { i: R(296, 1705), e: R(381, 1532), u: R(346, 804), a: R(600, 1250) };
+		await open(page, [{ id: 'v', name: 'Dann', voiceType: 'bass', formants: FOUR }]);
+		const stub = <T,>(fn: (s: { visitOpen: boolean; starts: number }) => T) => page.evaluate(fn as never) as Promise<T>;
+		await door(page, /^carry on recording$/i).click();
+		await expect(page.locator('.capture')).toBeVisible();
+		await page.locator('.takeover-back').click();
+		await expect(sentence(page)).toBeVisible();
+		await door(page, /^carry on recording$/i).click(); // a request from rest: the capture screen remounts
+		await expect(page.locator('.capture')).toBeVisible();
+		await page.locator('.main').click(); // Start: the count-in runs
+		await expect(page.locator('.main')).toBeDisabled();
+		await page.waitForTimeout(800);
+		await page.locator('.takeover-back').click(); // Back mid-take
+		await expect(sentence(page)).toBeVisible();
+		await expect.poll(() => page.evaluate(() => (window as unknown as { __ilyaStubSession: { visitOpen: boolean } }).__ilyaStubSession.visitOpen)).toBe(false);
+		const started = await page.evaluate(() => (window as unknown as { __ilyaStubSession: { starts: number } }).__ilyaStubSession.starts);
+		await page.waitForTimeout(8000); // longer than the count-in and the sweep: nothing may run on
+		expect(await page.evaluate(() => (window as unknown as { __ilyaStubSession: { starts: number } }).__ilyaStubSession.starts), 'no run was started behind the Drawer').toBe(started);
+		const v = (await stored(page)).voices[0];
+		expect(Object.keys(v.formants), 'no reading was added').toHaveLength(4);
+		expect(v.takes.map((t: { outcome: string }) => t.outcome), 'a cancelled take is recorded').toEqual(['cancelled']);
+	});
+});

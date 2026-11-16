@@ -114,7 +114,10 @@ export class StubCaptureSession implements CaptureSession {
 	private timers: ReturnType<typeof setTimeout>[] = [];
 	private active = false;
 	private readonly forced?: StubOutcome;
-	private readonly readiness: StubReadinessOutcome;
+	/** Public and mutable for a browser test that changes the room between two runs (the stub switch reads `__ilyaStubReadiness` once, at construction). */
+	readiness: StubReadinessOutcome;
+	/** How many runs (`start`, `startReadiness`) this session has begun, for a browser test that asserts none began behind the singer. */
+	starts = 0;
 
 	/**
 	 * Pass a StubOutcome to force every capture down one path, and a
@@ -134,6 +137,7 @@ export class StubCaptureSession implements CaptureSession {
 	}
 
 	start(vowel: Vowel, _voiceType: VoiceType | undefined, handlers: CaptureHandlers): void {
+		this.starts += 1;
 		this.cancel(); // clear any prior session cleanly
 		this.active = true;
 
@@ -165,6 +169,7 @@ export class StubCaptureSession implements CaptureSession {
 	 * settle) so the wizard's prompts read at a human pace without a device.
 	 */
 	startReadiness(handlers: ReadinessHandlers): void {
+		this.starts += 1;
 		this.cancel();
 		this.active = true;
 		const outcome = this.readiness;

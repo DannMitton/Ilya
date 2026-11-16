@@ -86,7 +86,8 @@
 		 * shared one (the wizard does), and hands the wizard the two things only it can do: end a take, and close the tick context.
 		 */
 		visit?: Visit;
-		onVisitHooks?: (hooks: { endTake(): void; closeTicks(): void } | null) => void;
+		/** Hands the wizard this screen's hooks (one object, for the screen's life), and on unmount passes the same object back with `null` so the wizard clears only its own: a remount mounts the new screen before the old one unmounts. */
+		onVisitHooks?: (hooks: { endTake(): void; closeTicks(): void } | null, was?: { endTake(): void; closeTicks(): void }) => void;
 	} = $props();
 
 	// ── State ───────────────────────────────────────────────────────────────
@@ -141,7 +142,8 @@
 		closeTicks: () => ritual.closeTicks(),
 		wanted: () => takeoverVisible
 	});
-	if (shared) untrack(() => onVisitHooks?.({ endTake: () => ritual.cancel(), closeTicks: () => ritual.closeTicks() }));
+	const hooks = { endTake: () => ritual.cancel(), closeTicks: () => ritual.closeTicks() };
+	if (shared) untrack(() => onVisitHooks?.(hooks));
 	$effect(() => { if (!shared) visit.sync(); });
 
 	/** The ritual has just set its cue for the take that ended: keep it on the screen if the singer needs to read it, else let the invitation take over. */
@@ -188,7 +190,7 @@
 		return () => {
 			mq.removeEventListener('change', change);
 			motion.stop();
-			if (shared) { ritual.destroy(); ritual.closeTicks(); onVisitHooks?.(null); } // the wizard's visit outlives this screen
+			if (shared) { ritual.destroy(); ritual.closeTicks(); onVisitHooks?.(null, hooks); } // the wizard's visit outlives this screen
 			else leaveScreen(visit, ritual); // the ritual ends silently, then the visit closes: no CANCELLED take record is written on the way out
 		};
 	});
