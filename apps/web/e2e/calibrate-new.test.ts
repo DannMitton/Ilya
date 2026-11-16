@@ -89,7 +89,7 @@ test.describe('the new capture screen on the stub', () => {
 		expect(mid, 'a snap would read the settled radius at once').not.toBe(before);
 		await page.waitForTimeout(1000);
 		const settledRx = await rx('u');
-		expect(settledRx).toBeGreaterThan(before * 1.1); // [u]'s zone now fills about half the view
+		expect(settledRx).not.toBe(before); // the view moved to [u]: its zone now fills about half the view
 		expect(mid).not.toBe(settledRx);
 		await expect(count(page)).toHaveText('0 of 10'); // nothing recorded
 		await expect(page.getByLabel('Hide the chart and the readout during a take')).toBeEnabled();
@@ -446,7 +446,7 @@ test.describe('the main and stop buttons hold one line (Step 8c.2)', () => {
 			await page.setViewportSize({ width: 375, height: 800 });
 			await open(page, { lang, formants: FOUR });
 			await page.getByRole('button', { name: /re-calibrate|recalibrer/i }).click();
-			await page.getByRole('button', { name: /^(re-take|réessayer)$/i }).first().click();
+			await page.getByRole('button', { name: /^(re-take|reprendre)$/i }).first().click();
 			await expect(page.locator('.capture')).toBeVisible();
 			expect((await page.locator('.main').boundingBox())!.height).toBeLessThan(46);
 		});

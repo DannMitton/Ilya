@@ -164,7 +164,13 @@
 		untrack(() => motion.to(target, ms));
 	});
 
+	let root: HTMLElement;
 	onMount(() => {
+		// The takeover keeps the scroll position the summary had: a singer who tapped Continue low on a long summary would open this screen scrolled past its
+		// head. It opens at the top, so the head and the Start row are in view (Step 4's criterion, after a first visit as well as on it).
+		for (let el = root.parentElement; el; el = el.parentElement) {
+			if (['auto', 'scroll'].includes(getComputedStyle(el).overflowY) && el.scrollTop > 0) el.scrollTop = 0;
+		}
 		const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
 		reducedMotion = mq.matches;
 		const change = () => (reducedMotion = mq.matches);
@@ -267,7 +273,7 @@
 
 <svelte:window onkeydown={onKeydown} />
 
-<div class="capture">
+<div class="capture" bind:this={root}>
 	<!-- The cue, spoken: the vowel by its name, never the bare glyph (§4.6). The eye reads the bracketed symbol below. -->
 	<p class="visually-hidden" role="status" aria-live="polite">{cue.ear}</p>
 

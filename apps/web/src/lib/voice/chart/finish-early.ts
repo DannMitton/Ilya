@@ -19,7 +19,7 @@ import { VOWELS, type CalibratedFormant, type Vowel } from '../engine/types';
 import { resolveVowelValues } from '../engine/resolve-values';
 
 export type FinishEarly =
-	| { kind: 'workOut'; /** How many vowels are left. */ m: number; /** They are, in `VOWELS` order. */ vowels: Vowel[] }
+	| { kind: 'workOut'; /** How many vowels are left. */ m: number; /** They are, in `VOWELS` order. */ vowels: readonly Vowel[] }
 	| { kind: 'useRecorded'; m: number; anySung: boolean };
 
 /**
