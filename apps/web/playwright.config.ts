@@ -1,4 +1,13 @@
 import { defineConfig, devices } from '@playwright/test';
+import { fileURLToPath } from 'node:url';
+
+/**
+ * EVERY TEST STARTS AS A RETURNING BROWSER (welcome sheet, lane `cloud-lane-57`, brief r2 item 2). A fresh Playwright browser has empty storage, and the
+ * welcome sheet stands in front of the whole app on a browser's first visit, so without this every test would meet it. One shared setup for both projects:
+ * the flag `ilya:welcomeSeen`, set for the config's own origin before the app loads. No test file is edited. Only the sheet's own tests clear it
+ * (`test.use({ storageState: { cookies: [], origins: [] } })`, `e2e/welcome-sheet.test.ts`, `e2e-phone/welcome-sheet.test.ts`).
+ */
+const RETURNING_BROWSER = fileURLToPath(new URL('./e2e/returning-browser.storage.json', import.meta.url));
 
 export default defineConfig({
 	testDir: './e2e',
@@ -11,6 +20,7 @@ export default defineConfig({
 	use: {
 		baseURL: 'http://localhost:5173',
 		trace: 'on-first-retry',
+		storageState: RETURNING_BROWSER,
 	},
 	projects: [
 		{

@@ -16,7 +16,7 @@
    tree on 2026-11-02 (consistency batch 2). Paths are under `apps/web/src/`;
    a prefix is listed with the files that use it most and its key count.
 
-   This file holds 1,272 keys.
+   This file holds 1,280 keys.
 
    A key built at run time (`watch.key.letter.${letter}`, `comment.<register>.<part>`)
    has no literal reference, so a search for the whole key can come back empty
@@ -89,6 +89,7 @@
    vowel.         11  lib/voice/vowel-names.ts, lib/markup/legend.ts
    wait.           2  lib/components/ReadingWait.svelte, lib/omr/wait.ts, lib/score/ScoreUploader.svelte
    watch.         46  the watch list: lib/analysis/watchlist.ts, lib/analysis/gates.ts, lib/markup/transposition-ruler.ts
+   welcome.        8  the welcome sheet: lib/components/Welcome/WelcomeSheet.svelte (its Begin is `calib.welcome.beginButton`; its three station labels are `tab.text`, `tab.markedScore`, `tab.insights`)
    witness.        8  no literal consumer found (its component was removed)
 
    THREE LEGACY KEYS keep a name the shown word has left, because the key is a
@@ -2522,6 +2523,21 @@ const strings: Record<string, Record<Language, string>> = {
 	// N.199 Step 6b: the drawing credit lines, RATIFIED by Dann 2026-11-13 11:35 ("I ratify these lines."); U+00A0 before the colon in French.
 	'capture.credit.plate': { en: 'Drawing: Dann Mitton, after Bolla (1981), plate {n}.', fr: 'Dessin : Dann Mitton, d’après Bolla (1981), planche {n}.' },
 	'capture.credit.noPlate': { en: 'Drawing: Dann Mitton. Bolla has no plate for this vowel.', fr: 'Dessin : Dann Mitton. Bolla ne donne pas de planche pour cette voyelle.' },
+	// THE WELCOME SHEET (lane cloud-lane-57, brief r2). RATIFIED by Dann 2026-11-15 01:30 (English and design) and 01:38 (French), `docs/memory/OPEN.md`,
+	// "THE WELCOME SHEET, EN AND FR, RATIFIED". Each value below was taken by script from the prototypes Dann ratified (`docs/sessions/welcome-sheet/
+	// ilya-welcome-draft-17.html` and `-17-fr.html`), not typed; `welcome-strings.test.ts` pins every pair against them. The French licence line is the prototype's own; the English one is the GUIDE's ratified
+	// opening (`GuideContent.svelte:579`, first two sentences), ruled by Dann 2026-11-15 13:20, so both carry "© 2026 Dann Mitton". The `<em>` tags and links render
+	// with {@html}, like `footer.attribution`; the links open in a new tab (`target="_blank"`, as `footer.attribution`'s do) so a singer who follows one does not leave
+	// the sheet. The station labels reuse `tab.text`, `tab.markedScore`, and `tab.insights`; Begin reuses `calib.welcome.beginButton` (en "Begin", fr "Commencer").
+	// The "Made with love in Canada" line's flag is drawn by the component after an en space, as the prototype has it.
+	'welcome.band': { en: 'WELCOME', fr: 'BIENVENUE' },
+	'welcome.title': { en: 'Sung Russian made easier.', fr: 'Le russe chanté, simplifié.' },
+	'welcome.lead': { en: '<em>Ilya</em> can make mistakes.', fr: '<em>Ilya</em> peut se tromper.' },
+	'welcome.body': { en: '<em>Ilya</em> bundles a live IPA transcription engine, an onboard Russian dictionary with English and French glosses, optical music recognition (OMR) that reads scores by machine, and an acoustic module that estimates your resonances using the microphone in your own device. Any of these steps can go wrong. So treat what <em>Ilya</em> shares as an early consultation within a much longer process of studying your song or aria, and <strong>confirm anything <em>Ilya</em> tells you with your teacher or coach before you rely on it.</strong>', fr: '<em>Ilya</em> réunit un moteur de transcription en API en direct, un dictionnaire russe intégré avec des gloses anglaises et françaises, une reconnaissance optique de la musique qui lit les partitions par machine, et un module acoustique qui estime vos résonances au moyen du microphone de votre propre appareil. Chacune de ces étapes peut faillir. Considérez donc ce qu\u2019<em>Ilya</em> vous présente comme une première consultation dans un processus bien plus long d\u2019étude de votre chant ou de votre air, et <strong>vérifiez tout ce qu\u2019<em>Ilya</em> vous indique auprès de votre professeure ou professeur de chant, ou de votre coach, avant de vous y fier.</strong>' },
+	'welcome.method': { en: 'The method is Craig Grayson\u2019s: <a target="_blank" rel="noopener" href="https://hdl.handle.net/1773/20548"><em>Russian Lyric Diction</em></a> (University of Washington, 2012).', fr: 'La méthode est celle de Craig Grayson\u00a0: <a target="_blank" rel="noopener" href="https://hdl.handle.net/1773/20548"><em>Russian Lyric Diction</em></a> (University of Washington, 2012).' },
+	'welcome.maker': { en: 'Made by Dann Mitton, voice teacher and researcher, <a target="_blank" rel="noopener" href="https://dannmitton.com">dannmitton.com</a>. His doctoral research, <a target="_blank" rel="noopener" href="https://hdl.handle.net/1807/100864"><em>Sung Russian for the Low Male Voice Classical Singer</em></a> (University of Toronto, 2020), is the argument behind <em>Ilya</em>; <a target="_blank" rel="noopener" href="https://ilya.dannmitton.com">ilya.dannmitton.com</a> is its home.', fr: 'Créé par Dann Mitton, professeur de chant et chercheur, <a target="_blank" rel="noopener" href="https://dannmitton.com">dannmitton.com</a>. Ses recherches doctorales, <a target="_blank" rel="noopener" href="https://hdl.handle.net/1807/100864"><em>Sung Russian for the Low Male Voice Classical Singer</em></a> (University of Toronto, 2020), en fournissent l\u2019argumentaire; <em>Ilya</em> vit à <a target="_blank" rel="noopener" href="https://ilya.dannmitton.com">ilya.dannmitton.com</a>.' },
+	'welcome.madeIn': { en: 'Made with love in Canada, in English and French', fr: 'Fait avec c\u0153ur au Canada, en anglais et en français' },
+	'welcome.licence': { en: '<em>Ilya</em> is free and open source, © 2026 Dann Mitton, and released under the GNU Affero General Public License, version\u00a03. The name <em>Ilya</em> and its icon are not licensed under it.', fr: '<em>Ilya</em> est gratuit et à code ouvert, © 2026 Dann Mitton, et publié selon les termes de la licence publique générale GNU Affero, version\u00a03. Le nom <em>Ilya</em> et son icône ne sont pas visés par cette licence.' },
 };
 
 /**

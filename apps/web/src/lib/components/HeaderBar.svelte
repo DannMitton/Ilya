@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { t, type Language } from '$lib/i18n';
 	import type { TabId } from '$lib/destinations';
+	import { languageSwitch } from '$lib/language-switch';
 
 	interface Props {
 		language: Language;
@@ -29,8 +30,9 @@
 	   The visible word therefore carries its own `lang` in the template,
 	   which is what stops a screen reader pronouncing "Français" with
 	   English phonetics. */
-	const other = $derived<Language>(language === 'en' ? 'fr' : 'en');
-	const label = $derived(other === 'fr' ? 'Français' : 'English');
+	const sw = $derived(languageSwitch(language));
+	const other = $derived(sw.other);
+	const label = $derived(sw.label);
 
 	function switchLanguage() {
 		onlanguagechange(other);
