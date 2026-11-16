@@ -76,6 +76,23 @@ describe('row 166: the identity head of a placeholder voice', () => {
 		}
 	});
 
+	it('the method line of a page with no score reads what the voice rests on: samples, generic values, or neither (N.203 Step 8)', () => {
+		expect(methodLineKey({ generic: false, typed: false, noScore: true, samples: true })).toBe('insights.method.noScore.samples');
+		expect(methodLineKey({ generic: true, typed: true, noScore: true, samples: false })).toBe('insights.method.noScore.generic');
+		expect(methodLineKey({ generic: false, typed: false, noScore: true, samples: false })).toBe('insights.method.noScore.none');
+		// With a score nothing changes: `noScore` and `samples` are not read.
+		expect(methodLineKey({ generic: true, typed: false, samples: true })).toBe('insights.method.generic.untyped');
+	});
+
+	it('the three states, from real profiles: a measured voice, a typed voice with generic values, a voice with neither', () => {
+		const sung = buildVoiceProfileSnapshot({ u: { f1: 330, f2: 800, f2Quality: 'clear', confidence: 'high', reading: 'captured', source: 'measured-user' } as never }, undefined, undefined, undefined, 'baritone');
+		const key = (a: Parameters<typeof restsOnSamples>[0]) => methodLineKey({ generic: a.generic, typed: false, noScore: true, samples: restsOnSamples(a) });
+		expect(key(sung)).toBe('insights.method.noScore.samples');
+		expect(key(un('baritone'))).toBe('insights.method.noScore.generic');
+		expect(key(un('contralto'))).toBe('insights.method.noScore.none');
+		expect(key(un(undefined))).toBe('insights.method.noScore.none');
+	});
+
 	it('the lede: shown only for a placeholder voice, with the identity line\'s own label (EN lower-cased, FR as printed)', () => {
 		const labels: Array<[string, string, string]> = [
 			['soprano', 'soprano', 'soprano'],

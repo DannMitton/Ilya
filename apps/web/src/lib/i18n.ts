@@ -16,7 +16,7 @@
    tree on 2026-11-02 (consistency batch 2). Paths are under `apps/web/src/`;
    a prefix is listed with the files that use it most and its key count.
 
-   This file holds 1,295 keys.
+   This file holds 1,298 keys.
 
    A key built at run time (`watch.key.letter.${letter}`, `comment.<register>.<part>`)
    has no literal reference, so a search for the whole key can come back empty
@@ -44,7 +44,7 @@
    group.          3  the drawer's band names: lib/components/Drawer/Drawer.svelte (LEGACY KEY: `group.scoreMarkup`)
    guide.          5  lib/components/Reading/GuideSources.svelte, lib/components/Drawer/Drawer.svelte
    input.          8  lib/components/Drawer/IntakePanel.svelte
-   insights.     190  the INSIGHTS document: lib/insights/singer-blocks.ts, lib/insights/InsightsPane.svelte, lib/insights/tessituragram-layout.ts (LEGACY KEYS: `insights.fit.*`)
+   insights.     193  the INSIGHTS document: lib/insights/singer-blocks.ts, lib/insights/InsightsPane.svelte, lib/insights/tessituragram-layout.ts (LEGACY KEYS: `insights.fit.*`)
    inspector.     43  lib/components/Drawer/InspectorPanel.svelte, lib/components/Drawer/Drawer.svelte, lib/components/Drawer/GlossOffer.svelte
    intake.        54  lib/components/Drawer/IntakePanel.svelte, lib/components/Drawer/IntakeViews.svelte, lib/components/Drawer/PoemLibraryCard.svelte, lib/text/input-line.ts, lib/components/Drawer/bandState.ts
    key.           23  the key ruler: lib/markup/transposition-ruler.ts, lib/markup/TranspositionDock.svelte, lib/markup/TranspositionRuler.svelte
@@ -1835,7 +1835,12 @@ const strings: Record<string, Record<Language, string>> = {
 	'insights.method.generic.untyped': { en: 'Method: computed from placeholder values for your voice type and the score as sung, including repeats.', fr: 'Méthode\u00a0: calculé à partir de valeurs par défaut pour votre type de voix et de la partition telle que chantée, reprises comprises.' },
 	'insights.silence.unmeasured': { en: 'No voice has been measured, so this page does not compare this piece with your voice. Withheld until one is:', fr: 'Aucune voix n\u2019a été mesurée, donc cette page ne compare pas cette pièce avec votre voix. Retenu jusqu\u2019à ce qu\u2019une voix le soit\u00a0:' },
 	'insights.silence.findings':   { en: 'Any finding about where this piece may challenge your voice.', fr: 'Toute observation sur les endroits où cette pièce pourrait solliciter votre voix.' },
-	'insights.silence.noScore':    { en: 'No score has been added, so there is nothing of this piece to measure.', fr: 'Aucune partition n\u2019a été ajoutée, il n\u2019y a donc rien de cette pièce à mesurer.' },
+	// N.203 sheet-english r2 / sheet-french r1, RATIFIED by Dann 2026-11-16 (01:13 English, 01:20 French), line 27.
+	'insights.silence.noScore':    { en: 'INSIGHTS measures a piece from its score, and connects it to your voice. Add a score in the INPUT pane to begin.', fr: 'Les APERÇUS mesurent une pièce à partir de sa partition, et la relient à votre voix. Ajoutez une partition dans le volet ENTRÉE pour commencer.' },
+	// The method line of the page with no score (sheet lines 28 and 29, and the new line for a voice with nothing usable and no generic values, RATIFIED by Dann 2026-11-16 01:28).
+	'insights.method.noScore.samples': { en: 'Method: from your resonance profile, measured in VOICE.', fr: 'Méthode\u00a0: à partir de votre profil de résonances, mesuré dans VOIX.' },
+	'insights.method.noScore.generic': { en: 'Method: from generic values for your voice type, until you record your own vowels.', fr: 'Méthode\u00a0: à partir de valeurs par défaut pour votre type de voix, jusqu\u2019à ce que vous captiez vos propres voyelles.' },
+	'insights.method.noScore.none':    { en: 'Method: record your vowels in VOICE, and this page computes from your voice.', fr: 'Méthode\u00a0: captez vos voyelles dans VOIX, et cette page calcule à partir de votre voix.' },
 	// N.123, phonation time: all RATIFIED by Dann 2026-09-23 unless marked
 	// (`docs/sessions/insights-phonation-time_r1_2026-09-22.md`).
 	'insights.phonation.heading':  { en: 'Phonation time',               fr: 'Temps de phonation' },

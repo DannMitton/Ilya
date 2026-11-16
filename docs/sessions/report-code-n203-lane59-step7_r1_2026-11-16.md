@@ -27,7 +27,7 @@ These still say "sing", "sample", or "captured" and will read as a second vocabu
 
 ## What needs Dann's eye
 
-- The 02:xx French of line 17 has no « tu » or « vous » surprise, but « Chantez-la » refers to the vowel by « la » (feminine, « voyelle »); I did not change it, it is the sheet's.
+- Line 17's French, « Chantez-la d’abord », refers to the vowel with « la » (« voyelle » is feminine, as the sheet's own header records); I applied the sheet as ratified and made no change.
 - The residual vocabulary above.
 
 ## What I could not establish
