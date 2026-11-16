@@ -43,6 +43,8 @@ Open for Dann (French, flagged by the audit): the storage messages say "syllable
 
 ## 3. Named places in capitals
 
+**"Band" is the build's word, never the singer's** (Dann 2026-11-16 01:14, transcribed as written: *"A reminder that what Ilya calls a band. is not german to the user. Users understand panes and windows and fliedls and blanks."*). A singer-facing string names a DRAWER section by its capitals alone; where a classifier is needed, it is "pane" (« volet » in French, ratified by Dann 2026-11-16 01:20).
+
 **Rule.** A place in Ilya is written in capitals wherever a singer reads it: every row marked "yes" above. French keeps every accent, cedilla, and tréma on capitals (OQLF, Vitrine linguistique, « Accents, trémas et cédilles aux lettres majuscules »). **Reason (Dann 12:19, 13:26):** capitals set the place apart from the ordinary word: open TEXT, but read the text; type in LYRICS, but sing the lyrics.
 
 **What counts as a place:** something on screen, with a visible name, that a singer goes to: a tab, a band, a field, a station, a panel, the DRAWER. A tab, a band, a station, and the DRAWER's pull are places even though a singer taps them: capitals, no chip. Not a control that does something (§4), not a mark on the page, not the page itself.

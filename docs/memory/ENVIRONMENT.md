@@ -5183,7 +5183,7 @@ Quote the range; cap at its top; add each actual when it lands. Actuals from `ST
 | kind of job | actuals (tokens) | range to quote |
 |---|---|---|
 | Sonnet browser measure on row 114 f1 | 148k, 155k, 158k, 192k, 206k, 208k, 208k, 238k (J2, three arms, 2026-11-09), 257k | 150k to 260k |
-| Fable review of a brief or design | 156k to 315k, most near 200k; 2026-11-13: 212k (N.200 r1), 222k in 6.6 min with 26 tool uses (N.199 readings r2, cap 330k; the brief pasted whole into the prompt, the desk's clone already installed); 2026-11-15: 360k in 15.2 min with 81 tool uses (N.202 r1, cap 250k, over by 110k: the helper read some sixty files, both lanes' diffs, and 100,000 characters of a web page) | 160k to 370k |
+| Fable review of a brief or design | 156k to 315k, most near 200k; 2026-11-13: 212k (N.200 r1), 222k in 6.6 min with 26 tool uses (N.199 readings r2, cap 330k; the brief pasted whole into the prompt, the desk's clone already installed); 2026-11-15: 360k in 15.2 min with 81 tool uses (N.202 r1, cap 250k, over by 110k: the helper read some sixty files, both lanes' diffs, and 100,000 characters of a web page); 2026-11-16: 227k in 6.2 min with 22 tool uses (lane 59 r2, cap 370k, with a Sonnet scout packet and the scout's clone) | 160k to 370k |
 | Fable review of two built lanes (as built, merge-tree, one probe) | 367k (2026-11-09, 46 min, cap 320k) | 300k to 400k |
 | Fable review of three Code briefs (B0, row 166, row 182 with its data file) | 378k (cap 400k), 71 min, 141 tool uses, 2026-11-09; 303k harness count (cap 420k), 13 min, 64 tool uses, 2026-11-12 (polish lane r2, rhyme r2, L17 r2, with a scout packet) | 300k to 420k |
 | Opus review standing in for Fable | 130k, 170k, 171k, 183k, 215k | 130k to 220k |
@@ -5198,6 +5198,10 @@ Quote the range; cap at its top; add each actual when it lands. Actuals from `ST
 | Sonnet French-name search, 6 operas and 8 roles, French sources beyond fr.wikipedia | 175k harness count (helper estimated 150k), 82 tool uses, 6.7 min, cap 290k (2026-11-11) | 150k to 230k (one actual) |
 | Sonnet survey of comparable products' guide and learning pages (8 products read, Diátaxis) | 138k harness count, 42 tool uses, 3.4 min, cap 350k (2026-11-11); a subagent's Write of its report was refused by the harness, so the desk saved the returned text | 130k to 250k (one actual) |
 | Sonnet scout packet for three Code briefs (every cited line checked, other sites grepped) | 244k harness count, 79 tool uses, 7.1 min, cap 320k (2026-11-11) | 230k to 320k |
+| Sonnet read-only scan of three lanes against `Shane` (trial merges, key counts, ceilings, gates from reports) | 168k harness count, 30 tool uses, 2.6 min, cap 350k (S1, 2026-11-16) | 150k to 350k (one actual) |
+| Sonnet eight-gate measure of one merge in the cloud workspace (clone, install, all gates) | 87k harness count, 8 tool uses, 12.2 min, cap 150k (S3, Shane + lane 56, 2026-11-16) | 80k to 150k (one actual) |
+| Sonnet citation scout for one Code brief (every cite read, call sites, derivation states, ceilings) | 233k harness count, 57 tool uses, 6.7 min, cap 320k (S6, lane 59 r1, 2026-11-16) | 200k to 320k |
+| Sonnet scoring run on the Mac through the bridge (clone, pnpm install, scorer, Burg reference) | 111k harness count, 15 tool uses, 6.1 min, cap 260k (S4, N.200 Step 4, 2026-11-16) | 110k to 260k (one actual) |
 
 Use the harness token count, never a helper's own estimate (2026-11-08: 231k counted against 185k estimated).
 
