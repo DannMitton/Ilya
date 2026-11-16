@@ -1,6 +1,6 @@
 /**
  * N.199 Step 4b: the capture screen, rendered on the server. What a singer would see at rest for a few profiles. The taps, the
- * take, Escape, and the sticky group are exercised in the browser in Step 6; nothing here mounts or clicks.
+ * take, and Escape are exercised in the browser in Step 6; nothing here mounts or clicks.
  */
 import { describe, expect, it } from 'vitest';
 import { render } from 'svelte/server';
@@ -38,7 +38,7 @@ describe('the screen at rest', () => {
 	it('has ten real buttons in Grayson’s order, named by their spoken name and state, the selected one saying so', () => {
 		const labels = buttons(html({ profile: pick('i', 'e'), startVowel: 'ɛ' }));
 		expect(labels).toEqual([
-			'cardinal-i, sung', 'close-e, sung', 'smallcaps-i, placeholder', 'velar-i, placeholder', 'open-e, placeholder, selected',
+			'cardinal-i, recorded', 'close-e, recorded', 'smallcaps-i, placeholder', 'velar-i, placeholder', 'open-e, placeholder, selected',
 			'bright-a, placeholder', 'dark-a, placeholder', 'turned-v, placeholder', 'Russian-o, placeholder', 'cardinal-u, placeholder'
 		]);
 		expect(VOWELS).toHaveLength(10);
@@ -56,16 +56,19 @@ describe('the screen at rest', () => {
 		const h = html();
 		expect(text(h)).toContain('Ready for [i].');
 		expect(h).toContain('Start [i]');
-		expect(text(h)).toContain('Start follows Ilya’s order. Or tap any vowel to sing that one now.');
-		expect(text(h)).toContain('Tap the [i] cardinal-i vowel to begin. First sing it as you usually do');
+		expect(text(h)).toContain('Tap a vowel to focus on it. Tap Start to record it.');
+		expect(text(h)).toContain('Start gives you a breath, then [i]. Sing it first as you usually do');
 		expect(text(html({ profile: pick('i') }))).not.toContain('First sing it as you usually do');
 	});
 
 	it('offers a re-take for a sung selection, and a way back to the summary as soon as one vowel is sung, not before', () => {
 		const none = html();
-		expect(none).not.toContain('Return to summary');
+		expect(none).not.toContain('Use what I’ve recorded');
+		expect(none).not.toContain('Let Ilya work out');
 		const one = html({ profile: pick('i') });
-		expect(one).toContain('Return to summary');
+		expect(one).toContain('Use what I’ve recorded');
+		expect(text(one)).toContain('If you wish, you can stop here: Ilya fills the other nine from what you have recorded so far.');
+		expect(one).not.toContain('See your vowel space');
 		expect(one).toContain('Re-take [i]');
 		expect(text(one)).toContain('is captured.');
 		expect(text(one)).toContain('A re-take replaces [i] only if the new reading is as clear.');
@@ -81,18 +84,52 @@ describe('the screen at rest', () => {
 		expect(text(html({ profile: pick('i'), startVowel: 'e' }))).not.toContain('381 Hz');
 	});
 
-	it('with all ten sung, says so, offers Done, and invites any vowel again', () => {
+	it('is in the order Dann ruled (2026-11-16 00:32): the vowel\'s row, the take line, the cue, the buttons, Start, the chart, then the hint', () => {
+		const h = html({ profile: pick('i') });
+		const at = (needle: string) => {
+			const k = h.search(new RegExp(needle.replace(/"$/, '[" ]')));
+			expect(k, needle).toBeGreaterThan(-1);
+			return k;
+		};
+		const order = [at('class="glyph-row"'), at('class="take-line"'), at('class="cue"'), at('class="buttons"'), at('class="actions"'), at('class="chart-box"'), at('class="hint"'), at('class="readings"')];
+		expect(order).toEqual([...order].sort((a, b) => a - b));
+		expect(h).not.toContain('class="stage');
+	});
+
+	it('puts the two resonances in the vowel\'s row, not in the cue\'s', () => {
+		const h = html({ profile: pick('i') });
+		const row = h.slice(h.indexOf('class="glyph-row'), h.indexOf('class="take-line'));
+		expect(row).toMatch(/class="readout[" ]/);
+		expect(h.slice(h.search(/class="cue[" ]/))).not.toMatch(/class="readout[" ]/);
+	});
+
+	it('after the seven in Ilya’s order offers to work out the other three, and says which, in both languages (N.203 Step 6)', () => {
+		const seven = pick('i', 'e', 'ɛ', 'a', 'ɑ', 'o', 'u');
+		const en = html({ profile: seven });
+		expect(en).toContain('Let Ilya work out the other three');
+		expect(text(en)).toContain('You have recorded the vowels Ilya needs. If you wish, it can work out the other three from them: [ɪ], [ɨ], and [ʌ].');
+		expect(en).not.toContain('Use what I’ve recorded');
+		const fr = text(html({ language: 'fr', profile: seven }));
+		expect(fr).toContain('Laisser Ilya déduire les trois autres');
+		expect(fr.replace(/\u00a0/g, ' ')).toContain('il peut en déduire les trois autres : [ɪ], [ɨ] et [ʌ].');
+	});
+
+	it('with all ten sung, says so, offers Re-take for the focused vowel and See your vowel space under the buttons, and invites any vowel again', () => {
 		const h = html({ profile: BASS, startVowel: 'u' });
 		expect(text(h)).toContain('All ten captured. This is your vowel space.');
-		expect(h).toMatch(/class="main[^"]*"[^>]*>Done</);
-		expect(text(h)).toContain('Tap any vowel to sing it again.');
+		expect(h).toMatch(/class="main[^"]*"[^>]*>Re-take \[u\]</);
+		expect(h).toMatch(/class="see-space[^"]*"[^>]*>See your vowel space</);
+		expect(h).not.toContain('Use what I’ve recorded');
+		expect(h).not.toContain('Let Ilya work out');
+		expect(h).not.toContain('>Done<');
+		expect(text(h)).toContain('Tap any vowel to focus on it. Re-take records it again.');
 		expect(text(h)).toContain('10 of 10');
 	});
 
 	it('has the toggle, the progress bar, Start over, and the one plain sentence about the dot and the axes', () => {
 		const h = html({ profile: pick('i') });
 		expect(h).toContain('type="checkbox"');
-		expect(text(h)).toContain('Hide the chart and the readout while I sing');
+		expect(text(h)).toContain('Hide the chart and the readout during a take');
 		expect(h).toContain('role="progressbar"');
 		expect(text(h)).toContain('Start over');
 		expect(text(h)).toContain('Each dot is one of your vowels: the higher your tongue, the higher the dot; the further forward, the nearer the front edge.');
@@ -116,19 +153,19 @@ describe('the screen at rest', () => {
 	it('renders for every voice type and none, and in French, every string French and none missing', () => {
 		for (const voiceType of [undefined, 'soprano', 'contralto', 'countertenor', 'bass-baritone', 'not-sure']) expect(buttons(html({ voiceType }))).toHaveLength(10);
 		const fr = html({ language: 'fr', profile: pick('i') });
-		expect(text(fr)).toContain('Retour au sommaire');
+		expect(text(fr)).toContain('Utiliser ce que j’ai capté');
 		expect(text(fr)).toContain('Tout recommencer');
 		expect(text(fr)).toContain('Vos résonances');
 		expect(text(fr)).toContain('1 sur 10');
 		expect(text(fr)).toContain('Reprendre [i]');
-		expect(text(fr)).toContain('Masquer le graphique et l’affichage pendant que je chante');
-		expect(buttons(fr)[0]).toBe('i cardinal, chantée, sélectionnée');
+		expect(text(fr)).toContain('Masquer le graphique et l’affichage pendant une prise');
+		expect(buttons(fr)[0]).toBe('i cardinal, captée, sélectionnée');
 		expect(text(fr)).toContain('Il en reste 9, dans l’ordre de votre choix.');
 		expect(fr).toContain('aria-label="Graphique des zones des voyelles.');
 		expect(text(fr)).not.toMatch(/MISSING|\{[a-z]+\}/);
 		// And with nothing sung, the first-time explanation and the first-move hint in French.
 		const none = html({ language: 'fr' });
-		expect(text(none)).toContain('Commencer suit l’ordre d’Ilya.');
+		expect(text(none)).toContain('Touchez une voyelle pour l’afficher. Touchez Commencer pour la capter.');
 		expect(text(none)).not.toMatch(/MISSING|\{[a-z]+\}/);
 	});
 });
@@ -164,7 +201,7 @@ describe('the readings list (readings brief, Step 1)', () => {
 	it('marks a sung row and a placeholder row differently, in words for assistive technology and by the legend’s two dots', () => {
 		const h = html({ profile: pick('i', 'e') });
 		expect(rowsOf(h).slice(0, 3)).toEqual([['i', 'sung'], ['e', 'sung'], ['ɪ', 'placed']]);
-		expect(h).toContain('cardinal-i, sung');
+		expect(h).toContain('cardinal-i, recorded');
 		expect(h).toContain('smallcaps-i, placeholder');
 		expect(count(h, /class="mark-sung[ "]/g)).toBe(2);
 		expect(count(h, /class="mark-placed[ "]/g)).toBe(8);
@@ -193,6 +230,6 @@ describe('the readings list (readings brief, Step 1)', () => {
 		const fr = html({ language: 'fr', profile: pick('i') });
 		expect(text(fr)).toContain('Vos lectures');
 		expect(text(fr)).toContain('Voyelle');
-		expect(fr).toContain('i cardinal, chantée');
+		expect(fr).toContain('i cardinal, captée');
 	});
 });

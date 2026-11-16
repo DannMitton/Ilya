@@ -1,63 +1,41 @@
 /**
- * The capture's count-in: sing the vowel first, pause, then fry.
+ * The take's first eight seconds, before the fry: Breathe (2 s, silent), Sing (4 s, four soft ticks), Shape (2 s, silent). Then the fry
+ * begins and the session listens. N.203 lane 59 Step 3, replacing the sung count of 2026-09-30 ("Three. Two. One.", then a 3 s pause).
  *
- * Row 2d part 3, `docs/sessions/brief-code-sing-first-then-fry_r1_2026-09-30.md`.
- * The flow and its strings were RATIFIED by Dann 2026-09-30 21:00. His reason
- * (20:59): most singers are not comfortable going from modal singing straight
- * into fry, so they are given a moment between the two. The sung vowel sets the
- * vocal tract; nothing is captured until the fry step, and the live gate, the
- * sweep, and the engine are unchanged.
+ * Dann's words: 2026-11-15 18:54, "Can the Breath and Keep the shape segments be the same shorter length while the Sing and Fry match a
+ * lottle longer?" (DESK DEFAULT 2, 4, 2, 4 s); 2026-11-16 00:42, "The three two one coun tdown is misleading" (the spoken count leaves the
+ * take; Breathe is silent and named). The sung vowel still sets the vocal tract; nothing is captured until the fry step.
  *
- * Kept out of the component so the order and the intervals are testable
- * without mounting it.
+ * Kept out of the component so the order and the intervals are testable without mounting it.
  */
 
-/** DESK DEFAULT 2026-09-30: one beat of the sung count. Was 700 ms. */
-export const SING_BEAT_MS = 1000;
-/**
- * DESK DEFAULT 2026-09-30: the silent moment between the sung vowel and the fry. Was 2000 ms; 3000 ms from N.199 Step 7 (DESK DEFAULT 2026-11-13,
- * Dann's to strike) so the 13-word pause line, "Stop singing, but maintain the shape of your vocal tract for that vowel.", can be read. Every singer's count-in
- * is six seconds at the ship (the wheel's re-export, `pacifier/count-in.ts`, went with the wheel in N.199 Step 8).
- */
-export const PAUSE_MS = 3000;
+/** DESK DEFAULT 2026-11-16: the breath before the sung vowel. Silent. */
+export const BREATHE_MS = 2000;
+/** The sung vowel. Four soft ticks sound at the start of each of its seconds. */
+export const SING_MS = 4000;
+/** The silent moment between the sung vowel and the fry (was 3 s; the pause line is shorter now, "Stop. Hold that shape, silently."). */
+export const SHAPE_MS = 2000;
+/** One tick a second through Sing. */
+export const TICK_MS = 1000;
 
-export type CountInStep = 'sing' | 'two' | 'one' | 'pause' | 'fry';
+export type CountInStep = 'breathe' | 'sing' | 'tick' | 'shape' | 'fry';
 
-/** When each step fires, in ms from the tap. `fry` is where capture begins. */
+/** When each step fires, in ms from the tap. `fry` is where capture begins. A `tick` fires at the start of each second of Sing (2, 3, 4, and 5 s). */
 export const COUNT_IN: readonly { at: number; step: CountInStep }[] = [
-	{ at: 0, step: 'sing' },
-	{ at: SING_BEAT_MS, step: 'two' },
-	{ at: 2 * SING_BEAT_MS, step: 'one' },
-	{ at: 3 * SING_BEAT_MS, step: 'pause' },
-	{ at: 3 * SING_BEAT_MS + PAUSE_MS, step: 'fry' }
+	{ at: 0, step: 'breathe' },
+	{ at: BREATHE_MS, step: 'sing' },
+	...[0, 1, 2, 3].map((k) => ({ at: BREATHE_MS + k * TICK_MS, step: 'tick' as const })),
+	{ at: BREATHE_MS + SING_MS, step: 'shape' },
+	{ at: BREATHE_MS + SING_MS + SHAPE_MS, step: 'fry' }
 ];
 
 /**
- * Runs the count-in. The first step fires at once, as the tap's own answer;
- * the rest go through `after`, so whoever owns the timers can cancel them all.
+ * Runs the count-in. The first step fires at once, as the tap's own answer; the rest go through `after`, so whoever owns the timers can
+ * cancel them all.
  */
 export function runCountIn(onStep: (step: CountInStep) => void, after: (ms: number, fn: () => void) => void): void {
 	for (const { at, step } of COUNT_IN) {
 		if (at === 0) onStep(step);
 		else after(at, () => onStep(step));
-	}
-}
-
-/**
- * What a singer's tap does to a vowel in a given state. One tap begins
- * (ratified 21:00; the arm step is gone). A tap during the sung count or the
- * pause cancels. A tap while the fry is being captured is ignored, as before;
- * Escape cancels it.
- */
-export function tapAction(state: string): 'begin' | 'cancel' | 'ignore' {
-	switch (state) {
-		case 'preparing':
-		case 'pausing':
-			return 'cancel';
-		case 'listening':
-		case 'working':
-			return 'ignore';
-		default:
-			return 'begin';
 	}
 }

@@ -7,7 +7,7 @@ import { t, tv, type Language } from '$lib/i18n';
 import type { Vowel } from '../engine/types';
 import { VOWELS } from '../engine/types';
 import { spoken, spokenName } from '../vowel-names';
-import type { RitualCue } from '../capture-ritual.svelte';
+import type { RitualCue, RitualPhase } from '../capture-ritual.svelte';
 
 /** The bracketed symbol the eye reads in a sentence. */
 export const bracket = (v: Vowel): string => `[${v}]`;
@@ -52,7 +52,7 @@ export interface Hint {
 export function hintsFor(h: HintInput): Hint[] {
 	const v = { v: bracket(h.selected) };
 	if (h.confirmingClear) return [{ key: 'capture.hint.confirmClear', vars: {} }];
-	if (h.active) return [{ key: 'capture.hint.active', vars: v }];
+	if (h.active) return [{ key: 'capture.hint.active', vars: {} }]; // the sheet's sentence has no {v} (Step 7)
 	const all = h.sung.size === VOWELS.length;
 	if (all) return [{ key: 'capture.hint.finished', vars: {} }];
 	if (h.sung.size === 0) return [{ key: 'capture.hint.first', vars: {} }];
@@ -68,16 +68,33 @@ export function hintsFor(h: HintInput): Hint[] {
 
 export const hintText = (hints: Hint[], language: Language): string => hints.map((x) => tv(x.key, language, x.vars)).join(' ');
 
-export type MainButton = { kind: 'start' | 'retake' | 'inProgress' | 'done'; label: string; disabled: boolean };
+export type MainButton = { kind: 'start' | 'retake' | 'inProgress'; label: string; disabled: boolean };
 
-/** The main button: Start, Re-take, "in progress" (disabled), or Done when all ten are sung and nothing is running. */
+/** The main button: Start for the focused vowel, Re-take once it is recorded (all ten included: the way on is "See your vowel space"), or "in progress" (disabled). */
 export function mainButton(active: boolean, sung: ReadonlySet<Vowel>, selected: Vowel, language: Language): MainButton {
 	const v = { v: bracket(selected) };
 	if (active) return { kind: 'inProgress', label: tv('capture.inProgress', language, v), disabled: true };
-	if (sung.size === VOWELS.length) return { kind: 'done', label: tv('capture.done', language), disabled: false };
 	return sung.has(selected)
 		? { kind: 'retake', label: tv('capture.retake', language, v), disabled: false }
 		: { kind: 'start', label: tv('capture.start', language, v), disabled: false };
+}
+
+/**
+ * What a tap on a vowel does, from its button or from the chart (N.203 Step 5): it focuses at rest and never records; during the dwell on a new dot it ends
+ * the dwell and focuses; during a take it does nothing.
+ */
+export function tapEffect(phase: RitualPhase): 'focus' | 'endDwellAndFocus' | 'ignore' {
+	if (phase === 'idle') return 'focus';
+	return phase === 'landing' ? 'endDwellAndFocus' : 'ignore';
+}
+
+/**
+ * What a tap on a vowel during the dwell leaves behind (follow-up fix 4): the focus is the tapped vowel, and both things the dwell had queued are cleared, the
+ * vowel Ilya's rule would have moved to, and the return to the summary that ends a re-take pass. Cleared together, so the screen does not leave under a
+ * singer who has just chosen a vowel.
+ */
+export function focusFromDwell(tapped: Vowel): { selected: Vowel; pendingSelected: null; returnWhenIdle: false } {
+	return { selected: tapped, pendingSelected: null, returnWhenIdle: false };
 }
 
 /** What the secondary button reads: Stop while a take runs, "Clear all" once Start over is tapped, "Start over" otherwise. */
@@ -104,12 +121,9 @@ export function idleCue(selected: Vowel, sung: ReadonlySet<Vowel>): RitualCue {
 /** Cues that stay on the screen after a take ends because the singer needs to read them: everything but a plain capture. */
 export const staysAfterTake = (key: string): boolean => key !== 'pacifier.captured';
 
-/**
- * The first-time explanation of sing, stop, and fry (the tree's ratified sentence, `calib.capture.cuePrefix` + the vowel + `cueSuffix`),
- * which shows under the cue line until the first take begins.
- */
+/** The first-time explanation of the take (sheet line 17, ratified), under the cue until the first take has begun; `{v}` is the bracketed symbol. */
 export function firstTimeExplanation(v: Vowel, language: Language): string {
-	return `${t('calib.capture.cuePrefix', language)} ${bracket(v)} ${spokenName(v, language)} ${t('calib.capture.cueSuffix', language)}`;
+	return tv('capture.firstTime', language, { v: bracket(v) });
 }
 
 /** Board D's optical nudges for each vowel's symbol in the circle, in em, in `VOWELS` order (Dann 2026-11-12: "visually centre the vowel"). */

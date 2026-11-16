@@ -14,7 +14,7 @@ describe('the ten buttons', () => {
 		const states = buttonStates(S('i'));
 		expect(states.i).toBe('sung');
 		expect(states.e).toBe('placed');
-		expect(buttonLabel('i', 'sung', true, 'en')).toBe('cardinal-i, sung, selected');
+		expect(buttonLabel('i', 'sung', true, 'en')).toBe('cardinal-i, recorded, selected');
 		expect(buttonLabel('ɨ', 'placed', false, 'en')).toBe('velar-i, placeholder');
 		expect(buttonLabel('ɨ', 'placed', false, 'fr')).toBe('i vélaire, valeur par défaut');
 	});
@@ -26,11 +26,11 @@ describe('the ten buttons', () => {
 describe('the hint', () => {
 	const base = { active: false, confirmingClear: false, selected: 'i' as Vowel, sung: S(), voiceType: 'bass' };
 	it('names the first move when nothing is sung', () => {
-		expect(hintText(hintsFor(base), 'en')).toBe('Start follows Ilya’s order. Or tap any vowel to sing that one now.');
+		expect(hintText(hintsFor(base), 'en')).toBe('Tap a vowel to focus on it. Tap Start to record it.');
 	});
 	it('says what ends a take while one runs, and only that', () => {
-		expect(hintsFor({ ...base, active: true, sung: S('i') })).toEqual([{ key: 'capture.hint.active', vars: { v: '[i]' } }]);
-		expect(hintText(hintsFor({ ...base, active: true }), 'en')).toBe('Stop, or a second tap on [i], ends this take. Nothing is saved from it.');
+		expect(hintsFor({ ...base, active: true, sung: S('i') })).toEqual([{ key: 'capture.hint.active', vars: {} }]);
+		expect(hintText(hintsFor({ ...base, active: true }), 'en')).toBe('Stop ends this take and sets it aside.');
 	});
 	it('asks for the second tap on Clear all, and only that', () => {
 		expect(hintText(hintsFor({ ...base, confirmingClear: true, sung: S('i') }), 'en')).toBe('Tap Clear all to clear every reading for this voice.');
@@ -38,11 +38,11 @@ describe('the hint', () => {
 	});
 	it('invites a re-take of a sung vowel, then says how many remain', () => {
 		const t = hintText(hintsFor({ ...base, sung: S('i', 'e'), selected: 'i' }), 'en');
-		expect(t).toBe('A re-take replaces [i] only if the new reading is as clear. 8 to go, in any order. Ilya keeps a placeholder for each until you sing it.');
+		expect(t).toBe('A re-take replaces [i] only if the new reading is as clear. 8 to go, in any order. Ilya keeps a placeholder for each until you record it.');
 	});
 	it('says a placeholder stands in for an unsung selection, from the voice type or from typical voices, never that it is wrong', () => {
 		const typed = hintText(hintsFor({ ...base, sung: S('i'), selected: 'ɑ', voiceType: 'bass' }), 'en');
-		expect(typed).toBe('Ilya has placed [ɑ] from your voice type for now. Its placeholder moves as you sing. 9 to go, in any order. Ilya keeps a placeholder for each until you sing it.');
+		expect(typed).toBe('Ilya has placed [ɑ] from your voice type for now. Its placeholder moves as you record. 9 to go, in any order. Ilya keeps a placeholder for each until you record it.');
 		for (const type of [undefined, '', 'not-sure']) {
 			expect(hintText(hintsFor({ ...base, sung: S('i'), selected: 'ɑ', voiceType: type }), 'en')).toContain('from typical voices');
 		}
@@ -50,7 +50,7 @@ describe('the hint', () => {
 		expect(hasDeclaredType('not-sure')).toBe(false);
 	});
 	it('invites any vowel again once all ten are sung', () => {
-		expect(hintText(hintsFor({ ...base, sung: ALL }), 'en')).toBe('Tap any vowel to sing it again.');
+		expect(hintText(hintsFor({ ...base, sung: ALL }), 'en')).toBe('Tap any vowel to focus on it. Re-take records it again.');
 	});
 	it('counts to go in digits in both languages (Dann 2026-11-13 11:52)', () => {
 		const some = { ...base, sung: S('i', 'e', 'u') };
@@ -73,11 +73,11 @@ describe('the hint', () => {
 });
 
 describe('the main button', () => {
-	it('is Start for an unsung vowel, Re-take for a sung one, in progress and disabled mid-take, and Done at ten', () => {
+	it('is Start for an unsung vowel, Re-take for a sung one (the focused vowel’s, at ten too), and in progress and disabled mid-take', () => {
 		expect(mainButton(false, S('i'), 'e', 'en')).toEqual({ kind: 'start', label: 'Start [e]', disabled: false });
 		expect(mainButton(false, S('i', 'e'), 'e', 'en')).toEqual({ kind: 'retake', label: 'Re-take [e]', disabled: false });
 		expect(mainButton(true, S('i'), 'e', 'en')).toEqual({ kind: 'inProgress', label: '[e] in progress', disabled: true });
-		expect(mainButton(false, ALL, 'e', 'en')).toEqual({ kind: 'done', label: 'Done', disabled: false });
+		expect(mainButton(false, ALL, 'e', 'en')).toEqual({ kind: 'retake', label: 'Re-take [e]', disabled: false });
 	});
 	it('the secondary button is Stop mid-take, Clear all once Start over is tapped, and the tree’s Start over otherwise', () => {
 		expect(stopLabel(true, false, 'en')).toBe('Stop');
@@ -90,21 +90,23 @@ describe('the main button', () => {
 describe('the cue', () => {
 	it('shows the bracketed symbol to the eye and the spoken name to the ear', () => {
 		expect(cueText({ key: 'pacifier.singFirst', vowel: 'ɨ' }, 'en')).toEqual({
-			eye: 'Sing [ɨ] as you usually do. Three.',
-			ear: 'Sing the velar-i vowel as you usually do. Three.'
+			eye: 'Sing [ɨ] as you usually do.',
+			ear: 'Sing the velar-i vowel as you usually do.'
 		});
 		expect(cueText({ key: 'capture.cue.ready', vowel: 'i' }, 'en').eye).toBe('Ready for [i].');
 		expect(cueText({ key: 'capture.cue.ready', vowel: 'i' }, 'en').ear).toBe('Ready for the cardinal-i vowel.');
-		expect(cueText({ key: 'calib.readiness.countTwo', vowel: 'i' }, 'en')).toEqual({ eye: 'Two.', ear: 'Two.' });
+		expect(cueText({ key: 'capture.cue.breathe', vowel: 'i' }, 'en')).toEqual({ eye: 'Breathe.', ear: 'Breathe.' });
+		expect(cueText({ key: 'pacifier.pause', vowel: 'i' }, 'en').eye).toBe('Stop. Hold that shape, silently.');
+		expect(cueText({ key: 'pacifier.nowSustain', vowel: 'i' }, 'en').eye).toBe('Now sustain. Ilya is measuring.');
 		expect(cueText({ key: '', vowel: null }, 'en')).toEqual({ eye: '', ear: '' });
 	});
 	it('reads a tree key in the language and a draft key in English', () => {
-		expect(cueText({ key: 'pacifier.pause', vowel: 'i' }, 'fr').eye).toBe('Arrêtez de chanter, mais gardez la forme de votre conduit vocal pour cette voyelle.');
+		expect(cueText({ key: 'pacifier.pause', vowel: 'i' }, 'fr').eye).toBe('Arrêtez. Gardez cette forme, en silence.');
 		expect(cueText({ key: 'capture.uncertain', vowel: 'e' }, 'fr').eye).toBe('[e] est noté, même si cette prise était moins nette. Une reprise peut le remplacer.');
 	});
 	it('every key the ritual can emit has words in both the draft and the tree: no [MISSING]', () => {
 		const keys = [
-			'pacifier.singFirst', 'calib.readiness.countTwo', 'calib.readiness.countOne', 'pacifier.pause', 'pacifier.beginPhonating', 'pacifier.nowSustain',
+			'capture.cue.breathe', 'pacifier.singFirst', 'pacifier.pause', 'pacifier.beginPhonating', 'pacifier.nowSustain',
 			'pacifier.captured', 'pacifier.rolledBack', 'capture.uncertain', 'pacifier.cancelled', 'pacifier.error.micPermission', 'pacifier.error.micNotFound',
 			'pacifier.error.noAudio', 'pacifier.error.tooShort', 'pacifier.error.default'
 		];
@@ -124,11 +126,10 @@ describe('the cue', () => {
 });
 
 describe('the first-time explanation', () => {
-	it('is the tree’s ratified sentence about sing, stop, and fry, for the vowel in the selection', () => {
+	it('is sheet line 17, for the vowel in the selection (the bracketed symbol)', () => {
 		const en = firstTimeExplanation('i', 'en');
-		expect(en.startsWith('Tap the [i] cardinal-i vowel to begin. First sing it as you usually do')).toBe(true);
-		expect(en).toContain('Ilya measures only the fry.');
-		expect(firstTimeExplanation('i', 'fr')).toContain('[i] i cardinal');
+		expect(en).toBe('Start gives you a breath, then [i]. Sing it first as you usually do, to coordinate the shape of your vocal tract. Then stop, but keep that shape, and begin again, this time in vocal fry. Ilya measures the fry.');
+		expect(firstTimeExplanation('i', 'fr')).toContain('puis vient [i]. Chantez-la d’abord comme d’habitude');
 	});
 });
 

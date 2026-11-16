@@ -11,6 +11,7 @@
 <script lang="ts">
 	import type { Vowel } from '../engine/types';
 	import { labelSizeFor, type View } from './geometry';
+	import { chartPoint, vowelForTap } from './tap';
 	import { CHART_W, CHART_H, type ChartModel } from './model';
 	import ChartLayers from './ChartLayers.svelte';
 	import { tv, type Language } from '$lib/i18n';
@@ -19,19 +20,32 @@
 		model,
 		view,
 		language,
-		active = null
+		active = null,
+		onFocus
 	}: {
 		model: ChartModel;
 		view: View;
 		language: Language;
 		/** The vowel being measured: its zone takes a deeper saturation. */
 		active?: Vowel | null;
+		/** A tap inside one or more zones focuses the vowel whose dot is nearest (`tap.ts`). Absent: the chart takes no taps. */
+		onFocus?: (vowel: Vowel) => void;
 	} = $props();
 
 	// The chart scales to the width it is given, so a symbol sized in its own units shrinks on a phone. The grid's numbers and the axis words are sized
 	// to hold 11 CSS px at any width (Step 6b amendment): the unit size is 11 times the ratio of the frame to the rendered width.
 	let width = $state(0);
 	const labelSize = $derived(labelSizeFor(CHART_W, width));
+
+	/** A tap (a `click`, never `pointerdown` or `touchstart`: the chart sits where a thumb scrolls, and a scroll that starts on it must not change the focus). */
+	function tapped(ev: MouseEvent) {
+		if (!onFocus) return;
+		const p = chartPoint(ev.clientX, ev.clientY, (ev.currentTarget as SVGRectElement).ownerSVGElement!.getBoundingClientRect(), CHART_W, CHART_H);
+		if (!p) return;
+		// Read against the view as it stands at this instant: it may be mid-glide.
+		const v = vowelForTap(p.x, p.y, view, CHART_W, CHART_H, model.zones, model.sung, model.placeholders);
+		if (v) onFocus(v);
+	}
 </script>
 
 <svg class="vowel-chart" bind:clientWidth={width} viewBox="0 0 {CHART_W} {CHART_H}" role="img" aria-label={tv('capture.chartAlt', language)} preserveAspectRatio="xMidYMid meet">
@@ -50,6 +64,9 @@
 		{labelSize}
 	/>
 	<rect x="0.6" y="0.6" width={CHART_W - 1.2} height={CHART_H - 1.2} class="frame" />
+	<!-- The tap layer: hidden from assistive technology and out of the tab order. The ten buttons are the keyboard and screen-reader path to the same act. -->
+	<!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+	<rect x="0" y="0" width={CHART_W} height={CHART_H} class="tap-layer" aria-hidden="true" onclick={tapped} />
 </svg>
 
 <style>
@@ -57,11 +74,15 @@
 		display: block;
 		width: 100%;
 		height: auto;
-		/* The chart is a drawing, not a control: a tap on it does nothing and must not select text. */
+		/* A tap on the chart focuses a vowel (`tap.ts`); it must not select text. */
 		user-select: none;
 	}
 	.ground {
 		fill: var(--paper-light, #f5f1e8);
+	}
+	.tap-layer {
+		fill: transparent;
+		cursor: pointer;
 	}
 	.frame {
 		fill: none;

@@ -19,10 +19,10 @@ const RATIFIED: Array<[string, string, string]> = [
 	['sheet.col.vowel', 'Vowel', 'Voyelle'],
 	['sheet.col.fr1', 'Hz and note', 'Hz et note'],
 	['sheet.col.fr2', 'Hz and note', 'Hz et note'],
-	['sheet.legend.sung', 'A vowel you sang, measured in vocal fry.', 'Une voyelle que vous avez chantée, mesurée en friture vocale.'],
-	['sheet.legend.placeholder', 'A placeholder: where Ilya expects a vowel you have not sung yet.', 'Une valeur par défaut : là où Ilya attend une voyelle que vous n’avez pas encore chantée.'],
+	['sheet.legend.sung', 'A vowel you recorded, measured in vocal fry.', 'Une voyelle que vous avez captée, mesurée en friture vocale.'],
+	['sheet.legend.placeholder', 'A placeholder: where Ilya expects a vowel you have not recorded yet.', 'Une valeur par défaut : là où Ilya attend une voyelle que vous n’avez pas encore captée.'],
 	['sheet.legend.zones', 'Each coloured area reflects the neighbourhood where Ilya expects a vowel to resonate in a voice like yours. The lavender areas mark [ɪ], [ɨ], [a], and [ʌ]: Ilya can work out these four from your samples of the other six, or you can choose to sample them directly. Overlap between areas (where the colours blend) is normal.', 'Chaque zone colorée reflète le voisinage où Ilya s’attend à ce qu’une voyelle résonne dans une voix comme la vôtre. Les zones lavande marquent [ɪ], [ɨ], [a] et [ʌ]\u00a0: Ilya peut déduire ces quatre-là de vos échantillons des six autres, ou vous pouvez choisir de les chanter directement. Le chevauchement entre les zones (là où les couleurs se fondent) est normal.'],
-	['sheet.legend.hull', 'The outline surrounds your sung vowels. It is dashed until all ten are sung.', 'Le contour entoure vos voyelles chantées. Il reste en pointillé jusqu’à ce que les dix soient chantées.'],
+	['sheet.legend.hull', 'The outline surrounds your recorded vowels. It is dashed until all ten are recorded.', 'Le contour entoure vos voyelles captées. Il reste en pointillé jusqu’à ce que les dix soient captées.'],
 	['sheet.axis.front', 'tongue forward', 'langue avancée'],
 	['sheet.axis.back', 'tongue back', 'langue reculée'],
 	['sheet.axis.open', 'mouth more open', 'bouche plus ouverte'],
@@ -36,25 +36,48 @@ const RATIFIED: Array<[string, string, string]> = [
 	['capture.start', 'Start {v}', 'Commencer {v}'],
 	['capture.retake', 'Re-take {v}', 'Reprendre {v}'],
 	['capture.inProgress', '{v} in progress', '{v} en cours'],
-	['capture.done', 'Done', 'Terminé'],
+	['capture.done', 'Done', 'Terminé'], // UNUSED since N.203 lane 59 Step 2, kept
+	['capture.seeSpace', 'See your vowel space', 'Voir votre espace vocalique'],
+	['capture.part.breathe', 'Breathe', 'Respiration'],
+	['capture.part.sing', 'Sing', 'Chant'],
+	['capture.part.shape', 'Shape', 'Forme'],
+	['capture.part.fry', 'Fry', 'Friture'],
+	['capture.cue.breathe', 'Breathe.', 'Respirez.'],
+	['capture.firstTime', 'Start gives you a breath, then {v}. Sing it first as you usually do, to coordinate the shape of your vocal tract. Then stop, but keep that shape, and begin again, this time in vocal fry. Ilya measures the fry.', 'Commencer vous laisse le temps d’une respiration, puis vient {v}. Chantez-la d’abord comme d’habitude, pour coordonner la forme de votre conduit vocal. Puis arrêtez, mais gardez cette forme, et recommencez, cette fois en friture vocale. Ilya mesure la friture.'],
+	['capture.finish.useRecorded', 'Use what I’ve recorded', 'Utiliser ce que j’ai capté'],
+	['capture.finish.useRecorded.caption', 'If you wish, you can stop here: Ilya fills the other {m} from what you have recorded so far.', 'Si vous le souhaitez, vous pouvez vous arrêter ici\u00a0: Ilya complète les {m} autres à partir de ce que vous avez capté jusqu’ici.'],
+	['capture.finish.useRecorded.captionLast', 'If you wish, you can stop here: Ilya fills the last one from what you have recorded so far.', 'Si vous le souhaitez, vous pouvez vous arrêter ici\u00a0: Ilya complète la dernière à partir de ce que vous avez capté jusqu’ici.'],
+	['capture.finish.workOut.last', 'Let Ilya work out the last one', 'Laisser Ilya déduire la dernière'],
+	['capture.finish.workOut.many', 'Let Ilya work out the other {m}', 'Laisser Ilya déduire les {m} autres'],
+	['capture.finish.workOut.caption', 'You have recorded the vowels Ilya needs. If you wish, it can work out the other {m} from them: {vowels}.', 'Vous avez capté les voyelles dont Ilya a besoin. Si vous le souhaitez, il peut en déduire les {m} autres\u00a0: {vowels}.'],
+	['capture.finish.workOut.captionLast', 'You have recorded the vowels Ilya needs. If you wish, it can work out the last one from them: {vowel}.', 'Vous avez capté les voyelles dont Ilya a besoin. Si vous le souhaitez, il peut en déduire la dernière\u00a0: {vowel}.'],
+	['capture.list.and', 'and', 'et'],
+	['capture.number.2', 'two', 'deux'],
+	['capture.number.3', 'three', 'trois'],
+	['capture.number.4', 'four', 'quatre'],
+	['capture.number.5', 'five', 'cinq'],
+	['capture.number.6', 'six', 'six'],
+	['capture.number.7', 'seven', 'sept'],
+	['capture.number.8', 'eight', 'huit'],
+	['capture.number.9', 'nine', 'neuf'],
 	['capture.stop', 'Stop', 'Arrêter'],
 	['capture.clearAll', 'Clear all', 'Tout effacer'],
-	['capture.hide', 'Hide the chart and the readout while I sing', 'Masquer le graphique et l’affichage pendant que je chante'],
-	['capture.hidden', 'The chart and the readout are hidden while you sing. They return when this vowel is captured.', 'Le graphique et l’affichage sont masqués pendant que vous chantez. Ils réapparaissent quand cette voyelle est captée.'],
-	['capture.hint.first', 'Start follows Ilya’s order. Or tap any vowel to sing that one now.', 'Commencer suit l’ordre d’Ilya. Ou touchez une voyelle pour la chanter tout de suite.'],
-	['capture.hint.active', 'Stop, or a second tap on {v}, ends this take. Nothing is saved from it.', 'Touchez {v} de nouveau, ou Arrêter, pour mettre fin à cette prise. Rien n’en est conservé.'],
+	['capture.hide', 'Hide the chart and the readout during a take', 'Masquer le graphique et l’affichage pendant une prise'],
+	['capture.hidden', 'The chart and the readout are hidden during the take. They return when this vowel is captured.', 'Le graphique et l’affichage sont masqués pendant la prise. Ils réapparaissent quand cette voyelle est captée.'],
+	['capture.hint.first', 'Tap a vowel to focus on it. Tap Start to record it.', 'Touchez une voyelle pour l’afficher. Touchez Commencer pour la capter.'],
+	['capture.hint.active', 'Stop ends this take and sets it aside.', 'Arrêter met fin à cette prise et la met de côté.'],
 	['capture.hint.retake', 'A re-take replaces {v} only if the new reading is as clear.', 'Une reprise ne remplace {v} que si la nouvelle lecture est aussi nette.'],
-	['capture.hint.placed.typed', 'Ilya has placed {v} from your voice type for now. Its placeholder moves as you sing.', 'Ilya a placé {v} d’après votre type de voix, pour l’instant. Sa valeur par défaut évolue à mesure que vous chantez.'],
-	['capture.hint.placed.untyped', 'Ilya has placed {v} from typical voices for now. Its placeholder moves as you sing.', 'Ilya a placé {v} d’après des voix typiques, pour l’instant. Sa valeur par défaut évolue à mesure que vous chantez.'],
-	['capture.hint.toGo', '{count} to go, in any order. Ilya keeps a placeholder for each until you sing it.', 'Il en reste {count}, dans l’ordre de votre choix. Ilya garde une valeur par défaut pour chaque voyelle jusqu’à ce que vous la chantiez.'],
-	['capture.hint.finished', 'Tap any vowel to sing it again.', 'Touchez une voyelle pour la chanter de nouveau.'],
+	['capture.hint.placed.typed', 'Ilya has placed {v} from your voice type for now. Its placeholder moves as you record.', 'Ilya a placé {v} d’après votre type de voix, pour l’instant. Sa valeur par défaut évolue à mesure que vous captez vos voyelles.'],
+	['capture.hint.placed.untyped', 'Ilya has placed {v} from typical voices for now. Its placeholder moves as you record.', 'Ilya a placé {v} d’après des voix typiques, pour l’instant. Sa valeur par défaut évolue à mesure que vous captez vos voyelles.'],
+	['capture.hint.toGo', '{count} to go, in any order. Ilya keeps a placeholder for each until you record it.', 'Il en reste {count}, dans l’ordre de votre choix. Ilya garde une valeur par défaut pour chaque voyelle jusqu’à ce que vous la captiez.'],
+	['capture.hint.finished', 'Tap any vowel to focus on it. Re-take records it again.', 'Touchez une voyelle pour l’afficher. Reprendre la capte de nouveau.'],
 	['capture.hint.confirmClear', 'Tap Clear all to clear every reading for this voice.', 'Touchez Tout effacer pour effacer toutes les lectures de cette voix.'],
 	['capture.uncertain', '{v} is noted, though this take was less clear. A re-take can replace it.', '{v} est noté, même si cette prise était moins nette. Une reprise peut le remplacer.'],
-	['capture.button.sung', 'sung', 'chantée'],
+	['capture.button.sung', 'recorded', 'captée'],
 	['capture.button.placed', 'placeholder', 'valeur par défaut'],
 	['capture.button.selected', 'selected', 'sélectionnée'],
 	['capture.bar', 'Progress of this take', 'Progression de cette prise'],
-	['capture.chartAlt', 'Chart of the vowel zones. It moves in on the vowel being measured, and a dot shows the reading.', 'Graphique des zones des voyelles. Il se rapproche de la voyelle mesurée, et un point en montre la lecture.'],
+	['capture.chartAlt', 'Chart of the vowel zones. It moves in on the vowel in focus, and a dot shows each reading.', 'Graphique des zones des voyelles. Il se rapproche de la voyelle affichée, et un point montre chaque lecture.'],
 	['capture.drawingAlt', 'Side view of the mouth and throat for {name}', 'Vue de profil de la bouche et de la gorge pour {name}'],
 	['capture.vowels', 'The ten vowels', 'Les dix voyelles'],
 	['sheet.print', 'Print this sheet', 'Imprimer cette feuille'],
@@ -64,8 +87,8 @@ const RATIFIED: Array<[string, string, string]> = [
 ];
 
 describe('the ratified calibration and sheet strings', () => {
-	it('pins all forty-eight, in both languages', () => {
-		expect(RATIFIED).toHaveLength(48);
+	it('pins all seventy-one, in both languages', () => {
+		expect(RATIFIED).toHaveLength(71);
 		for (const [key, en, fr] of RATIFIED) {
 			expect(t(key, 'en'), `${key} en`).toBe(en);
 			expect(t(key, 'fr'), `${key} fr`).toBe(fr);
@@ -78,13 +101,18 @@ describe('the ratified calibration and sheet strings', () => {
 	});
 
 	it('pins the pause line (EN 2026-11-13 01:05, FR 10:30)', () => {
-		expect(t('pacifier.pause', 'en')).toBe('Stop singing, but maintain the shape of your vocal tract for that vowel.');
-		expect(t('pacifier.pause', 'fr')).toBe('Arrêtez de chanter, mais gardez la forme de votre conduit vocal pour cette voyelle.');
+		expect(t('pacifier.pause', 'en')).toBe('Stop. Hold that shape, silently.');
+		expect(t('pacifier.pause', 'fr')).toBe('Arrêtez. Gardez cette forme, en silence.');
+		// N.203 sheet line 16 and the words supplement's item 8, RATIFIED 2026-11-16. The keys are `pacifier.`, so they are pinned here, not in the list.
+		expect(t('pacifier.singFirst', 'en')).toBe('Sing {v} as you usually do.');
+		expect(t('pacifier.singFirst', 'fr')).toBe('Chantez {v} comme d’habitude.');
+		expect(t('pacifier.nowSustain', 'en')).toBe('Now sustain. Ilya is measuring.');
+		expect(t('pacifier.nowSustain', 'fr')).toBe('Soutenez maintenant. Ilya mesure.');
 	});
 
 	it('fills its placeholders with `tv` and leaves an unfilled one showing', () => {
-		expect(tv('capture.hint.toGo', 'en', { count: 7 })).toBe('7 to go, in any order. Ilya keeps a placeholder for each until you sing it.');
-		expect(tv('capture.hint.toGo', 'fr', { count: 7 })).toBe('Il en reste 7, dans l’ordre de votre choix. Ilya garde une valeur par défaut pour chaque voyelle jusqu’à ce que vous la chantiez.');
+		expect(tv('capture.hint.toGo', 'en', { count: 7 })).toBe('7 to go, in any order. Ilya keeps a placeholder for each until you record it.');
+		expect(tv('capture.hint.toGo', 'fr', { count: 7 })).toBe('Il en reste 7, dans l’ordre de votre choix. Ilya garde une valeur par défaut pour chaque voyelle jusqu’à ce que vous la captiez.');
 		expect(tv('capture.count', 'fr', { n: 3 })).toBe('3 sur 10');
 		expect(tv('capture.start', 'en', { v: '[ɨ]' })).toBe('Start [ɨ]');
 		expect(tv('capture.drawingAlt', 'en', { name: 'velar-i' })).toBe('Side view of the mouth and throat for velar-i');

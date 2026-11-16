@@ -57,8 +57,14 @@ export function placeholderLabel(generic: boolean, voiceType: VoiceTypeChoice | 
 	return generic ? voiceTypePrint(voiceType, language) : undefined;
 }
 
-/** The Method endnote's string key: a placeholder voice names no calibration and no date (RATIFIED by Dann 2026-11-10; the strings are pinned in `ratified-lines.test.ts`). */
-export function methodLineKey(o: { generic: boolean; typed: boolean }): string {
+/**
+ * The Method endnote's string key. With a score: a placeholder voice names no calibration and no date (RATIFIED by Dann 2026-11-10; the strings are pinned in
+ * `ratified-lines.test.ts`). With no score (`noScore`, N.203 lane 59 Step 8; sheet lines 28 and 29, RATIFIED 2026-11-16): the line reads what the voice rests on,
+ * not the model, which a page with no score never has: `samples` (the voice rests on the singer's own samples, `restsOnSamples`), else `generic` (the five
+ * voice types' generic values, nothing usable recorded), else neither (contralto, countertenor, bass-baritone, "Not sure", or no type).
+ */
+export function methodLineKey(o: { generic: boolean; typed: boolean; noScore?: boolean; samples?: boolean }): string {
+	if (o.noScore) return o.samples ? 'insights.method.noScore.samples' : o.generic ? 'insights.method.noScore.generic' : 'insights.method.noScore.none';
 	const kind = o.typed ? 'typed' : 'untyped';
 	return o.generic ? `insights.method.generic.${kind}` : `insights.method.${kind}`;
 }

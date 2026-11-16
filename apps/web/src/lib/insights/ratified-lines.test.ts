@@ -414,6 +414,16 @@ describe('row 166: the six ratified placeholder strings', () => {
 		expect(t('insights.r2.vowels.against.generic', 'en')).toBe('against where each vowel turns in a generic {voiceType}');
 		expect(t('insights.r2.vowels.against.generic', 'fr')).toBe('selon la hauteur où chaque voyelle change de timbre pour une voix type de {voiceType}');
 	});
+	it('the no-score page: the ratified sentence, and the three method lines (N.203 sheet lines 27 to 29 and the new line, RATIFIED 2026-11-16)', () => {
+		expect(t('insights.silence.noScore', 'en')).toBe('INSIGHTS measures a piece from its score, and connects it to your voice. Add a score in the INPUT pane to begin.');
+		expect(t('insights.silence.noScore', 'fr')).toBe('Les APERÇUS mesurent une pièce à partir de sa partition, et la relient à votre voix. Ajoutez une partition dans le volet ENTRÉE pour commencer.');
+		expect(t('insights.method.noScore.samples', 'en')).toBe('Method: from your resonance profile, measured in VOICE.');
+		expect(t('insights.method.noScore.samples', 'fr')).toBe('Méthode\u00a0: à partir de votre profil de résonances, mesuré dans VOIX.');
+		expect(t('insights.method.noScore.generic', 'en')).toBe('Method: from generic values for your voice type, until you record your own vowels.');
+		expect(t('insights.method.noScore.generic', 'fr')).toBe('Méthode\u00a0: à partir de valeurs par défaut pour votre type de voix, jusqu’à ce que vous captiez vos propres voyelles.');
+		expect(t('insights.method.noScore.none', 'en')).toBe('Method: record your vowels in VOICE, and this page computes from your voice.');
+		expect(t('insights.method.noScore.none', 'fr')).toBe('Méthode\u00a0: captez vos voyelles dans VOIX, et cette page calcule à partir de votre voix.');
+	});
 	it('the method lines: the two placeholder forms, and "including repeats" in the two calibrated forms (French unchanged)', () => {
 		expect(t('insights.method.generic.typed', 'en')).toBe('Method: computed from placeholder values for your voice type, the voice characteristics you typed, and the score as sung, including repeats.');
 		expect(t('insights.method.generic.untyped', 'en')).toBe('Method: computed from placeholder values for your voice type and the score as sung, including repeats.');
