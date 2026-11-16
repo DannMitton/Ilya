@@ -49,7 +49,9 @@ One browser test: the stub's room is `no-fry`; Start; the refusal (line 13) show
 | integration | 159 passed (159) |
 | ratchets | OK |
 
-Web unit is one more test than Step 4's 6481 passed plus one failed... precisely: 6481 passed before; now 6480 passed and 1 failed, 6481 in all; no unit test was added in these fixes (they are browser tests). **The one failure** is `src/lib/text/syntactic-break-unit.test.ts` ("property: breakTarget agrees with unitEnd ... on random songs"), "Test timed out in 5000ms" under the full run's load, in a file this lane does not touch. It passes alone, three runs out of three. Same shape as the `open-extract` timeout of earlier runs: a 5 s limit on a two-core machine.
+Web unit: 6,481 tests ran in all (6,480 passed and 1 failed), the same 6,481 that passed at Step 4; these fixes added browser tests only, no unit test.
+
+**The one failure** is `src/lib/text/syntactic-break-unit.test.ts` ("property: breakTarget agrees with unitEnd ... on random songs"), "Test timed out in 5000ms" under the full run's load, in a file this lane does not touch. It passes alone, three runs out of three. Same shape as the `open-extract` timeout of earlier runs: a 5 s limit on a two-core machine.
 
 **Playwright, `voice-pane`, `calibrate-new`, `singer-paths`, `insights-no-score`, one run, Chromium, 14.2 minutes: 68 passed, 1 failed.** By file: `voice-pane` 19 passed, `singer-paths` 7, `insights-no-score` 6, `calibrate-new` 36 passed and 1 failed.
 
