@@ -26,6 +26,7 @@
 	import TakeLine from './TakeLine.svelte';
 	import { TAKE_PART_IDS, TAKE_WEIGHTS } from './take-line';
 	import { createVisit } from './visit';
+	import { finishEarlyState, finishEarlyText } from './chart/finish-early';
 	import { spokenName } from './vowel-names';
 	import FrSym from './FrSym.svelte';
 	import VowelChart from './chart/VowelChart.svelte';
@@ -255,7 +256,11 @@
 			ritual.cancel();
 		}
 	}
-	const returnShown = $derived(ritual.phase === 'idle' && sungSet.size >= 1 && !finished);
+	/** The quiet control at the foot, from the first recorded vowel to the ninth, at rest: what it offers and what it says (`chart/finish-early.ts`). */
+	const finishWords = $derived.by(() => {
+		const state = ritual.phase === 'idle' ? finishEarlyState(profile, voiceType, sungSet) : null;
+		return state ? finishEarlyText(state, language) : null;
+	});
 	const seeSpaceShown = $derived(ritual.phase === 'idle' && finished);
 	const stopDisabled = $derived(!active && (running || sungSet.size === 0));
 </script>
@@ -388,8 +393,9 @@
 		<span>{tv('capture.hide', language)}</span>
 	</label>
 
-	{#if returnShown}
-		<button type="button" class="return" onclick={onReturn}>{t('calib.capture.returnToSummary', language)}</button>
+	{#if finishWords}
+		<button type="button" class="return" onclick={onReturn}>{finishWords.link}</button>
+		{#if finishWords.caption}<p class="finish-caption">{finishWords.caption}</p>{/if}
 	{/if}
 </div>
 
@@ -762,6 +768,12 @@
 		height: 20px;
 		margin: 0;
 		accent-color: var(--lavender-jewel);
+	}
+	.finish-caption {
+		margin: 0;
+		font-size: 0.8125rem;
+		line-height: 1.4;
+		color: var(--ink-secondary);
 	}
 	.see-space {
 		padding: 0 1.1rem;

@@ -63,9 +63,11 @@ describe('the screen at rest', () => {
 
 	it('offers a re-take for a sung selection, and a way back to the summary as soon as one vowel is sung, not before', () => {
 		const none = html();
-		expect(none).not.toContain('Return to summary');
+		expect(none).not.toContain('Use what I’ve recorded');
+		expect(none).not.toContain('Let Ilya work out');
 		const one = html({ profile: pick('i') });
-		expect(one).toContain('Return to summary');
+		expect(one).toContain('Use what I’ve recorded');
+		expect(text(one)).toContain('If you wish, you can stop here: Ilya fills the other nine from what you have recorded so far.');
 		expect(one).not.toContain('See your vowel space');
 		expect(one).toContain('Re-take [i]');
 		expect(text(one)).toContain('is captured.');
@@ -101,12 +103,24 @@ describe('the screen at rest', () => {
 		expect(h.slice(h.search(/class="cue[" ]/))).not.toMatch(/class="readout[" ]/);
 	});
 
+	it('after the seven in Ilya’s order offers to work out the other three, and says which, in both languages (N.203 Step 6)', () => {
+		const seven = pick('i', 'e', 'ɛ', 'a', 'ɑ', 'o', 'u');
+		const en = html({ profile: seven });
+		expect(en).toContain('Let Ilya work out the other three');
+		expect(text(en)).toContain('You have recorded the vowels Ilya needs. If you wish, it can work out the other three from them: [ɪ], [ɨ], and [ʌ].');
+		expect(en).not.toContain('Use what I’ve recorded');
+		const fr = text(html({ language: 'fr', profile: seven }));
+		expect(fr).toContain('Laisser Ilya déduire les trois autres');
+		expect(fr.replace(/\u00a0/g, ' ')).toContain('il peut en déduire les trois autres : [ɪ], [ɨ] et [ʌ].');
+	});
+
 	it('with all ten sung, says so, offers Re-take for the focused vowel and See your vowel space under the buttons, and invites any vowel again', () => {
 		const h = html({ profile: BASS, startVowel: 'u' });
 		expect(text(h)).toContain('All ten captured. This is your vowel space.');
 		expect(h).toMatch(/class="main[^"]*"[^>]*>Re-take \[u\]</);
 		expect(h).toMatch(/class="see-space[^"]*"[^>]*>See your vowel space</);
-		expect(h).not.toContain('Return to summary');
+		expect(h).not.toContain('Use what I’ve recorded');
+		expect(h).not.toContain('Let Ilya work out');
 		expect(h).not.toContain('>Done<');
 		expect(text(h)).toContain('Tap any vowel to sing it again.');
 		expect(text(h)).toContain('10 of 10');
@@ -139,7 +153,7 @@ describe('the screen at rest', () => {
 	it('renders for every voice type and none, and in French, every string French and none missing', () => {
 		for (const voiceType of [undefined, 'soprano', 'contralto', 'countertenor', 'bass-baritone', 'not-sure']) expect(buttons(html({ voiceType }))).toHaveLength(10);
 		const fr = html({ language: 'fr', profile: pick('i') });
-		expect(text(fr)).toContain('Retour au sommaire');
+		expect(text(fr)).toContain('Utiliser ce que j’ai capté');
 		expect(text(fr)).toContain('Tout recommencer');
 		expect(text(fr)).toContain('Vos résonances');
 		expect(text(fr)).toContain('1 sur 10');

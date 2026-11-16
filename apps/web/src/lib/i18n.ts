@@ -16,7 +16,7 @@
    tree on 2026-11-02 (consistency batch 2). Paths are under `apps/web/src/`;
    a prefix is listed with the files that use it most and its key count.
 
-   This file holds 1,278 keys.
+   This file holds 1,294 keys.
 
    A key built at run time (`watch.key.letter.${letter}`, `comment.<register>.<part>`)
    has no literal reference, so a search for the whole key can come back empty
@@ -28,7 +28,7 @@
    app.            2  the page's hidden heading, lib/components/HeaderBar.svelte (`app.subtitle` has no literal consumer)
    binder.        10  lib/library/exchange.ts, lib/components/Drawer/RootPanel.svelte
    calib.        100  lib/voice/CalibrationWizard.svelte, lib/voice/ProfileSwitcher.svelte, lib/components/Drawer/VoiceAnchor.svelte
-   capture.       38  the calibration screen: lib/voice/VowelCapture.svelte, lib/voice/chart/screen-logic.ts, lib/voice/chart/VowelChart.svelte
+   capture.       54  the calibration screen: lib/voice/VowelCapture.svelte, lib/voice/chart/screen-logic.ts, lib/voice/chart/VowelChart.svelte
    clitic.         3  no literal consumer found (lib/score/clitic-seat.ts does the seating)
    collide.        5  routes/+page.svelte
    comment.       40  the note comments: lib/insights/singer-blocks.ts, lib/insights/comment-text.ts, lib/analysis/watchlist.ts
@@ -1327,6 +1327,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'calib.capture.hold.noted': { en: 'Noted, moving on. You can re-take it from the summary.', fr: 'C\u2019est noté, on poursuit. Vous pourrez la refaire depuis le sommaire.' },
 	// UNUSED SINCE N.199 (Step 8, Dann 2026-11-14 21:03): the wheel's capture branch of the wizard (queue, hold banner, Pause) is deleted and nothing reads this key. Kept and marked in place, with its ratified French.
 	'calib.capture.pauseButton': { en: 'Pause', fr: 'Pause' },
+	// UNUSED SINCE N.203 lane 59 Step 6: the foot of the capture screen says "Use what I’ve recorded" or "Let Ilya work out ..." (`capture.finish.*`). Kept.
 	'calib.capture.returnToSummary': { en: 'Return to summary', fr: 'Retour au sommaire' },
 	'calib.capture.toast': { en: 'The room sounds a little lively. Your sample is still good, but a quieter space would help.', fr: 'La pièce sonne un peu réverbérante. Votre échantillon reste bon, mais un endroit plus silencieux aiderait.' },
 	'calib.capture.toastDismissAria': { en: 'Dismiss', fr: 'Fermer' },
@@ -2506,6 +2507,24 @@ const strings: Record<string, Record<Language, string>> = {
 	'capture.part.shape': { en: 'Shape', fr: 'Forme' },
 	'capture.part.fry': { en: 'Fry', fr: 'Friture' },
 	'capture.cue.breathe': { en: 'Breathe.', fr: 'Respirez.' },
+	// N.203 counted forms and consent captions (sheet-english r2 and sheet-french r1, RATIFIED by Dann 2026-11-16 01:35; lines 22 and 23). Numbers in words,
+	// two to nine (the sheets' rule "words (one to nine)", one being "the last one"); {vowels} is a bracketed list in `VOWELS` order, `capture.list.and` its word.
+	'capture.finish.useRecorded': { en: 'Use what I’ve recorded', fr: 'Utiliser ce que j’ai capté' },
+	'capture.finish.useRecorded.caption': { en: 'If you wish, you can stop here: Ilya fills the other {m} from what you have recorded so far.', fr: 'Si vous le souhaitez, vous pouvez vous arrêter ici\u00a0: Ilya complète les {m} autres à partir de ce que vous avez capté jusqu’ici.' },
+	'capture.finish.useRecorded.captionLast': { en: 'If you wish, you can stop here: Ilya fills the last one from what you have recorded so far.', fr: 'Si vous le souhaitez, vous pouvez vous arrêter ici\u00a0: Ilya complète la dernière à partir de ce que vous avez capté jusqu’ici.' },
+	'capture.finish.workOut.last': { en: 'Let Ilya work out the last one', fr: 'Laisser Ilya déduire la dernière' },
+	'capture.finish.workOut.many': { en: 'Let Ilya work out the other {m}', fr: 'Laisser Ilya déduire les {m} autres' },
+	'capture.finish.workOut.caption': { en: 'You have recorded the vowels Ilya needs. If you wish, it can work out the other {m} from them: {vowels}.', fr: 'Vous avez capté les voyelles dont Ilya a besoin. Si vous le souhaitez, il peut en déduire les {m} autres\u00a0: {vowels}.' },
+	'capture.finish.workOut.captionLast': { en: 'You have recorded the vowels Ilya needs. If you wish, it can work out the last one from them: {vowel}.', fr: 'Vous avez capté les voyelles dont Ilya a besoin. Si vous le souhaitez, il peut en déduire la dernière\u00a0: {vowel}.' },
+	'capture.list.and': { en: 'and', fr: 'et' },
+	'capture.number.2': { en: 'two', fr: 'deux' },
+	'capture.number.3': { en: 'three', fr: 'trois' },
+	'capture.number.4': { en: 'four', fr: 'quatre' },
+	'capture.number.5': { en: 'five', fr: 'cinq' },
+	'capture.number.6': { en: 'six', fr: 'six' },
+	'capture.number.7': { en: 'seven', fr: 'sept' },
+	'capture.number.8': { en: 'eight', fr: 'huit' },
+	'capture.number.9': { en: 'nine', fr: 'neuf' },
 	// N.203 sheet line 24, RATIFIED by Dann 2026-11-16 01:13 and 01:20.
 	'capture.seeSpace': { en: 'See your vowel space', fr: 'Voir votre espace vocalique' },
 	'capture.stop': { en: 'Stop', fr: 'Arrêter' },

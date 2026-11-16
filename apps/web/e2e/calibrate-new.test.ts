@@ -1,6 +1,6 @@
 /**
  * N.199 Step 6: the new capture screen, in a browser, on `StubCaptureSession` (`?capture=stub`, development server only). Since N.199 Step 8 the screen is the capture phase for every singer: no switch is in the address.
- * A full tour (ten captures), a manual pick, a cancel in each phase, a rolled-back re-take and an error, Return to summary after one
+ * A full tour (ten captures), a manual pick, a cancel in each phase, a rolled-back re-take and an error, the finish-early control after one
  * vowel, Start over's two taps, hidden mode, and a soprano's view. Real time: the count-in is 8 s (Breathe, Sing, Shape) and the stub’s sweep 3.5 to 4 s,
  * so these tests are long by design. The stub gives clean readings, so what is asserted is the screen's behaviour and what it keeps,
  * not the extractor's.
@@ -148,11 +148,11 @@ test.describe('the new capture screen on the stub', () => {
 		await page.getByRole('button', { name: /^Stop$/ }).click();
 	});
 
-	test('a tap focuses and never records; Start records; a tap during a take does nothing; Ilya carries on from the singer’s lead; Return to summary shows after one vowel', async ({ page }) => {
+	test('a tap focuses and never records; Start records; a tap during a take does nothing; Ilya carries on from the singer’s lead; Use what I’ve recorded shows after one vowel', async ({ page }) => {
 		test.setTimeout(120_000);
 		await open(page);
 		await toCapture(page);
-		await expect(page.getByRole('button', { name: /^Return to summary$/ })).toHaveCount(0);
+		await expect(page.getByRole('button', { name: /^Use what I.ve recorded$/ })).toHaveCount(0);
 		await btn(page, /^cardinal-u/).click(); // a tap focuses
 		expect(await selected(page)).toBe('u');
 		await expect(cue(page)).toHaveText('Ready for [u].');
@@ -168,7 +168,7 @@ test.describe('the new capture screen on the stub', () => {
 		await settled(page);
 		expect(await selected(page)).toBe('i'); // round the seven from [u]: wraps to the first unsung
 		await expect(cue(page)).toHaveText('Ready for [i].');
-		await page.getByRole('button', { name: /^Return to summary$/ }).click();
+		await page.getByRole('button', { name: /^Use what I.ve recorded$/ }).click();
 		await expect(page.getByText('1 of 10 vowels sampled').first()).toBeVisible();
 	});
 
@@ -219,7 +219,7 @@ test.describe('the new capture screen on the stub', () => {
 		v = await stored(page);
 		expect(v.takes.map((t: { outcome: string; errorCode?: string }) => [t.outcome, t.errorCode])).toEqual([['rolled-back', undefined], ['failed', 'NO_AUDIO_INPUT']]);
 		await expect(page.locator('.main')).toBeEnabled(); // a way back in
-		await page.getByRole('button', { name: /^Return to summary$/ }).click();
+		await page.getByRole('button', { name: /^Use what I.ve recorded$/ }).click();
 		await expect(page.getByText('3 of 10 vowels sampled').first()).toBeVisible();
 	});
 

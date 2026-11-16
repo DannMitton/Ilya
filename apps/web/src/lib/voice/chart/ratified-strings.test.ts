@@ -43,6 +43,22 @@ const RATIFIED: Array<[string, string, string]> = [
 	['capture.part.shape', 'Shape', 'Forme'],
 	['capture.part.fry', 'Fry', 'Friture'],
 	['capture.cue.breathe', 'Breathe.', 'Respirez.'],
+	['capture.finish.useRecorded', 'Use what I’ve recorded', 'Utiliser ce que j’ai capté'],
+	['capture.finish.useRecorded.caption', 'If you wish, you can stop here: Ilya fills the other {m} from what you have recorded so far.', 'Si vous le souhaitez, vous pouvez vous arrêter ici\u00a0: Ilya complète les {m} autres à partir de ce que vous avez capté jusqu’ici.'],
+	['capture.finish.useRecorded.captionLast', 'If you wish, you can stop here: Ilya fills the last one from what you have recorded so far.', 'Si vous le souhaitez, vous pouvez vous arrêter ici\u00a0: Ilya complète la dernière à partir de ce que vous avez capté jusqu’ici.'],
+	['capture.finish.workOut.last', 'Let Ilya work out the last one', 'Laisser Ilya déduire la dernière'],
+	['capture.finish.workOut.many', 'Let Ilya work out the other {m}', 'Laisser Ilya déduire les {m} autres'],
+	['capture.finish.workOut.caption', 'You have recorded the vowels Ilya needs. If you wish, it can work out the other {m} from them: {vowels}.', 'Vous avez capté les voyelles dont Ilya a besoin. Si vous le souhaitez, il peut en déduire les {m} autres\u00a0: {vowels}.'],
+	['capture.finish.workOut.captionLast', 'You have recorded the vowels Ilya needs. If you wish, it can work out the last one from them: {vowel}.', 'Vous avez capté les voyelles dont Ilya a besoin. Si vous le souhaitez, il peut en déduire la dernière\u00a0: {vowel}.'],
+	['capture.list.and', 'and', 'et'],
+	['capture.number.2', 'two', 'deux'],
+	['capture.number.3', 'three', 'trois'],
+	['capture.number.4', 'four', 'quatre'],
+	['capture.number.5', 'five', 'cinq'],
+	['capture.number.6', 'six', 'six'],
+	['capture.number.7', 'seven', 'sept'],
+	['capture.number.8', 'eight', 'huit'],
+	['capture.number.9', 'nine', 'neuf'],
 	['capture.stop', 'Stop', 'Arrêter'],
 	['capture.clearAll', 'Clear all', 'Tout effacer'],
 	['capture.hide', 'Hide the chart and the readout while I sing', 'Masquer le graphique et l’affichage pendant que je chante'],
@@ -70,8 +86,8 @@ const RATIFIED: Array<[string, string, string]> = [
 ];
 
 describe('the ratified calibration and sheet strings', () => {
-	it('pins all fifty-four, in both languages', () => {
-		expect(RATIFIED).toHaveLength(54);
+	it('pins all seventy, in both languages', () => {
+		expect(RATIFIED).toHaveLength(70);
 		for (const [key, en, fr] of RATIFIED) {
 			expect(t(key, 'en'), `${key} en`).toBe(en);
 			expect(t(key, 'fr'), `${key} fr`).toBe(fr);
