@@ -106,3 +106,21 @@ describe('follow-up fix 4: a bar printed only as a later pass stays live', () =>
 		expect(own).toContain('data-system');
 	});
 });
+
+describe('follow-up 2, fix 1: an ending sung on two later passes has one live copy', () => {
+	it('endings "1" and "2, 3": the second ending prints on passes 2 and 3, and only its first copy is live', async () => {
+		const p = await load('strophic-volta-23.musicxml');
+		const { r, out } = pages(p, 624);
+		expect(r.bars.map((b) => b.source)).toEqual([0, 1, 2, 3, 0, 1, 2, 4, 0, 1, 2, 4, 5]);
+		expect(r.bars.map((b) => b.live ?? false)).toEqual([false, false, false, false, false, false, false, true, false, false, false, false, false]);
+		const ending = p.vocalLine.filter((e) => e.measureIndex === 4).map((e) => e.id);
+		const svg = out.pages.join('\n');
+		for (const id of ending) {
+			expect(svg.split(`data-hit="${id}"`).length - 1, `one live ${id}`).toBe(1);
+			expect(svg).toContain(`data-verse-hit="${id}~v3"`); // the copy on pass 3 is inert
+		}
+		const ranges = out.systems.map((s) => s.attr).filter((a) => a?.startsWith('data-system'));
+		const holding = ranges.filter((a) => /="(\d+)-(\d+)"/.test(a!) && (() => { const [lo, hi] = /="(\d+)-(\d+)"/.exec(a!)!.slice(1).map(Number); return lo <= 4 && 4 <= hi; })());
+		expect(holding, 'one system names source bar 4').toHaveLength(1);
+	});
+});

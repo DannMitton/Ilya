@@ -340,7 +340,13 @@ function build(parsed: ParsedScore, sung: number[], plan: Plan, path: RenderScor
 	delete score.accompaniment; // not drawn by MELODY, and keyed by notated bars
 
 	const printedLive = new Set(printed.filter((p) => !p.later).map((p) => p.source));
-	const liveBar = printed.map((p) => p.later && !printedLive.has(p.source));
+	// Only the FIRST copy of such a bar is live: an ending sung on two later passes ("2, 3") would otherwise make two sets of identical handles.
+	const liveSeen = new Set<number>();
+	const liveBar = printed.map((p) => {
+		if (!p.later || printedLive.has(p.source) || liveSeen.has(p.source)) return false;
+		liveSeen.add(p.source);
+		return true;
+	});
 	const liveIds = new Set(flat.filter((f) => liveBar[f.bar]).map((f) => f.ev.id));
 	const firstOf = new Map<number, string>();
 	for (const f of flat) if (!firstOf.has(f.bar)) firstOf.set(f.bar, f.ev.id);

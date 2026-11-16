@@ -37,6 +37,7 @@ export const FIXTURES_ADDED_BY_THE_LANE: readonly string[] = [
 	'packages/score-parser/src/fixtures/strophic-repeat.musicxml',
 	'packages/score-parser/src/fixtures/strophic-stacked.musicxml',
 	'packages/score-parser/src/fixtures/strophic-tacet-boundary.musicxml',
+	'packages/score-parser/src/fixtures/strophic-volta-23.musicxml',
 	'packages/score-parser/src/fixtures/strophic-volta-from-top.musicxml',
 	'packages/score-parser/src/fixtures/strophic-volta.musicxml',
 ];
