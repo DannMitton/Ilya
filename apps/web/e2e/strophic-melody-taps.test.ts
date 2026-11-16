@@ -36,4 +36,15 @@ test.describe('taps in a strophic song', () => {
 		await page.locator('.loupe .loupe-body').waitFor();
 		expect(await page.locator('.loupe').innerText()).toMatch(/m\.\s*1\b/);
 	});
+
+	test('a tap on a later-pass grace note names its source grace note', async ({ page }) => {
+		await raise(page, path.resolve(process.cwd(), '../../packages/score-parser/src/fixtures/strophic-repeat-grace.musicxml'));
+		// the grace note of source bar 4's first note: id m4-0-1~g1 on pass 1, m4-0-1~v2~g1 on pass 2
+		const later = page.locator('.score-page [data-verse-hit="m4-0-1~v2~g1"]').first();
+		expect(await later.count(), 'the later pass carries a grace note').toBe(1);
+		await later.scrollIntoViewIfNeeded();
+		await later.click();
+		await page.locator('.loupe .loupe-body').waitFor({ timeout: 10_000 });
+		expect(await page.locator('.loupe').innerText()).toMatch(/m\.\s*5\b/);
+	});
 });
