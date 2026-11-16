@@ -7,7 +7,7 @@ import { describe, it, expect } from 'vitest';
 import { ILYA_VERSION, ILYA_BUILD, ILYA_VERSION_YEAR } from './version';
 
 describe('lib/version.ts', () => {
-	it('is the release of 2026-11-20, 2026b, a year and a lowercase letter', () => {
+	it('is 2026b, a year and a lowercase letter', () => {
 		expect(ILYA_VERSION).toBe('2026b');
 		expect(ILYA_VERSION).toMatch(/^20\d\d[a-z]$/);
 	});
