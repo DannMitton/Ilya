@@ -116,6 +116,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	import { currentGuideAnchor } from '$lib/guide-anchors';
 	import CalibrationWizard from '$lib/voice/CalibrationWizard.svelte';
 	import VoiceAnchor from '$lib/components/Drawer/VoiceAnchor.svelte';
+	import type { VoiceRequest, VoiceRequestKind, VoiceSeam } from '$lib/voice/seam';
 	import MetadataFields from '$lib/components/Drawer/MetadataFields.svelte';
 	import {
 		SectionSet,
@@ -1653,10 +1654,20 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	 * Leaving the takeover returns to Insights, which never left the page.
 	 * On a phone the drawer is raised first, as a word click raises it.
 	 */
-	let calibrationRequest = $state<{ phase: 'characteristics'; n: number } | null>(null);
-	function openRangeFields() {
-		calibrationRequest = { phase: 'characteristics', n: (calibrationRequest?.n ?? 0) + 1 };
+	let calibrationRequest = $state<VoiceRequest | null>(null);
+	/** N.203 lane 60 (`voice/seam.ts`): what the wizard publishes of the voices, whole, for the VOICE pane at rest. Raw: it holds commands. */
+	let voiceSeam = $state.raw<VoiceSeam | undefined>(undefined);
+	/**
+	 * The pane's doors and INSIGHTS' "Add your range" (`record`, `summary`, `characteristics`). With no voice saved the takeover has no
+	 * content (`{#if activeVoice}` in the wizard), so nothing opens it: the VOICE pane opens onto its first-launch form instead.
+	 */
+	function openVoice(kind: VoiceRequestKind) {
 		if (isMobile) drawerRaised = true;
+		if (!voiceSeam?.voices.length) {
+			sections.reveal(BAND_IDS.scoreMarkup);
+			return;
+		}
+		calibrationRequest = { phase: kind, n: (calibrationRequest?.n ?? 0) + 1, fromRest: !calibrating };
 		enterCalibration();
 	}
 	const wordCount = $derived(
@@ -3885,6 +3896,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 						{language}
 						openRequest={calibrationRequest}
 						onComplete={exitCalibration}
+						onSeamChange={(s) => (voiceSeam = s)}
 						onActiveProfileChange={(f, name, characteristics, updatedAt, intake, voiceType) => {
 							voiceFormants = f;
 							voiceName = name;
@@ -4344,7 +4356,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 				pairings={shownPairings}
 				{drawnUnderlay}
 				openSyllabification={doc.openSyllabification}
-				onaddrange={openRangeFields}
+				onaddrange={() => openVoice('characteristics')}
 				{keyRuler}
 				octaveReading={doc.octaveReading}
 				ontoggleoctave={clefUi.toggle}

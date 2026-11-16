@@ -49,6 +49,7 @@
 	import VowelCapture from '$lib/voice/VowelCapture.svelte';
 	import { addTake, type TakeRecord } from '$lib/voice/takes';
 	import { openRetake, openTour, type Opening } from '$lib/voice/chart/opening';
+	import { landingFor, requestRefused, type VoiceRequest, type VoiceSeam } from '$lib/voice/seam';
 	import { t, type Language } from '$lib/i18n';
 	import Italics from '$lib/components/Italics.svelte';
 	import ProfileSwitcher from '$lib/voice/ProfileSwitcher.svelte';
@@ -197,8 +198,12 @@
 		 * while the takeover is stowed and a value read once at mount would
 		 * work only the first time. Insights' "Add your range" sends
 		 * `characteristics`, the Range fields. Absent, nothing changes.
+		 * N.203 lane 60: the pane's doors send `record`, `summary`, or `characteristics`
+		 * (`seam.ts`), and a request carries `fromRest`.
 		 */
-		openRequest?: { phase: 'characteristics'; n: number } | null;
+		openRequest?: VoiceRequest | null;
+		/** N.203 lane 60: the voices, the active id, and the commands, published whole for the pane at rest (`seam.ts`). */
+		onSeamChange?: (seam: VoiceSeam) => void;
 	}
 
 	let {
@@ -213,7 +218,8 @@
 		onActiveProfileChange,
 		onOpenLearnNote,
 		language,
-		openRequest = null
+		openRequest = null,
+		onSeamChange
 	}: CalibrationWizardProps = $props();
 
 	// N.22: dictionary lookup, following ScoreUploader.svelte and
@@ -317,16 +323,19 @@
 	let profile = $state<Partial<Record<Vowel, CalibratedFormant>>>({ ...initialFormants });
 	let phase = $state<Phase>(hasAnyReadings(initialFormants) ? 'summary' : 'welcome');
 
-	/* N.164: answer each new `openRequest` once. A capture in flight is never
-	   interrupted, the rule the voice switcher already follows
-	   (`disabled={phase === 'capture'}`): the singer is looking at it. */
+	/* N.164: answer each new `openRequest` once. Refused only for "Add your range" pressed over the capture screen (`requestRefused`); a
+	   refused request is dropped. A `record` request meets a fresh capture screen: `captureKey` remounts it on the vowel `openTour` names. */
 	let answeredRequest = 0;
+	let captureKey = $state(0);
 	$effect(() => {
 		const req = openRequest;
 		if (!req || req.n === answeredRequest) return;
 		answeredRequest = req.n;
 		untrack(() => {
-			if (phase !== 'capture') resetFlow(req.phase);
+			if (requestRefused(phase, req)) return;
+			const to = landingFor(req.phase, hasAnyReadings(profile));
+			if (to === 'capture') { opening = openTour(profile); captureKey += 1; }
+			resetFlow(to);
 		});
 	});
 
@@ -809,6 +818,21 @@
 		);
 	});
 
+	// The seam (`seam.ts`): one object, republished whenever the list, the active voice, or the next default name changes.
+	$effect(() => {
+		onSeamChange?.({
+			voices: store.voices.map((v) => ({ id: v.id, name: v.name })),
+			activeId: store.activeId,
+			nextDefaultName,
+			select: selectVoice,
+			create: (n) => createVoice(n),
+			duplicate: duplicateActiveVoice,
+			rename: renameActiveVoice,
+			remove: deleteActiveVoice,
+			setOwn
+		});
+	});
+
 	$effect(() => () => clearAllTimers());
 </script>
 
@@ -956,8 +980,8 @@
 						>
 					</div>
 				{/if}
-				<VowelCapture session={captureSession} {language} {voiceType} {profile} startVowel={opening.start} pass={opening.pass}
-					onCaptured={commitReading} onTake={recordTake} onReturn={() => (phase = 'summary')} onClearAll={confirmReset} />
+				{#key captureKey}<VowelCapture session={captureSession} {language} {voiceType} {profile} startVowel={opening.start} pass={opening.pass}
+					onCaptured={commitReading} onTake={recordTake} onReturn={() => (phase = 'summary')} onClearAll={confirmReset} />{/key}
 			</div>
 			{:else if phase === 'summary'}
 				<!-- YOUR VOWEL SPACE (N.203 lane 60, Step 5; plan r4 section 4.5). The sheet is the whole summary: the note on readings outside Ilya's values, then the chart, the one table with the roster's marks in it, the legend, the sources, and Print (`VowelSpaceSheet.svelte`). Finish is filled and leads; the way back to the ten vowels and Start over are quiet (Dann 2026-09-10, "Filled Finish ... in that order"). Finish writes nothing: every reading was saved when it was captured, so a singer who only looked must not re-date them. -->
@@ -1235,18 +1259,6 @@
 	/* The count-in beat and the capture bar (item 1.4a interaction, E.26).
 	   Deliberately plain: this is the wizard's own furniture, not the result
 	   surface, and it borrows the same tokens as everything else here. */
-	/* The caption under the invitation to sing the remaining three. Quieter than
-	   the button above it, because the button is the action and this explains
-	   it. */
-	.wizard-caption {
-		margin: 0.375rem 0 0;
-		max-width: 26rem;
-		font-family: var(--font-ui, var(--font-sans));
-		font-size: 0.8125rem;
-		line-height: 1.45;
-		text-align: center;
-		color: var(--ink-tertiary);
-	}
 
 	.wizard-count {
 		margin: 0;
