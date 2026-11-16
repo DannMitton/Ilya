@@ -26,7 +26,7 @@ export type OwnAnswers = Parameters<typeof assignToVoice>[1];
 
 /** What the wizard publishes to the page, whole, whenever the list, the active voice, or the next default name changes. */
 export interface VoiceSeam {
-	voices: { id: string; name: string }[];
+	voices: { id: string; name: string; createdAt: string }[];
 	activeId: string | null;
 	/** The smallest unused default name, which the switcher offers in its drafts. */
 	nextDefaultName: string;

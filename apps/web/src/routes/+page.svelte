@@ -115,7 +115,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	import PieceKeyLine from '$lib/markup/PieceKeyLine.svelte';
 	import { currentGuideAnchor } from '$lib/guide-anchors';
 	import CalibrationWizard from '$lib/voice/CalibrationWizard.svelte';
-	import VoiceAnchor from '$lib/components/Drawer/VoiceAnchor.svelte';
+	import VoicePane from '$lib/components/Drawer/VoicePane.svelte';
 	import type { VoiceRequest, VoiceRequestKind, VoiceSeam } from '$lib/voice/seam';
 	import MetadataFields from '$lib/components/Drawer/MetadataFields.svelte';
 	import {
@@ -129,7 +129,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	} from '$lib/components/Drawer/sections.svelte';
 	// N.73 S3: the one predicate for "is this voice calibrated", lifted out of
 	// the wizard so the voice anchor reads the same answer the wizard does.
-	import { usableReadingCount, type VoiceTypeChoice } from '$lib/voice/profileStore';
+	import { hasAnyReadings, usableReadingCount, type VoiceTypeChoice } from '$lib/voice/profileStore';
 	import { profileSave } from '$lib/voice/profile-save.svelte';
 	// N.115: the ten sung vowels as a value, so Score markup's state line can
 	// count the denominator of "10 of 10" without reading the wizard's queue.
@@ -1633,9 +1633,8 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	   `studioDocument === 'markup' ? !ingestedScore && !voiceCalibrated
 	   : !hasResults` (the id was `shane` until N.174 D.1), and it guarded a Print button inside the drawer. Print
 	   sits under the sheet now and IT IS ALWAYS LIVE ON TRANSCRIPTION AND
-	   MARKED SCORE: no disabled state, no greying. `voiceCalibrated` stays,
-	   because the voice anchor reads it. */
-	const voiceCalibrated = $derived(usableReadingCount(voiceFormants) > 0);
+	   MARKED SCORE: no disabled state, no greying. `voiceCalibrated` is gone
+	   with the voice anchor (N.203 lane 60); the pane reads `usableReadingCount`. */
 	/**
 	 * N.114b item 8 emptied this of everything but the flag. It used to expand
 	 * the wizard first, because the Q3 collapse could leave a takeover opening
@@ -4161,9 +4160,10 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 					     Instrument panel
 					     (`fable-gui-audit-and-spec_r1_2026-08-18.md:41-44`).
 
-					     `voiceCalibrated` is true when a reading is usable
-					     (`usableReadingCount`, `profileStore.ts`). The wizard's
-					     opening phase uses a wider test, on purpose. -->
+					     THE PANE AT REST (N.203 lane 60) replaces the anchor: the voice,
+					     its sentence, and its doors (`VoicePane.svelte`). "Recorded" is
+					     `usableReadingCount`; the wizard's opening phase uses a wider
+					     test, on purpose. -->
 					<div class="station">
 						<!-- N.150: no StationHeader. The band is named Voice, so the
 						     name is drawn once, there. N.114a (2026-09-09) kept this
@@ -4173,12 +4173,8 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 						     header's `aria-controls`, and there is no toggle
 						     left to control anything. -->
 						<div class="station-body">
-							<VoiceAnchor
-								voiceName={voiceName}
-								calibrated={voiceCalibrated}
-								{language}
-								oncalibrate={enterCalibration}
-							/>
+							<VoicePane {language} seam={voiceSeam} voiceType={voiceTypeChoice} usable={usableReadingCount(voiceFormants)}
+								hasStoredReading={hasAnyReadings(voiceFormants)} onopen={openVoice} />
 						</div>
 					</div>
 					<!-- ── THE NOTICES. Unstyled on purpose, as they have always

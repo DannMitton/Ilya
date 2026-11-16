@@ -196,11 +196,11 @@ test.describe('Markup with no calibration', () => {
 		await expect(empty).toBeVisible();
 		await expect(empty).toHaveText('Open VOICE and record your vowels, or choose a voice type to start from generic values.');
 
-		// The calibration invitation is offered, never forced. It lives in
-		// the drawer's own "Voice" station (VoiceAnchor.svelte, wired at
-		// +page.svelte), not inside the Markup page itself, and Voice starts
-		// collapsed.
+		// N.203 lane 60: with no voice saved, the VOICE pane is the first-launch form (the name field and
+		// Start), in the Drawer and never the microphone. The old Calibrate button (VoiceAnchor) is gone; the
+		// pane's doors appear once a voice is named (`voice-pane.test.ts`, the browser tests).
 		await expandStation(page, 'Voice');
-		await expect(page.getByRole('button', { name: 'Calibrate', exact: true })).toBeVisible();
+		await expect(page.getByRole('button', { name: 'Start', exact: true })).toBeVisible();
+		await expect(page.getByRole('button', { name: 'Calibrate', exact: true })).toHaveCount(0);
 	});
 });

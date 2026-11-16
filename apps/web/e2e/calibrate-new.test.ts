@@ -25,9 +25,9 @@ async function open(page: Page, opts: { formants?: Record<string, unknown>; voic
 	if ((page.viewportSize()?.width ?? 1440) < 1400) await page.getByRole('button', { name: /drawer|tiroir/i }).first().click();
 	await page.getByRole('button', { name: /^(voice|voix)$/i }).click();
 }
-/** From nothing sung: Calibrate, Begin, the readiness wait, Continue. Lands on the capture screen. */
+/** From nothing recorded: the pane's door (N.203 lane 60), Begin, the readiness wait, Continue. Lands on the capture screen. */
 async function toCapture(page: Page) {
-	await page.getByRole('button', { name: /^calibrate$/i }).click();
+	await page.getByRole('button', { name: /^record your vowels$/i }).click();
 	await page.getByRole('button', { name: /^begin$/i }).click();
 	await page.getByRole('button', { name: /^continue$/i }).click({ timeout: 30_000 });
 	await expect(page.locator('.capture')).toBeVisible();

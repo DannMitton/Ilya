@@ -355,9 +355,12 @@
 		.col-vowel {
 			white-space: normal;
 		}
+		.vowel-sheet:not(.for-print) {
+			gap: 0.55rem;
+		}
 		.readings th,
 		.readings td {
-			padding-right: 0.3rem;
+			padding: 0.12rem 0.3rem 0.12rem 0;
 		}
 		.note {
 			margin-left: 0.2em;

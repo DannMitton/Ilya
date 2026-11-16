@@ -1,0 +1,79 @@
+/**
+ * THE VOICE PANE AT REST, as data (N.203 lane 60, Step 2; plan r4 sections 4.1 and 4.2). The pane's sentence, the name of its door to
+ * recording, and whether "Your vowel space" shows. Pure, so the seven sentence states are tested without a browser. The eighth state of the
+ * pane, with no voice saved, is the first-launch form (`ProfileSwitcher.svelte`), not a sentence.
+ *
+ * "Recorded" means usable: the count the closed pane's line prints (`usableReadingCount`, `profileStore.ts`), so a voice whose readings
+ * were all refused by the plausibility guard says nothing is recorded, where the capture screen's `sungSet` and the summary's table, which
+ * count every stored reading, draw them.
+ */
+import { t, type Language } from '$lib/i18n';
+import { hasPlaceholderProfile } from '$lib/voice/engine/stand-ins';
+import { fillVoiceType, isTier1, voiceTypePrint } from '$lib/voice/voiceTypes';
+
+export interface PaneSentenceInput {
+	/** `usableReadingCount(voiceFormants)`, 0 to 10. */
+	usable: number;
+	/** The stored Tier 1 id, if any. An id this build does not know counts as none. */
+	voiceType?: string;
+	/**
+	 * True when every vowel left can be worked out from the ones recorded (lane 59's `finishEarlyState(...).kind === 'work-out'`,
+	 * `voice/chart/finish-early.ts`). Until that lane is merged the page passes `false`.
+	 */
+	restWorkedOut: boolean;
+}
+
+export type PaneState = 'none' | 'typed-generic' | 'typed-none' | 'not-sure' | 'some-fills' | 'some-works-out' | 'all';
+
+export function paneState(i: PaneSentenceInput): PaneState {
+	if (i.usable >= 10) return 'all';
+	if (i.usable >= 1) return i.restWorkedOut ? 'some-works-out' : 'some-fills';
+	if (!isTier1(i.voiceType)) return 'none';
+	if (i.voiceType === 'not-sure') return 'not-sure';
+	return hasPlaceholderProfile(i.voiceType) ? 'typed-generic' : 'typed-none';
+}
+
+const KEY: Record<Exclude<PaneState, 'some-fills' | 'some-works-out'>, string> = {
+	none: 'calib.pane.none',
+	'typed-generic': 'calib.pane.typedGeneric',
+	'typed-none': 'calib.pane.typedNone',
+	'not-sure': 'calib.pane.notSure',
+	all: 'calib.pane.all'
+};
+
+/** The sentence. Numerals in the count; the counted forms for one vowel left are the ratified "last one" forms. */
+export function paneSentence(i: PaneSentenceInput, language: Language): string {
+	const state = paneState(i);
+	if (state === 'some-fills' || state === 'some-works-out') {
+		const m = 10 - i.usable;
+		const base = state === 'some-fills' ? 'calib.pane.fills' : 'calib.pane.worksOut';
+		return t(m === 1 ? `${base}One` : base, language).replace('{n}', String(i.usable)).replace('{m}', String(m));
+	}
+	const text = t(KEY[state], language);
+	if (state === 'typed-generic' || state === 'typed-none') {
+		// The type's own name, not a finer label: "a {type} voice" must read with "a" for every type Ilya has generic values for.
+		return fillVoiceType(text, voiceTypePrint({ voiceType: i.voiceType }, language) ?? '', language);
+	}
+	return text;
+}
+
+/** The door to recording, named for the state: 0 usable, 1 to 9, 10. */
+export function recordDoorKey(usable: number): string {
+	return usable >= 10 ? 'calib.pane.door.again' : usable >= 1 ? 'calib.pane.door.carryOn' : 'calib.pane.door.record';
+}
+
+/**
+ * "Your vowel space" shows when the voice has a stored reading, or a declared type with generic values. It does not show for a contralto,
+ * countertenor, bass-baritone, "Not sure", or no type with nothing stored: the chart would draw ten placeholders for them on the screen
+ * after a sentence that says Ilya has none (review amendment 9, DESK DEFAULT; it narrows plan r4 section 4.1 item 3).
+ */
+export function showVowelSpaceDoor(hasStoredReading: boolean, voiceType?: string): boolean {
+	return hasStoredReading || hasPlaceholderProfile(voiceType);
+}
+
+/** The voice type as the pane's control prints it: the built label, and for "Not sure" (which `voiceTypePrint` leaves empty) its own name. */
+export function typeControlLabel(choice: { voiceType?: string; voiceTypeSpecific?: string; voiceTypeOther?: string } | undefined, language: Language): string | undefined {
+	const printed = voiceTypePrint(choice, language);
+	const label = printed ?? (choice?.voiceType === 'not-sure' ? t('voiceType.type.not-sure', language) : undefined);
+	return label ? label.charAt(0).toLocaleUpperCase(language) + label.slice(1) : undefined;
+}

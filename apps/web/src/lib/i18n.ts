@@ -16,7 +16,7 @@
    tree on 2026-11-02 (consistency batch 2). Paths are under `apps/web/src/`;
    a prefix is listed with the files that use it most and its key count.
 
-   This file holds 1,281 keys.
+   This file holds 1,297 keys.
 
    A key built at run time (`watch.key.letter.${letter}`, `comment.<register>.<part>`)
    has no literal reference, so a search for the whole key can come back empty
@@ -27,7 +27,7 @@
    analysis.       7  lib/analysis/analyze-score-adapter.ts (the broad-analysis note), lib/components/Drawer/bandState.ts (ANALYSIS's closed line)
    app.            2  the page's hidden heading, lib/components/HeaderBar.svelte (`app.subtitle` has no literal consumer)
    binder.        10  lib/library/exchange.ts, lib/components/Drawer/RootPanel.svelte
-   calib.        101  lib/voice/CalibrationWizard.svelte, lib/voice/ProfileSwitcher.svelte, lib/components/Drawer/VoiceAnchor.svelte
+   calib.        117  lib/voice/CalibrationWizard.svelte, lib/voice/ProfileSwitcher.svelte, lib/components/Drawer/VoicePane.svelte
    capture.       32  the calibration screen: lib/voice/VowelCapture.svelte, lib/voice/chart/screen-logic.ts, lib/voice/chart/VowelChart.svelte
    clitic.         3  no literal consumer found (lib/score/clitic-seat.ts does the seating)
    collide.        5  routes/+page.svelte
@@ -1215,9 +1215,12 @@ const strings: Record<string, Record<Language, string>> = {
 	//    guillemets are ADOPTED from `profile.subtitleNamed`; the no-break
 	//    space before the colon follows `calib.section.ariaLabel`.
 	//    « Recalibrer » is COINED. No house precedent.
+	// UNUSED SINCE N.203 lane 60 Step 2 (the pane at rest replaced the anchor; `calib.anchor.named` stays, the closed pane reads it). Kept and marked in place, with its ratified French.
 	'calib.anchor.uncalibrated': { en: 'Voice: not yet calibrated', fr: 'Voix\u00a0: pas encore calibrée' },
 	'calib.anchor.named': { en: 'Voice: {voice}', fr: 'Voix\u00a0: \u00ab\u00a0{voice}\u00a0\u00bb' },
+	// UNUSED SINCE N.203 lane 60 Step 2 (same; `calib.anchor.named` stays, the closed pane reads it). Kept and marked in place, with its ratified French.
 	'calib.anchor.calibrate': { en: 'Calibrate', fr: 'Calibrer' },
+	// UNUSED SINCE N.203 lane 60 Step 2 (same; `calib.anchor.named` stays, the closed pane reads it). Kept and marked in place, with its ratified French.
 	'calib.anchor.recalibrate': { en: 'Re-calibrate', fr: 'Recalibrer' },
 
 	// ── Calibration wizard (N.22 extraction; French placeholder = English
@@ -1400,6 +1403,23 @@ const strings: Record<string, Record<Language, string>> = {
 	'calib.summary.savedLede': { en: 'Your profile is saved on this device. You can keep refining any reading below.', fr: 'Votre profil est enregistré sur cet appareil. Vous pouvez continuer à affiner n\u2019importe quelle lecture ci-dessous.' },
 	// UNUSED SINCE N.203 lane 60 Step 5 (the summary became "Your vowel space": the ledes left). Kept and marked in place, with its ratified French, the way this file's other retired strings are.
 	'calib.summary.progressLedeSuffix': { en: 'vowels sampled. Review each reading and re-take anything uncertain before you finish.', fr: 'voyelles échantillonnées. Passez en revue chaque lecture et refaites tout ce qui est incertain avant de terminer.' },
+	// N.203 lane 60 Step 2: the VOICE pane at rest. Every word below is RATIFIED by Dann 2026-11-16 (English sheet r2 lines 1 to 8, with the 01:28, 01:35, and 02:07 amendments; French sheet r1), character for character.
+	'calib.pane.none': { en: 'Record your ten vowels, and Ilya builds your resonance profile. Or choose a voice type, and Ilya starts from generic values for now.', fr: 'Captez vos dix voyelles, et Ilya établit votre profil de résonances. Ou choisissez un type de voix, et Ilya part de valeurs par défaut pour l\u2019instant.' },
+	'calib.pane.typedGeneric': { en: 'Ilya is using generic values for a {voiceType} voice until you record your own.', fr: 'Ilya utilise des valeurs par défaut pour une voix type de {voiceType} jusqu\u2019à ce que vous captiez les vôtres.' },
+	'calib.pane.typedNone': { en: 'Ilya has no generic values for a {voiceType} voice yet, so it works from your own vowels. Record them to begin.', fr: 'Ilya n\u2019a pas encore de valeurs par défaut pour une voix de {voiceType}; il travaille donc à partir de vos propres voyelles. Captez-les pour commencer.' },
+	'calib.pane.notSure': { en: 'Ilya builds your resonance profile from your own vowels, recorded in vocal fry. Record them to begin.', fr: 'Ilya établit votre profil de résonances à partir de vos propres voyelles, captées en friture vocale. Captez-les pour commencer.' },
+	'calib.pane.fills': { en: 'You have recorded {n} of the 10 vowels. Ilya fills the other {m} from what you have recorded so far.', fr: 'Vous avez capté {n} des 10 voyelles. Ilya complète les {m} autres à partir de ce que vous avez capté jusqu\u2019ici.' },
+	'calib.pane.fillsOne': { en: 'You have recorded {n} of the 10 vowels. Ilya fills the last one from what you have recorded so far.', fr: 'Vous avez capté {n} des 10 voyelles. Ilya complète la dernière à partir de ce que vous avez capté jusqu\u2019ici.' },
+	'calib.pane.worksOut': { en: 'You have recorded {n} of the 10 vowels. Ilya works out the other {m} from your own vowels.', fr: 'Vous avez capté {n} des 10 voyelles. Ilya déduit les {m} autres de vos propres voyelles.' },
+	'calib.pane.worksOutOne': { en: 'You have recorded {n} of the 10 vowels. Ilya works out the last one from your own vowels.', fr: 'Vous avez capté {n} des 10 voyelles. Ilya déduit la dernière de vos propres voyelles.' },
+	'calib.pane.all': { en: 'You have recorded all ten vowels. Your resonance profile is complete.', fr: 'Vous avez capté les dix voyelles. Votre profil de résonances est complet.' },
+	'calib.pane.door.record': { en: 'Record your vowels', fr: 'Capter vos voyelles' },
+	'calib.pane.door.carryOn': { en: 'Carry on recording', fr: 'Continuer la captation' },
+	'calib.pane.door.again': { en: 'Record a vowel again', fr: 'Capter de nouveau une voyelle' },
+	'calib.pane.door.space': { en: 'Your vowel space', fr: 'Votre espace vocalique' },
+	'calib.pane.door.describe': { en: 'Describe your voice', fr: 'D\u00e9crire votre voix' },
+	'calib.pane.door.insights': { en: 'What INSIGHTS shares, and how', fr: 'Ce que partagent les APER\u00c7US, et comment' },
+	'calib.pane.chooseType': { en: 'Choose a voice type', fr: 'Choisir un type de voix' },
 	// Sheet line 25, RATIFIED by Dann 2026-11-16 01:13 and 01:20 (English sheet r2, French sheet r1).
 	'calib.summary.backToTen': { en: 'Back to the ten vowels', fr: 'Retour aux dix voyelles' },
 	'calib.summary.finishButton': { en: 'Finish', fr: 'Terminer' },

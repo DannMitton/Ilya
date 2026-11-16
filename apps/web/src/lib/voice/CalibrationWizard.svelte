@@ -52,7 +52,6 @@
 	import { landingFor, requestRefused, type VoiceRequest, type VoiceSeam } from '$lib/voice/seam';
 	import { t, type Language } from '$lib/i18n';
 	import Italics from '$lib/components/Italics.svelte';
-	import ProfileSwitcher from '$lib/voice/ProfileSwitcher.svelte';
 	import InsightsIntake from '$lib/voice/InsightsIntake.svelte';
 	import VoiceTypeIntake from '$lib/voice/VoiceTypeIntake.svelte';
 	import VoiceTypeFirst from '$lib/voice/VoiceTypeFirst.svelte';
@@ -821,7 +820,7 @@
 	// The seam (`seam.ts`): one object, republished whenever the list, the active voice, or the next default name changes.
 	$effect(() => {
 		onSeamChange?.({
-			voices: store.voices.map((v) => ({ id: v.id, name: v.name })),
+			voices: store.voices.map((v) => ({ id: v.id, name: v.name, createdAt: v.createdAt })),
 			activeId: store.activeId,
 			nextDefaultName,
 			select: selectVoice,
@@ -870,22 +869,8 @@
 
 	     DESK DEFAULT, ruled reversible: the body is always shown. -->
 	<div class="wizard-body" id="calibration-wizard-body">
-	<!-- The voice switcher heads the drawer (Kimi: whose-voice-is-this is
-	     settled before any capture; the main pane stays a pure gallery).
-	     Inert during an active capture. With no voices saved, it renders
-	     the first-launch naming and the wizard phases wait behind it. -->
-	<ProfileSwitcher
-		voices={store.voices}
-		activeId={store.activeId}
-		disabled={phase === 'capture'}
-		{language}
-		{nextDefaultName}
-		onSelect={selectVoice}
-		onCreate={(n) => createVoice(n)}
-		onDuplicate={duplicateActiveVoice}
-		onRename={renameActiveVoice}
-		onDelete={deleteActiveVoice}
-	/>
+	<!-- N.203 lane 60: the switcher is in the VOICE pane at rest (`VoicePane.svelte`, by the seam). Here the voice's name is a plain label at the head of each screen; the summary's sheet carries it on its own line, so the label is not drawn there. -->
+	{#if activeVoice && phase !== 'summary'}<p class="wizard-voice-name">{activeVoice.name}</p>{/if}
 
 	{#if activeVoice}
 		{#if phase === 'welcome'}
@@ -1236,6 +1221,13 @@
 		background: transparent;
 		color: var(--ink-secondary);
 		border-color: var(--stone-300);
+	}
+	.wizard-voice-name {
+		margin: 0;
+		font-family: var(--font-sans);
+		font-size: 0.875rem;
+		font-weight: 600;
+		color: var(--lavender-ink);
 	}
 	.wizard-secondary:hover {
 		border-color: var(--lavender);

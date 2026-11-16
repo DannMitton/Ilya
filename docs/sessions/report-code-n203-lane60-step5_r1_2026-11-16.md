@@ -54,3 +54,7 @@ Unchanged from Step 0: `usableReadingCount` excludes an implausible reading not 
 
 - The marks sit **under** the vowel's name on screen (as the roster had them, his placement of 2026-07-10) and beside it on paper. A marked row is taller. If he wants them on the row's one line on screen too, the cost is a wider name cell at 390 px.
 - The legend's words on this screen still say "sang" and "sung" (`sheet.legend.*`, `sheet.legend.hull`) against his ruling of 01:13 that the act is "record". Line 26b and supplement item 7 change them; lane 59 owns those keys. They will read wrong on this screen until that lane merges.
+
+## 8. Addendum, written in Step 2
+
+The "Done when" measurement in section 3 is **superseded by Step 2's report** (the voice switcher left the takeover, and I trimmed the narrow table). Short form: the sheet's head, chart, and all ten rows now fit the takeover's visible height at 390 by 844 in English (18 px to spare) and French (39 px), and in a desk Drawer at 900 high (5 px), with no note above and no marks. The pictures `step5-*.png` were retaken. With three marks showing it still does not fit (over by 43 to 65 px on the phone, 45 at the desk).
