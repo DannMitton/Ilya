@@ -1,7 +1,7 @@
 <script lang="ts">
 	/**
 	 * THE WELCOME PLATE (brief r2 item 5): one small square page, drawn in code, that turns over five times in place through six images: я, [ɑ], the
-	 * eighth note on a staff, the [ɑ] zone, the vowel space, the Илья icon. Each turn is the same 30-degree edge sweeping top to bottom; the sheet
+	 * eighth note on a staff (Finale Maestro), the [ɑ] zone, the vowel space, the Илья icon. Each turn is the same 30-degree edge sweeping top to bottom; the sheet
 	 * decides when (`welcome-motion.ts`), this component only shows the first `turned + 1` layers. The numbers are `welcome-plate.ts`'s.
 	 *
 	 * The plate is `role="img"` named Илья (`lang="ru"`, so a screen reader says the Russian name in either interface language), and its layers are hidden from a screen reader: the sheet's words say everything the pictures say.
@@ -30,7 +30,7 @@
 	<div class="layer" class:shown={turned >= 1} aria-hidden="true">
 		<svg viewBox="0 0 {BOX} {BOX}"><text class="ipa" x={centre} y="192" text-anchor="middle" font-size="124" fill="var(--ink-secondary)">[ɑ]</text></svg>
 	</div>
-	<!-- 2: the eighth note on a staff, Bravura U+E1D7, its bounding box centred on the plate -->
+	<!-- 2: the eighth note on a staff, Finale Maestro U+E1D7 (metNote8thUp), its notehead on the middle line -->
 	<div class="layer" class:shown={turned >= 2} aria-hidden="true">
 		<svg viewBox="0 0 {BOX} {BOX}">
 			{#each lines as y (y)}<line x1={STAFF.x1} y1={y} x2={STAFF.x2} y2={y} stroke="var(--ink-stave)" stroke-width="2.2" />{/each}
@@ -65,10 +65,15 @@
 </div>
 
 <style>
-	/* The fonts are the app's own files: Source Serif 4 (the Cyrillic subset is in google-families.css), Lato IPA (app.css), Bravura (below). */
+	/*
+	 * The fonts are the app's own files: Source Serif 4 (the Cyrillic subset is in google-families.css), Lato IPA (app.css), and Finale Maestro (below).
+	 * THE NOTE IS FINALE MAESTRO, the app's default music font (`AGENTS.md`, Engraving constraints; `score/notation-fonts.ts`, `DEFAULT_NOTATION_FONT_ID`), by the
+	 * same family name and file URL the score renderer registers, so the browser reuses one file. The desk's amendment of 2026-11-16, item 5; the first build
+	 * used Bravura because the brief and prototype named it. `welcome-plate.test.ts` holds the family and URL to `notation-fonts.ts`.
+	 */
 	@font-face {
-		font-family: 'Bravura';
-		src: url('/fonts/bravura/Bravura.woff2') format('woff2');
+		font-family: 'Finale Maestro';
+		src: url('/fonts/finale-maestro/FinaleMaestro.otf') format('opentype');
 		font-display: swap;
 	}
 	.plate {
@@ -115,7 +120,7 @@
 		font-family: 'Lato IPA', var(--font-sans);
 	}
 	.smufl {
-		font-family: 'Bravura';
+		font-family: 'Finale Maestro';
 	}
 	.icon {
 		position: absolute;

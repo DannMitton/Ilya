@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { LENGTH_CELLS } from '$lib/score/correction';
+import { DEFAULT_NOTATION_FONT_ID, NOTATION_FONTS } from '$lib/score/notation-fonts';
 import { ACTIVE, BOX, FRAME, ICON_STRIPES, ICON_WORD, NOTE_BBOX, NOTE_GLYPH, NOTE_FONT_SIZE, STAFF, activeZoneEnlarged, noteBaselineY, noteX, staffLineYs, vowelSpace } from './welcome-plate';
 
 const proto = readFileSync(new URL('../../../../../../docs/sessions/welcome-sheet/ilya-welcome-draft-17.html', import.meta.url), 'utf8').replace(/base64,[A-Za-z0-9+/=]{200,}/g, 'base64,');
@@ -72,15 +73,32 @@ describe('the staff and the note', () => {
 		expect(noteBaselineY()).toBe(150);
 	});
 
-	it('sizes the Bravura glyph so a staff space is the staff\'s gap (SMuFL: a quarter of the font size)', () => {
+	it('sizes the glyph so a staff space is the staff\'s gap (SMuFL: a quarter of the font size)', () => {
 		expect(NOTE_FONT_SIZE / 4).toBe(STAFF.gap);
 	});
 
-	it('holds the pinned bounding box of U+E1D7 (metNote8thUp) to Bravura\'s own metadata, so the constant cannot drift', () => {
-		const meta = JSON.parse(readFileSync(new URL('../../../../static/fonts/bravura/bravura_metadata.json', import.meta.url), 'utf8'));
+	it('holds the pinned bounding box of U+E1D7 (metNote8thUp) to Finale Maestro\'s own metadata, so the constant cannot drift', () => {
+		const meta = JSON.parse(readFileSync(new URL('../../../../static/fonts/finale-maestro/FinaleMaestro.json', import.meta.url), 'utf8'));
 		const box = meta.glyphBBoxes.metNote8thUp;
 		expect(NOTE_BBOX.sw).toEqual(box.bBoxSW);
 		expect(NOTE_BBOX.ne).toEqual(box.bBoxNE);
+	});
+
+	it('draws the note in Finale Maestro, the app\'s default music font, by the same family and file the score renderer registers, so the file is reused', () => {
+		const spec = NOTATION_FONTS.find((f) => f.id === 'finale-maestro')!;
+		expect(DEFAULT_NOTATION_FONT_ID).toBe('finale-maestro');
+		const svelte = readFileSync(new URL('./WelcomePlate.svelte', import.meta.url), 'utf8');
+		expect(svelte).toContain(`font-family: '${spec.family}';`);
+		expect(svelte).toContain(`url('${spec.file}')`);
+		expect(svelte).not.toContain("font-family: 'Bravura'");
+		expect(svelte).not.toContain('Bravura.woff2');
+	});
+
+	it('sits the notehead on the middle of the plate: its centre, from Maestro\'s noteheadBlack, is within a unit of the middle line\'s x', () => {
+		const meta = JSON.parse(readFileSync(new URL('../../../../static/fonts/finale-maestro/FinaleMaestro.json', import.meta.url), 'utf8'));
+		const head = meta.glyphBBoxes.noteheadBlack;
+		const centreX = noteX() + ((head.bBoxSW[0] + head.bBoxNE[0]) / 2) * STAFF.gap;
+		expect(Math.abs(centreX - BOX / 2)).toBeLessThan(1);
 	});
 
 	it('draws the glyph the app\'s own length picker draws for an eighth note', () => {

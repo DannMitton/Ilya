@@ -95,17 +95,17 @@ export const STAFF = { x1: 26, x2: 274, gap: 25, lines: 5 } as const;
 export const STAFF_TOP = BOX / 2 - (STAFF.gap * (STAFF.lines - 1)) / 2;
 export const staffLineYs = (): number[] => Array.from({ length: STAFF.lines }, (_, i) => STAFF_TOP + i * STAFF.gap);
 
-/** The glyph: SMuFL `metNote8thUp`, U+E1D7 (an eighth note, stem up), in Bravura. It is the glyph `score/correction.ts` `LENGTH_CELLS` draws for "eighth" (`:201`, `:208`). */
-export const NOTE_GLYPH = '';
+/** The glyph: SMuFL `metNote8thUp`, U+E1D7 (an eighth note, stem up), in Finale Maestro. It is the glyph `score/correction.ts` `LENGTH_CELLS` draws for "eighth" (`:201`, `:208`). */
+export const NOTE_GLYPH = '\uE1D7';
 /** Font size 100 makes a staff space 25 units (SMuFL: a staff space is a quarter of the font size), so the glyph sits on this staff exactly. */
 export const NOTE_FONT_SIZE = STAFF.gap * 4;
 
 /**
- * `metNote8thUp`'s bounding box from `static/fonts/bravura/bravura_metadata.json` (`glyphBBoxes.metNote8thUp`), in staff spaces. The 733 KB metadata is
- * not fetched for one glyph: the constant is pinned here and `welcome-plate.test.ts` reads the file and fails if they differ. (`note8thUp`, a different
- * glyph, is wider and taller; U+E1D7 is the metronome-mark form.)
+ * `metNote8thUp`'s bounding box from `static/fonts/finale-maestro/FinaleMaestro.json` (`glyphBBoxes.metNote8thUp`), in staff spaces. The metadata is not
+ * fetched for one glyph: the constant is pinned here and `welcome-plate.test.ts` reads the file and fails if they differ. (The first build drew this glyph in
+ * Bravura, whose box is NE [2.132, 2.784], SW [0, -0.564]; the desk's amendment of 2026-11-16 moved it to the app's default music font.)
  */
-export const NOTE_BBOX = { sw: [0.0, -0.564], ne: [2.132, 2.784] } as const;
+export const NOTE_BBOX = { sw: [0.0, -0.548], ne: [2.264, 3.04] } as const;
 
 /**
  * The note's left edge, in box units: the ratified prototype's own `x = 134` (`ilya-welcome-draft-17.html`, line 84), so that the NOTEHEAD, not the whole
@@ -117,7 +117,7 @@ export function noteX(): number {
 	return 134;
 }
 
-/** The note's baseline: Bravura's noteheads sit on the baseline, so the middle line is the baseline. */
+/** The note's baseline: a SMuFL notehead sits on the baseline, so the middle line is the baseline. */
 export const noteBaselineY = (): number => BOX / 2;
 
 /* ── the icon ────────────────────────────────────────────────────────────── */
