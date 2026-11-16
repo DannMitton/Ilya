@@ -1376,10 +1376,10 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		   used rather than as the page was first opened. */
 		const coarse = window.matchMedia?.('(pointer: coarse)').matches ?? false;
 		const spaces = coarse ? COARSE_TAP_SPACES : FINE_TAP_SPACES;
-		const targets = [...sheet.querySelectorAll('[data-hit]')].map((el) => {
+		const targets = [...sheet.querySelectorAll('[data-hit], [data-verse-hit]')].map((el) => {
 			const r = el.getBoundingClientRect();
 			return {
-				id: el.getAttribute('data-hit') ?? '',
+				id: (el.getAttribute('data-hit') ?? el.getAttribute('data-verse-hit') ?? '').replace(/~v\d+$/, ''), // a later-pass copy names its source note
 				cx: r.left + r.width / 2,
 				cy: r.top + r.height / 2,
 				...tapBand(r.top, r.height, spaces),

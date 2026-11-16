@@ -38,11 +38,11 @@
 			const svg = el.ownerSVGElement;
 			if (!svg) continue;
 			let best: { id: string; dx: number; left: number } | null = null;
-			for (const h of svg.querySelectorAll<SVGElement>('[data-hit]')) {
+			for (const h of svg.querySelectorAll<SVGElement>('[data-hit], [data-verse-hit]')) {
 				const b = h.getBoundingClientRect();
 				const dx = b.left - r.right;
 				if (dx < -2 || b.bottom < r.top - 40 || b.top > r.bottom + 40) continue;
-				if (!best || dx < best.dx) best = { id: h.getAttribute('data-hit') ?? '', dx, left: b.left };
+				if (!best || dx < best.dx) best = { id: (h.getAttribute('data-hit') ?? h.getAttribute('data-verse-hit') ?? '').replace(/~v\d+$/, ''), dx, left: b.left }; // a later-pass copy names its source bar
 			}
 			if (!best?.id) continue;
 			const min = coarse ? MIN_HIT : 24;

@@ -157,7 +157,7 @@ export function paginateMelody(i: MelodyPagesInput): MelodyPages {
 		seam: systemSeam(render.bars, {
 			label: (place) => t('markup.verseLabel', lang).replace('%s', String(place)),
 			tag: (bar, place) => t('markup.verseTag', lang).replace('%m', bar).replace('%v', String(place)),
-		}),
+		}, render.liveIds),
 	});
 	return { ...out, render, analyzed: { ...i.analyzed, events }, withheld: withheld.size > 0 ? withheld : undefined };
 }

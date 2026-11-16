@@ -23,7 +23,7 @@ const labels = (svg: string) => [...svg.matchAll(/<text data-verse-label="(\d+)"
 function pages(score: ParsedScore, width: number) {
 	const r = renderScoreOf(score);
 	const analyzed = analyzeScore(r.score, { fR1: {} }, () => undefined, { generatedAt: '2026-11-16T00:00:00.000Z' });
-	const out = paginateScore(r.score, analyzed, { pageWidth: width, pageHeight: 4000, marginTop: 0, marginBottom: 0, marginLeft: 0, marginRight: 0, breakRunsAt: r.boundaries, seam: systemSeam(r.bars, TEXT) });
+	const out = paginateScore(r.score, analyzed, { pageWidth: width, pageHeight: 4000, marginTop: 0, marginBottom: 0, marginLeft: 0, marginRight: 0, breakRunsAt: r.boundaries, seam: systemSeam(r.bars, TEXT, r.liveIds) });
 	return { r, out };
 }
 
@@ -82,5 +82,27 @@ describe('fix 3: two tacet bars that meet at a pass boundary', () => {
 		const pair = tacetAt.find((i, k) => tacetAt[k + 1] === i + 1);
 		expect(pair, 'two tacet columns are adjacent').toBeDefined();
 		expect(columns[pair! + 1].advance).toBeGreaterThanOrEqual(TACET_REST.measureSp * lineGap);
+	});
+});
+
+describe('follow-up fix 4: a bar printed only as a later pass stays live', () => {
+	it('the second ending is live under its source ids, and its system names its source bar', async () => {
+		const p = await load('strophic-volta.musicxml');
+		const { r, out } = pages(p, 624);
+		expect(r.bars.map((b) => b.live ?? false)).toEqual([false, false, false, false, false, false, false, true, false]);
+		const ending = p.vocalLine.filter((e) => e.measureIndex === 4).map((e) => e.id);
+		const svg = out.pages.join('\n');
+		for (const id of ending) {
+			expect(svg).toContain(`data-hit="${id}"`);
+			expect(svg).not.toContain(`data-verse-hit="${id}~v2"`);
+			expect(svg).not.toContain(`data-hit="${id}~v2"`);
+		}
+		// a later copy of a bar that has a live copy stays inert
+		const first = p.vocalLine.find((e) => e.measureIndex === 0)!.id;
+		expect(svg).toContain(`data-verse-hit="${first}~v2"`);
+		const own = out.systems.map((s) => s.attr).join(' ');
+		const range = out.systems.find((s) => s.svg.includes(`data-hit="${ending[0]}"`))!.attr!;
+		expect(range).toMatch(/^data-system="/);
+		expect(own).toContain('data-system');
 	});
 });

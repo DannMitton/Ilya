@@ -16,6 +16,11 @@ import type { Vowel } from './types';
 const BW = [60, 90, 120, 180, 250];
 const strip = (s: string) => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/.*$/gm, '$1');
 
+/* WHY 20 SECONDS. Two cases below run ten and nine full captures of synthetic fry in one test. On a cloud machine under load they
+   measured 5.0 to 6.1 s, past vitest's 5 s default, and failed on the clock alone (seen in lanes 56, 57, 58, and 60); they passed
+   when run alone. What they assert is the reading, not the speed, so they get four times the default. */
+const SLOW_CASE_MS = 20_000;
+
 describe('the measure switch', () => {
 	it('?measure=open selects the open picker, and nothing else does', () => {
 		expect(measurePicker('?measure=open')).toBe('open');
@@ -42,7 +47,7 @@ describe('the open picker is agnostic', () => {
 		const outs = asked.map((v) => JSON.stringify(runCapture(y, SYNTH_SR, v, undefined, undefined, 'open')));
 		expect(new Set(outs).size).toBe(1);
 		expect(outs[0]).toContain('"picker":"open"');
-	});
+	}, SLOW_CASE_MS);
 });
 
 describe('a reading taken under the open picker says so', () => {
@@ -84,5 +89,5 @@ describe('the wider match does not let the source peak claim fR1 (treble [ɑ], f
 			if (o.outcome === 'reading' && Math.abs(o.formant.f1 - 900) / 900 <= 0.10) good++;
 		}
 		expect(good).toBeGreaterThanOrEqual(8);
-	});
+	}, SLOW_CASE_MS);
 });
