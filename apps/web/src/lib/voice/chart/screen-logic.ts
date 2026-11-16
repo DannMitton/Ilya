@@ -112,12 +112,9 @@ export function idleCue(selected: Vowel, sung: ReadonlySet<Vowel>): RitualCue {
 /** Cues that stay on the screen after a take ends because the singer needs to read them: everything but a plain capture. */
 export const staysAfterTake = (key: string): boolean => key !== 'pacifier.captured';
 
-/**
- * The first-time explanation of sing, stop, and fry (the tree's ratified sentence, `calib.capture.cuePrefix` + the vowel + `cueSuffix`),
- * which shows under the cue line until the first take begins.
- */
+/** The first-time explanation of the take (sheet line 17, ratified), under the cue until the first take has begun; `{v}` is the bracketed symbol. */
 export function firstTimeExplanation(v: Vowel, language: Language): string {
-	return `${t('calib.capture.cuePrefix', language)} ${bracket(v)} ${spokenName(v, language)} ${t('calib.capture.cueSuffix', language)}`;
+	return tv('capture.firstTime', language, { v: bracket(v) });
 }
 
 /** Board D's optical nudges for each vowel's symbol in the circle, in em, in `VOWELS` order (Dann 2026-11-12: "visually centre the vowel"). */

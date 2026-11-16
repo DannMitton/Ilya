@@ -92,9 +92,9 @@ test.describe('the new capture screen on the stub', () => {
 		expect(settledRx).toBeGreaterThan(before * 1.1); // [u]'s zone now fills about half the view
 		expect(mid).not.toBe(settledRx);
 		await expect(count(page)).toHaveText('0 of 10'); // nothing recorded
-		await expect(page.getByLabel('Hide the chart and the readout while I sing')).toBeEnabled();
+		await expect(page.getByLabel('Hide the chart and the readout during a take')).toBeEnabled();
 		await page.locator('.main').click();
-		await expect(page.getByLabel('Hide the chart and the readout while I sing')).toBeDisabled();
+		await expect(page.getByLabel('Hide the chart and the readout during a take')).toBeDisabled();
 	});
 
 	/** Where a zone's centre is on the screen, from the drawn ellipse (the chart may be mid-glide: read it at the instant). */
@@ -262,9 +262,9 @@ test.describe('the new capture screen on the stub', () => {
 		test.setTimeout(120_000);
 		await open(page);
 		await toCapture(page);
-		await page.getByLabel('Hide the chart and the readout while I sing').check();
+		await page.getByLabel('Hide the chart and the readout during a take').check();
 		await page.locator('.main').click();
-		await expect(page.locator('.chart-box')).toContainText('The chart and the readout are hidden while you sing.');
+		await expect(page.locator('.chart-box')).toContainText('The chart and the readout are hidden during the take.');
 		expect(await page.locator('.vowel-chart').count()).toBe(0);
 		await expect(count(page)).toHaveText('1 of 10', { timeout: 40_000 });
 		await expect(page.locator('.vowel-chart')).toBeVisible();
@@ -278,7 +278,7 @@ test.describe('the new capture screen on the stub', () => {
 		await toCapture(page);
 		expect(await page.locator('.vowel-btn').count()).toBe(10);
 		expect(await page.locator('.pacifier, [class*="pacifier"]').count()).toBe(0);
-		await expect(page.locator('.hint')).toHaveText('Start follows Ilya’s order. Or tap any vowel to sing that one now.');
+		await expect(page.locator('.hint')).toHaveText('Tap a vowel to focus on it. Tap Start to record it.');
 	});
 
 	test('a lively room raises the room notice on the capture screen, and it can be dismissed (B2)', async ({ page }) => {
@@ -296,7 +296,7 @@ test.describe('the new capture screen on the stub', () => {
 		await toCapture(page);
 		expect(await page.locator('[data-zone]').count()).toBe(10);
 		expect(await page.locator('[data-placeholder]').count()).toBe(10);
-		await expect(page.locator('.hint')).toHaveText('Start follows Ilya’s order. Or tap any vowel to sing that one now.');
+		await expect(page.locator('.hint')).toHaveText('Tap a vowel to focus on it. Tap Start to record it.');
 	});
 });
 
@@ -352,7 +352,7 @@ test.describe('the readings list', () => {
 		await toCapture(page);
 		const list = page.locator('details.readings');
 		const toggle = page.locator('.hide-toggle');
-		await page.getByLabel('Hide the chart and the readout while I sing').check();
+		await page.getByLabel('Hide the chart and the readout during a take').check();
 		// The list's closed line and the toggle below it: its height and the gap between them. (Text above the list changes during a take, so the toggle's
 		// distance from the top of the screen is not the measure.)
 		const closedLine = async () => {
@@ -366,7 +366,7 @@ test.describe('the readings list', () => {
 		expect(await list.evaluate((e) => (e as HTMLDetailsElement).open)).toBe(true);
 		expect((await closedLine()).height).toBeGreaterThan(closedAtRest.height + 100); // open, the table fills it
 		await page.locator('.main').click();
-		await expect(page.locator('.chart-box')).toContainText('The chart and the readout are hidden while you sing.');
+		await expect(page.locator('.chart-box')).toContainText('The chart and the readout are hidden during the take.');
 		expect(await list.evaluate((e) => (e as HTMLDetailsElement).open)).toBe(false);
 		expect(await list.evaluate((e) => getComputedStyle(e).visibility)).toBe('hidden');
 		expect(await list.evaluate((e) => (e as HTMLElement).inert)).toBe(true);

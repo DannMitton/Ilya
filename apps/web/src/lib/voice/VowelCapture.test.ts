@@ -38,7 +38,7 @@ describe('the screen at rest', () => {
 	it('has ten real buttons in Grayson’s order, named by their spoken name and state, the selected one saying so', () => {
 		const labels = buttons(html({ profile: pick('i', 'e'), startVowel: 'ɛ' }));
 		expect(labels).toEqual([
-			'cardinal-i, sung', 'close-e, sung', 'smallcaps-i, placeholder', 'velar-i, placeholder', 'open-e, placeholder, selected',
+			'cardinal-i, recorded', 'close-e, recorded', 'smallcaps-i, placeholder', 'velar-i, placeholder', 'open-e, placeholder, selected',
 			'bright-a, placeholder', 'dark-a, placeholder', 'turned-v, placeholder', 'Russian-o, placeholder', 'cardinal-u, placeholder'
 		]);
 		expect(VOWELS).toHaveLength(10);
@@ -56,8 +56,8 @@ describe('the screen at rest', () => {
 		const h = html();
 		expect(text(h)).toContain('Ready for [i].');
 		expect(h).toContain('Start [i]');
-		expect(text(h)).toContain('Start follows Ilya’s order. Or tap any vowel to sing that one now.');
-		expect(text(h)).toContain('Tap the [i] cardinal-i vowel to begin. First sing it as you usually do');
+		expect(text(h)).toContain('Tap a vowel to focus on it. Tap Start to record it.');
+		expect(text(h)).toContain('Start gives you a breath, then [i]. Sing it first as you usually do');
 		expect(text(html({ profile: pick('i') }))).not.toContain('First sing it as you usually do');
 	});
 
@@ -122,14 +122,14 @@ describe('the screen at rest', () => {
 		expect(h).not.toContain('Use what I’ve recorded');
 		expect(h).not.toContain('Let Ilya work out');
 		expect(h).not.toContain('>Done<');
-		expect(text(h)).toContain('Tap any vowel to sing it again.');
+		expect(text(h)).toContain('Tap any vowel to focus on it. Re-take records it again.');
 		expect(text(h)).toContain('10 of 10');
 	});
 
 	it('has the toggle, the progress bar, Start over, and the one plain sentence about the dot and the axes', () => {
 		const h = html({ profile: pick('i') });
 		expect(h).toContain('type="checkbox"');
-		expect(text(h)).toContain('Hide the chart and the readout while I sing');
+		expect(text(h)).toContain('Hide the chart and the readout during a take');
 		expect(h).toContain('role="progressbar"');
 		expect(text(h)).toContain('Start over');
 		expect(text(h)).toContain('Each dot is one of your vowels: the higher your tongue, the higher the dot; the further forward, the nearer the front edge.');
@@ -158,14 +158,14 @@ describe('the screen at rest', () => {
 		expect(text(fr)).toContain('Vos résonances');
 		expect(text(fr)).toContain('1 sur 10');
 		expect(text(fr)).toContain('Reprendre [i]');
-		expect(text(fr)).toContain('Masquer le graphique et l’affichage pendant que je chante');
-		expect(buttons(fr)[0]).toBe('i cardinal, chantée, sélectionnée');
+		expect(text(fr)).toContain('Masquer le graphique et l’affichage pendant une prise');
+		expect(buttons(fr)[0]).toBe('i cardinal, captée, sélectionnée');
 		expect(text(fr)).toContain('Il en reste 9, dans l’ordre de votre choix.');
 		expect(fr).toContain('aria-label="Graphique des zones des voyelles.');
 		expect(text(fr)).not.toMatch(/MISSING|\{[a-z]+\}/);
 		// And with nothing sung, the first-time explanation and the first-move hint in French.
 		const none = html({ language: 'fr' });
-		expect(text(none)).toContain('Commencer suit l’ordre d’Ilya.');
+		expect(text(none)).toContain('Touchez une voyelle pour l’afficher. Touchez Commencer pour la capter.');
 		expect(text(none)).not.toMatch(/MISSING|\{[a-z]+\}/);
 	});
 });
@@ -201,7 +201,7 @@ describe('the readings list (readings brief, Step 1)', () => {
 	it('marks a sung row and a placeholder row differently, in words for assistive technology and by the legend’s two dots', () => {
 		const h = html({ profile: pick('i', 'e') });
 		expect(rowsOf(h).slice(0, 3)).toEqual([['i', 'sung'], ['e', 'sung'], ['ɪ', 'placed']]);
-		expect(h).toContain('cardinal-i, sung');
+		expect(h).toContain('cardinal-i, recorded');
 		expect(h).toContain('smallcaps-i, placeholder');
 		expect(count(h, /class="mark-sung[ "]/g)).toBe(2);
 		expect(count(h, /class="mark-placed[ "]/g)).toBe(8);
@@ -230,6 +230,6 @@ describe('the readings list (readings brief, Step 1)', () => {
 		const fr = html({ language: 'fr', profile: pick('i') });
 		expect(text(fr)).toContain('Vos lectures');
 		expect(text(fr)).toContain('Voyelle');
-		expect(fr).toContain('i cardinal, chantée');
+		expect(fr).toContain('i cardinal, captée');
 	});
 });

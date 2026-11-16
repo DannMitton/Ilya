@@ -16,7 +16,7 @@
    tree on 2026-11-02 (consistency batch 2). Paths are under `apps/web/src/`;
    a prefix is listed with the files that use it most and its key count.
 
-   This file holds 1,294 keys.
+   This file holds 1,295 keys.
 
    A key built at run time (`watch.key.letter.${letter}`, `comment.<register>.<part>`)
    has no literal reference, so a search for the whole key can come back empty
@@ -28,7 +28,7 @@
    app.            2  the page's hidden heading, lib/components/HeaderBar.svelte (`app.subtitle` has no literal consumer)
    binder.        10  lib/library/exchange.ts, lib/components/Drawer/RootPanel.svelte
    calib.        100  lib/voice/CalibrationWizard.svelte, lib/voice/ProfileSwitcher.svelte, lib/components/Drawer/VoiceAnchor.svelte
-   capture.       54  the calibration screen: lib/voice/VowelCapture.svelte, lib/voice/chart/screen-logic.ts, lib/voice/chart/VowelChart.svelte
+   capture.       55  the calibration screen: lib/voice/VowelCapture.svelte, lib/voice/chart/screen-logic.ts, lib/voice/chart/VowelChart.svelte
    clitic.         3  no literal consumer found (lib/score/clitic-seat.ts does the seating)
    collide.        5  routes/+page.svelte
    comment.       40  the note comments: lib/insights/singer-blocks.ts, lib/insights/comment-text.ts, lib/analysis/watchlist.ts
@@ -1298,6 +1298,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'calib.readiness.marginal': { en: 'Your fry is reading near the edge of our range; a little lower or higher may read cleaner.', fr: 'Votre friture se lit près de la limite de notre plage. Un peu plus grave ou plus aigu se lirait plus nettement.' },
 	// UNUSED SINCE N.199 (Step 8, Dann 2026-11-14 21:03): the wheel's capture branch of the wizard (queue, hold banner, Pause) is deleted and nothing reads this key. Kept and marked in place, with its ratified French.
 	'calib.capture.allSet': { en: 'All set.', fr: 'Tout est prêt.' },
+	// UNUSED SINCE N.203 lane 59 Step 7 (`cuePrefix` and `cueSuffix`): `capture.firstTime` holds the whole sentence. Kept, as the tree keeps its retired keys.
 	'calib.capture.cuePrefix': { en: 'Tap the', fr: 'Touchez la voyelle' },
 	// Row 2d part 3: cueSuffix, pacifier.singFirst, pacifier.pause, and
 	// pacifier.beginPhonating RATIFIED by Dann 2026-09-30 21:00, English and
@@ -2482,10 +2483,11 @@ const strings: Record<string, Record<Language, string>> = {
 	'sheet.col.vowel': { en: 'Vowel', fr: 'Voyelle' },
 	'sheet.col.fr1': { en: 'Hz and note', fr: 'Hz et note' },
 	'sheet.col.fr2': { en: 'Hz and note', fr: 'Hz et note' },
-	'sheet.legend.sung': { en: 'A vowel you sang, measured in vocal fry.', fr: 'Une voyelle que vous avez chantée, mesurée en friture vocale.' },
-	'sheet.legend.placeholder': { en: 'A placeholder: where Ilya expects a vowel you have not sung yet.', fr: 'Une valeur par défaut : là où Ilya attend une voyelle que vous n’avez pas encore chantée.' },
+	// N.203 sheet-english r2 / sheet-french r1, RATIFIED by Dann 2026-11-16 (01:13 English, 01:20 French), line 26b.
+	'sheet.legend.sung': { en: 'A vowel you recorded, measured in vocal fry.', fr: 'Une voyelle que vous avez captée, mesurée en friture vocale.' },
+	'sheet.legend.placeholder': { en: 'A placeholder: where Ilya expects a vowel you have not recorded yet.', fr: 'Une valeur par défaut : là où Ilya attend une voyelle que vous n’avez pas encore captée.' },
 	'sheet.legend.zones': { en: 'Each coloured area reflects the neighbourhood where Ilya expects a vowel to resonate in a voice like yours. The lavender areas mark [ɪ], [ɨ], [a], and [ʌ]: Ilya can work out these four from your samples of the other six, or you can choose to sample them directly. Overlap between areas (where the colours blend) is normal.', fr: 'Chaque zone colorée reflète le voisinage où Ilya s’attend à ce qu’une voyelle résonne dans une voix comme la vôtre. Les zones lavande marquent [ɪ], [ɨ], [a] et [ʌ] : Ilya peut déduire ces quatre-là de vos échantillons des six autres, ou vous pouvez choisir de les chanter directement. Le chevauchement entre les zones (là où les couleurs se fondent) est normal.' },
-	'sheet.legend.hull': { en: 'The outline surrounds your sung vowels. It is dashed until all ten are sung.', fr: 'Le contour entoure vos voyelles chantées. Il reste en pointillé jusqu’à ce que les dix soient chantées.' },
+	'sheet.legend.hull': { en: 'The outline surrounds your recorded vowels. It is dashed until all ten are recorded.', fr: 'Le contour entoure vos voyelles captées. Il reste en pointillé jusqu’à ce que les dix soient captées.' },
 	'sheet.axis.front': { en: 'tongue forward', fr: 'langue avancée' },
 	'sheet.axis.back': { en: 'tongue back', fr: 'langue reculée' },
 	'sheet.axis.open': { en: 'mouth more open', fr: 'bouche plus ouverte' },
@@ -2525,26 +2527,32 @@ const strings: Record<string, Record<Language, string>> = {
 	'capture.number.7': { en: 'seven', fr: 'sept' },
 	'capture.number.8': { en: 'eight', fr: 'huit' },
 	'capture.number.9': { en: 'nine', fr: 'neuf' },
+	// N.203 sheet line 17, RATIFIED (2026-11-16 01:13 English, 01:20 French): the first-time explanation, with {v} the bracketed symbol.
+	'capture.firstTime': { en: 'Start gives you a breath, then {v}. Sing it first as you usually do, to coordinate the shape of your vocal tract. Then stop, but keep that shape, and begin again, this time in vocal fry. Ilya measures the fry.', fr: 'Commencer vous laisse le temps d’une respiration, puis vient {v}. Chantez-la d’abord comme d’habitude, pour coordonner la forme de votre conduit vocal. Puis arrêtez, mais gardez cette forme, et recommencez, cette fois en friture vocale. Ilya mesure la friture.' },
 	// N.203 sheet line 24, RATIFIED by Dann 2026-11-16 01:13 and 01:20.
 	'capture.seeSpace': { en: 'See your vowel space', fr: 'Voir votre espace vocalique' },
 	'capture.stop': { en: 'Stop', fr: 'Arrêter' },
 	'capture.clearAll': { en: 'Clear all', fr: 'Tout effacer' },
-	'capture.hide': { en: 'Hide the chart and the readout while I sing', fr: 'Masquer le graphique et l’affichage pendant que je chante' },
-	'capture.hidden': { en: 'The chart and the readout are hidden while you sing. They return when this vowel is captured.', fr: 'Le graphique et l’affichage sont masqués pendant que vous chantez. Ils réapparaissent quand cette voyelle est captée.' },
-	'capture.hint.first': { en: 'Start follows Ilya’s order. Or tap any vowel to sing that one now.', fr: 'Commencer suit l’ordre d’Ilya. Ou touchez une voyelle pour la chanter tout de suite.' },
-	'capture.hint.active': { en: 'Stop, or a second tap on {v}, ends this take. Nothing is saved from it.', fr: 'Touchez {v} de nouveau, ou Arrêter, pour mettre fin à cette prise. Rien n’en est conservé.' },
+	// N.203 words supplement r1, RATIFIED by Dann 2026-11-16 01:38, item 1.
+	'capture.hide': { en: 'Hide the chart and the readout during a take', fr: 'Masquer le graphique et l’affichage pendant une prise' },
+	'capture.hidden': { en: 'The chart and the readout are hidden during the take. They return when this vowel is captured.', fr: 'Le graphique et l’affichage sont masqués pendant la prise. Ils réapparaissent quand cette voyelle est captée.' },
+	// N.203 sheet-english r2 / sheet-french r1, RATIFIED by Dann 2026-11-16 (01:13 English, 01:20 French), line 18.
+	'capture.hint.first': { en: 'Tap a vowel to focus on it. Tap Start to record it.', fr: 'Touchez une voyelle pour l’afficher. Touchez Commencer pour la capter.' },
+	// N.203 sheet-english r2 / sheet-french r1, RATIFIED by Dann 2026-11-16 (01:13 English, 01:20 French), line 19.
+	'capture.hint.active': { en: 'Stop ends this take and sets it aside.', fr: 'Arrêter met fin à cette prise et la met de côté.' },
 	'capture.hint.retake': { en: 'A re-take replaces {v} only if the new reading is as clear.', fr: 'Une reprise ne remplace {v} que si la nouvelle lecture est aussi nette.' },
-	'capture.hint.placed.typed': { en: 'Ilya has placed {v} from your voice type for now. Its placeholder moves as you sing.', fr: 'Ilya a placé {v} d’après votre type de voix, pour l’instant. Sa valeur par défaut évolue à mesure que vous chantez.' },
-	'capture.hint.placed.untyped': { en: 'Ilya has placed {v} from typical voices for now. Its placeholder moves as you sing.', fr: 'Ilya a placé {v} d’après des voix typiques, pour l’instant. Sa valeur par défaut évolue à mesure que vous chantez.' },
-	'capture.hint.toGo': { en: '{count} to go, in any order. Ilya keeps a placeholder for each until you sing it.', fr: 'Il en reste {count}, dans l’ordre de votre choix. Ilya garde une valeur par défaut pour chaque voyelle jusqu’à ce que vous la chantiez.' },
-	'capture.hint.finished': { en: 'Tap any vowel to sing it again.', fr: 'Touchez une voyelle pour la chanter de nouveau.' },
+	'capture.hint.placed.typed': { en: 'Ilya has placed {v} from your voice type for now. Its placeholder moves as you record.', fr: 'Ilya a placé {v} d’après votre type de voix, pour l’instant. Sa valeur par défaut évolue à mesure que vous captez vos voyelles.' },
+	'capture.hint.placed.untyped': { en: 'Ilya has placed {v} from typical voices for now. Its placeholder moves as you record.', fr: 'Ilya a placé {v} d’après des voix typiques, pour l’instant. Sa valeur par défaut évolue à mesure que vous captez vos voyelles.' },
+	'capture.hint.toGo': { en: '{count} to go, in any order. Ilya keeps a placeholder for each until you record it.', fr: 'Il en reste {count}, dans l’ordre de votre choix. Ilya garde une valeur par défaut pour chaque voyelle jusqu’à ce que vous la captiez.' },
+	// N.203 sheet-english r2 / sheet-french r1, RATIFIED by Dann 2026-11-16 (01:13 English, 01:20 French), line 20.
+	'capture.hint.finished': { en: 'Tap any vowel to focus on it. Re-take records it again.', fr: 'Touchez une voyelle pour l’afficher. Reprendre la capte de nouveau.' },
 	'capture.hint.confirmClear': { en: 'Tap Clear all to clear every reading for this voice.', fr: 'Touchez Tout effacer pour effacer toutes les lectures de cette voix.' },
 	'capture.uncertain': { en: '{v} is noted, though this take was less clear. A re-take can replace it.', fr: '{v} est noté, même si cette prise était moins nette. Une reprise peut le remplacer.' },
-	'capture.button.sung': { en: 'sung', fr: 'chantée' },
+	'capture.button.sung': { en: 'recorded', fr: 'captée' },
 	'capture.button.placed': { en: 'placeholder', fr: 'valeur par défaut' },
 	'capture.button.selected': { en: 'selected', fr: 'sélectionnée' },
 	'capture.bar': { en: 'Progress of this take', fr: 'Progression de cette prise' },
-	'capture.chartAlt': { en: 'Chart of the vowel zones. It moves in on the vowel being measured, and a dot shows the reading.', fr: 'Graphique des zones des voyelles. Il se rapproche de la voyelle mesurée, et un point en montre la lecture.' },
+	'capture.chartAlt': { en: 'Chart of the vowel zones. It moves in on the vowel in focus, and a dot shows each reading.', fr: 'Graphique des zones des voyelles. Il se rapproche de la voyelle affichée, et un point montre chaque lecture.' },
 	'capture.drawingAlt': { en: 'Side view of the mouth and throat for {name}', fr: 'Vue de profil de la bouche et de la gorge pour {name}' },
 	'capture.vowels': { en: 'The ten vowels', fr: 'Les dix voyelles' },
 	'sheet.print': { en: 'Print this sheet', fr: 'Imprimer cette feuille' },
