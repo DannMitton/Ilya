@@ -116,11 +116,9 @@
 
 	// 'characteristics' is the fifth phase (E.5 slice 3; Kimi's Q5 ruling,
 	// v39 §A.31): typed range/tessitura/passaggio through note pickers.
-	// Skippable and never a gate — entered only through the quiet summary
-	// button (Dann's slice-3 decision, 2026-07-13), and Done returns to
-	// the summary. Editable later through the same button.
-	// N.164 (Dann, 2026-09-25) adds a second door: Insights' "Add your
-	// range" opens here directly, through `openRequest`.
+	// Skippable and never a gate. The summary's button is gone (N.203 lane 60): it is entered by the
+	// pane's two doors, "Describe your voice" and "What INSIGHTS shares, and how", and by Insights'
+	// "Add your range" (N.164, Dann 2026-09-25), all through `openRequest`. Done closes the takeover.
 	type Phase = 'welcome' | 'readiness' | 'capture' | 'summary' | 'characteristics';
 
 	interface CalibrationWizardProps {
@@ -136,11 +134,10 @@
 		/** Fires with each guarded reading as it is stored, so a future parent can subscribe. */
 		onVowelCaptured?: (vowel: Vowel, formant: CalibratedFormant) => void;
 		/**
-		 * Fires once the singer taps Finish on the Profile summary (spec v1 §2
-		 * Phase 3). The profile persists to device storage continuously
-		 * (profileStore.ts), so this hook is for a parent that wants the
-		 * completion moment itself (the future profile-ready main-pane state,
-		 * Kimi-gated behind persistence, which is now real).
+		 * Fires when the singer taps Finish on the summary, or Done on the characteristics
+		 * screen. The page passes it to close the takeover (N.203 lane 60). It writes
+		 * nothing: every reading is saved when it is captured (`commitReading`), and
+		 * `persist()` would move `calibratedAt`, the date INSIGHTS prints.
 		 */
 		onComplete?: (formants: Partial<Record<Vowel, CalibratedFormant>>) => void;
 		/**
@@ -580,26 +577,8 @@
 	$effect(() => visit.sync());
 	$effect(() => () => visit.destroy());
 
-	// ── The resonance roster (Dann's direction, 2026-07-10) ──────────────────
-	// One table, both surfaces: all ten vowels accounted for from the start,
-	// in the canonical order, greyed until a value lands. Columns: vowel
-	// (with the reading word beneath, amber for Provisional), fR1, fR2 (and
-	// Re-take in the summary). This supersedes the same-day Claude-Kimi
-	// consensus's grow-as-you-capture log, fixed-height container, and
-	// scroll-to-newest machinery — a static roster is inherently
-	// layout-stable, which honours the ruling those mechanisms served. The
-	// unified table also supersedes the summary's earlier red Provisional
-	// colouring in favour of the locked calibration amber. An empty fR2 cell
-	// on a sampled vowel reads "Try again" (Dann's corrective-as-invitation
-	// copy register): the missing second resonance names its next action,
-	// not a deficiency. To be recorded in the Kimi file.
-	//
-	// Typography (Dann, 2026-07-10, per international mathematical-notation
-	// convention): the resonance symbol is an italic f (a variable) with an
-	// upright roman subscript R1 or R2 (a label, not a product of variables), set as
-	// a true subscript slightly smaller than the base, the R a full capital: Titze et al. (2015), Table I (Dann 2026-11-13 15:44).
-	// See `FrSym.svelte` (lifted from the wizard's snippet, N.199 Step 1). One source in the code; the convention extends across the
-	// whole app as other surfaces are touched.
+	// The resonance roster is GONE (N.203 lane 60, Step 5): the summary's one table is the sheet's (`chart/VowelSpaceSheet.svelte`), with the roster's marks in it. The
+	// symbol convention (an italic f with an upright roman subscript R1 or R2, Titze et al. 2015, Table I; Dann 2026-07-10 and 2026-11-13) is `FrSym.svelte`'s.
 	let logAnnounce = $state('');
 
 	// Start over (Phase 2b): clearing a voice's captures deserves one
@@ -951,10 +930,9 @@
 			<!-- E.5 slice 3 (Kimi's Q5 ruling, v39 §A.31): typed-first capture
 			     through note pickers; sung capture, when it arrives, verifies
 			     and never discovers. Every field optional; values save on
-			     every change (source 'manual'); Done returns to the summary.
-			     Copy is agentless throughout and EN-only pending the standing
-			     calibration-French pass; all strings flagged for Dann's copy
-			     review. -->
+			     every change (source 'manual'). Done closes the takeover (`finish`,
+			     N.203 lane 60 Step 3), to the Drawer at rest, or to INSIGHTS when the
+			     screen was opened from "Add your range". Copy is agentless throughout. -->
 			<div class="wizard-phase">
 				<h2 id="wizard-title">{T('calib.characteristics.title')}</h2>
 				<p class="wizard-lede">
