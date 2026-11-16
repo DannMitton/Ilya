@@ -38,6 +38,11 @@ const RATIFIED: Array<[string, string, string]> = [
 	['capture.inProgress', '{v} in progress', '{v} en cours'],
 	['capture.done', 'Done', 'Terminé'], // UNUSED since N.203 lane 59 Step 2, kept
 	['capture.seeSpace', 'See your vowel space', 'Voir votre espace vocalique'],
+	['capture.part.breathe', 'Breathe', 'Respiration'],
+	['capture.part.sing', 'Sing', 'Chant'],
+	['capture.part.shape', 'Shape', 'Forme'],
+	['capture.part.fry', 'Fry', 'Friture'],
+	['capture.cue.breathe', 'Breathe.', 'Respirez.'],
 	['capture.stop', 'Stop', 'Arrêter'],
 	['capture.clearAll', 'Clear all', 'Tout effacer'],
 	['capture.hide', 'Hide the chart and the readout while I sing', 'Masquer le graphique et l’affichage pendant que je chante'],
@@ -65,8 +70,8 @@ const RATIFIED: Array<[string, string, string]> = [
 ];
 
 describe('the ratified calibration and sheet strings', () => {
-	it('pins all forty-nine, in both languages', () => {
-		expect(RATIFIED).toHaveLength(49);
+	it('pins all fifty-four, in both languages', () => {
+		expect(RATIFIED).toHaveLength(54);
 		for (const [key, en, fr] of RATIFIED) {
 			expect(t(key, 'en'), `${key} en`).toBe(en);
 			expect(t(key, 'fr'), `${key} fr`).toBe(fr);
@@ -79,8 +84,13 @@ describe('the ratified calibration and sheet strings', () => {
 	});
 
 	it('pins the pause line (EN 2026-11-13 01:05, FR 10:30)', () => {
-		expect(t('pacifier.pause', 'en')).toBe('Stop singing, but maintain the shape of your vocal tract for that vowel.');
-		expect(t('pacifier.pause', 'fr')).toBe('Arrêtez de chanter, mais gardez la forme de votre conduit vocal pour cette voyelle.');
+		expect(t('pacifier.pause', 'en')).toBe('Stop. Hold that shape, silently.');
+		expect(t('pacifier.pause', 'fr')).toBe('Arrêtez. Gardez cette forme, en silence.');
+		// N.203 sheet line 16 and the words supplement's item 8, RATIFIED 2026-11-16. The keys are `pacifier.`, so they are pinned here, not in the list.
+		expect(t('pacifier.singFirst', 'en')).toBe('Sing {v} as you usually do.');
+		expect(t('pacifier.singFirst', 'fr')).toBe('Chantez {v} comme d’habitude.');
+		expect(t('pacifier.nowSustain', 'en')).toBe('Now sustain. Ilya is measuring.');
+		expect(t('pacifier.nowSustain', 'fr')).toBe('Soutenez maintenant. Ilya mesure.');
 	});
 
 	it('fills its placeholders with `tv` and leaves an unfilled one showing', () => {

@@ -16,7 +16,7 @@
    tree on 2026-11-02 (consistency batch 2). Paths are under `apps/web/src/`;
    a prefix is listed with the files that use it most and its key count.
 
-   This file holds 1,273 keys.
+   This file holds 1,278 keys.
 
    A key built at run time (`watch.key.letter.${letter}`, `comment.<register>.<part>`)
    has no literal reference, so a search for the whole key can come back empty
@@ -28,7 +28,7 @@
    app.            2  the page's hidden heading, lib/components/HeaderBar.svelte (`app.subtitle` has no literal consumer)
    binder.        10  lib/library/exchange.ts, lib/components/Drawer/RootPanel.svelte
    calib.        100  lib/voice/CalibrationWizard.svelte, lib/voice/ProfileSwitcher.svelte, lib/components/Drawer/VoiceAnchor.svelte
-   capture.       33  the calibration screen: lib/voice/VowelCapture.svelte, lib/voice/chart/screen-logic.ts, lib/voice/chart/VowelChart.svelte
+   capture.       38  the calibration screen: lib/voice/VowelCapture.svelte, lib/voice/chart/screen-logic.ts, lib/voice/chart/VowelChart.svelte
    clitic.         3  no literal consumer found (lib/score/clitic-seat.ts does the seating)
    collide.        5  routes/+page.svelte
    comment.       40  the note comments: lib/insights/singer-blocks.ts, lib/insights/comment-text.ts, lib/analysis/watchlist.ts
@@ -1362,11 +1362,13 @@ const strings: Record<string, Record<Language, string>> = {
 	// UNUSED SINCE N.199 (Step 8, Dann 2026-11-14 21:03): the vowel wheel is deleted and nothing reads this key. Kept and marked in place, with its ratified French, the way this file's other retired strings are.
 	'pacifier.tapToCapture': { en: 'Tap a vowel to capture it.', fr: 'Touchez une voyelle pour la capter.' },
 	// singFirst, pause, and beginPhonating: RATIFIED by Dann 2026-09-30 21:00 (row 2d part 3).
-	'pacifier.singFirst': { en: 'Sing {v} as you usually do. Three.', fr: 'Chantez {v} comme d\u2019habitude. Trois.' },
+	// N.203 sheet line 16 (RATIFIED 2026-11-16): the spoken count left the take.
+	'pacifier.singFirst': { en: 'Sing {v} as you usually do.', fr: 'Chantez {v} comme d\u2019habitude.' },
 	// N.199 Step 7: the pause line, new English (Dann 2026-11-13 01:05) and French (10:30); it replaces "Stop, and keep the shape." (ratified 2026-09-30 21:00).
-	'pacifier.pause': { en: 'Stop singing, but maintain the shape of your vocal tract for that vowel.', fr: 'Arrêtez de chanter, mais gardez la forme de votre conduit vocal pour cette voyelle.' },
+	'pacifier.pause': { en: 'Stop. Hold that shape, silently.', fr: 'Arrêtez. Gardez cette forme, en silence.' },
 	'pacifier.beginPhonating': { en: 'Now {v} in vocal fry.', fr: 'Maintenant, {v} en friture vocale.' },
-	'pacifier.nowSustain': { en: 'Now sustain. Sample recording.', fr: 'Soutenez maintenant. Échantillon en cours d\u2019enregistrement.' },
+	// N.203 words supplement item 8 (RATIFIED 2026-11-16 01:38), overriding sheet line 16's last cue.
+	'pacifier.nowSustain': { en: 'Now sustain. Ilya is measuring.', fr: 'Soutenez maintenant. Ilya mesure.' },
 	'pacifier.captured': { en: '{v} captured.', fr: 'Capture de {v} effectuée.' },
 	'pacifier.rolledBack': { en: '{v}: new sample was less certain, so the previous one was kept.', fr: 'Pour {v}, le nouvel échantillon était moins certain, donc le précédent a été conservé.' },
 	// UNUSED SINCE N.199 (Step 8, Dann 2026-11-14 21:03): the vowel wheel is deleted and nothing reads this key. Kept and marked in place, with its ratified French, the way this file's other retired strings are.
@@ -2498,6 +2500,12 @@ const strings: Record<string, Record<Language, string>> = {
 	'capture.inProgress': { en: '{v} in progress', fr: '{v} en cours' },
 	// UNUSED SINCE N.203 lane 59 Step 2: at ten recorded the main button reads Re-take, and "See your vowel space" is the way on. Kept, as the tree keeps its retired keys.
 	'capture.done': { en: 'Done', fr: 'Terminé' },
+	// N.203 sheet lines 15 and 16 (RATIFIED 2026-11-16 01:13 English, 01:20 French): the take line's four parts, and the cue for the first.
+	'capture.part.breathe': { en: 'Breathe', fr: 'Respiration' },
+	'capture.part.sing': { en: 'Sing', fr: 'Chant' },
+	'capture.part.shape': { en: 'Shape', fr: 'Forme' },
+	'capture.part.fry': { en: 'Fry', fr: 'Friture' },
+	'capture.cue.breathe': { en: 'Breathe.', fr: 'Respirez.' },
 	// N.203 sheet line 24, RATIFIED by Dann 2026-11-16 01:13 and 01:20.
 	'capture.seeSpace': { en: 'See your vowel space', fr: 'Voir votre espace vocalique' },
 	'capture.stop': { en: 'Stop', fr: 'Arrêter' },

@@ -90,21 +90,23 @@ describe('the main button', () => {
 describe('the cue', () => {
 	it('shows the bracketed symbol to the eye and the spoken name to the ear', () => {
 		expect(cueText({ key: 'pacifier.singFirst', vowel: 'ɨ' }, 'en')).toEqual({
-			eye: 'Sing [ɨ] as you usually do. Three.',
-			ear: 'Sing the velar-i vowel as you usually do. Three.'
+			eye: 'Sing [ɨ] as you usually do.',
+			ear: 'Sing the velar-i vowel as you usually do.'
 		});
 		expect(cueText({ key: 'capture.cue.ready', vowel: 'i' }, 'en').eye).toBe('Ready for [i].');
 		expect(cueText({ key: 'capture.cue.ready', vowel: 'i' }, 'en').ear).toBe('Ready for the cardinal-i vowel.');
-		expect(cueText({ key: 'calib.readiness.countTwo', vowel: 'i' }, 'en')).toEqual({ eye: 'Two.', ear: 'Two.' });
+		expect(cueText({ key: 'capture.cue.breathe', vowel: 'i' }, 'en')).toEqual({ eye: 'Breathe.', ear: 'Breathe.' });
+		expect(cueText({ key: 'pacifier.pause', vowel: 'i' }, 'en').eye).toBe('Stop. Hold that shape, silently.');
+		expect(cueText({ key: 'pacifier.nowSustain', vowel: 'i' }, 'en').eye).toBe('Now sustain. Ilya is measuring.');
 		expect(cueText({ key: '', vowel: null }, 'en')).toEqual({ eye: '', ear: '' });
 	});
 	it('reads a tree key in the language and a draft key in English', () => {
-		expect(cueText({ key: 'pacifier.pause', vowel: 'i' }, 'fr').eye).toBe('Arrêtez de chanter, mais gardez la forme de votre conduit vocal pour cette voyelle.');
+		expect(cueText({ key: 'pacifier.pause', vowel: 'i' }, 'fr').eye).toBe('Arrêtez. Gardez cette forme, en silence.');
 		expect(cueText({ key: 'capture.uncertain', vowel: 'e' }, 'fr').eye).toBe('[e] est noté, même si cette prise était moins nette. Une reprise peut le remplacer.');
 	});
 	it('every key the ritual can emit has words in both the draft and the tree: no [MISSING]', () => {
 		const keys = [
-			'pacifier.singFirst', 'calib.readiness.countTwo', 'calib.readiness.countOne', 'pacifier.pause', 'pacifier.beginPhonating', 'pacifier.nowSustain',
+			'capture.cue.breathe', 'pacifier.singFirst', 'pacifier.pause', 'pacifier.beginPhonating', 'pacifier.nowSustain',
 			'pacifier.captured', 'pacifier.rolledBack', 'capture.uncertain', 'pacifier.cancelled', 'pacifier.error.micPermission', 'pacifier.error.micNotFound',
 			'pacifier.error.noAudio', 'pacifier.error.tooShort', 'pacifier.error.default'
 		];

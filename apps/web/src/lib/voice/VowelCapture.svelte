@@ -20,7 +20,9 @@
 	import type { CaptureError } from './engine/errors';
 	import type { CalibratedFormant, Vowel } from './engine/types';
 	import { VOWELS } from './engine/types';
-	import { createCaptureRitual, LANDING_MS, type RitualCue } from './capture-ritual.svelte';
+	import { createCaptureRitual, GLIDE_MS, type RitualCue } from './capture-ritual.svelte';
+	import TakeLine from './TakeLine.svelte';
+	import { TAKE_PART_IDS, TAKE_WEIGHTS } from './take-line';
 	import { createVisit } from './visit';
 	import { spokenName } from './vowel-names';
 	import FrSym from './FrSym.svelte';
@@ -29,7 +31,7 @@
 	import { readingListRows } from './chart/readings';
 	import { nextVowel } from './chart/tour';
 	import { zoomTarget, type View } from './chart/geometry';
-	import { createViewMotion, ZOOM_IN_MS, ZOOM_OUT_QUICK_MS } from './chart/view-motion';
+	import { createViewMotion } from './chart/view-motion';
 	import { creditLine } from './chart/drawings';
 	import SagittalDrawing from './chart/SagittalDrawing.svelte';
 	import { failedTake, readingTake, type TakeRecord, type TakeVisibility } from './takes';
@@ -141,47 +143,22 @@
 		// all ten sung, no pass: the screen rests where it is
 	}
 
-	// ── The chart's view: in under the first sung beat, back out on the landing (Step 4c) ────────
-	let view = $state<View>(untrack(() => model.full));
-	const motion = createViewMotion(untrack(() => model.full), (v) => (view = v));
+	// ── The chart's view: it rests on the focused vowel and glides on every change of focus (N.203 Step 4) ────────
 	/** The view that moves in on a vowel's zone, widened to hold the reading it has (a re-take) or is about to have. */
 	const targetFor = (v: Vowel, extra?: CalibratedFormant) => {
 		const zone = model.zones.find((z) => z.vowel === v)!;
 		const have = extra ?? profile[v];
 		return zoomTarget(model.full, zone, have ? [{ f1: have.f1, f2: have.f2 }] : []);
 	};
-	let lastPhase: string = 'idle';
+	let view = $state<View>(untrack(() => targetFor(startVowel)));
+	const motion = createViewMotion(untrack(() => targetFor(startVowel)), (v) => (view = v));
+	// The subject is the take's vowel while one runs or lands, else the focus. A change of subject, or of the reading it holds, aims the view at
+	// it: a glide of about 800 ms, a jump under reduced motion, and none in hidden mode (the chart is not drawn). The dwell is the ritual's: the
+	// chart rests on the new dot for its 1.4 s because the subject does not change until the dwell is over.
 	$effect(() => {
-		const phase = ritual.phase;
-		const v = ritual.vowel;
-		untrack(() => {
-			const was = lastPhase;
-			lastPhase = phase;
-			if (phase === was) return;
-			const ms = (n: number) => (reducedMotion ? 0 : n);
-			if (phase === 'sing' && v) {
-				// Hidden mode: the chart is not drawn, so the view takes its place with no motion.
-				motion.to(targetFor(v), hideWhileSinging ? 0 : ms(ZOOM_IN_MS));
-			} else if (phase === 'landing' && v) {
-				// The reading has landed (the profile has it): start close on it, and move back out.
-				motion.set(targetFor(v, profile[v]));
-				motion.to(model.full, ms(LANDING_MS));
-			} else if (phase === 'idle' && (was === 'sing' || was === 'pause' || was === 'listening' || was === 'sweep')) {
-				motion.to(model.full, ms(ZOOM_OUT_QUICK_MS)); // a cancel or an error: out again
-			} else if (phase === 'idle' && was === 'landing') {
-				// The landing is over: rest on the full view as it now stands. The rest effect below acts only when the full view changes, and
-				// does not run for a landing that left it unchanged, so this is what guarantees the view ends where the voice is (Step 6a amendment).
-				motion.to(model.full, 0);
-			}
-		});
-	});
-	// At rest the view follows the voice (a dot added, a voice cleared). It acts only when the full view CHANGES: the phase is read
-	// untracked, so the move out after a cancel or an error (400 ms) is not ended by this effect in the same flush (Step 6a).
-	$effect(() => {
-		const full = model.full;
-		untrack(() => {
-			if (ritual.phase === 'idle') motion.set(full);
-		});
+		const target = targetFor(subject, profile[subject]);
+		const ms = reducedMotion || hiding ? 0 : GLIDE_MS;
+		untrack(() => motion.to(target, ms));
 	});
 
 	onMount(() => {
@@ -229,6 +206,7 @@
 	/** The readout shows at rest and in the landing, and not while a notice is being read: the cue then has the whole row (Step 7, the pause line on a phone). */
 	const showReading = $derived((ritual.phase === 'idle' || ritual.phase === 'landing') && !!reading && !(ritual.phase === 'idle' && notice));
 	const hz = $derived(t('calib.common.hz', language));
+	const takeParts = $derived(TAKE_PART_IDS.map((id) => ({ id, label: tv(`capture.part.${id}`, language), weight: TAKE_WEIGHTS[id] })));
 
 	// ── Gestures ───────────────────────────────────────────────────────────
 	/** What the singer could see from the tap to the reading: the toggle as it stood at the tap. */
@@ -314,16 +292,14 @@
 				<VowelChart {model} {view} {language} active={running ? subject : null} />
 			{/if}
 		</div>
-		<div
-			class="bar"
-			role="progressbar"
-			aria-label={tv('capture.bar', language)}
-			aria-valuemin="0"
-			aria-valuemax="100"
-			aria-valuenow={Math.round(ritual.progress * 100)}
-		>
-			<div class="bar-fill" style="width: {Math.round(ritual.progress * 100)}%"></div>
-		</div>
+		<TakeLine
+			parts={takeParts}
+			current={ritual.take?.part ?? null}
+			within={ritual.take?.within ?? 0}
+			holding={ritual.take?.holding ?? false}
+			label={tv('capture.bar', language)}
+			{reducedMotion}
+		/>
 		<div class="cue-row">
 			<p class="cue" aria-hidden="true">{cue.eye}</p>
 			{#if showReading && reading && !hiding}
@@ -559,17 +535,6 @@
 		padding: 1.5rem;
 		font-size: 0.9375rem;
 		color: var(--ink-secondary);
-	}
-	.bar {
-		height: 8px;
-		border-radius: 4px;
-		background: var(--lavender-desk);
-		overflow: hidden;
-	}
-	.bar-fill {
-		height: 8px;
-		background: var(--lavender-jewel);
-		transition: width 0.06s linear;
 	}
 	/* One height for the row, whatever the cue: the longest cue (the pause line, 13 words in English, longer in French) takes three lines
 	   across the whole row on a phone, so the buttons below never move under the singer's thumb (Step 7). */
@@ -835,9 +800,4 @@
 		text-decoration: underline;
 		font-weight: 400;
 	}
-	@media (prefers-reduced-motion: reduce) {
-		.bar-fill {
-			transition: none;
-		}
-	}
-</style>
+	</style>
