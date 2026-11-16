@@ -473,3 +473,44 @@ describe('ratified strophic verse strings (strophic lane A, 2026-11-12 12:58)', 
 		expect(t('markup.verseTag', 'fr').replace('%m', '12').replace('%v', '2')).toBe('12 \u00b7 couplet 2');
 	});
 });
+
+/* N.202 Step 4: the GUIDE's two entries, RATIFIED by Dann 2026-11-15 14:18 in both languages, as drafted
+   (`docs/memory/OPEN.md`, N.202, "THE GUIDE'S TWO ENTRIES"). The words are typed here from that entry, not read back
+   out of the Guide. The version, the year, and the build are placeholders in the markup and come from `lib/version.ts`;
+   no year is typed in the entries. U+2019 apostrophes, U+00A0 before each French colon. */
+describe('N.202: the Guide says which Ilya this is, and how to cite it', () => {
+	const NB = '\u00a0';
+	const pins: Array<['en' | 'fr', string]> = [
+		['en', '<h4 id="guide-version">Which Ilya is this?</h4>'],
+		['en', '<p>This is <em>Ilya</em> {ILYA_VERSION}. The letter advances with each public release. The footer of every page you print carries the same name, so a page can be traced to the release that made it. If you report a problem, include the build as well: {ILYA_BUILD}.</p>'],
+		['en', '<h4 id="guide-cite">How do I cite Ilya?</h4>'],
+		['en', '<p>Name the release that the footer of your page prints: Mitton, Dann. <em>Ilya</em> {ILYA_VERSION}. {ILYA_VERSION_YEAR}. https://ilya.dannmitton.com.</p>'],
+		['fr', '<h4 id="guide-version">De quelle version d’Ilya s’agit-il?</h4>'],
+		['fr', `<p>Vous utilisez <em>Ilya</em> {ILYA_VERSION}. La lettre avance à chaque nouvelle version publique. Le pied de chaque page que vous imprimez porte le même nom${NB}: une page peut ainsi être rattachée à la version qui l’a produite. Si vous signalez un problème, indiquez aussi la compilation${NB}: {ILYA_BUILD}.</p>`],
+		['fr', '<h4 id="guide-cite">Comment citer Ilya?</h4>'],
+		['fr', `<p>Nommez la version qu’imprime le pied de votre page${NB}: MITTON, Dann. <em>Ilya</em> {ILYA_VERSION}, {ILYA_VERSION_YEAR}. https://ilya.dannmitton.com.</p>`],
+	];
+	for (const [lang, text] of pins) {
+		it(`${lang}: ${text.slice(0, 48)}…`, () => {
+			expect(branches[lang]).toContain(text);
+		});
+	}
+	it('seats both entries directly after the future entry and before the forecast, in both languages', () => {
+		for (const lang of ['en', 'fr'] as const) {
+			const b = branches[lang];
+			const order = ['id="guide-future"', 'id="guide-version"', 'id="guide-cite"', 'id="guide-markup-forecast"'].map((k) => b.indexOf(k));
+			expect(order.every((i) => i > 0), lang).toBe(true);
+			expect([...order].sort((a, c) => a - c), lang).toEqual(order);
+		}
+	});
+	it('reads the version, the year, and the build from the one module, and types none of them', () => {
+		expect(guideSource).toContain("import { ILYA_VERSION, ILYA_BUILD, ILYA_VERSION_YEAR } from '$lib/version';");
+		for (const lang of ['en', 'fr'] as const) {
+			const entries = branches[lang].slice(branches[lang].indexOf('id="guide-version"'), branches[lang].indexOf('<!-- The forecast philosophy'));
+			expect(entries, lang).not.toMatch(/(?<![A-Za-z0-9])20\d\d/);
+		}
+	});
+	it('the French half holds no {:else} of its own, because three tests cut it at the first one', () => {
+		expect(guideSource.slice(guideFrStart, guideFrEnd)).not.toContain('{:else}');
+	});
+});
