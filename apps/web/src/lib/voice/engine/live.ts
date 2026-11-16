@@ -180,6 +180,9 @@ function fmt(x: number | null, digits = 2): string {
 	return x === null || Number.isNaN(x) ? 'n/a' : x.toFixed(digits);
 }
 
+/** The failures that release the microphone even inside a visit: there is nothing live to keep. */
+const MIC_FAILURES: readonly string[] = ['MIC_PERMISSION_DENIED', 'MIC_NOT_FOUND', 'NO_AUDIO_INPUT'];
+
 /** Map a getUserMedia rejection onto the locked CaptureError vocabulary. */
 function mapMicError(e: unknown): CaptureError {
 	const name = e instanceof DOMException || e instanceof Error ? e.name : '';
@@ -200,6 +203,8 @@ export class LiveCaptureSession implements CaptureSession {
 	 * stub's `active` flag, extended to real async boundaries). */
 	private gen = 0;
 	private active = false;
+	/** A visit is open (`openVisit()`): the stream and the context outlive a run. */
+	private visit = false;
 	private recording = false;
 	private handlers: CaptureHandlers | null = null;
 	/** Set for a readiness run instead of `handlers`; never both at once. */
@@ -254,6 +259,28 @@ export class LiveCaptureSession implements CaptureSession {
 		void this.runReadiness(this.gen);
 	}
 
+	openVisit(): void {
+		this.visit = true;
+		// Inside the Start tap (a user gesture): a context the system suspended between takes is resumed here, because start() itself runs later, from a timer.
+		if (this.ctx && this.ctx.state === 'suspended') void this.ctx.resume().catch(() => undefined);
+	}
+
+	closeVisit(): void {
+		this.visit = false;
+		this.gen++;
+		this.active = false;
+		this.handlers = null;
+		this.readinessHandlers = null;
+		this.chunks = [];
+		this.chunkSamples = 0;
+		this.recording = false;
+		this.quietBuf = null;
+		this.quietPower = null;
+		this.fryBuf = null;
+		this.fryRank = 0;
+		this.releaseAudio(true);
+	}
+
 	/** Common pre-run teardown: supersede silently and clear every buffer. */
 	private reset(): void {
 		this.gen++;
@@ -300,8 +327,12 @@ export class LiveCaptureSession implements CaptureSession {
 		}
 	}
 
-	/** Terminal failure: release everything, then report once. */
-	private fail(gen: number, error: CaptureError): void {
+	/**
+	 * Terminal failure: stop the run, then report once. A microphone failure, and a graph that could not be built (`force`), release the
+	 * stream and the context even inside a visit; every other failure (the gate's timeout above all) keeps them, so a missed fry does not
+	 * bring the microphone's banner back.
+	 */
+	private fail(gen: number, error: CaptureError, force = false): void {
 		if (gen !== this.gen) return;
 		dbg('fail:', error.code, '—', error.message, 'cause' in error ? JSON.stringify(error.cause) : '');
 		const handlers = this.handlers;
@@ -316,7 +347,7 @@ export class LiveCaptureSession implements CaptureSession {
 		this.quietPower = null;
 		this.fryBuf = null;
 		this.fryRank = 0;
-		this.releaseAudio();
+		this.releaseAudio(force || MIC_FAILURES.includes(error.code));
 		handlers?.onError(error);
 		readinessHandlers?.onError(error);
 	}
@@ -328,6 +359,19 @@ export class LiveCaptureSession implements CaptureSession {
 	 * the caller must do nothing further.
 	 */
 	private async acquire(gen: number): Promise<boolean> {
+		if (this.stream && this.ctx) {
+			// A visit keeps the graph between runs. Reuse it while its track is live and its context is open; otherwise (a call, a headset
+			// pulled, an interruption) let it go and acquire again.
+			if (this.stream.getAudioTracks()[0]?.readyState === 'live' && this.ctx.state !== 'closed') {
+				try {
+					if (this.ctx.state === 'suspended') await this.ctx.resume();
+				} catch {
+					// Best-effort, as below.
+				}
+				return gen === this.gen;
+			}
+			this.releaseGraph();
+		}
 		let stream: MediaStream;
 		try {
 			const md = typeof navigator !== 'undefined' ? navigator.mediaDevices : undefined;
@@ -380,12 +424,12 @@ export class LiveCaptureSession implements CaptureSession {
 			this.sinkNode = ctx.createGain();
 			this.sinkNode.gain.value = 0; // capture-only: the mic must never be audible
 			this.sinkNode.connect(ctx.destination);
-			this.tapNode = await this.buildTap(ctx, gen);
+			this.tapNode = await this.buildTap(ctx);
 			if (gen !== this.gen) return false;
 			this.srcNode.connect(this.tapNode);
 			this.tapNode.connect(this.sinkNode);
 		} catch (e) {
-			this.fail(gen, { code: 'EXTRACTION_FAILED', message: 'Audio capture setup failed.', cause: e });
+			this.fail(gen, { code: 'EXTRACTION_FAILED', message: 'Audio capture setup failed.', cause: e }, true);
 			return false;
 		}
 		return true;
@@ -454,7 +498,9 @@ export class LiveCaptureSession implements CaptureSession {
 	}
 
 	/** AudioWorklet tap, with a ScriptProcessorNode fallback. */
-	private async buildTap(ctx: AudioContext, gen: number): Promise<AudioNode> {
+	private async buildTap(ctx: AudioContext): Promise<AudioNode> {
+		// The handler reads the generation when it is called, not when it is built: a graph kept across runs belongs to whichever run is
+		// current, and `onChunk` drops everything that arrives between runs (`active` is false then).
 		if (typeof AudioWorkletNode === 'function' && ctx.audioWorklet) {
 			try {
 				const url = URL.createObjectURL(new Blob([WORKLET_SRC], { type: 'application/javascript' }));
@@ -468,7 +514,7 @@ export class LiveCaptureSession implements CaptureSession {
 					numberOfOutputs: 1,
 					outputChannelCount: [1]
 				});
-				node.port.onmessage = (ev: MessageEvent) => this.onChunk(gen, ev.data as Float32Array);
+				node.port.onmessage = (ev: MessageEvent) => this.onChunk(this.gen, ev.data as Float32Array);
 				dbg('tap: AudioWorklet');
 				return node;
 			} catch {
@@ -477,7 +523,7 @@ export class LiveCaptureSession implements CaptureSession {
 		}
 		const node = ctx.createScriptProcessor(4096, 1, 1);
 		node.onaudioprocess = (ev: AudioProcessingEvent) =>
-			this.onChunk(gen, new Float32Array(ev.inputBuffer.getChannelData(0)));
+			this.onChunk(this.gen, new Float32Array(ev.inputBuffer.getChannelData(0)));
 		dbg('tap: ScriptProcessor fallback');
 		return node;
 	}
@@ -703,8 +749,16 @@ export class LiveCaptureSession implements CaptureSession {
 		else handlers?.onError(outcome.error as CaptureError);
 	}
 
-	/** Release all audio resources: timers, graph, tracks, context. */
-	private releaseAudio(): void {
+	/**
+	 * Stop the run: every timer. Then, unless a visit is open (and `force` is not set), release the graph, the tracks, and the context.
+	 * A visit keeps the graph; its tap goes on posting audio, which `onChunk` drops while no run is active.
+	 */
+	private releaseAudio(force = false): void {
+		this.stopTimers();
+		if (force || !this.visit) this.releaseGraph();
+	}
+
+	private stopTimers(): void {
 		if (this.gateTimer) {
 			clearInterval(this.gateTimer);
 			this.gateTimer = null;
@@ -725,6 +779,10 @@ export class LiveCaptureSession implements CaptureSession {
 			clearTimeout(this.listenTimer);
 			this.listenTimer = null;
 		}
+	}
+
+	/** Release the graph, the tracks, and the context. */
+	private releaseGraph(): void {
 		if (this.tapNode) {
 			// typeof guard first: on the ScriptProcessor fallback path the
 			// AudioWorkletNode global may not exist, and a bare instanceof

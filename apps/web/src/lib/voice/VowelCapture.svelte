@@ -21,6 +21,7 @@
 	import type { CalibratedFormant, Vowel } from './engine/types';
 	import { VOWELS } from './engine/types';
 	import { createCaptureRitual, LANDING_MS, type RitualCue } from './capture-ritual.svelte';
+	import { createVisit } from './visit';
 	import { spokenName } from './vowel-names';
 	import FrSym from './FrSym.svelte';
 	import VowelChart from './chart/VowelChart.svelte';
@@ -48,7 +49,8 @@
 		onFailed,
 		onTake,
 		onReturn,
-		onClearAll
+		onClearAll,
+		takeoverVisible = true
 	}: {
 		session: CaptureSession;
 		language: Language;
@@ -68,6 +70,8 @@
 		onReturn: () => void;
 		/** The second tap of Start over: the wizard clears this voice's readings. */
 		onClearAll: () => void;
+		/** Whether the takeover this screen sits in is showing. The microphone is held open only while it is (`visit.ts`). */
+		takeoverVisible?: boolean;
 	} = $props();
 
 	// ── State ───────────────────────────────────────────────────────────────
@@ -113,6 +117,15 @@
 			keepNotice();
 		}
 	});
+
+	// The microphone is open once per visit to this screen: while it is mounted and the takeover is showing (Step 1).
+	const visit = createVisit({
+		session: untrack(() => session),
+		endTake: () => ritual.cancel(),
+		closeTicks: () => ritual.closeTicks(),
+		wanted: () => takeoverVisible
+	});
+	$effect(() => visit.sync());
 
 	/** The ritual has just set its cue for the take that ended: keep it on the screen if the singer needs to read it, else let the invitation take over. */
 	function keepNotice() {
@@ -179,6 +192,7 @@
 		return () => {
 			mq.removeEventListener('change', change);
 			motion.stop();
+			visit.destroy();
 			ritual.destroy();
 		};
 	});
@@ -226,6 +240,7 @@
 		notice = null;
 		confirmingClear = false;
 		tookAny = true;
+		visit.resume(); // the Start tap is a gesture: a context the system suspended between takes resumes here
 		ritual.begin(v);
 	}
 	function tapVowel(v: Vowel) {

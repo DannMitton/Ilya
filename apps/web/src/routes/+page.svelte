@@ -3880,6 +3880,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 					     nothing to ask of it. -->
 					<CalibrationWizard
 						{language}
+						takeoverVisible={calibrating}
 						openRequest={calibrationRequest}
 						onActiveProfileChange={(f, name, characteristics, updatedAt, intake, voiceType) => {
 							voiceFormants = f;

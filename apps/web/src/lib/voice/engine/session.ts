@@ -77,11 +77,29 @@ export interface CaptureSession {
 	 */
 	startReadiness(handlers: ReadinessHandlers): void;
 	/**
-	 * Fire-and-forget teardown (Kimi §2.5). The session stops the microphone
-	 * tracks, releases the AudioContext, aborts in-flight buffering and timers,
-	 * and calls onError({ code: 'CANCELLED' }) only if it was in a non-terminal
-	 * state. The component reverts on the cancel gesture itself, so a CANCELLED
+	 * Fire-and-forget teardown (Kimi §2.5). The session stops the run: it aborts
+	 * in-flight buffering and timers, clears its buffers, and calls
+	 * onError({ code: 'CANCELLED' }) only if it was in a non-terminal state. With
+	 * no visit open it also stops the microphone tracks and releases the
+	 * AudioContext, as every run has always done; inside a visit (below) it keeps
+	 * both. The component reverts on the cancel gesture itself, so a CANCELLED
 	 * callback is an idempotent confirmation rather than a required signal.
 	 */
 	cancel(): void;
+	/**
+	 * A visit (N.203 lane 59 Step 1, Dann 2026-11-16 00:44): the microphone is
+	 * opened once for as long as the singer is on the screen that needs it, so a
+	 * phone announces it once. Inside a visit only two things release the stream
+	 * and the context: closeVisit(), and a microphone failure
+	 * (MIC_PERMISSION_DENIED, MIC_NOT_FOUND, NO_AUDIO_INPUT). A run's end, a
+	 * cancel, and every other failure stop the run and keep both. Outside a visit
+	 * every run acquires and releases as before.
+	 *
+	 * openVisit() is idempotent and acquires nothing: the first start() or
+	 * startReadiness() of the visit does. Call it from a user gesture, because it
+	 * resumes a suspended context.
+	 */
+	openVisit(): void;
+	/** Ends the visit: silently supersedes any run, then releases the tracks and the context. Idempotent. */
+	closeVisit(): void;
 }

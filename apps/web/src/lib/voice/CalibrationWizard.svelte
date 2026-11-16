@@ -200,21 +200,22 @@
 		 * `characteristics`, the Range fields. Absent, nothing changes.
 		 */
 		openRequest?: { phase: 'characteristics'; n: number } | null;
+		/** N.203 lane 59: whether the takeover is showing. The wizard stays mounted while it is stowed (Back), so the microphone's visit follows this. */
+		takeoverVisible?: boolean;
 	}
 
 	let {
-		// The live auditory input (locked port order step 2). One session
-		// instance for the wizard's lifetime; each capture and each readiness
-		// run opens and releases the microphone itself, so the mic indicator
-		// rests dark between them. Construction touches no browser API;
-		// getUserMedia is requested only inside start() and startReadiness().
+		// The live auditory input (locked port order step 2). One session for the wizard's lifetime. Outside a visit each run opens and
+		// releases the microphone itself; the capture screen holds one visit open while it shows (`visit.ts`). Construction touches no
+		// browser API; getUserMedia is requested only inside start() and startReadiness().
 		session: captureSession = captureSessionFor(),
 		onVowelCaptured,
 		onComplete,
 		onActiveProfileChange,
 		onOpenLearnNote,
 		language,
-		openRequest = null
+		openRequest = null,
+		takeoverVisible = true
 	}: CalibrationWizardProps = $props();
 
 	// N.22: dictionary lookup, following ScoreUploader.svelte and
@@ -1136,7 +1137,7 @@
 					</div>
 				{/if}
 				<VowelCapture session={captureSession} {language} {voiceType} {profile} startVowel={opening.start} pass={opening.pass}
-					onCaptured={commitReading} onTake={recordTake} onReturn={() => (phase = 'summary')} onClearAll={confirmReset} />
+					onCaptured={commitReading} onTake={recordTake} onReturn={() => (phase = 'summary')} onClearAll={confirmReset} {takeoverVisible} />
 			</div>
 		{:else if phase === 'summary'}
 			<div class="wizard-phase">

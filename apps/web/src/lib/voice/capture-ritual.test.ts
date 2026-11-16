@@ -22,6 +22,8 @@ class FakeSession implements CaptureSession {
 		this.starts.push({ vowel, voiceType, handlers });
 	}
 	startReadiness(_h: ReadinessHandlers) {}
+	openVisit() {}
+	closeVisit() {}
 	cancel() {
 		this.cancels++;
 	}
@@ -425,5 +427,69 @@ describe('destroy', () => {
 		vi.advanceTimersByTime(SWEEP * 2);
 		r.session.last.onComplete(formant());
 		expect([r.captured.length, r.rolledBack.length, r.failed.length]).toEqual([0, 0, 0]);
+	});
+});
+
+describe('the tick context (N.203 lane 59 Step 1)', () => {
+	class FakeAudioContext {
+		static all: FakeAudioContext[] = [];
+		state: 'running' | 'suspended' | 'closed' = 'suspended';
+		currentTime = 0;
+		destination = {};
+		resumes = 0;
+		constructor() {
+			FakeAudioContext.all.push(this);
+		}
+		resume() {
+			this.resumes++;
+			this.state = 'running';
+			return Promise.resolve();
+		}
+		close() {
+			this.state = 'closed';
+			return Promise.resolve();
+		}
+		createOscillator() {
+			return { type: '', frequency: { value: 0 }, connect: () => ({ connect() {} }), start() {}, stop() {} };
+		}
+		createGain() {
+			return { gain: { setValueAtTime() {}, exponentialRampToValueAtTime() {} }, connect() {} };
+		}
+	}
+	beforeEach(() => {
+		FakeAudioContext.all = [];
+		vi.stubGlobal('AudioContext', FakeAudioContext);
+		vi.useFakeTimers();
+	});
+	afterEach(() => {
+		vi.unstubAllGlobals();
+		vi.useRealTimers();
+	});
+
+	it('is made and resumed inside begin(), the Start tap, not when the first tick sounds', () => {
+		const { ritual } = rig({ ticks: true });
+		ritual.begin('i');
+		expect(FakeAudioContext.all).toHaveLength(1);
+		expect(FakeAudioContext.all[0].resumes).toBe(1);
+		ritual.destroy();
+	});
+
+	it('closeTicks closes it without tearing the ritual down, and a later begin makes a working one', () => {
+		const { ritual } = rig({ ticks: true });
+		ritual.begin('i');
+		ritual.cancel();
+		ritual.closeTicks();
+		expect(FakeAudioContext.all[0].state).toBe('closed');
+		expect(ritual.begin('e')).toBe(true);
+		expect(FakeAudioContext.all).toHaveLength(2);
+		expect(FakeAudioContext.all[1].state).toBe('running');
+		ritual.destroy();
+	});
+
+	it('makes none when ticks are off', () => {
+		const { ritual } = rig({ ticks: false });
+		ritual.begin('i');
+		expect(FakeAudioContext.all).toHaveLength(0);
+		ritual.destroy();
 	});
 });

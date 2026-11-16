@@ -81,6 +81,8 @@ export interface CaptureRitual {
 	begin(vowel: Vowel): boolean;
 	/** Ends the take in progress. False, and nothing happens, when there is none or its reading is already delivered. */
 	cancel(): boolean;
+	/** Closes the tick's audio context without tearing the ritual down (the visit helper's close, Step 1). A later `begin()` makes a new one. */
+	closeTicks(): void;
 	/** Tears down: timers, the session, the audio context. Fires no event. */
 	destroy(): void;
 }
@@ -123,11 +125,34 @@ export function createCaptureRitual(deps: CaptureRitualDeps): CaptureRitual {
 		cue = { key, vowel: v };
 	};
 
-	/** A short sine tick on each sung beat; optional, and a failure must never block the count. */
+	/**
+	 * The tick's own audio context (not the session's), made and resumed inside the Start tap, which is a user gesture: the first tick comes later
+	 * than the tap, and a context made then may not run on iOS. Optional; a failure must never block the take.
+	 */
+	function prepareTicks() {
+		if (deps.ticks === false) return;
+		try {
+			if (!audioCtx || audioCtx.state === 'closed') audioCtx = new AudioContext();
+			if (audioCtx.state === 'suspended') void audioCtx.resume();
+		} catch {
+			// Audio is optional.
+		}
+	}
+	function closeTicks() {
+		try {
+			void audioCtx?.close();
+		} catch {
+			// Already closed.
+		}
+		audioCtx = undefined;
+	}
+
+	/** A short sine tick; optional, and a failure must never block the count. */
 	function tick() {
 		if (deps.ticks === false) return;
 		try {
-			audioCtx ??= new AudioContext();
+			prepareTicks();
+			if (!audioCtx) return;
 			const osc = audioCtx.createOscillator();
 			const gain = audioCtx.createGain();
 			osc.type = 'sine';
@@ -156,6 +181,7 @@ export function createCaptureRitual(deps: CaptureRitualDeps): CaptureRitual {
 	function begin(v: Vowel): boolean {
 		if (destroyed || phase !== 'idle') return false;
 		const id = ++takeId;
+		prepareTicks();
 		vowel = v;
 		progress = 0;
 		sessionStarted = false;
@@ -264,12 +290,7 @@ export function createCaptureRitual(deps: CaptureRitualDeps): CaptureRitual {
 		takeId++;
 		toIdle();
 		if (hadSession) deps.session.cancel();
-		try {
-			void audioCtx?.close();
-		} catch {
-			// Already closed.
-		}
-		audioCtx = undefined;
+		closeTicks();
 	}
 
 	return {
@@ -290,6 +311,7 @@ export function createCaptureRitual(deps: CaptureRitualDeps): CaptureRitual {
 		},
 		begin,
 		cancel,
+		closeTicks,
 		destroy
 	};
 }
