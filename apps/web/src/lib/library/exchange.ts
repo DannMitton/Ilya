@@ -50,6 +50,8 @@ export interface ExportDeps {
 	load: (id: string) => Promise<LoadResult>;
 	loadSource: (id: string) => Promise<SourceBytes | null>;
 	appVersion: string;
+	/** The commit the bundle was built from, written into the manifest beside the version (N.202). */
+	build?: string;
 	exportedAt: string;
 	/** Today, in the singer's own language, for the naming fallbacks. */
 	today: string;
@@ -119,6 +121,7 @@ export async function exportBinder(deps: ExportDeps): Promise<ExportResult> {
 		const bytes = await buildBinder({
 			songs,
 			appVersion: deps.appVersion,
+			...(deps.build !== undefined ? { build: deps.build } : {}),
 			exportedAt: deps.exportedAt,
 		});
 		const fileName =

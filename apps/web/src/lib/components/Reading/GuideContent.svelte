@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import type { Language } from '$lib/i18n';
+	import { ILYA_VERSION, ILYA_BUILD, ILYA_VERSION_YEAR } from '$lib/version';
 	import GuideSources from './GuideSources.svelte';
 
 	interface Props {
@@ -58,6 +59,14 @@
 						<h4 id="guide-future">Où va Ilya?</h4>
 
 						<p><em>Ilya</em> offre déjà un composant OCR permettant de photographier du texte cyrillique qu'<em>Ilya</em> analyse et traite normalement. Étendre la portée savante d'<em>Ilya</em> pourrait inclure des fonctions d'accessibilité améliorées, ou la rétro-ingénierie de la manière dont d'autres autorités en diction lyrique russe parviennent à leurs transcriptions caractéristiques, afin d'offrir des transcriptions comparatives « à la manière de » grands noms de la diction lyrique russe dont les résultats diffèrent de Grayson. L'objectif n'est pas d'affirmer la supériorité de Grayson sur des modèles plus anciens, mais plutôt d'utiliser la comparaison directe pour mettre en évidence les points de divergence, vous permettant de repérer les enjeux phonologiques les plus significatifs. <em>Ilya</em> pourrait servir de modèle pour une série d'applications de transcription de nouvelle génération centrées sur l'allemand, l'anglais, l'arabe, le coréen, l'espagnol, le finnois, le français, l'italien, le mandarin, le suédois ou le swahili chantés. Parce qu'<em>Ilya</em> est libre et à code ouvert, les améliorations qu'il connaîtra ne sont limitées que par votre intérêt et votre capacité à enrichir <em>Ilya</em> de modernisations significatives au fil du temps.</p>
+
+						<h4 id="guide-version">De quelle version d’Ilya s’agit-il?</h4>
+
+						<p>Vous utilisez <em>Ilya</em> {ILYA_VERSION}. La lettre avance à chaque nouvelle version publique. Le pied de chaque page que vous imprimez porte le même nom : une page peut ainsi être rattachée à la version qui l’a produite. Si vous signalez un problème, indiquez aussi la compilation : {ILYA_BUILD}.</p>
+
+						<h4 id="guide-cite">Comment citer Ilya?</h4>
+
+						<p>Nommez la version qu’imprime le pied de votre page : MITTON, Dann. <em>Ilya</em> {ILYA_VERSION}, {ILYA_VERSION_YEAR}. https://ilya.dannmitton.com.</p>
 
 						<!-- The forecast philosophy (Dann's copy, 2026-07-12), in French.
 						     Traduction française attentive mais non native, à valider lors
@@ -353,6 +362,14 @@
 						<h4 id="guide-future">Where is Ilya headed?</h4>
 
 						<p><em>Ilya</em> already offers an OCR component where users can photograph Cyrillic text that <em>Ilya</em> parses and processes like normal. Extending <em>Ilya</em>'s future scholarly reach might include improved accessibility features, or reverse-engineering how other Russian lyric authorities arrive at their signature transcriptions, to offer comparative transcriptions "in the style of" Russian lyric diction greats whose output differs from Grayson. The hope is not to assert Grayson's superiority over older models, but rather to use direct comparison to highlight points of divergence in transcription, allowing users to register the phonological issues that matter most. <em>Ilya</em> could be the model template for a series of robust next-gen transcription apps centring sung Arabic, English, Finnish, French, German, Italian, Korean, Mandarin, Spanish, Swedish, or Swahili. Because <em>Ilya</em> is free and open source, the improvements it will undergo are limited only by the interest of its users and their ability to enhance <em>Ilya</em> with meaningful modernisations over time.</p>
+
+						<h4 id="guide-version">Which Ilya is this?</h4>
+
+						<p>This is <em>Ilya</em> {ILYA_VERSION}. The letter advances with each public release. The footer of every page you print carries the same name, so a page can be traced to the release that made it. If you report a problem, include the build as well: {ILYA_BUILD}.</p>
+
+						<h4 id="guide-cite">How do I cite Ilya?</h4>
+
+						<p>Name the release that the footer of your page prints: Mitton, Dann. <em>Ilya</em> {ILYA_VERSION}. {ILYA_VERSION_YEAR}. https://ilya.dannmitton.com.</p>
 
 							<!-- The forecast philosophy (Dann's copy, 2026-07-12): the
 							     statement of what the Markup page is and is not. Its own findable

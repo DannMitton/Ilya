@@ -517,7 +517,6 @@
 		{language}
 		note={[keyRuler?.header(language), genericLede(adapted.generic && !!model, voiceType, language), placeholderLine(placeholders, language)]}
 		onheightchange={(h) => (headerHeight = h)}
-		versionAccent="var(--rose-ink)"
 		markAccent="var(--rose-ink)"
 		ruleAccent="var(--rose)"
 		labelInk="var(--rose-ink)"

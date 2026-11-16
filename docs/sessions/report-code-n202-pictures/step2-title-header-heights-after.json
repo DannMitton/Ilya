@@ -1,0 +1,62 @@
+{
+ "text-en": [
+  {
+   "offsetHeight": 106,
+   "offsetWidth": 624,
+   "logo": {
+    "w": 67.31,
+    "h": 27
+   }
+  }
+ ],
+ "markup-en": [
+  {
+   "offsetHeight": 155,
+   "offsetWidth": 624,
+   "logo": {
+    "w": 67.31,
+    "h": 27
+   }
+  }
+ ],
+ "insights-en": [
+  {
+   "offsetHeight": 128,
+   "offsetWidth": 624,
+   "logo": {
+    "w": 67.31,
+    "h": 27
+   }
+  }
+ ],
+ "text-fr": [
+  {
+   "offsetHeight": 106,
+   "offsetWidth": 624,
+   "logo": {
+    "w": 67.31,
+    "h": 27
+   }
+  }
+ ],
+ "markup-fr": [
+  {
+   "offsetHeight": 155,
+   "offsetWidth": 624,
+   "logo": {
+    "w": 67.31,
+    "h": 27
+   }
+  }
+ ],
+ "insights-fr": [
+  {
+   "offsetHeight": 128,
+   "offsetWidth": 624,
+   "logo": {
+    "w": 67.31,
+    "h": 27
+   }
+  }
+ ]
+}

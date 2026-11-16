@@ -96,8 +96,6 @@ const lin = (c: number) => ((c /= 255) <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1
 const rgb = (h: string) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
 const lum = (h: string) => { const [r, g, b] = rgb(h).map(lin); return 0.2126 * r + 0.7152 * g + 0.0722 * b; };
 const ratio = (a: string, b: string) => { const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p); return (x + 0.05) / (y + 0.05); };
-const over = (fg: string, bg: string, a: number) =>
-	'#' + rgb(fg).map((c, i) => Math.round(a * c + (1 - a) * rgb(bg)[i]).toString(16).padStart(2, '0')).join('').toUpperCase();
 
 const FAMILIES = ['sage', 'lavender', 'rose', 'cobalt', 'slate'] as const;
 const PAPER = token('paper-cream');
@@ -123,16 +121,6 @@ describe('row 165: contrast of the token pairs that carry words (WCAG 2.2 AA)', 
 			});
 		});
 	}
-	it('the 2026A badge: white on the jewel veil over each band is at least 4.5:1, at the percentage HeaderBar ships', () => {
-		const src = readFileSync(join(ROOT, 'apps/web/src/lib/components/HeaderBar.svelte'), 'utf8');
-		const m = src.match(/color-mix\(in srgb, var\(--tab-jewel\) (\d+)%, transparent\)/);
-		expect(m, 'the badge veil rule').not.toBeNull();
-		// The browser keeps the veil's alpha in 8 bits, and 57 percent measured 4.48:1 live for that reason.
-		const a = Math.round((Number(m![1]) / 100) * 255) / 255;
-		for (const f of FAMILIES) {
-			expect(ratio(WHITE, over(token(`${f}-jewel`), token(f), a)), `badge on ${f}`).toBeGreaterThanOrEqual(4.5);
-		}
-	});
 });
 
 describe('row 165: the browser chrome matches the TEXT band', () => {

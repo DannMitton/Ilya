@@ -14,16 +14,11 @@
 		language: Language;
 		onheightchange?: (height: number) => void;
 		/**
-		 * Colour of the nestled "2026a" version badge. Transcription pages
-		 * keep the default sage; Markup and Insights pass lavender to
-		 * harmonize the mark with their palette (Dann's ruling, 2026-07-12).
-		 */
-		versionAccent?: string;
-		/**
-		 * Colour of the "[Ilya]" wordmark itself (brackets and name).
-		 * Transcription keeps the default sage; Markup and Insights pass
-		 * lavender so the whole mark harmonizes, not just the version
-		 * badge (Dann's ruling, 2026-07-13).
+		 * Colour of the sigil, "[Ilya]" (brackets and name). Transcription
+		 * keeps the default sage; Markup and Insights pass lavender or rose
+		 * so the whole sigil harmonizes with their palette (Dann's rulings,
+		 * 2026-07-12 and 2026-07-13). The sigil carries the name alone
+		 * (N.202).
 		 */
 		markAccent?: string;
 		/**
@@ -69,7 +64,7 @@
 		aside?: Snippet;
 	}
 
-	let { title, composer, poet, translator, opus, language, onheightchange, versionAccent = 'var(--sage-ink)', markAccent = 'var(--sage-ink)', ruleAccent = 'var(--sage)', labelInk = 'var(--sage-ink)', note = undefined, legendItems = [], notationFont = null, aside }: Props = $props();
+	let { title, composer, poet, translator, opus, language, onheightchange, markAccent = 'var(--sage-ink)', ruleAccent = 'var(--sage)', labelInk = 'var(--sage-ink)', note = undefined, legendItems = [], notationFont = null, aside }: Props = $props();
 
 	/**
 	 * Line 1: COMPOSER (DATES)    OPUS
@@ -159,7 +154,7 @@
 <header class="title-header" class:has-aside={!!aside} style:--aside-room="{asideWidth + 14}px" bind:offsetHeight={measuredHeight}>
 	{#if aside}<div class="header-aside" bind:clientWidth={asideWidth}>{@render aside()}</div>{/if}
 	<div class="logo" style="color: {markAccent}">
-		<span class="logo-bracket">[</span><span class="logo-name">Ilya</span><span class="logo-bracket">]</span><span class="logo-version" style="color: {versionAccent}">2026a</span>
+		<span class="logo-bracket">[</span><span class="logo-name">Ilya</span><span class="logo-bracket">]</span>
 	</div>
 
 	<div class="song-title">
@@ -233,10 +228,9 @@
 		margin-right: var(--aside-room, 0px);
 	}
 
-	/* ── Logo: version nestled in y descender ──────────────── */
+	/* ── The sigil at the head of the page: [Ilya] and nothing else (N.202) ── */
 
 	.logo {
-		position: relative;
 		display: inline-block;
 		margin-bottom: 8px;
 		margin-left: -6px;
@@ -252,19 +246,6 @@
 	.logo-name {
 		font-family: var(--font-serif);
 		font-style: italic;
-	}
-
-	.logo-version {
-		position: absolute;
-		top: 21px;
-		left: 36px;
-		font-family: var(--font-sans);
-		font-size: 12px;
-		color: var(--sage-ink);
-		font-weight: 400;
-		font-variant-caps: all-small-caps;
-		letter-spacing: 0.04em;
-		line-height: 1;
 	}
 
 	/* ── Song title ────────────────────────────────────────── */

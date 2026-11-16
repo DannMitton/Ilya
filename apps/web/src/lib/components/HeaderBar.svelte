@@ -48,8 +48,8 @@
 	class:tab-insights={activeTab === 'insights'}
 >
 	<h1 class="sr-only">{t('app.title', language)}</h1>
-	<div class="sigil" aria-label="Ilya 2026a">
-		<span class="sigil-bracket">[</span><span class="sigil-name">Ilya</span><span class="sigil-bracket">]</span><span class="sigil-version">2026a</span>
+	<div class="sigil" aria-label="Ilya">
+		<span class="sigil-bracket">[</span><span class="sigil-name">Ilya</span><span class="sigil-bracket">]</span>
 	</div>
 
 	<!-- TWO CHILDREN AGAIN, N.115 increment 3: the sigil at the left and the
@@ -72,8 +72,8 @@
 
 	/* ── Tab-responsive background ────────────────────────── */
 
-	/* Each bar sets its band and its family's jewel; the language pill and the
-	   badge below read the jewel, so a family's colours are written once. */
+	/* Each bar sets its band and its family's jewel; the language pill below
+	   reads the jewel, so a family's colours are written once. */
 	.header-bar.tab-text {
 		background: var(--sage);
 		--tab-jewel: var(--sage-jewel);
@@ -94,9 +94,8 @@
 	   the app-bar half of the 2026-08-18 ruling above, which had folded the
 	   Marked score into Studio's sage, and it amends S0 ruling 3. The bar and
 	   the desk move together; the desk is --lavender-desk in app.css. The
-	   three sibling rules below (the sigil version, the inactive language
-	   option, and its hover underline) already key to --lavender and
-	   were never changed. */
+	   sibling rules below that once keyed to --lavender (the inactive
+	   language option and its hover underline) were never changed. */
 	.header-bar.tab-markup {
 		background: var(--lavender);
 		--tab-jewel: var(--lavender-jewel);
@@ -105,17 +104,15 @@
 	/* N.127 increment 1. Insights' governing colour is dusty rose, ruled by
 	   Dann 2026-09-11, so the bar takes rose. Learn carried rose too until
 	   stage 4 of the colour story moved it to slate (then umber), 2026-09-14; Insights
-	   keeps rose, and its sigil version and language chip below keep rose's
-	   values. */
+	   keeps rose, and its language chip below keeps rose's values. */
 	.header-bar.tab-insights {
 		background: var(--rose);
 		--tab-jewel: var(--rose-jewel);
 	}
 
-	/* ── [Ilya] sigil: version nestled in y descender ─────── */
+	/* ── The sigil: [Ilya] and nothing else (N.202) ───────── */
 
 	.sigil {
-		position: relative;
 		display: inline-flex;
 		align-items: baseline;
 		gap: 0;
@@ -135,28 +132,6 @@
 		font-style: italic;
 		color: white;
 		font-weight: 400;
-	}
-
-	.sigil-version {
-		position: absolute;
-		top: 26px;
-		left: 34px;
-		font-family: var(--font-sans);
-		font-size: 10px;
-		color: #fff;
-		font-weight: 600;
-		font-variant-caps: all-small-caps;
-		letter-spacing: 0.04em;
-		line-height: 1;
-		padding: 0 3px;
-		border-radius: 2px;
-		/* ONE colour for all five bars (row 165): white text on a veil of the
-		   family's jewel over the band. 58 percent puts the white at 4.5:1 or
-		   better on all five bars as the browser draws them (sage is the limit:
-		   4.55:1 here; 57 measured 4.48:1 live because the alpha rounds to 8
-		   bits; the ruled 22 percent measures 3.49 to 3.97 on four). */
-		background: color-mix(in srgb, var(--tab-jewel) 58%, transparent);
-		transition: background-color 300ms ease;
 	}
 
 	/* `.head-right`, `.head-pill` AND THE 1400 px ANCHOR THAT STOOD THE PAIR

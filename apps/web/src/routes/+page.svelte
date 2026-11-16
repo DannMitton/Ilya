@@ -88,7 +88,7 @@
 	import type { SongSummary } from '$lib/library/driver';
 	import type { SongRecord } from '$lib/library/types';
 	import type { SourceBytes } from '$lib/library/driver';
-	import { version } from '$app/environment';
+	import { ILYA_VERSION, ILYA_BUILD } from '$lib/version';
 	import type { OpenedLibrary } from '$lib/library';
 	import RootPanel from '$lib/components/Drawer/RootPanel.svelte';
 	import IntakePanel from '$lib/components/Drawer/IntakePanel.svelte';
@@ -2923,7 +2923,8 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 			// back out of a record Ilya has promised never to write to again.
 			load: (id) => library.load(id),
 			loadSource: (id) => library.loadSource(id),
-			appVersion: version,
+			appVersion: ILYA_VERSION,
+			build: ILYA_BUILD,
 			exportedAt: new Date().toISOString(),
 			today: todayInWords(),
 			untitled: t('songs.untitled', language),

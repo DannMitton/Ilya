@@ -1,0 +1,14 @@
+{
+    "format": "ilya-binder",
+    "schema": 1,
+    "appVersion": "2026b",
+    "build": "2c07ab75",
+    "exportedAt": "2026-11-15T23:38:33.833Z",
+    "songs": [
+        {
+            "id": "ebc14f98-03dc-4424-a70c-968e401ae78c",
+            "name": "Modest Mussorgsky (1839\u20131881), Without Sun, no. 1: Within Four Walls",
+            "path": "songs/ebc14f98-03dc-4424-a70c-968e401ae78c/song.json"
+        }
+    ]
+}

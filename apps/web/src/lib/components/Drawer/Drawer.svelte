@@ -278,7 +278,7 @@
 	function getParentIds(id: string | null): string[] {
 		if (!id) return [];
 		if (learnUnitChildren[id]) return [learnUnitChildren[id]];
-		if (['guide-what','guide-paste','guide-source','guide-ai','guide-role','guide-limits','guide-future','guide-markup-forecast','guide-markup-characteristics','guide-markup-notation'].includes(id)) return ['guide-how'];
+		if (['guide-what','guide-paste','guide-source','guide-ai','guide-role','guide-limits','guide-future','guide-version','guide-cite','guide-markup-forecast','guide-markup-characteristics','guide-markup-notation'].includes(id)) return ['guide-how'];
 		if (['guide-walk-interface','guide-walk-tabs','guide-walk-metadata','guide-walk-transcribe','guide-walk-analysis','guide-walk-notation','guide-walk-print'].includes(id)) return ['guide-walkthrough'];
 		if (['guide-grayson','guide-mitton','guide-claude','guide-kimi'].includes(id)) return ['guide-contributors'];
 		if (id === 'guide-grayson-intro') return ['guide-contributors', 'guide-grayson'];
@@ -747,6 +747,8 @@
 									<li><button class="toc-link toc-sub" class:active={isActive('guide-role')} data-heading-id="guide-role" onclick={() => handleTocClick('guide-role')}>{t('toc.guide.role', language)}</button></li>
 									<li><button class="toc-link toc-sub" class:active={isActive('guide-limits')} data-heading-id="guide-limits" onclick={() => handleTocClick('guide-limits')}>{t('toc.guide.limits', language)}</button></li>
 									<li><button class="toc-link toc-sub" class:active={isActive('guide-future')} data-heading-id="guide-future" onclick={() => handleTocClick('guide-future')}>{t('toc.guide.future', language)}</button></li>
+									<li><button class="toc-link toc-sub" class:active={isActive('guide-version')} data-heading-id="guide-version" onclick={() => handleTocClick('guide-version')}>{t('toc.guide.version', language)}</button></li>
+									<li><button class="toc-link toc-sub" class:active={isActive('guide-cite')} data-heading-id="guide-cite" onclick={() => handleTocClick('guide-cite')}>{t('toc.guide.cite', language)}</button></li>
 								<li><button class="toc-link toc-sub" class:active={isActive('guide-markup-forecast')} data-heading-id="guide-markup-forecast" onclick={() => handleTocClick('guide-markup-forecast')}>{t('toc.guide.markup-forecast', language)}</button></li>
 								<li><button class="toc-link toc-sub" class:active={isActive('guide-markup-characteristics')} data-heading-id="guide-markup-characteristics" onclick={() => handleTocClick('guide-markup-characteristics')}>{t('toc.guide.markup-characteristics', language)}</button></li>
 								<li><button class="toc-link toc-sub" class:active={isActive('guide-markup-notation')} data-heading-id="guide-markup-notation" onclick={() => handleTocClick('guide-markup-notation')}>{t('toc.guide.markup-notation', language)}</button></li>
