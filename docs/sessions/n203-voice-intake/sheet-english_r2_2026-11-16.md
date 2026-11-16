@@ -61,3 +61,6 @@ French: a marked draft from the file's existing French follows, built from this 
 - 22 caption: If you wish, you can stop here: Ilya fills the other {three} from what you have recorded so far. / one left: ... Ilya fills the last one from what you have recorded so far.
 - 5, one left: Ilya fills the last one with generic values for now.
 - 5b, one left: Ilya works out the last one from your own vowels.
+
+## Line 5, RATIFIED by Dann 2026-11-16 02:07 ("Proceed", on the desk's recommendation; his to overrule)
+- 5: You have recorded {n} of the 10 vowels. Ilya fills the other {m} from what you have recorded so far. / one left: ... Ilya fills the last one from what you have recorded so far.

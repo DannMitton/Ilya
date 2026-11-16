@@ -49,3 +49,6 @@ OPEN CHOICES (Dann's): A « capter » for "record" (the app uses « enregistrer 
 - 22 légende : Si vous le souhaitez, vous pouvez vous arrêter ici : Ilya complète les {trois} autres à partir de ce que vous avez capté jusqu’ici. / une restante : … Ilya complète la dernière à partir de ce que vous avez capté jusqu’ici.
 - 5, une restante : Ilya complète la dernière avec des valeurs par défaut pour l’instant.
 - 5b, une restante : Ilya déduit la dernière de vos propres voyelles.
+
+## Ligne 5, RATIFIÉE par Dann 2026-11-16 02:07 (« Proceed », sur la recommandation du bureau)
+- 5 : Vous avez capté {n} des 10 voyelles. Ilya complète les {m} autres à partir de ce que vous avez capté jusqu’ici. / une restante : … Ilya complète la dernière à partir de ce que vous avez capté jusqu’ici.
