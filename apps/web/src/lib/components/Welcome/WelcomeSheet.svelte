@@ -28,7 +28,7 @@
 	import { languageSwitch } from '$lib/language-switch';
 	import { hasSeenWelcome, markWelcomeSeen } from '$lib/welcome-seen';
 	import WelcomePlate from './WelcomePlate.svelte';
-	import { FINAL, FIRST_FRAME, LEAVE_MS, STATION_OF_IMAGE, plan } from './welcome-motion';
+	import { FINAL, FIRST_FRAME, LEAVE_MS, SHEET_LEAVE_MS, STATION_OF_IMAGE, plan } from './welcome-motion';
 
 	let { language, onlanguagechange }: { language: Language; onlanguagechange: (lang: Language) => void } = $props();
 
@@ -159,7 +159,7 @@
 
 {#if open}
 	<div class="overlay" use:portal>
-		<div class="scrim" class:leaving style:--leave="{LEAVE_MS}ms">
+		<div class="scrim" class:leaving style:--leave="{LEAVE_MS}ms" style:--leave-sheet="{SHEET_LEAVE_MS}ms">
 			<div bind:this={sheetEl} class="sheet" role="dialog" aria-modal="true" aria-labelledby="welcome-title" tabindex="-1">
 				<div class="head">
 					<span>{T('welcome.band')}</span>
@@ -239,8 +239,8 @@
 		/* The app's own float shadow (`app.css`, `--float-shadow`): the ratified design names "the app's float shadow" (OPEN.md, the welcome sheet), the desk's amendment of 2026-11-16, item 3. */
 		box-shadow: var(--float-shadow);
 		transition:
-			opacity var(--leave) ease-out,
-			transform var(--leave) ease-out;
+			opacity var(--leave-sheet) ease-out,
+			transform var(--leave-sheet) ease-out;
 	}
 	.leaving.scrim {
 		opacity: 0;

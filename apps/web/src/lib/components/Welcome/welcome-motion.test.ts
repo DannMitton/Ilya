@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { FINAL, FIRST_FRAME, HOLD_MS, IMAGE_COUNT, LAST_IMAGE, STATION_AT, STATION_OF_IMAGE, WIPE_MS, plan, totalMs, turns } from './welcome-motion';
+import { FINAL, FIRST_FRAME, HOLD_MS, IMAGE_COUNT, LAST_IMAGE, LEAVE_MS, SHEET_LEAVE_MS, STATION_AT, STATION_OF_IMAGE, WIPE_MS, plan, totalMs, turns } from './welcome-motion';
 
 describe('the plate\'s motion (the ratified prototype\'s script: WIPE 720, HOLD 380, FIRST 700, STATION [0,0,1,2,2,-1])', () => {
 	it('is six images and five turns', () => {
@@ -35,6 +35,12 @@ describe('the plate\'s motion (the ratified prototype\'s script: WIPE 720, HOLD 
 
 	it('ends with every image turned and the three labels resting', () => {
 		expect(FINAL).toEqual({ turned: LAST_IMAGE, station: -1 });
+	});
+
+	it('leaves in 260 ms for the scrim and 180 ms for the sheet, as the prototype has them (the sheet stays mounted for the longer)', () => {
+		expect(LEAVE_MS).toBe(260);
+		expect(SHEET_LEAVE_MS).toBe(180);
+		expect(LEAVE_MS).toBeGreaterThanOrEqual(SHEET_LEAVE_MS);
 	});
 
 	describe('prefers-reduced-motion', () => {

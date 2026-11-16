@@ -18,8 +18,14 @@ export const START_DELAY_MS = 250;
 export const WIPE_EASE = 'cubic-bezier(.45, 0, .25, 1)';
 /** A station's label lights this fraction of the way into the wipe that brings its image. */
 export const STATION_AT = 0.45;
-/** Leaving: the sheet and scrim fade out in the app's own `--motion` (180 ms, ease-out), opacity and transform only. */
-export const LEAVE_MS = 180;
+/**
+ * Leaving: Begin fades the scrim out in 260 ms and the sheet in 180 ms, ease-out, opacity and (for the sheet) transform only, as the prototype has them
+ * (`ilya-welcome-draft-17.html`, lines 24 and 27). The sheet is the app's own `--motion` (180 ms ease-out). The desk's amendment of 2026-11-16, item 4, moved the
+ * scrim from 180 to 260 ms; `LEAVE_MS` is the longer of the two, so it is also how long the sheet stays mounted after Begin.
+ */
+export const LEAVE_MS = 260;
+/** The sheet's own fade and rise on leaving, ms. */
+export const SHEET_LEAVE_MS = 180;
 
 /** Six images (0 to 5). Image 0 is on the plate from the first frame; images 1 to 5 arrive by a turn each. */
 export const IMAGE_COUNT = 6;
