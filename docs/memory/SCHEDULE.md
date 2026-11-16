@@ -12,11 +12,11 @@ r6, written by the desk (Opus 5.5) 2026-11-16 13:2x at Dann's request of 13:17 (
 
 ### 1. VOICE, finished (N.203)
 *What:* how a singer records and describes their voice. *Why:* the way into every personal reading INSIGHTS and MELODY give.
-- [ ] **Lane 59, the take** (breath, then Sing, Shape, Fry; the side view and the vowel space in view; a tap looks, Start sings; finish early). Built; Fable as built MERGE WITH FIXES (`../sessions/review-fable-lane59-as-built_r1_2026-11-16.md`); fixes running from 12:57. *Dann:* one merge paste, a walk on his phone.
+- [x] **Lane 59, the take** (SHIPPED `3fd9a13f` 2026-11-16 14:0x; walk owed) (breath, then Sing, Shape, Fry; the side view and the vowel space in view; a tap looks, Start sings; finish early). Built; Fable as built MERGE WITH FIXES (`../sessions/review-fable-lane59-as-built_r1_2026-11-16.md`); fixes running from 12:57. *Dann:* one merge paste, a walk on his phone.
 - [ ] **Lane 60, the VOICE pane** (your voice, its type, doors; a voice type alone is a start; one vowel-space view with one table). Steps 0 to 3, 5, 6 built; Step 4 waits for lane 59 on `Shane`. *Dann:* one merge paste, a walk.
 - [ ] **Lane 61, "Describe your voice" and "How INSIGHTS speaks to you"** in their own places, open without the microphone. Brief r1 written; starts after lane 60 merges. *Dann:* a walk.
 
-### 2. Strophic songs, last fixes (lane 56)
+### 2. Strophic songs, last fixes (lane 56): both rounds SHIPPED (`a16c011c`, `3fd9a13f`); walk owed
 *What:* MELODY prints a song of several verses in the order it is sung. Five fixes SHIPPED `a16c011c`; a second round of five (unusual endings, a later-verse grace note, a text correction on a live second ending, the clef's tap box, two tests) running from 12:57. *Dann:* one merge paste.
 
 ### 3. N.200, Ilya measures the voice as it is, solved well
