@@ -193,7 +193,7 @@ function ipaBaselineOf(sys: Element): number | null {
 	for (const t of sys.querySelectorAll('text')) {
 		/* A measure number (N.126) shares the Cyrillic row's size by ruling,
 		   so it has to be named out or it reads as that row. */
-		if (t.hasAttribute('data-analysis') || t.hasAttribute('data-bar-number')) continue;
+		if (t.hasAttribute('data-analysis') || t.hasAttribute('data-bar-number') || t.hasAttribute('data-verse-label')) continue;
 		const y = Number(t.getAttribute('y'));
 		if (!Number.isFinite(y)) continue;
 		if ((t.getAttribute('font-family') ?? '').includes('Lato IPA')) ipa = Math.max(ipa, y);

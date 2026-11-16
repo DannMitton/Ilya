@@ -118,6 +118,22 @@ than its expansion.
 the preceding sentence, name the thing instead. This is the single most common
 source of a reader having to backtrack.
 
+**Say what is there, not what is missing.** Find each "not", "no", and
+"nothing", ask what is true here, and write that. "Add a score, and this page
+measures it" carries what "No score has been added, so there is nothing to
+measure" leaves the reader to work out. A reader cannot picture what is absent,
+and a negative leaves them guessing at what is meant. Keep "not" for two jobs:
+to deny something, and to set up a contrast. Treat this as a habit: where the
+denial is the fact the reader needs, state it. Ruled by Dann 2026-11-15: "this
+is the kind of example I want you to follow instead of easy negatives." The
+rule is the fourth sentence of *The Star Copy Style*, the style sheet of the
+Kansas City Star, where Ernest Hemingway reported from October 1917 to April
+1918: "Be positive, not negative." The method (find each "not", ask what is
+true, replace it) and the two jobs kept for "not" follow Senswriter's seven
+slides on the rule (@senswriter), which Dann sent the desk that day. The slides
+are another writer's work, so they are kept with the desk's files and outside
+this public repository.
+
 **Minimize negatives.** "Wait for the build to finish" beats "do not proceed
 until the build is not still running."
 

@@ -10,6 +10,7 @@
 	import type { LineData, WordStackData, SongMetadata, UserStressOverride, YoToggle, SyllableOverride } from '$lib/types';
 	import { t, tOrEnglish, type Language } from '$lib/i18n';
 	import HeaderBar from '$lib/components/HeaderBar.svelte';
+	import WelcomeSheet from '$lib/components/Welcome/WelcomeSheet.svelte';
 	import Drawer from '$lib/components/Drawer/Drawer.svelte';
 	import {
 		buildSlotQueue,
@@ -3724,6 +3725,8 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	     and `Drawer` below is given the same two labels and the same two
 	     handlers. -->
 	<HeaderBar {language} {activeTab} onlanguagechange={handleLanguageChange} />
+	<!-- The first-visit welcome sheet (cloud-lane-57): portaled to <body>, stands over everything, never prints. Its flag is `ilya:welcomeSeen`. -->
+	<WelcomeSheet {language} onlanguagechange={handleLanguageChange} />
 <!-- N.67 step 4a. A NATIVE <dialog>, Dann's ruling 2026-08-16: bits-ui's
      AlertDialog measured +18.7 KB gzipped for this one thing, against about
      8 KB budgeted for the whole of N.67, and showModal() gives the modality,

@@ -36,7 +36,9 @@ export {
 } from './overlay-engine';
 export { modificationTarget, type ModificationTarget } from './modification-engine';
 export { isLongSustain, SUSTAIN_SECONDS_THRESHOLD } from './sustain';
-export { sungVerseNumbers } from './verses';
+export { sungVerseNumbers, verseView, verseGapBars } from './verses';
+export { renderScoreOf, derivedId, type RenderScore, type RenderBar } from './render-score';
+export { systemSeam, renameLaterPassAttributes, type SystemSeam, type SeamText } from './render-seam';
 export {
   resolveTempoTerm,
   TEMPO_TIER_BANDS,

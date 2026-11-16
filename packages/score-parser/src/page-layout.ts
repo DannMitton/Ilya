@@ -36,6 +36,7 @@ import { keepGraceNotes } from './grace';
 import { keyDeclaredAt, outgoingKeyAfter } from './accidental-carry';
 import { chooseClef } from './clef-select';
 import { slurEndsAcross, slursThrough } from './printed-marks';
+import type { SystemSeam } from './render-seam';
 
 export interface PageLayoutOptions extends StaffRenderOptions {
   /** Page size in px at 96 dpi. Defaults: US letter, 816 × 1056. */
@@ -53,6 +54,11 @@ export interface PageLayoutOptions extends StaffRenderOptions {
   marginLeft?: number;
   /** Vertical gap between stacked systems. */
   systemGap?: number;
+  /**
+   * Strophic lane A (D6, D7). A function applied to each system's markup after it is rendered, in both render
+   * calls, and the source of the wrapper's attribute. Absent, the output is byte-identical to what it was.
+   */
+  seam?: SystemSeam;
 }
 
 const PAGE_DEFAULTS = {
@@ -105,6 +111,8 @@ export interface SystemSlice {
    * has to carry the offset or the staff is clipped out of view.
    */
   minY: number;
+  /** The wrapper's attribute where a seam supplied it (`data-system="a-b"` is the default). */
+  attr?: string;
 }
 
 export interface PaginatedScore {
@@ -180,7 +188,7 @@ export function sliceWidth(
 }
 
 function viewBoxOf(svg: string): { minY: number; width: number; height: number } {
-  const m = svg.match(/viewBox="0 ([\d.]+) ([\d.]+) ([\d.]+)"/);
+  const m = svg.match(/viewBox="0 (-?[\d.]+) ([\d.]+) ([\d.]+)"/); // strophic lane A: a label can lift a system above y = 0
   return { minY: Number(m?.[1] ?? 0), width: Number(m?.[2] ?? 0), height: Number(m?.[3] ?? 0) };
 }
 
@@ -281,7 +289,7 @@ export function paginateScore(
   /* A tacet run is one unit and a system never ends inside it (row 141): a run
      of seven empty bars is one multimeasure rest, not six and one. A unit wider
      than a fresh system still goes alone on its own. */
-  const runs = tacetRuns(parsed);
+  const runs = tacetRuns(parsed, options.breakRunsAt);
   let from = 0;
   while (from < measureCount) {
     let to = unitEnd(runs, from);
@@ -306,12 +314,14 @@ export function paginateScore(
     // all reach both margins (Dann's ruling, 2026-08-06). `sliceWidth` above
     // still packs on NATURAL widths, which is what decides how many measures
     // a line can hold; `targetWidth` only spends the leftover.
-    const svg = renderSystemSlice(parsed, analyzed, renderOptions, a, b, {
+    const drawn = renderSystemSlice(parsed, analyzed, renderOptions, a, b, {
       finalBarline: i === ranges.length - 1,
       targetWidth: innerWidth,
     });
+    const seamed = options.seam?.(drawn, a, b);
+    const svg = seamed ? seamed.svg : drawn;
     const { minY, width, height } = viewBoxOf(svg);
-    return { fromMeasure: a, toMeasure: b, svg, width, height, minY };
+    return { fromMeasure: a, toMeasure: b, svg, width, height, minY, ...(seamed ? { attr: seamed.attr } : {}) };
   });
 
   // ── Assign systems to pages, THEN lay each page out ──
@@ -385,7 +395,7 @@ export function paginateScore(
   const lastGroup = pageGroups[pageGroups.length - 1];
   const lastSystem = systems[systems.length - 1];
   if (lastGroup && lastSystem) {
-    const svg = renderSystemSlice(
+    const drawnAgain = renderSystemSlice(
       parsed,
       analyzed,
       renderOptions,
@@ -393,6 +403,7 @@ export function paginateScore(
       lastSystem.toMeasure,
       { finalBarline: true },
     );
+    const svg = options.seam ? options.seam(drawnAgain, lastSystem.fromMeasure, lastSystem.toMeasure).svg : drawnAgain;
     const box = viewBoxOf(svg);
     const aloneOnFinalPage = lastGroup.length === 1 && pageGroups.length > 1;
     const fallsShort = box.width < innerWidth;
@@ -462,7 +473,7 @@ export function paginateScore(
       // carries the system's own min-y (N.6a) so the cropped headroom is
       // honoured; passing 0 here would scroll the staff off the top.
       pageParts.push(
-        `<svg x="${o.marginLeft}" y="${round2(y)}" width="${s.width}" height="${s.height}" viewBox="0 ${s.minY} ${s.width} ${s.height}" data-system="${s.fromMeasure}-${s.toMeasure}">`,
+        `<svg x="${o.marginLeft}" y="${round2(y)}" width="${s.width}" height="${s.height}" viewBox="0 ${s.minY} ${s.width} ${s.height}" ${s.attr ?? `data-system="${s.fromMeasure}-${s.toMeasure}"`}>`,
       );
       pageParts.push(s.svg.replace(/^<svg[^>]*>/, '').replace(/<\/svg>\s*$/, ''));
       pageParts.push('</svg>');
