@@ -235,3 +235,31 @@ describe('Step 4b: the label, the tag, and the multibar rest', () => {
 		expect(joined.systems.flatMap((sys) => counts(sys.svg))).toContain(2);
 	});
 });
+
+describe('follow-up 2, fix 3: a live later-pass bar of verse 1\'s own one-line words draws from verse 1\'s channels', () => {
+	it('a spelling and an IPA given for the bare id show under the second ending, and no other bar changes', async () => {
+		const s = await load('strophic-volta.musicxml');
+		const id = s.vocalLine.filter((e) => e.measureIndex === 4)[0].id;
+		const plain = melody(s);
+		const base = { ...Object.fromEntries(s.vocalLine.map((e) => [e.id, 'x'])) };
+		void base;
+		const analyzed = analyzeScore(s, demoProfile, (e) => buildUnderlayResolvers(s, 1, {}).vowel(e), { generatedAt: '2026-11-16T00:00:00.000Z' });
+		const corrected = paginateMelody({
+			score: s,
+			analyzed,
+			pageWidth: 624,
+			pageHeight: 727,
+			laterPageHeight: 727,
+			engraving: ENGRAVING_DEFAULTS,
+			channels: { cyrPreview: { [id]: 'зюзя' }, ipaPreview: { [id]: 'zʲuzʲa' } },
+			verses: { profile: demoProfile, notationPrefs: prefs, openSyllabification: false },
+		});
+		const texts = (m: MelodyPages) => cyrillicTexts(markup(m));
+		expect(texts(plain)).not.toContain('зюзя');
+		expect(texts(corrected)).toContain('зюзя');
+		expect(markup(corrected)).toContain('zʲuzʲa');
+		// the later-pass copies of bars that also have a live copy keep their own verse's words
+		expect(texts(corrected).filter((t) => t !== 'зюзя')).toHaveLength(texts(plain).length - 1);
+	});
+});
+

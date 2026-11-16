@@ -48,6 +48,8 @@ export interface RenderScore {
 	path: 'notated' | 'repeats' | 'stacked';
 	/** The derived ids of the events of `live` bars (the seam gives them live handles). */
 	liveIds: ReadonlySet<string>;
+	/** The derived ids, among `liveIds`, of bars that carry verse 1's own one-line words: the page draws them from verse 1's channels under the bare ids, so a correction made there reaches the page. */
+	liveVerse1Ids: ReadonlySet<string>;
 	/** Printed indices where one pass ends and another (or an outside stretch) begins: a multibar rest never spans one (D7). */
 	boundaries: ReadonlySet<number>;
 	/** Why `unfold` gave no order, when it did not. */
@@ -66,6 +68,7 @@ const notated = (parsed: ParsedScore, flags: UnfoldFlag[] = [], declined?: 'id-s
 	path: 'notated',
 	boundaries: new Set(),
 	liveIds: new Set(),
+	liveVerse1Ids: new Set(),
 	flags,
 	...(declined ? { declined } : {}),
 });
@@ -348,6 +351,9 @@ function build(parsed: ParsedScore, sung: number[], plan: Plan, path: RenderScor
 		return true;
 	});
 	const liveIds = new Set(flat.filter((f) => liveBar[f.bar]).map((f) => f.ev.id));
+	const wordsByBar = sungVersesByBar(parsed, new Set(sung));
+	const oneLine = (source: number): boolean => [...(wordsByBar.get(source) ?? [])].every((v) => v === sung[0]);
+	const liveVerse1Ids = new Set(flat.filter((f) => liveBar[f.bar] && oneLine(printed[f.bar].source)).map((f) => f.ev.id));
 	const firstOf = new Map<number, string>();
 	for (const f of flat) if (!firstOf.has(f.bar)) firstOf.set(f.bar, f.ev.id);
 	const boundaries = new Set<number>();
@@ -362,6 +368,7 @@ function build(parsed: ParsedScore, sung: number[], plan: Plan, path: RenderScor
 		path,
 		boundaries,
 		liveIds,
+		liveVerse1Ids,
 		flags,
 	};
 }
