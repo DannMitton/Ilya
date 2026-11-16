@@ -194,6 +194,7 @@ export class StubCaptureSession implements CaptureSession {
 	openVisit(): void {
 		this.visitOpen = true;
 	}
+	// Must stay silent like the live one: `closeVisit()` ends a run with no callback, no CANCELLED.
 	closeVisit(): void {
 		this.visitOpen = false;
 		this.cancel();
