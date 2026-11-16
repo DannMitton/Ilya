@@ -29,6 +29,7 @@ async function open(page: Page, opts: { formants?: Record<string, unknown>; voic
 async function toCapture(page: Page) {
 	await page.getByRole('button', { name: /^record your vowels$/i }).click();
 	await page.getByRole('button', { name: /^begin$/i }).click();
+	await page.getByRole('button', { name: /^start$/i }).click(); // N.203 lane 60 Step 4: the test fry waits for Start
 	await page.getByRole('button', { name: /^continue$/i }).click({ timeout: 30_000 });
 	await expect(page.locator('.capture')).toBeVisible();
 }
@@ -74,7 +75,7 @@ test.describe('the new capture screen on the stub', () => {
 		expect(v.takes).toHaveLength(10);
 		expect(v.takes.every((t: { outcome: string; raw?: unknown; voiceType: string; visible: string }) => ['captured', 'provisional'].includes(t.outcome) && !!t.raw && t.voiceType === 'bass' && t.visible === 'zone')).toBe(true);
 		await page.getByRole('button', { name: 'See your vowel space' }).click();
-		await expect(page.getByText('Your vowel space').first()).toBeVisible();
+		await expect(page.getByRole('heading', { name: 'Your vowel space' })).toBeVisible();
 	});
 
 	test('the chart glides to the focused vowel on every change of focus, it does not snap, and the hide box is not live during a take', async ({ page }) => {
@@ -109,14 +110,14 @@ test.describe('the new capture screen on the stub', () => {
 		const ALL = Object.fromEntries(['i', 'e', 'ɪ', 'ɨ', 'ɛ', 'a', 'ɑ', 'ʌ', 'o', 'u'].map((v, k) => [v, READING(300 + 40 * k, 2200 - 130 * k)]));
 		await open(page, { formants: ALL });
 		const visitOpen = () => page.evaluate(() => (window as unknown as { __ilyaStubSession: { visitOpen: boolean } }).__ilyaStubSession.visitOpen);
-		await page.getByRole('button', { name: /re-calibrate/i }).click();
+		await page.getByRole('button', { name: /^your vowel space$/i }).click();
 		expect(await visitOpen(), 'the summary is not the capture screen').toBe(false);
-		await page.getByRole('button', { name: /^re-take$/i }).first().click();
+		await page.getByRole('button', { name: /^back to the ten vowels$/i }).click();
 		await expect(page.locator('.capture')).toBeVisible();
 		await expect.poll(visitOpen).toBe(true);
 		await page.getByRole('button', { name: /back/i }).first().click();
 		await expect.poll(visitOpen).toBe(false);
-		await page.getByRole('button', { name: /calibrate/i }).first().click();
+		await page.getByRole('button', { name: /^record a vowel again$/i }).click();
 		await expect(page.locator('.capture')).toBeVisible();
 		await expect.poll(visitOpen).toBe(true);
 		await page.getByRole('button', { name: 'See your vowel space' }).click();
@@ -188,7 +189,7 @@ test.describe('the new capture screen on the stub', () => {
 		expect(await selected(page)).toBe('i'); // round the seven from [u]: wraps to the first unsung
 		await expect(cue(page)).toHaveText('Ready for [i].');
 		await page.getByRole('button', { name: /^Use what I.ve recorded$/ }).click();
-		await expect(page.getByText('1 of 10 vowels sampled').first()).toBeVisible();
+		await expect(page.locator('.vowel-sheet tr[data-row]:not(.placed)')).toHaveCount(1); // one recorded row (the lede is gone)
 	});
 
 	test('a cancel in each phase ends the take, saves no reading, and records a cancel', async ({ page }) => {
@@ -222,9 +223,9 @@ test.describe('the new capture screen on the stub', () => {
 
 	test('a rolled-back re-take keeps the reading and says so; an error says what happened; both leave a record', async ({ page }) => {
 		test.setTimeout(120_000);
-		await open(page, { formants: { i: READING(296, 1705), e: READING(381, 1532), u: READING(346, 804) }, next: ['provisional-low', 'error-no-audio'] });
-		await page.getByRole('button', { name: /re-calibrate/i }).click();
-		await page.getByRole('button', { name: /^re-take$/i }).first().click(); // [i], a pass of one
+		await open(page, { formants: { i: { ...READING(296, 1705), plausibility: 'implausible' }, e: READING(381, 1532), u: READING(346, 804) }, next: ['provisional-low', 'error-no-audio'] });
+		await page.getByRole('button', { name: /^your vowel space$/i }).click();
+		await page.getByRole('button', { name: /^re-take$/i }).first().click(); // the note's Re-take: [i], a pass of one
 		await expect(page.locator('.capture')).toBeVisible();
 		await page.locator('.main').click();
 		await expect(cue(page)).toContainText('previous one was kept', { timeout: 40_000 });
@@ -239,23 +240,23 @@ test.describe('the new capture screen on the stub', () => {
 		expect(v.takes.map((t: { outcome: string; errorCode?: string }) => [t.outcome, t.errorCode])).toEqual([['rolled-back', undefined], ['failed', 'NO_AUDIO_INPUT']]);
 		await expect(page.locator('.main')).toBeEnabled(); // a way back in
 		await page.getByRole('button', { name: /^Use what I.ve recorded$/ }).click();
-		await expect(page.getByText('3 of 10 vowels sampled').first()).toBeVisible();
+		await expect(page.locator('.vowel-sheet tr[data-row]:not(.placed)')).toHaveCount(3); // the lede is gone
 	});
 
 	test('a re-take from the summary walks its pass and returns by itself when the take is clean', async ({ page }) => {
 		test.setTimeout(120_000);
-		await open(page, { formants: { i: READING(296, 1705), u: READING(346, 804) } });
-		await page.getByRole('button', { name: /re-calibrate/i }).click();
-		await page.getByRole('button', { name: /^re-take$/i }).first().click();
+		await open(page, { formants: { i: { ...READING(296, 1705), plausibility: 'implausible' }, u: READING(346, 804) } });
+		await page.getByRole('button', { name: /^your vowel space$/i }).click();
+		await page.getByRole('button', { name: /^re-take$/i }).first().click(); // the note's Re-take walks its pass
 		await page.locator('.main').click();
-		await expect(page.getByText('2 of 10 vowels sampled').first()).toBeVisible({ timeout: 40_000 });
+		await expect(page.locator('.vowel-sheet tr[data-row]:not(.placed)')).toHaveCount(2, { timeout: 40_000 }); // the lede is gone
 	});
 
 	test('a tap during the dwell at the end of a re-take pass keeps the screen: it does not return to the summary under the singer (follow-up fix 4)', async ({ page }) => {
 		test.setTimeout(90_000);
-		await open(page, { formants: { i: READING(296, 1705), u: READING(346, 804) }, next: ['captured'] });
-		await page.getByRole('button', { name: /re-calibrate/i }).click();
-		await page.getByRole('button', { name: /^re-take$/i }).first().click(); // a pass of one
+		await open(page, { formants: { i: { ...READING(296, 1705), plausibility: 'implausible' }, u: READING(346, 804) }, next: ['captured'] });
+		await page.getByRole('button', { name: /^your vowel space$/i }).click();
+		await page.getByRole('button', { name: /^re-take$/i }).first().click(); // the note's Re-take: a pass of one
 		await page.locator('.main').click();
 		await expect(cue(page)).toHaveText('[i] captured.', { timeout: 40_000 }); // the dwell has begun
 		await btn(page, /^close-e/).click();
@@ -265,11 +266,11 @@ test.describe('the new capture screen on the stub', () => {
 		expect(await selected(page)).toBe('e');
 	});
 
-	test('the summary offers Continue while fewer than ten are sung, and it opens the capture screen on the next vowel in Ilya’s order (B3)', async ({ page }) => {
+	test('the summary offers Back to the ten vowels, and it opens the capture screen on the next vowel in Ilya’s order (B3)', async ({ page }) => {
 		await open(page, { formants: { i: READING(296, 1705), e: READING(381, 1532), u: READING(346, 804) } });
-		await page.getByRole('button', { name: /re-calibrate/i }).click();
-		await expect(page.getByText('3 of 10 vowels sampled').first()).toBeVisible();
-		await page.getByRole('button', { name: /^continue$/i }).click();
+		await page.getByRole('button', { name: /^your vowel space$/i }).click();
+		await expect(page.locator('.vowel-sheet tr[data-row]:not(.placed)')).toHaveCount(3); // the lede is gone
+		await page.getByRole('button', { name: /^back to the ten vowels$/i }).click();
 		await expect(page.locator('.capture')).toBeVisible();
 		expect(await selected(page)).toBe('ɛ');
 		await expect(cue(page)).toHaveText('Ready for [ɛ].');
@@ -278,8 +279,8 @@ test.describe('the new capture screen on the stub', () => {
 	test('Start over takes two taps, then clears the readings and the take record', async ({ page }) => {
 		test.setTimeout(120_000);
 		await open(page, { formants: { i: READING(296, 1705), e: READING(381, 1532), u: READING(346, 804) } });
-		await page.getByRole('button', { name: /re-calibrate/i }).click();
-		await page.getByRole('button', { name: /^re-take$/i }).first().click();
+		await page.getByRole('button', { name: /^your vowel space$/i }).click();
+		await page.getByRole('button', { name: /^back to the ten vowels$/i }).click();
 		await page.getByRole('button', { name: /^Start over$/ }).click();
 		await expect(page.getByRole('button', { name: /^Clear all$/ })).toBeVisible();
 		await expect(page.locator('.hint')).toHaveText('Tap Clear all to clear every reading for this voice.');
@@ -427,13 +428,13 @@ test.describe('the screen in order, in view (Step 4)', () => {
 					await page.setViewportSize({ width: w, height: h });
 					if (mode === 'first visit') {
 						await open(page, { lang });
-						await page.getByRole('button', { name: /^(calibrate|calibrer)$/i }).click();
+						await page.getByRole('button', { name: /^(record your vowels|capter vos voyelles)$/i }).click();
 						await page.getByRole('button', { name: /^(begin|commencer)$/i }).click();
+						await page.getByRole('button', { name: /^(start|commencer)$/i }).click(); // the test fry waits for Start
 						await page.getByRole('button', { name: /^(continue|continuer)$/i }).click({ timeout: 30_000 });
 					} else {
 						await open(page, { lang, formants: FOUR });
-						await page.getByRole('button', { name: /re-calibrate|recalibrer/i }).click();
-						await page.getByRole('button', { name: /^(continue|continuer)$/i }).click();
+						await page.getByRole('button', { name: /^(carry on recording|continuer la captation)$/i }).click();
 					}
 					await expect(page.locator('.capture')).toBeVisible();
 					const top = async (sel: string) => (await page.locator(sel).first().boundingBox())!.y;
@@ -462,8 +463,9 @@ test.describe('the main and stop buttons hold one line (Step 8c.2)', () => {
 				test.setTimeout(90_000);
 				await page.setViewportSize({ width: w, height: 800 });
 				await open(page, { lang });
-				await page.getByRole('button', { name: /^(calibrate|calibrer)$/i }).click();
+				await page.getByRole('button', { name: /^(record your vowels|capter vos voyelles)$/i }).click();
 				await page.getByRole('button', { name: /^(begin|commencer)$/i }).click();
+				await page.getByRole('button', { name: /^(start|commencer)$/i }).click(); // the test fry waits for Start
 				await page.getByRole('button', { name: /^(continue|continuer)$/i }).click({ timeout: 30_000 });
 				await expect(page.locator('.capture')).toBeVisible();
 				const oneLine = async () => {
@@ -478,9 +480,9 @@ test.describe('the main and stop buttons hold one line (Step 8c.2)', () => {
 		test(`${lang} at 375 px: Re-take [i] on one line`, async ({ page }) => {
 			await page.setViewportSize({ width: 375, height: 800 });
 			await open(page, { lang, formants: FOUR });
-			await page.getByRole('button', { name: /re-calibrate|recalibrer/i }).click();
-			await page.getByRole('button', { name: /^(re-take|reprendre)$/i }).first().click();
+			await page.getByRole('button', { name: /^(carry on recording|continuer la captation)$/i }).click();
 			await expect(page.locator('.capture')).toBeVisible();
+			await page.locator('.vowel-btn').first().click(); // focus [i], a recorded vowel: the main button reads Re-take [i]
 			expect((await page.locator('.main').boundingBox())!.height).toBeLessThan(46);
 		});
 	}

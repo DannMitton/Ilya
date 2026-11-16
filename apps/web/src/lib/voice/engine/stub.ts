@@ -48,7 +48,7 @@ const STUB_FORMANTS: Record<Vowel, { f1: number; f2: number }> = {
 export type StubOutcome = 'captured' | 'provisional-low' | 'provisional-divergent' | 'error-no-audio';
 
 /** Force a specific readiness outcome, for exercising the wizard's three paths. */
-export type StubReadinessOutcome = 'clear' | 'marginal-fry' | 'marginal-snr' | 'no-microphone';
+export type StubReadinessOutcome = 'clear' | 'marginal-fry' | 'marginal-snr' | 'no-microphone' | 'no-fry';
 
 function stubFormant(vowel: Vowel, outcome: Exclude<StubOutcome, 'error-no-audio'>): CalibratedFormant {
 	const { f1, f2 } = STUB_FORMANTS[vowel];
@@ -78,7 +78,8 @@ function stubFormant(vowel: Vowel, outcome: Exclude<StubOutcome, 'error-no-audio
  */
 function stubReadiness(outcome: Exclude<StubReadinessOutcome, 'no-microphone'>): ReadinessResult {
 	const snrDb = outcome === 'marginal-snr' ? ROOM_SNR_TOAST_DB - 7 : ROOM_SNR_TOAST_DB + 9;
-	const fryRateHz = outcome === 'marginal-fry' ? 22 : 48;
+	// `no-fry` (N.203 lane 60 Step 4): the room was heard and the detector refused what followed, so a browser test and the pictures can show the refusal.
+	const fryRateHz = outcome === 'no-fry' ? null : outcome === 'marginal-fry' ? 22 : 48;
 	// Any positive floor works; the pair is kept internally consistent with
 	// snrDb so nothing downstream can read a contradictory triple.
 	const noiseFloor = 1e-8;
@@ -96,8 +97,8 @@ function stubReadiness(outcome: Exclude<StubReadinessOutcome, 'no-microphone'>):
 		fryHeard: classifyFryPresence(snrDb),
 		fryRateHz,
 		fryRange: classifyFryRate(fryRateHz),
-		fryAccepted: true,
-		fryFailed: [],
+		fryAccepted: outcome !== 'no-fry',
+		fryFailed: outcome === 'no-fry' ? ['c7_flat'] : [],
 		fryUndecided: []
 	};
 }

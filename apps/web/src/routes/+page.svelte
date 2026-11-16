@@ -117,6 +117,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	import CalibrationWizard from '$lib/voice/CalibrationWizard.svelte';
 	import VoicePane from '$lib/components/Drawer/VoicePane.svelte';
 	import type { VoiceRequest, VoiceRequestKind, VoiceSeam } from '$lib/voice/seam';
+	import { finishEarlyState } from '$lib/voice/chart/finish-early';
 	import MetadataFields from '$lib/components/Drawer/MetadataFields.svelte';
 	import {
 		SectionSet,
@@ -4176,7 +4177,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 						     left to control anything. -->
 						<div class="station-body">
 							<VoicePane {language} seam={voiceSeam} voiceType={voiceTypeChoice} usable={usableReadingCount(voiceFormants)}
-								hasStoredReading={hasAnyReadings(voiceFormants)} onopen={openVoice} />
+								hasStoredReading={hasAnyReadings(voiceFormants)} restWorkedOut={finishEarlyState(voiceFormants, voiceTypeChoice?.voiceType).kind === 'work-out'} onopen={openVoice} />
 						</div>
 					</div>
 					<!-- ── THE NOTICES. Unstyled on purpose, as they have always

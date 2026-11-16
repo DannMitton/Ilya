@@ -12,10 +12,10 @@ const R = (f1: number, f2: number) => ({ f1, f2, confidence: 'high', f2Quality: 
 const NINE = { i: R(296, 1705), e: R(381, 1532), 'ɪ': R(393, 1600), 'ɨ': R(404, 1100), 'ɛ': R(577, 1311), a: R(711, 1113), 'ɑ': R(617, 1013), 'ʌ': R(616, 1167), o: R(489, 826) };
 
 type Voice = { id: string; name: string; formants?: Record<string, unknown>; voiceType?: string };
-async function open(page: Page, voices: Voice[] | null) {
+async function open(page: Page, voices: Voice[] | null, room?: string) {
 	const now = '2026-11-01T10:00:00.000Z';
 	const store = voices && { version: 2, activeId: voices[0].id, voices: voices.map((v) => ({ createdAt: now, updatedAt: now, calibratedAt: now, formants: {}, ...v })) };
-	await page.addInitScript(([s]) => { localStorage.setItem('ilya:language', 'en'); if (s) localStorage.setItem('shane.profiles.v2', s); }, [store ? JSON.stringify(store) : null] as const);
+	await page.addInitScript(([s, r]) => { localStorage.setItem('ilya:language', 'en'); if (s) localStorage.setItem('shane.profiles.v2', s); if (r) (window as unknown as { __ilyaStubReadiness?: string }).__ilyaStubReadiness = r; }, [store ? JSON.stringify(store) : null, room ?? ''] as const);
 	await page.goto('/?capture=stub');
 	await expect(page.locator('textarea.text-input')).toBeEnabled({ timeout: 45_000 });
 	await expandStation(page, 'Voice');
@@ -101,4 +101,62 @@ test.describe('the VOICE pane at rest', () => {
 			expect((await stored(page)).voices[0].calibratedAt).toBe('2026-11-01T10:00:00.000Z');
 		});
 	}
+
+	test.describe('the test fry (N.203 lane 60, Step 4)', () => {
+		const toFry = async (page: Page) => {
+			await door(page, /^record your vowels$/i).click();
+			await page.getByRole('button', { name: /^begin$/i }).click();
+		};
+		test('says what is coming before anything runs, and waits for Start', async ({ page }) => {
+			await open(page, [{ id: 'v', name: 'Dann', voiceType: 'bass' }]);
+			await toFry(page);
+			await expect(page.getByText('First, Ilya listens to the room for a moment.')).toBeVisible();
+			await page.waitForTimeout(1500);
+			await expect(page.locator('[data-part]')).toHaveCount(0); // nothing started by itself
+			await page.getByRole('button', { name: /^start$/i }).click();
+			await expect(page.locator('[data-part]')).toHaveCount(3);
+			await expect(page.locator('[data-part="quiet"] .name')).toHaveText('Quiet');
+			await expect(page.getByText('Stay silent.')).toBeVisible();
+			await expect(page.getByRole('button', { name: /^continue$/i })).toBeVisible({ timeout: 30_000 });
+		});
+		test('refuses a sound that is not fry: the line says so, Try again runs it again, Continue goes on, and the rate is not stored', async ({ page }) => {
+			await open(page, [{ id: 'v', name: 'Dann', voiceType: 'bass' }], 'no-fry');
+			await toFry(page);
+			await page.getByRole('button', { name: /^start$/i }).click();
+			await expect(page.getByText('Ilya heard the room, but no vocal fry.')).toBeVisible({ timeout: 30_000 });
+			const rec = (await stored(page)).voices[0].readiness;
+			expect(rec).toMatchObject({ measured: true, fryRateHz: null, fryRange: 'not-measured' });
+			await page.getByRole('button', { name: /^try again$/i }).click();
+			await expect(page.locator('[data-part]')).toHaveCount(3);
+			await expect(page.getByText('Ilya heard the room, but no vocal fry.')).toBeVisible({ timeout: 30_000 });
+			await page.getByRole('button', { name: /^continue$/i }).click();
+			await expect(page.locator('.capture')).toBeVisible();
+		});
+		test('Back during the run ends it and keeps nothing, and the run does not finish behind the singer’s back', async ({ page }) => {
+			await open(page, [{ id: 'v', name: 'Dann', voiceType: 'bass' }]);
+			await toFry(page);
+			await page.getByRole('button', { name: /^start$/i }).click();
+			await expect(page.locator('[data-part]')).toHaveCount(3);
+			await page.locator('.takeover-back').click();
+			expect((await stored(page)).voices[0].readiness).toBeUndefined();
+			await page.waitForTimeout(7000); // longer than the whole run: nothing finishes behind the singer's back
+			expect((await stored(page)).voices[0].readiness).toBeUndefined();
+			await toFry(page); // a voice with nothing recorded meets Welcome again, then the "before" screen
+			await expect(page.getByRole('button', { name: /^start$/i })).toBeVisible();
+			await expect(page.locator('[data-part]')).toHaveCount(0);
+		});
+		test('one microphone visit spans the test fry and the first vowel: closed before Start, open from Start, still open on the capture screen, closed on Back', async ({ page }) => {
+			await open(page, [{ id: 'v', name: 'Dann', voiceType: 'bass' }]);
+			const visitOpen = () => page.evaluate(() => (window as unknown as { __ilyaStubSession: { visitOpen: boolean } }).__ilyaStubSession.visitOpen);
+			await toFry(page);
+			expect(await visitOpen(), 'nothing listens before Start').toBe(false);
+			await page.getByRole('button', { name: /^start$/i }).click();
+			await expect.poll(visitOpen).toBe(true);
+			await page.getByRole('button', { name: /^continue$/i }).click({ timeout: 30_000 });
+			await expect(page.locator('.capture')).toBeVisible();
+			expect(await visitOpen(), 'the visit is not closed and reopened between the fry and the first vowel').toBe(true);
+			await page.locator('.takeover-back').click();
+			await expect.poll(visitOpen).toBe(false);
+		});
+	});
 });

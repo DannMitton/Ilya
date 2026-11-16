@@ -25,7 +25,7 @@
 	import { createCaptureRitual, GLIDE_MS, type RitualCue } from './capture-ritual.svelte';
 	import TakeLine from './TakeLine.svelte';
 	import { TAKE_PART_IDS, TAKE_WEIGHTS } from './take-line';
-	import { createVisit, leaveScreen } from './visit';
+	import { createVisit, leaveScreen, type Visit } from './visit';
 	import { resetScrollAncestors } from './scroll-top';
 	import { finishEarlyState, finishEarlyText } from './chart/finish-early';
 	import { spokenName } from './vowel-names';
@@ -56,7 +56,9 @@
 		onTake,
 		onReturn,
 		onClearAll,
-		takeoverVisible = true
+		takeoverVisible = true,
+		visit: sharedVisit = undefined,
+		onVisitHooks
 	}: {
 		session: CaptureSession;
 		language: Language;
@@ -78,6 +80,13 @@
 		onClearAll: () => void;
 		/** Whether the takeover this screen sits in is showing. The microphone is held open only while it is (`visit.ts`). */
 		takeoverVisible?: boolean;
+		/**
+		 * N.203 lane 60 Step 4: the wizard's one visit, which spans the test fry and this screen, so the microphone is announced once on a first journey and a
+		 * remount of this screen (`captureKey`) does not close and reopen it. When given, this screen creates no helper of its own, never syncs or destroys the
+		 * shared one (the wizard does), and hands the wizard the two things only it can do: end a take, and close the tick context.
+		 */
+		visit?: Visit;
+		onVisitHooks?: (hooks: { endTake(): void; closeTicks(): void } | null) => void;
 	} = $props();
 
 	// ── State ───────────────────────────────────────────────────────────────
@@ -125,13 +134,15 @@
 	});
 
 	// The microphone is open once per visit to this screen: while it is mounted and the takeover is showing (Step 1).
-	const visit = createVisit({
+	const shared = untrack(() => sharedVisit);
+	const visit = shared ?? createVisit({
 		session: untrack(() => session),
 		endTake: () => ritual.cancel(),
 		closeTicks: () => ritual.closeTicks(),
 		wanted: () => takeoverVisible
 	});
-	$effect(() => visit.sync());
+	if (shared) untrack(() => onVisitHooks?.({ endTake: () => ritual.cancel(), closeTicks: () => ritual.closeTicks() }));
+	$effect(() => { if (!shared) visit.sync(); });
 
 	/** The ritual has just set its cue for the take that ended: keep it on the screen if the singer needs to read it, else let the invitation take over. */
 	function keepNotice() {
@@ -177,7 +188,8 @@
 		return () => {
 			mq.removeEventListener('change', change);
 			motion.stop();
-			leaveScreen(visit, ritual); // the ritual ends silently, then the visit closes: no CANCELLED take record is written on the way out
+			if (shared) { ritual.destroy(); ritual.closeTicks(); onVisitHooks?.(null); } // the wizard's visit outlives this screen
+			else leaveScreen(visit, ritual); // the ritual ends silently, then the visit closes: no CANCELLED take record is written on the way out
 		};
 	});
 

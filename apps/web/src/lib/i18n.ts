@@ -16,7 +16,7 @@
    tree on 2026-11-02 (consistency batch 2). Paths are under `apps/web/src/`;
    a prefix is listed with the files that use it most and its key count.
 
-   This file holds 1,325 keys.
+   This file holds 1,328 keys.
 
    A key built at run time (`watch.key.letter.${letter}`, `comment.<register>.<part>`)
    has no literal reference, so a search for the whole key can come back empty
@@ -27,7 +27,7 @@
    analysis.       7  lib/analysis/analyze-score-adapter.ts (the broad-analysis note), lib/components/Drawer/bandState.ts (ANALYSIS's closed line)
    app.            2  the page's hidden heading, lib/components/HeaderBar.svelte (`app.subtitle` has no literal consumer)
    binder.        10  lib/library/exchange.ts, lib/components/Drawer/RootPanel.svelte
-   calib.        117  lib/voice/CalibrationWizard.svelte, lib/voice/ProfileSwitcher.svelte, lib/components/Drawer/VoicePane.svelte
+   calib.        120  lib/voice/CalibrationWizard.svelte, lib/voice/ProfileSwitcher.svelte, lib/components/Drawer/VoicePane.svelte
    capture.       55  the calibration screen: lib/voice/VowelCapture.svelte, lib/voice/chart/screen-logic.ts, lib/voice/chart/VowelChart.svelte
    clitic.         3  no literal consumer found (lib/score/clitic-seat.ts does the seating)
    collide.        5  routes/+page.svelte
@@ -1294,15 +1294,24 @@ const strings: Record<string, Record<Language, string>> = {
 	'calib.readiness.title': { en: 'Getting ready', fr: 'Préparation' },
 	// The readiness gate's copy, and `calib.roster.noiseFloorTitle` and `calib.challengingInvite.*`:
 	// RATIFIED by Dann 2026-09-30 23:42 ("yes"), desk-drafted; they were PLACEHOLDER.
-	'calib.readiness.quiet': { en: 'Listening to the room. Stay silent for a moment.', fr: 'Ilya écoute la pièce. Restez en silence un moment.' },
+	// N.203 lane 60 Step 4: the test fry's words. RATIFIED by Dann 2026-11-16 (English sheet r2 lines 9 to 14, French sheet r1), character for character. `quiet`, `captureLede`, and `noFry` below took lines 12 and 13 (the review's key map, amendment 18). 'Breathe' and 'Fry' on the line are lane 59's `capture.part.breathe` and `.fry`; the cue 'Breathe.' is `capture.cue.breathe`; Try again is `calib.roster.tryAgain`; Continue is `calib.common.continue`.
+	'calib.readiness.intro': { en: 'First, Ilya listens to the room for a moment. Then it asks you for three seconds of vocal fry, to check that the microphone hears you.', fr: 'D\u2019abord, Ilya écoute la pièce un moment. Puis il vous demande trois secondes de friture vocale, pour vérifier que le microphone vous entend.' },
+	'calib.readiness.start': { en: 'Start', fr: 'Commencer' },
+	'calib.readiness.partQuiet': { en: 'Quiet', fr: 'Silence' },
+	'calib.readiness.quiet': { en: 'Stay silent.', fr: 'Restez en silence.' },
+	// UNUSED SINCE N.203 lane 60 Step 4 (the spoken count and its lede left; the line says Breathe). Kept and marked in place, with its ratified French, the way this file's other retired strings are.
 	'calib.readiness.prepareLede': { en: 'Next, a short test fry, so Ilya can check that the microphone hears you.', fr: 'Ensuite, une courte friture d\u2019essai, pour qu\u2019Ilya vérifie que le micro vous entend.' },
+	// UNUSED SINCE N.203 lane 60 Step 4 (the spoken count left). Kept and marked in place, with its ratified French, the way this file's other retired strings are.
 	'calib.readiness.countThree': { en: 'Three.', fr: 'Trois.' },
+	// UNUSED SINCE N.203 lane 60 Step 4 (the spoken count left). Kept and marked in place, with its ratified French, the way this file's other retired strings are.
 	'calib.readiness.countTwo': { en: 'Two.', fr: 'Deux.' },
+	// UNUSED SINCE N.203 lane 60 Step 4 (the spoken count left). Kept and marked in place, with its ratified French, the way this file's other retired strings are.
 	'calib.readiness.countOne': { en: 'One.', fr: 'Un.' },
-	'calib.readiness.captureLede': { en: 'Fry now, and keep going until the bar fills.', fr: 'Faites la friture maintenant, et continuez jusqu\u2019à ce que la barre soit pleine.' },
+	'calib.readiness.captureLede': { en: 'Fry now, until the line fills.', fr: 'Faites la friture maintenant, jusqu\u2019à ce que la ligne se remplisse.' },
 	'calib.readiness.captureAria': { en: 'Recording your test fry', fr: 'Enregistrement de votre friture d\u2019essai' },
 	'calib.readiness.noMic': { en: 'Ilya could not reach your microphone, so nothing was measured.', fr: 'Ilya n\u2019a pas pu accéder à votre microphone, donc rien n\u2019a été mesuré.' },
-	'calib.readiness.noFry': { en: 'Ilya did not hear fry, so nothing was measured.', fr: 'Ilya n\u2019a pas entendu de friture, donc rien n\u2019a été mesuré.' },
+	'calib.readiness.noFry': { en: 'Ilya heard the room, but no vocal fry. Try again, or continue: each vowel listens for fry on its own.', fr: 'Ilya a entendu la pièce, mais pas de friture vocale. Réessayez, ou continuez\u00a0: chaque voyelle vérifie la friture à son tour.' },
+	// UNUSED SINCE N.203 lane 60 Step 4 (each vowel no longer asks for the microphone again: it is one visit, and line 13's own clause replaces this). Kept and marked in place, with its ratified French, the way this file's other retired strings are.
 	'calib.readiness.guidance': { en: 'You can carry on; each vowel asks for the microphone again.', fr: 'Vous pouvez poursuivre\u00a0: chaque voyelle redemande le microphone.' },
 	'calib.readiness.complete': { en: 'Readiness check complete.', fr: 'Vérification préalable terminée.' },
 	'calib.readiness.marginal': { en: 'Your fry is reading near the edge of our range; a little lower or higher may read cleaner.', fr: 'Votre friture se lit près de la limite de notre plage. Un peu plus grave ou plus aigu se lirait plus nettement.' },

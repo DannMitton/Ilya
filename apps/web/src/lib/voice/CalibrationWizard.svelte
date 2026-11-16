@@ -50,6 +50,10 @@
 	import { addTake, type TakeRecord } from '$lib/voice/takes';
 	import { openRetake, openTour, type Opening } from '$lib/voice/chart/opening';
 	import { landingFor, requestRefused, type VoiceRequest, type VoiceSeam } from '$lib/voice/seam';
+	import TakeLine from '$lib/voice/TakeLine.svelte';
+	import type { TakePart } from '$lib/voice/take-line';
+	import { createVisit } from '$lib/voice/visit';
+	import { fryView } from '$lib/voice/readiness-view';
 	import { t, type Language } from '$lib/i18n';
 	import Italics from '$lib/components/Italics.svelte';
 	import InsightsIntake from '$lib/voice/InsightsIntake.svelte';
@@ -64,7 +68,6 @@
 		READINESS_PREP_MS,
 		type ReadinessResult
 	} from '$lib/voice/engine/readiness';
-	import type { CaptureError } from '$lib/voice/engine/errors';
 	import { loadNotationFont, type LoadedNotationFont } from '$lib/score/notation-fonts';
 	import { pitchToMidi, type IntakeAnswers, type Pitch } from '@ilya/score-parser';
 		import { applyIghDivergence } from '$lib/voice/engine/divergence';
@@ -454,10 +457,8 @@
 		// take when it unmounts (`ritual.destroy()`).
 		if (phase === 'readiness') captureSession.cancel();
 		readinessResult = undefined;
-		readinessError = undefined;
-		readinessStep = 'quiet';
-		readinessCount = '';
-		readinessProgress = 0;
+		readinessStep = 'before';
+		fryWithin = 0;
 		clearReadinessTimers();
 		clearAllTimers();
 		confirmingReset = false;
@@ -518,57 +519,66 @@
 		persistStore();
 	}
 
-	// ── Phase 1, readiness (measured; item 1.4a) ─────────────────────────────
-	// 'unmeasured' is the abstention: the gate could not measure, so the
-	// wizard says so and makes no claim about the room or the fry. It is a
-	// state, never a block; Continue stands from it exactly as from 'done'.
-	// 'prepare' and 'capture' split what used to be one 'fry' step, on Dann's
-	// ruling of 2026-08-04 after he walked it as a user: "The step ... is too
-	// rapid. A new user will assume there was an error ... A human being will
-	// expect 3-5 seconds to carry out this task." The engine reaches its verdict
-	// in about one second; the step is longer on purpose, so the singer is
-	// counted in and can see when they have given enough. Same shape as the
-	// vowel steps (the deleted wheel's `beginPrepare` and its `SWEEP_MS` arc;
-	// the capture screen's count-in is `count-in.ts`).
-	let readinessStep = $state<'quiet' | 'prepare' | 'capture' | 'done' | 'unmeasured'>('quiet');
+	// ── Phase 1, the test fry (N.203 lane 60 Step 4; Dann 2026-11-16 00:31 to 00:35) ─────────────────────────────────────────────────────
+	// Before: what is coming, and Start. Nothing listens until Start. The run is `TakeLine` with three parts, Quiet, Breathe, Fry (weights 1, 2, 3),
+	// driven from this component's own clock: the line owns none. Quiet has no clock here: it lasts until the engine's `onQuiet` (on a first run that
+	// includes the permission prompt), so the line `holds` for it. Breathe is `READINESS_PREP_MS` and Fry is `READINESS_CAPTURE_MS`, which `engine/readiness.ts`
+	// and the engine read too. The verdict is `readiness-view.ts`: accepted only when the fry was heard AND the detector accepted it; a refusal offers
+	// Try again and Continue, and the gate never blocks. 'unmeasured' is now only "no microphone".
+	let readinessStep = $state<'before' | 'quiet' | 'breathe' | 'fry' | 'done' | 'unmeasured' | 'refused'>('before');
+	/** The accepted run's result (the room toast and the marginal line read it). Never set for a refusal, so a rustle's room is not a finding. */
 	let readinessResult = $state<ReadinessResult | undefined>(undefined);
-	let readinessError = $state<CaptureError | undefined>(undefined);
-	/** The count-in beat, 'Three.' | 'Two.' | 'One.'. */
-	let readinessCount = $state('');
-	/** 0 to 1 across READINESS_CAPTURE_MS. Drawn as the bar; never a measurement. */
-	let readinessProgress = $state(0);
-	let readinessTimers: ReturnType<typeof setTimeout>[] = [];
+	let fryMarginal = $state(false);
+	/** 0 to 1 within the current part. Drawn by `TakeLine`; never a measurement. */
+	let fryWithin = $state(0);
 	let readinessRaf = 0;
+	let reducedMotion = $state(false);
+	onMount(() => {
+		const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+		reducedMotion = mq.matches;
+		const change = () => (reducedMotion = mq.matches);
+		mq.addEventListener('change', change);
+		return () => mq.removeEventListener('change', change);
+	});
+	const fryRunning = $derived(readinessStep === 'quiet' || readinessStep === 'breathe' || readinessStep === 'fry');
+	const fryParts = $derived<TakePart[]>([
+		{ id: 'quiet', label: T('calib.readiness.partQuiet'), weight: 1 },
+		{ id: 'breathe', label: T('capture.part.breathe'), weight: 2 },
+		{ id: 'fry', label: T('capture.part.fry'), weight: 3 }
+	]);
+	const fryCue = $derived(readinessStep === 'quiet' ? T('calib.readiness.quiet') : readinessStep === 'breathe' ? T('capture.cue.breathe') : T('calib.readiness.captureLede'));
+	let snrMarginal = $derived(readinessResult?.room.lively ?? false);
 
-	/**
-	 * The wizard's own clock. It does NOT drive the engine and the engine does
-	 * not drive it: both read READINESS_PREP_MS and READINESS_CAPTURE_MS from
-	 * `engine/readiness.ts`, which is the same decoupling the vowel arc uses
-	 * ("a fixed 3.0 s clock that never stalls, independent of the engine's
-	 * delivery time", `SWEEP_MS` in the deleted wheel). If they disagree, the bar is
-	 * wrong and the measurement is not.
-	 */
 	function clearReadinessTimers() {
-		for (const t of readinessTimers) clearTimeout(t);
-		readinessTimers = [];
 		if (readinessRaf) cancelAnimationFrame(readinessRaf);
 		readinessRaf = 0;
 	}
-	// One source of truth: the two flags the UI reads are views of the gate's
-	// verdict, never separately assignable state that could disagree with it.
-	// An out-of-range fry takes the same guidance line as a marginal one; that
-	// line is Dann's copy and a distinct out-of-range string is flagged, not
-	// invented here.
-	let fryMarginal = $derived(
-		readinessResult?.fryRange === 'marginal' || readinessResult?.fryRange === 'out-of-range'
-	);
-	let snrMarginal = $derived(readinessResult?.room.lively ?? false);
-	/** True when no microphone could be reached, as opposed to no fry heard. */
-	let readinessNoMic = $derived(
-		readinessError?.code === 'MIC_NOT_FOUND' ||
-			readinessError?.code === 'MIC_PERMISSION_DENIED' ||
-			readinessError?.code === 'NO_AUDIO_INPUT'
-	);
+	/** Back to the "before" screen with nothing kept: the takeover left, the page hidden, or the voice changed during a run. */
+	function fryToBefore() {
+		if (!fryRunning) return;
+		captureSession.cancel();
+		clearReadinessTimers();
+		readinessStep = 'before';
+		fryWithin = 0;
+	}
+	$effect(() => { if (!takeoverVisible) untrack(fryToBefore); });
+	onMount(() => {
+		const hide = () => { if (document.visibilityState === 'hidden') fryToBefore(); };
+		document.addEventListener('visibilitychange', hide);
+		return () => document.removeEventListener('visibilitychange', hide);
+	});
+
+	// ONE visit spans the test fry and the capture screen (the brief's Step 4 item 4; lane 59's `visit.ts`), so Chrome on iOS announces the microphone once on a first
+	// journey. There is no second helper: the capture screen is handed this one (`visit` and `onVisitHooks`), and a `captureKey` remount does not close it.
+	let visitHooks: { endTake(): void; closeTicks(): void } | null = null;
+	const visit = createVisit({
+		session: untrack(() => captureSession),
+		endTake: () => { if (phase === 'readiness') captureSession.cancel(); visitHooks?.endTake(); },
+		closeTicks: () => visitHooks?.closeTicks(),
+		wanted: () => takeoverVisible && ((phase === 'readiness' && readinessStep !== 'before') || phase === 'capture')
+	});
+	$effect(() => visit.sync());
+	$effect(() => () => visit.destroy());
 
 	// ── The resonance roster (Dann's direction, 2026-07-10) ──────────────────
 	// One table, both surfaces: all ten vowels accounted for from the start,
@@ -638,73 +648,48 @@
 	}
 
 	// ── Phase 0 → 1 ────────────────────────────────────────────────────────
+	/** Welcome's Begin: to the "before" screen. Nothing listens. */
 	function beginReadiness() {
 		phase = 'readiness';
-		readinessStep = 'quiet';
+		readinessStep = 'before';
 		readinessResult = undefined;
-		readinessError = undefined;
-		readinessCount = '';
-		readinessProgress = 0;
+		fryWithin = 0;
 		clearReadinessTimers();
-		// Item 1.4a. Two steps, in this order, because SNR needs a quiet
-		// reference and a fry is not quiet (wizard spec v1 §2 Phase 1). Both
-		// are measured through the session's own microphone; the two `after()`
-		// timers that stood here, and read a stub, are deleted. The gate never
-		// blocks: every terminal state below offers Continue.
+	}
+	/** One part of the line over `ms`, then `done`. */
+	function ramp(ms: number, done?: () => void) {
+		const t0 = performance.now();
+		const step = (t: number) => {
+			fryWithin = Math.min(1, (t - t0) / ms);
+			if (fryWithin < 1) readinessRaf = requestAnimationFrame(step);
+			else { readinessRaf = 0; done?.(); }
+		};
+		readinessRaf = requestAnimationFrame(step);
+	}
+	function finishFry(run: Parameters<typeof fryView>[0]) {
+		const v = fryView(run, new Date().toISOString());
+		if (!v) return; // the singer leaving: nothing to say and nothing to record
+		clearReadinessTimers();
+		recordReadiness(v.record);
+		if (v.kind === 'no-mic') readinessStep = 'unmeasured';
+		else if (v.kind === 'refused') readinessStep = 'refused';
+		else { readinessResult = run.result; fryMarginal = v.marginal; fryWithin = 1; readinessStep = 'done'; }
+	}
+	/** Start, and Try again: the tap is the gesture (`visit.resume()` opens the visit, or resumes a suspended context, inside it). SNR needs a quiet reference and a fry is not quiet, so Quiet comes first (wizard spec v1 §2 Phase 1). */
+	function startFry() {
+		clearReadinessTimers();
+		readinessResult = undefined;
+		fryMarginal = false;
+		fryWithin = 0;
+		readinessStep = 'quiet';
+		visit.resume();
 		captureSession.startReadiness({
 			onQuiet: () => {
-				// Count the singer in, then draw the capture window. Three beats
-				// at a third of the countdown each, then the bar. Not shared with
-				// the vowel steps, whose beat is `SING_BEAT_MS` (`count-in.ts`).
-				readinessStep = 'prepare';
-				readinessCount = T('calib.readiness.countThree');
-				readinessProgress = 0;
-				const beat = READINESS_PREP_MS / 3;
-				readinessTimers.push(setTimeout(() => (readinessCount = T('calib.readiness.countTwo')), beat));
-				readinessTimers.push(setTimeout(() => (readinessCount = T('calib.readiness.countOne')), 2 * beat));
-				readinessTimers.push(
-					setTimeout(() => {
-						readinessStep = 'capture';
-						readinessCount = '';
-						const t0 = performance.now();
-						const step = (t: number) => {
-							readinessProgress = Math.min(1, (t - t0) / READINESS_CAPTURE_MS);
-							readinessRaf = readinessProgress < 1 ? requestAnimationFrame(step) : 0;
-						};
-						readinessRaf = requestAnimationFrame(step);
-					}, READINESS_PREP_MS)
-				);
+				readinessStep = 'breathe';
+				ramp(READINESS_PREP_MS, () => { readinessStep = 'fry'; ramp(READINESS_CAPTURE_MS); });
 			},
-			onComplete: (result) => {
-				clearReadinessTimers();
-				readinessProgress = 1;
-				readinessResult = result;
-				readinessStep = 'done';
-				recordReadiness({
-					measuredAt: new Date().toISOString(),
-					measured: true,
-					roomSnrDb: result.room.snrDb,
-					roomLively: result.room.lively,
-					fryRateHz: result.fryRateHz,
-					fryRange: result.fryRange
-				});
-			},
-			onError: (error) => {
-				// CANCELLED is the singer leaving, not a finding: there is
-				// nothing to say and nothing to record.
-				if (error.code === 'CANCELLED') return;
-				clearReadinessTimers();
-				readinessError = error;
-				readinessStep = 'unmeasured';
-				recordReadiness({
-					measuredAt: new Date().toISOString(),
-					measured: false,
-					roomSnrDb: null,
-					roomLively: false,
-					fryRateHz: null,
-					fryRange: 'not-measured'
-				});
-			}
+			onComplete: (result) => finishFry({ result }),
+			onError: (error) => finishFry({ error })
 		});
 	}
 
@@ -897,48 +882,21 @@
 		{:else if phase === 'readiness'}
 			<div class="wizard-phase" aria-live="polite">
 				<h2 id="wizard-title">{T('calib.readiness.title')}</h2>
-				{#if readinessStep === 'quiet'}
-					<p class="wizard-lede">{T('calib.readiness.quiet')}</p>
-				{:else if readinessStep === 'prepare'}
-					<!-- The count-in. Copy RATIFIED by Dann 2026-09-30 23:42. The shape
-					     was ruled first: the singer is told what is
-					     coming and given time to draw breath before anything is
-					     collected. Nothing is recorded during this step. -->
-					<p class="wizard-lede">{T('calib.readiness.prepareLede')}</p>
-					<p class="wizard-count" aria-hidden="true">{readinessCount}</p>
-				{:else if readinessStep === 'capture'}
-					<!-- Copy RATIFIED by Dann 2026-09-30 23:42. The bar is the point: it
-					     says the microphone is hearing them AND when they have given
-					     enough, which is the pair Dann named. -->
-					<p class="wizard-lede">{T('calib.readiness.captureLede')}</p>
-					<div
-						class="readiness-meter"
-						role="progressbar"
-						aria-label={T('calib.readiness.captureAria')}
-						aria-valuemin="0"
-						aria-valuemax="100"
-						aria-valuenow={Math.round(readinessProgress * 100)}
-					>
-						<div class="readiness-meter-fill" style="width: {readinessProgress * 100}%"></div>
-					</div>
+				{#if readinessStep === 'before'}
+					<!-- What is coming, before anything runs (sheet lines 9 and 10, RATIFIED by Dann 2026-11-16). Nothing listens until Start. -->
+					<p class="wizard-lede">{T('calib.readiness.intro')}</p>
+					<button type="button" class="wizard-primary" onclick={startFry}>{T('calib.readiness.start')}</button>
+				{:else if fryRunning}
+					<p class="wizard-lede">{fryCue}</p>
+					<TakeLine parts={fryParts} current={readinessStep} within={fryWithin} holding={readinessStep === 'quiet'} label={T('calib.readiness.captureAria')} {reducedMotion} />
 				{:else if readinessStep === 'unmeasured'}
-					<!-- The abstention (item 1.4a, "abstain with no microphone").
-					     Copy RATIFIED by Dann 2026-09-30 23:42. The register:
-					     it states what happened, assigns no fault, and names
-					     the next action, and Ilya, not "we", is the one that
-					     could not hear. What must not change is the shape: the gate
-					     makes no claim about the room or the fry here, and it
-					     does not block. -->
-					{#if readinessNoMic}
-						<p class="wizard-lede">
-							{T('calib.readiness.noMic')}
-						</p>
-					{:else}
-						<p class="wizard-lede">{T('calib.readiness.noFry')}</p>
-					{/if}
-					<p class="wizard-guidance">
-						{T('calib.readiness.guidance')}
-					</p>
+					<!-- No microphone: it states what happened, assigns no fault, and names the next action. The gate makes no claim about the room or the fry, and does not block. -->
+					<p class="wizard-lede">{T('calib.readiness.noMic')}</p>
+					<button type="button" class="wizard-primary" onclick={beginCapture}>{T('calib.common.continue')}</button>
+				{:else if readinessStep === 'refused'}
+					<!-- No fry heard (sheet lines 13 and 14). Try again is quiet and first, Continue filled and last: the gate never blocks, and a strict verdict must not trap a singer in a loop (DESK DEFAULT). -->
+					<p class="wizard-lede">{T('calib.readiness.noFry')}</p>
+					<button type="button" class="wizard-secondary" onclick={startFry}>{T('calib.roster.tryAgain')}</button>
 					<button type="button" class="wizard-primary" onclick={beginCapture}>{T('calib.common.continue')}</button>
 				{:else}
 					<p class="wizard-lede">{T('calib.readiness.complete')}</p>
@@ -967,7 +925,7 @@
 					</div>
 				{/if}
 				{#key captureKey}<VowelCapture session={captureSession} {language} {voiceType} {profile} startVowel={opening.start} pass={opening.pass}
-					onCaptured={commitReading} onTake={recordTake} onReturn={() => (phase = 'summary')} onClearAll={confirmReset} {takeoverVisible} />{/key}
+					onCaptured={commitReading} onTake={recordTake} onReturn={() => (phase = 'summary')} onClearAll={confirmReset} {takeoverVisible} {visit} onVisitHooks={(h) => (visitHooks = h)} />{/key}
 			</div>
 			{:else if phase === 'summary'}
 				<!-- YOUR VOWEL SPACE (N.203 lane 60, Step 5; plan r4 section 4.5). The sheet is the whole summary: the note on readings outside Ilya's values, then the chart, the one table with the roster's marks in it, the legend, the sources, and Print (`VowelSpaceSheet.svelte`). Finish is filled and leads; the way back to the ten vowels and Start over are quiet (Dann 2026-09-10, "Filled Finish ... in that order"). Finish writes nothing: every reading was saved when it was captured, so a singer who only looked must not re-date them. -->
@@ -1252,31 +1210,6 @@
 	/* The count-in beat and the capture bar (item 1.4a interaction, E.26).
 	   Deliberately plain: this is the wizard's own furniture, not the result
 	   surface, and it borrows the same tokens as everything else here. */
-
-	.wizard-count {
-		margin: 0;
-		font-family: var(--font-ui, var(--font-sans));
-		font-size: 1.5rem;
-		font-weight: 600;
-		line-height: 1;
-		color: var(--ink-secondary);
-		font-variant-numeric: tabular-nums;
-	}
-
-	.readiness-meter {
-		width: 100%;
-		max-width: 18rem;
-		height: 0.375rem;
-		border-radius: 999px;
-		background: var(--stone-300);
-		overflow: hidden;
-	}
-	.readiness-meter-fill {
-		height: 100%;
-		background: var(--sage);
-		/* No CSS transition: the width is driven per frame from one clock, so a
-		   transition would add a second, slower clock that disagrees with it. */
-	}
 
 	/* ── Voice characteristics (E.5 slice 3) ─────────────────────────────
 	   Groups fence with a quiet rule; the group heading takes a smaller
