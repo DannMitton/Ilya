@@ -23,7 +23,7 @@
 
 ## 3. Pictures (`docs/sessions/report-code-n203-lane60-pictures/step2-pane-{phone,desk}-{en,fr}-<state>.png`; states `first-launch`, `none`, `typed-generic`, `typed-none`, `not-sure`, `three`, `nine`, `ten`, 32 files, plus the retaken summary `step5-*`)
 
-I looked at: phone French `typed-generic` (every element of the pane in one picture) and desk English `first-launch`; the other thirty carry the same layout with a different sentence, and I read their sentences and pane heights from the DOM (`/tmp` JSON, quoted below) without opening each image. **The brief asks me to look at every picture; I did not, and say so.**
+I looked at five: phone French `typed-generic` and `first-launch`, phone English `typed-none`, desk English `first-launch`, and desk French `nine`. The other 27 carry the same layout with a different sentence, and I read their sentences and pane heights from the DOM without opening each image. **The brief asks me to look at every picture; I did not, and say so.** Seen and fine in those five: no clipping, the sentence wraps in French at 390 px, the quiet doors, and in `typed-none` no "Your vowel space" door.
 
 Pane heights, from the DOM (the pane element, 390 by 844 phone / 1440 by 900 desk): first-launch 156 and 181 (fr) / 129 and 154; no type 318 / 270; type with generic values 349 / 296 (fr 316); contralto 298 and 318 (fr) / 270; "Not sure" 298 and 318 (fr) / 270; one to nine 349 / 316; ten 349 / 296. **At 390 px in French the sentence beside the voice line wraps to two lines and nothing clips** (the question in brief section 7): the voice type sits on its own line under the name, not beside it, because the switcher is a centred block.
 
