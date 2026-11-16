@@ -16,7 +16,7 @@ r1, 2026-11-16. Branch `cloud-lane-59`. Brief r3 Step 3 with amendments 12 to 15
 
 ## Pictures (`docs/sessions/report-code-n203-lane59-pictures/`, `step3-<phone|desk>-<en|fr>-<state>.png`)
 
-Phone 390 by 844 (English: rest, breathe, sing, shape, fry, sweep, dwell; French: rest, breathe, shape, sweep, dwell) and desk 1440 by 900 (English, the same seven). I looked at the English phone rest, Breathe, Sing, Fry, and dwell, the French phone Breathe, and the desk Sing. What I saw: the line shows four named parts and the current one is bold; the cue is alone in its row; the French labels sit whole, with « Respiration » widening its column a little; at the dwell the chart has already moved to hold the new dot (the dot sits left of the zone) and the main button still reads "[i] in progress". The other pictures I took and did not open one by one; they are produced by the same run.
+Phone 390 by 844 (English: rest, breathe, sing, shape, fry, sweep, dwell; French: rest, breathe, shape, sweep, dwell) and desk 1440 by 900 (English, the same seven). I opened all 22 and looked at each. What I saw: the line shows four named parts and the current one is bold; the cue is alone in its row; at the dwell the chart has already moved to hold the new dot (the dot sits left of the zone) and the main button still reads "[i] in progress". In French on a phone the labels are whole and nothing is cut, but « Respiration » widens its column and sits about 4 px from « Chant » (the grid gap), which is tight; I left it, and it is yours to judge. The desk pictures match the phone ones in order and content. In every picture the screen has scrolled, so the vowel's row is above the top of the view: that is Step 4's.
 
 ## Things that need Dann's eye or are not yet right
 
