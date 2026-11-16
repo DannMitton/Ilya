@@ -19,12 +19,12 @@ interface FakeTrack {
 }
 class FakeCtx {
 	static all: FakeCtx[] = [];
-	sampleRate = SYNTH_SR;
-	state: 'running' | 'suspended' | 'closed' = FakeCtx.startSuspended ? 'suspended' : 'running';
 	/** A test sets this to start the next contexts suspended, and `holdResume` to keep their `resume()` pending until `releaseResume()`. */
 	static startSuspended = false;
 	static holdResume = false;
 	static releaseResume: (() => void) | null = null;
+	sampleRate = SYNTH_SR;
+	state: 'running' | 'suspended' | 'closed' = FakeCtx.startSuspended ? 'suspended' : 'running';
 	destination = {};
 	resumes = 0;
 	node: { onaudioprocess: ((ev: unknown) => void) | null; connect(): void; disconnect(): void } | null = null;
