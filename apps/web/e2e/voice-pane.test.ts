@@ -3,6 +3,7 @@
  * and the tree has no DOM test environment). Desk layout, the stub session (`?capture=stub`, development server only), no microphone.
  */
 import { test, expect, type Page } from '@playwright/test';
+import path from 'path';
 import { expandStation } from './helpers';
 
 test.use({ viewport: { width: 1440, height: 900 } });
@@ -232,3 +233,43 @@ test.describe('a take is never orphaned by a remount (fix 1 of the review of 38e
 		expect(v.takes.map((t: { outcome: string }) => t.outcome), 'a cancelled take is recorded').toEqual(['cancelled']);
 	});
 });
+
+/** INSIGHTS' "Add your range" on its two new branches (review fix 5). The offer needs a loaded score and a stored voice with no range. */
+test.describe('INSIGHTS "Add your range" and the seam', () => {
+	const FIXTURE = path.resolve(process.cwd(), 'src/lib/score/ingestion/fixtures/sunless-01-engraved.musicxml');
+	const loadScoreAndInsights = async (page: Page) => {
+		await page.locator('input[type="file"].hidden-input').setInputFiles(FIXTURE);
+		await expect(page.locator('.receipt-score')).toBeVisible({ timeout: 20_000 });
+		await page.locator('#tab-insights').click();
+	};
+	const offer = (page: Page) => page.getByRole('button', { name: 'Add your range' });
+
+	test('refused over the capture screen and dropped: nothing follows when the singer leaves; from rest it opens the Range fields', async ({ page }) => {
+		test.setTimeout(90_000);
+		await open(page, [{ id: 'v', name: 'Dann', voiceType: 'bass', formants: { i: R(296, 1705), e: R(381, 1532), u: R(346, 804), a: R(600, 1250) } }]);
+		await loadScoreAndInsights(page);
+		await expect(offer(page)).toBeVisible({ timeout: 20_000 });
+		await door(page, /^carry on recording$/i).click();
+		await expect(page.locator('.capture')).toBeVisible();
+		await offer(page).click(); // INSIGHTS' link, pressed while the capture screen is showing
+		await page.waitForTimeout(1500);
+		await expect(page.locator('.capture'), 'the capture screen is not broken into').toBeVisible();
+		await expect(page.getByRole('heading', { name: 'Voice characteristics' })).toHaveCount(0);
+		await page.locator('.takeover-back').click();
+		await expect(sentence(page)).toBeVisible();
+		await page.waitForTimeout(1500);
+		await expect(page.getByRole('heading', { name: 'Voice characteristics' }), 'a refused request is dropped, never answered later').toHaveCount(0);
+		// The same link from rest lands on the Range fields.
+		await offer(page).click();
+		await expect(page.getByRole('heading', { name: 'Voice characteristics' })).toBeVisible();
+	});
+
+	test('with no voice saved INSIGHTS offers no range link, and the takeover never opens onto an empty wizard (the no-voice branch of openVoice is not reachable from this link)', async ({ page }) => {
+		await open(page, null);
+		await loadScoreAndInsights(page);
+		await expect(page.locator('.insights-container')).toContainText('Nothing is claimed about your voice', { timeout: 20_000 });
+		await expect(offer(page)).toHaveCount(0);
+		await expect(page.locator('.takeover-back')).toBeHidden(); // the takeover stays stowed
+	});
+});
+
