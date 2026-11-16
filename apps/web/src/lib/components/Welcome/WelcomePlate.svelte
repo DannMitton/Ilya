@@ -30,7 +30,7 @@
 	<div class="layer" class:shown={turned >= 1} aria-hidden="true">
 		<svg viewBox="0 0 {BOX} {BOX}"><text class="ipa" x={centre} y="192" text-anchor="middle" font-size="124" fill="var(--ink-secondary)">[ɑ]</text></svg>
 	</div>
-	<!-- 2: the eighth note on a staff, Finale Maestro U+E1D7 (metNote8thUp), its notehead on the middle line -->
+	<!-- 2: the eighth note on a staff, Finale Maestro U+E1D7 (the box `FinaleMaestro.json` keys `note8thUp`), its notehead on the middle line -->
 	<div class="layer" class:shown={turned >= 2} aria-hidden="true">
 		<svg viewBox="0 0 {BOX} {BOX}">
 			{#each lines as y (y)}<line x1={STAFF.x1} y1={y} x2={STAFF.x2} y2={y} stroke="var(--ink-stave)" stroke-width="2.2" />{/each}
@@ -68,13 +68,16 @@
 	/*
 	 * The fonts are the app's own files: Source Serif 4 (the Cyrillic subset is in google-families.css), Lato IPA (app.css), and Finale Maestro (below).
 	 * THE NOTE IS FINALE MAESTRO, the app's default music font (`AGENTS.md`, Engraving constraints; `score/notation-fonts.ts`, `DEFAULT_NOTATION_FONT_ID`), by the
-	 * same family name and file URL the score renderer registers, so the browser reuses one file. The desk's amendment of 2026-11-16, item 5; the first build
+	 * same family name and file URL the score renderer registers. That makes it one URL, not one fetch: two face objects name it (this `@font-face` and `loadNotationFont`'s `new FontFace`, `notation-fonts.ts:52-55`),
+	 * `vercel.json` sets no `Cache-Control` for `/fonts`, and the service worker revalidates each hit in the background (`sw.js:129-141`). At most one download plus revalidations is what the code supports.
+	 * Svelte does not scope `@font-face`, so every element that already names 'Finale Maestro' (for example `tempo/TempoControl.svelte:256`) can now load the face without `loadNotationFont()`. The desk's amendment of 2026-11-16, item 5; the first build
 	 * used Bravura because the brief and prototype named it. `welcome-plate.test.ts` holds the family and URL to `notation-fonts.ts`.
 	 */
 	@font-face {
 		font-family: 'Finale Maestro';
 		src: url('/fonts/finale-maestro/FinaleMaestro.otf') format('opentype');
-		font-display: swap;
+		/* `block`, not `swap`: U+E1D7 is a private-use code point, and what a fallback face would draw for it is not established. Until the file arrives the staff stands empty. */
+		font-display: block;
 	}
 	.plate {
 		position: relative;

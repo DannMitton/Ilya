@@ -189,6 +189,17 @@ export class StubCaptureSession implements CaptureSession {
 		);
 	}
 
+	/** The stub has no microphone; a visit only records that one is open, so a test can read it. Mirrors `live.ts`'s API. */
+	visitOpen = false;
+	openVisit(): void {
+		this.visitOpen = true;
+	}
+	// Must stay silent like the live one: `closeVisit()` ends a run with no callback, no CANCELLED.
+	closeVisit(): void {
+		this.visitOpen = false;
+		this.cancel();
+	}
+
 	cancel(): void {
 		this.active = false;
 		// Clear every pending timer, not just the last: the onStableFry and

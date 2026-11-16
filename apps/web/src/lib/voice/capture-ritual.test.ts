@@ -1,6 +1,6 @@
 /**
- * N.199 Step 3: the capture ritual's transition table. A fake session, fake timers; nothing mounts. The intervals are quoted
- * here, not imported (1000 ms a beat, 3000 ms pause, 3000 ms sweep, 900 ms landing), so a silent change to the module or to
+ * N.199 Step 3, reshaped by N.203 lane 59 Step 3: the capture ritual's transition table. A fake session, fake timers; nothing mounts. The
+ * intervals are quoted here, not imported (2 s Breathe, 4 s Sing, 2 s Shape, 3 s sweep, 1.4 s dwell), so a silent change to the module or to
  * `count-in.ts` fails a test.
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -9,8 +9,8 @@ import type { CaptureSession, CaptureHandlers, ReadinessHandlers } from './engin
 import type { CaptureError } from './engine/errors';
 import type { CalibratedFormant, Vowel } from './engine/types';
 
-const BEAT = 1000, PAUSE = 3000, SWEEP = 3000, LANDING = 900;
-const FRY_AT = 3 * BEAT + PAUSE; // 6000: the session starts here
+const BREATHE = 2000, SING = 4000, SHAPE = 2000, SWEEP = 3000, LANDING = 1400;
+const FRY_AT = BREATHE + SING + SHAPE; // 8000: the session starts here
 
 const formant = (reading: CalibratedFormant['reading'] = 'captured', f1 = 296): CalibratedFormant =>
 	({ f1, f2: 1705, confidence: reading === 'provisional' ? 'low' : 'high', f2Quality: 'clear', reading, source: 'measured-user' }) as CalibratedFormant;
@@ -22,6 +22,8 @@ class FakeSession implements CaptureSession {
 		this.starts.push({ vowel, voiceType, handlers });
 	}
 	startReadiness(_h: ReadinessHandlers) {}
+	openVisit() {}
+	closeVisit() {}
 	cancel() {
 		this.cancels++;
 	}
@@ -78,24 +80,74 @@ describe('the count-in and the fry', () => {
 		expect(r.ritual.cancel()).toBe(false);
 	});
 
-	it('answers the tap at once with the sung cue, and walks the beats, the pause, and the fry at the stated intervals', () => {
+	it('answers the tap at once with Breathe, and walks Sing, Shape, and the fry at the stated intervals', () => {
 		const r = rig();
 		expect(r.ritual.begin('e')).toBe(true);
-		expect([r.ritual.phase, r.ritual.vowel, r.ritual.cue]).toEqual(['sing', 'e', { key: 'pacifier.singFirst', vowel: 'e' }]);
-		vi.advanceTimersByTime(BEAT - 1);
-		expect(r.ritual.cue.key).toBe('pacifier.singFirst');
+		expect([r.ritual.phase, r.ritual.vowel, r.ritual.cue]).toEqual(['breathe', 'e', { key: 'capture.cue.breathe', vowel: 'e' }]);
+		expect(r.ritual.take).toEqual({ part: 'breathe', within: 0, holding: false });
+		vi.advanceTimersByTime(BREATHE - 1);
+		expect(r.ritual.phase).toBe('breathe');
 		vi.advanceTimersByTime(1);
-		expect([r.ritual.phase, r.ritual.cue.key]).toEqual(['sing', 'calib.readiness.countTwo']);
-		vi.advanceTimersByTime(BEAT);
-		expect([r.ritual.phase, r.ritual.cue.key]).toEqual(['sing', 'calib.readiness.countOne']);
-		vi.advanceTimersByTime(BEAT);
-		expect([r.ritual.phase, r.ritual.cue]).toEqual(['pause', { key: 'pacifier.pause', vowel: 'e' }]);
-		vi.advanceTimersByTime(PAUSE - 1);
+		expect([r.ritual.phase, r.ritual.cue]).toEqual(['sing', { key: 'pacifier.singFirst', vowel: 'e' }]);
+		vi.advanceTimersByTime(SING - 1);
+		expect(r.ritual.phase).toBe('sing');
+		vi.advanceTimersByTime(1);
+		expect([r.ritual.phase, r.ritual.cue]).toEqual(['shape', { key: 'pacifier.pause', vowel: 'e' }]);
+		vi.advanceTimersByTime(SHAPE - 1);
 		expect(r.session.starts).toHaveLength(0); // nothing is captured before the fry step
 		vi.advanceTimersByTime(1);
 		expect([r.ritual.phase, r.ritual.cue]).toEqual(['listening', { key: 'pacifier.beginPhonating', vowel: 'e' }]);
 		expect(r.session.starts).toHaveLength(1);
 		expect(r.session.starts[0].vowel).toBe('e');
+	});
+
+	it('moves the take line through its parts, a fraction at a time', () => {
+		const r = rig();
+		r.ritual.begin('i');
+		vi.advanceTimersByTime(1000);
+		expect(r.ritual.take!.part).toBe('breathe');
+		expect(r.ritual.take!.within).toBeCloseTo(0.5, 1);
+		vi.advanceTimersByTime(BREATHE); // 3 s in: one second into Sing
+		expect(r.ritual.take!.part).toBe('sing');
+		expect(r.ritual.take!.within).toBeCloseTo(0.25, 1);
+		vi.advanceTimersByTime(SING); // 7 s: one second into Shape
+		expect(r.ritual.take!.part).toBe('shape');
+		expect(r.ritual.take!.within).toBeCloseTo(0.5, 1);
+	});
+
+	it('holds the line at the first quarter of Fry while it waits for steady fry, and flags the hold', () => {
+		const r = rig();
+		r.ritual.begin('i');
+		vi.advanceTimersByTime(FRY_AT + 500);
+		expect(r.ritual.take!.part).toBe('fry');
+		expect(r.ritual.take!.within).toBeCloseTo(0.125, 1);
+		expect(r.ritual.take!.holding).toBe(false);
+		vi.advanceTimersByTime(600);
+		expect(r.ritual.take!.within).toBe(0.25);
+		expect(r.ritual.take!.holding).toBe(true);
+		vi.advanceTimersByTime(8000); // a long wait: the line stays put, the cue stays
+		expect(r.ritual.take).toEqual({ part: 'fry', within: 0.25, holding: true });
+		expect(r.ritual.cue.key).toBe('pacifier.beginPhonating');
+		r.session.last.onStableFry();
+		vi.advanceTimersByTime(1500);
+		expect(r.ritual.take!.holding).toBe(false);
+		expect(r.ritual.take!.within).toBeCloseTo(0.625, 1);
+		vi.advanceTimersByTime(1500);
+		expect(r.ritual.take!.within).toBe(1);
+	});
+
+	it('does not rewrite the take line while it holds: the same object stands through the whole wait for steady fry (follow-up fix 8)', () => {
+		const r = rig();
+		r.ritual.begin('i');
+		vi.advanceTimersByTime(FRY_AT + 1200); // the quarter has filled; the line is holding
+		const held = r.ritual.take;
+		expect(held).toEqual({ part: 'fry', within: 0.25, holding: true });
+		vi.advanceTimersByTime(6000);
+		expect(r.ritual.take).toBe(held);
+	});
+
+	it('is idle with no take line when nothing runs', () => {
+		expect(rig().ritual.take).toBeNull();
 	});
 
 	it('reads the voice type when the session starts, not before', () => {
@@ -120,7 +172,7 @@ describe('the count-in and the fry', () => {
 });
 
 describe('the sweep and the reading', () => {
-	it('starts the bar at stable fry, not before, and fills it over 3.0 s', () => {
+	it('starts the sweep at stable fry, not before, and fills the line over 3.0 s', () => {
 		const r = rig();
 		r.ritual.begin('i');
 		vi.advanceTimersByTime(FRY_AT + 4000); // a long wait for stable fry
@@ -155,7 +207,7 @@ describe('the sweep and the reading', () => {
 		expect([r.ritual.phase, r.captured.length]).toEqual(['landing', 1]);
 	});
 
-	it('lands for 900 ms, then is idle and ready for the next take', () => {
+	it('lands for 1.4 s, then is idle and ready for the next take', () => {
 		const r = rig();
 		toSweep(r);
 		vi.advanceTimersByTime(SWEEP);
@@ -168,7 +220,7 @@ describe('the sweep and the reading', () => {
 		expect(r.ritual.begin('e')).toBe(true);
 	});
 
-	it('under reduced motion lands at once, and the bar still advances, in coarser steps', () => {
+	it('under reduced motion the line still advances, in coarser steps, and the dwell still holds', () => {
 		const r = rig();
 		r.reduced.on = true;
 		toSweep(r);
@@ -183,7 +235,11 @@ describe('the sweep and the reading', () => {
 		expect(seen.size).toBeGreaterThan(2);
 		vi.advanceTimersByTime(SWEEP);
 		r.session.last.onComplete(formant());
-		expect([r.ritual.phase, r.captured.length]).toEqual(['idle', 1]);
+		expect([r.ritual.phase, r.captured.length]).toEqual(['landing', 1]);
+		vi.advanceTimersByTime(LANDING - 1);
+		expect(r.ritual.phase).toBe('landing');
+		vi.advanceTimersByTime(1);
+		expect(r.ritual.phase).toBe('idle');
 	});
 });
 
@@ -227,9 +283,9 @@ describe('the re-take rule, against the guarded reading', () => {
 describe('cancel', () => {
 	const CANCEL_AT: Array<[string, number, boolean]> = [
 		// [where, ms from the tap, whether the session has started]
-		['the first sung beat', 500, false],
-		['the third sung beat', 2500, false],
-		['the pause', 4000, false],
+		['Breathe', 500, false],
+		['Sing', 4500, false],
+		['Shape', 7000, false],
 		['the wait for stable fry', FRY_AT + 1500, true]
 	];
 	it.each(CANCEL_AT)('ends the take in %s, once, and nothing it set going fires afterwards', (_where, ms, started) => {
@@ -239,7 +295,7 @@ describe('cancel', () => {
 		expect(r.ritual.cancellable).toBe(true);
 		expect(r.ritual.cancel()).toBe(true);
 		expect(r.failed).toEqual([['o', { code: 'CANCELLED', message: expect.any(String) }]]);
-		expect([r.ritual.phase, r.ritual.vowel, r.ritual.progress, r.ritual.cue]).toEqual(['idle', null, 0, { key: 'pacifier.cancelled', vowel: 'o' }]);
+		expect([r.ritual.phase, r.ritual.vowel, r.ritual.progress, r.ritual.take, r.ritual.cue]).toEqual(['idle', null, 0, null, { key: 'pacifier.cancelled', vowel: 'o' }]);
 		expect(r.session.cancels).toBe(started ? 1 : 0);
 		const startsThen = r.session.starts.length;
 		vi.advanceTimersByTime(30_000);
@@ -378,12 +434,12 @@ describe('the audio tick', () => {
 		vi.stubGlobal('AudioContext', FakeAudioContext);
 		return log;
 	}
-	it('ticks on the three sung beats and not on the pause, and closes the context on destroy', () => {
+	it('ticks four times (the four seconds of Sing), not in Breathe or Shape, and closes the context on destroy', () => {
 		const log = fakeAudio();
 		const r = rig({ ticks: true });
 		r.ritual.begin('i');
-		vi.advanceTimersByTime(3 * BEAT + PAUSE);
-		expect(log.oscillators).toBe(3);
+		vi.advanceTimersByTime(FRY_AT);
+		expect(log.oscillators).toBe(4);
 		expect(log.constructed).toBe(1);
 		r.ritual.destroy();
 		expect(log.closed).toBe(1);
@@ -425,5 +481,116 @@ describe('destroy', () => {
 		vi.advanceTimersByTime(SWEEP * 2);
 		r.session.last.onComplete(formant());
 		expect([r.captured.length, r.rolledBack.length, r.failed.length]).toEqual([0, 0, 0]);
+	});
+});
+
+describe('the ticks (N.203 lane 59 Step 3): four, on the seconds of Sing, and nowhere else', () => {
+	it('sound at 2, 3, 4, and 5 s after Start, and at no other time', () => {
+		const oscillators: number[] = [];
+		let now = 0;
+		class Ctx {
+			state = 'running';
+			currentTime = 0;
+			destination = {};
+			resume() { return Promise.resolve(); }
+			close() { return Promise.resolve(); }
+			createOscillator() { return { type: '', frequency: { value: 0 }, connect: () => ({ connect() {} }), start() { oscillators.push(now); }, stop() {} }; }
+			createGain() { return { gain: { setValueAtTime() {}, exponentialRampToValueAtTime() {} }, connect() {} }; }
+		}
+		vi.stubGlobal('AudioContext', Ctx);
+		const r = rig({ ticks: true });
+		r.ritual.begin('i');
+		for (let t = 0; t < 12; t++) {
+			now = (t + 1) * 1000;
+			vi.advanceTimersByTime(1000);
+		}
+		expect(oscillators).toEqual([2000, 3000, 4000, 5000]);
+		r.ritual.destroy();
+	});
+});
+
+describe('the tick context (N.203 lane 59 Step 1)', () => {
+	class FakeAudioContext {
+		static all: FakeAudioContext[] = [];
+		state: 'running' | 'suspended' | 'closed' = 'suspended';
+		currentTime = 0;
+		destination = {};
+		resumes = 0;
+		constructor() {
+			FakeAudioContext.all.push(this);
+		}
+		resume() {
+			this.resumes++;
+			this.state = 'running';
+			return Promise.resolve();
+		}
+		close() {
+			this.state = 'closed';
+			return Promise.resolve();
+		}
+		createOscillator() {
+			return { type: '', frequency: { value: 0 }, connect: () => ({ connect() {} }), start() {}, stop() {} };
+		}
+		createGain() {
+			return { gain: { setValueAtTime() {}, exponentialRampToValueAtTime() {} }, connect() {} };
+		}
+	}
+	beforeEach(() => {
+		FakeAudioContext.all = [];
+		vi.stubGlobal('AudioContext', FakeAudioContext);
+		vi.useFakeTimers();
+	});
+	afterEach(() => {
+		vi.unstubAllGlobals();
+		vi.useRealTimers();
+	});
+
+	it('is made and resumed inside begin(), the Start tap, not when the first tick sounds', () => {
+		const { ritual } = rig({ ticks: true });
+		ritual.begin('i');
+		expect(FakeAudioContext.all).toHaveLength(1);
+		expect(FakeAudioContext.all[0].resumes).toBe(1);
+		ritual.destroy();
+	});
+
+	it('closeTicks closes it without tearing the ritual down, and a later begin makes a working one', () => {
+		const { ritual } = rig({ ticks: true });
+		ritual.begin('i');
+		ritual.cancel();
+		ritual.closeTicks();
+		expect(FakeAudioContext.all[0].state).toBe('closed');
+		expect(ritual.begin('e')).toBe(true);
+		expect(FakeAudioContext.all).toHaveLength(2);
+		expect(FakeAudioContext.all[1].state).toBe('running');
+		ritual.destroy();
+	});
+
+	it('makes none when ticks are off', () => {
+		const { ritual } = rig({ ticks: false });
+		ritual.begin('i');
+		expect(FakeAudioContext.all).toHaveLength(0);
+		ritual.destroy();
+	});
+});
+
+describe('endDwell (N.203 lane 59 Step 2, amendment 8)', () => {
+	it('ends the landing at once and keeps the reading', () => {
+		const r = rig();
+		toSweep(r);
+		vi.advanceTimersByTime(SWEEP);
+		r.session.last.onComplete(formant());
+		expect(r.ritual.phase).toBe('landing');
+		expect(r.ritual.endDwell()).toBe(true);
+		expect([r.ritual.phase, r.ritual.vowel]).toEqual(['idle', null]);
+		expect(r.captured).toHaveLength(1);
+		expect(r.ritual.begin('e')).toBe(true);
+	});
+
+	it('does nothing in any other phase', () => {
+		const r = rig();
+		expect(r.ritual.endDwell()).toBe(false);
+		r.ritual.begin('i');
+		expect(r.ritual.endDwell()).toBe(false);
+		expect(r.ritual.phase).toBe('breathe');
 	});
 });

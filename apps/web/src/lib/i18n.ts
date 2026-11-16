@@ -16,7 +16,7 @@
    tree on 2026-11-02 (consistency batch 2). Paths are under `apps/web/src/`;
    a prefix is listed with the files that use it most and its key count.
 
-   This file holds 1,297 keys.
+   This file holds 1,325 keys.
 
    A key built at run time (`watch.key.letter.${letter}`, `comment.<register>.<part>`)
    has no literal reference, so a search for the whole key can come back empty
@@ -28,7 +28,7 @@
    app.            2  the page's hidden heading, lib/components/HeaderBar.svelte (`app.subtitle` has no literal consumer)
    binder.        10  lib/library/exchange.ts, lib/components/Drawer/RootPanel.svelte
    calib.        117  lib/voice/CalibrationWizard.svelte, lib/voice/ProfileSwitcher.svelte, lib/components/Drawer/VoicePane.svelte
-   capture.       32  the calibration screen: lib/voice/VowelCapture.svelte, lib/voice/chart/screen-logic.ts, lib/voice/chart/VowelChart.svelte
+   capture.       55  the calibration screen: lib/voice/VowelCapture.svelte, lib/voice/chart/screen-logic.ts, lib/voice/chart/VowelChart.svelte
    clitic.         3  no literal consumer found (lib/score/clitic-seat.ts does the seating)
    collide.        5  routes/+page.svelte
    comment.       40  the note comments: lib/insights/singer-blocks.ts, lib/insights/comment-text.ts, lib/analysis/watchlist.ts
@@ -44,7 +44,7 @@
    group.          3  the drawer's band names: lib/components/Drawer/Drawer.svelte (LEGACY KEY: `group.scoreMarkup`)
    guide.          5  lib/components/Reading/GuideSources.svelte, lib/components/Drawer/Drawer.svelte
    input.          8  lib/components/Drawer/IntakePanel.svelte
-   insights.     190  the INSIGHTS document: lib/insights/singer-blocks.ts, lib/insights/InsightsPane.svelte, lib/insights/tessituragram-layout.ts (LEGACY KEYS: `insights.fit.*`)
+   insights.     193  the INSIGHTS document: lib/insights/singer-blocks.ts, lib/insights/InsightsPane.svelte, lib/insights/tessituragram-layout.ts (LEGACY KEYS: `insights.fit.*`)
    inspector.     43  lib/components/Drawer/InspectorPanel.svelte, lib/components/Drawer/Drawer.svelte, lib/components/Drawer/GlossOffer.svelte
    intake.        54  lib/components/Drawer/IntakePanel.svelte, lib/components/Drawer/IntakeViews.svelte, lib/components/Drawer/PoemLibraryCard.svelte, lib/text/input-line.ts, lib/components/Drawer/bandState.ts
    key.           23  the key ruler: lib/markup/transposition-ruler.ts, lib/markup/TranspositionDock.svelte, lib/markup/TranspositionRuler.svelte
@@ -78,7 +78,7 @@
    tab.            5  lib/components/DeskHead.svelte, lib/components/Paper/RunningHeader.svelte, lib/insights/InsightsPane.svelte (LEGACY KEY: `tab.markedScore`)
    tempo.          3  lib/tempo/TempoControl.svelte, lib/tempo/TempoReceipt.svelte
    text.           2  lib/components/TextSourceLine.svelte
-   toc.           83  the tables of contents: lib/components/Drawer/Drawer.svelte
+   toc.           85  the tables of contents: lib/components/Drawer/Drawer.svelte
    underlay.       1  read only by lib/names.ts, the record of names; no component reads it
    update.         4  routes/+page.svelte
    upload.        50  lib/score/ScoreUploader.svelte, lib/score/format-label.ts, lib/score/ingestion/ingest.ts, lib/omr/scan.ts
@@ -1046,8 +1046,8 @@ const strings: Record<string, Record<Language, string>> = {
 	// These strings contain <em> tags for italic rendering.
 	// PageFooter.svelte uses {@html} to render them.
 	'footer.attribution':          {
-		en: 'Free and open source, <em>Ilya</em>\u00a02026a operationalizes Craig Grayson\u2019s <em>Russian Lyric Diction</em> (University of Washington, 2012). Stress data and translation glosses via <a href="https://kaikki.org" target="_blank" rel="noopener">kaikki.org</a> (<a href="https://creativecommons.org/licenses/by-sa/4.0/deed.en" target="_blank" rel="noopener">CC\u00a0BY-SA\u00a04.0</a>). Made with love in Canada\u00a0<svg viewBox="0 0 9600 4800" aria-label="Canada" role="img" style="display:inline-block;width:14px;height:7px;vertical-align:baseline;position:relative;top:0.5px"><path fill="#f00" d="m0 0h2400l99 99h4602l99-99h2400v4800h-2400l-99-99h-4602l-99 99H0z"/><path fill="#fff" d="m2400 0h4800v4800h-4800zm2490 4430-45-863a95 95 0 0 1 111-98l859 151-116-320a65 65 0 0 1 20-73l941-762-212-99a65 65 0 0 1-34-79l186-572-542 115a65 65 0 0 1-73-38l-105-247-423 454a65 65 0 0 1-111-57l204-1052-327 189a65 65 0 0 1-91-27l-332-652-332 652a65 65 0 0 1-91 27l-327-189 204 1052a65 65 0 0 1-111 57l-423-454-105 247a65 65 0 0 1-73 38l-542-115 186 572a65 65 0 0 1-34 79l-212 99 941 762a65 65 0 0 1 20 73l-116 320 859-151a95 95 0 0 1 111 98l-45 863z"/></svg>',
-		fr: 'Gratuit et à code ouvert, <em>Ilya</em>\u00a02026a met en \u0153uvre <em>Russian Lyric Diction</em> de Craig Grayson (University of Washington, 2012). Données d\u2019accentuation et glossaires de traduction via <a href="https://kaikki.org" target="_blank" rel="noopener">kaikki.org</a> (<a href="https://creativecommons.org/licenses/by-sa/4.0/deed.fr" target="_blank" rel="noopener">CC\u00a0BY-SA\u00a04.0</a>). Fait avec c\u0153ur au Canada\u00a0<svg viewBox="0 0 9600 4800" aria-label="Canada" role="img" style="display:inline-block;width:14px;height:7px;vertical-align:baseline;position:relative;top:0.5px"><path fill="#f00" d="m0 0h2400l99 99h4602l99-99h2400v4800h-2400l-99-99h-4602l-99 99H0z"/><path fill="#fff" d="m2400 0h4800v4800h-4800zm2490 4430-45-863a95 95 0 0 1 111-98l859 151-116-320a65 65 0 0 1 20-73l941-762-212-99a65 65 0 0 1-34-79l186-572-542 115a65 65 0 0 1-73-38l-105-247-423 454a65 65 0 0 1-111-57l204-1052-327 189a65 65 0 0 1-91-27l-332-652-332 652a65 65 0 0 1-91 27l-327-189 204 1052a65 65 0 0 1-111 57l-423-454-105 247a65 65 0 0 1-73 38l-542-115 186 572a65 65 0 0 1-34 79l-212 99 941 762a65 65 0 0 1 20 73l-116 320 859-151a95 95 0 0 1 111 98l-45 863z"/></svg>'
+		en: 'Free and open source, <em>Ilya</em>\u00a0{version} operationalizes Craig Grayson\u2019s <em>Russian Lyric Diction</em> (University of Washington, 2012). Stress data and translation glosses via <a href="https://kaikki.org" target="_blank" rel="noopener">kaikki.org</a> (<a href="https://creativecommons.org/licenses/by-sa/4.0/deed.en" target="_blank" rel="noopener">CC\u00a0BY-SA\u00a04.0</a>). Made with love in Canada\u00a0<svg viewBox="0 0 9600 4800" aria-label="Canada" role="img" style="display:inline-block;width:14px;height:7px;vertical-align:baseline;position:relative;top:0.5px"><path fill="#f00" d="m0 0h2400l99 99h4602l99-99h2400v4800h-2400l-99-99h-4602l-99 99H0z"/><path fill="#fff" d="m2400 0h4800v4800h-4800zm2490 4430-45-863a95 95 0 0 1 111-98l859 151-116-320a65 65 0 0 1 20-73l941-762-212-99a65 65 0 0 1-34-79l186-572-542 115a65 65 0 0 1-73-38l-105-247-423 454a65 65 0 0 1-111-57l204-1052-327 189a65 65 0 0 1-91-27l-332-652-332 652a65 65 0 0 1-91 27l-327-189 204 1052a65 65 0 0 1-111 57l-423-454-105 247a65 65 0 0 1-73 38l-542-115 186 572a65 65 0 0 1-34 79l-212 99 941 762a65 65 0 0 1 20 73l-116 320 859-151a95 95 0 0 1 111 98l-45 863z"/></svg>',
+		fr: 'Gratuit et à code ouvert, <em>Ilya</em>\u00a0{version} met en \u0153uvre <em>Russian Lyric Diction</em> de Craig Grayson (University of Washington, 2012). Données d\u2019accentuation et glossaires de traduction via <a href="https://kaikki.org" target="_blank" rel="noopener">kaikki.org</a> (<a href="https://creativecommons.org/licenses/by-sa/4.0/deed.fr" target="_blank" rel="noopener">CC\u00a0BY-SA\u00a04.0</a>). Fait avec c\u0153ur au Canada\u00a0<svg viewBox="0 0 9600 4800" aria-label="Canada" role="img" style="display:inline-block;width:14px;height:7px;vertical-align:baseline;position:relative;top:0.5px"><path fill="#f00" d="m0 0h2400l99 99h4602l99-99h2400v4800h-2400l-99-99h-4602l-99 99H0z"/><path fill="#fff" d="m2400 0h4800v4800h-4800zm2490 4430-45-863a95 95 0 0 1 111-98l859 151-116-320a65 65 0 0 1 20-73l941-762-212-99a65 65 0 0 1-34-79l186-572-542 115a65 65 0 0 1-73-38l-105-247-423 454a65 65 0 0 1-111-57l204-1052-327 189a65 65 0 0 1-91-27l-332-652-332 652a65 65 0 0 1-91 27l-327-189 204 1052a65 65 0 0 1-111 57l-423-454-105 247a65 65 0 0 1-73 38l-542-115 186 572a65 65 0 0 1-34 79l-212 99 941 762a65 65 0 0 1 20 73l-116 320 859-151a95 95 0 0 1 111 98l-45 863z"/></svg>'
 	},
 	// The Latin brief's addendum (Dann 2026-09-27 00:58, "unassailable citation"):
 	// on a page that shows a Latin word's IPA, the footer credits Richter.
@@ -1308,6 +1308,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'calib.readiness.marginal': { en: 'Your fry is reading near the edge of our range; a little lower or higher may read cleaner.', fr: 'Votre friture se lit près de la limite de notre plage. Un peu plus grave ou plus aigu se lirait plus nettement.' },
 	// UNUSED SINCE N.199 (Step 8, Dann 2026-11-14 21:03): the wheel's capture branch of the wizard (queue, hold banner, Pause) is deleted and nothing reads this key. Kept and marked in place, with its ratified French.
 	'calib.capture.allSet': { en: 'All set.', fr: 'Tout est prêt.' },
+	// UNUSED SINCE N.203 lane 59 Step 7 (`cuePrefix` and `cueSuffix`): `capture.firstTime` holds the whole sentence. Kept, as the tree keeps its retired keys.
 	'calib.capture.cuePrefix': { en: 'Tap the', fr: 'Touchez la voyelle' },
 	// Row 2d part 3: cueSuffix, pacifier.singFirst, pacifier.pause, and
 	// pacifier.beginPhonating RATIFIED by Dann 2026-09-30 21:00, English and
@@ -1337,6 +1338,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'calib.capture.hold.noted': { en: 'Noted, moving on. You can re-take it from the summary.', fr: 'C\u2019est noté, on poursuit. Vous pourrez la refaire depuis le sommaire.' },
 	// UNUSED SINCE N.199 (Step 8, Dann 2026-11-14 21:03): the wheel's capture branch of the wizard (queue, hold banner, Pause) is deleted and nothing reads this key. Kept and marked in place, with its ratified French.
 	'calib.capture.pauseButton': { en: 'Pause', fr: 'Pause' },
+	// UNUSED SINCE N.203 lane 59 Step 6: the foot of the capture screen says "Use what I’ve recorded" or "Let Ilya work out ..." (`capture.finish.*`). Kept.
 	'calib.capture.returnToSummary': { en: 'Return to summary', fr: 'Retour au sommaire' },
 	'calib.capture.toast': { en: 'The room sounds a little lively. Your sample is still good, but a quieter space would help.', fr: 'La pièce sonne un peu réverbérante. Votre échantillon reste bon, mais un endroit plus silencieux aiderait.' },
 	'calib.capture.toastDismissAria': { en: 'Dismiss', fr: 'Fermer' },
@@ -1372,11 +1374,13 @@ const strings: Record<string, Record<Language, string>> = {
 	// UNUSED SINCE N.199 (Step 8, Dann 2026-11-14 21:03): the vowel wheel is deleted and nothing reads this key. Kept and marked in place, with its ratified French, the way this file's other retired strings are.
 	'pacifier.tapToCapture': { en: 'Tap a vowel to capture it.', fr: 'Touchez une voyelle pour la capter.' },
 	// singFirst, pause, and beginPhonating: RATIFIED by Dann 2026-09-30 21:00 (row 2d part 3).
-	'pacifier.singFirst': { en: 'Sing {v} as you usually do. Three.', fr: 'Chantez {v} comme d\u2019habitude. Trois.' },
+	// N.203 sheet line 16 (RATIFIED 2026-11-16): the spoken count left the take.
+	'pacifier.singFirst': { en: 'Sing {v} as you usually do.', fr: 'Chantez {v} comme d\u2019habitude.' },
 	// N.199 Step 7: the pause line, new English (Dann 2026-11-13 01:05) and French (10:30); it replaces "Stop, and keep the shape." (ratified 2026-09-30 21:00).
-	'pacifier.pause': { en: 'Stop singing, but maintain the shape of your vocal tract for that vowel.', fr: 'Arrêtez de chanter, mais gardez la forme de votre conduit vocal pour cette voyelle.' },
+	'pacifier.pause': { en: 'Stop. Hold that shape, silently.', fr: 'Arrêtez. Gardez cette forme, en silence.' },
 	'pacifier.beginPhonating': { en: 'Now {v} in vocal fry.', fr: 'Maintenant, {v} en friture vocale.' },
-	'pacifier.nowSustain': { en: 'Now sustain. Sample recording.', fr: 'Soutenez maintenant. Échantillon en cours d\u2019enregistrement.' },
+	// N.203 words supplement item 8 (RATIFIED 2026-11-16 01:38), overriding sheet line 16's last cue.
+	'pacifier.nowSustain': { en: 'Now sustain. Ilya is measuring.', fr: 'Soutenez maintenant. Ilya mesure.' },
 	'pacifier.captured': { en: '{v} captured.', fr: 'Capture de {v} effectuée.' },
 	'pacifier.rolledBack': { en: '{v}: new sample was less certain, so the previous one was kept.', fr: 'Pour {v}, le nouvel échantillon était moins certain, donc le précédent a été conservé.' },
 	// UNUSED SINCE N.199 (Step 8, Dann 2026-11-14 21:03): the vowel wheel is deleted and nothing reads this key. Kept and marked in place, with its ratified French, the way this file's other retired strings are.
@@ -1864,7 +1868,12 @@ const strings: Record<string, Record<Language, string>> = {
 	'insights.method.generic.untyped': { en: 'Method: computed from placeholder values for your voice type and the score as sung, including repeats.', fr: 'Méthode\u00a0: calculé à partir de valeurs par défaut pour votre type de voix et de la partition telle que chantée, reprises comprises.' },
 	'insights.silence.unmeasured': { en: 'No voice has been measured, so this page does not compare this piece with your voice. Withheld until one is:', fr: 'Aucune voix n\u2019a été mesurée, donc cette page ne compare pas cette pièce avec votre voix. Retenu jusqu\u2019à ce qu\u2019une voix le soit\u00a0:' },
 	'insights.silence.findings':   { en: 'Any finding about where this piece may challenge your voice.', fr: 'Toute observation sur les endroits où cette pièce pourrait solliciter votre voix.' },
-	'insights.silence.noScore':    { en: 'No score has been added, so there is nothing of this piece to measure.', fr: 'Aucune partition n\u2019a été ajoutée, il n\u2019y a donc rien de cette pièce à mesurer.' },
+	// N.203 sheet-english r2 / sheet-french r1, RATIFIED by Dann 2026-11-16 (01:13 English, 01:20 French), line 27.
+	'insights.silence.noScore':    { en: 'INSIGHTS measures a piece from its score, and connects it to your voice. Add a score in the INPUT pane to begin.', fr: 'Les APERÇUS mesurent une pièce à partir de sa partition, et la relient à votre voix. Ajoutez une partition dans le volet ENTRÉE pour commencer.' },
+	// The method line of the page with no score (sheet lines 28 and 29, and the new line for a voice with nothing usable and no generic values, RATIFIED by Dann 2026-11-16 01:28).
+	'insights.method.noScore.samples': { en: 'Method: from your resonance profile, measured in VOICE.', fr: 'Méthode\u00a0: à partir de votre profil de résonances, mesuré dans VOIX.' },
+	'insights.method.noScore.generic': { en: 'Method: from generic values for your voice type, until you record your own vowels.', fr: 'Méthode\u00a0: à partir de valeurs par défaut pour votre type de voix, jusqu\u2019à ce que vous captiez vos propres voyelles.' },
+	'insights.method.noScore.none':    { en: 'Method: record your vowels in VOICE, and this page computes from your voice.', fr: 'Méthode\u00a0: captez vos voyelles dans VOIX, et cette page calcule à partir de votre voix.' },
 	// N.123, phonation time: all RATIFIED by Dann 2026-09-23 unless marked
 	// (`docs/sessions/insights-phonation-time_r1_2026-09-22.md`).
 	'insights.phonation.heading':  { en: 'Phonation time',               fr: 'Temps de phonation' },
@@ -2467,6 +2476,8 @@ const strings: Record<string, Record<Language, string>> = {
 	'toc.guide.role': { en: 'Your role as user', fr: 'R\u00f4le de l\u2019utilisateur' },
 	'toc.guide.limits': { en: 'Limitations', fr: 'Limites d\u2019Ilya' },
 	'toc.guide.future': { en: 'Where is Ilya headed?', fr: 'O\u00f9 va Ilya?' },
+	'toc.guide.version': { en: 'Which Ilya is this?', fr: 'De quelle version d\u2019Ilya s\u2019agit-il?' },
+	'toc.guide.cite': { en: 'How do I cite Ilya?', fr: 'Comment citer Ilya?' },
 	'toc.guide.markup-forecast': { en: 'Insights forecasts, it does not declare', fr: 'Les Aper\u00e7us pr\u00e9voient, ils ne d\u00e9clarent pas' },
 	'toc.guide.markup-characteristics': { en: 'Voice characteristics', fr: 'Caract\u00e9ristiques vocales' },
 	'toc.guide.markup-notation': { en: 'The notation conventions used by MELODY', fr: 'Les conventions de notation utilisées par le CHANT' },
@@ -2512,10 +2523,11 @@ const strings: Record<string, Record<Language, string>> = {
 	'sheet.col.vowel': { en: 'Vowel', fr: 'Voyelle' },
 	'sheet.col.fr1': { en: 'Hz and note', fr: 'Hz et note' },
 	'sheet.col.fr2': { en: 'Hz and note', fr: 'Hz et note' },
-	'sheet.legend.sung': { en: 'A vowel you sang, measured in vocal fry.', fr: 'Une voyelle que vous avez chantée, mesurée en friture vocale.' },
-	'sheet.legend.placeholder': { en: 'A placeholder: where Ilya expects a vowel you have not sung yet.', fr: 'Une valeur par défaut : là où Ilya attend une voyelle que vous n’avez pas encore chantée.' },
+	// N.203 sheet-english r2 / sheet-french r1, RATIFIED by Dann 2026-11-16 (01:13 English, 01:20 French), line 26b.
+	'sheet.legend.sung': { en: 'A vowel you recorded, measured in vocal fry.', fr: 'Une voyelle que vous avez captée, mesurée en friture vocale.' },
+	'sheet.legend.placeholder': { en: 'A placeholder: where Ilya expects a vowel you have not recorded yet.', fr: 'Une valeur par défaut : là où Ilya attend une voyelle que vous n’avez pas encore captée.' },
 	'sheet.legend.zones': { en: 'Each coloured area reflects the neighbourhood where Ilya expects a vowel to resonate in a voice like yours. The lavender areas mark [ɪ], [ɨ], [a], and [ʌ]: Ilya can work out these four from your samples of the other six, or you can choose to sample them directly. Overlap between areas (where the colours blend) is normal.', fr: 'Chaque zone colorée reflète le voisinage où Ilya s’attend à ce qu’une voyelle résonne dans une voix comme la vôtre. Les zones lavande marquent [ɪ], [ɨ], [a] et [ʌ] : Ilya peut déduire ces quatre-là de vos échantillons des six autres, ou vous pouvez choisir de les chanter directement. Le chevauchement entre les zones (là où les couleurs se fondent) est normal.' },
-	'sheet.legend.hull': { en: 'The outline surrounds your sung vowels. It is dashed until all ten are sung.', fr: 'Le contour entoure vos voyelles chantées. Il reste en pointillé jusqu’à ce que les dix soient chantées.' },
+	'sheet.legend.hull': { en: 'The outline surrounds your recorded vowels. It is dashed until all ten are recorded.', fr: 'Le contour entoure vos voyelles captées. Il reste en pointillé jusqu’à ce que les dix soient captées.' },
 	'sheet.axis.front': { en: 'tongue forward', fr: 'langue avancée' },
 	'sheet.axis.back': { en: 'tongue back', fr: 'langue reculée' },
 	'sheet.axis.open': { en: 'mouth more open', fr: 'bouche plus ouverte' },
@@ -2529,25 +2541,58 @@ const strings: Record<string, Record<Language, string>> = {
 	'capture.start': { en: 'Start {v}', fr: 'Commencer {v}' },
 	'capture.retake': { en: 'Re-take {v}', fr: 'Reprendre {v}' },
 	'capture.inProgress': { en: '{v} in progress', fr: '{v} en cours' },
+	// UNUSED SINCE N.203 lane 59 Step 2: at ten recorded the main button reads Re-take, and "See your vowel space" is the way on. Kept, as the tree keeps its retired keys.
 	'capture.done': { en: 'Done', fr: 'Terminé' },
+	// N.203 sheet lines 15 and 16 (RATIFIED 2026-11-16 01:13 English, 01:20 French): the take line's four parts, and the cue for the first.
+	'capture.part.breathe': { en: 'Breathe', fr: 'Respiration' },
+	'capture.part.sing': { en: 'Sing', fr: 'Chant' },
+	'capture.part.shape': { en: 'Shape', fr: 'Forme' },
+	'capture.part.fry': { en: 'Fry', fr: 'Friture' },
+	'capture.cue.breathe': { en: 'Breathe.', fr: 'Respirez.' },
+	// N.203 counted forms and consent captions (sheet-english r2 and sheet-french r1, RATIFIED by Dann 2026-11-16 01:35; lines 22 and 23). Numbers in words,
+	// two to nine (the sheets' rule "words (one to nine)", one being "the last one"); {vowels} is a bracketed list in `VOWELS` order, `capture.list.and` its word.
+	'capture.finish.useRecorded': { en: 'Use what I’ve recorded', fr: 'Utiliser ce que j’ai capté' },
+	'capture.finish.useRecorded.caption': { en: 'If you wish, you can stop here: Ilya fills the other {m} from what you have recorded so far.', fr: 'Si vous le souhaitez, vous pouvez vous arrêter ici\u00a0: Ilya complète les {m} autres à partir de ce que vous avez capté jusqu’ici.' },
+	'capture.finish.useRecorded.captionLast': { en: 'If you wish, you can stop here: Ilya fills the last one from what you have recorded so far.', fr: 'Si vous le souhaitez, vous pouvez vous arrêter ici\u00a0: Ilya complète la dernière à partir de ce que vous avez capté jusqu’ici.' },
+	'capture.finish.workOut.last': { en: 'Let Ilya work out the last one', fr: 'Laisser Ilya déduire la dernière' },
+	'capture.finish.workOut.many': { en: 'Let Ilya work out the other {m}', fr: 'Laisser Ilya déduire les {m} autres' },
+	'capture.finish.workOut.caption': { en: 'You have recorded the vowels Ilya needs. If you wish, it can work out the other {m} from them: {vowels}.', fr: 'Vous avez capté les voyelles dont Ilya a besoin. Si vous le souhaitez, il peut en déduire les {m} autres\u00a0: {vowels}.' },
+	'capture.finish.workOut.captionLast': { en: 'You have recorded the vowels Ilya needs. If you wish, it can work out the last one from them: {vowel}.', fr: 'Vous avez capté les voyelles dont Ilya a besoin. Si vous le souhaitez, il peut en déduire la dernière\u00a0: {vowel}.' },
+	'capture.list.and': { en: 'and', fr: 'et' },
+	'capture.number.2': { en: 'two', fr: 'deux' },
+	'capture.number.3': { en: 'three', fr: 'trois' },
+	'capture.number.4': { en: 'four', fr: 'quatre' },
+	'capture.number.5': { en: 'five', fr: 'cinq' },
+	'capture.number.6': { en: 'six', fr: 'six' },
+	'capture.number.7': { en: 'seven', fr: 'sept' },
+	'capture.number.8': { en: 'eight', fr: 'huit' },
+	'capture.number.9': { en: 'nine', fr: 'neuf' },
+	// N.203 sheet line 17, RATIFIED (2026-11-16 01:13 English, 01:20 French): the first-time explanation, with {v} the bracketed symbol.
+	'capture.firstTime': { en: 'Start gives you a breath, then {v}. Sing it first as you usually do, to coordinate the shape of your vocal tract. Then stop, but keep that shape, and begin again, this time in vocal fry. Ilya measures the fry.', fr: 'Commencer vous laisse le temps d’une respiration, puis vient {v}. Chantez-la d’abord comme d’habitude, pour coordonner la forme de votre conduit vocal. Puis arrêtez, mais gardez cette forme, et recommencez, cette fois en friture vocale. Ilya mesure la friture.' },
+	// N.203 sheet line 24, RATIFIED by Dann 2026-11-16 01:13 and 01:20.
+	'capture.seeSpace': { en: 'See your vowel space', fr: 'Voir votre espace vocalique' },
 	'capture.stop': { en: 'Stop', fr: 'Arrêter' },
 	'capture.clearAll': { en: 'Clear all', fr: 'Tout effacer' },
-	'capture.hide': { en: 'Hide the chart and the readout while I sing', fr: 'Masquer le graphique et l’affichage pendant que je chante' },
-	'capture.hidden': { en: 'The chart and the readout are hidden while you sing. They return when this vowel is captured.', fr: 'Le graphique et l’affichage sont masqués pendant que vous chantez. Ils réapparaissent quand cette voyelle est captée.' },
-	'capture.hint.first': { en: 'Start follows Ilya’s order. Or tap any vowel to sing that one now.', fr: 'Commencer suit l’ordre d’Ilya. Ou touchez une voyelle pour la chanter tout de suite.' },
-	'capture.hint.active': { en: 'Stop, or a second tap on {v}, ends this take. Nothing is saved from it.', fr: 'Touchez {v} de nouveau, ou Arrêter, pour mettre fin à cette prise. Rien n’en est conservé.' },
+	// N.203 words supplement r1, RATIFIED by Dann 2026-11-16 01:38, item 1.
+	'capture.hide': { en: 'Hide the chart and the readout during a take', fr: 'Masquer le graphique et l’affichage pendant une prise' },
+	'capture.hidden': { en: 'The chart and the readout are hidden during the take. They return when this vowel is captured.', fr: 'Le graphique et l’affichage sont masqués pendant la prise. Ils réapparaissent quand cette voyelle est captée.' },
+	// N.203 sheet-english r2 / sheet-french r1, RATIFIED by Dann 2026-11-16 (01:13 English, 01:20 French), line 18.
+	'capture.hint.first': { en: 'Tap a vowel to focus on it. Tap Start to record it.', fr: 'Touchez une voyelle pour l’afficher. Touchez Commencer pour la capter.' },
+	// N.203 sheet-english r2 / sheet-french r1, RATIFIED by Dann 2026-11-16 (01:13 English, 01:20 French), line 19.
+	'capture.hint.active': { en: 'Stop ends this take and sets it aside.', fr: 'Arrêter met fin à cette prise et la met de côté.' },
 	'capture.hint.retake': { en: 'A re-take replaces {v} only if the new reading is as clear.', fr: 'Une reprise ne remplace {v} que si la nouvelle lecture est aussi nette.' },
-	'capture.hint.placed.typed': { en: 'Ilya has placed {v} from your voice type for now. Its placeholder moves as you sing.', fr: 'Ilya a placé {v} d’après votre type de voix, pour l’instant. Sa valeur par défaut évolue à mesure que vous chantez.' },
-	'capture.hint.placed.untyped': { en: 'Ilya has placed {v} from typical voices for now. Its placeholder moves as you sing.', fr: 'Ilya a placé {v} d’après des voix typiques, pour l’instant. Sa valeur par défaut évolue à mesure que vous chantez.' },
-	'capture.hint.toGo': { en: '{count} to go, in any order. Ilya keeps a placeholder for each until you sing it.', fr: 'Il en reste {count}, dans l’ordre de votre choix. Ilya garde une valeur par défaut pour chaque voyelle jusqu’à ce que vous la chantiez.' },
-	'capture.hint.finished': { en: 'Tap any vowel to sing it again.', fr: 'Touchez une voyelle pour la chanter de nouveau.' },
+	'capture.hint.placed.typed': { en: 'Ilya has placed {v} from your voice type for now. Its placeholder moves as you record.', fr: 'Ilya a placé {v} d’après votre type de voix, pour l’instant. Sa valeur par défaut évolue à mesure que vous captez vos voyelles.' },
+	'capture.hint.placed.untyped': { en: 'Ilya has placed {v} from typical voices for now. Its placeholder moves as you record.', fr: 'Ilya a placé {v} d’après des voix typiques, pour l’instant. Sa valeur par défaut évolue à mesure que vous captez vos voyelles.' },
+	'capture.hint.toGo': { en: '{count} to go, in any order. Ilya keeps a placeholder for each until you record it.', fr: 'Il en reste {count}, dans l’ordre de votre choix. Ilya garde une valeur par défaut pour chaque voyelle jusqu’à ce que vous la captiez.' },
+	// N.203 sheet-english r2 / sheet-french r1, RATIFIED by Dann 2026-11-16 (01:13 English, 01:20 French), line 20.
+	'capture.hint.finished': { en: 'Tap any vowel to focus on it. Re-take records it again.', fr: 'Touchez une voyelle pour l’afficher. Reprendre la capte de nouveau.' },
 	'capture.hint.confirmClear': { en: 'Tap Clear all to clear every reading for this voice.', fr: 'Touchez Tout effacer pour effacer toutes les lectures de cette voix.' },
 	'capture.uncertain': { en: '{v} is noted, though this take was less clear. A re-take can replace it.', fr: '{v} est noté, même si cette prise était moins nette. Une reprise peut le remplacer.' },
-	'capture.button.sung': { en: 'sung', fr: 'chantée' },
+	'capture.button.sung': { en: 'recorded', fr: 'captée' },
 	'capture.button.placed': { en: 'placeholder', fr: 'valeur par défaut' },
 	'capture.button.selected': { en: 'selected', fr: 'sélectionnée' },
 	'capture.bar': { en: 'Progress of this take', fr: 'Progression de cette prise' },
-	'capture.chartAlt': { en: 'Chart of the vowel zones. It moves in on the vowel being measured, and a dot shows the reading.', fr: 'Graphique des zones des voyelles. Il se rapproche de la voyelle mesurée, et un point en montre la lecture.' },
+	'capture.chartAlt': { en: 'Chart of the vowel zones. It moves in on the vowel in focus, and a dot shows each reading.', fr: 'Graphique des zones des voyelles. Il se rapproche de la voyelle affichée, et un point montre chaque lecture.' },
 	'capture.drawingAlt': { en: 'Side view of the mouth and throat for {name}', fr: 'Vue de profil de la bouche et de la gorge pour {name}' },
 	'capture.vowels': { en: 'The ten vowels', fr: 'Les dix voyelles' },
 	'sheet.print': { en: 'Print this sheet', fr: 'Imprimer cette feuille' },

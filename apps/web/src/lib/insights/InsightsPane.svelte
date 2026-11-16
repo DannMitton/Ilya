@@ -286,9 +286,9 @@
 	);
 	/* A French page names its octave index once, here: « (A4 = 440 Hz) » (QUEUE row 68; DESK DEFAULT). */
 	const methodLine = $derived(
-		(!model
+		(!model && analysisScore
 			? T('insights.method.silent')
-			: fill(T(methodLineKey({ generic: adapted.generic, typed: hasTypedCharacteristics })), { date: calibratedOn ?? '' })) +
+			: fill(T(methodLineKey({ generic: adapted.generic, typed: hasTypedCharacteristics, noScore: !analysisScore, samples: restsOnSamples(adapted) })), { date: calibratedOn ?? '' })) +
 			(model && language === 'fr' ? ` ${T('insights.r2.pitchKey')}` : ''),
 	);
 
@@ -517,7 +517,6 @@
 		{language}
 		note={[keyRuler?.header(language), genericLede(adapted.generic && !!model, voiceType, language), placeholderLine(placeholders, language)]}
 		onheightchange={(h) => (headerHeight = h)}
-		versionAccent="var(--rose-ink)"
 		markAccent="var(--rose-ink)"
 		ruleAccent="var(--rose)"
 		labelInk="var(--rose-ink)"

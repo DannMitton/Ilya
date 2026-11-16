@@ -14,7 +14,7 @@ LEARN, opened from its tab at the top of the page, teaches the phonological syst
 
 Ilya runs in any modern browser with no installation required. It is also installable as a self-contained app on most major platforms, including mobile: visit [ilya.dannmitton.com](https://ilya.dannmitton.com), tap "Add to Home Screen," and Ilya works offline.
 
-Ilya is not AI. It is a rule-based, deterministic transcription engine implementing a specific scholarly framework. Given the same input, it will always produce the same output. There is no machine learning, no neural model, and no guesswork. Every transcription decision traces to a documented rule in Grayson's dissertation.
+Ilya's transcription is not AI. It is a rule-based, deterministic engine implementing a specific scholarly framework: given the same text, it always gives the same IPA, and every decision traces to a documented rule in Grayson's dissertation. Reading a printed score is different. To read a scan or a photograph, Ilya uses trained recognition models that run on your own device: a music reader, a time-signature reader, and text readers for the words. They can misread, so Ilya shows you what it read to check and correct.
 
 ## Scholarly Authority
 

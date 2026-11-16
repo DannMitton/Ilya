@@ -23,7 +23,7 @@ const labels = (svg: string) => [...svg.matchAll(/<text data-verse-label="(\d+)"
 function pages(score: ParsedScore, width: number) {
 	const r = renderScoreOf(score);
 	const analyzed = analyzeScore(r.score, { fR1: {} }, () => undefined, { generatedAt: '2026-11-16T00:00:00.000Z' });
-	const out = paginateScore(r.score, analyzed, { pageWidth: width, pageHeight: 4000, marginTop: 0, marginBottom: 0, marginLeft: 0, marginRight: 0, breakRunsAt: r.boundaries, seam: systemSeam(r.bars, TEXT) });
+	const out = paginateScore(r.score, analyzed, { pageWidth: width, pageHeight: 4000, marginTop: 0, marginBottom: 0, marginLeft: 0, marginRight: 0, breakRunsAt: r.boundaries, seam: systemSeam(r.bars, TEXT, r.liveIds) });
 	return { r, out };
 }
 
@@ -82,5 +82,56 @@ describe('fix 3: two tacet bars that meet at a pass boundary', () => {
 		const pair = tacetAt.find((i, k) => tacetAt[k + 1] === i + 1);
 		expect(pair, 'two tacet columns are adjacent').toBeDefined();
 		expect(columns[pair! + 1].advance).toBeGreaterThanOrEqual(TACET_REST.measureSp * lineGap);
+	});
+});
+
+describe('follow-up fix 4: a bar printed only as a later pass stays live', () => {
+	it('the second ending is live under its source ids, and its system names its source bar', async () => {
+		const p = await load('strophic-volta.musicxml');
+		const { r, out } = pages(p, 624);
+		expect(r.bars.map((b) => b.live ?? false)).toEqual([false, false, false, false, false, false, false, true, false]);
+		const ending = p.vocalLine.filter((e) => e.measureIndex === 4).map((e) => e.id);
+		const svg = out.pages.join('\n');
+		for (const id of ending) {
+			expect(svg).toContain(`data-hit="${id}"`);
+			expect(svg).not.toContain(`data-verse-hit="${id}~v2"`);
+			expect(svg).not.toContain(`data-hit="${id}~v2"`);
+		}
+		// a later copy of a bar that has a live copy stays inert
+		const first = p.vocalLine.find((e) => e.measureIndex === 0)!.id;
+		expect(svg).toContain(`data-verse-hit="${first}~v2"`);
+		// printed bars 0 to 3 are pass 1, 4 to 6 the first three bars of pass 2, 7 the second ending (source 4, live), 8 the bar after it (source 5)
+		expect(out.systems.map((s) => [s.fromMeasure, s.toMeasure, s.attr])).toEqual([
+			[0, 1, 'data-system="0-1"'],
+			[2, 3, 'data-system="2-3"'],
+			[4, 5, 'data-verse-system="4-5"'],
+			[6, 7, 'data-system="4-4"'], // a later-pass bar (source 2) and the live ending (source 4): it names source 4 alone
+			[8, 8, 'data-system="5-5"'],
+		]);
+	});
+});
+
+describe('follow-up 2, fix 1: an ending sung on two later passes has one live copy', () => {
+	it('endings "1" and "2, 3": the second ending prints on passes 2 and 3, and only its first copy is live', async () => {
+		const p = await load('strophic-volta-23.musicxml');
+		const { r, out } = pages(p, 624);
+		expect(r.bars.map((b) => b.source)).toEqual([0, 1, 2, 3, 0, 1, 2, 4, 0, 1, 2, 4, 5]);
+		expect(r.bars.map((b) => b.live ?? false)).toEqual([false, false, false, false, false, false, false, true, false, false, false, false, false]);
+		const ending = p.vocalLine.filter((e) => e.measureIndex === 4).map((e) => e.id);
+		const svg = out.pages.join('\n');
+		for (const id of ending) {
+			expect(svg.split(`data-hit="${id}"`).length - 1, `one live ${id}`).toBe(1);
+			expect(svg).toContain(`data-verse-hit="${id}~v3"`); // the copy on pass 3 is inert
+		}
+		// printed bars 7 (pass 2) is the live copy of source 4; 11 (pass 3) is its inert copy, in a system of later-pass bars only
+		expect(out.systems.map((s) => [s.fromMeasure, s.toMeasure, s.attr])).toEqual([
+			[0, 1, 'data-system="0-1"'],
+			[2, 3, 'data-system="2-3"'],
+			[4, 5, 'data-verse-system="4-5"'],
+			[6, 7, 'data-system="4-4"'],
+			[8, 9, 'data-verse-system="8-9"'],
+			[10, 11, 'data-verse-system="10-11"'], // source 2 and the second, inert copy of source 4
+			[12, 12, 'data-system="5-5"'],
+		]);
 	});
 });

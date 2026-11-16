@@ -95,11 +95,12 @@ describe('MELODY on strophic-repeat.musicxml', () => {
 	it('puts later-pass-only systems under data-verse-system, and a mixed system\'s data-system in source indices', async () => {
 		const m = melody(await load('strophic-repeat.musicxml'));
 		const bars = m.render.bars;
-		const expected = m.systems.map((sys) => {
-			const held = bars.slice(sys.fromMeasure, sys.toMeasure + 1);
-			const own = held.filter((b) => !b.later).map((b) => b.source);
-			return own.length > 0 ? `data-system="${Math.min(...own)}-${Math.max(...own)}"` : `data-verse-system="${sys.fromMeasure}-${sys.toMeasure}"`;
-		});
+		// Written out, not computed with the seam's own formula. Printed bars 0 to 2 are the introduction (sources 0 to 2), 3 to 8 pass 1
+		// (sources 3 to 8), 9 to 14 pass 2, 15 to 20 pass 3, 21 and 22 the ending (sources 9 and 10). The systems at this width:
+		// 0 to 3 and 4 to 7 are plain; 8 to 11 holds pass 1's last bar (source 8) and three bars of pass 2, so it names source 8 alone;
+		// 12 to 14 and 15 to 18 hold later-pass bars only; 19 to 22 holds two bars of pass 3 and the ending, so it names sources 9 to 10.
+		const expected = ['data-system="0-3"', 'data-system="4-7"', 'data-system="8-8"', 'data-verse-system="12-14"', 'data-verse-system="15-18"', 'data-system="9-10"'];
+		expect(m.systems.map((x) => [x.fromMeasure, x.toMeasure])).toEqual([[0, 3], [4, 7], [8, 11], [12, 14], [15, 18], [19, 22]]);
 		expect(m.systems.map((s) => s.attr)).toEqual(expected);
 		const wrappers = [...markup(m).matchAll(/<svg x="[^"]*" y="[^"]*" width="[^"]*" height="[^"]*" viewBox="[^"]*" (data-(?:verse-)?system="[^"]*")>/g)].map((x) => x[1]);
 		expect(wrappers).toEqual(m.systems.map((s) => s.attr));
@@ -235,3 +236,31 @@ describe('Step 4b: the label, the tag, and the multibar rest', () => {
 		expect(joined.systems.flatMap((sys) => counts(sys.svg))).toContain(2);
 	});
 });
+
+describe('follow-up 2, fix 3: a live later-pass bar of verse 1\'s own one-line words draws from verse 1\'s channels', () => {
+	it('a spelling and an IPA given for the bare id show under the second ending, and no other bar changes', async () => {
+		const s = await load('strophic-volta.musicxml');
+		const id = s.vocalLine.filter((e) => e.measureIndex === 4)[0].id;
+		const plain = melody(s);
+		const base = { ...Object.fromEntries(s.vocalLine.map((e) => [e.id, 'x'])) };
+		void base;
+		const analyzed = analyzeScore(s, demoProfile, (e) => buildUnderlayResolvers(s, 1, {}).vowel(e), { generatedAt: '2026-11-16T00:00:00.000Z' });
+		const corrected = paginateMelody({
+			score: s,
+			analyzed,
+			pageWidth: 624,
+			pageHeight: 727,
+			laterPageHeight: 727,
+			engraving: ENGRAVING_DEFAULTS,
+			channels: { cyrPreview: { [id]: 'зюзя' }, ipaPreview: { [id]: 'zʲuzʲa' } },
+			verses: { profile: demoProfile, notationPrefs: prefs, openSyllabification: false },
+		});
+		const texts = (m: MelodyPages) => cyrillicTexts(markup(m));
+		expect(texts(plain)).not.toContain('зюзя');
+		expect(texts(corrected)).toContain('зюзя');
+		expect(markup(corrected)).toContain('zʲuzʲa');
+		// the later-pass copies of bars that also have a live copy keep their own verse's words
+		expect(texts(corrected).filter((t) => t !== 'зюзя')).toHaveLength(texts(plain).length - 1);
+	});
+});
+

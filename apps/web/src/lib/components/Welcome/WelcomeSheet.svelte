@@ -132,7 +132,7 @@
 	/**
 	 * WHERE FOCUS GOES WHEN THE SHEET CLOSES (the desk's review, defect 6; amendment 2026-11-16 item 1): to a real control, never the document. The sheet had
 	 * remembered `document.activeElement` at open, which on a first visit is `<body>`, so a keyboard singer who chose Begin was dropped at the top of the page with
-	 * nothing focused. Now it is the first focusable control of the header in tab order (the language pill); if the header has none, the first control in the app.
+	 * nothing focused. Now it is the first focusable control of the header in document order (the language pill; the lookup does not test visibility); if the header has none, the first control in the app.
 	 */
 	function focusFirstControl() {
 		const CONTROL = 'button:not([disabled]), a[href], input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';

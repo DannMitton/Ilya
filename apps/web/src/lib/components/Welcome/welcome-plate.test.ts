@@ -77,9 +77,9 @@ describe('the staff and the note', () => {
 		expect(NOTE_FONT_SIZE / 4).toBe(STAFF.gap);
 	});
 
-	it('holds the pinned bounding box of U+E1D7 (metNote8thUp) to Finale Maestro\'s own metadata, so the constant cannot drift', () => {
+	it('holds the pinned bounding box of U+E1D7 (note8thUp, the key whose box the glyph\'s outline has) to Finale Maestro\'s own metadata, so the constant cannot drift', () => {
 		const meta = JSON.parse(readFileSync(new URL('../../../../static/fonts/finale-maestro/FinaleMaestro.json', import.meta.url), 'utf8'));
-		const box = meta.glyphBBoxes.metNote8thUp;
+		const box = meta.glyphBBoxes.note8thUp;
 		expect(NOTE_BBOX.sw).toEqual(box.bBoxSW);
 		expect(NOTE_BBOX.ne).toEqual(box.bBoxNE);
 	});
@@ -92,6 +92,13 @@ describe('the staff and the note', () => {
 		expect(svelte).toContain(`url('${spec.file}')`);
 		expect(svelte).not.toContain("font-family: 'Bravura'");
 		expect(svelte).not.toContain('Bravura.woff2');
+	});
+
+	it('holds the note back until Maestro arrives: `font-display: block`, so the staff stands empty rather than the browser drawing a fallback for a private-use code point', () => {
+		const svelte = readFileSync(new URL('./WelcomePlate.svelte', import.meta.url), 'utf8');
+		const face = svelte.match(/@font-face \{[^}]*Finale Maestro[^}]*\}/)![0];
+		expect(face).toMatch(/font-display:\s*block;/);
+		expect(face).not.toMatch(/font-display:\s*swap/);
 	});
 
 	it('sits the notehead on the middle of the plate: its centre, from Maestro\'s noteheadBlack, is within a unit of the middle line\'s x', () => {

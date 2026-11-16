@@ -380,9 +380,9 @@ The `.sheet` rule is now `box-shadow: var(--float-shadow);` (`app.css:150`), in 
 **Maestro has the glyph and draws it correctly, so the note is Maestro.** Evidence: `FinaleMaestro.json` has `glyphBBoxes.metNote8thUp` (NE [2.264, 3.04], SW [0, -0.548]); in the browser `document.fonts.check("100px 'Finale Maestro'", '')` returned `true` and the font's status was `loaded`; and I looked at the render at 3x (`/tmp` scratch capture, then the plate's third image in the contact sheet): a correct eighth note, notehead on the middle line, stem up, a clean flag, notehead centred on the plate. I could not inspect the OTF's cmap directly (`fontTools` is not installed here), so the browser check and the picture are the evidence.
 
 - `WelcomePlate.svelte` declares `@font-face { font-family: 'Finale Maestro'; src: url('/fonts/finale-maestro/FinaleMaestro.otf') format('opentype'); }` and its `.smufl` class uses it. The Bravura `@font-face` is gone.
-- Family and URL are exactly `notation-fonts.ts`'s spec for `finale-maestro` (`:39`), so the browser reuses one file. A test imports `NOTATION_FONTS` and `DEFAULT_NOTATION_FONT_ID` and asserts that the component contains that family and that URL and no Bravura declaration or file.
+- Family and URL are exactly `notation-fonts.ts`'s spec for `finale-maestro` (`:39`). (NARROWED 2026-11-16: this sentence first said "so the browser reuses one file". The code supports only the same family and URL; see the follow-up section.) A test imports `NOTATION_FONTS` and `DEFAULT_NOTATION_FONT_ID` and asserts that the component contains that family and that URL and no Bravura declaration or file.
 - `NOTE_BBOX` is now Maestro's box, pinned against `FinaleMaestro.json` by a test, as the Bravura one was against `bravura_metadata.json`. The glyph is still checked against `LENGTH_CELLS` (`score/correction.ts`).
-- One thing I noticed and did not change: in the browser `document.fonts` listed two entries for the family, `Finale Maestro` and `"Finale Maestro"`, both `loaded`. One is the plate's `@font-face` and the other is the app's own `FontFace` registered by the score renderer. They name the same URL, so I expect one download from the browser's cache; I did not check the network log.
+- One thing I noticed and did not change: in the browser `document.fonts` listed two entries for the family, `Finale Maestro` and `"Finale Maestro"`, both `loaded`. One is the plate's `@font-face` and the other is the app's own `FontFace` registered by the score renderer. They name the same URL; whether that is one download I did not check in the network log (NARROWED 2026-11-16: see the follow-up section).
 
 ### The pictures (retaken in `ea9e192`, each looked at)
 
@@ -407,3 +407,61 @@ The `.sheet` rule is now `box-shadow: var(--float-shadow);` (`app.css:150`), in 
 | 8 ratchets | OK | ratchets: OK. |
 
 Gate 4 is up 7 over the previous section's 5865 (two tests for the shadow, two for the leave timing, one for `LEAVE_MS` in `welcome-motion.test.ts`, two for Maestro). **The gate 4 baseline for the ship script, if this lane merges alone, is now 5872 passed | 1 skipped (5873)** (supersedes 5865).
+
+## Follow-up of 2026-11-16
+
+From the desk, after Fable's review of the amendment (`docs/sessions/review-fable-lane57-amendment_r1_2026-11-16.md`, section 2). Lane `cloud-lane-57`. I changed nothing under `docs/memory/`, edited no brief, and wrote no new English or French.
+
+### The merge
+
+`git merge origin/Shane` (at `16922501`) into `cloud-lane-57` (then at `419ce63`) completed with **no conflict**: the lane's work was already in `Shane`, so the merge brought `Shane`'s other changes (among them `packages/score-parser/`, 17 files). The lane's own diff against `Shane` touches nothing under `packages/`.
+
+### The five fixes, each its own commit
+
+| # | fix | commit | test |
+|---|---|---|---|
+| 1 | the pinned box is `note8thUp`'s; four comments corrected | `bef0097` | `welcome-plate.test.ts`, red first |
+| 2 | `font-display: block` for the plate's face | `7fe0709` | `welcome-plate.test.ts` (new), red first |
+| 3 | the focus test presses Tab | `4a573f2` | `e2e/welcome-sheet.test.ts`, passes |
+| 4 | "document order" in the focus comment | `921a17a` | comment only |
+| 5 | "one fetch" narrowed to "one URL" | `0cd7640` | comment and report text only |
+
+**1. The pinned box.** `NOTE_BBOX` is now `sw: [0.0, -0.528], ne: [2.248, 3.576]`, the `glyphBBoxes.note8thUp` entry of `FinaleMaestro.json`, and the test reads that key (red before the change, green after). The comments at `welcome-plate.ts` (the glyph's doc comment and the box's), `WelcomePlate.svelte:33`, and the test's title no longer call the glyph `metNote8thUp`; the one remaining mention in `welcome-plate.ts` is the dated correction note. I left `src/lib/score/correction.ts:201` alone, as instructed.
+- **What I did and did not establish.** The review measured the OTF's outline for U+E1D7 as (0, -132) to (562, 894); I did not repeat that measurement from the file (`fontTools` is not installed here). I made a coarse independent check in the browser instead: a canvas `measureText` at 1000 px, whose boxes come in steps of 1/64 em. U+E1D7 measured 562.5 wide with an ascent of about 906 and a descent of about 141; U+ECA7 measured 578 wide with an ascent of about 766 and a descent of about 141. `note8thUp` implies about 562 wide and 894 up, and `metNote8thUp` about 566 wide and 760 up. So the ascents agree with the review's assignment (U+E1D7 is the tall glyph, U+ECA7 the short one); the widths are too coarse to separate the two. That supports the review's reading and does not replace its measurement.
+- Nothing renders from `NOTE_BBOX`, so the render is unchanged, as the review says.
+
+**2. `font-display: block`.** The face in `WelcomePlate.svelte` is `block`; a test reads the `@font-face` and asserts it (red before). The comment says only that what a fallback face would draw for a private-use code point is not established, which is the review's word. I did not run a slow-network capture to see the staff stand empty, so that behaviour is the CSS specification's, not something I observed.
+
+**3. The focus test.** After Begin the test now also presses Tab and asserts that focus is inside `.app-shell` and no longer on `.lang-pill`. It passed on the first run (the behaviour was right; the test now says so). Its comment now says what the code does.
+
+**4. "Document order".** The comment at `WelcomeSheet.svelte` says "in document order (the language pill; the lookup does not test visibility)". The only other "tab order" in the lane's files (`welcome-plate.ts`, the icon's stripes) means the order of the tabs and is correct.
+
+**5. "One fetch".** I read each line the review cites before writing this:
+- Same family name and same file URL as the score renderer: true (`notation-fonts.ts:39`, and the test).
+- Two face objects name it: the plate's `@font-face`, and `loadNotationFont`'s `new FontFace(spec.family, url(spec.file))` followed by `document.fonts.add(face)` (`notation-fonts.ts:52-55`).
+- `vercel.json` sets a `Cache-Control` for `/_app/immutable/` only; no header for `/fonts`.
+- The service worker answers every other same-origin request stale-while-revalidate: it fetches in the background on each hit and updates the cache on a 200 (`static/sw.js:129-141`).
+- So the code supports "one URL, and at most one download plus revalidations". "One fetch" is not shown, and I did not look at a network log. The two earlier statements (the amendment section's "so the browser reuses one file" and "I expect one download from the browser's cache") are narrowed in place, marked "NARROWED 2026-11-16", and the comment in `WelcomePlate.svelte` says the same.
+- The side effect the review records stands: Svelte does not scope `@font-face`, so any element that already names `'Finale Maestro'` (`tempo/TempoControl.svelte:256`) can now load the face without `loadNotationFont()`. I saw no harm in it and did not test it.
+
+### The eight gates on the merged final tree (clean, no `build/`)
+
+| gate | baseline named by the desk | now |
+|---|---|---|
+| 1 phonology | 462 | 462 passed (462) |
+| 2 dictionary | 248 | 248 passed (248) |
+| 3 web-check | 0 errors, 12 warnings, 5 files | found 0 errors and 12 warnings in 5 files |
+| 4 web-test | 6313 passed \| 1 skipped (6314) | **6314 passed \| 1 skipped (6315)**, 334 files (+1: the `font-display` test) |
+| 5 score-parser | "as before" (842 \| 5 skipped (847)) | **894 passed \| 5 skipped (899)** |
+| 6 blurb | 178 | 178 passed (178) |
+| 7 integration | 159 | 159 passed (159) |
+| 8 ratchets | OK | ratchets: OK. |
+
+Two things the table does not say by itself:
+
+- **Gate 5 is 894, not 842.** The desk's "as before" is the old number. The merged `Shane` has 17 changed files under `packages/score-parser/` (a render seam, strophic fixtures, verse changes), and this lane changes nothing under `packages/`. So 894 | 5 skipped (899) is `Shane`'s count, and the gate-5 baseline for the ship script on this tree is that.
+- **Gate 4 failed once, then passed.** The first full run reported `1 failed | 6313 passed | 1 skipped (6315)`: `src/lib/voice/engine/open-extract.test.ts > the open picker is agnostic > gives the same reading whichever vowel is asked`, `Error: Test timed out in 5000ms` (it took 5,176 ms). That file is N.200 Step 3's, not this lane's. Run alone three times it passed twice and timed out once (about 5,100 ms), so it sits at the 5 s default and flakes under load. A full re-run of gate 4 gave `6314 passed | 1 skipped (6315)`, 334 files, nothing failing. The clean count is the second run; the first is reported here and not hidden.
+
+### The welcome browser suites, after the changes
+
+Desktop `e2e/welcome-sheet.test.ts`: `17 passed (1.0m)`. Phone `e2e-phone/welcome-sheet.test.ts`: `3 passed (8.6s)`. I did not re-run the whole Playwright suites for this follow-up: the changes are one comment, one font-display value, one test, and two comments.

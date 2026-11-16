@@ -33,7 +33,7 @@ export type SystemSeam = (svg: string, fromMeasure: number, toMeasure: number) =
 const LOOKUP_ATTRIBUTES = /\sdata-(hit|event-id|of-event|ipa-of)="([^"]*)"/g;
 
 /** The D6 rename over one system's markup. Markup that names no later-pass event is returned as it is. */
-export function renameLaterPassAttributes(svg: string): string {
+export function renameLaterPassAttributes(svg: string, live?: ReadonlySet<string>): string {
 	if (!svg.includes('~v')) return svg;
 	return svg.replace(/<[A-Za-z][^<>]*>/g, (tag) => {
 		if (!tag.includes('~v')) return tag;
@@ -41,10 +41,12 @@ export function renameLaterPassAttributes(svg: string): string {
 		const renamed = tag.replace(LOOKUP_ATTRIBUTES, (whole, name: string, value: string) => {
 			const k = /~v(\d+)/.exec(value)?.[1];
 			if (!k) return whole;
+			// a bar printed only as a later pass (a second ending) stays live under its source ids, so it can be tapped and corrected
+			if (live?.has(value.replace(/~[ga]\d+$/, ''))) return ` data-${name}="${value.replace(/~v\d+/, '')}"`;
 			verse ??= k;
 			return ` data-verse-${name}="${value}"`;
 		});
-		return verse ? renamed.replace(/(\/?>)$/, ` data-verse="${verse}"$1`) : tag;
+		return verse ? renamed.replace(/(\/?>)$/, ` data-verse="${verse}"$1`) : renamed;
 	});
 }
 
@@ -117,12 +119,12 @@ function withTag(svg: string, first: RenderBar, text: SeamText): string {
 }
 
 /** The seam for one render score's bars. */
-export function systemSeam(bars: readonly RenderBar[], text?: SeamText): SystemSeam {
+export function systemSeam(bars: readonly RenderBar[], text?: SeamText, live?: ReadonlySet<string>): SystemSeam {
 	return (svg, fromMeasure, toMeasure) => {
 		const held = bars.slice(fromMeasure, toMeasure + 1);
-		const own = held.filter((b) => !b.later).map((b) => b.source);
+		const own = held.filter((b) => !b.later || b.live).map((b) => b.source);
 		const attr = own.length > 0 ? `data-system="${Math.min(...own)}-${Math.max(...own)}"` : `data-verse-system="${fromMeasure}-${toMeasure}"`;
-		let out = renameLaterPassAttributes(svg);
+		let out = renameLaterPassAttributes(svg, live);
 		if (text) {
 			out = withTag(out, held[0], text);
 			out = withLabels(out, held, fromMeasure, text);

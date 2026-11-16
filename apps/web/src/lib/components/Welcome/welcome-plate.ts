@@ -95,17 +95,18 @@ export const STAFF = { x1: 26, x2: 274, gap: 25, lines: 5 } as const;
 export const STAFF_TOP = BOX / 2 - (STAFF.gap * (STAFF.lines - 1)) / 2;
 export const staffLineYs = (): number[] => Array.from({ length: STAFF.lines }, (_, i) => STAFF_TOP + i * STAFF.gap);
 
-/** The glyph: SMuFL `metNote8thUp`, U+E1D7 (an eighth note, stem up), in Finale Maestro. It is the glyph `score/correction.ts` `LENGTH_CELLS` draws for "eighth" (`:201`, `:208`). */
+/** The glyph: U+E1D7, an eighth note, stem up, in Finale Maestro. Its outline is the box `FinaleMaestro.json` keys `note8thUp` (see `NOTE_BBOX`). It is the glyph `score/correction.ts` `LENGTH_CELLS` draws for "eighth". */
 export const NOTE_GLYPH = '\uE1D7';
 /** Font size 100 makes a staff space 25 units (SMuFL: a staff space is a quarter of the font size), so the glyph sits on this staff exactly. */
 export const NOTE_FONT_SIZE = STAFF.gap * 4;
 
 /**
- * `metNote8thUp`'s bounding box from `static/fonts/finale-maestro/FinaleMaestro.json` (`glyphBBoxes.metNote8thUp`), in staff spaces. The metadata is not
- * fetched for one glyph: the constant is pinned here and `welcome-plate.test.ts` reads the file and fails if they differ. (The first build drew this glyph in
- * Bravura, whose box is NE [2.132, 2.784], SW [0, -0.564]; the desk's amendment of 2026-11-16 moved it to the app's default music font.)
+ * U+E1D7's bounding box from `static/fonts/finale-maestro/FinaleMaestro.json` (`glyphBBoxes.note8thUp`), in staff spaces. The metadata is not fetched for one
+ * glyph: the constant is pinned here and `welcome-plate.test.ts` reads the file and fails if they differ. CORRECTED in the follow-up of 2026-11-16: this was first
+ * pinned to the key `metNote8thUp` (NE [2.264, 3.04], SW [0, -0.548]), which is the box of a different glyph, U+ECA7; the desk's review measured the OTF's outline for
+ * U+E1D7 as (0, -132) to (562, 894) in 1000 units per em, which is this box exactly. (Bravura, which the first build used, has other boxes for these keys.)
  */
-export const NOTE_BBOX = { sw: [0.0, -0.548], ne: [2.264, 3.04] } as const;
+export const NOTE_BBOX = { sw: [0.0, -0.528], ne: [2.248, 3.576] } as const;
 
 /**
  * The note's left edge, in box units: the ratified prototype's own `x = 134` (`ilya-welcome-draft-17.html`, line 84), so that the NOTEHEAD, not the whole

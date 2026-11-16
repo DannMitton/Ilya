@@ -21,6 +21,8 @@ declare global {
 		__ilyaStubNext?: StubOutcome[];
 		/** The room the stub's readiness reports (default `clear`); `marginal-snr` raises the room notice (N.199 Step 8, B2). */
 		__ilyaStubReadiness?: StubReadinessOutcome;
+		/** The stub session itself, for a browser test that reads `visitOpen` (N.203 lane 59 follow-up, fix 3). Development server only, like the switch. */
+		__ilyaStubSession?: StubCaptureSession;
 	}
 }
 
@@ -28,5 +30,7 @@ export function captureSessionFor(search: string = here()): CaptureSession {
 	// The recorder's panel (`engine/capture-file.ts`): present only where `__ILYA_RECORDER__` is true and `?harness=1` is in the address.
 	if (__ILYA_RECORDER__ && captureFileEnabled()) mountRecorderPanel();
 	if (!captureStubOn(search)) return new LiveCaptureSession(measurePicker(search));
-	return new StubCaptureSession(undefined, (typeof window === 'undefined' ? undefined : window.__ilyaStubReadiness) ?? 'clear', () => (typeof window === 'undefined' ? undefined : window.__ilyaStubNext?.shift()));
+	const stub = new StubCaptureSession(undefined, (typeof window === 'undefined' ? undefined : window.__ilyaStubReadiness) ?? 'clear', () => (typeof window === 'undefined' ? undefined : window.__ilyaStubNext?.shift()));
+	if (typeof window !== 'undefined') window.__ilyaStubSession = stub;
+	return stub;
 }

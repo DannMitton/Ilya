@@ -63,7 +63,7 @@
 			   the grace note before it, of the system, and took its tap. The button keeps its ruled place and its 44 px box; only the part of it
 			   that lies over that hit area is clipped away (`clip-path` limits where a tap lands), never to less than 16 px (the time signature hit's own floor). */
 			let first = Infinity;
-			for (const h of el.ownerSVGElement?.querySelectorAll<SVGElement>('[data-hit]') ?? []) {
+			for (const h of el.ownerSVGElement?.querySelectorAll<SVGElement>('[data-hit], [data-verse-hit]') ?? []) {
 				const b = h.getBoundingClientRect();
 				if (b.left > r.left + 4 && b.bottom > r.top && b.top < r.bottom) first = Math.min(first, b.left);
 			}

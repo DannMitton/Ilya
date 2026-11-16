@@ -6,7 +6,7 @@ Guidance for AI agents working in this repository.
 
 **Ilya** is a free, open-source, bilingual (English and French) Russian-to-IPA transcription tool for classical singers, built as a progressive web application. It operationalises Craig Grayson's *Russian Lyric Diction: A Practical Guide* (D.M.A., University of Washington, 2012).
 
-**Ilya is not AI.** It is a rule-based, deterministic engine implementing a specific scholarly framework. Same input, same output, always. No machine learning, no neural model, no guesswork. This distinction is load-bearing for the project's credibility with singers and teachers. Never blur it, and never describe Ilya as AI-powered.
+**Ilya's transcription is not AI.** It is a rule-based, deterministic engine implementing a specific scholarly framework. Same input, same output, always. This distinction is load-bearing for the project's credibility with singers and teachers. Never blur it, and never describe Ilya as AI-powered. The one exception is reading a scan or a photograph: there Ilya runs trained recognition models in the browser (homr's ONNX models, its own time-signature network, and tesseract models for words), and shows the singer what they read to correct. See `ARCHITECTURE.md`.
 
 **MELODY** (code name today: `markup/`) and **INSIGHTS** (on branch `Shane`, behind `PUBLIC_INCLUDE_MARKUP_INSIGHTS=true`) are Ilya's voice-analysis documents. Where Ilya answers "how do I pronounce this?", they answer "does this piece suit my voice?" They operationalise Mitton (2020), *Sung Russian for the Low Male Voice* (D.M.A.).
 

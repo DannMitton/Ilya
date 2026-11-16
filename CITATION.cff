@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it using the metadata from this file."
+title: "Ilya"
+type: software
+authors:
+  - family-names: "Mitton"
+    given-names: "Dann"
+version: "2026b"
+url: "https://ilya.dannmitton.com"
+repository-code: "https://github.com/DannMitton/Ilya"
+license: "AGPL-3.0-only"

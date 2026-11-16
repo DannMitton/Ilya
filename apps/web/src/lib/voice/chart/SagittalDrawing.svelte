@@ -12,13 +12,22 @@
 
 	let { selected }: { selected: Vowel } = $props();
 
+	// The line holds one weight on the screen at any size (N.203 Step 4: the side view is larger now, and the built 7 and 6 units, which suited 132 px,
+	// would thicken with it). The target is the weight the built units gave on a phone: 1.19 px solid and 1.02 px dotted (Step 6b report), the stroke
+	// in the drawing's own units being the target px times the box's width over the rendered width.
+	const SOLID_PX = 1.3;
+	const DOTTED_PX = 1.1;
+	let rendered = $state(0);
+
 	const files = import.meta.glob('./sagittal/*.svg', { query: '?raw', import: 'default', eager: true }) as Record<string, string>;
 	const byName: Record<string, string> = {};
 	for (const [path, svg] of Object.entries(files)) byName[path.split('/').pop()!] = svg;
 	const drawing = buildSagittal(byName);
+	const boxW = Number(drawing.viewBox.split(/[\s,]+/)[2]) || 544;
+	const unit = $derived(rendered > 0 ? boxW / rendered : boxW / 132);
 </script>
 
-<svg class="sagittal" viewBox={drawing.viewBox} fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<svg class="sagittal" bind:clientWidth={rendered} style="--sw: {(SOLID_PX * unit).toFixed(2)}; --swd: {(DOTTED_PX * unit).toFixed(2)}" viewBox={drawing.viewBox} fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
 	<g class="fixed">{@html drawing.fixed}</g>
 	{#each VOWELS as v (v)}
 		<g class="moving" data-drawing={v} style="opacity: {v === selected ? 1 : 0}">{@html drawing.moving[v]}</g>
@@ -34,10 +43,10 @@
 		overflow: visible;
 	}
 	.sagittal :global(path) {
-		stroke-width: 7;
+		stroke-width: var(--sw, 7);
 	}
 	.sagittal :global(path[stroke-dasharray]) {
-		stroke-width: 6;
+		stroke-width: var(--swd, 6);
 	}
 	.moving {
 		transition: opacity 0.35s;

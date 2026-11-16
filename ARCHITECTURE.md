@@ -22,13 +22,16 @@ questions about it.
 Together, TEXT, MELODY, and INSIGHTS are the **page** (its folder is
 `components/Paper/`): the three documents Ilya offers for print.
 
-Ilya's analysis is rule-based and deterministic: the same input gives the
-same output, every time. No part of it is learned. The one trained component
-is the OCR text recognizer, `tesseract.js`, which reads the words of a scanned
-or photographed poem. The music reader (OMR) is classical computer vision, with
-no trained model. That claim is load-bearing for
-the project's credibility, and the approval tests in `__approved__/`
-directories pin it.
+Ilya's transcription and analysis are rule-based and deterministic: the same
+input gives the same output, every time, and no part of them is learned. That
+claim is load-bearing for the project's credibility, and the approval tests in
+`__approved__/` directories pin it. Reading a scan or a photograph is the
+exception, and it uses trained models, all run in the browser: homr's ONNX
+models for the music (`scripts/fetch-omr-models.mjs`, run with
+`onnxruntime-web`), Ilya's own time-signature network (`omr/metre-model.ts`),
+`tesseract.js` for a poem's words, and a fine-tuned tesseract model for the
+words under the notes (`omr/underlay-recognize.ts`). Their output is shown to
+the singer to check and correct.
 
 The app is bilingual (English and French), runs entirely in the browser as a
 progressive web app, and stores the singer's songs on their own device.

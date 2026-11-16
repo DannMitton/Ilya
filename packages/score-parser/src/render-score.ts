@@ -32,6 +32,8 @@ export interface RenderBar {
 	later: boolean;
 	/** The verse place whose label stands above this bar (the first later bar of a later pass), where it is one. */
 	label?: number;
+	/** True for a later-pass bar whose source bar is printed nowhere else (a second ending): its handles stay live, under the source ids, so it can be tapped and corrected. */
+	live?: true;
 	/** The id (as printed) of the bar's first event; absent for a bar with none (a tacet bar). The seam finds the bar's drawn position by it. */
 	first?: string;
 }
@@ -44,6 +46,10 @@ export interface RenderScore {
 	/** The lyric number each place sings, by place minus 1. A single entry when nothing is kept. */
 	verses: number[];
 	path: 'notated' | 'repeats' | 'stacked';
+	/** The derived ids of the events of `live` bars (the seam gives them live handles). */
+	liveIds: ReadonlySet<string>;
+	/** The derived ids, among `liveIds`, of bars that carry verse 1's own one-line words: the page draws them from verse 1's channels under the bare ids, so a correction made there reaches the page. */
+	liveVerse1Ids: ReadonlySet<string>;
 	/** Printed indices where one pass ends and another (or an outside stretch) begins: a multibar rest never spans one (D7). */
 	boundaries: ReadonlySet<number>;
 	/** Why `unfold` gave no order, when it did not. */
@@ -61,6 +67,8 @@ const notated = (parsed: ParsedScore, flags: UnfoldFlag[] = [], declined?: 'id-s
 	verses: [sungVerseNumbers(parsed)[0] ?? 1],
 	path: 'notated',
 	boundaries: new Set(),
+	liveIds: new Set(),
+	liveVerse1Ids: new Set(),
 	flags,
 	...(declined ? { declined } : {}),
 });
@@ -334,6 +342,18 @@ function build(parsed: ParsedScore, sung: number[], plan: Plan, path: RenderScor
 	};
 	delete score.accompaniment; // not drawn by MELODY, and keyed by notated bars
 
+	const printedLive = new Set(printed.filter((p) => !p.later).map((p) => p.source));
+	// Only the FIRST copy of such a bar is live: an ending sung on two later passes ("2, 3") would otherwise make two sets of identical handles.
+	const liveSeen = new Set<number>();
+	const liveBar = printed.map((p) => {
+		if (!p.later || printedLive.has(p.source) || liveSeen.has(p.source)) return false;
+		liveSeen.add(p.source);
+		return true;
+	});
+	const liveIds = new Set(flat.filter((f) => liveBar[f.bar]).map((f) => f.ev.id));
+	const wordsByBar = sungVersesByBar(parsed, new Set(sung));
+	const oneLine = (source: number): boolean => [...(wordsByBar.get(source) ?? [])].every((v) => v === sung[0]);
+	const liveVerse1Ids = new Set(flat.filter((f) => liveBar[f.bar] && oneLine(printed[f.bar].source)).map((f) => f.ev.id));
 	const firstOf = new Map<number, string>();
 	for (const f of flat) if (!firstOf.has(f.bar)) firstOf.set(f.bar, f.ev.id);
 	const boundaries = new Set<number>();
@@ -343,10 +363,12 @@ function build(parsed: ParsedScore, sung: number[], plan: Plan, path: RenderScor
 	});
 	return {
 		score,
-		bars: printed.map((p, i) => ({ source: p.source, place: p.place, later: p.later, ...(p.label ? { label: p.label } : {}), ...(firstOf.has(i) ? { first: firstOf.get(i) } : {}) })),
+		bars: printed.map((p, i) => ({ source: p.source, place: p.place, later: p.later, ...(p.label ? { label: p.label } : {}), ...(liveBar[i] ? { live: true as const } : {}), ...(firstOf.has(i) ? { first: firstOf.get(i) } : {}) })),
 		verses: sung.slice(0, places),
 		path,
 		boundaries,
+		liveIds,
+		liveVerse1Ids,
 		flags,
 	};
 }

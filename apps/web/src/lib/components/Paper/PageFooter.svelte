@@ -2,7 +2,8 @@
 	import type { LegendItem } from '$lib/provenance';
 	import type { PreparedSmuflFont } from '@ilya/score-parser';
 	import LegendItems from './LegendItems.svelte';
-	import { t, type Language } from '$lib/i18n';
+	import { t, tv, type Language } from '$lib/i18n';
+	import { ILYA_VERSION } from '$lib/version';
 	import Italics from '$lib/components/Italics.svelte';
 	import type { Snippet } from 'svelte';
 
@@ -54,7 +55,7 @@
 		element = $bindable(null),
 	}: Props = $props();
 
-	const attribution = $derived(t('footer.attribution', language));
+	const attribution = $derived(tv('footer.attribution', language, { version: ILYA_VERSION }));
 	const richterLine = $derived(richterCredit ? t('footer.richter', language) : '');
 
 	/** Measured height of this footer: legend, broad note, hairline and colophon. */

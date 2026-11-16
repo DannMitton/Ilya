@@ -10,3 +10,12 @@
 8. `pacifier.nowSustain`: Now sustain. Ilya is measuring. / Soutenez maintenant. Ilya mesure.
 9. `capture.chartAlt`: Chart of the vowel zones. It moves in on the vowel in focus, and a dot shows each reading. / Graphique des zones des voyelles. Il se rapproche de la voyelle affichée, et un point montre chaque lecture.
 Unchanged: `capture.cue.ready`, `capture.cue.isCaptured`, `capture.cue.allTen`, `pacifier.captured`.
+
+## Addendum, RATIFIED by Dann 2026-11-16 13:02 ("yes")
+
+Ten words lane 59 needed that the sheets did not print (lane 59 Step 6 report; Fable's as-built review):
+
+| Key | English | French |
+|---|---|---|
+| `capture.number.2` to `.9` | two, three, four, five, six, seven, eight, nine | deux, trois, quatre, cinq, six, sept, huit, neuf |
+| `capture.list.and` | and | et |

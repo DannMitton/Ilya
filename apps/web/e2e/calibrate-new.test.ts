@@ -1,7 +1,7 @@
 /**
  * N.199 Step 6: the new capture screen, in a browser, on `StubCaptureSession` (`?capture=stub`, development server only). Since N.199 Step 8 the screen is the capture phase for every singer: no switch is in the address.
- * A full tour (ten captures), a manual pick, a cancel in each phase, a rolled-back re-take and an error, Return to summary after one
- * vowel, Start over's two taps, hidden mode, and a soprano's view. Real time: the count-in is 6 s and the stub's sweep 3.5 to 4 s,
+ * A full tour (ten captures), a manual pick, a cancel in each phase, a rolled-back re-take and an error, the finish-early control after one
+ * vowel, Start over's two taps, hidden mode, and a soprano's view. Real time: the count-in is 8 s (Breathe, Sing, Shape) and the stub’s sweep 3.5 to 4 s,
  * so these tests are long by design. The stub gives clean readings, so what is asserted is the screen's behaviour and what it keeps,
  * not the extractor's.
  */
@@ -39,9 +39,14 @@ const count = (page: Page) => page.locator('.count');
 const btn = (page: Page, name: RegExp) => page.getByRole('button', { name });
 /** Waits for the take in progress to end and the landing to finish: the main button is enabled again. */
 const settled = async (page: Page) => expect(page.locator('.main')).toBeEnabled({ timeout: 40_000 });
+/** A tap on a vowel focuses it and never records (N.203 lane 59 Step 2); Start records the focused one. */
+const startTake = async (page: Page, name: RegExp) => {
+	await btn(page, name).click();
+	await page.locator('.main').click();
+};
 
 test.describe('the new capture screen on the stub', () => {
-	test('a full tour: ten captures in Ilya’s order, the hull whole, Done, and every take kept', async ({ page }) => {
+	test('a full tour: ten captures in Ilya’s order, the hull whole, Re-take and See your vowel space, and every take kept', async ({ page }) => {
 		test.setTimeout(300_000);
 		// Ten clean takes: the stub's default makes [ɨ] and [ʌ] Provisional, whose notices stay on screen by design.
 		await open(page, { next: Array(10).fill('captured') });
@@ -58,7 +63,8 @@ test.describe('the new capture screen on the stub', () => {
 		}
 		expect(order).toEqual(['i', 'e', 'ɛ', 'a', 'ɑ', 'o', 'u', 'ɨ', 'ɪ', 'ʌ']);
 		await expect(cue(page)).toHaveText('All ten captured. This is your vowel space.');
-		await expect(page.locator('.main')).toHaveText('Done');
+		await expect(page.locator('.main')).toHaveText('Re-take [ʌ]');
+		await expect(page.getByRole('button', { name: 'See your vowel space' })).toBeVisible();
 		await expect(page.locator('polygon.hull')).toBeVisible();
 		expect(await page.locator('polygon.hull.dashed').count()).toBe(0);
 		expect(await page.locator('[data-placeholder]').count()).toBe(0);
@@ -67,46 +73,121 @@ test.describe('the new capture screen on the stub', () => {
 		for (const f of Object.values(v.formants) as Array<{ visibility?: string }>) expect(f.visibility).toBe('zone');
 		expect(v.takes).toHaveLength(10);
 		expect(v.takes.every((t: { outcome: string; raw?: unknown; voiceType: string; visible: string }) => ['captured', 'provisional'].includes(t.outcome) && !!t.raw && t.voiceType === 'bass' && t.visible === 'zone')).toBe(true);
-		await page.locator('.main').click(); // Done
+		await page.getByRole('button', { name: 'See your vowel space' }).click();
 		await expect(page.getByText('Your vowel space').first()).toBeVisible();
 	});
 
-	test('after a cancel the chart moves out, it does not snap, and the hide box is not live during a take (Step 6a)', async ({ page }) => {
+	test('the chart glides to the focused vowel on every change of focus, it does not snap, and the hide box is not live during a take', async ({ page }) => {
 		test.setTimeout(60_000);
 		await open(page);
 		await toCapture(page);
-		const rx = async () => +(await page.locator('[data-zone="i"]').getAttribute('rx'));
-		const rest = await rx();
-		await expect(page.getByLabel('Hide the chart and the readout while I sing')).toBeEnabled();
-		await btn(page, /^cardinal-i/).click();
-		await expect(page.getByLabel('Hide the chart and the readout while I sing')).toBeDisabled();
-		await page.waitForTimeout(2500);
-		const zoomed = await rx();
-		expect(zoomed).toBeGreaterThan(rest * 1.3);
-		await btn(page, /^cardinal-i/).click(); // cancel
-		await page.waitForTimeout(100);
-		const mid = await rx();
-		expect(mid, 'a snap would read the rest radius at once').toBeGreaterThan(rest * 1.05);
-		expect(mid).toBeLessThan(zoomed);
-		await page.waitForTimeout(700);
-		expect(await rx()).toBeCloseTo(rest, 0);
-		await expect(page.getByLabel('Hide the chart and the readout while I sing')).toBeEnabled();
+		const rx = async (v: string) => +(await page.locator(`[data-zone="${v}"]`).getAttribute('rx'));
+		const before = await rx('u');
+		await btn(page, /^cardinal-u/).click(); // focus [u]: a tap never records
+		await page.waitForTimeout(120);
+		const mid = await rx('u');
+		expect(mid, 'a snap would read the settled radius at once').not.toBe(before);
+		await page.waitForTimeout(1000);
+		const settledRx = await rx('u');
+		expect(settledRx).not.toBe(before); // the view moved to [u]: its zone now fills about half the view
+		expect(mid).not.toBe(settledRx);
+		await expect(count(page)).toHaveText('0 of 10'); // nothing recorded
+		await expect(page.getByLabel('Hide the chart and the readout during a take')).toBeEnabled();
+		await page.locator('.main').click();
+		await expect(page.getByLabel('Hide the chart and the readout during a take')).toBeDisabled();
 	});
 
-	test('a manual pick starts at once and takes precedence; Ilya carries on from the singer’s lead; Return to summary shows after one vowel', async ({ page }) => {
+	/** Where a zone's centre is on the screen, from the drawn ellipse (the chart may be mid-glide: read it at the instant). */
+	const zoneCentre = (page: Page, v: string) =>
+		page.locator(`[data-zone="${v}"]`).evaluate((e) => {
+			const b = e.getBoundingClientRect();
+			return { x: b.left + b.width / 2, y: b.top + b.height / 2 };
+		});
+
+	test('the microphone is held open for the visit: open when the capture screen mounts, closed after Back, open on return, closed after See your vowel space (N.203 follow-up, fix 3)', async ({ page }) => {
+		test.setTimeout(90_000);
+		const ALL = Object.fromEntries(['i', 'e', 'ɪ', 'ɨ', 'ɛ', 'a', 'ɑ', 'ʌ', 'o', 'u'].map((v, k) => [v, READING(300 + 40 * k, 2200 - 130 * k)]));
+		await open(page, { formants: ALL });
+		const visitOpen = () => page.evaluate(() => (window as unknown as { __ilyaStubSession: { visitOpen: boolean } }).__ilyaStubSession.visitOpen);
+		await page.getByRole('button', { name: /re-calibrate/i }).click();
+		expect(await visitOpen(), 'the summary is not the capture screen').toBe(false);
+		await page.getByRole('button', { name: /^re-take$/i }).first().click();
+		await expect(page.locator('.capture')).toBeVisible();
+		await expect.poll(visitOpen).toBe(true);
+		await page.getByRole('button', { name: /back/i }).first().click();
+		await expect.poll(visitOpen).toBe(false);
+		await page.getByRole('button', { name: /calibrate/i }).first().click();
+		await expect(page.locator('.capture')).toBeVisible();
+		await expect.poll(visitOpen).toBe(true);
+		await page.getByRole('button', { name: 'See your vowel space' }).click();
+		await expect.poll(visitOpen).toBe(false);
+	});
+
+	test('a tap on a zone of the chart focuses that vowel and records nothing (N.203 Step 5)', async ({ page }) => {
+		test.setTimeout(60_000);
+		await open(page);
+		await toCapture(page);
+		await page.locator('.chart-box').scrollIntoViewIfNeeded();
+		await page.waitForTimeout(1000); // the glide to [i] is over
+		expect(await selected(page)).toBe('i');
+		const ic = await zoneCentre(page, 'i');
+		await page.mouse.click(ic.x, ic.y); // inside [i]'s zone
+		expect(await selected(page)).toBe('i');
+		await btn(page, /^open-e/).click(); // focus [e] by its button; the chart glides there
+		await page.waitForTimeout(1000);
+		const c = await zoneCentre(page, 'e');
+		await page.mouse.click(c.x, c.y);
+		expect(await selected(page)).toBe('e');
+		await expect(count(page)).toHaveText('0 of 10');
+		await expect(page.locator('.main')).toHaveText('Start [e]');
+	});
+
+	test('a tap on the chart during a take changes nothing, and a vertical drag that starts on the chart leaves the focus alone (N.203 Step 5)', async ({ page }) => {
+		test.setTimeout(60_000);
+		await open(page);
+		await toCapture(page);
+		await page.locator('.chart-box').scrollIntoViewIfNeeded();
+		await page.waitForTimeout(1000);
+		const box = (await page.locator('.vowel-chart').boundingBox())!;
+		// A drag: press on the chart, move 80 px up, release. No click, so no focus.
+		await btn(page, /^cardinal-u/).click();
+		await page.waitForTimeout(1000);
+		const at = await zoneCentre(page, 'u');
+		await page.mouse.move(at.x, at.y);
+		await page.mouse.down();
+		await page.mouse.move(at.x, at.y - 80, { steps: 5 });
+		await page.mouse.up();
+		expect(await selected(page)).toBe('u');
+		// During a take a tap on another zone does nothing.
+		await page.locator('.main').click();
+		await page.mouse.click(box.x + 20, box.y + 20);
+		await page.mouse.click(at.x, at.y);
+		expect(await selected(page)).toBe('u');
+		await expect(cue(page)).toHaveText('Breathe.');
+		await page.getByRole('button', { name: /^Stop$/ }).click();
+	});
+
+	test('a tap focuses and never records; Start records; a tap during a take does nothing; Ilya carries on from the singer’s lead; Use what I’ve recorded shows after one vowel', async ({ page }) => {
 		test.setTimeout(120_000);
 		await open(page);
 		await toCapture(page);
-		await expect(page.getByRole('button', { name: /^Return to summary$/ })).toHaveCount(0);
-		await btn(page, /^cardinal-u/).click(); // a tap on a vowel begins its take now
-		await expect(cue(page)).toContainText('Sing [u]');
-		await btn(page, /^open-e/).click(); // another vowel mid-take: ignored
+		await expect(page.getByRole('button', { name: /^Use what I.ve recorded$/ })).toHaveCount(0);
+		await btn(page, /^cardinal-u/).click(); // a tap focuses
 		expect(await selected(page)).toBe('u');
+		await expect(cue(page)).toHaveText('Ready for [u].');
+		await expect(page.locator('.main')).toBeEnabled(); // nothing started
+		await expect(page.locator('.main')).toHaveText('Start [u]');
+		await page.locator('.main').click();
+		await expect(cue(page)).toHaveText('Breathe.');
+		await btn(page, /^open-e/).click(); // another vowel mid-take: nothing
+		await btn(page, /^cardinal-u/).click(); // the same vowel: nothing (it no longer cancels)
+		expect(await selected(page)).toBe('u');
+		await expect(cue(page)).toHaveText('Breathe.');
 		await expect(count(page)).toHaveText('1 of 10', { timeout: 40_000 });
 		await settled(page);
 		expect(await selected(page)).toBe('i'); // round the seven from [u]: wraps to the first unsung
 		await expect(cue(page)).toHaveText('Ready for [i].');
-		await page.getByRole('button', { name: /^Return to summary$/ }).click();
+		await page.getByRole('button', { name: /^Use what I.ve recorded$/ }).click();
 		await expect(page.getByText('1 of 10 vowels sampled').first()).toBeVisible();
 	});
 
@@ -114,26 +195,26 @@ test.describe('the new capture screen on the stub', () => {
 		test.setTimeout(120_000);
 		await open(page);
 		await toCapture(page);
-		// The count-in is 6 s (three beats, a 3 s pause); the stub's stable fry comes 0.5 to 1 s after it, its sweep 3 s after that.
-		for (const ms of [500, 4500, 6150, 8200]) {
-			await btn(page, /^cardinal-i/).click();
+		// Breathe is 2 s, Sing 4 s, Shape 2 s; the stub's stable fry comes 0.5 to 1 s after that, its sweep 3 s after that.
+		for (const ms of [500, 4500, 7000, 8200, 10500]) {
+			await page.locator('.main').click();
 			await expect(page.locator('.main')).toBeDisabled();
 			await page.waitForTimeout(ms);
-			await btn(page, /^cardinal-i/).click(); // a second tap on the vowel cancels
+			await page.getByRole('button', { name: /^Stop$/ }).click();
 			await expect(cue(page)).toHaveText('Capture cancelled.');
 			await expect(page.locator('.main')).toBeEnabled();
 			await expect(count(page)).toHaveText('0 of 10');
 		}
 		const v = await stored(page);
 		expect(Object.keys(v.formants)).toHaveLength(0);
-		expect(v.takes.map((t: { outcome: string }) => t.outcome)).toEqual(['cancelled', 'cancelled', 'cancelled', 'cancelled']);
+		expect(v.takes.map((t: { outcome: string }) => t.outcome)).toEqual(['cancelled', 'cancelled', 'cancelled', 'cancelled', 'cancelled']);
 		expect(v.takes.every((t: { raw?: unknown }) => t.raw === undefined)).toBe(true);
 		// Stop and Escape cancel too.
-		await btn(page, /^cardinal-i/).click();
+		await page.locator('.main').click();
 		await page.waitForTimeout(800);
 		await page.getByRole('button', { name: /^Stop$/ }).click();
 		await expect(cue(page)).toHaveText('Capture cancelled.');
-		await btn(page, /^cardinal-i/).click();
+		await page.locator('.main').click();
 		await page.waitForTimeout(800);
 		await page.keyboard.press('Escape');
 		await expect(cue(page)).toHaveText('Capture cancelled.');
@@ -157,7 +238,7 @@ test.describe('the new capture screen on the stub', () => {
 		v = await stored(page);
 		expect(v.takes.map((t: { outcome: string; errorCode?: string }) => [t.outcome, t.errorCode])).toEqual([['rolled-back', undefined], ['failed', 'NO_AUDIO_INPUT']]);
 		await expect(page.locator('.main')).toBeEnabled(); // a way back in
-		await page.getByRole('button', { name: /^Return to summary$/ }).click();
+		await page.getByRole('button', { name: /^Use what I.ve recorded$/ }).click();
 		await expect(page.getByText('3 of 10 vowels sampled').first()).toBeVisible();
 	});
 
@@ -168,6 +249,20 @@ test.describe('the new capture screen on the stub', () => {
 		await page.getByRole('button', { name: /^re-take$/i }).first().click();
 		await page.locator('.main').click();
 		await expect(page.getByText('2 of 10 vowels sampled').first()).toBeVisible({ timeout: 40_000 });
+	});
+
+	test('a tap during the dwell at the end of a re-take pass keeps the screen: it does not return to the summary under the singer (follow-up fix 4)', async ({ page }) => {
+		test.setTimeout(90_000);
+		await open(page, { formants: { i: READING(296, 1705), u: READING(346, 804) }, next: ['captured'] });
+		await page.getByRole('button', { name: /re-calibrate/i }).click();
+		await page.getByRole('button', { name: /^re-take$/i }).first().click(); // a pass of one
+		await page.locator('.main').click();
+		await expect(cue(page)).toHaveText('[i] captured.', { timeout: 40_000 }); // the dwell has begun
+		await btn(page, /^close-e/).click();
+		expect(await selected(page)).toBe('e');
+		await page.waitForTimeout(2500); // past the dwell, and past where the return would have fired
+		await expect(page.locator('.capture')).toBeVisible();
+		expect(await selected(page)).toBe('e');
 	});
 
 	test('the summary offers Continue while fewer than ten are sung, and it opens the capture screen on the next vowel in Ilya’s order (B3)', async ({ page }) => {
@@ -200,9 +295,9 @@ test.describe('the new capture screen on the stub', () => {
 		test.setTimeout(120_000);
 		await open(page);
 		await toCapture(page);
-		await page.getByLabel('Hide the chart and the readout while I sing').check();
-		await btn(page, /^cardinal-i/).click();
-		await expect(page.locator('.chart-box')).toContainText('The chart and the readout are hidden while you sing.');
+		await page.getByLabel('Hide the chart and the readout during a take').check();
+		await page.locator('.main').click();
+		await expect(page.locator('.chart-box')).toContainText('The chart and the readout are hidden during the take.');
 		expect(await page.locator('.vowel-chart').count()).toBe(0);
 		await expect(count(page)).toHaveText('1 of 10', { timeout: 40_000 });
 		await expect(page.locator('.vowel-chart')).toBeVisible();
@@ -216,7 +311,7 @@ test.describe('the new capture screen on the stub', () => {
 		await toCapture(page);
 		expect(await page.locator('.vowel-btn').count()).toBe(10);
 		expect(await page.locator('.pacifier, [class*="pacifier"]').count()).toBe(0);
-		await expect(page.locator('.hint')).toHaveText('Start follows Ilya’s order. Or tap any vowel to sing that one now.');
+		await expect(page.locator('.hint')).toHaveText('Tap a vowel to focus on it. Tap Start to record it.');
 	});
 
 	test('a lively room raises the room notice on the capture screen, and it can be dismissed (B2)', async ({ page }) => {
@@ -234,14 +329,14 @@ test.describe('the new capture screen on the stub', () => {
 		await toCapture(page);
 		expect(await page.locator('[data-zone]').count()).toBe(10);
 		expect(await page.locator('[data-placeholder]').count()).toBe(10);
-		await expect(page.locator('.hint')).toHaveText('Start follows Ilya’s order. Or tap any vowel to sing that one now.');
+		await expect(page.locator('.hint')).toHaveText('Tap a vowel to focus on it. Tap Start to record it.');
 	});
 });
 
-/** N.199 readings brief, Step 3: the capture screen has a largest width (the chart's 484 px), so the Drawer as a sheet does not push the buttons off. */
+/** N.199 readings brief, Step 3, kept by N.203 Step 4: the capture screen has a largest width (the chart's 484 px), and everything down to the Start row is in view without scrolling. */
 test.describe('the capture screen in the Drawer as a sheet', () => {
 	for (const width of [768, 1024, 1244]) {
-		test(`at ${width} px wide and 800 high: 484 px wide, centred, and scrolled until the stage sticks the chart, the ten buttons, and both actions are in view`, async ({ page }) => {
+		test(`at ${width} px wide and 800 high: 484 px wide, centred, and the ten buttons and both actions are in view with nothing scrolled`, async ({ page }) => {
 			await page.setViewportSize({ width, height: 800 });
 			await open(page);
 			await toCapture(page);
@@ -249,10 +344,9 @@ test.describe('the capture screen in the Drawer as a sheet', () => {
 			const capture = await box('.capture');
 			expect(Math.round(capture.width)).toBe(484);
 			expect(Math.abs(capture.x + capture.width / 2 - width / 2)).toBeLessThan(2);
-			// Scroll the Drawer's takeover to its end: the stage sticks at the top.
-			await page.locator('.takeover-body').evaluate((e) => { e.scrollTop = e.scrollHeight; });
+			expect(await page.locator('.takeover-body').evaluate((e) => e.scrollTop)).toBe(0);
 			const drawer = await box('.drawer');
-			for (const sel of ['.chart-box', '.buttons', '.main', '.stop']) {
+			for (const sel of ['.buttons', '.main', '.stop']) {
 				const b = await box(sel);
 				expect(b.y, `${sel} above the Drawer`).toBeGreaterThanOrEqual(drawer.y);
 				expect(b.y + b.height, `${sel} below the Drawer's end`).toBeLessThanOrEqual(drawer.y + drawer.height);
@@ -280,7 +374,7 @@ test.describe('the readings list', () => {
 		await expect(list.locator('tbody tr')).toHaveCount(10);
 		// A take that ends does not fold it or open anything else; a closed list stays closed through a take.
 		await summary.click();
-		await btn(page, /^cardinal-i/).click();
+		await page.locator('.main').click();
 		await expect(count(page)).toHaveText('1 of 10', { timeout: 40_000 });
 		expect(await list.evaluate((e) => (e as HTMLDetailsElement).open)).toBe(false);
 	});
@@ -291,7 +385,7 @@ test.describe('the readings list', () => {
 		await toCapture(page);
 		const list = page.locator('details.readings');
 		const toggle = page.locator('.hide-toggle');
-		await page.getByLabel('Hide the chart and the readout while I sing').check();
+		await page.getByLabel('Hide the chart and the readout during a take').check();
 		// The list's closed line and the toggle below it: its height and the gap between them. (Text above the list changes during a take, so the toggle's
 		// distance from the top of the screen is not the measure.)
 		const closedLine = async () => {
@@ -304,8 +398,8 @@ test.describe('the readings list', () => {
 		await list.locator('summary').click();
 		expect(await list.evaluate((e) => (e as HTMLDetailsElement).open)).toBe(true);
 		expect((await closedLine()).height).toBeGreaterThan(closedAtRest.height + 100); // open, the table fills it
-		await btn(page, /^cardinal-i/).click();
-		await expect(page.locator('.chart-box')).toContainText('The chart and the readout are hidden while you sing.');
+		await page.locator('.main').click();
+		await expect(page.locator('.chart-box')).toContainText('The chart and the readout are hidden during the take.');
 		expect(await list.evaluate((e) => (e as HTMLDetailsElement).open)).toBe(false);
 		expect(await list.evaluate((e) => getComputedStyle(e).visibility)).toBe('hidden');
 		expect(await list.evaluate((e) => (e as HTMLElement).inert)).toBe(true);
@@ -318,52 +412,44 @@ test.describe('the readings list', () => {
 	});
 });
 
-/** N.199 Step 8c.1: the readings list under the sticky stage. The stage does not stick while the list is open and nothing runs; a take sticks it again. */
-test.describe('the stage and the open readings list (Step 8c.1)', () => {
+/**
+ * N.203 lane 59 Step 4 (Dann 2026-11-16 00:32): the order is the vowel's row, the take line, the cue, the buttons, Start, then the chart, and everything from the
+ * VOICE header to the Start row is in view without scrolling, on a 390 by 844 phone and in a desk Drawer 900 high, in both languages, first visit and after,
+ * and nothing scrolls by itself during a take. The heights are measured, not inferred (the report prints them).
+ */
+test.describe('the screen in order, in view (Step 4)', () => {
 	const FOUR = { i: READING(296, 1705), e: READING(381, 1532), u: READING(346, 804), a: READING(600, 1250) };
-	const position = (page: Page) => page.locator('.stage').evaluate((e) => getComputedStyle(e).position);
-	for (const [w, h] of [[390, 844], [375, 667]] as const) {
-		test(`at ${w} by ${h}: sticky with the list closed, static with it open, every row in view and none under the stage at some scroll, sticky again during a take`, async ({ page }) => {
-			test.setTimeout(90_000);
-			await page.setViewportSize({ width: w, height: h });
-			await open(page, { formants: FOUR });
-			await page.getByRole('button', { name: /re-calibrate/i }).click();
-			await page.getByRole('button', { name: /^continue$/i }).click();
-			await expect(page.locator('.capture')).toBeVisible();
-			await expect.poll(() => position(page)).toBe('sticky');
-			await page.locator('details.readings summary').click();
-			await expect.poll(() => position(page)).toBe('static');
-			// Scroll the takeover through its length: each of the ten rows is wholly in view and clear of the stage at some position.
-			const clear = await page.locator('.capture').evaluate((cap) => {
-				let sc: HTMLElement | null = cap.parentElement;
-				while (sc && !(['auto', 'scroll'].includes(getComputedStyle(sc).overflowY) && sc.scrollHeight > sc.clientHeight + 1)) sc = sc.parentElement;
-				if (!sc) return -1;
-				const box = sc.getBoundingClientRect();
-				const stage = cap.querySelector('.stage')!;
-				const rows = [...cap.querySelectorAll('details.readings tbody tr')];
-				const ok = new Set<number>();
-				for (let y = 0; y <= sc.scrollHeight - sc.clientHeight; y += 10) {
-					sc.scrollTop = y;
-					const sr = stage.getBoundingClientRect();
-					rows.forEach((r, i) => {
-						const b = r.getBoundingClientRect();
-						const under = b.bottom > sr.top && b.top < sr.bottom && sr.bottom > box.top && sr.top < box.bottom;
-						if (b.top >= box.top && b.bottom <= box.bottom && !under) ok.add(i);
-					});
-				}
-				return ok.size;
-			});
-			expect(clear).toBe(10);
-			// A take sticks the stage again, and it is static again at idle.
-			await page.locator('.main').evaluate((e) => (e as HTMLElement).click());
-			await page.waitForTimeout(400);
-			await expect.poll(() => position(page)).toBe('sticky');
-			await page.locator('.stop').evaluate((e) => (e as HTMLElement).click());
-			await expect(page.locator('.main')).toBeEnabled({ timeout: 20_000 });
-			await expect.poll(() => position(page)).toBe('static');
-			await page.locator('details.readings summary').click();
-			await expect.poll(() => position(page)).toBe('sticky');
-		});
+	for (const [name, w, h] of [['phone', 390, 844], ['desk', 1440, 900]] as const) {
+		for (const lang of ['en', 'fr'] as const) {
+			for (const mode of ['first visit', 'after'] as const) {
+				test(`${name} ${lang}, ${mode}: the Start row is in view, the order holds, and a take scrolls nothing`, async ({ page }) => {
+					test.setTimeout(90_000);
+					await page.setViewportSize({ width: w, height: h });
+					if (mode === 'first visit') {
+						await open(page, { lang });
+						await page.getByRole('button', { name: /^(calibrate|calibrer)$/i }).click();
+						await page.getByRole('button', { name: /^(begin|commencer)$/i }).click();
+						await page.getByRole('button', { name: /^(continue|continuer)$/i }).click({ timeout: 30_000 });
+					} else {
+						await open(page, { lang, formants: FOUR });
+						await page.getByRole('button', { name: /re-calibrate|recalibrer/i }).click();
+						await page.getByRole('button', { name: /^(continue|continuer)$/i }).click();
+					}
+					await expect(page.locator('.capture')).toBeVisible();
+					const top = async (sel: string) => (await page.locator(sel).first().boundingBox())!.y;
+					const order = [await top('.glyph-row'), await top('.take-line'), await top('.cue'), await top('.buttons'), await top('.main'), await top('.chart-box'), await top('.hint')];
+					expect(order).toEqual([...order].sort((a, b) => a - b));
+					const body = (await page.locator('.takeover-body').boundingBox())!;
+					const main = (await page.locator('.main').boundingBox())!;
+					expect(main.y + main.height, 'the Start row ends inside the takeover').toBeLessThanOrEqual(body.y + body.height);
+					expect(await page.locator('.takeover-body').evaluate((e) => e.scrollTop)).toBe(0);
+					await page.locator('.main').evaluate((e) => (e as HTMLElement).click());
+					await page.waitForTimeout(1500);
+					expect(await page.locator('.takeover-body').evaluate((e) => e.scrollTop), 'nothing scrolls by itself during a take').toBe(0);
+					await page.locator('.stop').evaluate((e) => (e as HTMLElement).click());
+				});
+			}
+		}
 	}
 });
 
@@ -393,7 +479,7 @@ test.describe('the main and stop buttons hold one line (Step 8c.2)', () => {
 			await page.setViewportSize({ width: 375, height: 800 });
 			await open(page, { lang, formants: FOUR });
 			await page.getByRole('button', { name: /re-calibrate|recalibrer/i }).click();
-			await page.getByRole('button', { name: /^(re-take|réessayer)$/i }).first().click();
+			await page.getByRole('button', { name: /^(re-take|reprendre)$/i }).first().click();
 			await expect(page.locator('.capture')).toBeVisible();
 			expect((await page.locator('.main').boundingBox())!.height).toBeLessThan(46);
 		});

@@ -203,14 +203,14 @@
 		openRequest?: VoiceRequest | null;
 		/** N.203 lane 60: the voices, the active id, and the commands, published whole for the pane at rest (`seam.ts`). */
 		onSeamChange?: (seam: VoiceSeam) => void;
+		/** N.203 lane 59: whether the takeover is showing. The wizard stays mounted while it is stowed (Back), so the microphone's visit follows this. */
+		takeoverVisible?: boolean;
 	}
 
 	let {
-		// The live auditory input (locked port order step 2). One session
-		// instance for the wizard's lifetime; each capture and each readiness
-		// run opens and releases the microphone itself, so the mic indicator
-		// rests dark between them. Construction touches no browser API;
-		// getUserMedia is requested only inside start() and startReadiness().
+		// The live auditory input (locked port order step 2). One session for the wizard's lifetime. Outside a visit each run opens and
+		// releases the microphone itself; the capture screen holds one visit open while it shows (`visit.ts`). Construction touches no
+		// browser API; getUserMedia is requested only inside start() and startReadiness().
 		session: captureSession = captureSessionFor(),
 		onVowelCaptured,
 		onComplete,
@@ -218,7 +218,8 @@
 		onOpenLearnNote,
 		language,
 		openRequest = null,
-		onSeamChange
+		onSeamChange,
+		takeoverVisible = true
 	}: CalibrationWizardProps = $props();
 
 	// N.22: dictionary lookup, following ScoreUploader.svelte and
@@ -966,7 +967,7 @@
 					</div>
 				{/if}
 				{#key captureKey}<VowelCapture session={captureSession} {language} {voiceType} {profile} startVowel={opening.start} pass={opening.pass}
-					onCaptured={commitReading} onTake={recordTake} onReturn={() => (phase = 'summary')} onClearAll={confirmReset} />{/key}
+					onCaptured={commitReading} onTake={recordTake} onReturn={() => (phase = 'summary')} onClearAll={confirmReset} {takeoverVisible} />{/key}
 			</div>
 			{:else if phase === 'summary'}
 				<!-- YOUR VOWEL SPACE (N.203 lane 60, Step 5; plan r4 section 4.5). The sheet is the whole summary: the note on readings outside Ilya's values, then the chart, the one table with the roster's marks in it, the legend, the sources, and Print (`VowelSpaceSheet.svelte`). Finish is filled and leads; the way back to the ten vowels and Start over are quiet (Dann 2026-09-10, "Filled Finish ... in that order"). Finish writes nothing: every reading was saved when it was captured, so a singer who only looked must not re-date them. -->

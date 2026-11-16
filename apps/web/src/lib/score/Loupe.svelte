@@ -59,11 +59,11 @@ import LoupeHeader from '$lib/score/LoupeHeader.svelte';
 		openAfterPageMeter,
 		nearestTarget,
 		hitsFor,
-		parseSystemRange,
 		systemIndexOf,
 		type InkSpan,
 		type SystemRange,
 	} from '$lib/score/loupe';
+	import { pageSystemRanges } from '$lib/score/page-systems';
 
 	interface Props {
 		/** Whether the loupe is up. The dock rises and falls with it. */
@@ -1051,11 +1051,7 @@ import LoupeHeader from '$lib/score/LoupeHeader.svelte';
 		const cropHeight = crop.height;
 		const contentHeight = cropHeight * scale;
 
-		const ranges: SystemRange[] = [];
-		for (const el of container.querySelectorAll('[data-system]')) {
-			const r = parseSystemRange(el.getAttribute('data-system'));
-			if (r) ranges.push(r);
-		}
+		const ranges: SystemRange[] = pageSystemRanges([...container.querySelectorAll('[data-system], [data-verse-system]')].map((el) => el.getAttribute('data-system')));
 
 		/* PARSED FROM THE RENDER'S OWN STRING, detached: it is markup to draw and
 		   nothing here measures it. A `<template>` parses SVG in its own
