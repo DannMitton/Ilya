@@ -48,7 +48,7 @@
 	import SummarySheet from '$lib/voice/chart/SummarySheet.svelte';
 	import VowelCapture from '$lib/voice/VowelCapture.svelte';
 	import { addTake, type TakeRecord } from '$lib/voice/takes';
-	import { openChallenging, openRetake, openTour, type Opening } from '$lib/voice/chart/opening';
+	import { openRetake, openTour, type Opening } from '$lib/voice/chart/opening';
 	import { t, type Language } from '$lib/i18n';
 	import Italics from '$lib/components/Italics.svelte';
 	import ProfileSwitcher from '$lib/voice/ProfileSwitcher.svelte';
@@ -67,8 +67,7 @@
 	import type { CaptureError } from '$lib/voice/engine/errors';
 	import { loadNotationFont, type LoadedNotationFont } from '$lib/score/notation-fonts';
 	import { pitchToMidi, type IntakeAnswers, type Pitch } from '@ilya/score-parser';
-	import { deriveFrom } from '$lib/voice/engine/derivations';
-	import { applyIghDivergence } from '$lib/voice/engine/divergence';
+		import { applyIghDivergence } from '$lib/voice/engine/divergence';
 	import { anchorF1sFor, checkPlausibility, buildPlausibilityEvent, keepReading } from '$lib/voice/engine/plausibility';
 	import {
 		loadStore,
@@ -331,17 +330,10 @@
 		});
 	});
 
-	let challengingOffered = $state(false);
-	let finished = $state(false);
-	let capturedCount = $derived(Object.values(profile).filter((f) => !!f).length);
 	let outside = $derived(outsideVowels(profile, ALL_VOWELS)); // The summary's one note (`outside.ts`).
 	// The voice type is asked before the first vowel only if the voice had none on arrival (Dann, 2026-09-30 12:44).
 	let askTypeFirst = $state(false);
 	$effect(() => { if (phase === 'welcome' && store.activeId) askTypeFirst = !untrack(() => voiceType); });
-	// The invitation to sing the remaining three waits for a complete default set
-	// (Dann, 2026-07-10): it must not appear when the summary is reached
-	// early by any path (a single-vowel re-take pass).
-	let defaultsComplete = $derived(DEFAULT_VOWELS.every((g) => !!profile[g]));
 
 	// ── Q3 WIZARD COLLAPSE, GONE (N.114b item 8) ─────────────────────────────
 	// Two effects, `seenScoreRenders`, `pendingCollapse` and the compact label
@@ -421,10 +413,6 @@
 		if (v) { assignToVoice(v, patch); persistStore(); }
 	}
 
-	let hasCharacteristics = $derived.by(() => {
-		const c = activeVoice?.characteristics;
-		return !!c && CHARACTERISTIC_FIELDS.some((f) => !!c[f]);
-	});
 	// Gentle consistency notes (amber, never a block): an inverted pair is
 	// almost certainly a typo, but the phase is not a gate and analysis
 	// copes, so the note only names what it sees. Enharmonic-aware through
@@ -465,8 +453,6 @@
 		clearAllTimers();
 		confirmingReset = false;
 		toastVisible = false;
-		challengingOffered = false;
-		finished = false;
 		phase = to;
 	}
 
@@ -762,14 +748,9 @@
 		persist();
 	}
 
-	function addChallengingVowels() {
-		challengingOffered = true;
-		opening = openChallenging(profile);
-		phase = 'capture';
-	}
-
-	/** The summary's way back into the tour (N.199 Step 8, B3): the next vowel Ilya's order has not got. */
-	function continueTour() {
+	/** The summary's way back to the ten vowels (sheet line 25): the next vowel Ilya's order has not got, or, with nothing recorded, Welcome. */
+	function backToTen() {
+		if (!hasAnyReadings(profile)) { phase = 'welcome'; return; }
 		opening = openTour(profile);
 		phase = 'capture';
 	}
@@ -782,10 +763,9 @@
 		phase = 'capture';
 	}
 
+	/** Finish closes the takeover and writes nothing: `persist()` would move `calibratedAt`, the date INSIGHTS prints. */
 	function finish() {
-		persist();
 		onComplete?.(profile);
-		finished = true;
 	}
 
 	// ── Start over: clears the active voice's readings, keeps its name ──────
@@ -803,29 +783,9 @@
 				return T('calib.roster.reading.captured');
 			case 'provisional':
 				return T('calib.roster.reading.provisional');
-			case 'estimated':
-				return T('calib.roster.reading.estimated');
 			default:
 				return '';
 		}
-	}
-
-	// ── Working values (Dann, 2026-07-02) ────────────────────────────────────
-	// Each roster row publishes the working fR1/fR2 so the singer sees what
-	// was received. For the challenging vowels, an unsampled row shows the
-	// engine's derived value (reading: Estimated), greyed, computed by the
-	// same derive() the analysis layer uses — display-only, single source of
-	// formulae (Mitton 2020 §5.3.3; the formulae themselves are never shown),
-	// and the stored profile keeps only what was actually sung.
-	//
-	// N.109 made that sentence true. The anchor table and the usability gate
-	// moved to derivations.ts, and the analysis adapter now imports the same
-	// deriveFrom(), so a value greyed here reaches the forecast instead of
-	// being dropped there.
-
-	/** The row's display value: the direct sample, or a derived preview. */
-	function displayFormant(g: Vowel): CalibratedFormant | undefined {
-		return profile[g] ?? deriveFrom(g, profile);
 	}
 
 	// The envelope's mirror (see onActiveProfileChange above): $state.snapshot
@@ -861,145 +821,6 @@
 -->
 {#snippet vowelTag(g: Vowel)}<span class="ipa-tag" aria-hidden="true">[{g}]</span
 	>{spokenName(g, language)}{/snippet}
-
-<!--
-	The resonance roster (Dann's direction, 2026-07-10; see the script-side
-	comment for full provenance). One table on both surfaces: the guided
-	flow renders it read-only under the quadrilateral; the summary renders
-	the same table with a Re-take column. All ten vowels present from the
-	start, greyed until a value lands, so the full schema is always
-	accounted for and the layout never shifts.
--->
-<!-- The invitation to sing the remaining three, single-sourced (Kimi's review
-     polish): the summary renders it in both its finished and unfinished states.
-
-     REWORDED 2026-08-04, Dann's report as a user: "Fit flashed completion before
-     I had the chance to enter velar-i or smallcaps-i. The user should be able to
-     attempt these values if they choose." **The control was already here and
-     already worked.** It failed as an affordance: its label was a sentence about
-     who is permitted rather than a verb saying what would happen, and it is the
-     quietest control in the last position on the page. So the label is now the
-     action and the reasoning moved to a caption beneath it.
-
-     BOTH STRINGS RATIFIED by Dann 2026-09-30 23:42, as built. The shape was
-     ruled before the words. What must not change is that the
-     button says what it does, and that nothing here calls a vowel optional. -->
-<!-- A way back into the tour (N.199 Step 8, B3; DESK DEFAULT, Dann's to strike or reword): while fewer than ten are sung, the summary offers to go on with the next vowel in Ilya's order. The word is the existing `calib.common.continue`. -->
-{#snippet continueTourButton()}
-	{#if capturedCount < ALL_VOWELS.length}
-		<button type="button" class="wizard-secondary" onclick={continueTour}>{T('calib.common.continue')}</button>
-	{/if}
-{/snippet}
-
-{#snippet challengingInvite()}
-	{#if !challengingOffered && defaultsComplete}
-		<button type="button" class="wizard-secondary" onclick={addChallengingVowels}>
-			{T('calib.challengingInvite.button')}
-		</button>
-		<p class="wizard-caption">
-			{T('calib.challengingInvite.caption')}
-		</p>
-	{/if}
-{/snippet}
-
-<!-- The Voice characteristics entry (E.5 slice 3, Dann's decision,
-     2026-07-13): one quiet secondary button on the summary, both in its
-     finished and unfinished states — opt-in first time, the edit path
-     afterward. Skippable and never a gate: Finish never routes through
-     the phase. -->
-{#snippet characteristicsButton()}
-	<button type="button" class="wizard-secondary" onclick={() => (phase = 'characteristics')}>
-		{hasCharacteristics ? T('calib.characteristics.editButton') : T('calib.characteristics.addButton')}
-	</button>
-{/snippet}
-
-{#snippet rosterTable(showActions: boolean)}
-	<table class="wizard-roster">
-		<thead>
-			<tr>
-				<th scope="col">{T('calib.common.vowelWord')}</th>
-				<th scope="col"><FrSym n={1} /></th>
-				<th scope="col"><FrSym n={2} /></th>
-				{#if showActions}
-					<th scope="col"><span class="visually-hidden">{T('calib.roster.actionsHeader')}</span></th>
-				{/if}
-			</tr>
-		</thead>
-		<tbody>
-			{#each ALL_VOWELS as g (g)}
-				{@const direct = profile[g]}
-				{@const f = displayFormant(g)}
-				<tr class:is-muted={!direct}>
-					<th scope="row" class="wizard-roster-vowel">
-						{@render vowelTag(g)}
-						{#if showActions && g === 'o' && onOpenLearnNote}
-							<!-- The sung-[o] note glyph (see the onOpenLearnNote doc):
-							     [o] only, summary only, and the ⓘ is the affordance
-							     ceiling. Speakable label, no raw glyph announced. -->
-							<button
-								type="button"
-								class="wizard-info-glyph"
-								aria-label={T('calib.roster.oNoteAria')}
-								onclick={onOpenLearnNote}
-							>ⓘ</button>
-						{/if}
-						{#if f && readingLabel(f.reading)}
-							<span
-								class="wizard-roster-reading"
-								class:is-provisional={f.reading === 'provisional'}
-							>
-								<!-- The derived siglum (Dann, 2026-07-11): ≈ joins the
-								     calibration sigla (✓ captured, ↻ provisional) marking
-								     synthetic values. aria-hidden: the word "Estimated"
-								     already says it for screen readers. -->
-								{#if f.reading === 'estimated'}<span aria-hidden="true">≈&nbsp;</span>{/if}
-								{readingLabel(f.reading)}
-							</span>
-						{/if}
-						{#if f?.plausibilityOverride}<span class="wizard-roster-noisefloor">{T('calib.roster.kept')}</span>{/if}
-						{#if f?.noiseFloor === 'unmeasured'}
-							<!-- Item 1.4b. The word is Dann's ruling of 4 August. It sits
-							     on its own line rather than beside the reading, because it
-							     is orthogonal to it: we can capture a vowel cleanly and
-							     still be unable to measure the room, so "Captured
-							     Unmeasured" on one line would read as a contradiction
-							     rather than as two separate facts. Never amber: this is
-							     not a fault in the singer's sample and must not be
-							     coloured like one. The qualifying clause in the title was
-							     RATIFIED by Dann 2026-09-30 23:42, as built; the word
-							     itself was ruled before. -->
-							<span
-								class="wizard-roster-noisefloor"
-								title={T('calib.roster.noiseFloorTitle')}
-							>{T('calib.roster.noiseFloorLabel')}</span>
-						{/if}
-					</th>
-					<td class="wizard-roster-value">
-						{#if f}{Math.round(f.f1)} {T('calib.common.hz')}{/if}
-					</td>
-					<td class="wizard-roster-value">
-						{#if f}
-							{#if typeof f.f2 === 'number'}
-								{Math.round(f.f2)} {T('calib.common.hz')}
-							{:else}
-								<!-- Corrective-as-invitation (Dann): the missing second
-								     resonance names its next action, not a deficiency. -->
-								<span class="wizard-roster-tryagain">{T('calib.roster.tryAgain')}</span>
-							{/if}
-						{/if}
-					</td>
-					{#if showActions}
-						<td class="wizard-roster-action">
-							{#if direct}
-								<button type="button" onclick={() => retakeFromSummary(g)}>{T('calib.common.retake')}</button>
-							{/if}
-						</td>
-					{/if}
-				</tr>
-			{/each}
-		</tbody>
-	</table>
-{/snippet}
 
 <section class="calibration-wizard" aria-label={T('calib.section.ariaLabel')}>
 	<!-- The dedicated polite live region for roster announcements (Kimi
@@ -1138,61 +959,25 @@
 				<VowelCapture session={captureSession} {language} {voiceType} {profile} startVowel={opening.start} pass={opening.pass}
 					onCaptured={commitReading} onTake={recordTake} onReturn={() => (phase = 'summary')} onClearAll={confirmReset} />
 			</div>
-		{:else if phase === 'summary'}
-			<div class="wizard-phase">
-				<h2 id="wizard-title">{T('calib.summary.title')}</h2>
-				{#if outside.length}<OutsideNote vowels={outside} {voiceType} {language} tag={vowelTag} onkeep={() => keepOutside(outside)} onretake={() => retakeFromSummary(outside[0], ...outside.slice(1))} />{/if}
-				{#if finished}
-					<!-- No dead ends (Dann, 2026-07-10): Finish confirms, but the
-					     roster stays visible and curatable — Re-take still works and
-					     the invitation to sing the remaining three survives. With persistence
-					     (Phase 2b) the confirmation is true across reloads. -->
-					<p class="wizard-lede">
-						{T('calib.summary.savedLede')}
-					</p>
-					{@render rosterTable(true)}
-					<SummarySheet {profile} {voiceType} {language} voiceName={activeVoice?.name} />
-					{@render continueTourButton()}
-					{@render challengingInvite()}
-					{@render characteristicsButton()}
-				{:else}
-					<p class="wizard-lede">
-						{capturedCount} {T('calib.common.of')} {ALL_VOWELS.length} {T('calib.summary.progressLedeSuffix')}
-					</p>
-					{@render rosterTable(true)}
-					<SummarySheet {profile} {voiceType} {language} voiceName={activeVoice?.name} />
-					{@render continueTourButton()}
-					{@render challengingInvite()}
-					<!-- FILLED FINISH LEADS, N.114b item 9, RULED BY DANN 2026-09-10:
-					     "Filled Finish, ghost Add voice characteristics, ghost Start
-					     over, in that order." It stood after the characteristics
-					     button, so the column read ghost then filled then link.
-					     REORDER ONLY: same handler, same string, same recipe. -->
+			{:else if phase === 'summary'}
+				<!-- YOUR VOWEL SPACE (N.203 lane 60, Step 5; plan r4 section 4.5). The sheet is the whole summary: the note on readings outside Ilya's values, then the chart, the one table with the roster's marks in it, the legend, the sources, and Print (`VowelSpaceSheet.svelte`). Finish is filled and leads; the way back to the ten vowels and Start over are quiet (Dann 2026-09-10, "Filled Finish ... in that order"). Finish writes nothing: every reading was saved when it was captured, so a singer who only looked must not re-date them. -->
+				<div class="wizard-phase">
+					{#if outside.length}<OutsideNote vowels={outside} {voiceType} {language} tag={vowelTag} onkeep={() => keepOutside(outside)} onretake={() => retakeFromSummary(outside[0], ...outside.slice(1))} />{/if}
+					<SummarySheet {profile} {voiceType} {language} voiceName={activeVoice?.name} {onOpenLearnNote} />
 					<button type="button" class="wizard-primary" onclick={finish}>{T('calib.summary.finishButton')}</button>
-					{@render characteristicsButton()}
-				{/if}
-				{#if confirmingReset}
-					<div class="wizard-inline-banner">
-						<p>{T('calib.summary.resetConfirm')}</p>
-						<div class="wizard-hold-actions">
-							<button type="button" onclick={confirmReset}>{T('calib.summary.startFreshButton')}</button>
-							<button type="button" onclick={() => (confirmingReset = false)}>
-								{T('calib.summary.keepProfileButton')}
-							</button>
+					<button type="button" class="wizard-secondary" onclick={backToTen}>{T('calib.summary.backToTen')}</button>
+					{#if confirmingReset}
+						<div class="wizard-inline-banner">
+							<p>{T('calib.summary.resetConfirm')}</p>
+							<div class="wizard-hold-actions">
+								<button type="button" onclick={confirmReset}>{T('calib.summary.startFreshButton')}</button>
+								<button type="button" onclick={() => (confirmingReset = false)}>{T('calib.summary.keepProfileButton')}</button>
+							</div>
 						</div>
-					</div>
-				{:else}
-					<!-- A GHOST PILL, N.114b item 9, RULED BY DANN 2026-09-10. It was
-					     an underlined text link (`.wizard-pause`, deleted with the
-					     wheel, N.199 Step 8); on this surface it is the third action
-					     in a column of actions, so it takes the same
-					     `.wizard-secondary` recipe as Add voice characteristics
-					     above it. Same handler, same string. -->
-					<button type="button" class="wizard-secondary" onclick={() => (confirmingReset = true)}>
-						{T('calib.summary.startOverButton')}
-					</button>
-				{/if}
-			</div>
+					{:else if hasAnyReadings(profile)}
+						<button type="button" class="wizard-secondary" onclick={() => (confirmingReset = true)}>{T('calib.summary.startOverButton')}</button>
+					{/if}
+				</div>
 		{:else if phase === 'characteristics'}
 			<!-- E.5 slice 3 (Kimi's Q5 ruling, v39 §A.31): typed-first capture
 			     through note pickers; sung capture, when it arrives, verifies
@@ -1486,141 +1271,6 @@
 		background: var(--sage);
 		/* No CSS transition: the width is driven per frame from one clock, so a
 		   transition would add a second, slower clock that disagrees with it. */
-	}
-
-	/* ── The resonance roster (Dann's direction, 2026-07-10) ─────────────────
-	   All ten vowels always present, so the table never changes size; rows
-	   grey until a value lands. Header carries the voice's signature lavender. */
-	.wizard-roster {
-		width: 100%;
-		border-collapse: collapse;
-		font-family: var(--font-ui, var(--font-sans));
-		font-size: 0.875rem;
-	}
-	.wizard-roster thead th {
-		background: var(--lavender-jewel);
-		color: #ffffff;
-		font-weight: 600;
-		font-size: 0.8125rem;
-		text-align: left;
-		padding: 0.375rem 0.75rem;
-	}
-	.wizard-roster thead th:first-child {
-		border-radius: 0.375rem 0 0 0.375rem;
-	}
-	.wizard-roster thead th:last-child {
-		border-radius: 0 0.375rem 0.375rem 0;
-	}
-	.wizard-roster tbody tr {
-		border-bottom: 1px solid var(--stone-300);
-	}
-	.wizard-roster tbody tr:last-child {
-		border-bottom: none;
-	}
-	/* Unsampled rows rest greyed, so the whole ten-vowel schema is visibly
-	   accounted for; a derived Estimated preview stays greyed too, reading
-	   as quieter than a sung capture (Dann, 2026-07-02). */
-	.wizard-roster tbody tr.is-muted {
-		opacity: 0.5;
-	}
-	.wizard-roster-vowel {
-		text-align: left;
-		font-weight: 600;
-		color: var(--ink-primary);
-		padding: 0.375rem 0.75rem;
-	}
-	/* The reading word beneath the vowel name (Dann's placement call,
-	   2026-07-10), amber for Provisional per the calibration vocabulary. */
-	.wizard-roster-reading {
-		display: block;
-		font-size: 0.6875rem;
-		font-weight: 600;
-		color: var(--ink-tertiary);
-		margin-top: 0.0625rem;
-	}
-	.wizard-roster-reading.is-provisional {
-		color: var(--prep-amber);
-	}
-	/* Item 1.4b. Deliberately the quietest tier available and deliberately NOT
-	   --prep-amber: amber is the project's "something about your sample needs
-	   your attention" colour, and an unmeasurable room is not that. It is a
-	   statement about our instrument. */
-	.wizard-roster-noisefloor {
-		display: block;
-		font-size: 0.6875rem;
-		font-weight: 400;
-		color: var(--ink-tertiary);
-	}
-	/* The numbers: metadata, never coloured (Kimi, 2026-07-10). */
-	.wizard-roster-value {
-		padding: 0.375rem 0.75rem;
-		color: var(--ink-secondary);
-		font-weight: 400;
-		font-variant-numeric: tabular-nums;
-		white-space: nowrap;
-		vertical-align: top;
-	}
-	.wizard-roster-tryagain {
-		color: var(--prep-amber);
-		font-size: 0.8125rem;
-	}
-	.wizard-roster-action {
-		padding: 0.375rem 0.5rem;
-		text-align: right;
-		vertical-align: top;
-	}
-	.wizard-roster-action button {
-		font-family: var(--font-ui, var(--font-sans));
-		font-size: 0.75rem;
-		font-weight: 600;
-		padding: 0.25rem 0.75rem;
-		border-radius: 999px;
-		border: 1px solid var(--stone-300);
-		background: #ffffff;
-		color: var(--ink-secondary);
-		cursor: pointer;
-	}
-	.wizard-roster-action button:hover {
-		border-color: var(--sage);
-		color: var(--sage-ink);
-	}
-	/* The sung-[o] note glyph: quiet and tertiary by ruling — no border,
-	   no fill, no animation. The markup gates it to the summary surface. */
-	.wizard-info-glyph {
-		background: none;
-		border: none;
-		padding: 0 0.25rem;
-		margin-left: 0.125rem;
-		font-family: var(--font-ui, var(--font-sans));
-		font-size: 0.875rem;
-		line-height: 1;
-		color: var(--ink-tertiary);
-		cursor: pointer;
-	}
-	.wizard-info-glyph:hover {
-		color: var(--ink-secondary);
-	}
-	/* Narrow-viewport hardening (Dann's call on Kimi's review, 2026-07-11):
-	   the column form holds at every width; small screens get tighter
-	   padding and wrapping vowel names rather than a different layout. */
-	@media (max-width: 380px) {
-		.wizard-roster {
-			font-size: 0.8125rem;
-		}
-		.wizard-roster thead th,
-		.wizard-roster-vowel,
-		.wizard-roster-value {
-			padding: 0.3125rem 0.375rem;
-		}
-		.wizard-roster-vowel {
-			overflow-wrap: anywhere;
-		}
-		.wizard-roster-action {
-			padding: 0.3125rem 0.25rem;
-		}
-		.wizard-roster-action button {
-			padding: 0.25rem 0.5rem;
-		}
 	}
 
 	/* ── Voice characteristics (E.5 slice 3) ─────────────────────────────

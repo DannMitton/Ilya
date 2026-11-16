@@ -21,7 +21,7 @@
 	import ChartLayers from './ChartLayers.svelte';
 	import { buildChartModel } from './model';
 	import { labelSizeFor } from './geometry';
-	import { readingRows } from './readings';
+	import { summaryRows } from './readings';
 	import { zoneColour } from './colours';
 
 	let {
@@ -30,7 +30,8 @@
 		language,
 		voiceName,
 		forPrint = false,
-		onprint
+		onprint,
+		onLearnNote
 	}: {
 		profile: Partial<Record<Vowel, CalibratedFormant>>;
 		voiceType?: string;
@@ -39,6 +40,8 @@
 		forPrint?: boolean;
 		/** The screen's print control. Absent: no control is drawn. */
 		onprint?: () => void;
+		/** The ⓘ beside [o] that opens LEARN. Absent, or on paper: no ⓘ is drawn. */
+		onLearnNote?: () => void;
 	} = $props();
 
 	/** The chart's own frame, in its viewBox units (the SVG scales to the width it is given). */
@@ -52,7 +55,8 @@
 	let chartWidth = $state(0);
 	const labelSize = $derived(forPrint ? 12 : labelSizeFor(W, chartWidth));
 	const model = $derived(buildChartModel(profile, voiceType));
-	const rows = $derived(readingRows(profile, language));
+	// Ten rows, always: a recorded vowel's reading, or the placeholder the chart draws for one not recorded (N.203 lane 60, Step 5).
+	const rows = $derived(summaryRows(profile, model.placeholders, language));
 	const allTen = $derived(model.allTen);
 	const hz = $derived(t('calib.common.hz', language));
 </script>
@@ -91,6 +95,49 @@
 		</svg>
 	</div>
 
+	{#if rows.length}
+		<table class="readings">
+			<caption>{tv('sheet.readings', language)}</caption>
+			<thead>
+				<tr>
+					<th scope="col" class="col-vowel">{tv('sheet.col.vowel', language)}</th>
+					<th scope="col"><FrSym n={1} /> <span class="col-unit">{tv('sheet.col.fr1', language)}</span></th>
+					<th scope="col"><FrSym n={2} /> <span class="col-unit">{tv('sheet.col.fr2', language)}</span></th>
+				</tr>
+			</thead>
+			<tbody>
+				{#each rows as r (r.vowel)}
+					<tr class:placed={r.kind === 'placed'} data-row={r.vowel}>
+						<th scope="row" class="col-vowel">
+							{#if r.kind === 'sung'}
+								<svg class="row-mark" viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><circle cx="6" cy="6" r="4.5" class="swatch-dot" /></svg>
+							{:else}
+								<svg class="row-mark" viewBox="0 0 12 12" width="12" height="12" role="img" aria-label={t('capture.button.placed', language)}><circle cx="6" cy="6" r="4.25" class="swatch-ghost" /></svg>
+							{/if}
+							<span class="row-sym" aria-hidden="true">{r.vowel}</span>
+							<span class="row-name">{spokenName(r.vowel, language)}</span>
+							{#if onLearnNote && !forPrint && r.vowel === 'o'}
+								<!-- The sung-[o] note glyph (Kimi 2026-07-11): [o] only, quiet and tertiary by ruling; it is the whole affordance. -->
+								<button type="button" class="row-info" aria-label={t('calib.roster.oNoteAria', language)} onclick={onLearnNote}>ⓘ</button>
+							{/if}
+							{#if r.marks.provisional}<span class="row-mark-word is-provisional">{t('calib.roster.reading.provisional', language)}</span>{/if}
+							{#if r.marks.beyond}<span class="row-mark-word">{t('calib.roster.kept', language)}</span>{/if}
+							{#if r.marks.noiseFloorUnmeasured}<span class="row-mark-word" title={t('calib.roster.noiseFloorTitle', language)}>{t('calib.roster.noiseFloorLabel', language)}</span>{/if}
+						</th>
+						<td><span class="num">{r.fR1.hzText} {hz}</span> <span class="note">{r.fR1.text}</span></td>
+						<td>
+							{#if r.fR2}
+								<span class="num">{r.fR2.hzText} {hz}</span> <span class="note">{r.fR2.text}</span>
+							{:else}
+								<span class="tryagain">{t('calib.roster.tryAgain', language)}</span>
+							{/if}
+						</td>
+					</tr>
+				{/each}
+			</tbody>
+		</table>
+	{/if}
+
 	<ul class="legend">
 		<li>
 			<svg viewBox="0 0 24 16" width="24" height="16" aria-hidden="true"><circle cx="12" cy="8" r="6" class="swatch-dot" /></svg>
@@ -113,37 +160,6 @@
 			<span>{tv('sheet.legend.hull', language)}</span>
 		</li>
 	</ul>
-
-	{#if rows.length}
-		<table class="readings">
-			<caption>{tv('sheet.readings', language)}</caption>
-			<thead>
-				<tr>
-					<th scope="col" class="col-vowel">{tv('sheet.col.vowel', language)}</th>
-					<th scope="col"><FrSym n={1} /> <span class="col-unit">{tv('sheet.col.fr1', language)}</span></th>
-					<th scope="col"><FrSym n={2} /> <span class="col-unit">{tv('sheet.col.fr2', language)}</span></th>
-				</tr>
-			</thead>
-			<tbody>
-				{#each rows as r (r.vowel)}
-					<tr>
-						<th scope="row" class="col-vowel">
-							<span class="row-sym" aria-hidden="true">{r.vowel}</span>
-							<span class="row-name">{spokenName(r.vowel, language)}</span>
-						</th>
-						<td><span class="num">{r.fR1.hzText} {hz}</span> <span class="note">{r.fR1.text}</span></td>
-						<td>
-							{#if r.fR2}
-								<span class="num">{r.fR2.hzText} {hz}</span> <span class="note">{r.fR2.text}</span>
-							{:else}
-								<span class="tryagain">{t('calib.roster.tryAgain', language)}</span>
-							{/if}
-						</td>
-					</tr>
-				{/each}
-			</tbody>
-		</table>
-	{/if}
 
 	<p class="provenance"><Italics text={tv('sheet.provenance', language)} /></p>
 
@@ -303,6 +319,75 @@
 	.col-vowel {
 		white-space: nowrap;
 	}
+	/* The mark: filled where recorded, hollow where Ilya's placeholder stands. Its word is the hollow one's accessible name. */
+	.row-mark {
+		display: inline-block;
+		vertical-align: -1px;
+		margin-right: 0.35em;
+	}
+	.readings tr.placed .num,
+	.readings tr.placed .row-sym,
+	.readings tr.placed .row-name,
+	.readings tr.placed .note {
+		color: var(--ink-tertiary);
+		font-weight: 400;
+	}
+	/* The roster's marks sit in the row's own cell, under the vowel's name (Dann's placement of 2026-07-10), so a marked row grows and an unmarked one does not. */
+	.row-mark-word {
+		display: block;
+		margin-left: 1.6em;
+		white-space: normal;
+		font-size: 0.6875rem;
+		font-weight: 600;
+		color: var(--ink-tertiary);
+	}
+	.row-mark-word.is-provisional {
+		color: var(--prep-amber);
+	}
+	/* Narrow screens (390 px, measured): one line a row. The number and its note stay together, the type steps down a size, and the gaps close. */
+	@media (max-width: 430px) {
+		.readings {
+			font-size: 0.8125rem;
+		}
+		.readings td {
+			white-space: nowrap;
+		}
+		.col-vowel {
+			white-space: normal;
+		}
+		.readings th,
+		.readings td {
+			padding-right: 0.3rem;
+		}
+		.note {
+			margin-left: 0.2em;
+		}
+		.row-sym {
+			min-width: 1.1em;
+		}
+		.row-mark {
+			margin-right: 0.2em;
+		}
+	}
+	.row-info {
+		background: none;
+		border: none;
+		padding: 0 0.25rem;
+		font: inherit;
+		font-size: 0.875rem;
+		line-height: 1;
+		color: var(--ink-tertiary);
+		cursor: pointer;
+	}
+	.row-info:hover {
+		color: var(--ink-secondary);
+	}
+	@media (pointer: coarse) {
+		.row-info {
+			min-width: 44px;
+			min-height: 44px;
+		}
+	}
 	.row-sym {
 		display: inline-block;
 		min-width: 1.4em;
@@ -371,6 +456,11 @@
 	.vowel-sheet.for-print .readings td {
 		padding-top: 0.08rem;
 		padding-bottom: 0.08rem;
+	}
+	/* On paper the marks sit on the row's own line, beside the name: the page is wide, and the sheet must stay one page (measured with ten rows and three marks). */
+	.vowel-sheet.for-print .row-mark-word {
+		display: inline-block;
+		margin-left: 0.6em;
 	}
 	.vowel-sheet.for-print .legend {
 		font-size: 0.75rem;

@@ -99,3 +99,39 @@ export function readingListRows(
 	}
 	return rows;
 }
+
+/** The roster's marks, kept in the summary's one table (N.203 lane 60, Step 5; sheet line 26). Each is true only where it applies. */
+export interface RowMarks {
+	/** The reading is Provisional (the plausibility guard or the [ɨ] pass resolved it so). */
+	provisional: boolean;
+	/** The singer kept a reading beyond Ilya's reference values. */
+	beyond: boolean;
+	/** The room's noise floor could not be measured for this reading. */
+	noiseFloorUnmeasured: boolean;
+}
+
+export interface SummaryRow extends ListRow {
+	marks: RowMarks;
+}
+
+/**
+ * The summary's ten rows: `readingListRows`, unchanged (it is the capture screen's list), with the marks of each sung vowel beside it.
+ * A vowel not recorded has a placeholder row and no marks.
+ */
+export function summaryRows(
+	profile: Partial<Record<Vowel, CalibratedFormant>>,
+	placeholders: readonly PlaceholderDot[],
+	language: 'en' | 'fr' = 'en'
+): SummaryRow[] {
+	return readingListRows(profile, placeholders, language).map((row) => {
+		const f = row.kind === 'sung' ? profile[row.vowel] : undefined;
+		return {
+			...row,
+			marks: {
+				provisional: f?.reading === 'provisional',
+				beyond: !!f?.plausibilityOverride,
+				noiseFloorUnmeasured: f?.noiseFloor === 'unmeasured'
+			}
+		};
+	});
+}

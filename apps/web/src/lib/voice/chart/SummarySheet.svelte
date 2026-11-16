@@ -8,7 +8,7 @@
 	import VowelSpaceSheet from './VowelSpaceSheet.svelte';
 	import { printVowelSheet } from './print-sheet';
 
-	let { profile, voiceType, language, voiceName }: { profile: Partial<Record<Vowel, CalibratedFormant>>; voiceType?: string; language: Language; voiceName?: string } = $props();
+	let { profile, voiceType, language, voiceName, onOpenLearnNote }: { profile: Partial<Record<Vowel, CalibratedFormant>>; voiceType?: string; language: Language; voiceName?: string; onOpenLearnNote?: () => void } = $props();
 </script>
 
-<VowelSpaceSheet {profile} {voiceType} {language} {voiceName} onprint={() => printVowelSheet({ profile, voiceType, language, voiceName })} />
+<VowelSpaceSheet {profile} {voiceType} {language} {voiceName} onLearnNote={onOpenLearnNote} onprint={() => printVowelSheet({ profile, voiceType, language, voiceName })} />

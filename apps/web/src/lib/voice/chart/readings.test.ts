@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { CalibratedFormant, Vowel } from '../engine/types';
-import { noteReading, readingListRows, readingRows, signedCents } from './readings';
+import { noteReading, readingListRows, summaryRows, readingRows, signedCents } from './readings';
 import { computeZones } from './zones';
 import { VOWELS } from '../engine/types';
 import { TIER1 } from '../voiceTypes';
@@ -127,5 +127,29 @@ describe('the capture screen’s readings list, as rows (readings brief, Step 1)
 
 	it('has no row for a vowel with neither a sung reading nor a placeholder: nothing is invented', () => {
 		expect(readingListRows({}, [])).toEqual([]);
+	});
+});
+
+describe('the summary’s ten rows, with the roster’s marks (N.203 lane 60, Step 5)', () => {
+	const profile: Partial<Record<Vowel, CalibratedFormant>> = {
+		i: f(296, 1705, { reading: 'provisional' }),
+		e: f(381, 1532, { plausibilityOverride: true }),
+		o: f(489, 826, { noiseFloor: 'unmeasured' }),
+		u: f(346, 804)
+	};
+	const ph = computeZones(profile, 'bass').placeholders;
+	it('leaves readingListRows’ own output as the capture screen had it, and adds only marks', () => {
+		const base = readingListRows(profile, ph);
+		const rows = summaryRows(profile, ph);
+		expect(rows.map(({ marks: _m, ...r }) => r)).toEqual(base);
+	});
+	it('marks a recorded vowel only where a mark applies, and never a placeholder', () => {
+		const rows = summaryRows(profile, ph);
+		const m = (v: Vowel) => rows.find((r) => r.vowel === v)!.marks;
+		expect(m('i')).toEqual({ provisional: true, beyond: false, noiseFloorUnmeasured: false });
+		expect(m('e')).toEqual({ provisional: false, beyond: true, noiseFloorUnmeasured: false });
+		expect(m('o')).toEqual({ provisional: false, beyond: false, noiseFloorUnmeasured: true });
+		expect(m('u')).toEqual({ provisional: false, beyond: false, noiseFloorUnmeasured: false });
+		for (const r of rows.filter((x) => x.kind === 'placed')) expect(r.marks).toEqual({ provisional: false, beyond: false, noiseFloorUnmeasured: false });
 	});
 });

@@ -16,7 +16,7 @@
    tree on 2026-11-02 (consistency batch 2). Paths are under `apps/web/src/`;
    a prefix is listed with the files that use it most and its key count.
 
-   This file holds 1,280 keys.
+   This file holds 1,281 keys.
 
    A key built at run time (`watch.key.letter.${letter}`, `comment.<register>.<part>`)
    has no literal reference, so a search for the whole key can come back empty
@@ -27,7 +27,7 @@
    analysis.       7  lib/analysis/analyze-score-adapter.ts (the broad-analysis note), lib/components/Drawer/bandState.ts (ANALYSIS's closed line)
    app.            2  the page's hidden heading, lib/components/HeaderBar.svelte (`app.subtitle` has no literal consumer)
    binder.        10  lib/library/exchange.ts, lib/components/Drawer/RootPanel.svelte
-   calib.        100  lib/voice/CalibrationWizard.svelte, lib/voice/ProfileSwitcher.svelte, lib/components/Drawer/VoiceAnchor.svelte
+   calib.        101  lib/voice/CalibrationWizard.svelte, lib/voice/ProfileSwitcher.svelte, lib/components/Drawer/VoiceAnchor.svelte
    capture.       32  the calibration screen: lib/voice/VowelCapture.svelte, lib/voice/chart/screen-logic.ts, lib/voice/chart/VowelChart.svelte
    clitic.         3  no literal consumer found (lib/score/clitic-seat.ts does the seating)
    collide.        5  routes/+page.svelte
@@ -1267,15 +1267,21 @@ const strings: Record<string, Record<Language, string>> = {
 	'calib.switcher.cancelButton': { en: 'Cancel', fr: 'Annuler' },
 	'calib.roster.reading.captured': { en: 'Captured', fr: 'Captée' },
 	'calib.roster.reading.provisional': { en: 'Provisional', fr: 'Provisoire' },
+	// UNUSED SINCE N.203 lane 60 Step 5 (the summary became "Your vowel space": the sheet's table says "placeholder" for a value not recorded, D2). Kept and marked in place, with its ratified French, the way this file's other retired strings are.
 	'calib.roster.reading.estimated': { en: 'Estimated', fr: 'Estimée' },
+	// UNUSED SINCE N.203 lane 60 Step 5 (the summary became "Your vowel space": the roster and its Re-take column are gone). Kept and marked in place, with its ratified French, the way this file's other retired strings are.
 	'calib.roster.actionsHeader': { en: 'Actions', fr: 'Actions' },
 	'calib.roster.oNoteAria': { en: 'About the sung [o] vowel (opens the Learn note)', fr: 'À propos de la voyelle [o] chantée (ouvre la note dans Leçons)' },
 	'calib.roster.noiseFloorTitle': { en: 'The room\'s noise floor could not be measured for this sample.', fr: 'Le niveau de bruit de fond de la pièce n\u2019a pas pu être mesuré pour cet échantillon.' },
 	'calib.roster.noiseFloorLabel': { en: 'Noise floor: Unmeasured', fr: 'Bruit de fond\u00a0: non mesuré' },
 	'calib.roster.tryAgain': { en: 'Try again', fr: 'Réessayer' },
+	// UNUSED SINCE N.203 lane 60 Step 5 (the summary became "Your vowel space": the invitation to sing the three left the screen). Kept and marked in place, with its ratified French, the way this file's other retired strings are.
 	'calib.challengingInvite.button': { en: 'Sing the three Ilya derived for you', fr: 'Chanter les trois qu\u2019Ilya a déduites pour vous' },
+	// UNUSED SINCE N.203 lane 60 Step 5 (the summary became "Your vowel space": same). Kept and marked in place, with its ratified French, the way this file's other retired strings are.
 	'calib.challengingInvite.caption': { en: 'None of the ten vowels is optional. These three are the hardest to produce on demand, so Ilya derives them from your own anchors until you choose to sing them.', fr: 'Aucune des dix voyelles n\u2019est facultative. Ces trois-là sont les plus difficiles à produire sur demande, donc Ilya les déduit de vos propres points d\u2019ancrage jusqu\u2019à ce que vous choisissiez de les chanter.' },
+	// UNUSED SINCE N.203 lane 60 Step 5 (the summary became "Your vowel space": the characteristics buttons left the summary, D14). Kept and marked in place, with its ratified French, the way this file's other retired strings are.
 	'calib.characteristics.editButton': { en: 'Edit voice characteristics', fr: 'Modifier les caractéristiques vocales' },
+	// UNUSED SINCE N.203 lane 60 Step 5 (the summary became "Your vowel space": same). Kept and marked in place, with its ratified French, the way this file's other retired strings are.
 	'calib.characteristics.addButton': { en: 'Add voice characteristics', fr: 'Ajouter des caractéristiques vocales' },
 	'calib.welcome.title': { en: 'Finding Your Resonances', fr: 'Trouver vos résonances' },
 	'calib.welcome.lede': { en: 'Ilya will measure your voice to build a resonance profile, which is a map of your voice\'s resonances that will be applied to your repertoire to determine how well it suits your voice. Follow the prompts. This wizard assumes you read IPA. Your device needs a working mic and you should be in a quiet space for the best capture of your resonances.', fr: 'Ilya mesurera votre voix afin de constituer un profil de résonances, c\u2019est-à-dire une carte des résonances de votre voix, qui sera ensuite appliquée à votre répertoire pour en évaluer la correspondance. Suivez les indications. Cet assistant présume que vous lisez l\u2019API. Votre appareil doit disposer d\u2019un microphone fonctionnel, et vous devriez vous trouver dans un endroit calme pour bien capter vos résonances.' },
@@ -1388,9 +1394,14 @@ const strings: Record<string, Record<Language, string>> = {
 	'pacifier.wheelAria': { en: 'Vowel calibration. Tap a vowel to begin, tap again to cancel, long-press to skip.', fr: 'Calibration des voyelles. Touchez une voyelle pour commencer, touchez-la de nouveau pour annuler, appuyez longuement pour l\u2019ignorer.' },
 	// UNUSED SINCE N.199 (Step 8, Dann 2026-11-14 21:03): the vowel wheel is deleted and nothing reads this key. Kept and marked in place, with its ratified French, the way this file's other retired strings are.
 	'pacifier.ready': { en: 'Tap {v} to begin.', fr: 'Touchez {v} pour commencer.' },
+	// UNUSED SINCE N.203 lane 60 Step 5 (the summary became "Your vowel space": no title above the sheet). Kept and marked in place, with its ratified French, the way this file's other retired strings are.
 	'calib.summary.title': { en: 'Profile summary', fr: 'Sommaire du profil' },
+	// UNUSED SINCE N.203 lane 60 Step 5 (the summary became "Your vowel space": the ledes left). Kept and marked in place, with its ratified French, the way this file's other retired strings are.
 	'calib.summary.savedLede': { en: 'Your profile is saved on this device. You can keep refining any reading below.', fr: 'Votre profil est enregistré sur cet appareil. Vous pouvez continuer à affiner n\u2019importe quelle lecture ci-dessous.' },
+	// UNUSED SINCE N.203 lane 60 Step 5 (the summary became "Your vowel space": the ledes left). Kept and marked in place, with its ratified French, the way this file's other retired strings are.
 	'calib.summary.progressLedeSuffix': { en: 'vowels sampled. Review each reading and re-take anything uncertain before you finish.', fr: 'voyelles échantillonnées. Passez en revue chaque lecture et refaites tout ce qui est incertain avant de terminer.' },
+	// Sheet line 25, RATIFIED by Dann 2026-11-16 01:13 and 01:20 (English sheet r2, French sheet r1).
+	'calib.summary.backToTen': { en: 'Back to the ten vowels', fr: 'Retour aux dix voyelles' },
 	'calib.summary.finishButton': { en: 'Finish', fr: 'Terminer' },
 	'calib.summary.resetConfirm': { en: 'This clears every reading saved for this voice. Start fresh?', fr: 'Ceci efface toutes les lectures enregistrées pour cette voix. Recommencer?' },
 	'calib.summary.startFreshButton': { en: 'Start fresh', fr: 'Recommencer' },

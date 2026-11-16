@@ -26,7 +26,9 @@ describe('the sheet', () => {
 		expect(count(h, /data-zone=/g)).toBe(10);
 		expect(count(h, /data-placeholder=/g)).toBe(10);
 		expect(count(h, /data-sung=/g)).toBe(0);
-		expect(h).not.toContain('class="readings"');
+		// N.203 lane 60 Step 5: the table has ten rows even with nothing recorded, each a placeholder with a hollow mark.
+		expect(count(h, /data-row=/g)).toBe(10);
+		expect(count(h, /<tr data-row="[^"]+" class="[^"]*\bplaced"/g)).toBe(10);
 	});
 
 	it('draws a filled dot for each sung vowel and a hollow one for each not, never both for one vowel', () => {
@@ -88,6 +90,35 @@ describe('the sheet', () => {
 
 	it('names the voice when given one', () => {
 		expect(html({ voiceName: 'Dann' })).toContain('Dann');
+	});
+});
+
+describe('the summary’s one table (N.203 lane 60, Step 5)', () => {
+	const marked = (v: Vowel, extra: Partial<CalibratedFormant>) => ({ ...BASS[v], ...extra }) as CalibratedFormant;
+	it('has ten rows: a filled mark for a recorded vowel, a hollow mark named "placeholder" for the rest', () => {
+		const h = html({ profile: pick('i', 'e') });
+		expect(count(h, /data-row=/g)).toBe(10);
+		expect(count(h, /<tr data-row="[^"]+" class="[^"]*\bplaced"/g)).toBe(8);
+		expect(count(h, /aria-label="placeholder"/g)).toBe(8);
+		expect(html({ profile: pick('i'), language: 'fr' })).toContain('aria-label="valeur par défaut"');
+	});
+	it('prints the roster’s marks only where they apply', () => {
+		const none = html({ profile: pick('i', 'o') }).replace(/&#39;|&#x27;/g, "'");
+		for (const k of ['calib.roster.reading.provisional', 'calib.roster.kept', 'calib.roster.noiseFloorLabel'] as const) expect(none).not.toContain(t(k, 'en'));
+		const h = html({ profile: { i: marked('i', { reading: 'provisional' }), e: marked('e', { plausibilityOverride: true }), o: marked('o', { noiseFloor: 'unmeasured' }) } }).replace(/&#39;|&#x27;/g, "'");
+		expect(count(h, /Provisional/g)).toBe(1);
+		expect(h).toContain(t('calib.roster.kept', 'en'));
+		expect(h).toContain(t('calib.roster.noiseFloorLabel', 'en'));
+	});
+	it('draws the ⓘ beside [o] only when handed a handler, and never on paper', () => {
+		expect(html({ profile: pick('o') })).not.toContain('row-info');
+		expect(count(html({ profile: pick('o'), onLearnNote: () => {} }), /class="row-info[ "]/g)).toBe(1);
+		expect(html({ profile: pick('o'), onLearnNote: () => {}, forPrint: true })).not.toContain('row-info');
+	});
+	it('puts the legend after the table', () => {
+		const h = html({ profile: pick('i') });
+		expect(h.search(/class="legend[ "]/)).toBeGreaterThan(h.search(/class="readings[ "]/));
+		expect(h.search(/class="readings[ "]/)).toBeGreaterThan(0);
 	});
 });
 
