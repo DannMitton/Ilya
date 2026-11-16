@@ -462,3 +462,14 @@ describe('ratified grace note and key signature lines (N.187, N.192; ratified by
 		for (const key of ['correct.keyChange', 'correct.keyToNext', 'correct.keyToEnd', 'correct.keyRemove', 'loupe.undo.keyRemoved']) expect(t(key, 'fr')).not.toContain("'");
 	});
 });
+
+describe('ratified strophic verse strings (strophic lane A, 2026-11-12 12:58)', () => {
+	it('the label above a later pass, in both languages', () => {
+		expect(t('markup.verseLabel', 'en').replace('%s', '2')).toBe('Verse 2');
+		expect(t('markup.verseLabel', 'fr').replace('%s', '2')).toBe('Couplet 2');
+	});
+	it('the tag on the bar number, in both languages: the full word, a middle dot between spaces', () => {
+		expect(t('markup.verseTag', 'en').replace('%m', '12').replace('%v', '2')).toBe('12 \u00b7 verse 2');
+		expect(t('markup.verseTag', 'fr').replace('%m', '12').replace('%v', '2')).toBe('12 \u00b7 couplet 2');
+	});
+});

@@ -64,12 +64,12 @@
 	import type { Vowel, CalibratedFormant, VoiceCharacteristics } from '$lib/voice/engine/types';
 	import { buildMarkupLegend } from '$lib/markup/legend';
 	import {
-		paginateScore,
 		analyzeScore,
 		shiftVocalOctave,
 		scoreInPerformanceOrder,
 		chooseClef,
 	} from '@ilya/score-parser';
+	import { paginateMelody } from './melody-pages';
 	import TranspositionRuler from './TranspositionRuler.svelte';
 	import { rulerOpening } from './transposition-ruler';
 	import type { TranspositionRulerState } from './transposition-ruler-state.svelte';
@@ -584,10 +584,10 @@
 	// analyzeScore and the watch list should see the score as it is actually
 	// SUNG: repeats taken, the D.C./D.S. jump family followed, and material after
 	// a Fine (or jumped over) absent, so a note earns an acoustic forecast only
-	// where the singer reaches it. The RENDER keeps the notated `readingScore`
-	// below (repeats and jumps drawn as written); this does not pre-empt the open
-	// strophic-render ruling (D3). When a structure cannot be unfolded, the
-	// projection falls back to as-written and carries the unfolder's own flags.
+	// where the singer reaches it. The RENDER paginates `paginateMelody`'s render
+	// score where a strophic song prints its verses in sung order, and the notated
+	// `readingScore` otherwise (repeats and jumps as written). Where a structure
+	// cannot be unfolded this falls back to as-written and carries the unfolder's flags.
 	const performanceOrder = $derived(readingScore ? scoreInPerformanceOrder(readingScore) : null);
 	const analysisScore = $derived(performanceOrder ? performanceOrder.score : null);
 	// Score-level notices for a later UI to read (§M0.3): the unfolder's flags for
@@ -803,9 +803,6 @@
 	const hasAcousticMarks = $derived(!!analyzed && Object.keys(analyzed.events).length > 0);
 	// The Markup legend (N.10b, N.176): the withheld sigla needs `withheldIpa`, and the stems key
 	// needs a note with a timbre analysis, so it sits here, after both.
-	// Row 78b: the turning-head entries; the hollow one only when a placeholder head is drawn.
-	const hollowHeads = $derived(!!analyzed && Object.values(analyzed.events).some((e) => e.placeholder));
-	let markupLegend = $derived(buildMarkupLegend(language, { withheldSyllables: !!withheldIpa, stems: hasAcousticMarks, turningHeads: hasAcousticMarks, hollowHeads, filledHeads: !adapted.generic }));
 	const showBroadNote = $derived(hasAcousticMarks && isBroadAnalysis(adapted.completeness));
 
 	// ── Item 1.8, the withheld statement (2026-08-05) ─────────────────────
@@ -852,29 +849,23 @@
 
 	const paginated = $derived(
 		readingScore && analyzed
-			? paginateScore(readingScore, analyzed, {
-					...(reading.clef ? { clef: reading.clef } : {}),
+			? paginateMelody({
+					score: readingScore,
+					analyzed,
+					clef: reading.clef,
 					pageWidth: contentWidth,
 					pageHeight: page1WindowHeight,
 					laterPageHeight: dims.height - subsequentTop - contentBottom, // row 79: later pages pack against their own, taller window
-					marginTop: 0,
-					marginBottom: 0,
-					marginLeft: 0,
-					marginRight: 0,
-					lineGap: engraving.lineGap,
-					pxPerWhole: engraving.pxPerWhole,
-					minGap: engraving.minGap,
-					systemGap: engraving.systemGap,
-					leftMargin: engraving.leftMargin,
-					...(ipaPreview ? { ipaPreview } : {}),
-					...(withheldIpa ? { withheldIpa } : {}),
-					...(cyrPreview ? { cyrPreview } : {}),
-					...(sylTypePreview ? { sylTypePreview } : {}),
-					...(melismaPreview ? { melismaPreview } : {}),
-					...(notationFont ? { font: notationFont.prepared, fontFamily: notationFont.family } : {}),
+					engraving,
+					channels: { ipaPreview, withheldIpa, cyrPreview, sylTypePreview, melismaPreview },
+					font: notationFont ? { prepared: notationFont.prepared, family: notationFont.family } : undefined,
+					verses: { profile: adapted.snapshot, notationPrefs, openSyllabification }, language,
 				})
 			: null,
 	);
+	// Row 78b: the turning-head entries; the hollow one only when a placeholder head is drawn.
+	const hollowHeads = $derived(!!analyzed && Object.values((paginated?.analyzed ?? analyzed).events).some((e) => e.placeholder));
+	let markupLegend = $derived(buildMarkupLegend(language, { withheldSyllables: !!(paginated ? paginated.withheld : withheldIpa), stems: hasAcousticMarks, turningHeads: hasAcousticMarks, hollowHeads, filledHeads: !adapted.generic }));
 	const scorePages = $derived(paginated?.pages ?? null);
 
 	// The commentary (octave notice, watch list, withheld statement) follows the score (Dann 2026-07-18)

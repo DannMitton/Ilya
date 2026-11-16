@@ -89,6 +89,12 @@ export async function measureGlyphInkInBrowser(glyphs: readonly string[]): Promi
 	return ctx ? measureGlyphInk(glyphs, ctx) : {};
 }
 
+/* STROPHIC LANE A, D6. A later pass's events are inert: every handle on them carries a `data-verse-` prefix (render-seam.ts),
+   so a lookup by `data-hit` or `data-event-id` sees verse 1 only. The walks below look at EVERY element of a system, so
+   they name the renamed rectangle and the label out as well, as they name the hit rectangle and the bar number out. */
+const isHitRect = (el: Element): boolean => el.hasAttribute('data-hit') || el.hasAttribute('data-verse-hit');
+const isVerseLabel = (el: Element): boolean => el.hasAttribute('data-verse-label');
+
 /* ── THREE READINGS OF A SYSTEM AS DRAWN, shared by the frame and the survey ──
    The frame effect and `pageMetrics` used to walk these each in their own
    copy. N.138 increments 2 and 3 need all three in both places, so they
@@ -103,7 +109,7 @@ export function musicInk(sys: Element): { nodes: Element[]; gate: number; xs: nu
 	const xs: number[] = [];
 	for (let i = gate; i >= 0 && i < nodes.length; i++) {
 		const el = nodes[i];
-		if (el.hasAttribute('data-hit') || el.hasAttribute('data-event-id')) continue;
+		if (isHitRect(el) || el.hasAttribute('data-event-id') || el.hasAttribute('data-verse-event-id') || isVerseLabel(el)) continue;
 		if (el.hasAttribute('data-selection-ring') || el.hasAttribute('data-bar-number')) continue;
 		if (el.closest('[data-analysis]') || el.closest('[data-held-measure]')) continue;
 		/* N.139: the page's meter is stripped from the clone, so it is not the
@@ -133,9 +139,9 @@ export function restOrNoteInk(sys: Element): number[] {
 	const xs: number[] = [];
 	for (const el of sys.querySelectorAll('*')) {
 		if (el.closest('[data-analysis]') || el.closest('[data-held-measure]') || el.closest('[data-meter], [data-key-change]')) continue;
-		if (el.hasAttribute('data-hit') || el.hasAttribute('data-selection-ring') || el.hasAttribute('data-bar-number')) continue;
+		if (isHitRect(el) || isVerseLabel(el) || el.hasAttribute('data-selection-ring') || el.hasAttribute('data-bar-number')) continue;
 		const tacet = el.closest('[data-tacet]');
-		const isNote = !!el.parentElement?.hasAttribute('data-event-id') || el.hasAttribute('data-of-event');
+		const isNote = !!el.parentElement?.hasAttribute('data-event-id') || el.hasAttribute('data-of-event') || !!el.parentElement?.hasAttribute('data-verse-event-id') || el.hasAttribute('data-verse-of-event');
 		const isRest = tacet ? tacet === el : el.tagName === 'text' && !el.closest('[data-event-id]') && isRestGlyph(el.textContent);
 		if (!isNote && !isRest) continue;
 		try {
@@ -226,7 +232,8 @@ export function pageMetrics(container: Element): PageInk | null {
 			if (el.hasAttribute('data-selection-ring')) continue;
 			/* N.126's measure numbers are stripped from the clone too. */
 			if (el.hasAttribute('data-bar-number')) continue;
-			if (el.tagName === 'rect' && el.hasAttribute('data-hit')) continue;
+			if (el.tagName === 'rect' && isHitRect(el)) continue;
+			if (isVerseLabel(el)) continue;
 			let top: number;
 			let bottom: number;
 			if (el.tagName === 'text') {
@@ -252,7 +259,7 @@ export function pageMetrics(container: Element): PageInk | null {
 		   the held measure's own boundary search uses: a barline is the
 		   vertical that spans the staff exactly. */
 		const bars = staffVerticals(sys, staffTop, gap).map((v) => v.x);
-		const heads = [...sys.querySelectorAll('[data-hit]')].map((el) => Number(el.getAttribute('x')));
+		const heads = [...sys.querySelectorAll('[data-hit], [data-verse-hit]')].map((el) => Number(el.getAttribute('x')));
 		const head = heads.length > 0 ? Math.max(0, Math.min(...heads)) : 0;
 		const edges = [head, ...bars.sort((a, b) => a - b), sysWidth];
 		/* N.138 INCREMENT 2 SHORTENS THE HEAD, so this has to stay a LOWER

@@ -16,7 +16,7 @@
    tree on 2026-11-02 (consistency batch 2). Paths are under `apps/web/src/`;
    a prefix is listed with the files that use it most and its key count.
 
-   This file holds 1,270 keys.
+   This file holds 1,272 keys.
 
    A key built at run time (`watch.key.letter.${letter}`, `comment.<register>.<part>`)
    has no literal reference, so a search for the whole key can come back empty
@@ -51,6 +51,7 @@
    legend.         7  the legends: lib/provenance.ts, lib/markup/MarkupPane.svelte, lib/tempo/TempoReceipt.svelte
    loupe.        129  lib/score/CorrectionSurface.svelte, lib/score/Loupe.svelte, lib/score/correction-verbs.svelte.ts, routes/+page.svelte
    lyrics.         3  lib/components/Drawer/IntakeViews.svelte (the receipt line and the tap note of the join of Poem to a scan's Lyrics)
+   markup.         2  lib/markup/melody-pages.ts
    meta.          15  lib/components/Drawer/MetadataFields.svelte, lib/components/Paper/TitleHeader.svelte
    notation.      16  lib/score/CorrectionSurface.svelte, lib/components/Drawer/bandState.ts, routes/+page.svelte
    notePicker.    10  lib/voice/NotePicker.svelte, lib/analysis/watchlist.ts
@@ -1983,6 +1984,9 @@ const strings: Record<string, Record<Language, string>> = {
 	//    "PLACEHOLDER TURNING NOTES ARE HOLLOW").
 	'placeholder.line.many': { en: 'Your {vowels} use placeholder values until you sample them in vocal fry, which you can do anytime through the DRAWER on the left. Findings that rest on a placeholder are drawn dashed.', fr: 'Vos voyelles {vowels} reposent sur des valeurs par défaut jusqu\u2019à ce que vous les échantillonniez en friture vocale, ce que vous pouvez faire à tout moment depuis le TIROIR de gauche. Les constats qui en dépendent sont tracés en pointillé.' },
 	'placeholder.line.one': { en: 'Your {vowels} uses a placeholder value until you sample it in vocal fry, which you can do anytime through the DRAWER on the left. Findings that rest on it are drawn dashed.', fr: 'Votre voyelle {vowels} repose sur une valeur par défaut jusqu\u2019à ce que vous l\u2019échantillonniez en friture vocale, ce que vous pouvez faire à tout moment depuis le TIROIR de gauche. Les constats qui en dépendent sont tracés en pointillé.' },
+	// Strophic lane A, RATIFIED by Dann 2026-11-12 12:58 (`OPEN.md`, "STROPHIC VERSE LABELS, EN AND FR"): the label above a later pass's first bar (%s the verse), and the tag on the bar number at a system start inside a later pass (%m the printed bar, %v the verse). Full word, no abbreviation.
+	'markup.verseLabel': { en: 'Verse %s', fr: 'Couplet %s' },
+	'markup.verseTag': { en: '%m \u00b7 verse %v', fr: '%m \u00b7 couplet %v' },
 	'placeholder.line.markup.many': { en: 'Your {vowels} use placeholder values until you sample them in vocal fry, which you can do anytime through the DRAWER on the left. Findings that rest on a placeholder are drawn hollow or dashed.', fr: 'Vos voyelles {vowels} reposent sur des valeurs par défaut jusqu\u2019à ce que vous les échantillonniez en friture vocale, ce que vous pouvez faire à tout moment depuis le TIROIR de gauche. Les constats qui en dépendent sont tracés évidés ou en pointillé.' },
 	'placeholder.line.markup.one': { en: 'Your {vowels} uses a placeholder value until you sample it in vocal fry, which you can do anytime through the DRAWER on the left. Findings that rest on it are drawn hollow or dashed.', fr: 'Votre voyelle {vowels} repose sur une valeur par défaut jusqu\u2019à ce que vous l\u2019échantillonniez en friture vocale, ce que vous pouvez faire à tout moment depuis le TIROIR de gauche. Les constats qui en dépendent sont tracés évidés ou en pointillé.' },
 	//    A comment, and the vowel figure's caption, saying in their own sentence
