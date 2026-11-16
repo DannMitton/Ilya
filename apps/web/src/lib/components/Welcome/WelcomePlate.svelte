@@ -30,7 +30,7 @@
 	<div class="layer" class:shown={turned >= 1} aria-hidden="true">
 		<svg viewBox="0 0 {BOX} {BOX}"><text class="ipa" x={centre} y="192" text-anchor="middle" font-size="124" fill="var(--ink-secondary)">[ɑ]</text></svg>
 	</div>
-	<!-- 2: the eighth note on a staff, Finale Maestro U+E1D7 (metNote8thUp), its notehead on the middle line -->
+	<!-- 2: the eighth note on a staff, Finale Maestro U+E1D7 (the box `FinaleMaestro.json` keys `note8thUp`), its notehead on the middle line -->
 	<div class="layer" class:shown={turned >= 2} aria-hidden="true">
 		<svg viewBox="0 0 {BOX} {BOX}">
 			{#each lines as y (y)}<line x1={STAFF.x1} y1={y} x2={STAFF.x2} y2={y} stroke="var(--ink-stave)" stroke-width="2.2" />{/each}

@@ -77,9 +77,9 @@ describe('the staff and the note', () => {
 		expect(NOTE_FONT_SIZE / 4).toBe(STAFF.gap);
 	});
 
-	it('holds the pinned bounding box of U+E1D7 (metNote8thUp) to Finale Maestro\'s own metadata, so the constant cannot drift', () => {
+	it('holds the pinned bounding box of U+E1D7 (note8thUp, the key whose box the glyph\'s outline has) to Finale Maestro\'s own metadata, so the constant cannot drift', () => {
 		const meta = JSON.parse(readFileSync(new URL('../../../../static/fonts/finale-maestro/FinaleMaestro.json', import.meta.url), 'utf8'));
-		const box = meta.glyphBBoxes.metNote8thUp;
+		const box = meta.glyphBBoxes.note8thUp;
 		expect(NOTE_BBOX.sw).toEqual(box.bBoxSW);
 		expect(NOTE_BBOX.ne).toEqual(box.bBoxNE);
 	});
