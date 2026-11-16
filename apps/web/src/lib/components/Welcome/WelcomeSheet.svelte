@@ -236,11 +236,8 @@
 		border-radius: 16px;
 		overflow: hidden;
 		outline: none;
-		box-shadow:
-			0 0 0 1px rgba(26, 22, 18, 0.1),
-			0 1px 2px rgba(46, 42, 38, 0.2),
-			0 8px 16px rgba(46, 42, 38, 0.13),
-			0 20px 44px rgba(46, 42, 38, 0.16);
+		/* The app's own float shadow (`app.css`, `--float-shadow`): the ratified design names "the app's float shadow" (OPEN.md, the welcome sheet), the desk's amendment of 2026-11-16, item 3. */
+		box-shadow: var(--float-shadow);
 		transition:
 			opacity var(--leave) ease-out,
 			transform var(--leave) ease-out;
