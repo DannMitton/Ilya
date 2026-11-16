@@ -744,9 +744,10 @@
 
 	/** The summary's way back to the ten vowels (sheet line 25): the next vowel Ilya's order has not got, or, with nothing recorded, Welcome. */
 	function backToTen() {
-		if (!hasAnyReadings(profile)) { phase = 'welcome'; return; }
-		opening = openTour(profile);
-		phase = 'capture';
+		confirmingReset = false; // a Start over left half-answered must not wait for the singer's return
+		const to = landingFor('record', hasAnyReadings(profile)); // the seam's rule, once
+		if (to === 'capture') opening = openTour(profile);
+		phase = to;
 	}
 
 	function retakeFromSummary(vowel: Vowel, ...more: Vowel[]) {

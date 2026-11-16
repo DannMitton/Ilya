@@ -85,6 +85,20 @@ test.describe('the VOICE pane at rest', () => {
 		await expect(sentence(page)).toHaveText('You have recorded 5 of the 10 vowels. Ilya fills the other 5 from what you have recorded so far.');
 	});
 
+	test('Back to the ten vowels clears a pending Start over, so the summary does not come back asking it (review fix 3)', async ({ page }) => {
+		const TEN = { ...NINE, u: R(346, 804) };
+		await open(page, [{ id: 'v', name: 'Dann', voiceType: 'bass', formants: TEN }]);
+		await door(page, /^your vowel space$/i).click();
+		await page.getByRole('button', { name: /^start over$/i }).click();
+		await expect(page.getByText('This clears every reading saved for this voice.')).toBeVisible();
+		await page.getByRole('button', { name: /^back to the ten vowels$/i }).click();
+		await expect(page.locator('.capture')).toBeVisible();
+		await page.getByRole('button', { name: 'See your vowel space' }).click();
+		await expect(page.locator('.vowel-sheet')).toBeVisible();
+		await expect(page.getByText('This clears every reading saved for this voice.')).toHaveCount(0);
+		await expect(page.getByRole('button', { name: /^start over$/i })).toBeVisible();
+	});
+
 	test('a request from rest lands on the asked screen even though the wizard was left stowed on the capture screen; Finish returns to the pane and writes nothing', async ({ page }) => {
 		await open(page, [{ id: 'v', name: 'Dann', voiceType: 'bass', formants: NINE }]);
 		await door(page, /^carry on recording$/i).click();
