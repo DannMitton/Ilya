@@ -62,14 +62,14 @@ The module ratchet (`MODULES` in `ratchets.mjs:78-85`) restricts only files unde
 
 Why not a native `<dialog>`: `docs/memory/ENVIRONMENT.md:910-921` (`app.css` resets `margin: 0`, which breaks a `showModal()` dialog's centring unless `margin: auto` is set) and `:1636-1654` (the `close` event does not fire in the in-app browser pane, so nothing may depend on it). A div-based sheet has neither trap, and it is the shape of the three existing cards. Two differences from the key signature card that the brief requires, so Step 1 adds them: (1) focus is **trapped** (the card has none; Tab can leave it), and (2) **Escape does nothing** (the card's Escape closes it). The page's one native `<dialog>` (`replace-dialog`, `+page.svelte:3768`) is a different feature and is not followed.
 
-Highest z-index in the tree today is 9300 (`grep` over `src`); the install banner is 9000 (`InstallPrompt.svelte:181`). The sheet takes 9400 and 9410 so it stands over both.
+CORRECTED 2026-11-16 (the desk's review): this paragraph said the highest z-index in the tree is 9300. That was the highest among `.svelte` and `.css` files, which is all my `grep` covered. The highest in the tree is `apps/web/src/lib/voice/engine/capture-file.ts:201`, the recorder panel's `z-index:2147483000`, set from a TypeScript string. It is mounted only when `__ILYA_RECORDER__` is true (`stub-switch.ts:29`): on the development server, and in a build only with `PUBLIC_RECORDER=1` outside Vercel production (`vite.config.ts`). So the singers' bundle has no layer above 9300 except this sheet, and a development or recorder build shows the recorder panel over the sheet, which is the tool standing over everything, as it is meant to. Of the app's own layers, the highest was 9300 (the cards); the install banner is 9000 (`InstallPrompt.svelte:181`). The sheet is 9400 (one value: `.scrim` in `WelcomeSheet.svelte`; this paragraph's earlier "9400 and 9410" was wrong).
 
 ### How the browser tests are given the flag
 
 - `apps/web/playwright.config.ts` has no `globalSetup` and no `storageState` (read on this tip: 54 lines, one `use` block with `baseURL` and `trace`, two projects `chromium` at 1440 x 900 and `phone` at 390 x 844, 3x). There are 34 files in `e2e/` and 15 in `e2e-phone/` (`ls`).
 - **Chosen: `use.storageState` in the config's top-level `use`**, pointing at one JSON file that holds `ilya:welcomeSeen` for the origin `http://localhost:5173` (the config's `baseURL`). Both projects spread `devices[...]`, which carries no `storageState`, so both inherit it, and no test file is edited.
 - Why not an init script in `e2e/helpers.ts`: 29 of the 49 test files (`grep -L helpers`) do not import it, so it would reach 20 files and miss 29.
-- **Known edge, to be settled by running it in Step 1:** two tests open their own context with `browser.newContext(...)`: `e2e/insights-page.test.ts:84` (no explicit `baseURL`, so it is relying on the config's defaults and is expected to inherit the storage state) and `e2e/heic-offline.test.ts:45` (its own `127.0.0.1` origin and port from a static server over `build/`, and it skips unless a build exists). If either does not inherit it, that test is touched by one line and the count is reported. The sheet's own tests clear it with `test.use({ storageState: { cookies: [], origins: [] } })`.
+- **Known edge, to be settled by running it in Step 1:** two tests open their own context with `browser.newContext(...)`: `e2e/insights-page.test.ts:84` (no explicit `baseURL`, so it is relying on the config's defaults and is expected to inherit the storage state) and `e2e/heic-offline.test.ts:45` (its own origin, `127.0.0.2:4173` (corrected 2026-11-16 from "`127.0.0.1`"), from a static server over `build/`, and it skips unless a build exists). If either does not inherit it, that test is touched by one line and the count is reported. The sheet's own tests clear it with `test.use({ storageState: { cookies: [], origins: [] } })`.
 
 ### The prototype needs no image file and no new font
 
@@ -189,7 +189,7 @@ The desktop suite is 223 tests in 35 files. A first run was cut off at the 30-mi
 |---|---|
 | desktop, first run (files up to `pages-without-gaps`) | about 111 passed, **2 failed** |
 | desktop, second run (`pages-without-gaps` and every later file, which includes the sheet's 14) | **110 passed, 0 failed** |
-| phone (44 tests, 15 files, which includes the sheet's 3) | **39 passed, 1 skipped, 4 failed** |
+| phone (44 tests, 16 files, which includes the sheet's 3 and its file; corrected 2026-11-16 from "15 files", which was the count before the sheet's file was added) | **39 passed, 1 skipped, 4 failed** |
 
 I assembled the desktop figure from two runs, so the first run's count is derived (the run was killed, so there is no final tally line for it): 223 tests minus the second run's 110 is 113, of which 2 failed.
 
