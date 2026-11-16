@@ -344,3 +344,66 @@ So both fail the same way with and without this lane. I did not establish why ei
 | 8 ratchets | OK | ratchets: OK. |
 
 **The gate 4 baseline for the ship script, if this lane merges alone, is now 5865 passed | 1 skipped (5866)** (supersedes 5863 and 5864 above). Two notes: I removed the gitignored `apps/web/build/` after the heic-offline run, and I checked that `git status` was clean before the gates. The "highest z-index" and "known edge" statements in Parts 0 and 2 are corrected in place, as item 6 says.
+
+## After the desk's amendment of 2026-11-16
+
+Five changes from the desk, each its own commit, test first where a test applies. I did not touch `docs/memory/` or any brief, and the inks are as built.
+
+| # | change | commit | test, red before the change |
+|---|---|---|---|
+| 1 | after Begin, focus goes to a real control | `c6ad6de` | Playwright: `activeElement` was `BODY`; now it is the header's `BUTTON` |
+| 2 | the note stands at the prototype's x = 134 | `3676231` | `welcome-plate.test.ts`: `expected 123.4 to be 134` |
+| 3 | the shadow is `var(--float-shadow)` | `d424278` | `welcome-sheet.test.ts` (new): the `.sheet` rule had four literal layers |
+| 4 | the scrim leaves in 260 ms | `6f96506` | `welcome-sheet.test.ts` and `welcome-motion.test.ts`: `expected 180 to be 260` |
+| 5 | the note is Finale Maestro | `63827a8` | `welcome-plate.test.ts`: the pinned box and the family and file URL |
+
+The pictures were retaken in `ea9e192`.
+
+### 1. Focus after Begin
+
+`WelcomeSheet.svelte` used to remember `document.activeElement` at open, which on a first visit is `<body>`, and give it focus back on close. It now waits one `tick()` (the app is `inert` until the sheet's effects clean up) and focuses the first focusable control of the header in tab order, falling back to the first control in the app. In the app that is the language pill. The new browser test in `e2e/welcome-sheet.test.ts` clicks Begin, waits for the dialog to go, and polls until `document.activeElement` is not `body` or `html`, is inside `header`, is a `BUTTON`, and has the class `lang-pill`. Red first (`isBody: true, tag: "BODY"`), then green.
+
+### 2. The note's place
+
+`noteX()` returns 134, the prototype's `x="134"` (line 84). `welcome-plate.test.ts` now reads the prototype's own text element for the note and asserts both that it says 134 and that `noteX()` equals it, with the baseline at 150. The test that centred the glyph's bounding box is gone. `NOTE_BBOX` stays as the pinned record of the glyph's box. With Maestro (item 5), 134 puts the notehead's centre at 134 + (1.272 / 2) x 25 = 149.9 in the 300-unit box, within a unit of the plate's middle; a test asserts that from `FinaleMaestro.json`'s `noteheadBlack`.
+
+### 3. The shadow
+
+The `.sheet` rule is now `box-shadow: var(--float-shadow);` (`app.css:150`), in place of the four literal layers, which included the prototype's 1 px ring. That ring went with them, because the amendment says to replace the four layers. A new test, `welcome-sheet.test.ts`, reads the component and asserts the declaration and the absence of the literal `rgba(46, 42, 38` layers, and reads `app.css` to assert that the token exists. In the retaken pictures the sheet's edge is softer, as `--float-shadow`'s lighter tail would make it.
+
+### 4. The scrim leaves in 260 ms
+
+`LEAVE_MS` (`welcome-motion.ts:22`) is 260. The prototype has the scrim at 260 ms and the sheet at 180 ms (lines 24 and 27), so I added `SHEET_LEAVE_MS` = 180 and the sheet's CSS reads that; only the scrim moved. The tests: `welcome-motion.test.ts` pins both numbers; `welcome-sheet.test.ts` reads the prototype's two `transition` declarations and asserts that the scrim spends `--leave` and the sheet `--leave-sheet`. `LEAVE_MS`, the longer of the two, is also how long the sheet stays mounted after Begin. Reduced motion still closes at once. I did not time the 260 ms fade in a browser; the browser test confirms that Begin closes the sheet.
+
+### 5. Finale Maestro
+
+**Maestro has the glyph and draws it correctly, so the note is Maestro.** Evidence: `FinaleMaestro.json` has `glyphBBoxes.metNote8thUp` (NE [2.264, 3.04], SW [0, -0.548]); in the browser `document.fonts.check("100px 'Finale Maestro'", '')` returned `true` and the font's status was `loaded`; and I looked at the render at 3x (`/tmp` scratch capture, then the plate's third image in the contact sheet): a correct eighth note, notehead on the middle line, stem up, a clean flag, notehead centred on the plate. I could not inspect the OTF's cmap directly (`fontTools` is not installed here), so the browser check and the picture are the evidence.
+
+- `WelcomePlate.svelte` declares `@font-face { font-family: 'Finale Maestro'; src: url('/fonts/finale-maestro/FinaleMaestro.otf') format('opentype'); }` and its `.smufl` class uses it. The Bravura `@font-face` is gone.
+- Family and URL are exactly `notation-fonts.ts`'s spec for `finale-maestro` (`:39`), so the browser reuses one file. A test imports `NOTATION_FONTS` and `DEFAULT_NOTATION_FONT_ID` and asserts that the component contains that family and that URL and no Bravura declaration or file.
+- `NOTE_BBOX` is now Maestro's box, pinned against `FinaleMaestro.json` by a test, as the Bravura one was against `bravura_metadata.json`. The glyph is still checked against `LENGTH_CELLS` (`score/correction.ts`).
+- One thing I noticed and did not change: in the browser `document.fonts` listed two entries for the family, `Finale Maestro` and `"Finale Maestro"`, both `loaded`. One is the plate's `@font-face` and the other is the app's own `FontFace` registered by the score renderer. They name the same URL, so I expect one download from the browser's cache; I did not check the network log.
+
+### The pictures (retaken in `ea9e192`, each looked at)
+
+- `desktop-en-final.png`: the sheet with the float shadow, a softer edge than before; layout unchanged; Begin whole in the footer. The icon is at rest.
+- `phone-fr-final.png`: unchanged in layout; Commencer whole in the fixed footer.
+- `plate-five-images-and-icon.png` (the name is stale: it now holds **six** images, in order): я, [ɑ], the Maestro note on its staff, the enlarged [ɑ] zone, the vowel space, the icon. **This is the first contact sheet to hold all six.** I made it by setting each layer's reveal state directly, because two earlier timed captures skipped or doubled an image: a screenshot can run longer than the 1,100 ms between turns. So these are the plate's images at rest, not frames of the running sequence.
+
+### Counts
+
+- **Both welcome Playwright suites:** desktop `17 passed (55.2s)` (`e2e/welcome-sheet.test.ts`, which gained the focus test), phone `3 passed (8.1s)` (`e2e-phone/welcome-sheet.test.ts`). I did not re-run the whole suites after this amendment; the earlier whole-suite results stand for the other tests, and the amendment touches only the sheet and the plate.
+- **The eight gates, on the final tree (`ea9e192`, clean, no `build/`):**
+
+| gate | baseline | now |
+|---|---|---|
+| 1 phonology | 462 passed (462) | 462 passed (462) |
+| 2 dictionary | 248 passed (248) | 248 passed (248) |
+| 3 web-check | 0 errors, 12 warnings, 5 files | found 0 errors and 12 warnings in 5 files |
+| 4 web-test | 5817 passed \| 1 skipped (5818) | **5872 passed \| 1 skipped (5873)**, 331 files |
+| 5 score-parser | 842 passed \| 5 skipped (847) | 842 passed \| 5 skipped (847) |
+| 6 blurb | 178 passed (178) | 178 passed (178) |
+| 7 integration | 159 passed (159) | 159 passed (159) |
+| 8 ratchets | OK | ratchets: OK. |
+
+Gate 4 is up 7 over the previous section's 5865 (two tests for the shadow, two for the leave timing, one for `LEAVE_MS` in `welcome-motion.test.ts`, two for Maestro). **The gate 4 baseline for the ship script, if this lane merges alone, is now 5872 passed | 1 skipped (5873)** (supersedes 5865).
