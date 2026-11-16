@@ -104,6 +104,25 @@ test.describe('the new capture screen on the stub', () => {
 			return { x: b.left + b.width / 2, y: b.top + b.height / 2 };
 		});
 
+	test('the microphone is held open for the visit: open when the capture screen mounts, closed after Back, open on return, closed after See your vowel space (N.203 follow-up, fix 3)', async ({ page }) => {
+		test.setTimeout(90_000);
+		const ALL = Object.fromEntries(['i', 'e', 'ɪ', 'ɨ', 'ɛ', 'a', 'ɑ', 'ʌ', 'o', 'u'].map((v, k) => [v, READING(300 + 40 * k, 2200 - 130 * k)]));
+		await open(page, { formants: ALL });
+		const visitOpen = () => page.evaluate(() => (window as unknown as { __ilyaStubSession: { visitOpen: boolean } }).__ilyaStubSession.visitOpen);
+		await page.getByRole('button', { name: /re-calibrate/i }).click();
+		expect(await visitOpen(), 'the summary is not the capture screen').toBe(false);
+		await page.getByRole('button', { name: /^re-take$/i }).first().click();
+		await expect(page.locator('.capture')).toBeVisible();
+		await expect.poll(visitOpen).toBe(true);
+		await page.getByRole('button', { name: /back/i }).first().click();
+		await expect.poll(visitOpen).toBe(false);
+		await page.getByRole('button', { name: /calibrate/i }).first().click();
+		await expect(page.locator('.capture')).toBeVisible();
+		await expect.poll(visitOpen).toBe(true);
+		await page.getByRole('button', { name: 'See your vowel space' }).click();
+		await expect.poll(visitOpen).toBe(false);
+	});
+
 	test('a tap on a zone of the chart focuses that vowel and records nothing (N.203 Step 5)', async ({ page }) => {
 		test.setTimeout(60_000);
 		await open(page);
