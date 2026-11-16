@@ -584,10 +584,10 @@
 	// analyzeScore and the watch list should see the score as it is actually
 	// SUNG: repeats taken, the D.C./D.S. jump family followed, and material after
 	// a Fine (or jumped over) absent, so a note earns an acoustic forecast only
-	// where the singer reaches it. The RENDER keeps the notated `readingScore`
-	// below (repeats and jumps drawn as written); this does not pre-empt the open
-	// strophic-render ruling (D3). When a structure cannot be unfolded, the
-	// projection falls back to as-written and carries the unfolder's own flags.
+	// where the singer reaches it. The RENDER paginates `paginateMelody`'s render
+	// score where a strophic song prints its verses in sung order, and the notated
+	// `readingScore` otherwise (repeats and jumps as written). Where a structure
+	// cannot be unfolded this falls back to as-written and carries the unfolder's flags.
 	const performanceOrder = $derived(readingScore ? scoreInPerformanceOrder(readingScore) : null);
 	const analysisScore = $derived(performanceOrder ? performanceOrder.score : null);
 	// Score-level notices for a later UI to read (§M0.3): the unfolder's flags for

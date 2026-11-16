@@ -19,7 +19,7 @@ import { execFileSync } from 'node:child_process';
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { analyzeScore, MusicXmlScoreParser, type ParsedScore } from '@ilya/score-parser';
+import { analyzeScore, MusicXmlScoreParser, renderScoreOf, type ParsedScore } from '@ilya/score-parser';
 import { paginateMelody } from './melody-pages';
 import { parseXml } from '$lib/score/ingestion/mini-dom';
 import { ENGRAVING_DEFAULTS } from '$lib/score/engraving';
@@ -57,7 +57,7 @@ async function parse(path: string): Promise<ParsedScore> {
 async function hashOf(rel: string): Promise<string> {
 	const parsed = await parse(join(ROOT, rel));
 	const analyzed = analyzeScore(parsed, { fR1: {} }, () => undefined, { generatedAt: '2026-10-11T00:00:00.000Z' });
-	const { pages } = paginateMelody({ score: parsed, analyzed, ...PAGE, laterPageHeight: PAGE.pageHeight, engraving: ENGRAVING_DEFAULTS, channels: {} });
+	const { pages } = paginateMelody({ score: parsed, analyzed, ...PAGE, laterPageHeight: PAGE.pageHeight, engraving: ENGRAVING_DEFAULTS, channels: {}, verses: { profile: { fR1: {} }, notationPrefs: { reducedVowel: false, geminate: false, shcha: false, palatalNasal: false, reconstitution: false }, openSyllabification: false }, language: 'en' });
 	return createHash('sha256').update(pages.join('\u0000')).digest('hex');
 }
 
@@ -81,5 +81,16 @@ describe('D8: one-verse scores are byte-identical to the base commit', () => {
 
 	it.each(Object.keys(baseline).sort())('%s', async (rel) => {
 		expect(await hashOf(rel)).toBe(baseline[rel]);
+	}, 60_000);
+
+	/* D8: "for every tracked file other than the new fixtures, that function returns its input score by reference". The
+	   hashes above go through `paginateMelody` with the later-verse build present, but only this assertion says that
+	   `renderScoreOf` answered "the notated score" and not a copy that happens to draw the same. No exception is named:
+	   none of the 207 baseline scores has a second Cyrillic verse. */
+	it.each(Object.keys(baseline).sort())('the render score of %s is the parsed score itself', async (rel) => {
+		const parsed = await parse(join(ROOT, rel));
+		const r = renderScoreOf(parsed);
+		expect(r.path).toBe('notated');
+		expect(r.score).toBe(parsed);
 	}, 60_000);
 });

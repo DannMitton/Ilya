@@ -1628,7 +1628,7 @@ export function layoutColumns(
       advance:
         columns.length === 0
           ? 0
-          : (prevEv ? columnAdvance(prevEv, undefined, prevDurWhole, options, prevInk) : 0) + BARLINE_ROOM + (prevInk?.ringReach ?? 0) + room.meterRoom,
+          : (options.breakRunsAt ? owedByTacet : 0) + (prevEv ? columnAdvance(prevEv, undefined, prevDurWhole, options, prevInk) : 0) + BARLINE_ROOM + (prevInk?.ringReach ?? 0) + room.meterRoom, // strophic lane A: with pass boundaries, a tacet run right after another pays the width the first owes (D8: other scores unchanged)
       newMeasure: columns.length > 0,
       ...room,
     });

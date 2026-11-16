@@ -64,17 +64,20 @@ const EM_PER_CHAR = 0.62;
 /** The x of the leftmost ink of the group that is `id`'s own, not counting its hit rectangle. Undefined where there is no such group. */
 function groupLeft(svg: string, id: string): number | undefined {
 	const open = svg.search(new RegExp(`<g data-(?:verse-)?event-id="${id.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}"`));
-	if (open < 0) return undefined;
-	const body = svg.slice(open, svg.indexOf('</g>', open));
+	// A rest is drawn in an anonymous group (`<g pointer-events="none">`) whose first child is its hit rectangle, so it is found by that.
+	const at = open >= 0 ? open : svg.search(new RegExp(`<rect data-(?:verse-)?hit="${id.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}"`));
+	if (at < 0) return undefined;
+	const body = svg.slice(at, svg.indexOf('</g>', at)).replace(/^<rect data-(?:verse-)?hit="[^>]*>/, '');
 	const xs: number[] = [];
+	for (const m of body.matchAll(/<rect x="([-\d.]+)"/g)) xs.push(Number(m[1]));
 	for (const m of body.matchAll(/<ellipse cx="([-\d.]+)" cy="[-\d.]+" rx="([-\d.]+)"/g)) xs.push(Number(m[1]) - Number(m[2]));
 	for (const m of body.matchAll(/<text [^>]*?\bx="([-\d.]+)"/g)) xs.push(Number(m[1])); // a notehead drawn as a font glyph starts at its x
 	return xs.length > 0 ? Math.min(...xs) : undefined;
 }
 
-/** The x of a tacet group's left end, `local` being the slice-relative bar index it opens. */
-function tacetLeft(svg: string, local: number): number | undefined {
-	const open = svg.search(new RegExp(`<g data-tacet="${local}-`));
+/** The x of a tacet group's left end. The markup names a run by its printed index (`staff-renderer.ts`, `runFrom`). */
+function tacetLeft(svg: string, printed: number): number | undefined {
+	const open = svg.search(new RegExp(`<g data-tacet="${printed}-`));
 	if (open < 0) return undefined;
 	const body = svg.slice(open, svg.indexOf('</g>', open));
 	const xs = [...body.matchAll(/\s(?:x|x1)="([-\d.]+)"/g)].map((m) => Number(m[1]));
@@ -82,7 +85,7 @@ function tacetLeft(svg: string, local: number): number | undefined {
 }
 
 /** D7: the label above each bar of this system that opens a later pass, the system's box grown to hold it. */
-function withLabels(svg: string, slice: readonly RenderBar[], text: SeamText): string {
+function withLabels(svg: string, slice: readonly RenderBar[], from: number, text: SeamText): string {
 	const labelled = slice.map((b, i) => ({ b, i })).filter((x) => x.b.label !== undefined);
 	if (labelled.length === 0) return svg;
 	const vb = /viewBox="0 ([-\d.]+) ([\d.]+) ([\d.]+)"/.exec(svg);
@@ -92,7 +95,7 @@ function withLabels(svg: string, slice: readonly RenderBar[], text: SeamText): s
 	const baseline = round2(minY - 0.35 * fs);
 	const band = round2(1.4 * fs);
 	const marks = labelled.map(({ b, i }) => {
-		const x = (b.first ? groupLeft(svg, b.first) : undefined) ?? tacetLeft(svg, i) ?? 0;
+		const x = (b.first ? groupLeft(svg, b.first) : undefined) ?? tacetLeft(svg, from + i) ?? 0;
 		return `<text data-verse-label="${b.label}" x="${round2(x)}" y="${baseline}" text-anchor="start" font-size="${fs}" font-family="${CYR_FONT_FAMILY}" fill="${BAR_NUMBER.fill}">${esc(text.label(b.label!))}</text>`;
 	});
 	const grown = svg
@@ -122,7 +125,7 @@ export function systemSeam(bars: readonly RenderBar[], text?: SeamText): SystemS
 		let out = renameLaterPassAttributes(svg);
 		if (text) {
 			out = withTag(out, held[0], text);
-			out = withLabels(out, held, text);
+			out = withLabels(out, held, fromMeasure, text);
 		}
 		return { svg: out, attr };
 	};
