@@ -4,11 +4,11 @@
  *
  * THE STATE comes from the chart's own resolution, `resolveVowelValues(profile, voiceType, { placeholders: 'always' })` (`chart/zones.ts`), never from the
  * count of recorded vowels alone (Fable's review, amendment 10):
- *   - `workOut`: no vowel's fR1 or fR2 rests on a stand-in (`surrogate`), and at least one vowel is not recorded. Every vowel left is then one of [ɪ], [ɨ], [a],
+ *   - `work-out`: no vowel's fR1 or fR2 rests on a stand-in (`surrogate`), and at least one vowel is not recorded. Every vowel left is then one of [ɪ], [ɨ], [a],
  *     [ʌ], and each is worked out from recorded anchors (`DERIVE_ANCHORS`, `engine/derivations.ts`, whose `usableAnchor` the resolution applies).
- *   - `useRecorded`: every other state. Its caption says Ilya "fills" the rest, and prints only when something was recorded that the resolution can use
- *     (`anySung`): with nothing usable the fill is the voice type's template alone, and the sentence would not be true.
- * It shows from the first recorded vowel, and not at ten (`null`). The control is the screen's; it adds no control and never moves the focus.
+ *   - `use-recorded`: every other state. Its caption says Ilya "fills" the rest, and prints only when something was recorded that the resolution can use
+ *     (`anyUsable`): with nothing usable the fill is the voice type's template alone, and the sentence would not be true.
+ * It shows from the first recorded vowel to the ninth (the screen decides that). The control is the screen's; it adds no control and never moves the focus.
  *
  * THE WORDS are the ratified counted forms and consent captions (sheet-english r2 and sheet-french r1, "Counted forms and consent captions", Dann 2026-11-16
  * 01:35): numbers in words from two to nine, "the last one" for one, and the vowels listed in brackets in `VOWELS` order with an Oxford comma in English and
@@ -18,24 +18,23 @@ import { t, tv, type Language } from '$lib/i18n';
 import { VOWELS, type CalibratedFormant, type Vowel } from '../engine/types';
 import { resolveVowelValues } from '../engine/resolve-values';
 
-export type FinishEarly =
-	| { kind: 'workOut'; /** How many vowels are left. */ m: number; /** They are, in `VOWELS` order. */ vowels: readonly Vowel[] }
-	| { kind: 'useRecorded'; m: number; anySung: boolean };
+export interface FinishEarly {
+	kind: 'work-out' | 'use-recorded';
+	/** The vowels not recorded, in `VOWELS` order. */
+	remaining: Vowel[];
+	/** Whether anything recorded is usable: the resolver's `anySung`. */
+	anyUsable: boolean;
+}
 
 /**
- * @param recorded the vowels the screen counts as recorded (`VowelCapture.svelte`'s `sungSet`: a stored reading that is not an estimate, with a positive fR1).
+ * Pure. "Recorded" is the screen's own test: a stored reading that is not an estimate, with a positive fR1. The screen shows the control only from one to nine
+ * recorded; this function answers for any profile (with none recorded, `remaining` is all ten and the kind is `use-recorded`).
  */
-export function finishEarlyState(
-	profile: Partial<Record<Vowel, CalibratedFormant>>,
-	voiceType: string | undefined,
-	recorded: ReadonlySet<Vowel>
-): FinishEarly | null {
-	if (recorded.size === 0 || recorded.size >= VOWELS.length) return null;
+export function finishEarlyState(profile: Partial<Record<Vowel, CalibratedFormant>>, voiceType: string | undefined): FinishEarly {
+	const remaining = VOWELS.filter((v) => !(profile[v] && profile[v]!.reading !== 'estimated' && profile[v]!.f1 > 0));
 	const r = resolveVowelValues(profile, voiceType, { placeholders: 'always' });
 	const standIn = VOWELS.some((v) => r.fR1Source[v] === 'surrogate' || r.fR2Source[v] === 'surrogate');
-	const left = VOWELS.filter((v) => !recorded.has(v));
-	if (!standIn && left.length > 0) return { kind: 'workOut', m: left.length, vowels: left };
-	return { kind: 'useRecorded', m: left.length, anySung: r.anySung };
+	return { kind: !standIn && remaining.length > 0 ? 'work-out' : 'use-recorded', remaining, anyUsable: r.anySung };
 }
 
 /** The number in a word, two to nine: the counted forms' rule ("words (one to nine)"; one is "the last one"). */
@@ -53,21 +52,22 @@ export function vowelList(vowels: readonly Vowel[], language: Language): string 
 
 /** The control's words: the link, and the caption (null where it is not printed). */
 export function finishEarlyText(state: FinishEarly, language: Language): { link: string; caption: string | null } {
-	if (state.kind === 'workOut') {
-		const last = state.m === 1;
+	const m = state.remaining.length;
+	if (state.kind === 'work-out') {
+		const last = m === 1;
 		return {
-			link: last ? t('capture.finish.workOut.last', language) : tv('capture.finish.workOut.many', language, { m: numberWord(state.m, language) }),
+			link: last ? t('capture.finish.workOut.last', language) : tv('capture.finish.workOut.many', language, { m: numberWord(m, language) }),
 			caption: last
-				? tv('capture.finish.workOut.captionLast', language, { vowel: vowelList(state.vowels, language) })
-				: tv('capture.finish.workOut.caption', language, { m: numberWord(state.m, language), vowels: vowelList(state.vowels, language) })
+				? tv('capture.finish.workOut.captionLast', language, { vowel: vowelList(state.remaining, language) })
+				: tv('capture.finish.workOut.caption', language, { m: numberWord(m, language), vowels: vowelList(state.remaining, language) })
 		};
 	}
 	return {
 		link: t('capture.finish.useRecorded', language),
-		caption: !state.anySung
+		caption: !state.anyUsable
 			? null
-			: state.m === 1
+			: m === 1
 				? t('capture.finish.useRecorded.captionLast', language)
-				: tv('capture.finish.useRecorded.caption', language, { m: numberWord(state.m, language) })
+				: tv('capture.finish.useRecorded.caption', language, { m: numberWord(m, language) })
 	};
 }

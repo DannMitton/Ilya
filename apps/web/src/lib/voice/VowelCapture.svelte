@@ -264,7 +264,7 @@
 	}
 	/** The quiet control at the foot, from the first recorded vowel to the ninth, at rest: what it offers and what it says (`chart/finish-early.ts`). */
 	const finishWords = $derived.by(() => {
-		const state = ritual.phase === 'idle' ? finishEarlyState(profile, voiceType, sungSet) : null;
+		const state = ritual.phase === 'idle' && sungSet.size >= 1 && !finished ? finishEarlyState(profile, voiceType) : null;
 		return state ? finishEarlyText(state, language) : null;
 	});
 	const seeSpaceShown = $derived(ritual.phase === 'idle' && finished);

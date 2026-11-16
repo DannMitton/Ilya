@@ -34,3 +34,7 @@ States: seven recorded (work out the other three), three recorded (use what I've
 ## What I could not establish
 
 - The browser suites for this change: not run yet.
+
+## Desk amendment of 02:3x (applied after Step 8; the order of work did not change)
+
+`voice/chart/finish-early.ts` now exports exactly `finishEarlyState(profile: Partial<Record<Vowel, CalibratedFormant>>, voiceType: string | undefined): { kind: 'work-out' | 'use-recorded'; remaining: Vowel[]; anyUsable: boolean }`, computed from `resolveVowelValues(profile, voiceType, { placeholders: 'always' })` as amendment 10 says: `work-out` when no vowel's fR1 or fR2 is `surrogate` and at least one vowel is not recorded; `remaining` in `VOWELS` order (a vowel is recorded by the screen's test: a stored reading that is not an estimate, with a positive fR1); `anyUsable` is the resolver's `anySung`. It is pure and takes no recorded set, and it returns no null: the screen (`VowelCapture.svelte`) now decides visibility (one to nine recorded, at rest). `finishEarlyText` reads `remaining.length` and `anyUsable`. Unit tests (`chart/finish-early.test.ts`) rewritten for the shape, plus a purity test (same answer twice, profile unchanged) and the none-recorded and all-ten answers. Run: `finish-early.test.ts` and `VowelCapture.test.ts`, 37 passed; `svelte-check` 0 errors, 12 warnings, 5 files. I did not re-run the eight gates or Playwright after this change (the desk's rule is once, at the end of Step 8, which had passed).
