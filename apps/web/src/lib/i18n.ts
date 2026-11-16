@@ -1456,7 +1456,8 @@ const strings: Record<string, Record<Language, string>> = {
 	'profile.provisional.listSepPair': { en: ' and ', fr: ' et ' },
 	'profile.provisional.listSepFinal': { en: ', and ', fr: ' et ' },
 	'profile.provisional.listSepMedial': { en: ', ', fr: ', ' },
-	'profile.emptyState': { en: 'Calibrate your voice to begin.', fr: 'Calibrez votre voix pour commencer.' },
+	// Sheet line 30, RATIFIED by Dann 2026-11-16 (English sheet r2, French sheet r1): MELODY with no voice points to VOICE in the singer's words. Replaces "Calibrate your voice to begin."
+	'profile.emptyState': { en: 'Open VOICE and record your vowels, or choose a voice type to start from generic values.', fr: 'Ouvrez VOIX et captez vos voyelles, ou choisissez un type de voix pour partir de valeurs par défaut.' },
 	// RETIRED FROM MARKUP by row 47 (Dann's ruling of 2026-10-08, 01:11 to 01:20)
 	// and DRAWN BY NOTHING since: both tabs now say it in one quiet line, the five
 	// `octave.*` keys below. The copy was approved by Dann on 2026-07-18 and is

@@ -96,10 +96,10 @@ test.describe('bilingual Markup and Insights', () => {
 		await page.getByRole('tab', { name: 'MELODY' }).click();
 
 		const empty = page.locator('.profile-empty');
-		await expect(empty).toHaveText('Calibrate your voice to begin.');
+		await expect(empty).toHaveText('Open VOICE and record your vowels, or choose a voice type to start from generic values.');
 
 		await page.locator('.lang-pill').click();
-		await expect(empty).toHaveText('Calibrez votre voix pour commencer.');
+		await expect(empty).toHaveText('Ouvrez VOIX et captez vos voyelles, ou choisissez un type de voix pour partir de valeurs par défaut.');
 	});
 
 	test('switching EN/FR updates the Insights pane\'s uncalibrated message', async ({ page }) => {
@@ -194,7 +194,7 @@ test.describe('Markup with no calibration', () => {
 
 		const empty = page.locator('.profile-empty');
 		await expect(empty).toBeVisible();
-		await expect(empty).toHaveText('Calibrate your voice to begin.');
+		await expect(empty).toHaveText('Open VOICE and record your vowels, or choose a voice type to start from generic values.');
 
 		// The calibration invitation is offered, never forced. It lives in
 		// the drawer's own "Voice" station (VoiceAnchor.svelte, wired at

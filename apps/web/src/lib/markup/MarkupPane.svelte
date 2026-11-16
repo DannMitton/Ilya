@@ -19,7 +19,7 @@
 	 * The two interim states (copy Dann's, 2026-07-12, superseding the
 	 * 2026-07-11 trio and folding the Workshop cue and forward pointer
 	 * into two body paragraphs):
-	 * - Pre-calibration: the single line "Calibrate your voice to begin."
+	 * - Pre-calibration: the single line that points to VOICE (`profile.emptyState`, sheet line 30)
 	 * - Post-calibration: (1) "Your repertoire-fit results will appear
 	 *   here once you upload your score." — the upload clause names an
 	 *   unwired action; Claude raised the never-advertise rule once, Dann
