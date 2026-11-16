@@ -38,7 +38,7 @@
 	import SagittalDrawing from './chart/SagittalDrawing.svelte';
 	import { failedTake, readingTake, type TakeRecord, type TakeVisibility } from './takes';
 	import {
-		GLYPH_NUDGE, bracket, buttonLabel, buttonStates, cueText, firstTimeExplanation, hintText, hintsFor, idleCue, mainButton, staysAfterTake, stopLabel
+		GLYPH_NUDGE, bracket, buttonLabel, buttonStates, cueText, firstTimeExplanation, hintText, hintsFor, idleCue, mainButton, staysAfterTake, stopLabel, tapEffect
 	} from './chart/screen-logic';
 
 	let {
@@ -223,8 +223,9 @@
 	}
 	/** A tap focuses a vowel and never records (Dann 2026-11-15 19:23). During a take it does nothing; during the dwell on a new dot it ends the dwell at once (DESK DEFAULT). */
 	function tapVowel(v: Vowel) {
-		if (active) return;
-		if (ritual.phase === 'landing') {
+		const effect = tapEffect(ritual.phase);
+		if (effect === 'ignore') return;
+		if (effect === 'endDwellAndFocus') {
 			ritual.endDwell();
 			pendingSelected = null;
 		}
@@ -338,7 +339,7 @@
 		{#if hiding}
 			<p class="hidden-note">{tv('capture.hidden', language)}</p>
 		{:else}
-			<VowelChart {model} {view} {language} active={running ? subject : null} />
+			<VowelChart {model} {view} {language} active={running ? subject : null} onFocus={tapVowel} />
 		{/if}
 	</div>
 

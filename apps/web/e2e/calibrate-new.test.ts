@@ -97,6 +97,57 @@ test.describe('the new capture screen on the stub', () => {
 		await expect(page.getByLabel('Hide the chart and the readout while I sing')).toBeDisabled();
 	});
 
+	/** Where a zone's centre is on the screen, from the drawn ellipse (the chart may be mid-glide: read it at the instant). */
+	const zoneCentre = (page: Page, v: string) =>
+		page.locator(`[data-zone="${v}"]`).evaluate((e) => {
+			const b = e.getBoundingClientRect();
+			return { x: b.left + b.width / 2, y: b.top + b.height / 2 };
+		});
+
+	test('a tap on a zone of the chart focuses that vowel and records nothing (N.203 Step 5)', async ({ page }) => {
+		test.setTimeout(60_000);
+		await open(page);
+		await toCapture(page);
+		await page.locator('.chart-box').scrollIntoViewIfNeeded();
+		await page.waitForTimeout(1000); // the glide to [i] is over
+		expect(await selected(page)).toBe('i');
+		const ic = await zoneCentre(page, 'i');
+		await page.mouse.click(ic.x, ic.y); // inside [i]'s zone
+		expect(await selected(page)).toBe('i');
+		await btn(page, /^open-e/).click(); // focus [e] by its button; the chart glides there
+		await page.waitForTimeout(1000);
+		const c = await zoneCentre(page, 'e');
+		await page.mouse.click(c.x, c.y);
+		expect(await selected(page)).toBe('e');
+		await expect(count(page)).toHaveText('0 of 10');
+		await expect(page.locator('.main')).toHaveText('Start [e]');
+	});
+
+	test('a tap on the chart during a take changes nothing, and a vertical drag that starts on the chart leaves the focus alone (N.203 Step 5)', async ({ page }) => {
+		test.setTimeout(60_000);
+		await open(page);
+		await toCapture(page);
+		await page.locator('.chart-box').scrollIntoViewIfNeeded();
+		await page.waitForTimeout(1000);
+		const box = (await page.locator('.vowel-chart').boundingBox())!;
+		// A drag: press on the chart, move 80 px up, release. No click, so no focus.
+		await btn(page, /^cardinal-u/).click();
+		await page.waitForTimeout(1000);
+		const at = await zoneCentre(page, 'u');
+		await page.mouse.move(at.x, at.y);
+		await page.mouse.down();
+		await page.mouse.move(at.x, at.y - 80, { steps: 5 });
+		await page.mouse.up();
+		expect(await selected(page)).toBe('u');
+		// During a take a tap on another zone does nothing.
+		await page.locator('.main').click();
+		await page.mouse.click(box.x + 20, box.y + 20);
+		await page.mouse.click(at.x, at.y);
+		expect(await selected(page)).toBe('u');
+		await expect(cue(page)).toHaveText('Breathe.');
+		await page.getByRole('button', { name: /^Stop$/ }).click();
+	});
+
 	test('a tap focuses and never records; Start records; a tap during a take does nothing; Ilya carries on from the singer’s lead; Return to summary shows after one vowel', async ({ page }) => {
 		test.setTimeout(120_000);
 		await open(page);

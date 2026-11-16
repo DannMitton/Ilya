@@ -7,7 +7,7 @@ import { t, tv, type Language } from '$lib/i18n';
 import type { Vowel } from '../engine/types';
 import { VOWELS } from '../engine/types';
 import { spoken, spokenName } from '../vowel-names';
-import type { RitualCue } from '../capture-ritual.svelte';
+import type { RitualCue, RitualPhase } from '../capture-ritual.svelte';
 
 /** The bracketed symbol the eye reads in a sentence. */
 export const bracket = (v: Vowel): string => `[${v}]`;
@@ -77,6 +77,15 @@ export function mainButton(active: boolean, sung: ReadonlySet<Vowel>, selected: 
 	return sung.has(selected)
 		? { kind: 'retake', label: tv('capture.retake', language, v), disabled: false }
 		: { kind: 'start', label: tv('capture.start', language, v), disabled: false };
+}
+
+/**
+ * What a tap on a vowel does, from its button or from the chart (N.203 Step 5): it focuses at rest and never records; during the dwell on a new dot it ends
+ * the dwell and focuses; during a take it does nothing.
+ */
+export function tapEffect(phase: RitualPhase): 'focus' | 'endDwellAndFocus' | 'ignore' {
+	if (phase === 'idle') return 'focus';
+	return phase === 'landing' ? 'endDwellAndFocus' : 'ignore';
 }
 
 /** What the secondary button reads: Stop while a take runs, "Clear all" once Start over is tapped, "Start over" otherwise. */
