@@ -771,7 +771,7 @@
 		phase = 'capture';
 	}
 
-	/** Finish closes the takeover and writes nothing: `persist()` would move `calibratedAt`, the date INSIGHTS prints. */
+	/** Finish, and Done on the characteristics screen (N.203 lane 60 Step 3), close the takeover and write nothing: `persist()` would move `calibratedAt`, the date INSIGHTS prints. */
 	function finish() {
 		onComplete?.(profile);
 	}
@@ -1069,7 +1069,7 @@
 				<div class="charx-group">
 					<InsightsIntake value={activeVoice.intake} {language} onchange={(intake) => setOwn({ intake })} />
 				</div>
-				<button type="button" class="wizard-primary" onclick={() => (phase = 'summary')}>
+				<button type="button" class="wizard-primary" onclick={finish}>
 					{T('calib.characteristics.doneButton')}
 				</button>
 			</div>

@@ -89,4 +89,16 @@ test.describe('the VOICE pane at rest', () => {
 		expect(after.calibratedAt).toBe(before.calibratedAt);
 		expect(after.updatedAt).toBe(before.updatedAt);
 	});
+
+	for (const [label, name] of [['Describe your voice', /^describe your voice$/i], ['What INSIGHTS shares, and how', /^what insights shares, and how$/i]] as const) {
+		test(`"${label}" opens the built Voice characteristics screen with no microphone, and Done returns to the pane at rest`, async ({ page }) => {
+			await open(page, [{ id: 'v', name: 'Dann' }]);
+			await door(page, name).click();
+			await expect(page.getByRole('heading', { name: 'Voice characteristics' })).toBeVisible();
+			await expect(page.locator('.capture')).toHaveCount(0);
+			await page.getByRole('button', { name: /^done$/i }).click();
+			await expect(sentence(page)).toBeVisible();
+			expect((await stored(page)).voices[0].calibratedAt).toBe('2026-11-01T10:00:00.000Z');
+		});
+	}
 });
