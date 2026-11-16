@@ -42,3 +42,30 @@ test('at 390 px each later pass starts mid-system and later passes are inert', a
 	expect(ink.left.filter((n) => n.x < -0.01), 'bar numbers or tags with ink left of the system edge').toEqual([]);
 	expect(ink.left.some((n) => /\u00b7 verse \d/.test(n.text ?? ''))).toBe(true);
 });
+
+test('follow-up 2, fix 4: a clef\'s tap box stops short of the first note of its system, a later-pass note included', async ({ page }) => {
+	test.setTimeout(120_000);
+	await raise(page);
+	const rows = await page.evaluate(() => {
+		const clefs = [...document.querySelectorAll<SVGGElement>('.markup-paper-container .score-page [data-clef]')];
+		const buttons = [...document.querySelectorAll<HTMLElement>('[data-clef-hit]')];
+		return clefs.map((el, i) => {
+			const r = el.getBoundingClientRect();
+			let first = Infinity;
+			for (const h of el.ownerSVGElement?.querySelectorAll<SVGElement>('[data-hit], [data-verse-hit]') ?? []) {
+				const b = h.getBoundingClientRect();
+				if (b.left > r.left + 4 && b.bottom > r.top && b.top < r.bottom) first = Math.min(first, b.left);
+			}
+			const btn = buttons[i];
+			if (!btn) return null;
+			const b = btn.getBoundingClientRect();
+			const clip = Number(/inset\(0px (\d+(?:\.\d+)?)px 0px 0px\)|inset\(0 (\d+(?:\.\d+)?)px 0 0\)/.exec(btn.getAttribute('style') ?? '')?.slice(1).find(Boolean) ?? 0);
+			return { first, left: b.left, right: b.right - clip, later: !!el.ownerSVGElement?.querySelector('[data-verse-hit]') && !el.ownerSVGElement?.querySelector('[data-hit]') };
+		});
+	});
+	expect(rows.some((r) => r && r.later), 'a system of later-pass bars only has a clef').toBe(true);
+	for (const r of rows) {
+		if (!r) continue;
+		expect(r.right, `the box ends before the first note at ${r.first}`).toBeLessThanOrEqual(Math.max(r.first - 2, r.left + 16) + 0.5);
+	}
+});
