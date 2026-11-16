@@ -26,6 +26,7 @@
 	import TakeLine from './TakeLine.svelte';
 	import { TAKE_PART_IDS, TAKE_WEIGHTS } from './take-line';
 	import { createVisit } from './visit';
+	import { resetScrollAncestors } from './scroll-top';
 	import { finishEarlyState, finishEarlyText } from './chart/finish-early';
 	import { spokenName } from './vowel-names';
 	import FrSym from './FrSym.svelte';
@@ -168,9 +169,7 @@
 	onMount(() => {
 		// The takeover keeps the scroll position the summary had: a singer who tapped Continue low on a long summary would open this screen scrolled past its
 		// head. It opens at the top, so the head and the Start row are in view (Step 4's criterion, after a first visit as well as on it).
-		for (let el = root.parentElement; el; el = el.parentElement) {
-			if (['auto', 'scroll'].includes(getComputedStyle(el).overflowY) && el.scrollTop > 0) el.scrollTop = 0;
-		}
+		resetScrollAncestors(root.parentElement);
 		const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
 		reducedMotion = mq.matches;
 		const change = () => (reducedMotion = mq.matches);
