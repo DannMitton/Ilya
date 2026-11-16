@@ -146,13 +146,28 @@ export function paginateMelody(i: MelodyPagesInput): MelodyPages {
 		Object.assign(cyr, v.cyr);
 		for (const id of v.withheld) withheld.add(id);
 	}
+	// A live later-pass bar that carries verse 1's own one-line words (a second ending) draws them from verse 1's channels under the bare id,
+	// so a correction made there (a placed syllable, a spelling, a melisma) reaches the page. The later verse's own channels are dropped for it.
+	const sylType = c.sylTypePreview ? { ...c.sylTypePreview } : undefined;
+	const melisma = c.melismaPreview ? new Set(c.melismaPreview) : undefined;
+	for (const id of render.liveVerse1Ids) {
+		const bare = id.replace(/~v\d+/, '');
+		delete ipa[id];
+		delete cyr[id];
+		withheld.delete(id);
+		if (c.ipaPreview && bare in c.ipaPreview) ipa[id] = c.ipaPreview[bare];
+		if (c.cyrPreview && bare in c.cyrPreview) cyr[id] = c.cyrPreview[bare];
+		if (c.withheldIpa?.has(bare)) withheld.add(id);
+		if (sylType && c.sylTypePreview && bare in c.sylTypePreview) sylType[id] = c.sylTypePreview[bare];
+		if (melisma && c.melismaPreview?.has(bare)) melisma.add(id);
+	}
 	const out = paginateScore(render.score, { ...i.analyzed, events }, {
 		...base,
 		ipaPreview: ipa,
 		cyrPreview: cyr,
 		...(withheld.size > 0 ? { withheldIpa: withheld } : {}),
-		...(c.sylTypePreview ? { sylTypePreview: c.sylTypePreview } : {}),
-		...(c.melismaPreview ? { melismaPreview: c.melismaPreview } : {}),
+		...(sylType ? { sylTypePreview: sylType } : {}),
+		...(melisma ? { melismaPreview: melisma } : {}),
 		breakRunsAt: render.boundaries,
 		seam: systemSeam(render.bars, {
 			label: (place) => t('markup.verseLabel', lang).replace('%s', String(place)),

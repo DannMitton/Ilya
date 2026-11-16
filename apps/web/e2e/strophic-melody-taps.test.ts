@@ -36,4 +36,34 @@ test.describe('taps in a strophic song', () => {
 		await page.locator('.loupe .loupe-body').waitFor();
 		expect(await page.locator('.loupe').innerText()).toMatch(/m\.\s*1\b/);
 	});
+
+	test('a tap on a later-pass grace note names its source grace note', async ({ page }) => {
+		await raise(page, path.resolve(process.cwd(), '../../packages/score-parser/src/fixtures/strophic-repeat-grace.musicxml'));
+		// the grace note of source bar 4's first note: id m4-0-1~g1 on pass 1, m4-0-1~v2~g1 on pass 2
+		const later = page.locator('.score-page [data-verse-hit="m4-0-1~v2~g1"]').first();
+		expect(await later.count(), 'the later pass carries a grace note').toBe(1);
+		await later.scrollIntoViewIfNeeded();
+		await later.click();
+		await page.locator('.loupe .loupe-body').waitFor({ timeout: 10_000 });
+		expect(await page.locator('.loupe').innerText()).toMatch(/m\.\s*5\b/);
+	});
+
+	test('a syllable corrected through the live second ending shows on the page', async ({ page }) => {
+		await raise(page, VOLTA);
+		const words = async () => page.evaluate(() => [...document.querySelectorAll('.score-page text')].map((t) => t.textContent ?? '').filter((t) => /\p{Script=Cyrillic}/u.test(t)));
+		const count = (all: string[], w: string) => all.filter((t) => t === w).length;
+		const before = await words();
+		expect(count(before, 'Вот'), 'the second ending draws its first word once').toBe(1);
+		await page.locator('.score-page [data-hit="m4-0-1"]').first().click();
+		await page.locator('.loupe .loupe-body').waitFor();
+		await page.locator('#loupe-mode-syllables').click();
+		// place another syllable of the score's own words on the held note
+		await page.locator('.loupe-syl-slot', { hasText: /^Всё$/ }).first().click();
+		await page.keyboard.press('Escape');
+		await expect(page.locator('.loupe .loupe-body')).toBeHidden();
+		await page.waitForTimeout(1_500);
+		const after = await words();
+		expect(count(after, 'Вот'), 'the corrected note no longer draws its old word').toBe(0);
+		expect(count(after, 'Всё')).toBe(count(before, 'Всё') + 1);
+	});
 });

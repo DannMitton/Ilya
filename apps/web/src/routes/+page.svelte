@@ -1379,7 +1379,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		const targets = [...sheet.querySelectorAll('[data-hit], [data-verse-hit]')].map((el) => {
 			const r = el.getBoundingClientRect();
 			return {
-				id: (el.getAttribute('data-hit') ?? el.getAttribute('data-verse-hit') ?? '').replace(/~v\d+$/, ''), // a later-pass copy names its source note
+				id: (el.getAttribute('data-hit') ?? el.getAttribute('data-verse-hit') ?? '').replace(/~v\d+/, ''), // a later-pass copy names its source note
 				cx: r.left + r.width / 2,
 				cy: r.top + r.height / 2,
 				...tapBand(r.top, r.height, spaces),
