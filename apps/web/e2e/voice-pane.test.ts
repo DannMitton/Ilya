@@ -158,6 +158,25 @@ test.describe('the VOICE pane at rest', () => {
 			await page.getByRole('button', { name: /^continue$/i }).click();
 			await expect(page.locator('.capture')).toBeVisible();
 		});
+		test('refusal, then Try again, then acceptance: the refusal clears, and the accepted rate is stored (amendment 16 in full)', async ({ page }) => {
+			await open(page, [{ id: 'v', name: 'Dann', voiceType: 'bass' }], 'no-fry');
+			await toFry(page);
+			await page.getByRole('button', { name: /^start$/i }).click();
+			const refusal = page.getByText('Ilya heard the room, but no vocal fry.');
+			await expect(refusal).toBeVisible({ timeout: 30_000 });
+			expect((await stored(page)).voices[0].readiness).toMatchObject({ measured: true, fryRateHz: null, fryRange: 'not-measured' });
+			// The room changes: the stub switch reads its outcome once, so the test sets it on the session between the runs.
+			await page.evaluate(() => { (window as unknown as { __ilyaStubSession: { readiness: string } }).__ilyaStubSession.readiness = 'clear'; });
+			await page.getByRole('button', { name: /^try again$/i }).click();
+			await expect(refusal).toHaveCount(0); // the refusal clears as the run starts
+			await expect(page.getByText('Readiness check complete.')).toBeVisible({ timeout: 30_000 });
+			await expect(page.getByRole('button', { name: /^try again$/i })).toHaveCount(0);
+			const rec = (await stored(page)).voices[0].readiness;
+			expect(rec).toMatchObject({ measured: true, fryRange: 'clear' });
+			expect(rec.fryRateHz, 'the accepted rate is stored').toBe(48);
+			await page.getByRole('button', { name: /^continue$/i }).click();
+			await expect(page.locator('.capture')).toBeVisible();
+		});
 		test('Back during the run ends it and keeps nothing, and the run does not finish behind the singer’s back', async ({ page }) => {
 			await open(page, [{ id: 'v', name: 'Dann', voiceType: 'bass' }]);
 			await toFry(page);
