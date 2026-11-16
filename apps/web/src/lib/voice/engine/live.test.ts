@@ -20,7 +20,11 @@ interface FakeTrack {
 class FakeCtx {
 	static all: FakeCtx[] = [];
 	sampleRate = SYNTH_SR;
-	state: 'running' | 'suspended' | 'closed' = 'running';
+	state: 'running' | 'suspended' | 'closed' = FakeCtx.startSuspended ? 'suspended' : 'running';
+	/** A test sets this to start the next contexts suspended, and `holdResume` to keep their `resume()` pending until `releaseResume()`. */
+	static startSuspended = false;
+	static holdResume = false;
+	static releaseResume: (() => void) | null = null;
 	destination = {};
 	resumes = 0;
 	node: { onaudioprocess: ((ev: unknown) => void) | null; connect(): void; disconnect(): void } | null = null;
@@ -29,6 +33,14 @@ class FakeCtx {
 	}
 	resume() {
 		this.resumes++;
+		if (FakeCtx.holdResume) {
+			return new Promise<void>((done) => {
+				FakeCtx.releaseResume = () => {
+					this.state = 'running';
+					done();
+				};
+			});
+		}
 		this.state = 'running';
 		return Promise.resolve();
 	}
@@ -55,6 +67,9 @@ beforeEach(() => {
 	vi.useFakeTimers();
 	vi.spyOn(console, 'info').mockImplementation(() => {});
 	FakeCtx.all = [];
+	FakeCtx.startSuspended = false;
+	FakeCtx.holdResume = false;
+	FakeCtx.releaseResume = null;
 	tracks = [];
 	getUserMedia = vi.fn(async () => {
 		const t: FakeTrack = { readyState: 'live', label: 'fake', stop() { t.readyState = 'ended'; }, getSettings: () => ({}) };
@@ -229,6 +244,26 @@ describe('one microphone per visit', () => {
 		s.openVisit();
 		expect(ctxNow().state).toBe('running');
 		expect(ctxNow().resumes).toBeGreaterThanOrEqual(1);
+	});
+
+	it('a cancel while resume() is pending leaves no half-built graph: the next take in the visit reaches stable fry', async () => {
+		const s = new LiveCaptureSession();
+		s.openVisit();
+		FakeCtx.startSuspended = true;
+		FakeCtx.holdResume = true;
+		const first = run();
+		s.start('i', 'bass', first.handlers);
+		await vi.advanceTimersByTimeAsync(10); // getUserMedia is in, the context is made, resume() is pending
+		expect(FakeCtx.releaseResume).not.toBeNull();
+		s.cancel();
+		FakeCtx.releaseResume!(); // the superseded acquire returns, with no source connected
+		await vi.advanceTimersByTimeAsync(10);
+		expect(first.errors.map((e) => e.code)).toEqual(['CANCELLED']);
+		FakeCtx.startSuspended = false;
+		FakeCtx.holdResume = false;
+		const second = run();
+		await take(s, second);
+		expect(second.events[0]).toBe('fry');
 	});
 
 	it('openVisit acquires nothing', () => {

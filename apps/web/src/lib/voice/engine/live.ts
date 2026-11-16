@@ -205,6 +205,8 @@ export class LiveCaptureSession implements CaptureSession {
 	private active = false;
 	/** A visit is open (`openVisit()`): the stream and the context outlive a run. */
 	private visit = false;
+	/** The held graph is whole: its source is connected to its tap. Set only once the graph is built; a cancel during `resume()` or `buildTap()` leaves it false. */
+	private graphReady = false;
 	private recording = false;
 	private handlers: CaptureHandlers | null = null;
 	/** Set for a readiness run instead of `handlers`; never both at once. */
@@ -360,9 +362,9 @@ export class LiveCaptureSession implements CaptureSession {
 	 */
 	private async acquire(gen: number): Promise<boolean> {
 		if (this.stream && this.ctx) {
-			// A visit keeps the graph between runs. Reuse it while its track is live and its context is open; otherwise (a call, a headset
-			// pulled, an interruption) let it go and acquire again.
-			if (this.stream.getAudioTracks()[0]?.readyState === 'live' && this.ctx.state !== 'closed') {
+			// A visit keeps the graph between runs. Reuse it while it is whole, its track is live, and its context is open; otherwise (a call, a headset
+			// pulled, an interruption, a run cancelled before the graph was built) let it go and acquire again.
+			if (this.graphReady && this.stream.getAudioTracks()[0]?.readyState === 'live' && this.ctx.state !== 'closed') {
 				try {
 					if (this.ctx.state === 'suspended') await this.ctx.resume();
 				} catch {
@@ -424,10 +426,12 @@ export class LiveCaptureSession implements CaptureSession {
 			this.sinkNode = ctx.createGain();
 			this.sinkNode.gain.value = 0; // capture-only: the mic must never be audible
 			this.sinkNode.connect(ctx.destination);
-			this.tapNode = await this.buildTap(ctx);
+			const tap = await this.buildTap(ctx);
 			if (gen !== this.gen) return false;
-			this.srcNode.connect(this.tapNode);
-			this.tapNode.connect(this.sinkNode);
+			this.tapNode = tap;
+			this.srcNode.connect(tap);
+			tap.connect(this.sinkNode);
+			this.graphReady = true;
 		} catch (e) {
 			this.fail(gen, { code: 'EXTRACTION_FAILED', message: 'Audio capture setup failed.', cause: e }, true);
 			return false;
@@ -783,6 +787,7 @@ export class LiveCaptureSession implements CaptureSession {
 
 	/** Release the graph, the tracks, and the context. */
 	private releaseGraph(): void {
+		this.graphReady = false;
 		if (this.tapNode) {
 			// typeof guard first: on the ScriptProcessor fallback path the
 			// AudioWorkletNode global may not exist, and a bare instanceof
