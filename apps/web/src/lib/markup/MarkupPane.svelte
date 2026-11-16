@@ -1008,7 +1008,6 @@
 						legendItems={markupLegend}
 						{notationFont}
 						onheightchange={handleHeaderHeight}
-						versionAccent="var(--lavender-ink)"
 						markAccent="var(--lavender-ink)"
 						ruleAccent="var(--lavender)"
 						labelInk="var(--lavender-ink)"
@@ -1093,7 +1092,6 @@
 		legendItems={markupLegend}
 		{notationFont}
 		onheightchange={handleHeaderHeight}
-		versionAccent="var(--lavender-ink)"
 		markAccent="var(--lavender-ink)"
 		ruleAccent="var(--lavender)"
 		labelInk="var(--lavender-ink)"
