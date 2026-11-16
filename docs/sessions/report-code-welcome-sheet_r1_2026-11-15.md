@@ -252,3 +252,95 @@ Ruled by Dann 2026-11-15 13:20, sent to this session by the desk while Part 2's 
 | 8 ratchets | OK | ratchets: OK. |
 
 **The new gate 4 baseline for the ship script, if this lane merges alone, is 5864 passed | 1 skipped (5865)** (Part 2 said 5863; it is superseded). The full Playwright suites were run before this amendment; after it I re-ran only the sheet's own browser tests (17 passed), because the amendment changes one string and no other code.
+
+## After the desk's review
+
+From the desk, 2026-11-16, after Fable's as-built review (verdict: merge with fixes). Seven items. I did not change the note's place, the music font, the shadow, the scrim's timing, or the plate's inks.
+
+### 1. The plate on its fourth image
+
+`plate-fourth-image-active-zone.png`: the plate alone, at rest on its fourth image, captured when exactly three layers were turned (checked: `shown layers at capture 3`). I looked at it: a rose ellipse, about 90 by 104 units, centred on the square, with [ɑ] in Lato IPA at its centre, on the paper-light ground. It is the enlarged [ɑ] zone the prototype shows.
+
+### 2. The desktop mid-wipe pictures, retaken; one French phone picture added
+
+- `desktop-en-mid-wipe.png` and `desktop-fr-mid-wipe.png` were caught before the station label's 300 ms colour change. They are retaken after it: the wipe is paused at 50 percent, then the script waits for the lit label and a further 700 ms. The lit label's computed colour was `rgb(98, 63, 132)`, which is `--lavender-ink` (#623F84). I looked at both: **MELODY** (English) and **CHANT** (French) are lavender with their underline, TEXT or TEXTE and INSIGHTS or APERÇUS are grey, and the staff and note are half revealed along the diagonal. The report's earlier statement that they are lit is now true of the files.
+- `phone-fr-final-scrolled-to-end.png` (new): the French phone body scrolled to its end. I looked at it: the maker's line, then the made-in line with the flag, then the full French licence line (« *Ilya* est gratuit et à code ouvert, © 2026 Dann Mitton, … », four lines at 390 px), then **Commencer** whole and full width in the fixed footer.
+
+### 3. The plate's name has its language
+
+`WelcomePlate.svelte:24` now reads `<div class="plate" class:still={!animate} role="img" lang="ru" aria-label={ICON_WORD} ...>`. `welcome-plate.test.ts` gained a test that reads that element and asserts `role="img"`, `lang="ru"`, `aria-label={ICON_WORD}`, and that `ICON_WORD` is `Илья`.
+
+### 4. `e2e/heic-offline.test.ts`: it fails, and not because of the sheet
+
+I built the app (`pnpm --filter @ilya/web build`, exit 0) and ran that one test: `pnpm exec playwright test --project=chromium heic-offline --trace off`.
+
+- Result line: `✘ 1 [chromium] › e2e/heic-offline.test.ts:43:1 › a singer offline who never opened a HEIC can open one (1.1m)`, then `1 failed`.
+- Error: `expect(locator).toBeVisible() failed`, locator `getByText(/Ilya is reading the notes off your page|Reading the page/).first()`, `Expected: visible`, `Timeout: 60000ms`, `Error: element(s) not found`, at `heic-offline.test.ts:78` (line 84 after the edit below).
+- The page snapshot at the failure showed the sheet's dialog up (`dialog "Sung Russian made easier."`) and, in the intake, the message "Could not load dictionary manifest. Please check that dictionary-manifest.json exists in /data/."
+- **To test whether the sheet was the cause I gave that context the flag** (a `storageState` with origin `http://127.0.0.2:4173` holding `ilya:welcomeSeen` = `1`, the smallest change). The dialog was then gone from the snapshot, and **the test failed in exactly the same way**, with the same message about the dictionary manifest. So the sheet is not the cause.
+- **On a clean worktree of `fb9d829e`** (built the same way), the same test fails the same way: same locator, same `element(s) not found`, same "Could not load dictionary manifest" in the snapshot.
+- **I reverted my edit.** The test file is untouched, so **no existing test file was edited by this lane.** I did not establish why the offline page cannot load the dictionary manifest in this sandbox. The test is a sandbox baseline, not a regression.
+- Because the build existed during the full runs below, this test ran and failed there (it is skipped without a build).
+
+### 5. Keyboard scrolling at 1280 x 600: it did not work, and now does
+
+Measured first, with focus where the sheet put it (on the sheet itself): at 1280 x 600 the text region's content is 504 px in a 427 px region, and **none of ArrowDown, Space, PageDown, or End moved it** (scroll position stayed 0). The cause: focus was on `.sheet`, which is not the scroller. Fix, in `WelcomeSheet.svelte`:
+
+- `.body` (the scrolling text) has `tabindex="-1"`, and focus lands on it when the sheet opens, not on the sheet.
+- The `focusin` guard that keeps focus inside the sheet used to pull a stray outside focus back to the sheet itself, which undid the new target (found by logging every `focus()` call and `focusin`); it now returns focus to the same place.
+- Tab goes to the links, then Begin; Shift+Tab reaches the language pill. A link inside the text keeps the arrow keys working, because the scroller is its ancestor.
+
+Browser tests added to `e2e/welcome-sheet.test.ts` at 1280 x 600: the text overflows (so the test proves something); focus is on `.body`; each of ArrowDown, Space, PageDown, and End scrolls from the top; End reaches the end; ArrowUp comes back; Begin stays in the viewport; a link takes focus on the first Tab and ArrowDown still scrolls. The sheet's browser tests now number 16 desktop and 3 phone, all passing.
+
+### 6. Three statements corrected
+
+Each is corrected in place in Parts 0 and 2 and marked "corrected 2026-11-16": (a) the highest z-index is `voice/engine/capture-file.ts:201`, the recorder panel's `z-index:2147483000`, mounted only on the development server or a `PUBLIC_RECORDER=1` build outside Vercel production (my `grep` had covered only `.svelte` and `.css`); of the app's own layers the highest was 9300, and the sheet is 9400 (the "9400 and 9410" was wrong, it is one value); (b) the phone suite is 44 tests in **16** files with the sheet's; (c) `heic-offline`'s origin is `127.0.0.2:4173`, not `127.0.0.1`.
+
+### 7. Both Playwright projects, whole, once, on the final code
+
+Run on commit `763dac14` (the code and pictures; the only commits since are this report's text), `--trace off`, this sandbox's Chromium 1243, with the build present:
+
+- **Desktop (`chromium`): `3 failed`, `222 passed (46.4m)`** (225 tests: the earlier 223 plus the two keyboard tests).
+- **Phone: `4 failed`, `1 skipped`, `39 passed (8.8m)`** (44 tests, as before).
+
+The desktop failures: `calibrate-new.test.ts:392`, `loupe-header.test.ts:47`, and `heic-offline.test.ts:43` (item 4). The four phone failures are the ones named in Part 2: `input-views.test.ts:134`, `phrase-ends.test.ts:26`, `relining.test.ts:70`, `relining.test.ts:95`; none changed.
+
+**`calibrate-new.test.ts:392` (fr at 375 px: Re-take [i] on one line).** On this tip:
+
+```
+Test timeout of 60000ms exceeded.
+Error: locator.click: Test timeout of 60000ms exceeded.
+Call log:
+  - waiting for getByRole('button', { name: /^(re-take|réessayer)$/i }).first()
+> 396 | await page.getByRole('button', { name: /^(re-take|réessayer)$/i }).first().click();
+```
+
+On a clean worktree of `fb9d829e`, the same test: `✘ ... (1.0m)`, with the same text, the same locator, and the same line 396.
+
+**`loupe-header.test.ts:47` (a drag on the desk moves the card).** On this tip:
+
+```
+Error: expect(received).toBe(expected) // Object.is equality
+Expected: -40
+Received: -30
+> 59 | expect(Math.round(moved.x - before.x)).toBe(-40);
+```
+
+On a clean worktree of `fb9d829e`, the same test: `✘ ... (10.8s)`, with `Expected: -40`, `Received: -30`, line 59.
+
+So both fail the same way with and without this lane. I did not establish why either fails in this sandbox. CI is the shared record.
+
+### The eight gates, on the final tree (`1886332`, with the build removed)
+
+| gate | baseline | now |
+|---|---|---|
+| 1 phonology | 462 passed (462) | 462 passed (462) |
+| 2 dictionary | 248 passed (248) | 248 passed (248) |
+| 3 web-check | 0 errors, 12 warnings, 5 files | found 0 errors and 12 warnings in 5 files |
+| 4 web-test | 5817 passed \| 1 skipped (5818) | **5865 passed \| 1 skipped (5866)**, 330 files (+48: Part 1's 46, the amendment's GUIDE test, and the plate-name test) |
+| 5 score-parser | 842 passed \| 5 skipped (847) | 842 passed \| 5 skipped (847) |
+| 6 blurb | 178 passed (178) | 178 passed (178) |
+| 7 integration | 159 passed (159) | 159 passed (159) |
+| 8 ratchets | OK | ratchets: OK. |
+
+**The gate 4 baseline for the ship script, if this lane merges alone, is now 5865 passed | 1 skipped (5866)** (supersedes 5863 and 5864 above). Two notes: I removed the gitignored `apps/web/build/` after the heic-offline run, and I checked that `git status` was clean before the gates. The "highest z-index" and "known edge" statements in Parts 0 and 2 are corrected in place, as item 6 says.
