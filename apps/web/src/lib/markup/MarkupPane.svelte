@@ -313,8 +313,8 @@
 		const pick = onnotepick;
 		if (!pick) return;
 		const handler = (e: MouseEvent) => {
-			const el = (e.target as Element | null)?.closest?.('[data-hit]');
-			const id = el?.getAttribute('data-hit');
+			const el = (e.target as Element | null)?.closest?.('[data-hit], [data-verse-hit]');
+			const id = (el?.getAttribute('data-hit') ?? el?.getAttribute('data-verse-hit'))?.replace(/~v\d+$/, ''); // a tap on a later-pass copy picks its source note
 			if (id) pick(id);
 		};
 		document.addEventListener('click', handler);

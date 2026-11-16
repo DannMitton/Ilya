@@ -97,7 +97,7 @@ describe('MELODY on strophic-repeat.musicxml', () => {
 		const bars = m.render.bars;
 		const expected = m.systems.map((sys) => {
 			const held = bars.slice(sys.fromMeasure, sys.toMeasure + 1);
-			const own = held.filter((b) => !b.later).map((b) => b.source);
+			const own = held.filter((b) => !b.later || b.live).map((b) => b.source);
 			return own.length > 0 ? `data-system="${Math.min(...own)}-${Math.max(...own)}"` : `data-verse-system="${sys.fromMeasure}-${sys.toMeasure}"`;
 		});
 		expect(m.systems.map((s) => s.attr)).toEqual(expected);
