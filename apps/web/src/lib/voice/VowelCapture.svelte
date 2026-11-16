@@ -1,16 +1,18 @@
 <!--
-	THE CAPTURE SCREEN (N.199 Step 4b; brief r5 section 1). One vowel at a time: the symbol in a circle with its spoken name, the
-	chart of the vowel space, the cue line and the readout, the progress of the take, ten buttons in Grayson's order, the hint, Start and
-	Stop, the toggle that hides the chart and the numbers while singing, and the way back to the summary. It is the capture
-	phase for every singer (Step 8, Dann 2026-11-14 21:03); the wheel it replaced is deleted.
+	THE CAPTURE SCREEN (N.199 Step 4b; reordered by N.203 lane 59 Step 4, Dann 2026-11-16 00:32). One vowel at a time, in this order: the head and its
+	count; the vowel's row (the symbol in a circle, its spoken name, the drawing's credit and the two resonances, and the side view); the take line;
+	the cue, alone; the first-time explanation until a take has begun; the ten buttons in Grayson's order; Start and the second button (and, at ten
+	recorded, See your vowel space); the vowel space chart; then the hint, the sentence on the dots, the folded readings, the toggle that hides the chart
+	and the numbers during a take, and the quiet way back to the summary. A tap on a vowel focuses it; Start records it. It is the capture phase
+	for every singer (Step 8, Dann 2026-11-14 21:03); the wheel it replaced is deleted.
 
 	WHAT IT OWNS: the selection, the idle notice, the Clear-all confirmation, the toggle. WHAT IT DOES NOT: the profile, which is the
 	wizard's and arrives as `profile`; a captured reading goes back to the wizard through `onCaptured`, which runs the guard, persists,
 	and returns the profile with the reading in it, so the dot lands from the same stored values the summary reads. The take itself
 	is `capture-ritual.svelte.ts`. Capture shows no verdict: a dot is drawn wherever it falls, the summary asks about it.
 
-	Width: 484 px in the Drawer on desktop, the phone's width on a phone. One component; the chart takes the width it is given. The
-	chart, the cue line, and the buttons sit in one sticky group, so they stay in view together during a take when the takeover scrolls.
+	Width: 484 px in the Drawer on desktop, the phone's width on a phone. One component; the chart takes the width it is given. Everything from the
+	VOICE header down to the Start row is in view without scrolling (measured in the Step 4 report); nothing is sticky now.
 	Words: `i18n.ts`, English and French, ratified by Dann (`OPEN.md` section N.199); never invented here.
 -->
 <script lang="ts">
@@ -195,8 +197,6 @@
 	const hiding = $derived(hideWhileSinging && active);
 	const states = $derived(buttonStates(sungSet));
 	const cue = $derived(running ? cueText(ritual.cue, language) : cueText(notice ?? idleCue(selected, sungSet), language));
-	/** The readings list is open and nothing is running: the stage does not stick, so the list's rows never slide under it (Step 8c.1; DESK DEFAULT, Dann's to strike). A take and its landing stick it again, so the dot is seen. */
-	const stageFlows = $derived(listOpen && ritual.phase === 'idle');
 	const hint = $derived(hintText(hintsFor({ active, confirmingClear, selected, sung: sungSet, voiceType }), language));
 	const main = $derived(mainButton(running, sungSet, selected, language));
 	const showExplain = $derived(!tookAny && sungSet.size === 0);
@@ -270,6 +270,7 @@
 		<p class="count">{tv('capture.count', language, { n: sungSet.size })}</p>
 	</header>
 
+	<!-- The vowel's row: the symbol, its name and credit and the two resonances, and the side view (N.203 Step 4, Dann 2026-11-16 00:32). -->
 	<div class="glyph-row">
 		<div class="glyph-circle" aria-hidden="true">
 			<span class="glyph" style="transform: translate({GLYPH_NUDGE[selected][0]}em, {GLYPH_NUDGE[selected][1]}em)">{selected}</span>
@@ -277,31 +278,6 @@
 		<div class="glyph-words">
 			<p class="vowel-name">{spokenName(selected, language)}</p>
 			<p class="credit">{creditLine(selected, language)}</p>
-		</div>
-		<!-- The side view, in a squircle with a fixed frame: the ten drawings share one box, so the picture changes in place (Dann 2026-11-12, entry 41). -->
-		<div class="squircle" role="img" aria-label={tv('capture.drawingAlt', language, { name: spokenName(selected, language) })}>
-			<div class="squircle-frame"><SagittalDrawing {selected} /></div>
-		</div>
-	</div>
-
-	<div class="stage" class:flows={stageFlows}>
-		<div class="chart-box">
-			{#if hiding}
-				<p class="hidden-note">{tv('capture.hidden', language)}</p>
-			{:else}
-				<VowelChart {model} {view} {language} active={running ? subject : null} />
-			{/if}
-		</div>
-		<TakeLine
-			parts={takeParts}
-			current={ritual.take?.part ?? null}
-			within={ritual.take?.within ?? 0}
-			holding={ritual.take?.holding ?? false}
-			label={tv('capture.bar', language)}
-			{reducedMotion}
-		/>
-		<div class="cue-row">
-			<p class="cue" aria-hidden="true">{cue.eye}</p>
 			{#if showReading && reading && !hiding}
 				<div class="readout" aria-hidden="true">
 					<div class="readout-line"><FrSym n={1} /><span>{Math.round(reading.f1)} {hz}</span></div>
@@ -312,34 +288,57 @@
 				</div>
 			{/if}
 		</div>
-		{#if showExplain}
-			<p class="explain-first">{firstTimeExplanation(selected, language)}</p>
-		{/if}
-
-		<div class="buttons" role="group" aria-label={tv('capture.vowels', language)}>
-			{#each VOWELS as v (v)}
-				{@const isSelected = v === selected}
-				<button
-					type="button"
-					class="vowel-btn"
-					class:sung={states[v] === 'sung'}
-					class:placed={states[v] === 'placed'}
-					class:selected={isSelected}
-					aria-label={buttonLabel(v, states[v], isSelected, language)}
-					aria-pressed={isSelected}
-					onclick={() => tapVowel(v)}
-				>
-					<span class="btn-glyph" style="transform: translate({GLYPH_NUDGE[v][0]}em, {GLYPH_NUDGE[v][1]}em)">{v}</span>
-				</button>
-			{/each}
+		<!-- The side view, in a squircle with a fixed frame: the ten drawings share one box, so the picture changes in place (Dann 2026-11-12, entry 41). -->
+		<div class="squircle" role="img" aria-label={tv('capture.drawingAlt', language, { name: spokenName(selected, language) })}>
+			<div class="squircle-frame"><SagittalDrawing {selected} /></div>
 		</div>
+	</div>
 
-		<div class="actions">
-			<button type="button" class="main" disabled={main.disabled} onclick={pressMain}>{main.label}</button>
-			<button type="button" class="stop" disabled={stopDisabled} onclick={pressStop}>{stopLabel(active, confirmingClear, language)}</button>
-		</div>
-		{#if seeSpaceShown}
-			<button type="button" class="see-space" onclick={onReturn}>{tv('capture.seeSpace', language)}</button>
+	<TakeLine
+		parts={takeParts}
+		current={ritual.take?.part ?? null}
+		within={ritual.take?.within ?? 0}
+		holding={ritual.take?.holding ?? false}
+		label={tv('capture.bar', language)}
+		{reducedMotion}
+	/>
+	<p class="cue" aria-hidden="true">{cue.eye}</p>
+	{#if showExplain}
+		<p class="explain-first">{firstTimeExplanation(selected, language)}</p>
+	{/if}
+
+	<div class="buttons" role="group" aria-label={tv('capture.vowels', language)}>
+		{#each VOWELS as v (v)}
+			{@const isSelected = v === selected}
+			<button
+				type="button"
+				class="vowel-btn"
+				class:sung={states[v] === 'sung'}
+				class:placed={states[v] === 'placed'}
+				class:selected={isSelected}
+				aria-label={buttonLabel(v, states[v], isSelected, language)}
+				aria-pressed={isSelected}
+				onclick={() => tapVowel(v)}
+			>
+				<span class="btn-glyph" style="transform: translate({GLYPH_NUDGE[v][0]}em, {GLYPH_NUDGE[v][1]}em)">{v}</span>
+			</button>
+		{/each}
+	</div>
+
+	<div class="actions">
+		<button type="button" class="main" disabled={main.disabled} onclick={pressMain}>{main.label}</button>
+		<button type="button" class="stop" disabled={stopDisabled} onclick={pressStop}>{stopLabel(active, confirmingClear, language)}</button>
+	</div>
+	{#if seeSpaceShown}
+		<button type="button" class="see-space" onclick={onReturn}>{tv('capture.seeSpace', language)}</button>
+	{/if}
+
+	<!-- The vowel space chart, below the buttons (Dann 2026-11-16 00:32). -->
+	<div class="chart-box">
+		{#if hiding}
+			<p class="hidden-note">{tv('capture.hidden', language)}</p>
+		{:else}
+			<VowelChart {model} {view} {language} active={running ? subject : null} />
 		{/if}
 	</div>
 
@@ -441,14 +440,14 @@
 	.glyph-row {
 		container-type: inline-size;
 		display: flex;
-		gap: 0.9rem;
+		gap: 0.7rem;
 		align-items: center;
-		min-height: 6rem;
+		min-height: 4.5rem;
 	}
 	.glyph-circle {
 		flex: none;
-		width: 6rem;
-		height: 6rem;
+		width: min(6rem, 20cqw);
+		height: min(6rem, 20cqw);
 		box-sizing: border-box;
 		border-radius: 50%;
 		background: var(--lavender-wash);
@@ -457,7 +456,7 @@
 		align-items: center;
 		justify-content: center;
 		font-family: 'Lato IPA', 'Source Sans 3', sans-serif;
-		font-size: 3.25rem;
+		font-size: min(3.25rem, 11cqw);
 		line-height: 1;
 	}
 	.glyph {
@@ -481,7 +480,8 @@
 	.squircle {
 		flex: none;
 		position: relative;
-		width: min(8.25rem, 34cqw);
+		/* The side view takes the width the row allows: about 208 px in the desk Drawer and 154 px on a 390 px phone (plan r4 section 4.4's target 220 and 155). */
+		width: min(13.75rem, 43cqw);
 		aspect-ratio: 1;
 		box-sizing: border-box;
 		border-radius: 24%;
@@ -494,21 +494,6 @@
 		inset: 6%;
 	}
 
-	/* The group that stays in view together during a take when the takeover scrolls: chart, bar, cue, buttons, Start and Stop. */
-	.stage {
-		position: sticky;
-		top: 0;
-		z-index: 2;
-		display: flex;
-		flex-direction: column;
-		gap: 0.55rem;
-		padding: 0.35rem 0 0.5rem;
-		background: var(--drawer-bg, #faf8f5);
-	}
-	/* The readings list is open at rest: the stage scrolls away with the page like anything else (same flow, so nothing moves when it changes). */
-	.stage.flows {
-		position: static;
-	}
 	.chart-box {
 		position: relative;
 		width: 100%;
@@ -536,28 +521,20 @@
 		font-size: 0.9375rem;
 		color: var(--ink-secondary);
 	}
-	/* One height for the row, whatever the cue: the longest cue (the pause line, 13 words in English, longer in French) takes three lines
-	   across the whole row on a phone, so the buttons below never move under the singer's thumb (Step 7). */
-	.cue-row {
-		display: flex;
-		align-items: center;
-		gap: 0.75rem;
-		min-height: 4.75rem;
-	}
+	/* The cue sits alone in its row, two lines tall at the most: a longer notice (a rolled-back take, an error) grows the row by a line. */
 	.cue {
 		margin: 0;
-		flex: 1;
+		min-height: 2.5em;
 		font-family: var(--font-serif);
 		font-size: 1.1875rem;
 		line-height: 1.25;
 	}
 	.readout {
-		flex: none;
-		width: 8rem;
+		margin-top: 0.35rem;
 		display: flex;
 		flex-direction: column;
 		gap: 1px;
-		font-size: 1rem;
+		font-size: 0.9375rem;
 		line-height: 1.3;
 		font-variant-numeric: tabular-nums;
 		font-weight: 600;

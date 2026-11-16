@@ -1,6 +1,6 @@
 /**
  * N.199 Step 4b: the capture screen, rendered on the server. What a singer would see at rest for a few profiles. The taps, the
- * take, Escape, and the sticky group are exercised in the browser in Step 6; nothing here mounts or clicks.
+ * take, and Escape are exercised in the browser in Step 6; nothing here mounts or clicks.
  */
 import { describe, expect, it } from 'vitest';
 import { render } from 'svelte/server';
@@ -80,6 +80,25 @@ describe('the screen at rest', () => {
 		expect(html({ profile: { e: f(381) }, startVowel: 'e' })).toContain('Try again');
 		// An unsung selection shows no numbers.
 		expect(text(html({ profile: pick('i'), startVowel: 'e' }))).not.toContain('381 Hz');
+	});
+
+	it('is in the order Dann ruled (2026-11-16 00:32): the vowel\'s row, the take line, the cue, the buttons, Start, the chart, then the hint', () => {
+		const h = html({ profile: pick('i') });
+		const at = (needle: string) => {
+			const k = h.search(new RegExp(needle.replace(/"$/, '[" ]')));
+			expect(k, needle).toBeGreaterThan(-1);
+			return k;
+		};
+		const order = [at('class="glyph-row"'), at('class="take-line"'), at('class="cue"'), at('class="buttons"'), at('class="actions"'), at('class="chart-box"'), at('class="hint"'), at('class="readings"')];
+		expect(order).toEqual([...order].sort((a, b) => a - b));
+		expect(h).not.toContain('class="stage');
+	});
+
+	it('puts the two resonances in the vowel\'s row, not in the cue\'s', () => {
+		const h = html({ profile: pick('i') });
+		const row = h.slice(h.indexOf('class="glyph-row'), h.indexOf('class="take-line'));
+		expect(row).toMatch(/class="readout[" ]/);
+		expect(h.slice(h.search(/class="cue[" ]/))).not.toMatch(/class="readout[" ]/);
 	});
 
 	it('with all ten sung, says so, offers Re-take for the focused vowel and See your vowel space under the buttons, and invites any vowel again', () => {
