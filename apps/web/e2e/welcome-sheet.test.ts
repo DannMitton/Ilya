@@ -66,6 +66,21 @@ test.describe('a first visit', () => {
 		await expect(page.locator('textarea.text-input')).toBeEnabled({ timeout: 45_000 });
 	});
 
+	test('after Begin, focus is on a real control in the header, never on the document', async ({ page }) => {
+		await visit(page);
+		await page.getByRole('button', { name: 'Begin' }).click();
+		await expect(dialog(page)).toHaveCount(0);
+		// The first focusable control of the header, in tab order: the language pill.
+		await expect
+			.poll(() => page.evaluate(() => {
+				const a = document.activeElement;
+				return { isBody: !a || a === document.body || a === document.documentElement, inHeader: !!a?.closest('header'), tag: a?.tagName };
+			}))
+			.toEqual({ isBody: false, inHeader: true, tag: 'BUTTON' });
+		// A key press now reaches the app: Tab moves on from the pill rather than starting from the top of the page.
+		expect(await page.evaluate(() => (document.activeElement as HTMLElement | null)?.classList.contains('lang-pill'))).toBe(true);
+	});
+
 	test('a returning browser never sees it', async ({ page }) => {
 		await visit(page);
 		await page.getByRole('button', { name: 'Begin' }).click();

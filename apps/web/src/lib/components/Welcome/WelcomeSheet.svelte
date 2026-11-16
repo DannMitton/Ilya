@@ -22,7 +22,7 @@
 	 * item 6) and the arrow keys, Space, Page Down, and End scroll the text at once. It used to land on the sheet, which is not the scroller: at 1280 x 600 the text
 	 * overflows and no key scrolled it (the desk's review, 2026-11-16). Tab reaches the links, then Begin; Shift+Tab reaches the language pill.
 	 */
-	import { onMount } from 'svelte';
+	import { onMount, tick } from 'svelte';
 	import { browser } from '$app/environment';
 	import { t, type Language } from '$lib/i18n';
 	import { languageSwitch } from '$lib/language-switch';
@@ -48,7 +48,6 @@
 	let turned = $state(reduced ? FINAL.turned : FIRST_FRAME.turned);
 	let station = $state(reduced ? FINAL.station : FIRST_FRAME.station);
 	let sheetEl: HTMLElement | undefined = $state();
-	let returnTo: Element | null = null;
 
 	const sw = $derived(languageSwitch(language));
 	const T = (key: string) => t(key, language);
@@ -87,7 +86,6 @@
 	/** Focus moves into the sheet and stays; Escape does nothing. */
 	$effect(() => {
 		if (!open) return;
-		returnTo = document.activeElement;
 		const focusables = (): HTMLElement[] =>
 			sheetEl
 				? [...sheetEl.querySelectorAll<HTMLElement>('button, a[href], [tabindex]:not([tabindex="-1"])')].filter((el) => el.getClientRects().length > 0)
@@ -131,15 +129,27 @@
 		};
 	});
 
+	/**
+	 * WHERE FOCUS GOES WHEN THE SHEET CLOSES (the desk's review, defect 6; amendment 2026-11-16 item 1): to a real control, never the document. The sheet had
+	 * remembered `document.activeElement` at open, which on a first visit is `<body>`, so a keyboard singer who chose Begin was dropped at the top of the page with
+	 * nothing focused. Now it is the first focusable control of the header in tab order (the language pill); if the header has none, the first control in the app.
+	 */
+	function focusFirstControl() {
+		const CONTROL = 'button:not([disabled]), a[href], input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+		const shell = document.querySelector('.app-shell');
+		(shell?.querySelector<HTMLElement>(`header ${CONTROL.split(', ').join(', header ')}`) ?? shell?.querySelector<HTMLElement>(CONTROL))?.focus();
+	}
 	let leaveTimer: ReturnType<typeof setTimeout> | undefined;
 	onMount(() => () => {
 		if (leaveTimer) clearTimeout(leaveTimer);
 	});
 	function begin() {
 		markWelcomeSeen(() => localStorage);
-		const done = () => {
+		const done = async () => {
 			open = false;
-			if (returnTo instanceof HTMLElement && returnTo.isConnected) returnTo.focus();
+			// The app is inert until the sheet's effects clean up, so wait for that flush before moving focus.
+			await tick();
+			focusFirstControl();
 		};
 		if (prefersReducedMotion()) return done();
 		leaving = true;
