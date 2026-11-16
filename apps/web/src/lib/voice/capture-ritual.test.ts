@@ -493,3 +493,25 @@ describe('the tick context (N.203 lane 59 Step 1)', () => {
 		ritual.destroy();
 	});
 });
+
+describe('endDwell (N.203 lane 59 Step 2, amendment 8)', () => {
+	it('ends the landing at once and keeps the reading', () => {
+		const r = rig();
+		toSweep(r);
+		vi.advanceTimersByTime(SWEEP);
+		r.session.last.onComplete(formant());
+		expect(r.ritual.phase).toBe('landing');
+		expect(r.ritual.endDwell()).toBe(true);
+		expect([r.ritual.phase, r.ritual.vowel]).toEqual(['idle', null]);
+		expect(r.captured).toHaveLength(1);
+		expect(r.ritual.begin('e')).toBe(true);
+	});
+
+	it('does nothing in any other phase', () => {
+		const r = rig();
+		expect(r.ritual.endDwell()).toBe(false);
+		r.ritual.begin('i');
+		expect(r.ritual.endDwell()).toBe(false);
+		expect(r.ritual.phase).toBe('sing');
+	});
+});

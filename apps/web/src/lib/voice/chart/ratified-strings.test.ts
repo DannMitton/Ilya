@@ -36,7 +36,8 @@ const RATIFIED: Array<[string, string, string]> = [
 	['capture.start', 'Start {v}', 'Commencer {v}'],
 	['capture.retake', 'Re-take {v}', 'Reprendre {v}'],
 	['capture.inProgress', '{v} in progress', '{v} en cours'],
-	['capture.done', 'Done', 'Terminé'],
+	['capture.done', 'Done', 'Terminé'], // UNUSED since N.203 lane 59 Step 2, kept
+	['capture.seeSpace', 'See your vowel space', 'Voir votre espace vocalique'],
 	['capture.stop', 'Stop', 'Arrêter'],
 	['capture.clearAll', 'Clear all', 'Tout effacer'],
 	['capture.hide', 'Hide the chart and the readout while I sing', 'Masquer le graphique et l’affichage pendant que je chante'],
@@ -64,8 +65,8 @@ const RATIFIED: Array<[string, string, string]> = [
 ];
 
 describe('the ratified calibration and sheet strings', () => {
-	it('pins all forty-eight, in both languages', () => {
-		expect(RATIFIED).toHaveLength(48);
+	it('pins all forty-nine, in both languages', () => {
+		expect(RATIFIED).toHaveLength(49);
 		for (const [key, en, fr] of RATIFIED) {
 			expect(t(key, 'en'), `${key} en`).toBe(en);
 			expect(t(key, 'fr'), `${key} fr`).toBe(fr);

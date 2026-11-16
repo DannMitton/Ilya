@@ -243,17 +243,16 @@
 		visit.resume(); // the Start tap is a gesture: a context the system suspended between takes resumes here
 		ritual.begin(v);
 	}
+	/** A tap focuses a vowel and never records (Dann 2026-11-15 19:23). During a take it does nothing; during the dwell on a new dot it ends the dwell at once (DESK DEFAULT). */
 	function tapVowel(v: Vowel) {
-		if (ritual.phase !== 'idle') {
-			// A second tap on the vowel in progress ends the take; a tap on any other vowel is ignored.
-			if (v === ritual.vowel) ritual.cancel();
-			return;
+		if (active) return;
+		if (ritual.phase === 'landing') {
+			ritual.endDwell();
+			pendingSelected = null;
 		}
 		selected = v;
-		startTake(v); // a tapped vowel starts at once and takes precedence
 	}
 	function pressMain() {
-		if (main.kind === 'done') return onReturn();
 		if (main.disabled) return;
 		startTake(selected);
 	}
@@ -277,7 +276,8 @@
 			ritual.cancel();
 		}
 	}
-	const returnShown = $derived(ritual.phase === 'idle' && sungSet.size >= 1);
+	const returnShown = $derived(ritual.phase === 'idle' && sungSet.size >= 1 && !finished);
+	const seeSpaceShown = $derived(ritual.phase === 'idle' && finished);
 	const stopDisabled = $derived(!active && (running || sungSet.size === 0));
 </script>
 
@@ -362,6 +362,9 @@
 			<button type="button" class="main" disabled={main.disabled} onclick={pressMain}>{main.label}</button>
 			<button type="button" class="stop" disabled={stopDisabled} onclick={pressStop}>{stopLabel(active, confirmingClear, language)}</button>
 		</div>
+		{#if seeSpaceShown}
+			<button type="button" class="see-space" onclick={onReturn}>{tv('capture.seeSpace', language)}</button>
+		{/if}
 	</div>
 
 	<p class="hint">{hint}</p>
@@ -643,6 +646,7 @@
 	.vowel-btn:focus-visible,
 	.main:focus-visible,
 	.stop:focus-visible,
+	.see-space:focus-visible,
 	.return:focus-visible {
 		outline: 2px solid var(--ink-primary);
 		outline-offset: 2px;
@@ -657,6 +661,7 @@
 	}
 	.main,
 	.stop,
+	.see-space,
 	.return {
 		min-height: 44px;
 		border-radius: 22px;
@@ -814,6 +819,12 @@
 		height: 20px;
 		margin: 0;
 		accent-color: var(--lavender-jewel);
+	}
+	.see-space {
+		padding: 0 1.1rem;
+		border: 1.5px solid var(--lavender-jewel);
+		background: transparent;
+		color: var(--lavender-ink);
 	}
 	.return {
 		align-self: flex-start;

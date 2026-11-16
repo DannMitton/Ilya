@@ -42,22 +42,3 @@ export function runCountIn(onStep: (step: CountInStep) => void, after: (ms: numb
 		else after(at, () => onStep(step));
 	}
 }
-
-/**
- * What a singer's tap does to a vowel in a given state. One tap begins
- * (ratified 21:00; the arm step is gone). A tap during the sung count or the
- * pause cancels. A tap while the fry is being captured is ignored, as before;
- * Escape cancels it.
- */
-export function tapAction(state: string): 'begin' | 'cancel' | 'ignore' {
-	switch (state) {
-		case 'preparing':
-		case 'pausing':
-			return 'cancel';
-		case 'listening':
-		case 'working':
-			return 'ignore';
-		default:
-			return 'begin';
-	}
-}

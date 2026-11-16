@@ -16,7 +16,7 @@
    tree on 2026-11-02 (consistency batch 2). Paths are under `apps/web/src/`;
    a prefix is listed with the files that use it most and its key count.
 
-   This file holds 1,272 keys.
+   This file holds 1,273 keys.
 
    A key built at run time (`watch.key.letter.${letter}`, `comment.<register>.<part>`)
    has no literal reference, so a search for the whole key can come back empty
@@ -28,7 +28,7 @@
    app.            2  the page's hidden heading, lib/components/HeaderBar.svelte (`app.subtitle` has no literal consumer)
    binder.        10  lib/library/exchange.ts, lib/components/Drawer/RootPanel.svelte
    calib.        100  lib/voice/CalibrationWizard.svelte, lib/voice/ProfileSwitcher.svelte, lib/components/Drawer/VoiceAnchor.svelte
-   capture.       32  the calibration screen: lib/voice/VowelCapture.svelte, lib/voice/chart/screen-logic.ts, lib/voice/chart/VowelChart.svelte
+   capture.       33  the calibration screen: lib/voice/VowelCapture.svelte, lib/voice/chart/screen-logic.ts, lib/voice/chart/VowelChart.svelte
    clitic.         3  no literal consumer found (lib/score/clitic-seat.ts does the seating)
    collide.        5  routes/+page.svelte
    comment.       40  the note comments: lib/insights/singer-blocks.ts, lib/insights/comment-text.ts, lib/analysis/watchlist.ts
@@ -2496,7 +2496,10 @@ const strings: Record<string, Record<Language, string>> = {
 	'capture.start': { en: 'Start {v}', fr: 'Commencer {v}' },
 	'capture.retake': { en: 'Re-take {v}', fr: 'Reprendre {v}' },
 	'capture.inProgress': { en: '{v} in progress', fr: '{v} en cours' },
+	// UNUSED SINCE N.203 lane 59 Step 2: at ten recorded the main button reads Re-take, and "See your vowel space" is the way on. Kept, as the tree keeps its retired keys.
 	'capture.done': { en: 'Done', fr: 'Terminé' },
+	// N.203 sheet line 24, RATIFIED by Dann 2026-11-16 01:13 and 01:20.
+	'capture.seeSpace': { en: 'See your vowel space', fr: 'Voir votre espace vocalique' },
 	'capture.stop': { en: 'Stop', fr: 'Arrêter' },
 	'capture.clearAll': { en: 'Clear all', fr: 'Tout effacer' },
 	'capture.hide': { en: 'Hide the chart and the readout while I sing', fr: 'Masquer le graphique et l’affichage pendant que je chante' },

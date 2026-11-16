@@ -73,11 +73,11 @@ describe('the hint', () => {
 });
 
 describe('the main button', () => {
-	it('is Start for an unsung vowel, Re-take for a sung one, in progress and disabled mid-take, and Done at ten', () => {
+	it('is Start for an unsung vowel, Re-take for a sung one (the focused vowel’s, at ten too), and in progress and disabled mid-take', () => {
 		expect(mainButton(false, S('i'), 'e', 'en')).toEqual({ kind: 'start', label: 'Start [e]', disabled: false });
 		expect(mainButton(false, S('i', 'e'), 'e', 'en')).toEqual({ kind: 'retake', label: 'Re-take [e]', disabled: false });
 		expect(mainButton(true, S('i'), 'e', 'en')).toEqual({ kind: 'inProgress', label: '[e] in progress', disabled: true });
-		expect(mainButton(false, ALL, 'e', 'en')).toEqual({ kind: 'done', label: 'Done', disabled: false });
+		expect(mainButton(false, ALL, 'e', 'en')).toEqual({ kind: 'retake', label: 'Re-take [e]', disabled: false });
 	});
 	it('the secondary button is Stop mid-take, Clear all once Start over is tapped, and the tree’s Start over otherwise', () => {
 		expect(stopLabel(true, false, 'en')).toBe('Stop');

@@ -68,13 +68,12 @@ export function hintsFor(h: HintInput): Hint[] {
 
 export const hintText = (hints: Hint[], language: Language): string => hints.map((x) => tv(x.key, language, x.vars)).join(' ');
 
-export type MainButton = { kind: 'start' | 'retake' | 'inProgress' | 'done'; label: string; disabled: boolean };
+export type MainButton = { kind: 'start' | 'retake' | 'inProgress'; label: string; disabled: boolean };
 
-/** The main button: Start, Re-take, "in progress" (disabled), or Done when all ten are sung and nothing is running. */
+/** The main button: Start for the focused vowel, Re-take once it is recorded (all ten included: the way on is "See your vowel space"), or "in progress" (disabled). */
 export function mainButton(active: boolean, sung: ReadonlySet<Vowel>, selected: Vowel, language: Language): MainButton {
 	const v = { v: bracket(selected) };
 	if (active) return { kind: 'inProgress', label: tv('capture.inProgress', language, v), disabled: true };
-	if (sung.size === VOWELS.length) return { kind: 'done', label: tv('capture.done', language), disabled: false };
 	return sung.has(selected)
 		? { kind: 'retake', label: tv('capture.retake', language, v), disabled: false }
 		: { kind: 'start', label: tv('capture.start', language, v), disabled: false };

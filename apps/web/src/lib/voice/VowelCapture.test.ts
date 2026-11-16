@@ -66,6 +66,7 @@ describe('the screen at rest', () => {
 		expect(none).not.toContain('Return to summary');
 		const one = html({ profile: pick('i') });
 		expect(one).toContain('Return to summary');
+		expect(one).not.toContain('See your vowel space');
 		expect(one).toContain('Re-take [i]');
 		expect(text(one)).toContain('is captured.');
 		expect(text(one)).toContain('A re-take replaces [i] only if the new reading is as clear.');
@@ -81,10 +82,13 @@ describe('the screen at rest', () => {
 		expect(text(html({ profile: pick('i'), startVowel: 'e' }))).not.toContain('381 Hz');
 	});
 
-	it('with all ten sung, says so, offers Done, and invites any vowel again', () => {
+	it('with all ten sung, says so, offers Re-take for the focused vowel and See your vowel space under the buttons, and invites any vowel again', () => {
 		const h = html({ profile: BASS, startVowel: 'u' });
 		expect(text(h)).toContain('All ten captured. This is your vowel space.');
-		expect(h).toMatch(/class="main[^"]*"[^>]*>Done</);
+		expect(h).toMatch(/class="main[^"]*"[^>]*>Re-take \[u\]</);
+		expect(h).toMatch(/class="see-space[^"]*"[^>]*>See your vowel space</);
+		expect(h).not.toContain('Return to summary');
+		expect(h).not.toContain('>Done<');
 		expect(text(h)).toContain('Tap any vowel to sing it again.');
 		expect(text(h)).toContain('10 of 10');
 	});

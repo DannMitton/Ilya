@@ -5,7 +5,7 @@
  * DEFAULT, 2026-09-30).
  */
 import { describe, it, expect, vi, afterEach } from 'vitest';
-import { runCountIn, tapAction, type CountInStep } from './count-in';
+import { runCountIn, type CountInStep } from './count-in';
 
 const BEAT = 1000, PAUSE = 3000;
 
@@ -26,12 +26,8 @@ function harness() {
 
 afterEach(() => { vi.useRealTimers(); });
 
-describe('one tap begins the count-in', () => {
-	it('begins from every resting state, including the wizard’s pointer and a skipped vowel', () => {
-		for (const s of ['dormant', 'estimated', 'armed', 'captured', 'provisional', 'deselected']) expect(tapAction(s)).toBe('begin');
-	});
-
-	it('answers the tap at once with the sung cue', () => {
+describe('Start answers the tap at once', () => {
+	it('with the first step', () => {
 		vi.useFakeTimers();
 		const h = harness();
 		h.begin();
@@ -67,14 +63,7 @@ describe('no capture session starts before the fry step', () => {
 	});
 });
 
-describe('a tap during the count or the pause cancels', () => {
-	it('maps a tap in the sung count and in the pause to cancel, and a tap in the fry to nothing', () => {
-		expect(tapAction('preparing')).toBe('cancel');
-		expect(tapAction('pausing')).toBe('cancel');
-		expect(tapAction('listening')).toBe('ignore');
-		expect(tapAction('working')).toBe('ignore');
-	});
-
+describe('a cancel in the count or the pause', () => {
 	it.each([
 		['the sung count', 1.5 * BEAT],
 		['the pause', 3 * BEAT + PAUSE / 2]
@@ -83,7 +72,7 @@ describe('a tap during the count or the pause cancels', () => {
 		const h = harness();
 		h.begin();
 		vi.advanceTimersByTime(ms);
-		h.clear(); // what the Pacifier's cancelCapture does to its timers
+		h.clear(); // what the ritual's cancel does to its timers
 		vi.advanceTimersByTime(10 * BEAT);
 		expect(h.sessionStart).not.toHaveBeenCalled();
 		expect(h.seen.every((s) => s.at <= ms)).toBe(true);

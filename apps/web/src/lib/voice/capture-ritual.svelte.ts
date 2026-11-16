@@ -81,6 +81,8 @@ export interface CaptureRitual {
 	begin(vowel: Vowel): boolean;
 	/** Ends the take in progress. False, and nothing happens, when there is none or its reading is already delivered. */
 	cancel(): boolean;
+	/** Ends the landing (the dwell on the new dot) at once. False, and nothing happens, in any other phase. The reading is already delivered and kept. */
+	endDwell(): boolean;
 	/** Closes the tick's audio context without tearing the ritual down (the visit helper's close, Step 1). A later `begin()` makes a new one. */
 	closeTicks(): void;
 	/** Tears down: timers, the session, the audio context. Fires no event. */
@@ -283,6 +285,12 @@ export function createCaptureRitual(deps: CaptureRitualDeps): CaptureRitual {
 		return true;
 	}
 
+	function endDwell(): boolean {
+		if (destroyed || phase !== 'landing') return false;
+		toIdle();
+		return true;
+	}
+
 	function destroy() {
 		if (destroyed) return;
 		destroyed = true;
@@ -311,6 +319,7 @@ export function createCaptureRitual(deps: CaptureRitualDeps): CaptureRitual {
 		},
 		begin,
 		cancel,
+		endDwell,
 		closeTicks,
 		destroy
 	};
