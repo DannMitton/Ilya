@@ -46,3 +46,48 @@ for (const drawerOpen of [false, true]) {
 		expect((await page.locator('[data-station="insightsShares"]').boundingBox())!.y).toBeGreaterThanOrEqual(0);
 	});
 }
+
+/* Step 4 (phone): L4 and L6 land with the Drawer lowered and with it open. */
+async function openNoScore(page: Page, formants: Record<string, unknown>) {
+	const store = { version: 2, activeId: 'v', voices: [{ id: 'v', name: 'Dann', createdAt: NOW, updatedAt: NOW, calibratedAt: NOW, formants, voiceType: 'bass' }] };
+	await page.addInitScript(([s]) => { localStorage.setItem('ilya:language', 'en'); localStorage.setItem('shane.profiles.v2', s); }, [JSON.stringify(store)] as const);
+	await page.goto('/?capture=stub');
+	await expect(page.locator('textarea.text-input')).toBeEnabled({ timeout: 45_000 });
+	await page.locator('#tab-insights').click();
+}
+/** The copy of a control on screen (the pane draws each block twice, once off screen). */
+async function onScreen(page: Page, name: string) {
+	const all = await page.locator('button.offer-link', { hasText: name }).all();
+	for (const l of all) { const b = await l.boundingBox(); if (b && b.x >= 0 && b.x < 390) return l; }
+	throw new Error(`no copy of "${name}" is on screen`);
+}
+
+for (const drawerOpen of [false, true]) {
+	test(`L6 (INPUT) with the Drawer ${drawerOpen ? 'open on VOICE' : 'lowered'} opens the INPUT pane, its head in view`, async ({ page }) => {
+		test.setTimeout(90_000);
+		await openNoScore(page, {});
+		if (drawerOpen) {
+			await page.locator('.drawer-pull').click();
+			await band(page, /^voice$/i).click();
+			await page.locator('.drawer-pull').click();
+		}
+		await expect(page.locator('button.offer-link', { hasText: 'INPUT' }).first()).toBeAttached({ timeout: 20_000 });
+		const link = await onScreen(page, 'INPUT');
+		await link.scrollIntoViewIfNeeded();
+		await link.click();
+		await expect(page.locator('aside.drawer').getByRole('button', { name: /^input$/i })).toHaveAttribute('aria-expanded', 'true');
+		await expect.poll(async () => (await page.locator('[data-band-head="input"]').boundingBox())?.y ?? 9999, { timeout: 5000 }).toBeLessThan(800);
+		expect((await page.locator('[data-band-head="input"]').boundingBox())!.y).toBeGreaterThanOrEqual(0);
+	});
+}
+
+test('L4 (Record your vowels) with the Drawer lowered opens Welcome on a phone', async ({ page }) => {
+	test.setTimeout(90_000);
+	await openNoScore(page, {});
+	await expect(page.locator('button.offer-link', { hasText: 'Record your vowels' }).first()).toBeAttached({ timeout: 20_000 });
+	const link = await onScreen(page, 'Record your vowels');
+	await link.scrollIntoViewIfNeeded();
+	await link.click();
+	await expect(page.locator('.takeover-back')).toBeVisible();
+	await expect(page.getByRole('button', { name: /^begin$/i })).toBeVisible();
+});

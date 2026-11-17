@@ -83,7 +83,7 @@
 	import { breakOffsets, lineBoxes } from '$lib/insights/line-breaks';
 	import { paginate, type Segment } from '$lib/insights/paginate';
 	import { browserStore, rangeOfferDeclined, recordRangeOfferDecline } from '$lib/insights/range-offer-decline';
-	import { composeIdentityLine, genericLede, methodLineKey, placeholderLabel, restsOnSamples } from '$lib/insights/identity';
+	import { composeIdentityLine, genericLede, isGenericMethodKey, methodLineKey, placeholderLabel, restsOnSamples } from '$lib/insights/identity';
 	import { isUsable } from '$lib/voice/engine/plausibility';
 	import type { VoiceTypeChoice } from '$lib/voice/profileStore';
 
@@ -289,12 +289,9 @@
 		adapted.completeness.range || adapted.completeness.tessitura || adapted.completeness.passaggio,
 	);
 	/* A French page names its octave index once, here: « (A4 = 440 Hz) » (QUEUE row 68; DESK DEFAULT). */
-	const methodLine = $derived(
-		(!model && analysisScore
-			? T('insights.method.silent')
-			: fill(T(methodLineKey({ generic: adapted.generic, typed: hasTypedCharacteristics, noScore: !analysisScore, samples: restsOnSamples(adapted) })), { date: calibratedOn ?? '' })) +
-			(model && language === 'fr' ? ` ${T('insights.r2.pitchKey')}` : ''),
-	);
+	const methodKey = $derived(methodLineKey({ generic: adapted.generic, typed: hasTypedCharacteristics, noScore: !analysisScore, samples: restsOnSamples(adapted) }));
+	const methodLine = $derived((!model && analysisScore ? T('insights.method.silent') : fill(T(methodKey), { date: calibratedOn ?? '' })) + (model && language === 'fr' ? ` ${T('insights.r2.pitchKey')}` : ''));
+	const methodGeneric = $derived((!!model || !analysisScore) && isGenericMethodKey(methodKey)); // L4 follows the three generic Method lines
 
 	// ── Words for the model ────────────────────────────────────────────
 	const P = (p: Pitch) => pitchName(p, language);
@@ -535,6 +532,7 @@
 		ontry={keyRuler ? tryKey : undefined}
 		onaddrange={() => onaddrange?.()}
 		{links}
+		{methodGeneric}
 		ondecline={declineOffer}
 		onoctave={measuring ? undefined : () => ontoggleoctave?.()}
 		ontempo={measuring ? undefined : () => ontempo?.()}

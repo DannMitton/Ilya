@@ -116,6 +116,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	import { currentGuideAnchor } from '$lib/guide-anchors';
 	import CalibrationWizard from '$lib/voice/CalibrationWizard.svelte';
 	import VoicePane from '$lib/components/Drawer/VoicePane.svelte';
+	import { recordDoorKey } from '$lib/components/Drawer/voice-pane';
 	import type { VoiceRequest, OpenKind, VoiceSeam } from '$lib/voice/seam';
 	import { finishEarlyState } from '$lib/voice/chart/finish-early';
 	import MetadataFields from '$lib/components/Drawer/MetadataFields.svelte';
@@ -1676,6 +1677,15 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		if (!calibrating) return action();
 		afterLeave = action;
 		calibrationRequest = { phase: 'leave', n: (calibrationRequest?.n ?? 0) + 1, fromRest: false };
+	}
+	/** L6: the word INPUT in INSIGHTS' sentence for a piece with no score. Same path as `openStation`: dropped over the capture screen, else the takeover is left. */
+	function openInput() {
+		leaveThen(() => {
+			if (isMobile) drawerRaised = true;
+			sections.reveal(BAND_IDS.input);
+			revealTarget = '[data-band-head="input"]';
+			revealRequest += 1;
+		});
 	}
 	function openStation(which: 'describe' | 'insights', at?: 'range') {
 		leaveThen(() => {
@@ -4352,7 +4362,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 				{drawnUnderlay}
 				openSyllabification={doc.openSyllabification}
 				onaddrange={() => openStation('describe', 'range')}
-				links={voiceSeam?.voices.length ? { shares: () => openStation('insights') } : undefined}
+				links={{ shares: voiceSeam?.voices.length ? () => openStation('insights') : undefined, record: () => openVoice('record'), recordKey: recordDoorKey(usableReadingCount(voiceFormants)), input: openInput }}
 				{keyRuler}
 				octaveReading={doc.octaveReading}
 				ontoggleoctave={clefUi.toggle}
