@@ -4352,6 +4352,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 				{drawnUnderlay}
 				openSyllabification={doc.openSyllabification}
 				onaddrange={() => openStation('describe', 'range')}
+				links={voiceSeam?.voices.length ? { shares: () => openStation('insights') } : undefined}
 				{keyRuler}
 				octaveReading={doc.octaveReading}
 				ontoggleoctave={clefUi.toggle}

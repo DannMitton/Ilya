@@ -16,6 +16,7 @@
 	import type { RenderedComment } from '$lib/insights/comment-text';
 	import { richParts, textParts } from '$lib/insights/text-parts';
 	import type { Block } from '$lib/insights/singer-blocks';
+	import type { InsightsLinks } from '$lib/insights/links';
 	import PitchSeconds from '$lib/insights/PitchSeconds.svelte';
 	import OctaveLine from '$lib/components/OctaveLine.svelte';
 
@@ -26,6 +27,8 @@
 		width: number;
 		ontry?: (stop: KeyChoice) => void;
 		onaddrange?: () => void;
+		/** The notes block's links to other parts of the app (`links.ts`); drawn on screen only, never printed. */
+		links?: InsightsLinks;
 		ondecline?: () => void;
 		/** Row 47: the octave line's tap (`kind: 'octave'`). */
 		onoctave?: () => void;
@@ -36,7 +39,7 @@
 		ontoggle?: (open: boolean) => void;
 	}
 
-	let { block, language, width, ontry, onaddrange, ondecline, onoctave, ontempo, open = false, ontoggle }: Props = $props();
+	let { block, language, width, ontry, onaddrange, links, ondecline, onoctave, ontempo, open = false, ontoggle }: Props = $props();
 	const T = (key: string) => t(key, language);
 
 	/* The ring's circumference at r = 32. */
@@ -168,6 +171,7 @@
 		{@render heading(block.heading)}
 		{#if block.footnote}<p class="source-line"><sup>1</sup>&#8201;{@html block.footnote}</p>{/if}
 		<p class="source-line">{block.method}</p>
+		{#if links?.shares}<p class="source-line notes-links"><button type="button" class="offer-link" onclick={() => links.shares?.()}>{T('calib.pane.door.insights')}</button></p>{/if}
 	{:else if block.kind === 'prose'}
 		{@render heading(block.heading)}
 		<p class:prose={!block.small} class:source-line={block.small}>{@render rich(block.text)}{#if block.link}{' '}<button type="button" class="tempo-link" tabindex={ontempo ? 0 : -1} onclick={() => ontempo?.()}>{block.link}</button>{/if}</p>
@@ -559,6 +563,15 @@
 		color: var(--ink-primary);
 	}
 
+	.notes-links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.25rem 1rem;
+	}
+	.notes-links .offer-link {
+		font: inherit;
+		cursor: pointer;
+	}
 	.offer-link {
 		border: none;
 		padding: 0;
@@ -591,6 +604,7 @@
 
 	@media print {
 		.try-key,
+		.notes-links,
 		.offer-decline,
 		.tempo-link,
 		.more,

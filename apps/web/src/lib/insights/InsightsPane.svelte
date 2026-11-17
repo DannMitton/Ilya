@@ -78,7 +78,8 @@
 	import { withSingerTempo } from '$lib/tempo/singer-tempo';
 	import type { OctaveReading, TempoChoice } from '$lib/library/types';
 	import { readingClef } from '$lib/score/clef-choice';
-	import { notesBlock, singerBlocks, type PlacedBlock } from '$lib/insights/singer-blocks';
+	import { noScoreBlocks, notesBlock, singerBlocks, type PlacedBlock } from '$lib/insights/singer-blocks';
+	import type { InsightsLinks } from '$lib/insights/links';
 	import { breakOffsets, lineBoxes } from '$lib/insights/line-breaks';
 	import { paginate, type Segment } from '$lib/insights/paginate';
 	import { browserStore, rangeOfferDeclined, recordRangeOfferDecline } from '$lib/insights/range-offer-decline';
@@ -110,8 +111,10 @@
 		drawnUnderlay?: DrawnUnderlay;
 		openSyllabification?: boolean;
 		isMobile?: boolean;
-		/** N.164: "Add your range" opens calibration on the Range fields. */
+		/** N.164, lane 61: "Add your range" opens "Describe your voice" at the Range. */
 		onaddrange?: () => void;
+		/** N.203 lane 61: the notes block's links to the VOICE pane (`links.ts`). */
+		links?: InsightsLinks;
 		/** N.94 slice 2: the chosen key, which Insights reads (curation rule 3), and "Try this key". */
 		keyRuler?: SungKey;
 		/** Rows 47, 127, 144: the singer's octave and clef choice (`SongRecord.octaveReading`). Insights reads its octave from `readingClef`, as Markup does. */
@@ -142,6 +145,7 @@
 		openSyllabification = false,
 		isMobile = false,
 		onaddrange = undefined,
+		links = undefined,
 		keyRuler = undefined,
 		octaveReading = null,
 		tempoChoice = null,
@@ -323,11 +327,7 @@
 		}, language, intake);
 	});
 	const blocks = $derived.by((): PlacedBlock[] => {
-		if (!analysisScore)
-			return [
-				{ group: 'free', block: { kind: 'silence', lines: [T('insights.silence.noScore')] } },
-				{ group: 'free', block: notesBlock(methodLine, null, language) },
-			];
+		if (!analysisScore) return noScoreBlocks(methodLine, language);
 		if (!model) {
 			return [
 				{
@@ -534,6 +534,7 @@
 		{width}
 		ontry={keyRuler ? tryKey : undefined}
 		onaddrange={() => onaddrange?.()}
+		{links}
 		ondecline={declineOffer}
 		onoctave={measuring ? undefined : () => ontoggleoctave?.()}
 		ontempo={measuring ? undefined : () => ontempo?.()}

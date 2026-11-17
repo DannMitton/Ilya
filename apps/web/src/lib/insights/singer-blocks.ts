@@ -378,6 +378,14 @@ export function notesBlock(method: string, footnote: string | null, language: La
 	return { kind: 'notes', heading: t('insights.r2.notes', language), footnote, method };
 }
 
+/** The page with no score: the sentence that says what INSIGHTS needs, then the notes (moved from `InsightsPane.svelte`, N.203 lane 61, to free its lines). */
+export function noScoreBlocks(method: string, language: Language): PlacedBlock[] {
+	return [
+		{ group: 'free', block: { kind: 'silence', lines: [t('insights.silence.noScore', language)] } },
+		{ group: 'free', block: notesBlock(method, null, language) },
+	];
+}
+
 /** A squircle's heading rides on its first block, so a page never ends on a heading alone. */
 function withHeading(b: Block | undefined, heading: string): void {
 	if (b) (b as { heading?: string }).heading = heading;
