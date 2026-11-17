@@ -279,21 +279,13 @@
 			? crypto.randomUUID()
 			: `s-${Date.now().toString(36)}`;
 	/**
-	 * Runs the vowel-aware fR1 window check on a just-captured reading and
-	 * returns a clone carrying the verdict as a description. It never changes
-	 * the reading's status: a reading's status comes from its own evidence
-	 * (the picker's cross-check, the guard, the signal), and the neighbourhood
-	 * "never demotes, discards, or blocks a reading" (Dann 2026-11-13,
-	 * `docs/memory/PRODUCT.md:1269-1270`, "Ilya encounters the voice as it is").
-	 * Before lane 64 an `implausible` Captured reading was turned Provisional
-	 * here; that demotion is gone, and `plausibility` stays on the reading as
-	 * information beside it. `confidence` is untouched too (plausibility and
-	 * signal quality are orthogonal facts, Kimi's ruling). Guard placement at
-	 * this boundary follows the withIghPass precedent: the profile (the
-	 * anchors) lives here, not in the §9 core. The structured console event
-	 * is emitted for EVERY extraction (ruled): the distance-to-edge
-	 * distribution of honest readings is the evidence base for any future
-	 * margin tightening.
+	 * Runs the vowel-aware fR1 window check on a just-captured reading and returns a clone carrying the verdict
+	 * as a description. It never changes the reading's status, which comes from its own evidence: the neighbourhood
+	 * "never demotes" (Dann 2026-11-13, `docs/memory/PRODUCT.md:1269-1270`). Before lane 64 an `implausible` Captured
+	 * reading became Provisional here; `plausibility` now stays beside it as information, and `confidence` is untouched
+	 * (orthogonal facts, Kimi's ruling). The guard sits at this boundary because the profile (the anchors) lives here,
+	 * as with withIghPass. The structured console event is emitted for EVERY extraction (ruled): the distance-to-edge
+	 * distribution of honest readings is the evidence base for any future margin tightening.
 	 */
 	function withPlausibility(vowel: Vowel, formant: CalibratedFormant): CalibratedFormant {
 		if (formant.source !== 'measured-user') return formant;
