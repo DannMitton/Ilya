@@ -3,9 +3,13 @@
  * synthetic takes (`fidelity-set.ts`), written to `__golden__/shipped-open-600.json`, so a later step can show that adding the path
  * picker changed neither. f1 and f2 are rounded to 0.1 Hz, because pole values differed between two machines in P0b.
  *
+ * Lane 64 (switch-on brief r2, Step 0 item 2) adds a second golden, `__golden__/path-600.json`: the `path` picker on the same 600 takes, same
+ * row shape and rounding. Until Step 4 rewrites it, it stays byte-equal with every new option off.
+ *
  * Not one of the eight gates (DESK DEFAULT). Run from the repository root:
  *   pnpm --filter @ilya/web exec vitest run --config ../../tools/n200-score/vitest.config.ts golden.run.ts
- * It writes the golden when `N200_GOLDEN=write`, and otherwise compares to the committed file and fails on any difference.
+ * `N200_GOLDEN=write` writes `shipped-open-600.json`; `N200_GOLDEN=write-path` writes `path-600.json`; otherwise both are compared to the
+ * committed files and the run fails on any difference.
  */
 import { test, expect } from 'vitest';
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
@@ -16,6 +20,7 @@ import { takes, PRIMARY } from './fidelity-set';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const FILE = path.join(here, '__golden__', 'shipped-open-600.json');
+const FILE_PATH = path.join(here, '__golden__', 'path-600.json');
 const r1 = (v: number | undefined | null) => (v === undefined || v === null ? null : Math.round(v * 10) / 10);
 
 export function goldenRows(pickers: Picker[] = ['shipped', 'open']) {
@@ -33,10 +38,21 @@ export function goldenRows(pickers: Picker[] = ['shipped', 'open']) {
 	return rows;
 }
 
-test('the shipped and open pickers on the 600 primary takes match the committed golden', () => {
-	const rows = goldenRows();
-	const text = JSON.stringify({ takes: rows.length, rows }, null, 0).replace(/\},\{"idx"/g, '},\n{"idx"') + '\n';
+function goldenText(pickers: Picker[]): { rows: Record<string, unknown>[]; text: string } {
+	const rows = goldenRows(pickers);
+	return { rows, text: JSON.stringify({ takes: rows.length, rows }, null, 0).replace(/\},\{"idx"/g, '},\n{"idx"') + '\n' };
+}
+
+test.skipIf(process.env.N200_GOLDEN === 'write-path')('the shipped and open pickers on the 600 primary takes match the committed golden', () => {
+	const { rows, text } = goldenText(['shipped', 'open']);
 	if (process.env.N200_GOLDEN === 'write') { mkdirSync(path.dirname(FILE), { recursive: true }); writeFileSync(FILE, text); return; }
 	expect(rows).toHaveLength(600);
 	expect(text === readFileSync(FILE, 'utf8')).toBe(true);
+});
+
+test.skipIf(process.env.N200_GOLDEN === 'write')('the path picker on the 600 primary takes matches the committed golden', () => {
+	const { rows, text } = goldenText(['path']);
+	if (process.env.N200_GOLDEN === 'write-path') { mkdirSync(path.dirname(FILE_PATH), { recursive: true }); writeFileSync(FILE_PATH, text); return; }
+	expect(rows).toHaveLength(600);
+	expect(text === readFileSync(FILE_PATH, 'utf8')).toBe(true);
 });
