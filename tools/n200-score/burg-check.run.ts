@@ -8,7 +8,7 @@ import { spawnSync } from 'node:child_process';
 import { writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { burgCoefficients, burgFrames, polesOf } from '$lib/voice/engine/burg';
-import { BURG_REF, KNOWN_POLES, KNOWN_SR, impulseRecord, noiseRecord, rounded10k, thirteenTakes, withTmp, quartiles } from '$lib/voice/engine/burg-fixtures';
+import { BURG_REF, KNOWN_POLES, KNOWN_SR, impulseRecord, noiseRecord, rounded10k, thirteenTakes, withTmp, quartiles } from './burg-fixtures';
 import { wavBytes } from '$lib/voice/engine/capture-file';
 import { SYNTH_SR } from '$lib/voice/engine/fry-synth';
 import { median } from '$lib/voice/engine/dsp';

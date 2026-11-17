@@ -52,7 +52,7 @@ export function truthFor(type: SetType, vowel: Vowel): number[] {
 	for (const v of SIX) cap[v] = { f1: t.f1[v], f2: t.f2[v] };
 	let f1: number, f2: number;
 	if ((SIX as readonly string[]).includes(vowel)) { f1 = t.f1[vowel as (typeof SIX)[number]]; f2 = t.f2[vowel as (typeof SIX)[number]]; }
-	else { const d = derive(vowel, cap)!; f1 = d.f1; f2 = d.f2; }
+	else { const d = derive(vowel, cap)!; f1 = d.f1; f2 = d.f2!; }
 	return [f1, f2, ...ROW[vowel].map((x) => x * scale)];
 }
 

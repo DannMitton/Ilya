@@ -1,6 +1,6 @@
 /**
  * Scores a folder of the recorder's files. Not a gate; see `vitest.config.ts` for the command.
- * The folder is `N200_DIR`, or the first path on the command line. Output goes into `<folder>/n200-score-out/`:
+ * The folder is `N200_DIR`, or the first path on the command line. The reference file is `N200_REF` (a name in the folder, or an absolute path), default `reference.csv`. Output goes into `<folder>/n200-score-out/`:
  * `table.csv` (one row per take), `summary.txt` (pass rates against the bars), `candidates.json` (every candidate).
  */
 import { test } from 'vitest';
@@ -11,7 +11,7 @@ import { scoreFolder, tableCsv, summaryText, isDir } from './score-core';
 const dir = process.env.N200_DIR ?? process.argv.slice(2).find((a) => !a.startsWith('-') && isDir(a));
 
 test.skipIf(!dir)('score a folder of recorder files', () => {
-	const rows = scoreFolder(dir!, { burg: process.env.N200_NO_BURG !== '1' });
+	const rows = scoreFolder(dir!, { burg: process.env.N200_NO_BURG !== '1', ref: process.env.N200_REF });
 	const out = path.join(dir!, 'n200-score-out');
 	mkdirSync(out, { recursive: true });
 	writeFileSync(path.join(out, 'table.csv'), tableCsv(rows));

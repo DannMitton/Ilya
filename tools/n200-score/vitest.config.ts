@@ -29,7 +29,7 @@ export default {
 	},
 	test: {
 		root: here,
-		include: ['fidelity-set.test.ts', 'score-core.test.ts', 'score.run.ts', 'synth-gate.run.ts', 'golden.run.ts', 'burg-check.run.ts'],
+		include: ['fidelity-set.test.ts', 'score-core.test.ts', 'score.run.ts', 'synth-gate.run.ts', 'golden.run.ts', 'burg-check.run.ts', 'measure.run.ts'],
 		testTimeout: 30 * 60 * 1000,
 		hookTimeout: 30 * 60 * 1000,
 	},

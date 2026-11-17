@@ -10,7 +10,7 @@ import { spawnSync } from 'node:child_process';
 import { writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { burgCoefficients, burgFrames, polesOf, gaussianWindow, PREEMPH_HZ } from './burg';
-import { BURG_REF, KNOWN_POLES, KNOWN_SR, havePython, noiseRecord, pyCoeffs, rounded10k, thirteenTakes, quartiles, withTmp } from './burg-fixtures';
+import { BURG_REF, KNOWN_POLES, KNOWN_SR, havePython, noiseRecord, pyCoeffs, rounded10k, thirteenTakes, quartiles, withTmp } from '../../../../../../tools/n200-score/burg-fixtures';
 import { synthFry, SYNTH_SR } from './fry-synth';
 import { wavBytes } from './capture-file';
 import { median } from './dsp';

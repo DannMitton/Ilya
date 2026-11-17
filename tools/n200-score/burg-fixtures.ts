@@ -1,19 +1,18 @@
 /**
- * Test support for `burg.test.ts` and `tools/n200-score/burg-check.run.ts`: the known-pole records, the 13 takes, the reference
+ * Test support for `apps/web/src/lib/voice/engine/burg.test.ts` and `tools/n200-score/burg-check.run.ts`: the known-pole records, the 13 takes, the reference
  * helper `tools/n200-score/burg_ref.py` (which imports `tools/i-extractor-check/burg.py` unedited), and Python's percentile rule.
- * Nothing in the app imports it.
+ * Nothing in the app imports it. It lives under `tools/`, because it reads the recorder's `wavBytes` and `capture-file.test.ts` allows no file of the app's source to import the recorder.
  */
 import { spawnSync } from 'node:child_process';
 import { mkdtempSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
-import { rng, synthFry, SYNTH_SR, type FryCase } from './fry-synth';
-import { resampleTo } from './dsp';
-import { wavBytes } from './capture-file';
-import { cells, caseFor, PRIMARY } from '../../../../../../tools/n200-score/fidelity-set';
+import { rng, synthFry, SYNTH_SR, type FryCase } from '$lib/voice/engine/fry-synth';
+import { resampleTo } from '$lib/voice/engine/dsp';
+import { wavBytes } from '$lib/voice/engine/capture-file';
+import { cells, caseFor, PRIMARY } from './fidelity-set';
 
-const ROOT = path.resolve(__dirname, '../../../../../..');
-export const BURG_REF = path.join(ROOT, 'tools/n200-score/burg_ref.py');
+export const BURG_REF = path.join(__dirname, 'burg_ref.py');
 
 /** Python with numpy and scipy, and `burg.py` present. NOT RUN where it is not. */
 export const havePython = spawnSync('python3', ['-c', 'import numpy, scipy'], { encoding: 'utf8' }).status === 0;

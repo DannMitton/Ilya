@@ -11,7 +11,9 @@
  *      suspicion;
  *   4. writes one table: file, asked, sung, each picker's fR1 and fR2, status, the evidence marks, and the reference.
  *
- * There are two pickers, `shipped` (the prior-led picker the app has used) and `open` (N.200 Step 3).
+ * There are three pickers, `shipped` (the prior-led picker the app has used), `open` (N.200 Step 3), and `path` (the path picker,
+ * `?measure=path`, L15 ladder, through `runCapture`). `path9` is the path picker with the L9 ladder, read by `extractPath` on the guard's
+ * stretch, with no status (columns `path9_fR1` and `path9_fR2`): `runCapture` has no route for it.
  */
 import { readdirSync, readFileSync, existsSync, statSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
@@ -20,6 +22,7 @@ import { fileURLToPath } from 'node:url';
 import { runCapture, type CaptureOutcome } from '$lib/voice/engine/analyze';
 import { ltasEnvExport, type ExtractTrace } from '$lib/voice/engine/extract';
 import { findPeaks } from '$lib/voice/engine/dsp';
+import { extractPath, L9 } from '$lib/voice/engine/path-extract';
 import type { Vowel } from '$lib/voice/engine/types';
 import type { ClosedPhaseResult } from '$lib/voice/engine/closed-phase';
 
@@ -99,13 +102,16 @@ export interface PickerReading {
 }
 
 type PickerFn = (y: Float64Array, sr: number, asked: Vowel, trace: Partial<ExtractTrace>) => CaptureOutcome;
-/** `shipped` is the prior-led picker the app has used; `open` is the agnostic picker (`?measure=open`, N.200 Step 3). */
+/** `shipped` is the prior-led picker the app has used; `open` is the agnostic picker (`?measure=open`, N.200 Step 3); `path` is the path picker (`?measure=path`). */
 export const PICKERS: Record<string, PickerFn> = {
 	shipped: (y, sr, asked, trace) => runCapture(y, sr, asked, undefined, trace),
 	open: (y, sr, asked, trace) => runCapture(y, sr, asked, undefined, trace, 'open'),
+	path: (y, sr, asked, trace) => runCapture(y, sr, asked, undefined, trace, 'path'),
 };
 
 function evidenceOf(trace: Partial<ExtractTrace>): string | null {
+	const p = trace.chosen?.path;
+	if (p) return `case:${p.case}${p.reason ? `-${p.reason}` : ''};f2kept:${p.fR2Kept ? 1 : 0};ceil:${p.ceiling === null ? '-' : Math.round(p.ceiling)};setAside:${p.setAside};pathF2:${p.pathF2 === null ? '-' : Math.round(p.pathF2)}`;
 	const e = trace.chosen?.evidence;
 	if (!e) return null;
 	return `f1:${e.fR1 ?? '-'};f2:${e.fR2 ?? '-'};comb:${e.comb};rival:${e.runnerUp ? 1 : 0};r3:${e.r3 ? `${Math.round(e.r3.f)}${e.r3.resolved ? 'r' : 'm'}` : '-'};cpAbstained:${e.closedPhaseAbstained ? 1 : 0}`;
@@ -137,10 +143,13 @@ export function burgReference(wavPath: string): Reference {
 	} catch { return { f1: null, f2: null, source: null }; }
 }
 
-/** `reference.csv` in the folder: `file,fR1,fR2`, Dann's own reading of the spectrum, which takes the place of Burg's. */
-export function manualReferences(dir: string): Map<string, Reference> {
+/**
+ * `reference.csv` in the folder (or the file named by `N200_REF`, a name in the folder or an absolute path): `file,fR1,fR2`, Dann's own
+ * reading of the spectrum, or another reference's values, which takes the place of Burg's.
+ */
+export function manualReferences(dir: string, refFile = 'reference.csv'): Map<string, Reference> {
 	const out = new Map<string, Reference>();
-	const p = path.join(dir, 'reference.csv');
+	const p = path.resolve(dir, refFile);
 	if (!existsSync(p)) return out;
 	for (const line of readFileSync(p, 'utf8').split(/\r?\n/).slice(1)) {
 		const [file, a, b] = line.split(',').map((s) => s.trim());
@@ -160,6 +169,8 @@ export interface Row {
 	/** The reading as the recorder stored it, from the build that took the take. */
 	recorded: { f1: number | null; f2: number | null } | null;
 	pickers: Record<string, PickerReading>;
+	/** The path picker with the L9 ladder on the guard's stretch (`extractPath`), no status; null when no stretch could be read. */
+	path9: { f1: number | null; f2: number | null } | null;
 	reference: Reference;
 	candidates: Candidates | null;
 }
@@ -170,24 +181,31 @@ export interface Sidecar { file?: string; asked?: string; vowel?: string; sung?:
 export function scoreTake(y: Float64Array, sr: number, asked: Vowel, meta: { file: string; sung?: string | null; build?: string | null; recorded?: Row['recorded'] }): Row {
 	const pickers: Record<string, PickerReading> = {};
 	let candidates: Candidates | null = null;
+	let path9: Row['path9'] = null;
 	for (const [name, pick] of Object.entries(PICKERS)) {
 		const trace: Partial<ExtractTrace> = {};
 		const o = pick(y, sr, asked, trace);
 		pickers[name] = readingOf(o, trace);
+		if (name === 'path') {
+			const seg = o.outcome === 'error' ? undefined : o.guard?.segmentS;
+			const yw = seg ? y.subarray(Math.round(seg[0] * sr), Math.round(seg[1] * sr)) : y;
+			const r9 = extractPath(yw, sr, { ladder: L9 });
+			path9 = { f1: r9.f1 === null ? null : round(r9.f1, 1), f2: r9.path?.pathF2 === null || r9.path?.pathF2 === undefined ? null : round(r9.path.pathF2, 1) };
+		}
 		if (!candidates && o.outcome !== 'error') {
 			const seg = o.guard?.segmentS;
 			const yw = seg ? y.subarray(Math.round(seg[0] * sr), Math.round(seg[1] * sr)) : y;
 			candidates = candidatesFor(yw, sr, trace.closedPhase ?? null);
 		}
 	}
-	return { file: meta.file, asked, sung: meta.sung ?? null, build: meta.build ?? null, recorded: meta.recorded ?? null, pickers, reference: { f1: null, f2: null, source: null }, candidates };
+	return { file: meta.file, asked, sung: meta.sung ?? null, build: meta.build ?? null, recorded: meta.recorded ?? null, pickers, path9, reference: { f1: null, f2: null, source: null }, candidates };
 }
 
-export interface ScoreOptions { burg?: boolean }
+export interface ScoreOptions { burg?: boolean; ref?: string }
 
 /** Every `.wav` with its `.json` under `dir` (one level, or the recorder's ZIP unpacked into a folder). */
 export function scoreFolder(dir: string, opts: ScoreOptions = {}): Row[] {
-	const manual = manualReferences(dir);
+	const manual = manualReferences(dir, opts.ref);
 	const rows: Row[] = [];
 	for (const name of readdirSync(dir).filter((n) => n.endsWith('.wav')).sort()) {
 		const wavPath = path.join(dir, name), jsonPath = wavPath.replace(/\.wav$/, '.json');
@@ -212,7 +230,7 @@ export const kindOf = (r: Row): Kind => (r.sung === null ? 'unstated' : r.sung =
 
 export function tableCsv(rows: Row[]): string {
 	const names = Object.keys(PICKERS);
-	const head = ['file', 'asked', 'sung', 'kind', 'build', 'recorded_fR1', 'recorded_fR2', ...names.flatMap((n) => [`${n}_fR1`, `${n}_fR2`, `${n}_status`, `${n}_f2Quality`, `${n}_confidence`, `${n}_method`, `${n}_steadySpread`, `${n}_setAside`, `${n}_evidence`, `${n}_note`, `${n}_fR1_ok`, `${n}_fR2_ok`]), 'comb', 'ref_source', 'ref_fR1', 'ref_fR2'];
+	const head = ['file', 'asked', 'sung', 'kind', 'build', 'recorded_fR1', 'recorded_fR2', ...names.flatMap((n) => [`${n}_fR1`, `${n}_fR2`, `${n}_status`, `${n}_f2Quality`, `${n}_confidence`, `${n}_method`, `${n}_steadySpread`, `${n}_setAside`, `${n}_evidence`, `${n}_note`, `${n}_fR1_ok`, `${n}_fR2_ok`]), 'path9_fR1', 'path9_fR2', 'path9_fR1_ok', 'path9_fR2_ok', 'comb', 'ref_source', 'ref_fR1', 'ref_fR2'];
 	const q = (s: unknown) => { const t = s === null || s === undefined ? '' : String(s); return /[",\n]/.test(t) ? `"${t.replace(/"/g, '""')}"` : t; };
 	const lines = [head.join(',')];
 	for (const r of rows) {
@@ -221,7 +239,7 @@ export function tableCsv(rows: Row[]): string {
 			const p = r.pickers[n];
 			cells.push(p.f1, p.f2, p.reading, p.f2Quality, p.confidence, p.method, p.steadySpread, p.setAside, p.evidence, p.note, within(p.f1, r.reference.f1, BAR_F1), within(p.f2, r.reference.f2, BAR_F2));
 		}
-		cells.push(r.candidates?.comb, r.reference.source, r.reference.f1, r.reference.f2);
+		cells.push(r.path9?.f1, r.path9?.f2, within(r.path9?.f1 ?? null, r.reference.f1, BAR_F1), within(r.path9?.f2 ?? null, r.reference.f2, BAR_F2), r.candidates?.comb, r.reference.source, r.reference.f1, r.reference.f2);
 		lines.push(cells.map(q).join(','));
 	}
 	return lines.join('\n') + '\n';
@@ -238,6 +256,13 @@ export function summaryText(rows: Row[]): string {
 			const rate = (sel: (r: Row) => boolean | null) => { const m = g.map(sel).filter((x): x is boolean => x !== null); return `${m.filter(Boolean).length} of ${m.length}`; };
 			out.push(`  ${k} (${g.length} takes): fR1 ${rate((r) => within(r.pickers[n].f1, r.reference.f1, BAR_F1))}, fR2 ${rate((r) => within(r.pickers[n].f2, r.reference.f2, BAR_F2))}; captured ${g.filter((r) => r.pickers[n].reading === 'captured').length}, provisional ${g.filter((r) => r.pickers[n].reading === 'provisional').length}, no reading ${g.filter((r) => r.pickers[n].outcome !== 'reading').length}`);
 		}
+	}
+	out.push('\nPicker path9 (the path picker, L9 ladder, no status)');
+	for (const k of ['right', 'wrong', 'unstated'] as Kind[]) {
+		const g = rows.filter((r) => kindOf(r) === k);
+		if (!g.length) continue;
+		const rate = (sel: (r: Row) => boolean | null) => { const m = g.map(sel).filter((x): x is boolean => x !== null); return `${m.filter(Boolean).length} of ${m.length}`; };
+		out.push(`  ${k} (${g.length} takes): fR1 ${rate((r) => within(r.path9?.f1 ?? null, r.reference.f1, BAR_F1))}, fR2 ${rate((r) => within(r.path9?.f2 ?? null, r.reference.f2, BAR_F2))}`);
 	}
 	out.push('\nA take with no reference value is left out of that rate. A reference from Burg reads every frame, open phase and all; it is a second opinion, not the truth.');
 	return out.join('\n') + '\n';
