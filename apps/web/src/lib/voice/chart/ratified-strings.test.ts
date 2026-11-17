@@ -100,6 +100,12 @@ describe('the ratified calibration and sheet strings', () => {
 		expect(live).toEqual(RATIFIED.map((r) => r[0]).sort());
 	});
 
+	// `calib.voiceTypeFirst.hint`: the wizard's first screen, re-ratified by Dann 2026-11-17 15:46 (EN, his words) and 15:47 (FR, "I ratify your better French"). Not a capture. or sheet. key, so pinned here beside the list.
+	it('pins the wizard\u2019s voice type line (EN 2026-11-17 15:46, FR 15:47)', () => {
+		expect(t('calib.voiceTypeFirst.hint', 'en')).toBe('Ilya can use generic values with your guidance, until you record your own vowels. This doesn\u2019t change what Ilya measures. \u201cNot sure\u201d is a valid answer.');
+		expect(t('calib.voiceTypeFirst.hint', 'fr')).toBe('Ilya peut utiliser des valeurs par défaut selon vos indications, jusqu\u2019à ce que vous captiez vos propres voyelles. Cela ne change pas ce qu\u2019Ilya mesure. «\u00a0Je ne sais pas\u00a0» est une réponse valable.');
+	});
+
 	it('pins the pause line (EN 2026-11-13 01:05, FR 10:30)', () => {
 		expect(t('pacifier.pause', 'en')).toBe('Stop. Hold that shape, silently.');
 		expect(t('pacifier.pause', 'fr')).toBe('Arrêtez. Gardez cette forme, en silence.');
