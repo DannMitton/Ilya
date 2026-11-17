@@ -33,7 +33,7 @@ test.skipIf(!SET || !OUT)('measure the path picker on the synthetic set', () => 
 	for (const t of takes(opts)) {
 		if (want && t.cell.type !== want) continue;
 		const y = t.y, sr = SYNTH_SR, vowel = t.cell.vowel;
-		const shipped = runCapture(y, sr, vowel);
+		const shipped = runCapture(y, sr, vowel, undefined, undefined, 'shipped');
 		const trace: Partial<ExtractTrace> = {};
 		const po = runCapture(y, sr, vowel, undefined, trace, 'path');
 		const ev = trace.chosen?.path ?? null;

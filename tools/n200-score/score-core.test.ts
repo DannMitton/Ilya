@@ -10,6 +10,7 @@ import { synthFry, SYNTH_SR, type FryCase } from '$lib/voice/engine/fry-synth';
 import { wavBytes } from '$lib/voice/engine/capture-file';
 import { VARIANT_KEYS, WEIGHT_KEY, DEFAULT_KEY, type VarCell } from './variants';
 import { judge, choice, weightTable, defaultCheck } from './variant-core';
+import { divergenceTable, plausibilityTable, iuAbsentTable } from './step5-core';
 import { TYPES } from './fidelity-set';
 import type { MRow } from './measure-core';
 import { decodeWav, scoreTake, scoreFolder, tableCsv, summaryText, kindOf, PICKERS, BURG_PY } from './score-core';
@@ -181,6 +182,35 @@ describe('lane 64: the bars of section 3A, on constructed rows', () => {
 		expect(defaultCheck(good()).anyMiss).toBe(false);
 		const rows = good(); for (let i = 0; i < 5; i++) rows[i] = take('bass', cell({ f2: 900 }));
 		expect(defaultCheck(rows).anyMiss).toBe(true);
+	});
+});
+
+describe('lane 64 Step 5: the counts', () => {
+	const row = (vowel: string, f1: number, f2: number | null, over: { kase?: string; reading?: string; type?: MRow['type']; k?: number } = {}): MRow => {
+		const cell: VarCell = { f1, f2, p2: f2, p3: null, case: over.kase ?? 'a', track: f2 === null ? null : 2, ceiling: 5000, runnerUp: 5200 };
+		const pc = { outcome: 'reading', f1, f2, reading: over.reading ?? 'captured', confidence: 'high' } as MRow['path'];
+		return { idx: 0, k: over.k ?? 0, type: over.type ?? 'bass', vowel, pair: false, truth: [f1, f2 ?? 0, 0, 0, 0], shipped: pc, path: pc, variants: {}, v: { [DEFAULT_KEY]: cell } } as MRow;
+	};
+	// [i] 300 / 2200 and [u] 350 / 800 expect [ɨ] near 409.5 / 1262.
+	it('counts the [ɨ] readings the divergence pass used to demote: a missing [u], and a divergent [ɨ]; an [ɨ] near the expectation is not counted', () => {
+		const missing = [row('i', 300, 2200), row('ɨ', 410, 1262)];
+		expect(divergenceTable(missing).total).toMatchObject({ igh: 1, own: 1, missing: 1, divergent: 0, changed: 1 });
+		const divergent = [row('i', 300, 2200), row('u', 350, 800), row('ɨ', 350, 1262)];
+		expect(divergenceTable(divergent).total).toMatchObject({ own: 1, missing: 0, divergent: 1, changed: 1 });
+		const fine = [row('i', 300, 2200), row('u', 350, 800), row('ɨ', 410, 1262)];
+		expect(divergenceTable(fine).total).toMatchObject({ own: 1, missing: 0, divergent: 0, changed: 0 });
+	});
+	it('an [ɨ] that was Provisional on its own evidence is not counted, and an [i] without an fR2 counts as missing', () => {
+		const own = [row('i', 300, 2200), row('u', 350, 800), row('ɨ', 350, 1262, { reading: 'provisional' })];
+		expect(divergenceTable(own).total).toMatchObject({ igh: 1, own: 0, changed: 0 });
+		const noF2 = [row('i', 300, null), row('u', 350, 800), row('ɨ', 410, 1262)];
+		expect(divergenceTable(noF2).total).toMatchObject({ missing: 1, changed: 1 });
+	});
+	it('counts the Captured readings the plausibility band used to demote, and [i] and [u] with fR1 standing and fR2 absent', () => {
+		const rows = [row('i', 90, 2200), row('i', 296, 1705), row('u', 346, null), row('u', 346, null, { kase: 'b' }), row('u', 346, 804)];
+		const p = plausibilityTable(rows);
+		expect(p).toMatchObject({ total: 1, of: 5 });
+		expect(iuAbsentTable(rows)).toMatch(/\| bass \| 0\/2 \(0\.0%\) \| 1\/3 \(33\.3%\) \|/);
 	});
 });
 

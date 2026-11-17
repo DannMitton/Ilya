@@ -22,12 +22,12 @@ const strip = (s: string) => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:]
 const SLOW_CASE_MS = 20_000;
 
 describe('the measure switch', () => {
-	it('?measure=open selects the open picker, and nothing else does', () => {
+	it('?measure=open selects the open picker, ?measure=shipped the shipped picker, and nothing else changes the default, the path picker', () => {
 		expect(measurePicker('?measure=open')).toBe('open');
 		expect(measurePicker('?a=1&measure=open')).toBe('open');
-		expect(measurePicker('')).toBe('shipped');
+		expect(measurePicker('')).toBe('path');
 		expect(measurePicker('?measure=shipped')).toBe('shipped');
-		expect(measurePicker('?measure=OPEN')).toBe('shipped');
+		expect(measurePicker('?measure=OPEN')).toBe('path');
 		expect(measurePicker('?measure=path')).toBe('path');
 	});
 });
@@ -60,10 +60,10 @@ describe('a reading taken under the open picker says so', () => {
 		expect(o.formant.picker).toBe('open');
 		const rec = readingTake({ vowel: 'ɑ', visible: 'zone', now: new Date('2026-11-15T00:00:00Z') }, o.formant);
 		expect(rec.raw?.picker).toBe('open');
-		const shipped = runCapture(y, SYNTH_SR, 'ɑ');
+		const shipped = runCapture(y, SYNTH_SR, 'ɑ', undefined, undefined, 'shipped');
 		if (shipped.outcome !== 'reading') throw new Error('no reading');
-		expect(shipped.formant.picker).toBeUndefined();
-		expect(readingTake({ vowel: 'ɑ', visible: 'zone' }, shipped.formant).raw?.picker).toBeUndefined();
+		expect(shipped.formant.picker).toBe('shipped');
+		expect(readingTake({ vowel: 'ɑ', visible: 'zone' }, shipped.formant).raw?.picker).toBe('shipped');
 	});
 });
 

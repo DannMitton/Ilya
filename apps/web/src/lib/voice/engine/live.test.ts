@@ -137,7 +137,7 @@ async function take(s: LiveCaptureSession, r: Run, source = FRY()) {
 
 describe('one microphone per visit', () => {
 	it('two takes in one visit call getUserMedia once, and the stream and the context stay live between them', async () => {
-		const s = new LiveCaptureSession();
+		const s = new LiveCaptureSession('shipped');
 		s.openVisit();
 		await take(s, run());
 		expect(tracks[0].readyState).toBe('live');
@@ -148,7 +148,7 @@ describe('one microphone per visit', () => {
 	});
 
 	it('the second take of a visit receives audio and reaches stable fry (the handler reads the run at call time)', async () => {
-		const s = new LiveCaptureSession();
+		const s = new LiveCaptureSession('shipped');
 		s.openVisit();
 		await take(s, run());
 		const second = run();
@@ -157,7 +157,7 @@ describe('one microphone per visit', () => {
 	});
 
 	it('no audio from before a take reaches it: chunks between runs are dropped and a start clears the buffer', async () => {
-		const s = new LiveCaptureSession();
+		const s = new LiveCaptureSession('shipped');
 		s.openVisit();
 		await take(s, run());
 		const internals = s as unknown as { chunkSamples: number };
@@ -168,7 +168,7 @@ describe('one microphone per visit', () => {
 	});
 
 	it('a gate timeout inside a visit keeps the microphone: the next take does not call getUserMedia again', async () => {
-		const s = new LiveCaptureSession();
+		const s = new LiveCaptureSession('shipped');
 		s.openVisit();
 		const missed = run();
 		await startAndSettle(s, missed);
@@ -180,7 +180,7 @@ describe('one microphone per visit', () => {
 	});
 
 	it('Stop (cancel) mid-take inside a visit keeps the tracks live, and CANCELLED is reported once', async () => {
-		const s = new LiveCaptureSession();
+		const s = new LiveCaptureSession('shipped');
 		s.openVisit();
 		const r = run();
 		await startAndSettle(s, r);
@@ -192,7 +192,7 @@ describe('one microphone per visit', () => {
 	});
 
 	it('closeVisit between takes releases the tracks and the context, and a take after it acquires again', async () => {
-		const s = new LiveCaptureSession();
+		const s = new LiveCaptureSession('shipped');
 		s.openVisit();
 		await take(s, run());
 		s.closeVisit();
@@ -205,7 +205,7 @@ describe('one microphone per visit', () => {
 	});
 
 	it('closeVisit during a take ends it silently and stops the tracks', async () => {
-		const s = new LiveCaptureSession();
+		const s = new LiveCaptureSession('shipped');
 		s.openVisit();
 		const r = run();
 		await startAndSettle(s, r);
@@ -216,7 +216,7 @@ describe('one microphone per visit', () => {
 	});
 
 	it('a microphone failure releases the microphone even inside a visit', async () => {
-		const s = new LiveCaptureSession();
+		const s = new LiveCaptureSession('shipped');
 		s.openVisit();
 		getUserMedia.mockRejectedValueOnce(Object.assign(new Error('no'), { name: 'NotReadableError' }));
 		const r = run();
@@ -227,7 +227,7 @@ describe('one microphone per visit', () => {
 	});
 
 	it('a held track that has ended is let go, and the next take acquires again', async () => {
-		const s = new LiveCaptureSession();
+		const s = new LiveCaptureSession('shipped');
 		s.openVisit();
 		await take(s, run());
 		tracks[0].readyState = 'ended';
@@ -236,7 +236,7 @@ describe('one microphone per visit', () => {
 	});
 
 	it('openVisit resumes a context the system suspended, and is idempotent', async () => {
-		const s = new LiveCaptureSession();
+		const s = new LiveCaptureSession('shipped');
 		s.openVisit();
 		await take(s, run());
 		ctxNow().state = 'suspended';
@@ -247,7 +247,7 @@ describe('one microphone per visit', () => {
 	});
 
 	it('a cancel while resume() is pending leaves no half-built graph: the next take in the visit reaches stable fry', async () => {
-		const s = new LiveCaptureSession();
+		const s = new LiveCaptureSession('shipped');
 		s.openVisit();
 		FakeCtx.startSuspended = true;
 		FakeCtx.holdResume = true;
@@ -267,14 +267,14 @@ describe('one microphone per visit', () => {
 	});
 
 	it('openVisit acquires nothing', () => {
-		new LiveCaptureSession().openVisit();
+		new LiveCaptureSession('shipped').openVisit();
 		expect(getUserMedia).not.toHaveBeenCalled();
 	});
 });
 
 describe('outside a visit, every run behaves as it always did', () => {
 	it('a take acquires and releases its own microphone', async () => {
-		const s = new LiveCaptureSession();
+		const s = new LiveCaptureSession('shipped');
 		await take(s, run());
 		expect(tracks[0].readyState).toBe('ended');
 		expect(FakeCtx.all[0].state).toBe('closed');
@@ -283,7 +283,7 @@ describe('outside a visit, every run behaves as it always did', () => {
 	});
 
 	it('a cancel releases the tracks', async () => {
-		const s = new LiveCaptureSession();
+		const s = new LiveCaptureSession('shipped');
 		const r = run();
 		await startAndSettle(s, r);
 		s.cancel();
@@ -293,7 +293,7 @@ describe('outside a visit, every run behaves as it always did', () => {
 
 describe('the visit helper over the live session (Back and return)', () => {
 	it('Back, return, then two takes call getUserMedia exactly once more', async () => {
-		const s = new LiveCaptureSession();
+		const s = new LiveCaptureSession('shipped');
 		const state = { wanted: true };
 		const visit = createVisit({ session: s, endTake: () => s.cancel(), closeTicks: () => {}, wanted: () => state.wanted, pageVisible: () => true });
 		visit.sync();
@@ -310,7 +310,7 @@ describe('the visit helper over the live session (Back and return)', () => {
 	});
 
 	it('Back during a take ends it, keeps nothing, and stops the tracks', async () => {
-		const s = new LiveCaptureSession();
+		const s = new LiveCaptureSession('shipped');
 		const state = { wanted: true };
 		const visit = createVisit({ session: s, endTake: () => s.cancel(), closeTicks: () => {}, wanted: () => state.wanted, pageVisible: () => true });
 		visit.sync();

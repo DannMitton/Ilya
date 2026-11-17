@@ -7,10 +7,11 @@ import { extractOpen, COMB_MAX, PROM_DB } from './open-extract';
 import { extractPath } from './path-extract';
 
 /**
- * Which picker reads the resonances (N.200 Step 3). `shipped` is the picker the app has used, which looks for the asked vowel's
- * expected peaks (`extract.ts`, `MITTON`). `open` takes no vowel (`open-extract.ts`). `?measure=open` selects it
- * (`chart/measure-switch.ts`); a reading taken under it carries `picker: 'open'`. `path` reads each take from the take alone, by a ladder
- * of ceilings (`path-extract.ts`); `?measure=path` selects it, and its readings carry `picker: 'path'`.
+ * Which picker reads the resonances (N.200). `path` is the default since lane 64 (switch-on brief r2, Step 5): it reads each take from the take
+ * alone, by a ladder of ceilings (`path-extract.ts`), so no vowel, no voice type, and no other singer's values reach into the measurement
+ * (Dann 2026-11-13, `docs/memory/PRODUCT.md:1264-1273`). `shipped` is the picker the app used until then: it looks for the asked vowel's expected peaks
+ * (`extract.ts`, `MITTON`), and `?measure=shipped` selects it. `open` takes no vowel (`open-extract.ts`), and `?measure=open` selects it
+ * (`chart/measure-switch.ts`). Every reading carries the picker that took it, `picker: 'shipped' | 'open' | 'path'`.
  */
 export type Picker = 'shipped' | 'open' | 'path';
 
@@ -56,7 +57,7 @@ export interface Steadiness {
 /** JUDGEMENT, illustrative: fR2 is read from a weaker peak than fR1, so its halves are held to a wider bar. */
 const T_HALVES_F2 = 0.12;
 
-export function f1Steadiness(y: Float64Array, sr: number, vowel: Vowel, picker: Picker = 'shipped'): Steadiness {
+export function f1Steadiness(y: Float64Array, sr: number, vowel: Vowel, picker: Picker = 'path'): Steadiness {
 	const mid = y.length >> 1;
 	const ra = extractWith(picker, y.subarray(0, mid), sr, vowel), rb = extractWith(picker, y.subarray(mid), sr, vowel);
 	const a = ra.f1, b = rb.f1;
@@ -135,13 +136,13 @@ function pathF2Quality(ex: ExtractResult, st: Steadiness): CalibratedFormant['f2
  * `fullWindow`. Re-running the guard on a 1.5 s slice would report `fullWindow: true`
  * for that slice and promote a sub-window take to `high`, which is a claim about
  * steadiness the singer never made. Absent the parameter the guard runs on `y` as
- * it always has, so every existing caller is unchanged.
+ * it always has. The picker defaults to `path` (lane 64, Step 5); a caller that needs the earlier picker passes `'shipped'`.
  */
-export function analyze(y: Float64Array, sr: number, vowel: Vowel, _voiceType?: VoiceType, outerGuard?: GuardResult, trace?: Partial<ExtractTrace>, picker: Picker = 'shipped'): CalibratedFormant {
+export function analyze(y: Float64Array, sr: number, vowel: Vowel, _voiceType?: VoiceType, outerGuard?: GuardResult, trace?: Partial<ExtractTrace>, picker: Picker = 'path'): CalibratedFormant {
 	return grade(y, sr, vowel, outerGuard, trace, picker).formant;
 }
 
-function grade(y: Float64Array, sr: number, vowel: Vowel, outerGuard?: GuardResult, trace?: Partial<ExtractTrace>, picker: Picker = 'shipped'): { formant: CalibratedFormant; steadiness: Steadiness } {
+function grade(y: Float64Array, sr: number, vowel: Vowel, outerGuard?: GuardResult, trace?: Partial<ExtractTrace>, picker: Picker = 'path'): { formant: CalibratedFormant; steadiness: Steadiness } {
 	const det = detect(y, sr);
 	const g = outerGuard ?? guard(y, sr);
 	const ex = extractWith(picker, y, sr, vowel, trace);
@@ -177,7 +178,7 @@ function grade(y: Float64Array, sr: number, vowel: Vowel, outerGuard?: GuardResu
 		noiseFloor: det.snrDb === null ? 'unmeasured' : 'measured',
 	};
 	if (ex.f2 !== null) out.f2 = ex.f2;
-	if (picker === 'open' || picker === 'path') out.picker = picker;
+	out.picker = picker;
 	return { formant: out, steadiness: st };
 }
 
@@ -192,7 +193,7 @@ export type CaptureOutcome =
 
 /** The capture pipeline: structural checks, the live gate, then the §9 core. */
 /** `trace`, when passed, is filled with what the extractor saw and chose (the dev-only capture file). */
-export function runCapture(y: Float64Array, sr: number, vowel: Vowel, _voiceType?: VoiceType, trace?: Partial<ExtractTrace>, picker: Picker = 'shipped'): CaptureOutcome {
+export function runCapture(y: Float64Array, sr: number, vowel: Vowel, _voiceType?: VoiceType, trace?: Partial<ExtractTrace>, picker: Picker = 'path'): CaptureOutcome {
 	const durMs = (y.length / sr) * 1000;
 	if (durMs < MIN_BUFFER_S * 1000)
 		return { outcome: 'error', error: { code: 'SAMPLE_TOO_SHORT', message: 'buffer too short', actualMs: durMs, minimumMs: MIN_BUFFER_S * 1000 } };

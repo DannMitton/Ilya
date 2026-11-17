@@ -110,7 +110,7 @@ export interface PickerReading {
 type PickerFn = (y: Float64Array, sr: number, asked: Vowel, trace: Partial<ExtractTrace>) => CaptureOutcome;
 /** `shipped` is the prior-led picker the app has used; `open` is the agnostic picker (`?measure=open`, N.200 Step 3); `path` is the path picker (`?measure=path`). */
 export const PICKERS: Record<string, PickerFn> = {
-	shipped: (y, sr, asked, trace) => runCapture(y, sr, asked, undefined, trace),
+	shipped: (y, sr, asked, trace) => runCapture(y, sr, asked, undefined, trace, 'shipped'),
 	open: (y, sr, asked, trace) => runCapture(y, sr, asked, undefined, trace, 'open'),
 	path: (y, sr, asked, trace) => runCapture(y, sr, asked, undefined, trace, 'path'),
 };

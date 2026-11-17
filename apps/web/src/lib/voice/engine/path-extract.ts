@@ -1,6 +1,6 @@
 /**
- * The path picker (N.200 plan step P2, `docs/sessions/brief-code-n200-path-picker_r3_2026-11-16.md`, section 3.2). Read when `?measure=path`
- * is in the address. It reads each take from the take alone: no vowel, no voice type, and no table of anyone's values reach it.
+ * The path picker (N.200 plan step P2, `docs/sessions/brief-code-n200-path-picker_r3_2026-11-16.md`, section 3.2). Read by default since lane 64 Step 5:
+ * with no `measure` in the address (`chart/measure-switch.ts`). It reads each take from the take alone: no vowel, no voice type, and no table of anyone's values reach it.
  *
  * THE METHOD, from the published descriptions (Dann, 2026-11-16 16:46: build from them, never from Praat's code):
  *  - Burg LPC at each ceiling of a ladder (`burg.ts`), the first three poles of each frame forming three formant tracks.

@@ -6,6 +6,7 @@ import { test } from 'vitest';
 import { readFileSync, writeFileSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import { setByName } from './fidelity-set';
+import { step5Tables } from './step5-core';
 import { verdictTable, perTypeTable, weightTable, defaultCheck, selfCheck, choice, pairSplitTable, trackTable } from './variant-core';
 import { mainTables, flagTable, moveTable, f2Section, ceilingTable, sensitivityTable, iuAbsent, onOffTable, type MRow } from './measure-core';
 
@@ -29,6 +30,7 @@ test.skipIf(!SET || !OUT)('tables', () => {
 		parts.push('\n### Every voice type, every variant\n', perTypeTable(rows), '\n### Split by the second pulse (reported, not judged)\n', pairSplitTable(rows));
 		for (const [label, g] of [['with the second pulse', rows.filter((r) => r.pair)], ['without the second pulse', rows.filter((r) => !r.pair)]] as const) parts.push(`\n### Verdict table, ${label} (reported, not judged)\n`, verdictTable(g, label));
 	}
+	if (rows.some((r) => r.v)) parts.push('\n' + step5Tables(rows, SET));
 	const text = parts.join('\n') + '\n';
 	writeFileSync(path.join(OUT, `tables-${SET}.md`), text);
 	console.log(text);

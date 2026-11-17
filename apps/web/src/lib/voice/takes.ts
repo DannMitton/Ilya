@@ -25,7 +25,7 @@ export interface TakeRecord {
 	/** The session's error code, for a failed take. */
 	errorCode?: string;
 	/** The engine's reading as it came, before the guard: absent on a failed or cancelled take. */
-	raw?: { f1: number; f2?: number; confidence: CalibratedFormant['confidence']; f2Quality?: CalibratedFormant['f2Quality']; picker?: 'open' | 'path' };
+	raw?: { f1: number; f2?: number; confidence: CalibratedFormant['confidence']; f2Quality?: CalibratedFormant['f2Quality']; picker?: 'shipped' | 'open' | 'path' };
 	/** The declared voice type at the time; null when none. */
 	voiceType: string | null;
 	visible: TakeVisibility;

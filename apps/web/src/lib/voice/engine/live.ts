@@ -196,8 +196,8 @@ function mapMicError(e: unknown): CaptureError {
 }
 
 export class LiveCaptureSession implements CaptureSession {
-	/** Which picker reads the take (`?measure=open`, `chart/measure-switch.ts`). */
-	constructor(private readonly picker: Picker = 'shipped') {}
+	/** Which picker reads the take: `path` unless the address says `?measure=shipped` or `?measure=open` (`chart/measure-switch.ts`). */
+	constructor(private readonly picker: Picker = 'path') {}
 	/** Generation counter: every async continuation checks it, so a cancel
 	 * or a superseding start silences stale callbacks (same pattern as the
 	 * stub's `active` flag, extended to real async boundaries). */

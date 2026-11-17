@@ -147,12 +147,12 @@ describe('the abstention reaches the reading a singer keeps', () => {
 	// exists to stop. What is asserted is the propagation, which is the change.
 	it('marks the noise floor unmeasured when the band collapsed', () => {
 		const sr = 8000;
-		expect(analyze(sample(sr), sr, 'a').noiseFloor).toBe('unmeasured');
+		expect(analyze(sample(sr), sr, 'a', undefined, undefined, undefined, 'shipped').noiseFloor).toBe('unmeasured');
 	});
 
 	it('marks it measured when the band was formed', () => {
 		const sr = 48000;
-		expect(analyze(sample(sr), sr, 'a').noiseFloor).toBe('measured');
+		expect(analyze(sample(sr), sr, 'a', undefined, undefined, undefined, 'shipped').noiseFloor).toBe('measured');
 	});
 });
 

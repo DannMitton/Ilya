@@ -280,23 +280,25 @@
 			: `s-${Date.now().toString(36)}`;
 	/**
 	 * Runs the vowel-aware fR1 window check on a just-captured reading and
-	 * returns a clone carrying the verdict. An `implausible` reading resolves
-	 * to Provisional (never a block, nothing discarded; the sigla and the
-	 * hold copy carry it) while `confidence` stays untouched — plausibility
-	 * and signal quality are orthogonal facts (Kimi's ruling: "the machine
-	 * heard you perfectly, but you sang a different vowel than intended" is
-	 * itself useful information). Guard placement at this boundary follows
-	 * the withIghPass precedent: the profile (the anchors) lives here, not in
-	 * the §9 core. The structured console event is emitted for EVERY
-	 * extraction (ruled): the distance-to-edge distribution of honest
-	 * readings is the evidence base for any future margin tightening.
+	 * returns a clone carrying the verdict as a description. It never changes
+	 * the reading's status: a reading's status comes from its own evidence
+	 * (the picker's cross-check, the guard, the signal), and the neighbourhood
+	 * "never demotes, discards, or blocks a reading" (Dann 2026-11-13,
+	 * `docs/memory/PRODUCT.md:1269-1270`, "Ilya encounters the voice as it is").
+	 * Before lane 64 an `implausible` Captured reading was turned Provisional
+	 * here; that demotion is gone, and `plausibility` stays on the reading as
+	 * information beside it. `confidence` is untouched too (plausibility and
+	 * signal quality are orthogonal facts, Kimi's ruling). Guard placement at
+	 * this boundary follows the withIghPass precedent: the profile (the
+	 * anchors) lives here, not in the §9 core. The structured console event
+	 * is emitted for EVERY extraction (ruled): the distance-to-edge
+	 * distribution of honest readings is the evidence base for any future
+	 * margin tightening.
 	 */
 	function withPlausibility(vowel: Vowel, formant: CalibratedFormant): CalibratedFormant {
 		if (formant.source !== 'measured-user') return formant;
 		const res = checkPlausibility(formant.f1, vowel, voiceType, anchorF1sFor(profile));
 		const out: CalibratedFormant = { ...formant, plausibility: res.plausibility };
-		if (res.plausibility === 'implausible' && out.reading === 'captured')
-			out.reading = 'provisional';
 		// No re-prompt is ever shown now (2026-09-30, `outside.ts`); the field stays in the ruled schema.
 		const rePromptShown = false;
 		console.info(

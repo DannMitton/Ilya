@@ -44,7 +44,7 @@ const SOURCES: Partial<FryCase>[] = [{ jitter: 0.02 }, { jitter: 0.12 }, { jitte
 const RATES = [35, 50, 70], LEVELS = [0, -15, -30];
 
 function f1Of(y: Float64Array, vowel: 'i' | 'u' | 'ɑ', trace?: Partial<ExtractTrace>): number {
-	const o = runCapture(y, SYNTH_SR, vowel, undefined, trace);
+	const o = runCapture(y, SYNTH_SR, vowel, undefined, trace, 'shipped');
 	if (o.outcome !== 'reading') throw new Error(`no reading: ${JSON.stringify(o).slice(0, 200)}`);
 	return o.formant.f1;
 }
@@ -84,7 +84,7 @@ describe('the closed phase gives way when it disagrees with the envelope', () =>
 		const y = synthFry({ formants: [450, 800, 2400, 3100, 3800], bandwidths: BW, rate: 70, levelDb: -30, seed: 792,
 			jitter: 0.1, breath: 1, pairMs: 5, pairRatio: 0.6, highpassHz: 150, humRms: 0.002 });
 		const trace: Partial<ExtractTrace> = {};
-		const o = runCapture(y, SYNTH_SR, 'o', undefined, trace);
+		const o = runCapture(y, SYNTH_SR, 'o', undefined, trace, 'shipped');
 		expect(o.outcome).toBe('reading');
 		if (o.outcome !== 'reading') return;
 		expect(trace.closedPhaseSetAside).toBe(true);

@@ -184,23 +184,23 @@ describe('a take that is steady for part of its length is judged on that part', 
 	});
 
 	it('returns a reading instead of a re-prompt', () => {
-		expect(runCapture(twoPhaseBuffer, SR, 'u').outcome).toBe('reading');
+		expect(runCapture(twoPhaseBuffer, SR, 'u', undefined, undefined, 'shipped').outcome).toBe('reading');
 	});
 
 	it('recovers the first formant the fixture put in the signal', () => {
-		const out = runCapture(twoPhaseBuffer, SR, 'u');
+		const out = runCapture(twoPhaseBuffer, SR, 'u', undefined, undefined, 'shipped');
 		if (out.outcome !== 'reading') throw new Error(`expected a reading, got ${out.outcome}`);
 		expect(Math.abs(out.formant.f1 - FR1)).toBeLessThan(30);
 	});
 
 	it('tops the confidence out at medium, because a second and a half is not 3.5 seconds', () => {
-		const out = runCapture(twoPhaseBuffer, SR, 'u');
+		const out = runCapture(twoPhaseBuffer, SR, 'u', undefined, undefined, 'shipped');
 		if (out.outcome !== 'reading') throw new Error(`expected a reading, got ${out.outcome}`);
 		expect(out.formant.confidence).not.toBe('high');
 	});
 
 	it('carries the guard verdict out to the caller, which is what the console prints', () => {
-		const out = runCapture(twoPhaseBuffer, SR, 'u');
+		const out = runCapture(twoPhaseBuffer, SR, 'u', undefined, undefined, 'shipped');
 		if (out.outcome !== 'reading') throw new Error(`expected a reading, got ${out.outcome}`);
 		expect(out.guard.reading).toBe('Captured');
 		expect(out.guard.fullWindow).toBe(false);
@@ -213,7 +213,7 @@ describe('the takes this change was not written for move nowhere', () => {
 		// The positive control, and the reason `fullWindow` had to be threaded
 		// rather than recomputed: if a 1.5 s slice could earn 'high', this
 		// assertion and the sub-window one above would say the same thing.
-		const out = runCapture(steadyBuffer, SR, 'u');
+		const out = runCapture(steadyBuffer, SR, 'u', undefined, undefined, 'shipped');
 		if (out.outcome !== 'reading') throw new Error(`expected a reading, got ${out.outcome}`);
 		expect(out.formant.confidence).toBe('high');
 		expect(out.guard.fullWindow).toBe(true);
@@ -223,7 +223,7 @@ describe('the takes this change was not written for move nowhere', () => {
 		// The negative control. `segmentS` is null, so the pipeline hands the
 		// detector the whole buffer exactly as it did before N.80.
 		expect(guard(roughBuffer, SR).segmentS).toBeNull();
-		const out = runCapture(roughBuffer, SR, 'u');
+		const out = runCapture(roughBuffer, SR, 'u', undefined, undefined, 'shipped');
 		expect(out.outcome).toBe('reprompt');
 	});
 });
@@ -233,18 +233,18 @@ describe('the confidence tier reads the guard verdict it was given', () => {
 		// The one rule the threading exists for, stated directly. The buffer is the
 		// regular 3.5 s control, which earns 'high' on its own guard. Told that the
 		// take it came from only held for a sub-window, the same buffer must not.
-		expect(analyze(steadyBuffer, SR, 'u').confidence).toBe('high');
+		expect(analyze(steadyBuffer, SR, 'u', undefined, undefined, undefined, 'shipped').confidence).toBe('high');
 		const asSubWindow = analyze(steadyBuffer, SR, 'u', undefined, {
 			...guard(steadyBuffer, SR), fullWindow: false, segmentS: [0, MIN_STABLE_S], spanS: MIN_STABLE_S
-		});
+		}, undefined, 'shipped');
 		expect(asSubWindow.confidence).toBe('medium');
 	});
 
 	it('behaves as it always did when no verdict is passed', () => {
 		// The parameter is optional and the absent case must be the old case: the
 		// guard runs on `y`. Same buffer, same answer, both ways of asking.
-		const own = analyze(steadyBuffer, SR, 'u');
-		const explicit = analyze(steadyBuffer, SR, 'u', undefined, guard(steadyBuffer, SR));
+		const own = analyze(steadyBuffer, SR, 'u', undefined, undefined, undefined, 'shipped');
+		const explicit = analyze(steadyBuffer, SR, 'u', undefined, guard(steadyBuffer, SR), undefined, 'shipped');
 		expect(explicit).toEqual(own);
 	});
 });
@@ -309,7 +309,7 @@ describe('the guard says which of its four tests refused a take, and by how much
 	it('rides out on the capture outcome, which is what the console prints', () => {
 		// Confirmed, not assumed: `live.ts:684` stringifies the whole outcome, so
 		// `diag` reaches the console only if it is reachable from here.
-		const out = runCapture(twoPhaseBuffer, SR, 'u');
+		const out = runCapture(twoPhaseBuffer, SR, 'u', undefined, undefined, 'shipped');
 		if (out.outcome !== 'reading') throw new Error(`expected a reading, got ${out.outcome}`);
 		expect(out.guard.diag.full.failed).toContain('rate_cv');
 		expect(out.guard.diag.best?.failed).toEqual([]);
@@ -332,13 +332,13 @@ describe('a quiet fry is read, and a dead input is still named', () => {
 		expect(rms(quiet)).toBeLessThan(OLD_FLOOR);
 		// The live gate's question, on a one-second window: it accepts at this level.
 		expect(detect(quiet.subarray(0, SR), SR).accept).toBe(true);
-		const out = runCapture(quiet, SR, 'u');
+		const out = runCapture(quiet, SR, 'u', undefined, undefined, 'shipped');
 		if (out.outcome !== 'reading') throw new Error(`expected a reading, got ${JSON.stringify(out)}`);
 		expect(Math.abs(out.formant.f1 - FR1)).toBeLessThan(30);
 	});
 
 	it('still names a dead input: a buffer of zeros', () => {
-		const out = runCapture(new Float64Array(TOTAL_S * SR), SR, 'u');
+		const out = runCapture(new Float64Array(TOTAL_S * SR), SR, 'u', undefined, undefined, 'shipped');
 		expect(out.outcome === 'error' && out.error.code).toBe('NO_AUDIO_INPUT');
 	});
 
@@ -346,7 +346,7 @@ describe('a quiet fry is read, and a dead input is still named', () => {
 		const r = rng(0x5eed), room = new Float64Array(TOTAL_S * SR);
 		for (let i = 0; i < room.length; i++) room[i] = (r() * 2 - 1) * 0.002;
 		expect(rms(room)).toBeLessThan(OLD_FLOOR);
-		expect(runCapture(room, SR, 'u').outcome).not.toBe('reading');
+		expect(runCapture(room, SR, 'u', undefined, undefined, 'shipped').outcome).not.toBe('reading');
 	});
 });
 
@@ -378,7 +378,7 @@ describe('a take is Provisional on evidence about its reading, not on its rhythm
 	const shiftedBuffer = buildShifted(steadyIntervals(SHIFT_S, 0x11d), SHIFT_S, SHIFT_S / 2, [FR1, FR2], [450, 800]);
 
 	it('reads a fry whose rhythm wanders as Captured, though the guard refuses the rhythm', () => {
-		const out = runCapture(rateWanderBuffer, SR, 'u');
+		const out = runCapture(rateWanderBuffer, SR, 'u', undefined, undefined, 'shipped');
 		if (out.outcome !== 'reading') throw new Error(`expected a reading, got ${JSON.stringify(out)}`);
 		// The guard refuses every window on the rhythm, which alone made this take
 		// Provisional before row 2d.
@@ -394,7 +394,7 @@ describe('a take is Provisional on evidence about its reading, not on its rhythm
 		// can hide the move and the whole take reaches the extractor.
 		expect(guard(shiftedBuffer, SR).segmentS).toBeNull();
 		expect(detect(shiftedBuffer, SR).accept).toBe(true);
-		const out = runCapture(shiftedBuffer, SR, 'u');
+		const out = runCapture(shiftedBuffer, SR, 'u', undefined, undefined, 'shipped');
 		if (out.outcome !== 'reading') throw new Error(`expected a reading, got ${JSON.stringify(out)}`);
 		expect(out.steadiness.steady).toBe(false);
 		expect(out.formant.reading).toBe('provisional');
@@ -402,7 +402,7 @@ describe('a take is Provisional on evidence about its reading, not on its rhythm
 	});
 
 	it('names both halves on the outcome, which is what the capture file keeps', () => {
-		const out = runCapture(shiftedBuffer, SR, 'u');
+		const out = runCapture(shiftedBuffer, SR, 'u', undefined, undefined, 'shipped');
 		if (out.outcome !== 'reading') throw new Error(`expected a reading, got ${out.outcome}`);
 		const [a, b] = out.steadiness.halvesF1;
 		expect(Math.abs(a! - FR1)).toBeLessThan(45);

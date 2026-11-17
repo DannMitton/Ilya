@@ -3,16 +3,22 @@
  * constructed inputs, that no table of anyone's values and no prior reaches the choice, that the reading does not depend on the vowel asked,
  * and the route's status and evidence. Expected values come from generator arguments or from the brief's rules, never from the picker's output.
  */
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { synthFry, SYNTH_SR } from './fry-synth';
 import { runCapture } from './analyze';
+import { extractFormants } from './extract';
+import { closedPhaseF1 } from './closed-phase';
 import { measurePicker } from '../chart/measure-switch';
 import { readingTake } from '../takes';
 import { crossCheck, extractPath, ladder, L15, L9, scoreCeilings, PATH_DEFAULTS, type CeilingTracks } from './path-extract';
 import type { ExtractTrace } from './extract';
 import type { Vowel } from './types';
+
+// Spies that call through: they record a call without changing what the picker returns.
+vi.mock('./extract', async (importOriginal) => { const m = await importOriginal<typeof import('./extract')>(); return { ...m, extractFormants: vi.fn(m.extractFormants) }; });
+vi.mock('./closed-phase', async (importOriginal) => { const m = await importOriginal<typeof import('./closed-phase')>(); return { ...m, closedPhaseF1: vi.fn(m.closedPhaseF1) }; });
 
 const strip = (s: string) => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/.*$/gm, '$1');
 const SLOW_CASE_MS = 60_000;
@@ -213,14 +219,43 @@ describe('the path picker is agnostic', () => {
 	}, SLOW_CASE_MS);
 });
 
+describe('lane 64 Step 5: no default path reaches MITTON', () => {
+	beforeEach(() => { vi.mocked(extractFormants).mockClear(); vi.mocked(closedPhaseF1).mockClear(); });
+	const take = () => synthFry({ formants: [330, 1250, 2500, 3300, 3900], bandwidths: BW, rate: 50, jitter: 0.03, seed: 8 });
+	it('with no measure in the address, a capture never calls extractFormants or closedPhaseF1', () => {
+		const picker = measurePicker('');
+		expect(picker).toBe('path');
+		const o = runCapture(take(), SYNTH_SR, 'ɨ', undefined, undefined, picker);
+		expect(o.outcome).not.toBe('error');
+		expect(extractFormants).not.toHaveBeenCalled();
+		expect(closedPhaseF1).not.toHaveBeenCalled();
+	}, SLOW_CASE_MS);
+	it('with no picker argument at all, runCapture reads by the path picker and carries picker "path"', () => {
+		const o = runCapture(take(), SYNTH_SR, 'ɨ');
+		expect(o.outcome).toBe('reading');
+		if (o.outcome === 'reading') expect(o.formant.picker).toBe('path');
+		expect(extractFormants).not.toHaveBeenCalled();
+		expect(closedPhaseF1).not.toHaveBeenCalled();
+	}, SLOW_CASE_MS);
+	it('the shipped picker still reaches extractFormants, and a reading taken under it stores picker "shipped"', () => {
+		const o = runCapture(take(), SYNTH_SR, 'ɨ', undefined, undefined, 'shipped');
+		expect(extractFormants).toHaveBeenCalled();
+		if (o.outcome === 'reading') expect(o.formant.picker).toBe('shipped');
+		expect(o.outcome).toBe('reading');
+	}, SLOW_CASE_MS);
+});
+
 describe('the measure switch', () => {
-	it('?measure=path selects the path picker, for the exact value only', () => {
+	it('with no measure in the address, and for any value other than the exact `shipped` and `open`, the path picker reads (lane 64, Step 5)', () => {
+		expect(measurePicker('')).toBe('path');
 		expect(measurePicker('?measure=path')).toBe('path');
 		expect(measurePicker('?a=1&measure=path')).toBe('path');
-		expect(measurePicker('?measure=PATH')).toBe('shipped');
-		expect(measurePicker('?measure=paths')).toBe('shipped');
+		expect(measurePicker('?measure=PATH')).toBe('path');
+		expect(measurePicker('?measure=paths')).toBe('path');
+		expect(measurePicker('?measure=')).toBe('path');
+		expect(measurePicker('?measure=SHIPPED')).toBe('path');
+		expect(measurePicker('?measure=shipped')).toBe('shipped');
 		expect(measurePicker('?measure=open')).toBe('open');
-		expect(measurePicker('')).toBe('shipped');
 	});
 });
 
@@ -259,8 +294,8 @@ describe('the route', () => {
 
 	it('the shipped and open pickers are not changed by the new route', () => {
 		const y = synthFry({ formants: [650, 1050, 2500, 3300, 3900], bandwidths: BW, rate: 50, jitter: 0.03, seed: 9 });
-		const shipped = runCapture(y, SYNTH_SR, 'ɑ');
+		const shipped = runCapture(y, SYNTH_SR, 'ɑ', undefined, undefined, 'shipped');
 		if (shipped.outcome !== 'reading') throw new Error('no reading');
-		expect(shipped.formant.picker).toBeUndefined();
+		expect(shipped.formant.picker).toBe('shipped');
 	}, SLOW_CASE_MS);
 });
