@@ -149,3 +149,13 @@ export function iuAbsent(rows: MRow[]): string {
 	});
 	return table(['type', '[i] fR1 standing, fR2 absent', '[u] fR1 standing, fR2 absent'], body);
 }
+
+/** The main table with `f2Check` on (as `runCapture` ran it) and off (fR2 is the path's own whenever it has one): the status does not depend on the check. */
+export function onOffTable(rows: MRow[]): string {
+	const body = byType(rows).map(({ t, rows: g }) => {
+		const on = g.filter((r) => bars(r).f2).length, off = g.filter((r) => preBars(r).f2).length;
+		const bothOn = g.filter((r) => bars(r).f1 && bars(r).f2).length, bothOff = g.filter((r) => preBars(r).f1 && preBars(r).f2).length;
+		return [t, g.length, frac(on, g.length), frac(off, g.length), frac(bothOn, g.length), frac(bothOff, g.length), g.filter((r) => isReading(r.path) && r.path.kept === false).length];
+	});
+	return table(['type', 'takes', 'fR2 within 12%, check on', 'check off', 'both bars, check on', 'check off', 'fR2 marked absent by the check'], body);
+}
