@@ -36,7 +36,23 @@ Not measured: the closed-phase and envelope work are inside `runCapture` for bot
 
 ## End of lane
 
-END_OF_LANE_PLACEHOLDER
+The eight gates, run once on the tip with all four steps' code (commit `144c576`; the later commit only added reports and tables), each exit 0:
+
+| Gate | Baseline | Measured |
+|---|---|---|
+| 1 phonology | 462 passed (462) | 462 passed (462) |
+| 2 dictionary | 248 passed (248) | 248 passed (248) |
+| 3 web-check | 0 errors, 12 warnings, 5 files | 0 errors, 12 warnings, 5 files |
+| 4 web-test | 6481 passed, 1 skipped (6482) | **6512 passed, 1 skipped (6513)** |
+| 5 score-parser | 904 passed, 5 skipped (909) | 904 passed, 5 skipped (909) |
+| 6 blurb | 178 passed (178) | 178 passed (178) |
+| 7 integration | 159 passed (159) | 159 passed (159) |
+| 8 ratchets | OK | OK |
+
+Gate 4 moved by 31: the 5 tests of `burg.test.ts` and the 26 of `path-extract.test.ts`. The others are at baseline.
+
+**Playwright.** The brief and the desk's amendment name no suite, so I chose the ones that exercise the code I changed: `path-picker-time` in the `phone` project (passed, the figures above), and `calibrate-new` and `core-loop` in the `chromium` project (the calibration capture flow that `live.ts` serves, and the core loop): **58 passed** (13.6 minutes). The browser is the container's Chromium through `PW_CHROMIUM_PATH=/opt/pw-browsers/chromium`; the default launch looks for a build that is not installed here.
+Not run: the rest of the `chromium` project and the other `phone` tests. The desk names any it wants.
 
 ## What I could not establish
 
