@@ -28,6 +28,7 @@ describe('the measure switch', () => {
 		expect(measurePicker('')).toBe('shipped');
 		expect(measurePicker('?measure=shipped')).toBe('shipped');
 		expect(measurePicker('?measure=OPEN')).toBe('shipped');
+		expect(measurePicker('?measure=path')).toBe('path');
 	});
 });
 

@@ -24,7 +24,7 @@
  * anything. Nothing is stored in the app, and nothing is sent anywhere: this file holds no network call, and
  * `capture-file.test.ts` checks that.
  */
-import type { CaptureOutcome } from './analyze';
+import type { CaptureOutcome, Picker } from './analyze';
 import type { ExtractTrace } from './extract';
 
 export function captureFileEnabled(): boolean {
@@ -101,8 +101,10 @@ export interface CaptureRecord {
 	sampleRate: number;
 	/** Seconds trimmed from each end of the sweep before this buffer. */
 	trimS: number;
-	/** Which picker made the reading (`?measure=open` selects `open`), from N.200 Step 3. */
-	picker?: 'shipped' | 'open';
+	/** Which picker made the reading (`?measure=open` selects `open`, `?measure=path` selects `path`), from N.200 Step 3. */
+	picker?: Picker;
+	/** Milliseconds `runCapture` took on this take, whole, for every picker (N.200 path picker, Step 4). Set by `live.ts`; absent from a record made elsewhere. */
+	analysisMs?: number;
 	outcome: CaptureOutcome | { outcome: 'threw'; message: string };
 	trace: ExtractTrace | null;
 }

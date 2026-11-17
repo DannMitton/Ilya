@@ -1,6 +1,7 @@
 import { rfftMag, cepstralEnvelopeDb, hann, findPeaks, autocorr, levinson, polyRoots, resampleTo } from './dsp';
 import { closedPhaseF1, closedPhaseResonances, type ClosedPhaseResult } from './closed-phase';
 import type { OpenEvidence } from './open-extract';
+import type { PathEvidence } from './path-extract';
 
 export const MITTON: Record<string, [number, number]> = {
 	i: [296, 1705], e: [381, 1532], ɪ: [393, 1600], ɨ: [404, 1100], ɛ: [577, 1311],
@@ -127,7 +128,7 @@ export interface ExtractTrace {
  * `agreement` (the cents between the cepstral and the LPC readings) was removed in N.200 Step 3 (item 10): it was computed from an
  * LPC reading picked by the prior, and nothing read it but the recorder's JSON. `evidence` is set by the open picker only.
  */
-export interface ExtractResult { f1: number | null; f2: number | null; f2Prom: number; method: 'closed-phase' | 'ltas' | 'lpc-fallback' | 'open'; evidence?: OpenEvidence; }
+export interface ExtractResult { f1: number | null; f2: number | null; f2Prom: number; method: 'closed-phase' | 'ltas' | 'lpc-fallback' | 'open' | 'path'; evidence?: OpenEvidence; path?: PathEvidence; }
 
 export function extractFormants(y: Float64Array, sr: number, vowel: string, trace?: Partial<ExtractTrace>): ExtractResult {
 	const r = extractCore(y, sr, vowel, trace);

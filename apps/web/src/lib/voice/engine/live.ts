@@ -734,15 +734,18 @@ export class LiveCaptureSession implements CaptureSession {
 		// Each use starts with `__ILYA_RECORDER__`, which `vite.config.ts` makes the literal false in every
 		// build but the recorder's own deployment, so the bundler drops these branches and `capture-file.ts` with them.
 		const trace: Partial<ExtractTrace> | undefined = __ILYA_RECORDER__ && captureFileEnabled() ? {} : undefined;
+		const t0 = performance.now();
+		let analysisMs = 0;
 		try {
 			outcome = runCapture(y, sr, vowel, voiceType, trace, this.picker);
+			analysisMs = Math.round(performance.now() - t0);
 		} catch (e) {
-			if (__ILYA_RECORDER__ && trace) holdCapture(y, { vowel, sampleRate: sr, trimS: TRIM_S, picker: this.picker, outcome: { outcome: 'threw', message: String(e) }, trace: null });
+			if (__ILYA_RECORDER__ && trace) holdCapture(y, { vowel, sampleRate: sr, trimS: TRIM_S, picker: this.picker, analysisMs: Math.round(performance.now() - t0), outcome: { outcome: 'threw', message: String(e) }, trace: null });
 			handlers?.onError({ code: 'EXTRACTION_FAILED', message: 'Analysis failed unexpectedly.', cause: e });
 			return;
 		}
 		dbg('outcome:', JSON.stringify(outcome));
-		if (__ILYA_RECORDER__ && trace) holdCapture(y, { vowel, sampleRate: sr, trimS: TRIM_S, picker: this.picker, outcome, trace: trace.chosen ? (trace as ExtractTrace) : null });
+		if (__ILYA_RECORDER__ && trace) holdCapture(y, { vowel, sampleRate: sr, trimS: TRIM_S, picker: this.picker, analysisMs, outcome, trace: trace.chosen ? (trace as ExtractTrace) : null });
 		if (outcome.outcome === 'reading') handlers?.onComplete(outcome.formant);
 		else if (outcome.outcome === 'reprompt')
 			handlers?.onError({

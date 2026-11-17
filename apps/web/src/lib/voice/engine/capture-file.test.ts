@@ -135,7 +135,7 @@ describe('the recorder is out of every build that does not set the flag', () => 
 		const v = JSON.parse(readFileSync(join(__dirname, '../../../../../../vercel.json'), 'utf8')) as { buildCommand: string };
 		const cmd = v.buildCommand;
 		expect(cmd.match(/PUBLIC_RECORDER/g)).toHaveLength(1);
-		expect(cmd).toMatch(/^if \[ "\$VERCEL_GIT_COMMIT_REF" = "cloud-lane-\d+" \]; then export PUBLIC_RECORDER=1; fi; pnpm --filter @ilya\/web build$/);
+		expect(cmd).toMatch(/^if \[ "\$VERCEL_GIT_COMMIT_REF" = "cloud-lane-\d+" \]( \|\| \[ "\$VERCEL_GIT_COMMIT_REF" = "cloud-lane-\d+" \])*; then export PUBLIC_RECORDER=1; fi; pnpm --filter @ilya\/web build$/);
 	});
 
 	it('vite.config.ts turns the flag off in a Vercel production build', () => {

@@ -4,16 +4,18 @@ import { detect } from './detector';
 import { guard, type GuardResult } from './guard';
 import { extractFormants, type ExtractTrace, type ExtractResult } from './extract';
 import { extractOpen, COMB_MAX, PROM_DB } from './open-extract';
+import { extractPath } from './path-extract';
 
 /**
  * Which picker reads the resonances (N.200 Step 3). `shipped` is the picker the app has used, which looks for the asked vowel's
  * expected peaks (`extract.ts`, `MITTON`). `open` takes no vowel (`open-extract.ts`). `?measure=open` selects it
- * (`chart/measure-switch.ts`); a reading taken under it carries `picker: 'open'`.
+ * (`chart/measure-switch.ts`); a reading taken under it carries `picker: 'open'`. `path` reads each take from the take alone, by a ladder
+ * of ceilings (`path-extract.ts`); `?measure=path` selects it, and its readings carry `picker: 'path'`.
  */
-export type Picker = 'shipped' | 'open';
+export type Picker = 'shipped' | 'open' | 'path';
 
 function extractWith(picker: Picker, y: Float64Array, sr: number, vowel: Vowel, trace?: Partial<ExtractTrace>): ExtractResult {
-	return picker === 'open' ? extractOpen(y, sr, trace) : extractFormants(y, sr, vowel, trace);
+	return picker === 'open' ? extractOpen(y, sr, trace) : picker === 'path' ? extractPath(y, sr, {}, trace) : extractFormants(y, sr, vowel, trace);
 }
 
 /**
@@ -105,6 +107,27 @@ function openF2Quality(ex: ExtractResult, st: Steadiness): CalibratedFormant['f2
 }
 
 /**
+ * The path picker's steadiness, from the halves of the one fit's frame tracks (`PathEvidence.halves`): the picker runs once, not twice.
+ * Held to the same bars as the split-half check of the other pickers.
+ */
+function pathSteadiness(ex: ExtractResult): Steadiness {
+	const h = ex.path?.halves ?? { f1: [null, null], f2: [null, null] } as const;
+	const [a, b] = h.f1, [a2, b2] = h.f2;
+	const spread = a && b ? Math.abs(a - b) / ((a + b) / 2) : null;
+	const spread2 = a2 && b2 ? Math.abs(a2 - b2) / ((a2 + b2) / 2) : null;
+	return {
+		halvesF1: [a, b], spread: spread === null ? null : Math.round(spread * 1000) / 1000, steady: spread !== null && spread < T_HALVES_F1,
+		halvesF2: [a2, b2], spread2: spread2 === null ? null : Math.round(spread2 * 1000) / 1000, steady2: spread2 === null ? null : spread2 < T_HALVES_F2
+	};
+}
+
+/** fR2's quality under the path picker: `absent` when fR2 is null (not found, or not kept by the cross-check); `clear` in case (a) when the halves agree; otherwise `marginal`. */
+function pathF2Quality(ex: ExtractResult, st: Steadiness): CalibratedFormant['f2Quality'] {
+	if (ex.f2 === null) return 'absent';
+	return ex.path?.case === 'a' && st.steady2 !== false ? 'clear' : 'marginal';
+}
+
+/**
  * §9 batch core: samples + vowel -> CalibratedFormant. Pure; the [ɨ] pass is separate.
  *
  * N.80: `outerGuard` carries the verdict the caller already computed on the WHOLE
@@ -122,7 +145,7 @@ function grade(y: Float64Array, sr: number, vowel: Vowel, outerGuard?: GuardResu
 	const det = detect(y, sr);
 	const g = outerGuard ?? guard(y, sr);
 	const ex = extractWith(picker, y, sr, vowel, trace);
-	const st = f1Steadiness(y, sr, vowel, picker);
+	const st = picker === 'path' ? pathSteadiness(ex) : f1Steadiness(y, sr, vowel, picker);
 	// Confidence tiers recalibrated 2026-07-01 on Dann's ACCEPT: the old flat
 	// (snrDb < 20 -> low) rule stamped every real-room capture Provisional even
 	// when the gate passed it. Graded on the same evidence as the c8 recalibration:
@@ -140,19 +163,21 @@ function grade(y: Float64Array, sr: number, vowel: Vowel, outerGuard?: GuardResu
 	// be as strong as the chosen peak.
 	const ev = ex.evidence;
 	const evidencePoor = picker === 'open' && !!ev && (ev.fR1 !== 'both' || ev.comb > COMB_MAX || ev.runnerUp);
+	// The path picker's status comes from its cross-check: case (b) or (d) is unsteady (`path-extract.ts`, `crossCheck`).
+	const pathPoor = picker === 'path' && (ex.path?.case === 'b' || ex.path?.case === 'd');
 	const confidence: CalibratedFormant['confidence'] =
-		!st.steady || !det.accept || snrLow || evidencePoor ? 'low'
+		!st.steady || !det.accept || snrLow || evidencePoor || pathPoor ? 'low'
 		: snrHigh && g.fullWindow ? 'high'
 		: 'medium';
 	const reading: CalibratedFormant['reading'] = confidence === 'low' ? 'provisional' : 'captured';
 	const out: CalibratedFormant = {
 		f1: ex.f1 ?? 0,
 		confidence, reading, source: 'measured-user',
-		f2Quality: picker === 'open' ? openF2Quality(ex, st) : f2Quality(ex.f2, ex.f1, ex.f2Prom, g.reading === 'Captured'),
+		f2Quality: picker === 'open' ? openF2Quality(ex, st) : picker === 'path' ? pathF2Quality(ex, st) : f2Quality(ex.f2, ex.f1, ex.f2Prom, g.reading === 'Captured'),
 		noiseFloor: det.snrDb === null ? 'unmeasured' : 'measured',
 	};
 	if (ex.f2 !== null) out.f2 = ex.f2;
-	if (picker === 'open') out.picker = 'open';
+	if (picker === 'open' || picker === 'path') out.picker = picker;
 	return { formant: out, steadiness: st };
 }
 

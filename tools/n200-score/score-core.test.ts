@@ -61,6 +61,22 @@ describe('scoreTake dumps every candidate', () => {
 	});
 });
 
+describe('the path picker in the scoring tool', () => {
+	it('is a picker beside shipped and open, with its evidence marks, and path9 (L9, no status) beside it', () => {
+		const row = scoreTake(fry('i'), SYNTH_SR, 'i', { file: 'x.wav', sung: 'i' });
+		expect(Object.keys(PICKERS)).toEqual(['shipped', 'open', 'path']);
+		expect(row.pickers.path.outcome).toBe('reading');
+		expect(row.pickers.path.method).toBe('path');
+		expect(row.pickers.path.evidence).toMatch(/^case:[abcd]/);
+		expect(row.path9).not.toBeNull();
+		expect(row.path9!.f1).toBeGreaterThan(150);
+		const csv = tableCsv([row]).split('\n');
+		expect(csv[0]).toContain('path_fR1,path_fR2,path_status');
+		expect(csv[0]).toContain('path9_fR1,path9_fR2,path9_fR1_ok,path9_fR2_ok');
+		expect(summaryText([row])).toContain('Picker path9');
+	}, 60_000);
+});
+
 describe('scoreFolder, on files in the recorder`s own format', () => {
 	const dir = mkdtempSync(path.join(os.tmpdir(), 'n200-score-'));
 	const put = (stem: string, v: keyof typeof CASES, asked: string, sung: string | null) => {
@@ -102,6 +118,13 @@ describe('scoreFolder, on files in the recorder`s own format', () => {
 		// Burg reads every frame, open phase included: a second opinion, so the bar here is wide (25%) and from the generator's argument.
 		expect(Math.abs(right.reference.f1! - CASES.i[0]) / CASES.i[0]).toBeLessThan(0.25);
 	});
+
+	it('reads the reference file named by the ref option, a name in the folder', () => {
+		writeFileSync(path.join(dir, 'other.csv'), 'file,fR1,fR2\nilya-capture-asked-i-sung-i-T1.wav,111,222\n');
+		const rows = scoreFolder(dir, { burg: false, ref: 'other.csv' });
+		expect(rows.find((r) => r.file === 'ilya-capture-asked-i-sung-i-T1.wav')!.reference).toEqual({ f1: 111, f2: 222, source: 'manual' });
+		expect(rows.find((r) => kindOf(r) === 'wrong')!.reference.source).toBeNull();
+	}, 60_000);
 
 	it('cleans up', () => { rmSync(dir, { recursive: true, force: true }); });
 });

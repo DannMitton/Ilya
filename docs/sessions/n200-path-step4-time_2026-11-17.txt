@@ -1,0 +1,6 @@
+CPU 1x: runCapture shipped 356, 291, 255, 272, 321 ms (median 291); path 492, 486, 376, 401, 427 ms (median 427); path minus shipped 136 ms
+CPU 1x: Burg ms per ceiling (median of 5 takes): 3001 Hz 12 ms; 3188 Hz 9 ms; 3387 Hz 9 ms; 3598 Hz 11 ms; 3822 Hz 8 ms; 4061 Hz 9 ms; 4314 Hz 10 ms; 4583 Hz 15 ms; 4869 Hz 10 ms; 5172 Hz 12 ms; 5495 Hz 15 ms; 5838 Hz 15 ms; 6202 Hz 11 ms; 6589 Hz 12 ms; 7000 Hz 17 ms
+CPU 1x: frames per ceiling (a 2 s buffer): 308, 311, 315, 312, 311, 311, 312, 314, 312, 311, 311, 312, 311, 314, 314
+CPU 4x: runCapture shipped 1092, 1360, 1043, 1065, 1267 ms (median 1092); path 1600, 1602, 1521, 1544, 1831 ms (median 1600); path minus shipped 508 ms
+CPU 4x: Burg ms per ceiling (median of 5 takes): 3001 Hz 35 ms; 3188 Hz 39 ms; 3387 Hz 37 ms; 3598 Hz 37 ms; 3822 Hz 39 ms; 4061 Hz 47 ms; 4314 Hz 44 ms; 4583 Hz 54 ms; 4869 Hz 43 ms; 5172 Hz 49 ms; 5495 Hz 49 ms; 5838 Hz 50 ms; 6202 Hz 52 ms; 6589 Hz 57 ms; 7000 Hz 58 ms
+CPU 4x: frames per ceiling (a 2 s buffer): 308, 311, 315, 312, 311, 311, 312, 314, 312, 311, 311, 312, 311, 314, 314
