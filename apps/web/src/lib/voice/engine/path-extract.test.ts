@@ -10,7 +10,7 @@ import { synthFry, SYNTH_SR } from './fry-synth';
 import { runCapture } from './analyze';
 import { measurePicker } from '../chart/measure-switch';
 import { readingTake } from '../takes';
-import { crossCheck, ladder, L15, L9, scoreCeilings, type CeilingTracks } from './path-extract';
+import { crossCheck, extractPath, ladder, L15, L9, scoreCeilings, PATH_DEFAULTS, type CeilingTracks } from './path-extract';
 import type { ExtractTrace } from './extract';
 import type { Vowel } from './types';
 
@@ -138,6 +138,23 @@ describe('lane 64: the fR2 options (R125, DP, P3), each off by default', () => {
 		expect(crossCheck(640, 647, closed, [peak(647), peak(1500)], true, { p3: true, pathF3: 1500 })).not.toHaveProperty('track');
 		expect(crossCheck(640, 2000, closed, [peak(640), peak(3400)], true, { r125: true, p3: true, pathF3: 3400 })).toMatchObject({ fR2Kept: false });
 	});
+});
+
+describe('lane 64 Step 4: the chosen defaults (L15, R125 + DP + P3 on, weighting off)', () => {
+	it('PATH_DEFAULTS is the desk\'s choice of section 3A', () => {
+		expect(PATH_DEFAULTS).toEqual({ r125: true, dp: true, p3: true, sqrtWeight: false });
+	});
+	it('a call with no options runs with the defaults, and an option passed as false turns it off', () => {
+		const y = synthFry({ formants: [640, 1500, 2500, 3300, 3900], bandwidths: BW, rate: 50, jitter: 0.03, seed: 21 });
+		const dflt = extractPath(y, SYNTH_SR);
+		const explicit = extractPath(y, SYNTH_SR, { r125: true, dp: true, p3: true, sqrtWeight: false });
+		expect(dflt.f1).toBe(explicit.f1);
+		expect(dflt.f2).toBe(explicit.f2);
+		expect(dflt.path!.fR2Track).toBe(explicit.path!.fR2Track);
+		const off = extractPath(y, SYNTH_SR, { r125: false, dp: false, p3: false });
+		expect(off.f1).toBe(dflt.f1);
+		expect(off.path!.pathF1).toBe(dflt.path!.pathF1);
+	}, 60_000);
 });
 
 describe('lane 64: the weighting option', () => {

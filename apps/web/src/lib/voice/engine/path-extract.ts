@@ -25,8 +25,9 @@
  *
  * THE CROSS-CHECK has no prior (`crossCheck`). Every tolerance is relative to the path's value. It never calls `closedPhaseF1`, which picks by a prior.
  *
- * LANE 64 OPTIONS (switch-on brief r2, Step 1, Fable's fixes 1 and 5), each a field of `PathOptions`, each OFF by default, so the scoring tool can
- * run every combination. With every one off the picker is byte-identical to lane 62's (`tools/n200-score/__golden__/path-600.json`):
+ * LANE 64 OPTIONS (switch-on brief r2, Steps 1 and 4, Fable's fixes 1 and 5), each a field of `PathOptions`, so the scoring tool can run every
+ * combination. Step 1 built them off; Step 4 turned R125, DP, and P3 ON by default (`PATH_DEFAULTS`) and left the weighting off. With every
+ * one set false the picker is byte-identical to lane 62's, which is what the scoring tool's `off` combination does (`tools/n200-score/variants.ts`):
  *  - r125: keep fR2 only when it stands at least `RESOLUTION_HZ` above fR1 (the envelope cannot separate two peaks closer than that).
  *  - dp: the envelope peak that supports fR1 is looked for in every case, and is never the peak that supports fR2 (a duplicate pole is not a second formant).
  *  - p3: when the second track fails r125 or dp, the third track is offered to the same tests, and `PathEvidence.fR2Track` records which track gave fR2.
@@ -46,6 +47,16 @@ export function ladder(middle: number, step: number, jMax: number): number[] {
 }
 export const L15 = ladder(4583, 0.0605, 7);
 export const L9 = ladder(5500, 0.05, 4);
+
+/**
+ * The path picker's defaults, chosen by section 3A of `docs/sessions/brief-code-n200-switch-on-lane64_r2_2026-11-17.md`: ladder L15, R125 + DP + P3 on, weighting off.
+ * Evidence: the third synthetic set, `docs/sessions/report-code-n200-lane64-step3_r1_2026-11-17.md` (tables: `n200-lane64-step3-tables-third_2026-11-17.md`):
+ * 580 of 600 takes in both bars against 535 with every option off, fR2 changed on none of the 542 takes whose track-2 fR2 was already within 12 percent,
+ * all 46 readings P3 promoted within 12 percent, every voice type at 80 percent or more; and the desk's run of Dann's takes, 2026-11-17, held outside the
+ * repository: 12 of 13 in both bars (as for every L15 variant), no take lost, both [u] takes kept, and R125 changes none of the 12 readings.
+ * The weighting stays off: it moves 27.3 percent of the ceilings on the third set and no bar was set for it. A caller passes an option as `false` to turn it off.
+ */
+export const PATH_DEFAULTS = { r125: true, dp: true, p3: true, sqrtWeight: false } as const;
 
 export const T_WEIGHT = 1.25;
 export const TERMS = 3;
@@ -91,13 +102,13 @@ export interface PathOptions {
 	stepS?: number;
 	/** Whether an envelope peak must stand under fR2 for it to be kept. Default true. */
 	f2Check?: boolean;
-	/** Keep fR2 only when `pathF2 - pathF1 >= RESOLUTION_HZ`. Default off. Acts inside the fR2 check, so not when `f2Check` is false. */
+	/** Keep fR2 only when `pathF2 - pathF1 >= RESOLUTION_HZ`. Default on (`PATH_DEFAULTS`). Acts inside the fR2 check, so not when `f2Check` is false. */
 	r125?: boolean;
-	/** Look for fR1's envelope peak in every case and exclude it as fR2's peak in every case. Default off. */
+	/** Look for fR1's envelope peak in every case and exclude it as fR2's peak in every case. Default on (`PATH_DEFAULTS`). */
 	dp?: boolean;
-	/** When track 2 fails `r125` or `dp`, offer track 3 to the same tests. Never fires alone: it needs `r125` or `dp`. Default off. */
+	/** When track 2 fails `r125` or `dp`, offer track 3 to the same tests. Never fires alone: it needs `r125` or `dp`. Default on (`PATH_DEFAULTS`). */
 	p3?: boolean;
-	/** Weight each row of `fitTrack` by 1/sqrt(b) instead of 1/b. Default off. */
+	/** Weight each row of `fitTrack` by 1/sqrt(b) instead of 1/b. Default off (`PATH_DEFAULTS`). */
 	sqrtWeight?: boolean;
 }
 
@@ -161,7 +172,7 @@ export function scoreCeilings(all: CeilingTracks[], opts: PathOptions = {}): (nu
 		let chi2 = 0, s2 = 0, d = 0;
 		for (const tr of c.tracks) {
 			if (tr.length < MIN_TRACK_SHARE * c.frames) return null;
-			const fit = fitTrack(tr, c.t0, c.t1, terms, bFloor, opts.sqrtWeight ?? false);
+			const fit = fitTrack(tr, c.t0, c.t1, terms, bFloor, opts.sqrtWeight ?? PATH_DEFAULTS.sqrtWeight);
 			if (!fit) return null;
 			chi2 += fit.chi2; s2 += fit.varSum; d += tr.length - terms;
 		}
@@ -266,7 +277,7 @@ export function checkInputs(y: Float64Array, sr: number): CheckInputs {
 export function pathFinish(all: CeilingTracks[], inputs: CheckInputs, opts: PathOptions = {}, trace?: Partial<ExtractTrace>): ExtractResult {
 	const ch = choosePath(all, opts), { best, w, frames, f1, f2, f3, halves } = ch;
 	const f2Check = opts.f2Check ?? true;
-	const x = crossCheck(f1, f2, inputs.poles.length ? inputs.poles : null, inputs.peaks, f2Check, { r125: opts.r125, dp: opts.dp, p3: opts.p3, pathF3: f3 });
+	const x = crossCheck(f1, f2, inputs.poles.length ? inputs.poles : null, inputs.peaks, f2Check, { r125: opts.r125 ?? PATH_DEFAULTS.r125, dp: opts.dp ?? PATH_DEFAULTS.dp, p3: opts.p3 ?? PATH_DEFAULTS.p3, pathF3: f3 });
 	const evidence: PathEvidence = {
 		case: x.case, ...(x.reason ? { reason: x.reason } : {}), fR2Kept: x.fR2Kept, f2Check, pathF1: f1, pathF2: f2, pathF3: f3, fR2Track: x.fR2Kept ? (x.track ?? 2) : null,
 		ceiling: best >= 0 ? all[best].ceiling : null, ceilings: all.map((c) => c.ceiling), w, setAside: w.filter((v) => v === null).length, frames, halves,

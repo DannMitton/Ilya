@@ -8,7 +8,7 @@
  *  - Combinations: off, R125, DP, R125+DP, R125+DP+P3. P3 acts only when R125 or DP fails, so it has no combination of its own.
  *  - The weighting option (`sqrtWeight`, Fable's fix 5) is run on L15 alone, with the other options off: key `L15|w`.
  *
- * `L15|off` is the lane 62 picker as `runCapture` runs it. The runners check that it equals the default run.
+ * `L15|off` is the lane 62 picker. Since Step 4 the engine's default is `L15|R125+DP+P3` (`PATH_DEFAULTS`), and the runners check that this variant equals the default run.
  */
 import { pathTracks, checkInputs, pathFinish, type PathOptions, type PathEvidence } from '$lib/voice/engine/path-extract';
 import type { ExtractResult } from '$lib/voice/engine/extract';
@@ -19,11 +19,15 @@ export type LadderName = (typeof LADDERS)[number];
 export const LADDER_DROP: Record<LadderName, number> = { L15: 0, L3188: 1, L3387: 2 };
 export const COMBOS = ['off', 'R125', 'DP', 'R125+DP', 'R125+DP+P3'] as const;
 export type ComboName = (typeof COMBOS)[number];
+/** Every option is named, true or false, because since Step 4 an option left out takes the engine's default (`PATH_DEFAULTS`: R125, DP, and P3 on). */
+const O = (r125: boolean, dp: boolean, p3: boolean): PathOptions => ({ r125, dp, p3, sqrtWeight: false });
 export const COMBO_OPTS: Record<ComboName, PathOptions> = {
-	off: {}, R125: { r125: true }, DP: { dp: true }, 'R125+DP': { r125: true, dp: true }, 'R125+DP+P3': { r125: true, dp: true, p3: true },
+	off: O(false, false, false), R125: O(true, false, false), DP: O(false, true, false), 'R125+DP': O(true, true, false), 'R125+DP+P3': O(true, true, true),
 };
 export const key = (l: LadderName, c: ComboName) => `${l}|${c}`;
 export const WEIGHT_KEY = 'L15|w';
+/** The variant the engine runs by default since Step 4 (`PATH_DEFAULTS` in `path-extract.ts`): ladder L15, R125 + DP + P3, weighting off. */
+export const DEFAULT_KEY = 'L15|R125+DP+P3';
 /** The fifteen ladder-and-combination variants, in the order the tables print them. */
 export const VARIANT_KEYS: string[] = LADDERS.flatMap((l) => COMBOS.map((c) => key(l, c)));
 
@@ -62,6 +66,6 @@ export function runVariants(yw: Float64Array, sr: number, withWeight = true): Re
 	const inputs = checkInputs(yw, sr);
 	const out: Record<string, VarCell> = {};
 	for (const l of LADDERS) for (const c of COMBOS) out[key(l, c)] = cellOf(pathFinish(tracks.slice(LADDER_DROP[l]), inputs, COMBO_OPTS[c]));
-	if (withWeight) out[WEIGHT_KEY] = cellOf(pathFinish(tracks, inputs, { sqrtWeight: true }));
+	if (withWeight) out[WEIGHT_KEY] = cellOf(pathFinish(tracks, inputs, { ...COMBO_OPTS.off, sqrtWeight: true }));
 	return out;
 }

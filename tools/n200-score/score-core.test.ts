@@ -8,7 +8,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { synthFry, SYNTH_SR, type FryCase } from '$lib/voice/engine/fry-synth';
 import { wavBytes } from '$lib/voice/engine/capture-file';
-import { VARIANT_KEYS, WEIGHT_KEY, type VarCell } from './variants';
+import { VARIANT_KEYS, WEIGHT_KEY, DEFAULT_KEY, type VarCell } from './variants';
 import { judge, choice, weightTable, defaultCheck } from './variant-core';
 import { TYPES } from './fidelity-set';
 import type { MRow } from './measure-core';
@@ -82,13 +82,14 @@ describe('the path picker in the scoring tool', () => {
 });
 
 describe('lane 64: the path variants in the scoring tool', () => {
-	it('every ladder and combination is a column, L15 with every option off equals the default path run, and the evidence string names fR1, fR3, and both ceilings', () => {
+	it('every ladder and combination is a column, the default variant (L15, R125+DP+P3) equals the default path run, L15 with every option off differs from the engine defaults only where an option acts, and the evidence string names fR1, fR3, and both ceilings', () => {
 		const row = scoreTake(fry('i'), SYNTH_SR, 'i', { file: 'x.wav', sung: 'i' });
 		expect(Object.keys(row.variants!)).toEqual(VARIANT_KEYS);
 		expect(VARIANT_KEYS).toHaveLength(15);
-		const off = row.variants!['L15|off'], path = row.pickers.path;
-		expect(off.f1).toBe(path.f1);
-		expect(off.f2).toBe(path.f2);
+		const dflt = row.variants![DEFAULT_KEY], path = row.pickers.path;
+		expect(dflt.f1).toBe(path.f1);
+		expect(dflt.f2).toBe(path.f2);
+		expect(row.variants!['L15|off'].f1).toBe(path.f1);
 		expect(row.variants!['L3188|off'].ceiling).toBeGreaterThanOrEqual(3188);
 		expect(row.variants!['L3387|off'].ceiling).toBeGreaterThanOrEqual(3387);
 		const head = tableCsv([row]).split('\n')[0];

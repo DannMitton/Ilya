@@ -13,7 +13,7 @@
  */
 import { TYPES } from './fidelity-set';
 import { BAR1, BAR2, PASS, FLAG_MAX, type MRow } from './measure-core';
-import { VARIANT_KEYS, WEIGHT_KEY, type VarCell, type LadderName } from './variants';
+import { VARIANT_KEYS, WEIGHT_KEY, DEFAULT_KEY, type VarCell, type LadderName } from './variants';
 
 const within = (v: number | null, t: number, bar: number) => v !== null && Math.abs(v - t) / t <= bar;
 const pct = (n: number, d: number) => (d ? `${((100 * n) / d).toFixed(1)}%` : 'n/a');
@@ -146,11 +146,11 @@ export function defaultCheck(rows: MRow[]): { text: string; anyMiss: boolean } {
 	return { anyMiss, text: `Every option off, L15 (the lane 62 picker), the ${PASS * 100}% bar per voice type:\n\n` + table(['type', 'takes', 'fR1 within 10%', 'fR2 within 12%', 'bar'], body) };
 }
 
-/** How many of the self-check readings, `L15|off` against the default run, agree (they must all). */
+/** How many readings of the default variant (`DEFAULT_KEY`) equal the default `runCapture` path reading (they must all). */
 export function selfCheck(rows: MRow[]): { agree: number; of: number; text: string } {
-	const g = rows.filter((r) => r.path.outcome === 'reading' && r.v?.['L15|off']);
-	const agree = g.filter((r) => r.v!['L15|off'].f1 === r.path.f1 && r.v!['L15|off'].f2 === r.path.f2).length;
-	return { agree, of: g.length, text: `Self-check: L15 with every option off equals the default \`runCapture\` path reading (f1 and f2 to 0.1 Hz) on ${agree} of ${g.length} readings.` };
+	const g = rows.filter((r) => r.path.outcome === 'reading' && r.v?.[DEFAULT_KEY]);
+	const agree = g.filter((r) => r.v![DEFAULT_KEY].f1 === r.path.f1 && r.v![DEFAULT_KEY].f2 === r.path.f2).length;
+	return { agree, of: g.length, text: `Self-check: ${DEFAULT_KEY} equals the default \`runCapture\` path reading (f1 and f2 to 0.1 Hz) on ${agree} of ${g.length} readings.` };
 }
 
 /** The variants that pass every bar on the pooled third set, with the desk's choice rule: most takes in both bars, then fewest options, then L15. */
