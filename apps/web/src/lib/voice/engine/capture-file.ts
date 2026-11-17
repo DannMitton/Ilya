@@ -103,6 +103,8 @@ export interface CaptureRecord {
 	trimS: number;
 	/** Which picker made the reading (`?measure=open` selects `open`, `?measure=path` selects `path`), from N.200 Step 3. */
 	picker?: Picker;
+	/** Milliseconds `runCapture` took on this take, whole, for every picker (N.200 path picker, Step 4). Set by `live.ts`; absent from a record made elsewhere. */
+	analysisMs?: number;
 	outcome: CaptureOutcome | { outcome: 'threw'; message: string };
 	trace: ExtractTrace | null;
 }
