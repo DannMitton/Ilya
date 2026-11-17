@@ -7,7 +7,8 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
-import { crc32, zipBytes, takeBase, holdCapture, heldCount, heldZip, clearHeld, setSungVowel, sungVowel, captureFileEnabled } from './capture-file';
+import { crc32, zipBytes, takeBase, holdCapture, heldCount, heldZip, clearHeld, setSungVowel, sungVowel, captureFileEnabled, panelFace, PANEL_TAB_WIDTH_PX, PANEL_TAB_BOTTOM_PX } from './capture-file';
+import { measurePicker } from '../chart/measure-switch';
 import { SYNTH_SR, synthFry } from './fry-synth';
 
 const here = (f: string) => join(__dirname, f);
@@ -141,5 +142,36 @@ describe('the recorder is out of every build that does not set the flag', () => 
 	it('vite.config.ts turns the flag off in a Vercel production build', () => {
 		const cfg = readFileSync(join(__dirname, '../../../../vite.config.ts'), 'utf8');
 		expect(cfg).toMatch(/PUBLIC_RECORDER === '1' && process\.env\.VERCEL_ENV !== 'production'/);
+	});
+});
+
+/* LANE 65, Step 3. The panel rests as a folded tab in the right-hand gutter and names the picker in use. The tree has no DOM test environment, so the
+   placement is pinned from the face's words, the exported measures, and the source; the six screens were measured in a browser (the lane's report). */
+describe('the recorder panel on a phone (lane 65, Step 3)', () => {
+	it('the folded tab names the picker in use, the take count, and a star while takes are unsaved', () => {
+		expect(panelFace('open', 0, 0)).toBe('rec \u00b7 open \u00b7 0');
+		expect(panelFace('shipped', 3, 0)).toBe('rec \u00b7 shipped \u00b7 3');
+		expect(panelFace('shipped', 3, 2)).toBe('rec \u00b7 shipped \u00b7 3*');
+		expect(panelFace('path', 1, 1)).toContain('path');
+	});
+
+	it('what the address selects reaches the face: ?measure=open and ?measure=shipped', () => {
+		expect(panelFace(measurePicker('?harness=1&measure=open'), 0, 0)).toContain('open');
+		expect(panelFace(measurePicker('?harness=1&measure=shipped'), 0, 0)).toContain('shipped');
+	});
+
+	it('the tab stands in a gutter narrower than the 16 px every control on the six screens leaves, and above the DRAWER bar (44 px)', () => {
+		expect(PANEL_TAB_WIDTH_PX).toBeLessThanOrEqual(16);
+		expect(PANEL_TAB_BOTTOM_PX).toBeGreaterThanOrEqual(44 + 16);
+	});
+
+	it('the wrapper is flush to the right edge and takes no touches; it no longer stands at right 12 px, bottom 12 px; the session hands it the picker', () => {
+		const code = stripComments(read('capture-file.ts'));
+		expect(code).toMatch(/position:fixed;right:0;bottom:\$\{PANEL_TAB_BOTTOM_PX\}px/);
+		expect(code).toMatch(/pointer-events:none/);
+		expect(code).not.toMatch(/right:12px;bottom:12px/);
+		expect(code).toMatch(/mountRecorderPanel\(picker: Picker = 'shipped'\)/);
+		const line = read('../chart/stub-switch.ts').split('\n').find((l) => /mountRecorderPanel\(/.test(l) && !/^\s*(\/\/|\*|import)/.test(l))!;
+		expect(line).toMatch(/__ILYA_RECORDER__\s*&&\s*captureFileEnabled\(\)\)\s*mountRecorderPanel\(measurePicker\(search\)\)/);
 	});
 });
