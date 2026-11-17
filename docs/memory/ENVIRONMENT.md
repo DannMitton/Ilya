@@ -5357,3 +5357,6 @@ The page is https://dannmitton.com/ilya, built in GoDaddy Website Builder (Urban
 - **A clean merge with the key-count conflict, shipped in one paste:** the resolver `~/Downloads/_desk-2026-11-16/resolve-lane59-count.sh` refuses unless the conflict is the measured one and the result's md5 is the desk's; Dann's merge printed "matches the desk's" (14:0x).
 - **Estimates, actuals:** Fable as built of lane 59 265,618 (cap 400k); Fable as built of lane 56 follow-up 198,204 (cap 300k); Fable review of a plan 168,989 (cap 250k); Sonnet phase 0 map of the whole code, by script, 250,641 (cap 300k, 10 min); the desk's eight gates on a merge in its workspace about 9 minutes, gate 4 most of it.
 - **knip 6.45.1 runs on this workspace** with a config outside the repository (phase 0, `p0-tools`); its `--production` mode misreads five used dependencies as unused, so it is not used.
+
+## VITEST THROUGH PNPM HANGS IN A CLOUD WORKSPACE (2026-11-16, N.200 fidelity helper)
+`pnpm --filter @ilya/web exec vitest ...` hung in the desk's cloud workspace; `apps/web/node_modules/.bin/vitest run --config <file> --globals` worked. Index row owed at the close.
