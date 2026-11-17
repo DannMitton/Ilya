@@ -4177,7 +4177,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 						     left to control anything. -->
 						<div class="station-body">
 							<VoicePane {language} seam={voiceSeam} voiceType={voiceTypeChoice} usable={usableReadingCount(voiceFormants)}
-								hasStoredReading={hasAnyReadings(voiceFormants)} restWorkedOut={finishEarlyState(voiceFormants, voiceTypeChoice?.voiceType).kind === 'work-out'} onopen={openVoice} />
+								hasStoredReading={hasAnyReadings(voiceFormants)} restWorkedOut={finishEarlyState(voiceFormants, voiceTypeChoice?.voiceType).kind === 'work-out'} onopen={openVoice} {sections} characteristics={voiceCharacteristics} intake={voiceIntake} />
 						</div>
 					</div>
 					<!-- ── THE NOTICES. Unstyled on purpose, as they have always

@@ -84,7 +84,7 @@
    upload.        50  lib/score/ScoreUploader.svelte, lib/score/format-label.ts, lib/score/ingestion/ingest.ts, lib/omr/scan.ts
    verify.         1  lib/components/Paper/WordStack.svelte
    voice.          2  lib/components/Drawer/bandState.ts, lib/components/Drawer/Drawer.svelte
-   voiceIntake.   60  lib/voice/InsightsIntake.svelte, lib/voice/VoiceTypeIntake.svelte
+   voiceIntake.   60  lib/voice/DescribeVoice.svelte, lib/voice/InsightsShares.svelte, lib/voice/IntakeScale.svelte, lib/voice/VoiceTypeIntake.svelte
    voiceType.     42  lib/voice/VoiceTypeIntake.svelte, lib/voice/voiceTypes.ts, lib/voice/VoiceTypeFirst.svelte, lib/voice/OutsideNote.svelte
    vowel.         11  lib/voice/vowel-names.ts, lib/markup/legend.ts
    wait.           2  lib/components/ReadingWait.svelte, lib/omr/wait.ts, lib/score/ScoreUploader.svelte

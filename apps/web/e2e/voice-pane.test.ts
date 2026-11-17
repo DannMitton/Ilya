@@ -117,14 +117,20 @@ test.describe('the VOICE pane at rest', () => {
 		expect(after.updatedAt).toBe(before.updatedAt);
 	});
 
-	for (const [label, name] of [['Describe your voice', /^describe your voice$/i], ['What INSIGHTS shares, and how', /^what insights shares, and how$/i]] as const) {
-		test(`"${label}" opens the built Voice characteristics screen with no microphone, and Done returns to the pane at rest`, async ({ page }) => {
+	/* N.203 lane 61, Step 1: the two doors that opened the takeover's characteristics screen are two stations that open in place. */
+	for (const [label, name, id] of [['Describe your voice', /^describe your voice$/i, 'describe-voice-body'], ['What INSIGHTS shares, and how', /^what insights shares, and how$/i, 'insights-shares-body']] as const) {
+		test(`"${label}" opens in place with no microphone and no takeover, and closes again; the voice's date does not move`, async ({ page }) => {
 			await open(page, [{ id: 'v', name: 'Dann' }]);
-			await door(page, name).click();
-			await expect(page.getByRole('heading', { name: 'Voice characteristics' })).toBeVisible();
+			const header = page.getByRole('button', { name });
+			await expect(header).toHaveAttribute('aria-expanded', 'false');
+			await header.click();
+			await expect(header).toHaveAttribute('aria-expanded', 'true');
+			await expect(page.locator(`#${id}`)).toBeVisible();
 			await expect(page.locator('.capture')).toHaveCount(0);
-			await page.getByRole('button', { name: /^done$/i }).click();
+			await expect(page.getByRole('heading', { name: 'Voice characteristics' })).toHaveCount(0);
 			await expect(sentence(page)).toBeVisible();
+			await header.click();
+			await expect(page.locator(`#${id}`)).toHaveCount(0);
 			expect((await stored(page)).voices[0].calibratedAt).toBe('2026-11-01T10:00:00.000Z');
 		});
 	}

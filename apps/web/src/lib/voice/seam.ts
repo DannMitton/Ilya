@@ -8,6 +8,7 @@
  * No take-running flag crosses this seam (review amendment 3): the takeover stows the whole Drawer content while it is up, so the pane is
  * never on screen beside the capture screen, and every command below that changes the voice ends the flow (`resetFlow`).
  */
+import type { Pitch } from '@ilya/score-parser';
 import type { assignToVoice } from './profileStore';
 
 /** What the pane's doors ask the wizard to show. "sing" is not a name here: it is the modal part of a take only (Dann 2026-11-16 01:13). */
@@ -24,6 +25,15 @@ export interface VoiceRequest {
 /** The singer's own answers the wizard saves on every change (`setOwn`): the voice type, its finer label, her own words, the INSIGHTS intake. */
 export type OwnAnswers = Parameters<typeof assignToVoice>[1];
 
+/** The six notes of "Describe your voice" (it was private to the wizard; N.203 lane 61, Step 1). */
+export type CharacteristicField =
+	| 'rangeLow'
+	| 'rangeHigh'
+	| 'tessituraLow'
+	| 'tessituraHigh'
+	| 'passaggioPrimary'
+	| 'passaggioSecondary';
+
 /** What the wizard publishes to the page, whole, whenever the list, the active voice, or the next default name changes. */
 export interface VoiceSeam {
 	voices: { id: string; name: string; createdAt: string }[];
@@ -36,6 +46,8 @@ export interface VoiceSeam {
 	rename(name: string): void;
 	remove(): void;
 	setOwn(patch: OwnAnswers): void;
+	/** One of the six notes, or none (`undefined` clears it). Writes as the wizard always has: source 'manual', and `touchVoice`, which keeps `calibratedAt`. */
+	setCharacteristic(field: CharacteristicField, pitch: Pitch | undefined): void;
 }
 
 export type Landing = 'welcome' | 'capture' | 'summary' | 'characteristics';
