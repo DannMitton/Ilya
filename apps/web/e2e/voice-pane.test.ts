@@ -38,6 +38,51 @@ test.describe('the VOICE pane at rest', () => {
 		await expect(door(page, /^your vowel space$/i)).toHaveCount(0);
 	});
 
+	/* Lane 65, Step 1 (Dann 2026-11-17 15:04, his option 2): the switcher; three rows of equal weight; the sentence; the doors. */
+	const ORDER = ['switcher', 'type-row', 'describeVoice', 'insightsShares', 'sentence', 'doors'];
+	const paneOrder = (page: Page) => page.locator('.voice-pane').evaluate((el) => [...el.children].map((c) => {
+		if (c.classList.contains('vp-sentence')) return 'sentence';
+		if (c.classList.contains('vp-doors')) return 'doors';
+		if (c.getAttribute('data-vp-row') === 'voiceType') return 'type-row';
+		return c.getAttribute('data-station') ?? 'switcher';
+	}));
+	test('the pane’s children stand in the ruled order for a voice with no type, with a type, and with readings', async ({ page }) => {
+		await open(page, [{ id: 'v', name: 'Dann' }]);
+		expect(await paneOrder(page)).toEqual(ORDER);
+		await page.getByRole('button', { name: /^choose a voice type$/i }).click();
+		await page.getByRole('radio', { name: 'Bass', exact: true }).check();
+		expect(await paneOrder(page)).toEqual(ORDER);
+	});
+	test('with a type chosen the row names the type, in the same order', async ({ page }) => {
+		await open(page, [{ id: 'v', name: 'Dann', voiceType: 'bass' }]);
+		expect(await paneOrder(page)).toEqual(ORDER);
+		await expect(page.locator('[data-vp-row="voiceType"] .station-name')).toHaveText(/bass/i);
+	});
+	test('with readings stored the order is the same, and the doors name the state', async ({ page }) => {
+		await open(page, [{ id: 'v', name: 'Dann', voiceType: 'bass', formants: NINE }]);
+		expect(await paneOrder(page)).toEqual(ORDER);
+		await expect(door(page, /^carry on recording$/i)).toBeVisible();
+		await expect(door(page, /^your vowel space$/i)).toBeVisible();
+	});
+	test('the voice type row opens and closes the control in place, closed on arrival', async ({ page }) => {
+		await open(page, [{ id: 'v', name: 'Dann' }]);
+		const row = page.getByRole('button', { name: /^choose a voice type$/i });
+		await expect(row).toHaveAttribute('aria-expanded', 'false');
+		await expect(page.locator('#voice-type-body')).toHaveCount(0);
+		await row.click();
+		await expect(row).toHaveAttribute('aria-expanded', 'true');
+		await expect(page.locator('#voice-type-body').getByRole('radio', { name: 'Bass', exact: true })).toBeVisible();
+		await row.click();
+		await expect(page.locator('#voice-type-body')).toHaveCount(0);
+	});
+	test('the voice type row is a full-width row like the two station rows', async ({ page }) => {
+		await open(page, [{ id: 'v', name: 'Dann' }]);
+		const w = (sel: string) => page.locator(`${sel} .station-disclosure`).evaluate((e) => Math.round(e.getBoundingClientRect().width));
+		const type = await w('[data-vp-row="voiceType"]');
+		expect(type).toBe(await w('[data-station="describeVoice"]'));
+		expect(type).toBe(await w('[data-station="insightsShares"]'));
+	});
+
 	test('the type control in the pane writes the stored voice type, and the sentence and the doors follow', async ({ page }) => {
 		await open(page, [{ id: 'v', name: 'Dann' }]);
 		await page.getByRole('button', { name: /^choose a voice type$/i }).click();
