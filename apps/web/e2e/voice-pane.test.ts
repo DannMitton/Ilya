@@ -250,7 +250,7 @@ test.describe('INSIGHTS "Add your range" and the seam', () => {
 	};
 	const offer = (page: Page) => page.getByRole('button', { name: 'Add your range' });
 
-	test('refused over the capture screen and dropped: nothing follows when the singer leaves; from rest it opens the Range fields', async ({ page }) => {
+	test('refused over the capture screen and dropped: nothing follows when the singer leaves; from rest it opens the Describe station at the Range', async ({ page }) => {
 		test.setTimeout(90_000);
 		await open(page, [{ id: 'v', name: 'Dann', voiceType: 'bass', formants: { i: R(296, 1705), e: R(381, 1532), u: R(346, 804), a: R(600, 1250) } }]);
 		await loadScoreAndInsights(page);
@@ -260,14 +260,17 @@ test.describe('INSIGHTS "Add your range" and the seam', () => {
 		await offer(page).click(); // INSIGHTS' link, pressed while the capture screen is showing
 		await page.waitForTimeout(1500);
 		await expect(page.locator('.capture'), 'the capture screen is not broken into').toBeVisible();
-		await expect(page.getByRole('heading', { name: 'Voice characteristics' })).toHaveCount(0);
+		await expect(page.locator('#describe-voice-body')).toHaveCount(0);
 		await page.locator('.takeover-back').click();
 		await expect(sentence(page)).toBeVisible();
 		await page.waitForTimeout(1500);
-		await expect(page.getByRole('heading', { name: 'Voice characteristics' }), 'a refused request is dropped, never answered later').toHaveCount(0);
-		// The same link from rest lands on the Range fields.
+		await expect(page.locator('#describe-voice-body'), 'a refused request is dropped, never answered later').toHaveCount(0);
+		await expect(page.getByRole('button', { name: /^describe your voice$/i })).toHaveAttribute('aria-expanded', 'false');
+		// The same link from rest opens the Describe station at the Range, in place: the takeover does not open.
 		await offer(page).click();
-		await expect(page.getByRole('heading', { name: 'Voice characteristics' })).toBeVisible();
+		await expect(page.getByRole('button', { name: /^describe your voice$/i })).toHaveAttribute('aria-expanded', 'true');
+		await expect(page.locator('[data-describe="range"]')).toBeInViewport();
+		await expect(page.locator('.takeover-back')).toBeHidden();
 	});
 
 	test('with no voice saved INSIGHTS offers no range link, and the takeover never opens onto an empty wizard (the no-voice branch of openVoice is not reachable from this link)', async ({ page }) => {

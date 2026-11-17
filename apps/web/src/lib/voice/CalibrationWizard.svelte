@@ -55,9 +55,6 @@
 	import { createVisit } from '$lib/voice/visit';
 	import { fryView } from '$lib/voice/readiness-view';
 	import { t, type Language } from '$lib/i18n';
-	import DescribeVoice from '$lib/voice/DescribeVoice.svelte';
-	import InsightsShares from '$lib/voice/InsightsShares.svelte';
-	import VoiceTypeIntake from '$lib/voice/VoiceTypeIntake.svelte';
 	import VoiceTypeFirst from '$lib/voice/VoiceTypeFirst.svelte';
 	import OutsideNote from '$lib/voice/OutsideNote.svelte';
 	import { outsideVowels } from '$lib/voice/outside';
@@ -112,12 +109,8 @@
 	// (declared there, see near `const T =`) so it can read
 	// calib.defaultVoiceName through T(), which needs `language`.
 
-	// 'characteristics' is the fifth phase (E.5 slice 3; Kimi's Q5 ruling,
-	// v39 §A.31): typed range/tessitura/passaggio through note pickers.
-	// Skippable and never a gate. The summary's button is gone (N.203 lane 60): it is entered by the
-	// pane's two doors, "Describe your voice" and "What INSIGHTS shares, and how", and by Insights'
-	// "Add your range" (N.164, Dann 2026-09-25), all through `openRequest`. Done closes the takeover.
-	type Phase = 'welcome' | 'readiness' | 'capture' | 'summary' | 'characteristics';
+	// The characteristics screen left the takeover (N.203 lane 61, Step 2): "Describe your voice" and "What INSIGHTS shares, and how" are stations in the pane.
+	type Phase = 'welcome' | 'readiness' | 'capture' | 'summary';
 
 	interface CalibrationWizardProps {
 		/**
@@ -193,14 +186,14 @@
 		 * N.164: a parent's request to show a phase. Each new `n` lands the
 		 * wizard on `phase`, wherever it was, because the wizard stays mounted
 		 * while the takeover is stowed and a value read once at mount would
-		 * work only the first time. Insights' "Add your range" sends
-		 * `characteristics`, the Range fields. Absent, nothing changes.
-		 * N.203 lane 60: the pane's doors send `record`, `summary`, or `characteristics`
-		 * (`seam.ts`), and a request carries `fromRest`.
+		 * work only the first time. Absent, nothing changes. N.203 lane 60: the pane's doors send `record` or `summary`; lane 61: a link
+		 * pressed over the takeover sends `leave` (`seam.ts`). A request carries `fromRest`.
 		 */
 		openRequest?: VoiceRequest | null;
 		/** N.203 lane 60: the voices, the active id, and the commands, published whole for the pane at rest (`seam.ts`). */
 		onSeamChange?: (seam: VoiceSeam) => void;
+		/** N.203 lane 61: a `leave` request that was not refused. The page leaves the takeover and opens what the link named. Not `onComplete`: Finish calls that too. */
+		onLeave?: () => void;
 		/** N.203 lane 59: whether the takeover is showing. The wizard stays mounted while it is stowed (Back), so the microphone's visit follows this. */
 		takeoverVisible?: boolean;
 	}
@@ -217,6 +210,7 @@
 		language,
 		openRequest = null,
 		onSeamChange,
+		onLeave,
 		takeoverVisible = true
 	}: CalibrationWizardProps = $props();
 
@@ -331,6 +325,7 @@
 		answeredRequest = req.n;
 		untrack(() => {
 			if (requestRefused(phase, req)) return;
+			if (req.phase === 'leave') { onLeave?.(); return; }
 			const to = landingFor(req.phase, hasAnyReadings(profile));
 			if (to === 'capture') { opening = openTour(profile); captureKey += 1; }
 			resetFlow(to);
@@ -885,28 +880,6 @@
 						<button type="button" class="wizard-secondary" onclick={() => (confirmingReset = true)}>{T('calib.summary.startOverButton')}</button>
 					{/if}
 				</div>
-		{:else if phase === 'characteristics'}
-			<!-- E.5 slice 3 (Kimi's Q5 ruling, v39 §A.31): typed-first capture
-			     through note pickers; sung capture, when it arrives, verifies
-			     and never discovers. Every field optional; values save on
-			     every change (source 'manual'). Done closes the takeover (`finish`,
-			     N.203 lane 60 Step 3), to the Drawer at rest, or to INSIGHTS when the
-			     screen was opened from "Add your range". Copy is agentless throughout. -->
-			<div class="wizard-phase">
-				<h2 id="wizard-title">{T('calib.characteristics.title')}</h2>
-				<div class="charx-group"><VoiceTypeIntake value={activeVoice} {language} onchange={setOwn} /></div>
-				<!-- N.203 lane 61 Step 1: the pickers and the five questions are "Describe your voice", the topics and the rest are "What INSIGHTS shares,
-				     and how", the two components the Drawer's VOICE pane draws as stations. This screen draws them until Step 2 retires it. -->
-				<div class="charx-group">
-					<DescribeVoice characteristics={activeVoice.characteristics} intake={activeVoice.intake} {voiceType} {language} onnote={setCharacteristic} onintake={(intake) => setOwn({ intake })} />
-				</div>
-				<div class="charx-group">
-					<InsightsShares value={activeVoice.intake} {language} onchange={(intake) => setOwn({ intake })} />
-				</div>
-				<button type="button" class="wizard-primary" onclick={finish}>
-					{T('calib.characteristics.doneButton')}
-				</button>
-			</div>
 		{/if}
 	{/if}
 	</div>
@@ -1085,18 +1058,6 @@
 	/* The count-in beat and the capture bar (item 1.4a interaction, E.26).
 	   Deliberately plain: this is the wizard's own furniture, not the result
 	   surface, and it borrows the same tokens as everything else here. */
-
-	/* ── Voice characteristics (E.5 slice 3) ─────────────────────────────
-	   Groups fence with a quiet rule; the group heading takes a smaller
-	   cut of the phase-heading recipe so the hierarchy reads at a glance. */
-	.charx-group {
-		width: 100%;
-		display: flex;
-		flex-direction: column;
-		gap: 0.625rem;
-		padding-top: 0.625rem;
-		border-top: 1px solid var(--stone-300);
-	}
 
 	.wizard-inline-banner {
 		display: flex;

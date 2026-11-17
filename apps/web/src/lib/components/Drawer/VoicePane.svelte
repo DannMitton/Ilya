@@ -21,7 +21,7 @@
 	import VoiceTypeIntake from '$lib/voice/VoiceTypeIntake.svelte';
 	import DescribeVoice from '$lib/voice/DescribeVoice.svelte';
 	import InsightsShares from '$lib/voice/InsightsShares.svelte';
-	import type { VoiceRequestKind, VoiceSeam } from '$lib/voice/seam';
+	import type { OpenKind, VoiceSeam } from '$lib/voice/seam';
 	import type { VoiceTypeChoice } from '$lib/voice/profileStore';
 	import type { VoiceCharacteristics } from '$lib/voice/engine/types';
 	import type { IntakeAnswers } from '@ilya/score-parser';
@@ -41,7 +41,7 @@
 		hasStoredReading: boolean;
 		/** Whether every vowel left can be worked out (lane 59's `finishEarlyState`); `false` until that lane is merged. */
 		restWorkedOut?: boolean;
-		onopen: (kind: VoiceRequestKind) => void;
+		onopen: (kind: OpenKind) => void;
 		/** The Drawer's open set: the two stations read it and toggle through it, as NOTATION does. */
 		sections: SectionSet;
 		/** The active voice's six notes and its intake answers, as the page holds them. */

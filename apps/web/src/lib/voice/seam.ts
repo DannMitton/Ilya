@@ -11,8 +11,14 @@
 import type { Pitch } from '@ilya/score-parser';
 import type { assignToVoice } from './profileStore';
 
-/** What the pane's doors ask the wizard to show. "sing" is not a name here: it is the modal part of a take only (Dann 2026-11-16 01:13). */
-export type VoiceRequestKind = 'record' | 'summary' | 'characteristics';
+/**
+ * What the page asks the wizard. `record` and `summary` are the pane's doors. `leave` (N.203 lane 61) is a link pressed over the takeover
+ * ("Add your range", L1, L6): the wizard answers it by calling `onLeave`, never by landing on a screen, and refuses it over the capture screen.
+ * "sing" is not a name here: it is the modal part of a take only (Dann 2026-11-16 01:13).
+ */
+export type VoiceRequestKind = 'record' | 'summary' | 'leave';
+/** The kinds that land on a screen of the takeover. */
+export type OpenKind = Exclude<VoiceRequestKind, 'leave'>;
 
 export interface VoiceRequest {
 	phase: VoiceRequestKind;
@@ -50,13 +56,13 @@ export interface VoiceSeam {
 	setCharacteristic(field: CharacteristicField, pitch: Pitch | undefined): void;
 }
 
-export type Landing = 'welcome' | 'capture' | 'summary' | 'characteristics';
+export type Landing = 'welcome' | 'capture' | 'summary';
 
 /**
  * Where a request lands. `record` opens Welcome for a voice with no stored reading (`hasAnyReadings`, the wizard's own test), else the
  * capture screen on the next vowel Ilya's order has not got (`openTour`, which gives [i] at ten recorded).
  */
-export function landingFor(kind: VoiceRequestKind, hasReadings: boolean): Landing {
+export function landingFor(kind: OpenKind, hasReadings: boolean): Landing {
 	if (kind === 'record') return hasReadings ? 'capture' : 'welcome';
 	return kind;
 }
