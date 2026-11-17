@@ -14,6 +14,11 @@
  * There are three pickers, `shipped` (the prior-led picker the app has used), `open` (N.200 Step 3), and `path` (the path picker,
  * `?measure=path`, L15 ladder, through `runCapture`). `path9` is the path picker with the L9 ladder, read by `extractPath` on the guard's
  * stretch, with no status (columns `path9_fR1` and `path9_fR2`): `runCapture` has no route for it.
+ *
+ * Lane 64 (Step 2) adds, beside `path9`, the path with each of three ladders (L15, and L15 with its lowest one or two ceilings removed:
+ * 3188 to 7000 Hz, 3387 to 7000 Hz) and each of the five combinations of the fR2 options (`variants.ts`): columns `p_<ladder>_<combination>_fR1`,
+ * `_fR2`, `_fR1_ok`, `_fR2_ok`, on the guard's stretch, with no status. The path's evidence string now also carries fR1, fR3, the chosen
+ * ceiling, and the runner-up ceiling.
  */
 import { readdirSync, readFileSync, existsSync, statSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
@@ -25,6 +30,7 @@ import { findPeaks } from '$lib/voice/engine/dsp';
 import { extractPath, L9 } from '$lib/voice/engine/path-extract';
 import type { Vowel } from '$lib/voice/engine/types';
 import type { ClosedPhaseResult } from '$lib/voice/engine/closed-phase';
+import { runVariants, runnerUpCeiling, VARIANT_KEYS, type VarCell } from './variants';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 export const BURG_PY = path.resolve(here, '../i-extractor-check/burg.py');
@@ -111,7 +117,10 @@ export const PICKERS: Record<string, PickerFn> = {
 
 function evidenceOf(trace: Partial<ExtractTrace>): string | null {
 	const p = trace.chosen?.path;
-	if (p) return `case:${p.case}${p.reason ? `-${p.reason}` : ''};f2kept:${p.fR2Kept ? 1 : 0};ceil:${p.ceiling === null ? '-' : Math.round(p.ceiling)};setAside:${p.setAside};pathF2:${p.pathF2 === null ? '-' : Math.round(p.pathF2)}`;
+	if (p) {
+		const n = (v: number | null) => (v === null ? '-' : Math.round(v));
+		return `case:${p.case}${p.reason ? `-${p.reason}` : ''};f2kept:${p.fR2Kept ? 1 : 0};ceil:${n(p.ceiling)};runnerUp:${n(runnerUpCeiling(p))};setAside:${p.setAside};pathF1:${n(p.pathF1)};pathF2:${n(p.pathF2)};pathF3:${n(p.pathF3)}`;
+	}
 	const e = trace.chosen?.evidence;
 	if (!e) return null;
 	return `f1:${e.fR1 ?? '-'};f2:${e.fR2 ?? '-'};comb:${e.comb};rival:${e.runnerUp ? 1 : 0};r3:${e.r3 ? `${Math.round(e.r3.f)}${e.r3.resolved ? 'r' : 'm'}` : '-'};cpAbstained:${e.closedPhaseAbstained ? 1 : 0}`;
@@ -171,6 +180,8 @@ export interface Row {
 	pickers: Record<string, PickerReading>;
 	/** The path picker with the L9 ladder on the guard's stretch (`extractPath`), no status; null when no stretch could be read. */
 	path9: { f1: number | null; f2: number | null } | null;
+	/** The path with each ladder and each combination of the fR2 options (`variants.ts`), on the guard's stretch; null when no take was read. */
+	variants: Record<string, VarCell> | null;
 	reference: Reference;
 	candidates: Candidates | null;
 }
@@ -182,6 +193,7 @@ export function scoreTake(y: Float64Array, sr: number, asked: Vowel, meta: { fil
 	const pickers: Record<string, PickerReading> = {};
 	let candidates: Candidates | null = null;
 	let path9: Row['path9'] = null;
+	let variants: Row['variants'] = null;
 	for (const [name, pick] of Object.entries(PICKERS)) {
 		const trace: Partial<ExtractTrace> = {};
 		const o = pick(y, sr, asked, trace);
@@ -191,6 +203,7 @@ export function scoreTake(y: Float64Array, sr: number, asked: Vowel, meta: { fil
 			const yw = seg ? y.subarray(Math.round(seg[0] * sr), Math.round(seg[1] * sr)) : y;
 			const r9 = extractPath(yw, sr, { ladder: L9 });
 			path9 = { f1: r9.f1 === null ? null : round(r9.f1, 1), f2: r9.path?.pathF2 === null || r9.path?.pathF2 === undefined ? null : round(r9.path.pathF2, 1) };
+			variants = runVariants(yw, sr, false);
 		}
 		if (!candidates && o.outcome !== 'error') {
 			const seg = o.guard?.segmentS;
@@ -198,7 +211,7 @@ export function scoreTake(y: Float64Array, sr: number, asked: Vowel, meta: { fil
 			candidates = candidatesFor(yw, sr, trace.closedPhase ?? null);
 		}
 	}
-	return { file: meta.file, asked, sung: meta.sung ?? null, build: meta.build ?? null, recorded: meta.recorded ?? null, pickers, path9, reference: { f1: null, f2: null, source: null }, candidates };
+	return { file: meta.file, asked, sung: meta.sung ?? null, build: meta.build ?? null, recorded: meta.recorded ?? null, pickers, path9, variants, reference: { f1: null, f2: null, source: null }, candidates };
 }
 
 export interface ScoreOptions { burg?: boolean; ref?: string }
@@ -228,9 +241,12 @@ const within = (v: number | null, ref: number | null, bar: number) => (v === nul
 export type Kind = 'right' | 'wrong' | 'unstated';
 export const kindOf = (r: Row): Kind => (r.sung === null ? 'unstated' : r.sung === r.asked ? 'right' : 'wrong');
 
+/** A variant's key as a column name: `L3188|R125+DP` becomes `L3188_R125+DP`. */
+const vname = (k: string) => k.replace('|', '_');
+
 export function tableCsv(rows: Row[]): string {
 	const names = Object.keys(PICKERS);
-	const head = ['file', 'asked', 'sung', 'kind', 'build', 'recorded_fR1', 'recorded_fR2', ...names.flatMap((n) => [`${n}_fR1`, `${n}_fR2`, `${n}_status`, `${n}_f2Quality`, `${n}_confidence`, `${n}_method`, `${n}_steadySpread`, `${n}_setAside`, `${n}_evidence`, `${n}_note`, `${n}_fR1_ok`, `${n}_fR2_ok`]), 'path9_fR1', 'path9_fR2', 'path9_fR1_ok', 'path9_fR2_ok', 'comb', 'ref_source', 'ref_fR1', 'ref_fR2'];
+	const head = ['file', 'asked', 'sung', 'kind', 'build', 'recorded_fR1', 'recorded_fR2', ...names.flatMap((n) => [`${n}_fR1`, `${n}_fR2`, `${n}_status`, `${n}_f2Quality`, `${n}_confidence`, `${n}_method`, `${n}_steadySpread`, `${n}_setAside`, `${n}_evidence`, `${n}_note`, `${n}_fR1_ok`, `${n}_fR2_ok`]), 'path9_fR1', 'path9_fR2', 'path9_fR1_ok', 'path9_fR2_ok', ...VARIANT_KEYS.flatMap((k) => [`p_${vname(k)}_fR1`, `p_${vname(k)}_fR2`, `p_${vname(k)}_fR1_ok`, `p_${vname(k)}_fR2_ok`]), 'comb', 'ref_source', 'ref_fR1', 'ref_fR2'];
 	const q = (s: unknown) => { const t = s === null || s === undefined ? '' : String(s); return /[",\n]/.test(t) ? `"${t.replace(/"/g, '""')}"` : t; };
 	const lines = [head.join(',')];
 	for (const r of rows) {
@@ -239,7 +255,9 @@ export function tableCsv(rows: Row[]): string {
 			const p = r.pickers[n];
 			cells.push(p.f1, p.f2, p.reading, p.f2Quality, p.confidence, p.method, p.steadySpread, p.setAside, p.evidence, p.note, within(p.f1, r.reference.f1, BAR_F1), within(p.f2, r.reference.f2, BAR_F2));
 		}
-		cells.push(r.path9?.f1, r.path9?.f2, within(r.path9?.f1 ?? null, r.reference.f1, BAR_F1), within(r.path9?.f2 ?? null, r.reference.f2, BAR_F2), r.candidates?.comb, r.reference.source, r.reference.f1, r.reference.f2);
+		cells.push(r.path9?.f1, r.path9?.f2, within(r.path9?.f1 ?? null, r.reference.f1, BAR_F1), within(r.path9?.f2 ?? null, r.reference.f2, BAR_F2));
+		for (const k of VARIANT_KEYS) { const v = r.variants?.[k] ?? null; cells.push(v?.f1, v?.f2, within(v?.f1 ?? null, r.reference.f1, BAR_F1), within(v?.f2 ?? null, r.reference.f2, BAR_F2)); }
+		cells.push(r.candidates?.comb, r.reference.source, r.reference.f1, r.reference.f2);
 		lines.push(cells.map(q).join(','));
 	}
 	return lines.join('\n') + '\n';
@@ -263,6 +281,17 @@ export function summaryText(rows: Row[]): string {
 		if (!g.length) continue;
 		const rate = (sel: (r: Row) => boolean | null) => { const m = g.map(sel).filter((x): x is boolean => x !== null); return `${m.filter(Boolean).length} of ${m.length}`; };
 		out.push(`  ${k} (${g.length} takes): fR1 ${rate((r) => within(r.path9?.f1 ?? null, r.reference.f1, BAR_F1))}, fR2 ${rate((r) => within(r.path9?.f2 ?? null, r.reference.f2, BAR_F2))}`);
+	}
+	out.push('\nPath variants (ladder and fR2 options, no status; `L15_off` is the lane 62 picker)');
+	for (const vk of VARIANT_KEYS) {
+		const cells: string[] = [];
+		for (const k of ['right', 'wrong', 'unstated'] as Kind[]) {
+			const g = rows.filter((r) => kindOf(r) === k);
+			if (!g.length) continue;
+			const rate = (sel: (r: Row) => boolean | null) => { const m = g.map(sel).filter((x): x is boolean => x !== null); return `${m.filter(Boolean).length} of ${m.length}`; };
+			cells.push(`${k}: fR1 ${rate((r) => within(r.variants?.[vk]?.f1 ?? null, r.reference.f1, BAR_F1))}, fR2 ${rate((r) => within(r.variants?.[vk]?.f2 ?? null, r.reference.f2, BAR_F2))}`);
+		}
+		out.push(`  ${vname(vk)}: ${cells.join('; ')}`);
 	}
 	out.push('\nA take with no reference value is left out of that rate. A reference from Burg reads every frame, open phase and all; it is a second opinion, not the truth.');
 	return out.join('\n') + '\n';

@@ -8,6 +8,10 @@ import os from 'node:os';
 import path from 'node:path';
 import { synthFry, SYNTH_SR, type FryCase } from '$lib/voice/engine/fry-synth';
 import { wavBytes } from '$lib/voice/engine/capture-file';
+import { VARIANT_KEYS, WEIGHT_KEY, type VarCell } from './variants';
+import { judge, choice, weightTable, defaultCheck } from './variant-core';
+import { TYPES } from './fidelity-set';
+import type { MRow } from './measure-core';
 import { decodeWav, scoreTake, scoreFolder, tableCsv, summaryText, kindOf, PICKERS, BURG_PY } from './score-core';
 import { existsSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
@@ -75,6 +79,108 @@ describe('the path picker in the scoring tool', () => {
 		expect(csv[0]).toContain('path9_fR1,path9_fR2,path9_fR1_ok,path9_fR2_ok');
 		expect(summaryText([row])).toContain('Picker path9');
 	}, 60_000);
+});
+
+describe('lane 64: the path variants in the scoring tool', () => {
+	it('every ladder and combination is a column, L15 with every option off equals the default path run, and the evidence string names fR1, fR3, and both ceilings', () => {
+		const row = scoreTake(fry('i'), SYNTH_SR, 'i', { file: 'x.wav', sung: 'i' });
+		expect(Object.keys(row.variants!)).toEqual(VARIANT_KEYS);
+		expect(VARIANT_KEYS).toHaveLength(15);
+		const off = row.variants!['L15|off'], path = row.pickers.path;
+		expect(off.f1).toBe(path.f1);
+		expect(off.f2).toBe(path.f2);
+		expect(row.variants!['L3188|off'].ceiling).toBeGreaterThanOrEqual(3188);
+		expect(row.variants!['L3387|off'].ceiling).toBeGreaterThanOrEqual(3387);
+		const head = tableCsv([row]).split('\n')[0];
+		for (const c of ['p_L15_off_fR1', 'p_L3188_R125+DP_fR2', 'p_L3387_R125+DP+P3_fR2_ok']) expect(head).toContain(c);
+		expect(path.evidence).toMatch(/runnerUp:(\d+|-);.*pathF1:\d+;pathF2:(\d+|-);pathF3:(\d+|-)$/);
+		expect(summaryText([row])).toContain('L3387_R125+DP+P3');
+	}, 60_000);
+});
+
+describe('lane 64: the bars of section 3A, on constructed rows', () => {
+	const cell = (o: Partial<VarCell> = {}): VarCell => ({ f1: 500, f2: 1500, p2: 1500, p3: 2500, case: 'a', track: 2, ceiling: 5000, runnerUp: 5200, ...o });
+	/** A take whose truth is fR1 500, fR2 1500; every variant reads `base` unless `over` says otherwise. */
+	const take = (type: MRow['type'], base: VarCell, over: Record<string, Partial<VarCell>> = {}, extra: Partial<MRow> = {}): MRow => {
+		const v: Record<string, VarCell> = {};
+		for (const k of [...VARIANT_KEYS, WEIGHT_KEY]) v[k] = { ...base, ...(over[k] ?? {}) };
+		const pc = { outcome: 'reading', f1: 500, f2: 1500, reading: 'captured', confidence: 'high' } as MRow['path'];
+		return { idx: 0, k: 0, type, vowel: 'i', pair: false, truth: [500, 1500, 2500, 3300, 3900], shipped: pc, path: pc, variants: {}, v, ...extra } as MRow;
+	};
+	// Enough good takes of every type that bar 5 holds, so the other bars decide.
+	const good = () => TYPES.flatMap((t) => Array.from({ length: 20 }, () => take(t, cell())));
+	it('with nothing to fix every variant passes, and L15 off is the reference for bar 2', () => {
+		const rows = good();
+		const j = judge(rows, 'L15|off');
+		expect(j).toMatchObject({ both: 100, pass: true });
+		expect(j.b2.reference).toBe(true);
+		expect(judge(rows, 'R125+DP+P3').b3).toMatchObject({ promoted: 0, pass: false });
+	});
+	it('bar 1: a variant that changes fR2 on more than 1 percent of in-bar takes fails', () => {
+		const rows = good();
+		rows[0] = take('bass', cell(), { 'L15|R125': { f2: null } });
+		const j = judge(rows, 'L15|R125');
+		expect(j.b1).toMatchObject({ n: 100, differ: 1, pass: true });
+		rows[1] = take('bass', cell(), { 'L15|R125': { f2: null } });
+		expect(judge(rows, 'L15|R125').b1).toMatchObject({ differ: 2, pass: false });
+	});
+	it('bar 2: the duplicate fault (track 2 at 647, kept) ends absent under R125, which is more than off, and at least half', () => {
+		const rows = [...good(), take('bass', cell({ p2: 647, f2: 647 }), { 'L15|R125': { f2: null } }), take('bass', cell({ p2: 647, f2: 647 }), { 'L15|R125': { f2: null } })];
+		const j = judge(rows, 'L15|R125');
+		expect(j.b2).toMatchObject({ n: 2, okV: 2, okBase: 0, pass: true });
+		const none = [...good(), take('bass', cell({ p2: 647, f2: 647 })), take('bass', cell({ p2: 647, f2: 647 }))];
+		expect(judge(none, 'L15|R125').b2).toMatchObject({ okV: 0, pass: false });
+		const half = [...good(), take('bass', cell({ p2: 647, f2: 647 }), { 'L15|R125': { f2: null } }), take('bass', cell({ p2: 647, f2: 647 }))];
+		expect(judge(half, 'L15|R125').b2).toMatchObject({ okV: 1, n: 2, pass: true });
+	});
+	it('bar 2: a take with no track-2 value is in neither set, and is counted only in the with-nulls figure', () => {
+		const rows = [...good(), take('bass', cell({ p2: null, f2: null }))];
+		const j = judge(rows, 'L15|R125');
+		expect(j.b1.n).toBe(100);
+		expect(j.b2).toMatchObject({ n: 0, nNull: 1, okVWithNull: 1 });
+	});
+	it('bar 3: P3 must promote something, and 90 percent of what it promotes must be within 12 percent', () => {
+		const prom = (f2: number) => take('bass', cell({ p2: 647, f2: 647 }), { 'L15|R125+DP+P3': { f2, track: 3 } });
+		const rows = [...good(), ...Array.from({ length: 9 }, () => prom(1500)), prom(900)];
+		expect(judge(rows, 'L15|R125+DP+P3').b3).toMatchObject({ promoted: 10, within: 9, pass: true });
+		expect(judge([...rows, prom(900)], 'L15|R125+DP+P3').b3).toMatchObject({ promoted: 11, within: 9, pass: false });
+		expect(judge(rows, 'L15|R125').b3.applies).toBe(false);
+	});
+	it('bar 4: a raised floor that takes one in-both take out of both bars on L15 fails', () => {
+		const rows = good();
+		rows[0] = take('bass', cell(), { 'L3188|off': { f1: 300 } });
+		expect(judge(rows, 'L3188|off').b4).toMatchObject({ lost: 1, pass: false });
+		expect(judge(rows, 'L3387|off').b4).toMatchObject({ lost: 0, pass: true });
+		expect(judge(rows, 'L15|off').b4.applies).toBe(false);
+	});
+	it('bar 5: a voice type under 80 percent fails the variant, and a re-prompt is a miss', () => {
+		const rows = good();
+		for (let i = 0; i < 5; i++) rows[i] = take('bass', cell(), {}, { path: { outcome: 'reprompt', f1: null, f2: null, reading: null, confidence: null } as MRow['path'] });
+		const j = judge(rows, 'L15|off');
+		expect(j.b5.pass).toBe(false);
+		expect(j.b5.worst).toContain('bass fR1 75.0%');
+	});
+	it('bar 5: more than 10 percent of in-both takes in case (b) or (d) fails it', () => {
+		const rows = good();
+		for (let i = 0; i < 11; i++) rows[i] = take('bass', cell({ case: 'b' }));
+		expect(judge(rows, 'L15|off').b5.pass).toBe(false);
+	});
+	it('the choice: most takes in both bars, then fewest options, then L15', () => {
+		const rows = good();
+		const c = choice(rows);
+		expect(c.ranked[0].key).toBe('L15|off');
+		expect(c.ranked.map((j) => j.key)).not.toContain('L15|R125+DP+P3');
+	});
+	it('the weighting table counts takes that change ceiling', () => {
+		const rows = good();
+		rows[0] = take('bass', cell(), { [WEIGHT_KEY]: { ceiling: 6000 } });
+		expect(weightTable(rows)).toMatch(/\| all \| 100 \| 1\/100/);
+	});
+	it('the default check flags a voice type under 80 percent with every option off', () => {
+		expect(defaultCheck(good()).anyMiss).toBe(false);
+		const rows = good(); for (let i = 0; i < 5; i++) rows[i] = take('bass', cell({ f2: 900 }));
+		expect(defaultCheck(rows).anyMiss).toBe(true);
+	});
 });
 
 describe('scoreFolder, on files in the recorder`s own format', () => {

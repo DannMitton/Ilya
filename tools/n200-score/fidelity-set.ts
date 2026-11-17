@@ -68,6 +68,20 @@ export const PRIMARY: SetOptions = { seedBase: 5000, permBase: 7000 };
 /** Settings of the held-out set (Step 3). Committed before its one run. */
 export const HELD_OUT: SetOptions = { seedBase: 9000, permBase: 11000, truthBase: 13000 };
 
+/**
+ * The third set (lane 64, Step 2; confirmed by the desk after Step 0): take seed `15000 + idx*20 + k`, permutation from `rng(17000 + idx*31 + 1)`,
+ * truth factor from `rng(19000 + idx)` drawn as `HELD_OUT` draws it. Its ranges collide with neither earlier set (Fable, `review-fable-briefs-lanes63-64_r1`, item C).
+ * The primary and held-out sets are spent for choosing; the third set is for the choice, and is run once.
+ */
+export const THIRD: SetOptions = { seedBase: 15000, permBase: 17000, truthBase: 19000 };
+/** The sets by the name `N200_SET` gives. An unknown name throws: it must never fall back to another set. */
+export function setByName(name: string): SetOptions {
+	if (name === 'primary') return PRIMARY;
+	if (name === 'held') return HELD_OUT;
+	if (name === 'third') return THIRD;
+	throw new Error(`N200_SET must be primary, held, or third; got "${name}"`);
+}
+
 export interface SetCell { idx: number; type: SetType; vowel: Vowel; truth: number[]; factor: number }
 export interface SetTake { cell: SetCell; k: number; seed: number; combo: Combo; pair: boolean; truth: number[]; y: Float64Array }
 

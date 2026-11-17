@@ -2,7 +2,7 @@
  * The Step 3 runner (N.200 path picker brief r3): runs the synthetic set through the shipped and path pickers (and the sensitivity variants)
  * and writes one JSON file of rows per voice type, for `measure-core.ts`. Not a gate. Synthetic takes only; nothing from a real voice.
  *
- *   N200_SET=primary|held   which set (`fidelity-set.ts`: `PRIMARY`, `HELD_OUT`)
+ *   N200_SET=primary|held|third   which set (`fidelity-set.ts`: `PRIMARY`, `HELD_OUT`, `THIRD`); any other value throws
  *   N200_TYPE=0..4          one voice type (the five run in separate processes), or `all`
  *   N200_STEP5=1            primary set only: also read at a 5 ms step
  *   N200_OUT=<dir>          where the rows go (never into the repository)
@@ -15,7 +15,8 @@ import { runCapture, type CaptureOutcome } from '$lib/voice/engine/analyze';
 import type { ExtractTrace } from '$lib/voice/engine/extract';
 import { pathTracks, pathFromTracks, extractPath, choosePath, L9, L15 } from '$lib/voice/engine/path-extract';
 import { SYNTH_SR } from '$lib/voice/engine/fry-synth';
-import { takes, PRIMARY, HELD_OUT, TYPES } from './fidelity-set';
+import { takes, setByName, TYPES } from './fidelity-set';
+import { runVariants } from './variants';
 import type { MRow, PickerCell, PathCell, Variant } from './measure-core';
 
 const SET = process.env.N200_SET ?? '', TYPE = process.env.N200_TYPE ?? 'all', OUT = process.env.N200_OUT ?? '', STEP5 = process.env.N200_STEP5 === '1';
@@ -26,7 +27,7 @@ const cell = (o: CaptureOutcome): PickerCell => o.outcome === 'reading'
 	: { outcome: o.outcome, f1: null, f2: null, reading: null, confidence: null };
 
 test.skipIf(!SET || !OUT)('measure the path picker on the synthetic set', () => {
-	const opts = SET === 'held' ? HELD_OUT : PRIMARY;
+	const opts = setByName(SET);
 	const rows: MRow[] = [];
 	const want = TYPE === 'all' ? null : TYPES[Number(TYPE)];
 	for (const t of takes(opts)) {
@@ -41,7 +42,9 @@ test.skipIf(!SET || !OUT)('measure the path picker on the synthetic set', () => 
 		const seg = po.outcome === 'error' ? undefined : po.guard?.segmentS;
 		const yw = seg ? y.subarray(Math.round(seg[0] * sr), Math.round(seg[1] * sr)) : y;
 		const variants: Record<string, Variant> = {};
-		if (po.outcome === 'reading' || po.outcome === 'reprompt') {
+		// Lane 64: every ladder and option combination from one set of tracks. A re-prompt is a miss in every variant.
+		const v = po.outcome === 'reprompt' ? null : runVariants(yw, sr, true);
+		if (SET !== 'third' && (po.outcome === 'reading' || po.outcome === 'reprompt')) {
 			const tr = pathTracks(yw, sr);
 			const pick = (name: string, tracks: ReturnType<typeof pathTracks>, o: Parameters<typeof choosePath>[1]) => {
 				const c = choosePath(tracks, o);
@@ -60,7 +63,7 @@ test.skipIf(!SET || !OUT)('measure the path picker on the synthetic set', () => 
 			pathF1: r1(ev?.pathF1), pathF2: r1(ev?.pathF2), pathF3: r1(ev?.pathF3),
 			ceiling: ev?.ceiling ?? null, ceilingIdx: idx, ladderLen: L15.length, setAside: ev?.setAside ?? null, w: ev ? ev.w.map((v) => (v === null ? null : Math.round(v * 1e4) / 1e4)) : null, frames: ev?.frames ?? null,
 		};
-		rows.push({ idx: t.cell.idx, k: t.k, type: t.cell.type, vowel, pair: t.pair, truth: t.truth.map((v) => Math.round(v * 10) / 10), shipped: cell(shipped), path, variants });
+		rows.push({ idx: t.cell.idx, k: t.k, type: t.cell.type, vowel, pair: t.pair, truth: t.truth.map((v) => Math.round(v * 10) / 10), shipped: cell(shipped), path, variants, v });
 	}
 	mkdirSync(OUT, { recursive: true });
 	writeFileSync(path.join(OUT, `rows-${SET}-${TYPE}.json`), JSON.stringify(rows));

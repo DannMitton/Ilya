@@ -8,6 +8,7 @@
  * An fR2 marked absent is an fR2 miss in the main table. "In both bars" is judged on the path's fR1 and fR2 before the fR2 check.
  */
 import { TYPES, type SetType } from './fidelity-set';
+import type { VarCell } from './variants';
 
 export const BAR1 = 0.10, BAR2 = 0.12, PASS = 0.80, FLAG_MAX = 0.10;
 
@@ -23,6 +24,8 @@ export interface MRow {
 	idx: number; k: number; type: SetType; vowel: string; pair: boolean; truth: number[];
 	shipped: PickerCell; path: PathCell;
 	variants: Record<string, Variant>;
+	/** Lane 64: the fifteen ladder-and-option variants and the weighting variant (`variants.ts`); null for a re-prompt; absent in rows written before lane 64. */
+	v?: Record<string, VarCell> | null;
 }
 
 const within = (v: number | null, t: number, bar: number) => v !== null && Math.abs(v - t) / t <= bar;

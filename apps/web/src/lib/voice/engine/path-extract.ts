@@ -180,7 +180,7 @@ const med = (v: number[]): number | null => {
 export interface CrossCheck { case: PathCase; reason?: PathReason; fR2Kept: boolean; f2Prom: number; track?: 3; f2?: number }
 /** The fR2 options of the cross-check (`PathOptions`), and the path's third track for `p3`. */
 export interface Fr2Options { r125?: boolean; dp?: boolean; p3?: boolean; pathF3?: number | null }
-interface PeakLite { f: number; prom: number }
+export interface PeakLite { f: number; prom: number }
 
 /**
  * The cross-check with no prior. `closed` is the closed phase's qualifying poles (150 to 1200 Hz, `MIN_BW <= bw < MAX_BW`), or null when it
@@ -252,22 +252,33 @@ export function choosePath(all: CeilingTracks[], opts: PathOptions = {}): Chosen
 	return { best, w, frames: c.frames, f1: med(c.tracks[0].map((p) => p.f)), f2: med(c.tracks[1].map((p) => p.f)), f3: med(c.tracks[2].map((p) => p.f)), halves };
 }
 
-/** Everything after Burg: the choice of path, the reading, and the cross-check. `opts.f2Check` is the switch the brief's keep-rule asks for. */
-export function pathFromTracks(y: Float64Array, sr: number, all: CeilingTracks[], opts: PathOptions = {}, trace?: Partial<ExtractTrace>): ExtractResult {
-	const ch = choosePath(all, opts), { best, w, frames, f1, f2, f3, halves } = ch;
+/** What the cross-check reads from the take, apart from the path: the envelope's peaks and the closed phase's qualifying poles. Computed once per take. */
+export interface CheckInputs { peaks: PeakLite[]; closedPhase: ClosedPhaseResult | null; poles: Resonance[] }
+export function checkInputs(y: Float64Array, sr: number): CheckInputs {
 	const { env, freqs } = ltasEnvExport(y, sr);
 	const peaks = findPeaks(env, PROM_DB).filter((p) => freqs[p.idx] >= PEAK_RANGE[0] && freqs[p.idx] <= PEAK_RANGE[1]).map((p) => ({ f: parabolic(env, freqs, p.idx), prom: p.prom }));
-	const cp: ClosedPhaseResult | null = closedPhaseResonances(y, sr);
-	const poles = cp ? cp.resonances.filter((r) => r.f >= F1R[0] && r.f <= F1R[1] && r.bw >= MIN_BW && r.bw < MAX_BW) : [];
+	const closedPhase: ClosedPhaseResult | null = closedPhaseResonances(y, sr);
+	const poles = closedPhase ? closedPhase.resonances.filter((r) => r.f >= F1R[0] && r.f <= F1R[1] && r.bw >= MIN_BW && r.bw < MAX_BW) : [];
+	return { peaks, closedPhase, poles };
+}
+
+/** The choice of path, the reading, and the cross-check, from stored tracks and stored cross-check inputs. The scoring tool runs every variant through it. */
+export function pathFinish(all: CeilingTracks[], inputs: CheckInputs, opts: PathOptions = {}, trace?: Partial<ExtractTrace>): ExtractResult {
+	const ch = choosePath(all, opts), { best, w, frames, f1, f2, f3, halves } = ch;
 	const f2Check = opts.f2Check ?? true;
-	const x = crossCheck(f1, f2, poles.length ? poles : null, peaks, f2Check, { r125: opts.r125, dp: opts.dp, p3: opts.p3, pathF3: f3 });
+	const x = crossCheck(f1, f2, inputs.poles.length ? inputs.poles : null, inputs.peaks, f2Check, { r125: opts.r125, dp: opts.dp, p3: opts.p3, pathF3: f3 });
 	const evidence: PathEvidence = {
 		case: x.case, ...(x.reason ? { reason: x.reason } : {}), fR2Kept: x.fR2Kept, f2Check, pathF1: f1, pathF2: f2, pathF3: f3, fR2Track: x.fR2Kept ? (x.track ?? 2) : null,
 		ceiling: best >= 0 ? all[best].ceiling : null, ceilings: all.map((c) => c.ceiling), w, setAside: w.filter((v) => v === null).length, frames, halves,
 	};
 	const out: ExtractResult = { f1, f2: x.fR2Kept ? (x.f2 ?? f2) : null, f2Prom: x.f2Prom, method: 'path', path: evidence };
-	if (trace) Object.assign(trace, { envelopePeaks: peaks.map((p) => ({ f: p.f, promDb: p.prom })), closedPhase: cp, chosen: out });
+	if (trace) Object.assign(trace, { envelopePeaks: inputs.peaks.map((p) => ({ f: p.f, promDb: p.prom })), closedPhase: inputs.closedPhase, chosen: out });
 	return out;
+}
+
+/** Everything after Burg: the choice of path, the reading, and the cross-check. `opts.f2Check` is the switch the brief's keep-rule asks for. */
+export function pathFromTracks(y: Float64Array, sr: number, all: CeilingTracks[], opts: PathOptions = {}, trace?: Partial<ExtractTrace>): ExtractResult {
+	return pathFinish(all, checkInputs(y, sr), opts, trace);
 }
 
 /** The path picker. `runCapture` uses the defaults. */
