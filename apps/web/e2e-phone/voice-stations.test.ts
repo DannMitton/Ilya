@@ -83,7 +83,7 @@ test('"Add your range" with the takeover up on Welcome leaves the takeover and l
 	await openWithScore(page, {});
 	await page.locator('.drawer-pull').click();
 	await band(page, /^voice$/i).click();
-	await page.getByRole('button', { name: /^record your vowels$/i }).click();
+	await page.locator('aside.drawer').getByRole('button', { name: /^record your vowels$/i }).click();
 	await expect(page.locator('.takeover-back')).toBeVisible();
 	await page.locator('.drawer-pull').click(); // lowered over the takeover: INSIGHTS is the page
 	await expect(offer(page)).toBeVisible({ timeout: 20_000 });

@@ -74,7 +74,7 @@ test.describe('"Add your range" lands on the Range pickers', () => {
 			await toInsights(page);
 			// The Drawer is at the top when the takeover is entered, so the stow keeps 0, and the Range sits below the fold: a restore would undo the link.
 			await page.locator('.drawer-content').evaluate((el) => { el.scrollTop = 0; });
-			await page.getByRole('button', { name: where === 'Welcome' ? /^record your vowels$/i : /^your vowel space$/i }).evaluate((b: HTMLElement) => b.click());
+			await page.locator('aside.drawer').getByRole('button', { name: where === 'Welcome' ? /^record your vowels$/i : /^your vowel space$/i }).evaluate((b: HTMLElement) => b.click());
 			await expect(page.locator('.takeover-back')).toBeVisible();
 			await offer(page).click();
 			await landed(page);
@@ -89,7 +89,7 @@ test.describe('"Add your range" lands on the Range pickers', () => {
 		await toInsights(page);
 		const visitOpen = () => page.evaluate(() => (window as unknown as { __ilyaStubSession: { visitOpen: boolean } }).__ilyaStubSession.visitOpen);
 		await expandStation(page, 'Voice');
-		await page.getByRole('button', { name: /^record your vowels$/i }).click();
+		await page.locator('aside.drawer').getByRole('button', { name: /^record your vowels$/i }).click();
 		await page.getByRole('button', { name: /^begin$/i }).click();
 		await page.getByRole('button', { name: /^start$/i }).click();
 		await expect.poll(visitOpen).toBe(true);
