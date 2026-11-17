@@ -66,6 +66,24 @@ export function clefForVoiceType(voiceType?: string): PickerClef | null {
 }
 
 /**
+ * What an EMPTY picker shows before the singer picks anything: the clef of the
+ * declared voice type (`clefForVoiceType`), treble where the type asks for
+ * none, and the octave the octave control starts at.
+ *
+ * The 2026-10-09 ruling's clef reached a picker that held a note and no other.
+ * An empty picker drew treble for every type, so a bass saw a treble clef
+ * until he chose a note. DESK DEFAULT (lane 63): a bass-clef type starts at
+ * octave 3, the octave of the bass clef's own middle line (`MIDDLE_LINE.bass`,
+ * D3); every other type starts at octave 4, as before. The baritone takes the
+ * bass clef by the ruling, so the brief treats it as it treats the bass; that
+ * octave 3 suits a baritone's first pick as well is NOT ESTABLISHED.
+ */
+export function emptyPickerStart(voiceType?: string): { clef: PickerClef; octave: number } {
+	const clef = clefForVoiceType(voiceType) ?? 'treble';
+	return { clef, octave: clef === 'bass' ? 3 : 4 };
+}
+
+/**
  * How far from the middle line, in half-line-gap steps, the picker's drawing
  * box shows a note (150 by 136 at an 8 px line gap, middle at y 68). Past this
  * a note would be clipped.
