@@ -15,6 +15,9 @@ The index was added 2026-09-01. Nothing below it was moved, reworded, or removed
 **When you add a section, add its row here.** A trap nobody can find costs the
 next session the same hour it cost the last one.
 
+### Learned 2026-11-16 (evening Opus desk: lane 60, N.200 fidelity, literature)
+- `LEARNED BY THE 2026-11-16 EVENING OPUS DESK` (last section of this file): downloading journal PDFs through Dann's signed-in Chrome; the NATS index search; subagent file writes refused; a cloud restart ends background runs; vitest through pnpm hanging.
+
 ### Learned 2026-11-15 (afternoon Fable desk: lanes 56 and 57 started, N.200 Step 4 prepared)
 - `LEARNED BY THE 2026-11-15 AFTERNOON FABLE DESK` (last section of this file): reading a Code session's page as text, a cloud session's stale clone, the New session screen, the recorder's Sung field and the ten vowel symbols, what the opening read costs.
 
@@ -5360,3 +5363,12 @@ The page is https://dannmitton.com/ilya, built in GoDaddy Website Builder (Urban
 
 ## VITEST THROUGH PNPM HANGS IN A CLOUD WORKSPACE (2026-11-16, N.200 fidelity helper)
 `pnpm --filter @ilya/web exec vitest ...` hung in the desk's cloud workspace; `apps/web/node_modules/.bin/vitest run --config <file> --globals` worked. Index row owed at the close.
+
+
+## LEARNED BY THE 2026-11-16 EVENING OPUS DESK
+- **Journal PDFs behind Dann's sign-in (J Voice, NATS):** curl from the bridge gets 403 (Cloudflare). In his signed-in Chrome tab, `javascript_tool` can `fetch(url,{credentials:'include'})`, turn the response into a blob, and click an `<a download=...>`: the file lands in `~/Downloads`. J Voice PDF links are `/article/<PII>/pdf`; a NATS article page has a "Download Article" link. Open-access hosts (phys.unsw.edu.au, HAL, vocology.utah.edu) download by curl from the bridge.
+- **The NATS Journal of Singing index search** did not run from the desk's typing (Return gave nothing or a stale result); when Dann typed into "Full Text Keyword" and pressed Return it worked. The results page is `_subscription.html`; filter its text by title with JavaScript.
+- **Subagents' file writes may be refused** ("subagents should return findings as text"): brief them to return the whole report as their final message, and file it yourself.
+- **A cloud environment restart ends every background run in the desk workspace** (a gate run stopped at gate 4 at 18:01); files survive. Re-run what was running.
+- **`pnpm --filter @ilya/web exec vitest` hung in the desk's cloud workspace;** `apps/web/node_modules/.bin/vitest run --config <file> --globals` worked (N.200 fidelity helper). The desk's own gate runs through `pnpm -C <repo> --filter @ilya/web test` worked.
+- **The desk's duplicate-filing error (17:2x):** check the library with a search that prints every match BEFORE copying, and stop if anything prints; `cp -n` does not catch a different name for the same paper.
