@@ -15,6 +15,9 @@ The index was added 2026-09-01. Nothing below it was moved, reworded, or removed
 **When you add a section, add its row here.** A trap nobody can find costs the
 next session the same hour it cost the last one.
 
+### Learned 2026-11-16 (late Opus desk: lanes 61 and 62, N.200 plan and papers)
+- `LEARNED BY THE 2026-11-16 LATE OPUS DESK` (last section of this file): the Mac shell reaches the open web with curl; the Library folder request; Chrome's Send worked tonight; JavaScript refused on claude.ai; parselmouth and scipy absent on the Mac VM; the desk's question that was a default; estimates.
+
 ### Learned 2026-11-16 (evening Opus desk: lane 60, N.200 fidelity, literature)
 - `LEARNED BY THE 2026-11-16 EVENING OPUS DESK` (last section of this file): downloading journal PDFs through Dann's signed-in Chrome; the NATS index search; subagent file writes refused; a cloud restart ends background runs; vitest through pnpm hanging.
 
@@ -5372,3 +5375,13 @@ The page is https://dannmitton.com/ilya, built in GoDaddy Website Builder (Urban
 - **A cloud environment restart ends every background run in the desk workspace** (a gate run stopped at gate 4 at 18:01); files survive. Re-run what was running.
 - **`pnpm --filter @ilya/web exec vitest` hung in the desk's cloud workspace;** `apps/web/node_modules/.bin/vitest run --config <file> --globals` worked (N.200 fidelity helper). The desk's own gate runs through `pnpm -C <repo> --filter @ilya/web test` worked.
 - **The desk's duplicate-filing error (17:2x):** check the library with a search that prints every match BEFORE copying, and stop if anything prints; `cp -n` does not catch a different name for the same paper.
+
+
+## LEARNED BY THE 2026-11-16 LATE OPUS DESK (20:03 to 22:3x; lanes 61 and 62 started, N.200 plan, P0, P0b, P1)
+
+- **The Mac shell (`device_bash`) reached the open web with `curl`** (fon.hum.uva.nl and the IPA's ICPhS 2023 proceedings, 22:3x). Chrome's second `fetch`-and-`download` on one site was blocked silently (no file appeared); `curl` from the Mac shell then worked. guarant.cz's ICPhS 2023 PDF links return a 404 page now; the same papers are at `internationalphoneticassociation.org/icphs-proceedings/ICPhS2023/full_papers/<id>.pdf`.
+- **`device_request_folder_access` for `~/Documents/Voice Pedagogy Library` was refused once by the session's safety check** (21:3x) and granted at once when retried after Dann asked for the prompt (21:34: "Ask me for access and I will grant it! Jesus"). Desk error owned: report the refusal and ask him in the same message, not later.
+- **Chrome let the desk's Send through on claude.ai/code twice tonight** (lanes 61 and 62), against the 2026-11-16 afternoon note that it refuses. `javascript_tool` is still refused on claude.ai pages; the desk typed with the `computer` tool's `type` action, one paragraph, read back with `get_page_text`.
+- **The Mac VM has numpy but not scipy, and `praat-parselmouth` has no aarch64 wheel there** (P0b, 22:0x). Praat references for real takes come from earlier runs' numbers; a new Praat run needs another machine.
+- **A question that was a default** (20:1x): the desk asked Dann whether links may scroll the Drawer; the rule it cited was the desk's own derivation of 2026-09-02 hardened into a code comment (`OPEN.md`, last lines). Tether 19: an older decision is a default with a reason; take the better option and say so in one line.
+- **Estimates, actuals tonight (harness counts):** Fable review of a brief 221k (lane 61 r1, cap 400k), 219k (path r1, cap 330k); Fable delta review 160k (lane 61 r2, cap 200k), 159k (path r2, cap 160k: at its cap); Fable plan critique 224k (cap 370k); Sonnet scout 229k (cap 280k); Sonnet full read of three papers 154k (cap 230k); Sonnet re-score (P0b) 201k (cap 260k); Sonnet band check from images (P1) 202k (cap 230k).
