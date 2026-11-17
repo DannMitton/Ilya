@@ -47,3 +47,13 @@ export function revealScrollTop(input: {
 	if (head.top >= win.top && head.bottom <= win.bottom) return null;
 	return Math.max(0, input.scrollTop + (head.top - win.top));
 }
+
+/**
+ * Whether a reveal cancels the takeover's queued scroll restore: only when a
+ * restore is queued AND the reveal's target was found. A link whose target is
+ * missing moves nothing, so it must not cancel the restore. (Lane 63, Step 2;
+ * no path reaches a missing target today.)
+ */
+export function revealYieldsRestore(restoreQueued: boolean, targetFound: boolean): boolean {
+	return restoreQueued && targetFound;
+}

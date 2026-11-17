@@ -2,7 +2,7 @@
  * THE ACOUSTICS QUESTION'S SYMBOLS (N.199, the Titze alignment of 2026-11-13). The stem of `voiceIntake.acoustics` names four terms with their symbols in
  * parentheses, "fundamental (fo), harmonic (nfo), resonance (fR1), and formant (F1)", which Dann wrote on Titze et al. (2015), Table I (`i18n.ts`, ruled
  * 2026-09-29). Table I sets each as an italic letter with an upright subscript: fo (italic f, subscript o), nfo (n, italic f, subscript o), fR1 (italic f,
- * subscript R1, the R a full capital), F1 (italic F, subscript 1). This splits a stem into text and those four symbols so `InsightsIntake.svelte`, which
+ * subscript R1, the R a full capital), F1 (italic F, subscript 1). This splits a stem into text and those four symbols so `IntakeScale.svelte`, which
  * draws a stem as markup (a stem may carry `<em>`), can set them. The string's words are not changed, in either language.
  *
  * It lives beside the component that uses it because `lib/voice` may not import `lib/insights` (`scripts/ratchets.mjs`), where `richParts` is.

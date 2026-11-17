@@ -3,7 +3,7 @@
 	import { t, type Language } from '$lib/i18n';
 	import { tick, untrack } from 'svelte';
 	import { SectionSet, BAND_IDS } from './sections.svelte';
-	import { revealScrollTop } from './reveal-scroll';
+	import { revealScrollTop, revealYieldsRestore } from './reveal-scroll';
 	import { readSwipe } from './gesture';
 	import type { Destination, TabId } from '$lib/destinations';
 
@@ -403,8 +403,8 @@
 		void tick().then(() => {
 			const el = drawerContentEl;
 			if (!el || untrack(() => takeoverActive)) return;
-			if (restoreQueued) restoreYields = true;
 			const head = el.querySelector(revealTarget || '[data-band-head="analysis"]');
+			if (revealYieldsRestore(restoreQueued, !!head)) restoreYields = true;
 			const win = el.getBoundingClientRect();
 			const box = head?.getBoundingClientRect();
 			const to = revealScrollTop({
