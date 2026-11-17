@@ -1,14 +1,14 @@
 /**
  * The numbers for the Step 1 report (desk amendment r2, 2026-11-17). Not a gate. Prints, never asserts.
  *   pnpm --filter @ilya/web exec vitest run --config ../../tools/n200-score/vitest.config.ts burg-check.run.ts
- * Writes nothing into the repository.
+ * Writes nothing into the repository. Skips, and prints why, where python3 lacks numpy or scipy (`havePython`, `burg-fixtures.ts`).
  */
 import { test } from 'vitest';
 import { spawnSync } from 'node:child_process';
-import { writeFileSync } from 'node:fs';
+import { writeFileSync, writeSync } from 'node:fs';
 import path from 'node:path';
 import { burgCoefficients, burgFrames, polesOf } from '$lib/voice/engine/burg';
-import { BURG_REF, KNOWN_POLES, KNOWN_SR, impulseRecord, noiseRecord, rounded10k, thirteenTakes, withTmp, quartiles } from './burg-fixtures';
+import { BURG_REF, havePython, KNOWN_POLES, KNOWN_SR, impulseRecord, noiseRecord, rounded10k, thirteenTakes, withTmp, quartiles } from './burg-fixtures';
 import { wavBytes } from '$lib/voice/engine/capture-file';
 import { SYNTH_SR } from '$lib/voice/engine/fry-synth';
 import { median } from '$lib/voice/engine/dsp';
@@ -20,7 +20,10 @@ const py = (args: string[]) => {
 	return JSON.parse(r.stdout);
 };
 
-test('Step 1 numbers', () => {
+const NO_PYTHON = 'burg-check.run.ts SKIPPED: it needs python3 with numpy and scipy (`import numpy, scipy` failed), as `burg-fixtures.ts` `havePython` reports.';
+
+test('Step 1 numbers', (ctx) => {
+	if (!havePython) { writeSync(2, NO_PYTHON + '\n'); ctx.skip(NO_PYTHON); } // written to fd 2, because the default reporter drops a skipped test's console
 	const out: string[] = [];
 	// Test 2: largest error per pole over the 20 records.
 	const worst = KNOWN_POLES.map(() => 0);

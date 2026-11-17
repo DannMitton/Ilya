@@ -7,7 +7,7 @@
 	 * and their order are in `voiceTypes.ts`.
 	 *
 	 * Tier 1 is one radio group, the nine types ending in "Not sure", with
-	 * "Clear answer" back to no answer, for the reason `InsightsIntake.svelte`
+	 * "Clear answer" back to no answer, for the reason `IntakeScale.svelte`
 	 * gives: a radio group cannot otherwise be unselected. "More specific"
 	 * appears only after a Tier 1 type that has finer labels, lists only that
 	 * type's labels, and ends with Other and its text field. Changing Tier 1
@@ -126,8 +126,9 @@
 </div>
 
 <style>
-	/* `InsightsIntake.svelte`'s recipes, so the group reads as part of the
-	   phase it sits in. */
+	/* `IntakeScale.svelte`'s recipes (its `.intake-option` is `.vt-option` here),
+	   so the group reads as part of the VOICE pane's stations beside it
+	   (`DescribeVoice.svelte`, `InsightsShares.svelte`). */
 	.voice-type {
 		display: flex;
 		flex-direction: column;
@@ -144,7 +145,7 @@
 		gap: 0.3rem;
 	}
 
-	/* The characteristics phase's group heading (`.charx-heading`). */
+	/* The group heading, the same recipe as `DescribeVoice.svelte`'s `.dv-heading`. */
 	.vt-legend {
 		padding: 0 0 0.35rem;
 		font-family: var(--font-sans);

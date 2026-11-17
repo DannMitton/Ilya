@@ -4,7 +4,7 @@
  * when the ANALYSIS head is outside the window, head to the window's top.
  */
 import { describe, it, expect } from 'vitest';
-import { revealScrollTop } from './reveal-scroll';
+import { revealScrollTop, revealYieldsRestore } from './reveal-scroll';
 
 const win = { top: 100, bottom: 700 };
 
@@ -49,5 +49,18 @@ describe('revealScrollTop for a link (Dann 2026-11-16 20:13)', () => {
 	});
 	it('a target that straddles the foot counts as outside', () => {
 		expect(revealScrollTop({ phone: false, link: true, scrollTop: 0, window: win, head: { top: 680, bottom: 720 } })).toBe(580);
+	});
+});
+
+describe('revealYieldsRestore (lane 63)', () => {
+	it('yields when a restore is queued and the target was found', () => {
+		expect(revealYieldsRestore(true, true)).toBe(true);
+	});
+	it('does not yield when the target is missing, so the takeover\u2019s restore still runs', () => {
+		expect(revealYieldsRestore(true, false)).toBe(false);
+	});
+	it('does not yield when no restore is queued', () => {
+		expect(revealYieldsRestore(false, true)).toBe(false);
+		expect(revealYieldsRestore(false, false)).toBe(false);
 	});
 });

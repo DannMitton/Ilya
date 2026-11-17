@@ -35,6 +35,7 @@
 	import {
 		STEPS,
 		clefFor,
+		emptyPickerStart,
 		staffOffset,
 		ledgerOffsets,
 		spokenPitchLabel,
@@ -65,10 +66,13 @@
 	// Staged accidental and octave survive while no letter is chosen (and
 	// after Clear), so the controls never snap back mid-entry.
 	let stagedAlter = $state(0);
-	let stagedOctave = $state(4);
+	// `null` until the singer sets an octave (the control, or Clear): until then
+	// the octave follows the declared voice type (`emptyPickerStart`).
+	let stagedOctave = $state<number | null>(null);
+	let start = $derived(emptyPickerStart(voiceType));
 	let curStep = $derived<Step | ''>(value?.step ?? '');
 	let curAlter = $derived(value ? value.alter : stagedAlter);
-	let curOctave = $derived(value ? value.octave : stagedOctave);
+	let curOctave = $derived(value ? value.octave : (stagedOctave ?? start.octave));
 
 	const OCTAVES = [1, 2, 3, 4, 5, 6];
 	// N.50: the option text is a dictionary KEY, not a literal. The glyphs
@@ -119,7 +123,7 @@
 	const ACC_X = 82; // accidental centre
 	const glyphSize = smuflFontSizePx(L); // 4 spaces, one em spans the staff
 
-	let clef = $derived(value ? clefFor(value, voiceType) : 'treble');
+	let clef = $derived(value ? clefFor(value, voiceType) : start.clef);
 	let offset = $derived(value ? staffOffset(value, clef) : 0);
 	let noteY = $derived(MID - offset * HALF);
 	let ledgers = $derived(value ? ledgerOffsets(offset) : []);

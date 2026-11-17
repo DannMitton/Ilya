@@ -3,6 +3,7 @@ import type { Pitch } from '@ilya/score-parser';
 import {
 	clefFor,
 	clefForVoiceType,
+	emptyPickerStart,
 	staffOffset,
 	ledgerOffsets,
 	pitchLabel,
@@ -72,6 +73,33 @@ describe('the clef follows the singer\u2019s voice type (Dann, 2026-10-09)', () 
 		expect(clefFor(p('C', 2), 'tenor')).toBe('bass');
 		// Within the box the type\u2019s clef stands.
 		expect(clefFor(p('C', 3), 'tenor')).toBe('treble');
+	});
+});
+
+describe('the empty picker draws the declared voice type\u2019s clef and starts at its octave (lane 63)', () => {
+	const cases: [string | undefined, 'treble' | 'bass', number][] = [
+		['bass', 'bass', 3],
+		['bass-baritone', 'bass', 3],
+		['baritone', 'bass', 3],
+		['tenor', 'treble', 4],
+		['mezzo-soprano', 'treble', 4],
+		['soprano', 'treble', 4],
+		['contralto', 'treble', 4],
+		['countertenor', 'treble', 4],
+		['not-sure', 'treble', 4],
+		[undefined, 'treble', 4],
+		['', 'treble', 4],
+		['something-else', 'treble', 4]
+	];
+	for (const [type, clef, octave] of cases) {
+		it(`${JSON.stringify(type)}: ${clef} clef, octave ${octave}`, () => {
+			expect(emptyPickerStart(type)).toEqual({ clef, octave });
+		});
+	}
+
+	it('a bass\u2019s starting octave sits on the middle of the bass staff (D3)', () => {
+		const start = emptyPickerStart('bass');
+		expect(staffOffset(p('D', start.octave), start.clef)).toBe(0);
 	});
 });
 
