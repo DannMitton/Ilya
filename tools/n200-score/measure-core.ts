@@ -136,7 +136,7 @@ export function sensitivityTable(rows: MRow[]): string {
 		}).length;
 		const inBoth = g.filter((r) => within(r.variants[n].f1, r.truth[0], BAR1) && within(r.variants[n].f2, r.truth[1], BAR2)).length;
 		const base = g.filter((r) => preBars(r).f1 && preBars(r).f2).length;
-		return [n, g.length, frac(ceil, g.length), frac(bar, g.length), `${inBoth} (default ${base})`];
+		return [n, g.length, n === 'L9' ? 'n/a (a different ladder: no ceiling is shared)' : frac(ceil, g.length), frac(bar, g.length), `${inBoth} (default ${base})`];
 	});
 	return table(['variant', 'takes', 'change ceiling', 'change a bar result', 'in both bars (default)'], body);
 }
