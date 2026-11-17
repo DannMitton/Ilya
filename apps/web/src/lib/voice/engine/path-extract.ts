@@ -24,12 +24,19 @@
  *  - The reading is the median of the winning path's fR1 and fR2 frames over the stretch it is given (the guard's, `analyze.ts`).
  *
  * THE CROSS-CHECK has no prior (`crossCheck`). Every tolerance is relative to the path's value. It never calls `closedPhaseF1`, which picks by a prior.
+ *
+ * LANE 64 OPTIONS (switch-on brief r2, Step 1, Fable's fixes 1 and 5), each a field of `PathOptions`, each OFF by default, so the scoring tool can
+ * run every combination. With every one off the picker is byte-identical to lane 62's (`tools/n200-score/__golden__/path-600.json`):
+ *  - r125: keep fR2 only when it stands at least `RESOLUTION_HZ` above fR1 (the envelope cannot separate two peaks closer than that).
+ *  - dp: the envelope peak that supports fR1 is looked for in every case, and is never the peak that supports fR2 (a duplicate pole is not a second formant).
+ *  - p3: when the second track fails r125 or dp, the third track is offered to the same tests, and `PathEvidence.fR2Track` records which track gave fR2.
+ *  - sqrtWeight: `fitTrack` weights each row by 1/sqrt(b) instead of 1/b.
  */
 import { burgFrames, type BurgFrame } from './burg';
 import { findPeaks } from './dsp';
 import { closedPhaseResonances, MIN_BW, MAX_BW, type ClosedPhaseResult, type Resonance } from './closed-phase';
 import { ltasEnvExport, parabolic, type ExtractResult, type ExtractTrace } from './extract';
-import { PROM_DB, F1R } from './open-extract';
+import { PROM_DB, F1R, RESOLUTION_HZ } from './open-extract';
 
 /** Weenink (2023)'s ladder: middle × exp(j × step), j from -jMax to +jMax. */
 export function ladder(middle: number, step: number, jMax: number): number[] {
@@ -70,6 +77,8 @@ export interface PathEvidence {
 	w: (number | null)[];
 	setAside: number;
 	frames: number;
+	/** Which track gave the fR2 that was kept: 2 (the usual), or 3 when `p3` promoted it; null when fR2 was not kept. */
+	fR2Track: 2 | 3 | null;
 	/** The winning path's fR1 and fR2 in the first and second half of its frames. */
 	halves: { f1: [number | null, number | null]; f2: [number | null, number | null] };
 }
@@ -82,6 +91,14 @@ export interface PathOptions {
 	stepS?: number;
 	/** Whether an envelope peak must stand under fR2 for it to be kept. Default true. */
 	f2Check?: boolean;
+	/** Keep fR2 only when `pathF2 - pathF1 >= RESOLUTION_HZ`. Default off. Acts inside the fR2 check, so not when `f2Check` is false. */
+	r125?: boolean;
+	/** Look for fR1's envelope peak in every case and exclude it as fR2's peak in every case. Default off. */
+	dp?: boolean;
+	/** When track 2 fails `r125` or `dp`, offer track 3 to the same tests. Never fires alone: it needs `r125` or `dp`. Default off. */
+	p3?: boolean;
+	/** Weight each row of `fitTrack` by 1/sqrt(b) instead of 1/b. Default off. */
+	sqrtWeight?: boolean;
 }
 
 interface Pt { t: number; f: number; b: number }
@@ -119,14 +136,14 @@ function invert(a: number[][]): number[][] | null {
 }
 
 /** One track fitted with Legendre terms by least squares weighted 1/b: χ², and the sum of the coefficients' variances (the covariance matrix's trace). */
-function fitTrack(pts: Pt[], t0: number, t1: number, terms: number, bFloor: number): { chi2: number; varSum: number } | null {
+function fitTrack(pts: Pt[], t0: number, t1: number, terms: number, bFloor: number, sqrtWeight = false): { chi2: number; varSum: number } | null {
 	if (pts.length <= terms) return null;
 	const half = (t1 - t0) / 2 || 1, mid = (t0 + t1) / 2;
 	const ata = Array.from({ length: terms }, () => new Array<number>(terms).fill(0)), atb = new Array<number>(terms).fill(0);
 	const rows = pts.map((p) => {
-		const b = Math.max(p.b, bFloor), phi = legendre((p.t - mid) / half, terms).map((v) => v / b);
-		for (let i = 0; i < terms; i++) { atb[i] += phi[i] * (p.f / b); for (let j = 0; j < terms; j++) ata[i][j] += phi[i] * phi[j]; }
-		return { phi, y: p.f / b };
+		const b = Math.max(p.b, bFloor), div = sqrtWeight ? Math.sqrt(b) : b, phi = legendre((p.t - mid) / half, terms).map((v) => v / div);
+		for (let i = 0; i < terms; i++) { atb[i] += phi[i] * (p.f / div); for (let j = 0; j < terms; j++) ata[i][j] += phi[i] * phi[j]; }
+		return { phi, y: p.f / div };
 	});
 	const inv = invert(ata);
 	if (!inv) return null;
@@ -144,7 +161,7 @@ export function scoreCeilings(all: CeilingTracks[], opts: PathOptions = {}): (nu
 		let chi2 = 0, s2 = 0, d = 0;
 		for (const tr of c.tracks) {
 			if (tr.length < MIN_TRACK_SHARE * c.frames) return null;
-			const fit = fitTrack(tr, c.t0, c.t1, terms, bFloor);
+			const fit = fitTrack(tr, c.t0, c.t1, terms, bFloor, opts.sqrtWeight ?? false);
 			if (!fit) return null;
 			chi2 += fit.chi2; s2 += fit.varSum; d += tr.length - terms;
 		}
@@ -159,7 +176,10 @@ const med = (v: number[]): number | null => {
 	return s.length % 2 ? s[h] : (s[h - 1] + s[h]) / 2;
 };
 
-export interface CrossCheck { case: PathCase; reason?: PathReason; fR2Kept: boolean; f2Prom: number }
+/** `track` and `f2` appear only when `p3` promoted track 3: `f2` is then the value to report in place of the path's second track. */
+export interface CrossCheck { case: PathCase; reason?: PathReason; fR2Kept: boolean; f2Prom: number; track?: 3; f2?: number }
+/** The fR2 options of the cross-check (`PathOptions`), and the path's third track for `p3`. */
+export interface Fr2Options { r125?: boolean; dp?: boolean; p3?: boolean; pathF3?: number | null }
 interface PeakLite { f: number; prom: number }
 
 /**
@@ -171,7 +191,7 @@ interface PeakLite { f: number; prom: number }
  *   fR2: runs whenever the path has an fR1. An envelope peak within T2 of the path's fR2 keeps it (in case c, a peak other than fR1's);
  *        otherwise, or when the path has no fR2, it is absent. fR2 never makes a take unsteady.
  */
-export function crossCheck(pathF1: number | null, pathF2: number | null, closed: Resonance[] | null, peaks: PeakLite[], f2Check = true): CrossCheck {
+export function crossCheck(pathF1: number | null, pathF2: number | null, closed: Resonance[] | null, peaks: PeakLite[], f2Check = true, fr2: Fr2Options = {}): CrossCheck {
 	if (pathF1 === null) return { case: 'd', reason: 'no-fr1', fR2Kept: false, f2Prom: 0 };
 	const near = (v: number, f: number, tol: number) => Math.abs(f - v) / v <= tol;
 	let kase: PathCase, reason: PathReason | undefined, f1Peak: PeakLite | null = null;
@@ -184,16 +204,29 @@ export function crossCheck(pathF1: number | null, pathF2: number | null, closed:
 		for (const p of peaks) if (near(pathF1, p.f, T1) && (!f1Peak || Math.abs(p.f - pathF1) < Math.abs(f1Peak.f - pathF1))) f1Peak = p;
 		if (f1Peak) kase = 'c'; else { kase = 'd'; reason = 'no-peak'; }
 	}
-	let kept = false, f2Prom = 0;
+	const { r125 = false, dp = false, p3 = false, pathF3 = null } = fr2;
+	if (dp && !f1Peak) for (const p of peaks) if (near(pathF1, p.f, T1) && (!f1Peak || Math.abs(p.f - pathF1) < Math.abs(f1Peak.f - pathF1))) f1Peak = p;
+	/** One value through the fR2 tests: kept, or failed on `r125` or `dp` (the failures `p3` answers), or simply unsupported. */
+	const test = (v: number): { kept: boolean; prom: number; failed: boolean } => {
+		let best: PeakLite | null = null;
+		for (const p of peaks) if (p !== f1Peak && near(v, p.f, T2) && (!best || Math.abs(p.f - v) < Math.abs(best.f - v))) best = p;
+		const gapFail = r125 && v - pathF1 < RESOLUTION_HZ;
+		const dpFail = dp && !best && f1Peak !== null && near(v, f1Peak.f, T2);
+		return { kept: !gapFail && !!best, prom: best ? best.prom : 0, failed: gapFail || dpFail };
+	};
+	let kept = false, f2Prom = 0, promoted: { f2: number } | null = null;
 	if (pathF2 !== null) {
 		if (!f2Check) kept = true;
 		else {
-			let best: PeakLite | null = null;
-			for (const p of peaks) if (p !== f1Peak && near(pathF2, p.f, T2) && (!best || Math.abs(p.f - pathF2) < Math.abs(best.f - pathF2))) best = p;
-			if (best) { kept = true; f2Prom = best.prom; }
+			const t2 = test(pathF2);
+			if (t2.kept) { kept = true; f2Prom = t2.prom; }
+			else if (p3 && (r125 || dp) && t2.failed && pathF3 !== null) {
+				const t3 = test(pathF3);
+				if (t3.kept) { kept = true; f2Prom = t3.prom; promoted = { f2: pathF3 }; }
+			}
 		}
 	}
-	return { case: kase, ...(reason ? { reason } : {}), fR2Kept: kept, f2Prom };
+	return { case: kase, ...(reason ? { reason } : {}), fR2Kept: kept, f2Prom, ...(promoted ? { track: 3 as const, f2: promoted.f2 } : {}) };
 }
 
 export interface Chosen {
@@ -227,12 +260,12 @@ export function pathFromTracks(y: Float64Array, sr: number, all: CeilingTracks[]
 	const cp: ClosedPhaseResult | null = closedPhaseResonances(y, sr);
 	const poles = cp ? cp.resonances.filter((r) => r.f >= F1R[0] && r.f <= F1R[1] && r.bw >= MIN_BW && r.bw < MAX_BW) : [];
 	const f2Check = opts.f2Check ?? true;
-	const x = crossCheck(f1, f2, poles.length ? poles : null, peaks, f2Check);
+	const x = crossCheck(f1, f2, poles.length ? poles : null, peaks, f2Check, { r125: opts.r125, dp: opts.dp, p3: opts.p3, pathF3: f3 });
 	const evidence: PathEvidence = {
-		case: x.case, ...(x.reason ? { reason: x.reason } : {}), fR2Kept: x.fR2Kept, f2Check, pathF1: f1, pathF2: f2, pathF3: f3,
+		case: x.case, ...(x.reason ? { reason: x.reason } : {}), fR2Kept: x.fR2Kept, f2Check, pathF1: f1, pathF2: f2, pathF3: f3, fR2Track: x.fR2Kept ? (x.track ?? 2) : null,
 		ceiling: best >= 0 ? all[best].ceiling : null, ceilings: all.map((c) => c.ceiling), w, setAside: w.filter((v) => v === null).length, frames, halves,
 	};
-	const out: ExtractResult = { f1, f2: x.fR2Kept ? f2 : null, f2Prom: x.f2Prom, method: 'path', path: evidence };
+	const out: ExtractResult = { f1, f2: x.fR2Kept ? (x.f2 ?? f2) : null, f2Prom: x.f2Prom, method: 'path', path: evidence };
 	if (trace) Object.assign(trace, { envelopePeaks: peaks.map((p) => ({ f: p.f, promDb: p.prom })), closedPhase: cp, chosen: out });
 	return out;
 }

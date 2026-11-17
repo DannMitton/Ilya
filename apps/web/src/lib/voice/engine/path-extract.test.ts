@@ -96,6 +96,62 @@ describe('the cross-check: every fR2 outcome', () => {
 	});
 });
 
+describe('lane 64: the fR2 options (R125, DP, P3), each off by default', () => {
+	const closed = [pole(640)];
+	it('fR1 640, fR2 647, case (a), one envelope peak at 647: kept with every option off (the fault), not kept under R125, not kept under DP', () => {
+		const off = crossCheck(640, 647, closed, [peak(647)]);
+		expect(off).toMatchObject({ case: 'a', fR2Kept: true });
+		expect(crossCheck(640, 647, closed, [peak(647)], true, { r125: true })).toMatchObject({ case: 'a', fR2Kept: false });
+		expect(crossCheck(640, 647, closed, [peak(647)], true, { dp: true })).toMatchObject({ case: 'a', fR2Kept: false });
+		expect(crossCheck(640, 647, closed, [peak(647)], true, { r125: true, dp: true })).toMatchObject({ fR2Kept: false });
+	});
+	it('R125: a gap of exactly 125 Hz is kept, 124 Hz is not (RESOLUTION_HZ is 1000 / 8)', () => {
+		expect(crossCheck(640, 765, closed, [peak(765)], true, { r125: true })).toMatchObject({ fR2Kept: true });
+		expect(crossCheck(640, 764, closed, [peak(764)], true, { r125: true })).toMatchObject({ fR2Kept: false });
+	});
+	it('DP: fR1\'s peak is excluded as fR2\'s peak in every case, but a second peak near fR2 still keeps it', () => {
+		expect(crossCheck(640, 647, closed, [peak(647), peak(700)], true, { dp: true })).toMatchObject({ fR2Kept: true });
+		expect(crossCheck(640, 647, [pole(2000)], [peak(647)], true, { dp: true })).toMatchObject({ case: 'b', fR2Kept: false });
+		expect(crossCheck(640, 647, null, [peak(647)], true, { dp: true })).toMatchObject({ case: 'c', fR2Kept: false });
+		expect(crossCheck(1300, 1310, [pole(1300)], [peak(1310)], true, { dp: true })).toMatchObject({ case: 'd', reason: 'out-of-range', fR2Kept: false });
+	});
+	it('options act inside the fR2 check: with f2Check off they change nothing', () => {
+		expect(crossCheck(640, 647, closed, [peak(647)], false, { r125: true, dp: true, p3: true, pathF3: 1500 })).toMatchObject({ fR2Kept: true });
+	});
+	it('with every option off the result is the same object shape as before: no track, no f2', () => {
+		expect(crossCheck(640, 1500, closed, [peak(1500)])).toEqual({ case: 'a', fR2Kept: true, f2Prom: 5 });
+	});
+	it('P3 promotes a track-3 value that passes the same tests', () => {
+		const x = crossCheck(640, 647, closed, [peak(647), peak(1500, 7)], true, { r125: true, p3: true, pathF3: 1500 });
+		expect(x).toMatchObject({ fR2Kept: true, track: 3, f2: 1500, f2Prom: 7 });
+		const y = crossCheck(640, 647, closed, [peak(647), peak(1500)], true, { dp: true, p3: true, pathF3: 1500 });
+		expect(y).toMatchObject({ fR2Kept: true, track: 3, f2: 1500 });
+	});
+	it('P3 refuses a track-3 value that does not pass: too close to fR1, no peak under it, or the fR1 peak again', () => {
+		expect(crossCheck(640, 647, closed, [peak(647), peak(700)], true, { r125: true, p3: true, pathF3: 700 })).toMatchObject({ fR2Kept: false });
+		expect(crossCheck(640, 647, closed, [peak(647)], true, { r125: true, p3: true, pathF3: 1500 })).toMatchObject({ fR2Kept: false });
+		expect(crossCheck(640, 647, closed, [peak(647)], true, { dp: true, p3: true, pathF3: 650 })).toMatchObject({ fR2Kept: false });
+		expect(crossCheck(640, 647, closed, [peak(647), peak(1500)], true, { r125: true, p3: true, pathF3: null })).toMatchObject({ fR2Kept: false });
+	});
+	it('P3 acts only when track 2 fails R125 or DP: alone it never fires, and a track 2 with no peak under it is not offered a second chance', () => {
+		expect(crossCheck(640, 647, closed, [peak(647), peak(1500)], true, { p3: true, pathF3: 1500 })).toMatchObject({ fR2Kept: true, f2Prom: 5 });
+		expect(crossCheck(640, 647, closed, [peak(647), peak(1500)], true, { p3: true, pathF3: 1500 })).not.toHaveProperty('track');
+		expect(crossCheck(640, 2000, closed, [peak(640), peak(3400)], true, { r125: true, p3: true, pathF3: 3400 })).toMatchObject({ fR2Kept: false });
+	});
+});
+
+describe('lane 64: the weighting option', () => {
+	const mk = (b0: number, b1: number): CeilingTracks => {
+		const n = 100, tr = (f: number, b: number, j: number) => Array.from({ length: n }, (_, i) => ({ t: i * 0.00625, f: f + j * Math.sin(i * 1.7), b: i % 2 ? b : b * 0.4 }));
+		return { ceiling: 5000, frames: n, t0: 0, t1: (n - 1) * 0.00625, tracks: [tr(500, b0, 12), tr(1500, b1, 12), tr(2500, b1, 12)] };
+	};
+	it('sqrtWeight false is the default exactly; true changes W', () => {
+		const c = mk(60, 200);
+		expect(scoreCeilings([c], { sqrtWeight: false })).toEqual(scoreCeilings([c]));
+		expect(scoreCeilings([c], { sqrtWeight: true })[0]).not.toBe(scoreCeilings([c])[0]);
+	});
+});
+
 describe('scoring the ceilings', () => {
 	const track = (f: number, n: number, jitter: number, b = 80) => Array.from({ length: n }, (_, i) => ({ t: i * 0.00625, f: f + jitter * Math.sin(i * 1.7), b }));
 	const ceil = (ceiling: number, jitter: number, n = 100): CeilingTracks => ({ ceiling, frames: n, t0: 0, t1: (n - 1) * 0.00625, tracks: [track(500, n, jitter), track(1500, n, jitter), track(2500, n, jitter)] });
