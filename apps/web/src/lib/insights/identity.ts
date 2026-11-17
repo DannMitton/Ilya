@@ -68,3 +68,8 @@ export function methodLineKey(o: { generic: boolean; typed: boolean; noScore?: b
 	const kind = o.typed ? 'typed' : 'untyped';
 	return o.generic ? `insights.method.generic.${kind}` : `insights.method.${kind}`;
 }
+
+/** Whether a Method line key is one of the three generic ones (`insights.method.generic.typed`, `.untyped`, `insights.method.noScore.generic`): the lines that say the findings rest on placeholder values (N.203 lane 61, link L4). */
+export function isGenericMethodKey(key: string): boolean {
+	return key === 'insights.method.generic.typed' || key === 'insights.method.generic.untyped' || key === 'insights.method.noScore.generic';
+}

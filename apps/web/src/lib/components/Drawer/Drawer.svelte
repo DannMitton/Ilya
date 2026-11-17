@@ -146,11 +146,12 @@
 		 */
 		ontogglepull: () => void;
 		/**
-		 * N.201: a counter that goes up on each word tap, the `calibrationRequest`
-		 * shape. The page has already revealed ANALYSIS; this asks the Drawer to
-		 * scroll it into view (`reveal-scroll.ts`). Ignored during the takeover.
+		 * A counter that goes up when the singer asks for something the Drawer holds (a word tap, or a link that opens a pane or station),
+		 * the `calibrationRequest` shape. The page has already opened it; this asks the Drawer to scroll to `revealTarget`, a selector ('' is
+		 * ANALYSIS's head, the word tap's). `reveal-scroll.ts` decides. Ignored during the takeover.
 		 */
 		revealRequest?: number;
+		revealTarget?: string;
 		/**
 		 * The loupe has the screen, so the swipe must not fire. Dann's ruling
 		 * names it. The press still works: the pull is a control and the dock
@@ -161,7 +162,7 @@
 		onheadingnavigate: (id: string) => void;
 	}
 
-	let { width, raised, isMobile, language, destination, activeTab, activeHeadingId = null, repertoireGroup, inputGroup, analysisGroup, scoreGroup, metadataBody, sections, repertoireState = '', pieceState = '', pieceFromScore = false, inputState = '', analysisState = '', scoreState = '', voiceTakeover, takeoverActive = false, onexittakeover, ontogglepull, revealRequest = 0, gesturesBlocked = false, ontabchange, onheadingnavigate }: Props = $props();
+	let { width, raised, isMobile, language, destination, activeTab, activeHeadingId = null, repertoireGroup, inputGroup, analysisGroup, scoreGroup, metadataBody, sections, repertoireState = '', pieceState = '', pieceFromScore = false, inputState = '', analysisState = '', scoreState = '', voiceTakeover, takeoverActive = false, onexittakeover, ontogglepull, revealRequest = 0, revealTarget = '', gesturesBlocked = false, ontabchange, onheadingnavigate }: Props = $props();
 
 	/* ── THE SILHOUETTE AND THE BOOKMARK TAB ARE GONE (N.108 increment 1a) ──
 	   Ruled by Dann 2026-09-02: the desk has no pull, chevron or collapsed
@@ -344,11 +345,9 @@
 	   wait for the layout to come back, so it is deferred one frame.
 
 	   THE TAKEOVER'S SELF-SCROLL, N.108 increment 3, rides in the same
-	   effect. N.108 §2: "the drawer never scrolls itself, except once, on
-	   entry to the calibration takeover." N.201 ADDS ONE MORE, the word tap's
-	   (the effect below): the singer asked for that word's analysis, so the
-	   tap may bring ANALYSIS into view. The takeover's own scroll is held and
-	   given back on exit so the singer lands where they were.
+	   effect: its scroll is held and given back on exit so the singer lands
+	   where they were, unless a link asked to scroll somewhere (`restoreYields`,
+	   below; N.203 lane 61, Dann 2026-11-16 20:13).
 
 	   IT IS WRITTEN ON THE WAY OUT, NOT ON THE WAY IN, AND THAT WAS MEASURED
 	   RATHER THAN CHOSEN. The prototype sets `takeoverBody.scrollTop = 0` on
@@ -368,6 +367,8 @@
 	   NOTHING IS PAINTED SCROLLED: this runs before the DOM update that
 	   stows the box, so the reset and the hide land in one frame. */
 	let stowedScrollTop = 0;
+	let restoreQueued = false; // a restore is waiting for its frame
+	let restoreYields = false; // a reveal ran in that window and decides the scroll
 	let takeoverWas = false;
 	let takeoverBodyEl: HTMLElement | undefined = $state();
 	$effect.pre(() => {
@@ -380,17 +381,20 @@
 			stowedScrollTop = el.scrollTop;
 		} else {
 			if (takeoverBodyEl) takeoverBodyEl.scrollTop = 0;
+			restoreQueued = true;
+			restoreYields = false;
 			requestAnimationFrame(() => {
-				el.scrollTop = stowedScrollTop;
+				restoreQueued = false;
+				if (!restoreYields) el.scrollTop = stowedScrollTop;
 			});
 		}
 	});
 
-	/* N.201: A WORD TAP SCROLLS THE DRAWER, the one exception beside the
-	   takeover's. The page has revealed ANALYSIS and bumped `revealRequest`;
-	   after the DOM settles, `revealScrollTop` decides (phone: the top; desk:
-	   only when ANALYSIS's head is outside the window). Skipped while the
-	   takeover holds the scroll (`stowedScrollTop`). */
+	/* THE DRAWER MOVES ONLY WHEN THE SINGER ASKS FOR SOMETHING IT HOLDS
+	   (`reveal-scroll.ts`; N.108, N.201, Dann 2026-11-16 20:13): a word tap, or
+	   a link that opens a pane or station. The page has opened it and bumped
+	   `revealRequest`; after the DOM settles `revealScrollTop` decides. A link
+	   asked in the turn the takeover is left must win over the stow's restore. */
 	let revealSeen = 0;
 	$effect(() => {
 		const n = revealRequest;
@@ -399,11 +403,13 @@
 		void tick().then(() => {
 			const el = drawerContentEl;
 			if (!el || untrack(() => takeoverActive)) return;
-			const head = el.querySelector('[data-band-head="analysis"]');
+			if (restoreQueued) restoreYields = true;
+			const head = el.querySelector(revealTarget || '[data-band-head="analysis"]');
 			const win = el.getBoundingClientRect();
 			const box = head?.getBoundingClientRect();
 			const to = revealScrollTop({
 				phone: isMobile,
+				link: !!revealTarget,
 				scrollTop: el.scrollTop,
 				window: { top: win.top, bottom: win.bottom },
 				head: box ? { top: box.top, bottom: box.bottom } : null,
@@ -970,13 +976,10 @@
 	}
 
 
-	/* THE TWO SCROLLS. N.108: the drawer never scrolls itself, except on entry
-	   to the calibration takeover (increment 3: its stow and restore give the
-	   singer back the position they had). N.201 names the second exception: a
-	   word tap, which the singer made to see that word's analysis, brings
-	   ANALYSIS into view (`revealScrollTop`, the effect above). A station
-	   opening, a band opening, or a pick still opens IN PLACE. Do not add a
-	   third scroll here. */
+	/* THE DRAWER SCROLLS ONLY WHEN THE SINGER ASKS FOR SOMETHING IT HOLDS (N.108,
+	   N.201, Dann 2026-11-16 20:13): entering the takeover (its stow and restore),
+	   a word tap, a link that opens a pane or station. Opening a station, a band,
+	   or a pick opens IN PLACE and never scrolls. See `reveal-scroll.ts`. */
 	.drawer-content {
 		flex: 1;
 		min-height: 0;

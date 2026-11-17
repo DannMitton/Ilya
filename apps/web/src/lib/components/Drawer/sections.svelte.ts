@@ -53,13 +53,16 @@ export const OPEN_STATIONS_KEY = 'ilya:openStations';
 export const FIRST_RUN_STATIONS: readonly string[] = ['input'];
 
 /**
+ * THE TWO VOICE STATIONS JOIN NOTATION HERE (N.203 lane 61, Step 1; plan r4 D1, DESK DEFAULT): "Describe your voice" and "What INSIGHTS
+ * shares, and how" open in place, closed on arrival and never stored open, as NOTATION is.
+ *
  * NOTATION DOES NOT JOIN THE PERSISTED SET, AND THIS IS DELIBERATE (§B.4).
  * `+page.svelte`'s own comment carries the reason and it is unchanged: "a
  * remembered collapse hides the toggles from a singer who forgot they exist."
  * NOTATION keeps its ruled collapsed-on-arrival default, so it is filtered out
  * on the way to storage and is never read back in. Do not tidy this away.
  */
-export const UNPERSISTED_STATIONS: readonly string[] = ['notation'];
+export const UNPERSISTED_STATIONS: readonly string[] = ['notation', 'describeVoice', 'insightsShares'];
 
 /**
  * The station ids, which are WIRE VALUES: they are written to `localStorage`
@@ -70,6 +73,9 @@ export const UNPERSISTED_STATIONS: readonly string[] = ['notation'];
 export const STATION_IDS = {
 	binder: 'binder',
 	notation: 'notation',
+	/* N.203 lane 61: the VOICE pane's two stations, wire values (`UNPERSISTED_STATIONS` keeps them from storage). */
+	describeVoice: 'describeVoice',
+	insightsShares: 'insightsShares',
 	/* `repertoire` AND `analysis` LEFT FOR `BAND_IDS`, N.201 step 1. Their
 	   strings are unchanged; only the tier moved. */
 	/* `corrections` IS GONE, N.149, RULED BY DANN 2026-09-20: it moved to

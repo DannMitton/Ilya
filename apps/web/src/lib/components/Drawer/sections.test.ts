@@ -45,6 +45,7 @@ import {
 	STATION_IDS,
 	FIRST_RUN_STATIONS,
 	OPEN_STATIONS_VERSION,
+	UNPERSISTED_STATIONS,
 } from './sections.svelte';
 
 describe('N.108 the open set migrates once', () => {
@@ -81,8 +82,8 @@ describe('N.108 the open set migrates once', () => {
 		).toEqual(['repertoire', 'piece', 'input', 'analysis', 'scoreMarkup']);
 	});
 
-	it('leaves binder and notation as the only stations', () => {
-		expect(Object.values(STATION_IDS)).toEqual(['binder', 'notation']);
+	it('leaves binder, notation, and the two VOICE stations (N.203 lane 61) as the only stations', () => {
+		expect(Object.values(STATION_IDS)).toEqual(['binder', 'notation', 'describeVoice', 'insightsShares']);
 	});
 
 	it('knows a band id from a station id', () => {
@@ -394,7 +395,7 @@ describe('N.201 SectionSet: reveal, fold, restore', () => {
 	}
 	const KEY = 'ilya:openStations';
 	const make = (open: string[], exclusive: boolean) => {
-		const set = new SectionSet({ open, storageKey: KEY, unpersisted: ['notation'] });
+		const set = new SectionSet({ open, storageKey: KEY, unpersisted: UNPERSISTED_STATIONS });
 		set.exclusive = exclusive;
 		return set;
 	};
@@ -494,5 +495,68 @@ describe('N.201 REPERTOIRE on arrival', () => {
 	it('never opens on a phone, whatever the count', () => {
 		expect(repertoireOpensOnArrival(true, 16)).toBe(false);
 		expect(repertoireOpensOnArrival(true, 2)).toBe(false);
+	});
+});
+
+/* N.203 lane 61, Step 1: the VOICE pane's two stations open in place, closed on arrival, never stored open, and on a phone one at a time across
+   the whole station tier (so opening one shuts the other, and NOTATION). The ruled behaviour (brief r3, Step 1). */
+describe('N.203 lane 61: the two VOICE stations', () => {
+	const KEY = 'ilya:openStations';
+	const stub = () => {
+		const store = new Map<string, string>();
+		(globalThis as { localStorage?: unknown }).localStorage = {
+			getItem: (k: string) => store.get(k) ?? null,
+			setItem: (k: string, v: string) => void store.set(k, v),
+		};
+		return store;
+	};
+	const make = (open: string[], exclusive: boolean) => {
+		const set = new SectionSet({ open, storageKey: KEY, unpersisted: UNPERSISTED_STATIONS });
+		set.exclusive = exclusive;
+		return set;
+	};
+	it('are stations, not bands, and are never on first run', () => {
+		for (const id of [STATION_IDS.describeVoice, STATION_IDS.insightsShares]) {
+			expect(tierOf(id)).toBe('station');
+			expect(FIRST_RUN_STATIONS.includes(id)).toBe(false);
+			expect(UNPERSISTED_STATIONS).toContain(id);
+		}
+	});
+	it('are held but never written: opening one leaves the stored set as it was', () => {
+		const store = stub();
+		const set = make(['input'], false);
+		set.reveal('scoreMarkup');
+		set.reveal(STATION_IDS.describeVoice);
+		set.reveal(STATION_IDS.insightsShares);
+		expect(set.has(STATION_IDS.describeVoice)).toBe(true);
+		expect(JSON.parse(store.get(KEY)!).open).toEqual(['input', 'scoreMarkup']);
+	});
+	it('on a phone, opening one shuts the other and shuts NOTATION; the bands stay', () => {
+		stub();
+		const set = make(['input', 'scoreMarkup', 'notation'], true);
+		set.toggle(STATION_IDS.describeVoice);
+		expect(set.has('notation')).toBe(false);
+		expect(set.has(STATION_IDS.describeVoice)).toBe(true);
+		expect(set.has('scoreMarkup')).toBe(true);
+		set.toggle(STATION_IDS.insightsShares);
+		expect(set.has(STATION_IDS.describeVoice)).toBe(false);
+		expect(set.has(STATION_IDS.insightsShares)).toBe(true);
+		set.toggle('notation');
+		expect(set.has(STATION_IDS.insightsShares)).toBe(false);
+	});
+	it('on a desk, both stay open together', () => {
+		stub();
+		const set = make(['scoreMarkup'], false);
+		set.toggle(STATION_IDS.describeVoice);
+		set.toggle(STATION_IDS.insightsShares);
+		expect(set.has(STATION_IDS.describeVoice) && set.has(STATION_IDS.insightsShares)).toBe(true);
+	});
+	it('a stored set that somehow names one drops back closed on a reload (restore keeps only what it was handed; the write never wrote it)', () => {
+		const store = stub();
+		const set = make(['input'], false);
+		set.reveal(STATION_IDS.describeVoice);
+		const fresh = make(['input'], false);
+		fresh.restore(store.get(KEY) ?? null, false);
+		expect(fresh.has(STATION_IDS.describeVoice)).toBe(false);
 	});
 });

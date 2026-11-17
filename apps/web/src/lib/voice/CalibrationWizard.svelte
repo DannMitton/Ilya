@@ -49,27 +49,22 @@
 	import VowelCapture from '$lib/voice/VowelCapture.svelte';
 	import { addTake, type TakeRecord } from '$lib/voice/takes';
 	import { openRetake, openTour, type Opening } from '$lib/voice/chart/opening';
-	import { landingFor, requestRefused, type VoiceRequest, type VoiceSeam } from '$lib/voice/seam';
+	import { landingFor, requestRefused, type CharacteristicField, type VoiceRequest, type VoiceSeam } from '$lib/voice/seam';
 	import TakeLine from '$lib/voice/TakeLine.svelte';
 	import type { TakePart } from '$lib/voice/take-line';
 	import { createVisit } from '$lib/voice/visit';
 	import { fryView } from '$lib/voice/readiness-view';
 	import { t, type Language } from '$lib/i18n';
-	import Italics from '$lib/components/Italics.svelte';
-	import InsightsIntake from '$lib/voice/InsightsIntake.svelte';
-	import VoiceTypeIntake from '$lib/voice/VoiceTypeIntake.svelte';
 	import VoiceTypeFirst from '$lib/voice/VoiceTypeFirst.svelte';
 	import OutsideNote from '$lib/voice/OutsideNote.svelte';
 	import { outsideVowels } from '$lib/voice/outside';
-	import NotePicker from '$lib/voice/NotePicker.svelte';
 	import type { CaptureSession } from '$lib/voice/engine/session';
 	import {
 		READINESS_CAPTURE_MS,
 		READINESS_PREP_MS,
 		type ReadinessResult
 	} from '$lib/voice/engine/readiness';
-	import { loadNotationFont, type LoadedNotationFont } from '$lib/score/notation-fonts';
-	import { pitchToMidi, type IntakeAnswers, type Pitch } from '@ilya/score-parser';
+	import type { IntakeAnswers, Pitch } from '@ilya/score-parser';
 		import { applyIghDivergence } from '$lib/voice/engine/divergence';
 	import { anchorF1sFor, checkPlausibility, buildPlausibilityEvent, keepReading } from '$lib/voice/engine/plausibility';
 	import {
@@ -114,12 +109,8 @@
 	// (declared there, see near `const T =`) so it can read
 	// calib.defaultVoiceName through T(), which needs `language`.
 
-	// 'characteristics' is the fifth phase (E.5 slice 3; Kimi's Q5 ruling,
-	// v39 §A.31): typed range/tessitura/passaggio through note pickers.
-	// Skippable and never a gate. The summary's button is gone (N.203 lane 60): it is entered by the
-	// pane's two doors, "Describe your voice" and "What INSIGHTS shares, and how", and by Insights'
-	// "Add your range" (N.164, Dann 2026-09-25), all through `openRequest`. Done closes the takeover.
-	type Phase = 'welcome' | 'readiness' | 'capture' | 'summary' | 'characteristics';
+	// The characteristics screen left the takeover (N.203 lane 61, Step 2): "Describe your voice" and "What INSIGHTS shares, and how" are stations in the pane.
+	type Phase = 'welcome' | 'readiness' | 'capture' | 'summary';
 
 	interface CalibrationWizardProps {
 		/**
@@ -195,14 +186,14 @@
 		 * N.164: a parent's request to show a phase. Each new `n` lands the
 		 * wizard on `phase`, wherever it was, because the wizard stays mounted
 		 * while the takeover is stowed and a value read once at mount would
-		 * work only the first time. Insights' "Add your range" sends
-		 * `characteristics`, the Range fields. Absent, nothing changes.
-		 * N.203 lane 60: the pane's doors send `record`, `summary`, or `characteristics`
-		 * (`seam.ts`), and a request carries `fromRest`.
+		 * work only the first time. Absent, nothing changes. N.203 lane 60: the pane's doors send `record` or `summary`; lane 61: a link
+		 * pressed over the takeover sends `leave` (`seam.ts`). A request carries `fromRest`.
 		 */
 		openRequest?: VoiceRequest | null;
 		/** N.203 lane 60: the voices, the active id, and the commands, published whole for the pane at rest (`seam.ts`). */
 		onSeamChange?: (seam: VoiceSeam) => void;
+		/** N.203 lane 61: a `leave` request that was not refused. The page leaves the takeover and opens what the link named. Not `onComplete`: Finish calls that too. */
+		onLeave?: () => void;
 		/** N.203 lane 59: whether the takeover is showing. The wizard stays mounted while it is stowed (Back), so the microphone's visit follows this. */
 		takeoverVisible?: boolean;
 	}
@@ -219,6 +210,7 @@
 		language,
 		openRequest = null,
 		onSeamChange,
+		onLeave,
 		takeoverVisible = true
 	}: CalibrationWizardProps = $props();
 
@@ -333,6 +325,7 @@
 		answeredRequest = req.n;
 		untrack(() => {
 			if (requestRefused(phase, req)) return;
+			if (req.phase === 'leave') { onLeave?.(); return; }
 			const to = landingFor(req.phase, hasAnyReadings(profile));
 			if (to === 'capture') { opening = openTour(profile); captureKey += 1; }
 			resetFlow(to);
@@ -357,32 +350,7 @@
 		saveStore($state.snapshot(store) as ProfileStore);
 	}
 
-	// ── Voice characteristics (E.5 slice 3; Kimi's Q5 ruling, v39 §A.31) ─────
-	// The six pickers share one notation font load (memoized in the shared
-	// loader; the Markup page's own load makes this a cache hit). Failure falls
-	// back to the pickers' primitive shapes — never blocking.
-	let notationFont = $state<LoadedNotationFont | null>(null);
-	onMount(() => {
-		let alive = true;
-		loadNotationFont()
-			.then((f) => {
-				if (alive) notationFont = f;
-			})
-			.catch(() => {
-				/* primitive-mode fallback; the pickers stay fully functional */
-			});
-		return () => {
-			alive = false;
-		};
-	});
-
-	type CharacteristicField =
-		| 'rangeLow'
-		| 'rangeHigh'
-		| 'tessituraLow'
-		| 'tessituraHigh'
-		| 'passaggioPrimary'
-		| 'passaggioSecondary';
+	// The six note pickers moved to `DescribeVoice.svelte` (N.203 lane 61, Step 1), which loads the notation font itself and writes through the seam.
 	const CHARACTERISTIC_FIELDS: CharacteristicField[] = [
 		'rangeLow',
 		'rangeHigh',
@@ -422,21 +390,6 @@
 		if (v) { assignToVoice(v, patch); persistStore(); }
 	}
 
-	// Gentle consistency notes (amber, never a block): an inverted pair is
-	// almost certainly a typo, but the phase is not a gate and analysis
-	// copes, so the note only names what it sees. Enharmonic-aware through
-	// pitchToMidi. Copy flagged for Dann's review with the slice-3 strings.
-	let rangeInverted = $derived.by(() => {
-		const c = activeVoice?.characteristics;
-		return !!(c?.rangeLow && c.rangeHigh) && pitchToMidi(c.rangeLow) > pitchToMidi(c.rangeHigh);
-	});
-	let tessituraInverted = $derived.by(() => {
-		const c = activeVoice?.characteristics;
-		return (
-			!!(c?.tessituraLow && c.tessituraHigh) &&
-			pitchToMidi(c.tessituraLow) > pitchToMidi(c.tessituraHigh)
-		);
-	});
 	/** Write the working profile into the active voice and save (failure-silent). */
 	function persist() {
 		const v = store.voices.find((x) => x.id === store.activeId);
@@ -794,7 +747,8 @@
 			duplicate: duplicateActiveVoice,
 			rename: renameActiveVoice,
 			remove: deleteActiveVoice,
-			setOwn
+			setOwn,
+			setCharacteristic
 		});
 	});
 
@@ -926,91 +880,6 @@
 						<button type="button" class="wizard-secondary" onclick={() => (confirmingReset = true)}>{T('calib.summary.startOverButton')}</button>
 					{/if}
 				</div>
-		{:else if phase === 'characteristics'}
-			<!-- E.5 slice 3 (Kimi's Q5 ruling, v39 §A.31): typed-first capture
-			     through note pickers; sung capture, when it arrives, verifies
-			     and never discovers. Every field optional; values save on
-			     every change (source 'manual'). Done closes the takeover (`finish`,
-			     N.203 lane 60 Step 3), to the Drawer at rest, or to INSIGHTS when the
-			     screen was opened from "Add your range". Copy is agentless throughout. -->
-			<div class="wizard-phase">
-				<h2 id="wizard-title">{T('calib.characteristics.title')}</h2>
-				<p class="wizard-lede">
-					{T('calib.characteristics.lede')}
-				</p>
-				<div class="charx-group"><VoiceTypeIntake value={activeVoice} {language} onchange={setOwn} /></div>
-				<div class="charx-group">
-					<h3 class="charx-heading">{T('calib.characteristics.rangeHeading')}</h3>
-					<NotePicker
-						label={T('calib.characteristics.rangeHighLabel')}
-						value={activeVoice.characteristics?.rangeHigh}
-						font={notationFont}
-						{language} {voiceType}
-						onchange={(p) => setCharacteristic('rangeHigh', p)}
-					/>
-					<NotePicker
-						label={T('calib.characteristics.rangeLowLabel')}
-						value={activeVoice.characteristics?.rangeLow}
-						font={notationFont}
-						{language} {voiceType}
-						onchange={(p) => setCharacteristic('rangeLow', p)}
-					/>
-					{#if rangeInverted}
-						<p class="charx-note" role="status">{T('calib.characteristics.rangeInvertedNote')}</p>
-					{/if}
-				</div>
-				<div class="charx-group">
-					<h3 class="charx-heading">{T('calib.characteristics.tessituraHeading')}</h3>
-					<!-- Kimi's ruled copy, verbatim (v39 §A.31). Higher limits first in all three groups (Dann, 2026-09-28 15:40). -->
-					<p class="charx-hint">{T('calib.characteristics.tessituraHint')}</p>
-					<NotePicker
-						label={T('calib.characteristics.tessituraHighLabel')}
-						value={activeVoice.characteristics?.tessituraHigh}
-						font={notationFont}
-						{language} {voiceType}
-						onchange={(p) => setCharacteristic('tessituraHigh', p)}
-					/>
-					<NotePicker
-						label={T('calib.characteristics.tessituraLowLabel')}
-						value={activeVoice.characteristics?.tessituraLow}
-						font={notationFont}
-						{language} {voiceType}
-						onchange={(p) => setCharacteristic('tessituraLow', p)}
-					/>
-					{#if tessituraInverted}
-						<p class="charx-note" role="status">{T('calib.characteristics.tessituraInvertedNote')}</p>
-					{/if}
-				</div>
-				<div class="charx-group">
-					<h3 class="charx-heading"><Italics text={T('calib.characteristics.passaggioHeading')} /></h3>
-					<!-- Kimi's example string redrafted agentless (the §A.31 copy
-					     flag): the app never speaks as an agent. -->
-					<p class="charx-hint"><Italics text={T('calib.characteristics.passaggioHint')} /></p>
-					<NotePicker
-						label={T('calib.characteristics.passaggioSecondaryLabel')}
-						value={activeVoice.characteristics?.passaggioSecondary}
-						font={notationFont}
-						{language} {voiceType}
-						onchange={(p) => setCharacteristic('passaggioSecondary', p)}
-					/>
-					<NotePicker
-						label={T('calib.characteristics.passaggioPrimaryLabel')}
-						value={activeVoice.characteristics?.passaggioPrimary}
-						font={notationFont}
-						{language} {voiceType}
-						onchange={(p) => setCharacteristic('passaggioPrimary', p)}
-					/>
-				</div>
-				<!-- N.172: the Insights intake, one panel with the questions and the
-				     topic switches (Dann, 2026-09-24 23:21), beside the fields it
-				     joins on the profile. Ratified in both languages 2026-09-25. -->
-				<div class="charx-group">
-					<InsightsIntake value={activeVoice.intake} {language} onchange={(intake) => setOwn({ intake })} />
-				</div>
-				<button type="button" class="wizard-primary" onclick={finish}>
-					{T('calib.characteristics.doneButton')}
-				</button>
-			</div>
 		{/if}
 	{/if}
 	</div>
@@ -1189,42 +1058,6 @@
 	/* The count-in beat and the capture bar (item 1.4a interaction, E.26).
 	   Deliberately plain: this is the wizard's own furniture, not the result
 	   surface, and it borrows the same tokens as everything else here. */
-
-	/* ── Voice characteristics (E.5 slice 3) ─────────────────────────────
-	   Groups fence with a quiet rule; the group heading takes a smaller
-	   cut of the phase-heading recipe so the hierarchy reads at a glance. */
-	.charx-group {
-		width: 100%;
-		display: flex;
-		flex-direction: column;
-		gap: 0.625rem;
-		padding-top: 0.625rem;
-		border-top: 1px solid var(--stone-300);
-	}
-	.charx-heading {
-		margin: 0;
-		font-family: var(--font-sans);
-		font-size: 0.65rem;
-		text-transform: uppercase;
-		letter-spacing: 0.12em;
-		color: var(--ink-tertiary);
-		font-weight: 600;
-		text-align: left;
-	}
-	.charx-hint {
-		margin: 0;
-		font-family: var(--font-ui, var(--font-sans));
-		font-size: 0.8125rem;
-		color: var(--ink-tertiary);
-		line-height: 1.4;
-	}
-	.charx-note {
-		margin: 0;
-		font-family: var(--font-ui, var(--font-sans));
-		font-size: 0.8125rem;
-		color: var(--prep-amber);
-		line-height: 1.4;
-	}
 
 	.wizard-inline-banner {
 		display: flex;

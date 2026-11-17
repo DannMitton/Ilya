@@ -7,6 +7,11 @@
 	 * and nothing else. The one filled control in the pane is that form's Start (`ProfileSwitcher.svelte`), as the Drawer fills one pill at
 	 * rest (`docs/memory/PRODUCT.md:522`); every door is quiet, because the next thing on the path is the piece, which INPUT already fills.
 	 *
+	 * Below the doors stand the two stations (N.203 lane 61, Step 1): "Describe your voice" and "What INSIGHTS shares, and how". They open in
+	 * place, as NOTATION opens in ANALYSIS (Dann 2026-11-15 20:20: "they are analogous to text;'s Notation section"), closed on arrival and never
+	 * stored open (`UNPERSISTED_STATIONS`); on a phone one at a time across the station tier. They have no state line when closed: no words for
+	 * one are ratified. Each answer and each note saves as it changes, through the seam.
+	 *
 	 * This component decides nothing about the voices: it renders the published seam (`voice/seam.ts`) and calls its commands. The sentence,
 	 * the door names, and the vowel-space rule are in `voice-pane.ts`. The pane is never on screen beside the capture screen (the takeover
 	 * stows the Drawer's content), so nothing here is inert during a take.
@@ -14,8 +19,14 @@
 	import { t, type Language } from '$lib/i18n';
 	import ProfileSwitcher from '$lib/voice/ProfileSwitcher.svelte';
 	import VoiceTypeIntake from '$lib/voice/VoiceTypeIntake.svelte';
-	import type { VoiceRequestKind, VoiceSeam } from '$lib/voice/seam';
+	import DescribeVoice from '$lib/voice/DescribeVoice.svelte';
+	import InsightsShares from '$lib/voice/InsightsShares.svelte';
+	import type { OpenKind, VoiceSeam } from '$lib/voice/seam';
 	import type { VoiceTypeChoice } from '$lib/voice/profileStore';
+	import type { VoiceCharacteristics } from '$lib/voice/engine/types';
+	import type { IntakeAnswers } from '@ilya/score-parser';
+	import StationHeader from './StationHeader.svelte';
+	import { STATION_IDS, type SectionSet } from './sections.svelte';
 	import { paneSentence, recordDoorKey, showVowelSpaceDoor, typeControlLabel } from './voice-pane';
 
 	interface Props {
@@ -30,9 +41,14 @@
 		hasStoredReading: boolean;
 		/** Whether every vowel left can be worked out (lane 59's `finishEarlyState`); `false` until that lane is merged. */
 		restWorkedOut?: boolean;
-		onopen: (kind: VoiceRequestKind) => void;
+		onopen: (kind: OpenKind) => void;
+		/** The Drawer's open set: the two stations read it and toggle through it, as NOTATION does. */
+		sections: SectionSet;
+		/** The active voice's six notes and its intake answers, as the page holds them. */
+		characteristics: VoiceCharacteristics | undefined;
+		intake: IntakeAnswers | undefined;
 	}
-	let { language, seam, voiceType, usable, hasStoredReading, restWorkedOut = false, onopen }: Props = $props();
+	let { language, seam, voiceType, usable, hasStoredReading, restWorkedOut = false, onopen, sections, characteristics, intake }: Props = $props();
 
 	let typeOpen = $state(false);
 	const typeLabel = $derived(typeControlLabel(voiceType, language));
@@ -66,8 +82,39 @@
 				{#if showVowelSpaceDoor(hasStoredReading, voiceType?.voiceType)}
 					<button type="button" class="vp-door" onclick={() => onopen('summary')}>{T('calib.pane.door.space')}</button>
 				{/if}
-				<button type="button" class="vp-door" onclick={() => onopen('characteristics')}>{T('calib.pane.door.describe')}</button>
-				<button type="button" class="vp-door" onclick={() => onopen('characteristics')}>{T('calib.pane.door.insights')}</button>
+			</div>
+			<div class="vp-station" data-station="describeVoice">
+				<StationHeader
+					label={T('calib.pane.door.describe')}
+					expanded={sections.has(STATION_IDS.describeVoice)}
+					ontoggle={() => sections.toggle(STATION_IDS.describeVoice)}
+					controls="describe-voice-body"
+				/>
+				{#if sections.has(STATION_IDS.describeVoice)}
+					<div class="vp-station-body" id="describe-voice-body">
+						<DescribeVoice
+							{characteristics}
+							{intake}
+							voiceType={voiceType?.voiceType}
+							{language}
+							onnote={seam.setCharacteristic}
+							onintake={(next) => seam?.setOwn({ intake: next })}
+						/>
+					</div>
+				{/if}
+			</div>
+			<div class="vp-station" data-station="insightsShares">
+				<StationHeader
+					label={T('calib.pane.door.insights')}
+					expanded={sections.has(STATION_IDS.insightsShares)}
+					ontoggle={() => sections.toggle(STATION_IDS.insightsShares)}
+					controls="insights-shares-body"
+				/>
+				{#if sections.has(STATION_IDS.insightsShares)}
+					<div class="vp-station-body" id="insights-shares-body">
+						<InsightsShares value={intake} {language} onchange={(next) => seam?.setOwn({ intake: next })} />
+					</div>
+				{/if}
 			</div>
 		{/if}
 	</div>
@@ -96,6 +143,9 @@
 	}
 	.vp-type-body {
 		padding: 0 0.25rem;
+	}
+	.vp-station-body {
+		padding: 0 0.25rem 0.25rem;
 	}
 	.vp-sentence {
 		margin: 0;

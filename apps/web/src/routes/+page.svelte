@@ -116,7 +116,8 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	import { currentGuideAnchor } from '$lib/guide-anchors';
 	import CalibrationWizard from '$lib/voice/CalibrationWizard.svelte';
 	import VoicePane from '$lib/components/Drawer/VoicePane.svelte';
-	import type { VoiceRequest, VoiceRequestKind, VoiceSeam } from '$lib/voice/seam';
+	import { recordDoorKey } from '$lib/components/Drawer/voice-pane';
+	import type { VoiceRequest, OpenKind, VoiceSeam } from '$lib/voice/seam';
 	import { finishEarlyState } from '$lib/voice/chart/finish-early';
 	import MetadataFields from '$lib/components/Drawer/MetadataFields.svelte';
 	import {
@@ -1648,20 +1649,14 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	function exitCalibration() {
 		calibrating = false;
 	}
-	/**
-	 * N.164, ruled by Dann 2026-09-25: Insights' "Add your range" opens the
-	 * takeover on the Range fields, so the singer does not have to hunt.
-	 * Leaving the takeover returns to Insights, which never left the page.
-	 * On a phone the drawer is raised first, as a word click raises it.
-	 */
 	let calibrationRequest = $state<VoiceRequest | null>(null);
 	/** N.203 lane 60 (`voice/seam.ts`): what the wizard publishes of the voices, whole, for the VOICE pane at rest. Raw: it holds commands. */
 	let voiceSeam = $state.raw<VoiceSeam | undefined>(undefined);
 	/**
-	 * The pane's doors and INSIGHTS' "Add your range" (`record`, `summary`, `characteristics`). With no voice saved the takeover has no
-	 * content (`{#if activeVoice}` in the wizard), so nothing opens it: the VOICE pane opens onto its first-launch form instead.
+	 * The pane's doors (`record`, `summary`). With no voice saved the takeover has no content (`{#if activeVoice}` in the wizard), so
+	 * nothing opens it: the VOICE pane opens onto its first-launch form instead.
 	 */
-	function openVoice(kind: VoiceRequestKind) {
+	function openVoice(kind: OpenKind) {
 		if (isMobile) drawerRaised = true;
 		if (!voiceSeam?.voices.length) {
 			sections.reveal(BAND_IDS.scoreMarkup);
@@ -1669,6 +1664,39 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		}
 		calibrationRequest = { phase: kind, n: (calibrationRequest?.n ?? 0) + 1, fromRest: !calibrating };
 		enterCalibration();
+	}
+	/**
+	 * N.203 lane 61, Step 2: a link that opens a pane or station (INSIGHTS' "Add your range", and the links of Steps 3 and 4). N.164 (Dann
+	 * 2026-09-25: "so the singer does not have to hunt") brought the Range fields up in the takeover; they are a station now, and Dann
+	 * 2026-11-16 20:13 ruled that such a link scrolls the Drawer to what it opens (`reveal-scroll.ts`). With the takeover up the press goes to
+	 * the wizard as `leave`: over the capture screen it is dropped and never answered later; otherwise the wizard calls `onLeave` and `action` runs.
+	 */
+	let afterLeave: (() => void) | null = null;
+	let revealTarget = $state('');
+	function leaveThen(action: () => void) {
+		if (!calibrating) return action();
+		afterLeave = action;
+		calibrationRequest = { phase: 'leave', n: (calibrationRequest?.n ?? 0) + 1, fromRest: false };
+	}
+	/** L6: the word INPUT in INSIGHTS' sentence for a piece with no score. Same path as `openStation`: dropped over the capture screen, else the takeover is left. */
+	function openInput() {
+		leaveThen(() => {
+			if (isMobile) drawerRaised = true;
+			sections.reveal(BAND_IDS.input);
+			revealTarget = '[data-band-head="input"]';
+			revealRequest += 1;
+		});
+	}
+	function openStation(which: 'describe' | 'insights', at?: 'range') {
+		leaveThen(() => {
+			if (isMobile) drawerRaised = true;
+			sections.reveal(BAND_IDS.scoreMarkup);
+			if (!voiceSeam?.voices.length) return;
+			const id = which === 'describe' ? STATION_IDS.describeVoice : STATION_IDS.insightsShares;
+			sections.reveal(id);
+			revealTarget = at === 'range' ? '[data-describe="range"]' : `[data-station="${id}"]`;
+			revealRequest += 1;
+		});
 	}
 	const wordCount = $derived(
 		textLines.reduce((sum, l) => sum + l.words.length, 0)
@@ -2149,6 +2177,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		   leaves ANALYSIS open on a second tap; the counter asks the Drawer to
 		   scroll (`Drawer.svelte`, `revealScrollTop`). */
 		sections.reveal(BAND_IDS.analysis);
+		revealTarget = '';
 		revealRequest += 1;
 		// Switch to Transcription if clicking a word from another surface
 		if (destination !== 'studio' || studioDocument !== 'text') {
@@ -3852,6 +3881,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		scoreState={scoreStateText}
 		ontogglepull={handlePullToggle}
 		{revealRequest}
+		{revealTarget}
 		gesturesBlocked={loupeOpen}
 		ontabchange={handleTabChange}
 		onheadingnavigate={handleHeadingNavigate}
@@ -3899,6 +3929,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 						openRequest={calibrationRequest}
 						onComplete={exitCalibration}
 						onSeamChange={(s) => (voiceSeam = s)}
+						onLeave={() => { exitCalibration(); const run = afterLeave; afterLeave = null; run?.(); }}
 						onActiveProfileChange={(f, name, characteristics, updatedAt, intake, voiceType) => {
 							voiceFormants = f;
 							voiceName = name;
@@ -4140,44 +4171,19 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 					     down, so the rule of 2026-08-19 survives in the band and
 					     no lavender is lost.
 
-					     THE STATION DOES NOT RETRACT, AND THAT IS BACK WHERE SHIP
-					     B HAD IT. N.114a, RULED BY DANN 2026-09-09 walking
-					     `3765314`: Calibrate and Re-calibrate open the drawer's own
-					     takeover surface, so this station has nothing to collapse
-					     for. N.108 had given it a header and a chevron on "every
-					     station in a frame retracts"; his ruling of 2026-08-21 said
-					     the opposite for this one station and is the later word
-					     again. So: the header stays, the toggle and the collapsed
-					     state go, and `voice` leaves `STATION_IDS` with them,
-					     because a station that cannot close has no state to store.
-					     `StationHeader` draws no button and no chevron when it is
-					     given no `ontoggle`, so this needs no new branch there.
-					     CORRECTIONS KEEPS ITS CHEVRON: it has contents that are
-					     worth the height.
+					     THE VOICE STATION ITSELF DOES NOT RETRACT (N.114a, Dann 2026-09-09:
+					     it has nothing to collapse for), so it has no header and no id; the
+					     band carries the name. The wizard is the drawer's one takeover,
+					     rendered from the `voiceTakeover` snippet above, not here.
 
-					     THE CALIBRATION WIZARD IS NOT HERE. It is the drawer's one
-					     takeover, entered from Calibrate inside this station, and
-					     rendered from the `voiceTakeover` snippet above. The GUI
-					     spec's defect F2 was that its `welcome` plea sat inside
-					     this scroll, reading voice at a singer who had asked for an
-					     Instrument panel
-					     (`fable-gui-audit-and-spec_r1_2026-08-18.md:41-44`).
-
-					     THE PANE AT REST (N.203 lane 60) replaces the anchor: the voice,
-					     its sentence, and its doors (`VoicePane.svelte`). "Recorded" is
-					     `usableReadingCount`; the wizard's opening phase uses a wider
-					     test, on purpose. -->
+					     THE PANE AT REST (N.203 lane 60) replaces the anchor: the voice, its
+					     sentence, its doors, and (lane 61) its two stations (`VoicePane.svelte`).
+					     "Recorded" is `usableReadingCount`; the wizard's opening phase uses a
+					     wider test, on purpose. -->
 					<div class="station">
-						<!-- N.150: no StationHeader. The band is named Voice, so the
-						     name is drawn once, there. N.114a (2026-09-09) kept this
-						     header because it was the only thing naming Voice; that
-						     condition is gone. One line brings it back. -->
-						<!-- No `id` here since N.114a: the id existed for the
-						     header's `aria-controls`, and there is no toggle
-						     left to control anything. -->
 						<div class="station-body">
 							<VoicePane {language} seam={voiceSeam} voiceType={voiceTypeChoice} usable={usableReadingCount(voiceFormants)}
-								hasStoredReading={hasAnyReadings(voiceFormants)} restWorkedOut={finishEarlyState(voiceFormants, voiceTypeChoice?.voiceType).kind === 'work-out'} onopen={openVoice} />
+								hasStoredReading={hasAnyReadings(voiceFormants)} restWorkedOut={finishEarlyState(voiceFormants, voiceTypeChoice?.voiceType).kind === 'work-out'} onopen={openVoice} {sections} characteristics={voiceCharacteristics} intake={voiceIntake} />
 						</div>
 					</div>
 					<!-- ── THE NOTICES. Unstyled on purpose, as they have always
@@ -4355,7 +4361,8 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 				pairings={shownPairings}
 				{drawnUnderlay}
 				openSyllabification={doc.openSyllabification}
-				onaddrange={() => openVoice('characteristics')}
+				onaddrange={() => openStation('describe', 'range')}
+				links={{ shares: voiceSeam?.voices.length ? () => openStation('insights') : undefined, record: () => openVoice('record'), recordKey: recordDoorKey(usableReadingCount(voiceFormants)), input: openInput }}
 				{keyRuler}
 				octaveReading={doc.octaveReading}
 				ontoggleoctave={clefUi.toggle}

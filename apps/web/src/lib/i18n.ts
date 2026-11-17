@@ -84,7 +84,7 @@
    upload.        50  lib/score/ScoreUploader.svelte, lib/score/format-label.ts, lib/score/ingestion/ingest.ts, lib/omr/scan.ts
    verify.         1  lib/components/Paper/WordStack.svelte
    voice.          2  lib/components/Drawer/bandState.ts, lib/components/Drawer/Drawer.svelte
-   voiceIntake.   60  lib/voice/InsightsIntake.svelte, lib/voice/VoiceTypeIntake.svelte
+   voiceIntake.   60  lib/voice/DescribeVoice.svelte, lib/voice/InsightsShares.svelte, lib/voice/IntakeScale.svelte, lib/voice/VoiceTypeIntake.svelte
    voiceType.     42  lib/voice/VoiceTypeIntake.svelte, lib/voice/voiceTypes.ts, lib/voice/VoiceTypeFirst.svelte, lib/voice/OutsideNote.svelte
    vowel.         11  lib/voice/vowel-names.ts, lib/markup/legend.ts
    wait.           2  lib/components/ReadingWait.svelte, lib/omr/wait.ts, lib/score/ScoreUploader.svelte
@@ -1440,6 +1440,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'calib.summary.startFreshButton': { en: 'Start fresh', fr: 'Recommencer' },
 	'calib.summary.keepProfileButton': { en: 'Keep my profile', fr: 'Conserver mon profil' },
 	'calib.summary.startOverButton': { en: 'Start over', fr: 'Tout recommencer' },
+	// UNUSED SINCE N.203 lane 61 Step 2 (the characteristics screen left the takeover; the stations name themselves with `calib.pane.door.*`). Kept and marked in place, with its ratified French, the way this file's other retired strings are.
 	'calib.characteristics.title': { en: 'Voice characteristics', fr: 'Caractéristiques vocales' },
 	'calib.characteristics.lede': { en: 'These optional values sharpen MELODY and INSIGHTS. Any field can stay blank; where a value is missing, the analysis simply stays broad for that dimension.', fr: 'Ces valeurs facultatives précisent le CHANT et les APERÇUS. Tout champ peut rester vide. Là où une valeur manque, l\u2019analyse demeure simplement générale pour cette dimension.' },
 	'calib.characteristics.rangeHeading': { en: 'Range', fr: 'Ambitus' },
@@ -1455,6 +1456,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'calib.characteristics.passaggioHint': { en: 'The zona lies between two turns, a lower and an upper. Enter both to flag it; with either blank it stays unmarked, which does not mean it is absent.', fr: 'La *zona* se situe entre deux événements vocaux acoustiques, l\u2019un inférieur et l\u2019autre supérieur. Saisissez les deux pour la signaler. Si l\u2019un des deux reste vide, elle demeure non marquée, ce qui ne veut pas dire qu\u2019elle est absente.' },
 	'calib.characteristics.passaggioPrimaryLabel': { en: 'Primary passaggio', fr: '*Passaggio* primaire' },
 	'calib.characteristics.passaggioSecondaryLabel': { en: 'Secondary passaggio', fr: '*Passaggio* secondaire' },
+	// UNUSED SINCE N.203 lane 61 Step 2 (the characteristics screen left the takeover; the stations name themselves with `calib.pane.door.*`). Kept and marked in place, with its ratified French, the way this file's other retired strings are.
 	'calib.characteristics.doneButton': { en: 'Done', fr: 'Terminé' },
 
 	// ── Voice profile pane (N.22 extraction; French placeholder = English

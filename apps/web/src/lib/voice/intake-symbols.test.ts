@@ -2,7 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { render } from 'svelte/server';
 import { t } from '$lib/i18n';
 import { stemParts } from './intake-symbols';
-import InsightsIntake from './InsightsIntake.svelte';
+import InsightsShares from './InsightsShares.svelte';
+import DescribeVoice from './DescribeVoice.svelte';
 
 const STEM = 'voiceIntake.acoustics.stem';
 const plain = (h: string) => h.replace(/<[^>]*>/g, '');
@@ -30,7 +31,10 @@ describe('the acoustics stem split into text and symbols', () => {
 describe('the intake question, drawn', () => {
 	/** The markup with Svelte's hydration comments and scoped classes taken out. */
 	const clean = (h: string) => h.replace(/<!--.*?-->/gs, '').replace(/ class="[^"]*"/g, '');
-	const html = (language: 'en' | 'fr') => clean(render(InsightsIntake, { props: { value: undefined, language, onchange: () => {} } as never }).body);
+	/* The acoustics question is drawn by "What INSIGHTS shares, and how"; the other five questions, with the <em> in two stems, by "Describe your voice" (N.203 lane 61, Step 1). */
+	const html = (language: 'en' | 'fr') => clean(render(InsightsShares, { props: { value: undefined, language, onchange: () => {} } as never }).body);
+	const describeHtml = (language: 'en' | 'fr') =>
+		clean(render(DescribeVoice, { props: { characteristics: undefined, intake: undefined, voiceType: undefined, language, onnote: () => {}, onintake: () => {} } as never }).body);
 	const legends = (h: string) => [...h.matchAll(/<legend>(.*?)<\/legend>/gs)].map((m) => m[1]);
 	const acoustics = (h: string, language: 'en' | 'fr') => legends(h).find((l) => plain(l).replace(/\s+/g, ' ') === t(STEM, language).replace(/\s+/g, ' '))!;
 
@@ -43,9 +47,18 @@ describe('the intake question, drawn', () => {
 	it('reads, with the markup taken away, as the string it always was, in both languages', () => {
 		for (const lang of ['en', 'fr'] as const) expect(acoustics(html(lang), lang), lang).toBeDefined();
 	});
-	it('leaves the other questions’ stems as they were, their <em> still markup', () => {
-		const fr = html('fr');
+	it('leaves the other questions’ stems as they were, their <em> still markup, in "Describe your voice"', () => {
+		const fr = describeHtml('fr');
 		expect(fr).toContain('<em>passaggi</em>');
 		expect(fr).toContain('<em>piano</em>');
+	});
+	it('draws the acoustics question in one station and not the other', () => {
+		expect(acoustics(html('en'), 'en')).toBeDefined();
+		expect(legends(describeHtml('en')).some((l) => plain(l).replace(/\s+/g, ' ') === t(STEM, 'en').replace(/\s+/g, ' '))).toBe(false);
+	});
+	it('counts the five questions in the intro: Five in English, Cinq in French', () => {
+		expect(describeHtml('en')).toContain(t('voiceIntake.intro', 'en').replace('{count}', 'Five'));
+		expect(describeHtml('fr')).toContain(t('voiceIntake.intro', 'fr').replace('{count}', 'Cinq'));
+		expect(html('en')).not.toContain('quick questions');
 	});
 });

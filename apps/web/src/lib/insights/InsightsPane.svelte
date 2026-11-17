@@ -78,11 +78,12 @@
 	import { withSingerTempo } from '$lib/tempo/singer-tempo';
 	import type { OctaveReading, TempoChoice } from '$lib/library/types';
 	import { readingClef } from '$lib/score/clef-choice';
-	import { notesBlock, singerBlocks, type PlacedBlock } from '$lib/insights/singer-blocks';
+	import { noScoreBlocks, notesBlock, singerBlocks, type PlacedBlock } from '$lib/insights/singer-blocks';
+	import type { InsightsLinks } from '$lib/insights/links';
 	import { breakOffsets, lineBoxes } from '$lib/insights/line-breaks';
 	import { paginate, type Segment } from '$lib/insights/paginate';
 	import { browserStore, rangeOfferDeclined, recordRangeOfferDecline } from '$lib/insights/range-offer-decline';
-	import { composeIdentityLine, genericLede, methodLineKey, placeholderLabel, restsOnSamples } from '$lib/insights/identity';
+	import { composeIdentityLine, genericLede, isGenericMethodKey, methodLineKey, placeholderLabel, restsOnSamples } from '$lib/insights/identity';
 	import { isUsable } from '$lib/voice/engine/plausibility';
 	import type { VoiceTypeChoice } from '$lib/voice/profileStore';
 
@@ -110,8 +111,10 @@
 		drawnUnderlay?: DrawnUnderlay;
 		openSyllabification?: boolean;
 		isMobile?: boolean;
-		/** N.164: "Add your range" opens calibration on the Range fields. */
+		/** N.164, lane 61: "Add your range" opens "Describe your voice" at the Range. */
 		onaddrange?: () => void;
+		/** N.203 lane 61: the notes block's links to the VOICE pane (`links.ts`). */
+		links?: InsightsLinks;
 		/** N.94 slice 2: the chosen key, which Insights reads (curation rule 3), and "Try this key". */
 		keyRuler?: SungKey;
 		/** Rows 47, 127, 144: the singer's octave and clef choice (`SongRecord.octaveReading`). Insights reads its octave from `readingClef`, as Markup does. */
@@ -142,6 +145,7 @@
 		openSyllabification = false,
 		isMobile = false,
 		onaddrange = undefined,
+		links = undefined,
 		keyRuler = undefined,
 		octaveReading = null,
 		tempoChoice = null,
@@ -285,12 +289,9 @@
 		adapted.completeness.range || adapted.completeness.tessitura || adapted.completeness.passaggio,
 	);
 	/* A French page names its octave index once, here: « (A4 = 440 Hz) » (QUEUE row 68; DESK DEFAULT). */
-	const methodLine = $derived(
-		(!model && analysisScore
-			? T('insights.method.silent')
-			: fill(T(methodLineKey({ generic: adapted.generic, typed: hasTypedCharacteristics, noScore: !analysisScore, samples: restsOnSamples(adapted) })), { date: calibratedOn ?? '' })) +
-			(model && language === 'fr' ? ` ${T('insights.r2.pitchKey')}` : ''),
-	);
+	const methodKey = $derived(methodLineKey({ generic: adapted.generic, typed: hasTypedCharacteristics, noScore: !analysisScore, samples: restsOnSamples(adapted) }));
+	const methodLine = $derived((!model && analysisScore ? T('insights.method.silent') : fill(T(methodKey), { date: calibratedOn ?? '' })) + (model && language === 'fr' ? ` ${T('insights.r2.pitchKey')}` : ''));
+	const methodGeneric = $derived((!!model || !analysisScore) && isGenericMethodKey(methodKey)); // L4 follows the three generic Method lines
 
 	// ── Words for the model ────────────────────────────────────────────
 	const P = (p: Pitch) => pitchName(p, language);
@@ -323,11 +324,7 @@
 		}, language, intake);
 	});
 	const blocks = $derived.by((): PlacedBlock[] => {
-		if (!analysisScore)
-			return [
-				{ group: 'free', block: { kind: 'silence', lines: [T('insights.silence.noScore')] } },
-				{ group: 'free', block: notesBlock(methodLine, null, language) },
-			];
+		if (!analysisScore) return noScoreBlocks(methodLine, language);
 		if (!model) {
 			return [
 				{
@@ -534,6 +531,8 @@
 		{width}
 		ontry={keyRuler ? tryKey : undefined}
 		onaddrange={() => onaddrange?.()}
+		{links}
+		{methodGeneric}
 		ondecline={declineOffer}
 		onoctave={measuring ? undefined : () => ontoggleoctave?.()}
 		ontempo={measuring ? undefined : () => ontempo?.()}

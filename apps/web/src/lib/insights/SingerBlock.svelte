@@ -16,6 +16,7 @@
 	import type { RenderedComment } from '$lib/insights/comment-text';
 	import { richParts, textParts } from '$lib/insights/text-parts';
 	import type { Block } from '$lib/insights/singer-blocks';
+	import type { InsightsLinks } from '$lib/insights/links';
 	import PitchSeconds from '$lib/insights/PitchSeconds.svelte';
 	import OctaveLine from '$lib/components/OctaveLine.svelte';
 
@@ -26,6 +27,10 @@
 		width: number;
 		ontry?: (stop: KeyChoice) => void;
 		onaddrange?: () => void;
+		/** The notes block's links to other parts of the app (`links.ts`); drawn on screen only, never printed. */
+		links?: InsightsLinks;
+		/** The Method line's key is one of the three generic ones (`isGenericMethodKey`): L4 follows it. */
+		methodGeneric?: boolean;
 		ondecline?: () => void;
 		/** Row 47: the octave line's tap (`kind: 'octave'`). */
 		onoctave?: () => void;
@@ -36,7 +41,7 @@
 		ontoggle?: (open: boolean) => void;
 	}
 
-	let { block, language, width, ontry, onaddrange, ondecline, onoctave, ontempo, open = false, ontoggle }: Props = $props();
+	let { block, language, width, ontry, onaddrange, links, methodGeneric = false, ondecline, onoctave, ontempo, open = false, ontoggle }: Props = $props();
 	const T = (key: string) => t(key, language);
 
 	/* The ring's circumference at r = 32. */
@@ -54,6 +59,8 @@
 </script>
 
 {#snippet rich(text: string)}{#each richParts(text) as p, j (j)}{#if p.sub}<sub>{p.text}</sub>{:else if p.ipa}<span class="ipa">{p.text}</span>{:else if p.acc}<span class="acc">{p.text}</span>{:else if p.mus}<span class="mus">{p.text}</span>{:else if p.em}<em>{p.text}</em>{:else}{p.text}{/if}{/each}{/snippet}
+
+{#snippet withInput(text: string)}{@const word = t('group.input', language)}{@const at = text.indexOf(word)}{#if at < 0}{@render rich(text)}{:else}{@render rich(text.slice(0, at))}<button type="button" class="offer-link input-link" onclick={() => links?.input?.()}>{word}</button>{@render rich(text.slice(at + word.length))}{/if}{/snippet}
 
 {#snippet prose(text: string)}{#each textParts(text) as part, j (j)}{#if part.ipa}<span class="ipa">{part.text}</span>{:else if part.acc}<span class="acc">{part.text}</span>{:else}{part.text}{/if}{/each}{/snippet}
 
@@ -80,7 +87,7 @@
 		<p class="frame">{block.text}</p>
 	{:else if block.kind === 'silence'}
 		{@render heading(block.heading)}
-		{#each block.lines as line, j (j)}<p class="prose">{@render rich(line)}</p>{/each}
+		{#each block.lines as line, j (j)}<p class="prose">{#if links?.input && line === T('insights.silence.noScore')}{@render withInput(line)}{:else}{@render rich(line)}{/if}</p>{/each}
 		{#if block.withheld}<ul class="withheld">{#each block.withheld as w, j (j)}<li>{@render rich(w)}</li>{/each}</ul>{/if}
 	{:else if block.kind === 'conclusion'}
 		{@render heading(block.heading)}
@@ -168,6 +175,12 @@
 		{@render heading(block.heading)}
 		{#if block.footnote}<p class="source-line"><sup>1</sup>&#8201;{@html block.footnote}</p>{/if}
 		<p class="source-line">{block.method}</p>
+		{#if links?.shares || (methodGeneric && links?.record)}
+			<p class="source-line notes-links">
+				{#if links.shares}<button type="button" class="offer-link" onclick={() => links.shares?.()}>{T('calib.pane.door.insights')}</button>{/if}
+				{#if methodGeneric && links.record && links.recordKey}<button type="button" class="offer-link" onclick={() => links.record?.()}>{T(links.recordKey)}</button>{/if}
+			</p>
+		{/if}
 	{:else if block.kind === 'prose'}
 		{@render heading(block.heading)}
 		<p class:prose={!block.small} class:source-line={block.small}>{@render rich(block.text)}{#if block.link}{' '}<button type="button" class="tempo-link" tabindex={ontempo ? 0 : -1} onclick={() => ontempo?.()}>{block.link}</button>{/if}</p>
@@ -559,6 +572,16 @@
 		color: var(--ink-primary);
 	}
 
+	.notes-links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.25rem 1rem;
+	}
+	.notes-links .offer-link,
+	.input-link {
+		font: inherit;
+		cursor: pointer;
+	}
 	.offer-link {
 		border: none;
 		padding: 0;
@@ -591,6 +614,7 @@
 
 	@media print {
 		.try-key,
+		.notes-links,
 		.offer-decline,
 		.tempo-link,
 		.more,
