@@ -43,7 +43,7 @@ Run, only this step's changed test file: `path-extract.test.ts`, **35 passed (35
 
 ## The golden, options off
 
-`path-600.json` compare mode (`golden.run.ts -t "path picker"`) on this step's code: running when this commit was made; the result is recorded in the next commit.
+`path-600.json` compare mode (`golden.run.ts -t "path picker"`) on this step's code: **passed**: `1 passed | 1 skipped (2)`, so `path-600.json` is byte-equal with every new option off (the skipped test is the shipped-and-open compare, not run here).
 
 ## What I could not establish
 
