@@ -19,8 +19,8 @@
  *
  * Design rulings (Kimi, 2026-07-11): tri-state result (`unchecked` is a
  * valid outcome, not an error); plausibility never demotes `confidence`
- * (orthogonal facts — the reading demotion to Provisional happens at the
- * wizard boundary); margin ±2 semitones PROVISIONAL, tightened only on
+ * (orthogonal facts; the verdict never changes a reading's status either,
+ * Dann 2026-11-13); margin ±2 semitones PROVISIONAL, tightened only on
  * logged evidence (distance-to-edge is logged for every extraction, not
  * just failures); union bands are computed first, margin applied after
  * (margin-then-union would widen the guard twice).
@@ -311,18 +311,15 @@ export function buildPlausibilityEvent(
 }
 
 /**
- * Whether Markup and Insights may use a reading: not judged implausible, or
- * judged so and kept by the singer (`plausibilityOverride`, 2026-09-30).
- */
-export function isUsable(f: { plausibility?: Plausibility; plausibilityOverride?: true }): boolean {
-	return f.plausibility !== 'implausible' || f.plausibilityOverride === true;
-}
-
-/**
  * The singer's "Keep my reading". The verdict stays; the flag records the
  * decision; the reading returns to what its confidence alone earns
- * (`analyze.ts`: low is Provisional, anything else Captured), undoing only the
- * guard's demotion in `CalibrationWizard.svelte`'s `withPlausibility`.
+ * (`analyze.ts`: low is Provisional, anything else Captured). Since lane 64 the
+ * guard changes no status, so for a reading held as it was captured this
+ * returns the status it already had; a reading stored before lane 64 that the
+ * old guard demoted returns to what its confidence earns. Keep changes no
+ * number: every sung reading counts (`sung.ts`). It records the singer's word
+ * for the reading, which marks it "Beyond Ilya's reference values" and quiets
+ * the summary's note (`outside.ts`).
  */
 export function keepReading(f: CalibratedFormant): CalibratedFormant {
 	return { ...f, plausibilityOverride: true, reading: f.confidence === 'low' ? 'provisional' : 'captured' };

@@ -56,8 +56,9 @@ export interface CalibratedFormant {
 	 * the singer's own anchors for the four Bozeman-absent vowels).
 	 * Tri-state by ruling: `unchecked` is a valid outcome (window
 	 * unavailable), not an error. Orthogonal to `confidence` (signal
-	 * quality) by ruling — an implausible reading resolves to Provisional at
-	 * the wizard boundary but its confidence is never touched. Optional:
+	 * quality) by ruling. The verdict describes a reading and never changes
+	 * its status or its confidence (Dann 2026-11-13,
+	 * `docs/memory/PRODUCT.md:1269-1270`). Optional:
 	 * absent on values predating the guard and on derived/estimated values.
 	 */
 	plausibility?: 'plausible' | 'implausible' | 'unchecked';

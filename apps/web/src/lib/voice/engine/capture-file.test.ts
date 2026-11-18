@@ -7,7 +7,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
-import { crc32, zipBytes, takeBase, holdCapture, heldCount, heldZip, clearHeld, setSungVowel, sungVowel, captureFileEnabled, panelFace, PANEL_TAB_WIDTH_PX, PANEL_TAB_BOTTOM_PX } from './capture-file';
+import { crc32, zipBytes, takeBase, holdCapture, heldCount, heldZip, clearHeld, setSungVowel, sungVowel, captureFileEnabled, panelFace, panelPickerLine, panelLastTakeLine, panelAddressLine, lastHeldPicker, PANEL_TAB_WIDTH_PX, PANEL_TAB_BOTTOM_PX } from './capture-file';
 import { measurePicker } from '../chart/measure-switch';
 import { SYNTH_SR, synthFry } from './fry-synth';
 
@@ -170,8 +170,59 @@ describe('the recorder panel on a phone (lane 65, Step 3)', () => {
 		expect(code).toMatch(/position:fixed;right:0;bottom:\$\{PANEL_TAB_BOTTOM_PX\}px/);
 		expect(code).toMatch(/pointer-events:none/);
 		expect(code).not.toMatch(/right:12px;bottom:12px/);
-		expect(code).toMatch(/mountRecorderPanel\(picker: Picker = 'shipped'\)/);
+		expect(code).toMatch(/mountRecorderPanel\(picker: Picker = 'path'\)/);
+		expect(code).toMatch(/let panelPicker: Picker = 'path'/);
 		const line = read('../chart/stub-switch.ts').split('\n').find((l) => /mountRecorderPanel\(/.test(l) && !/^\s*(\/\/|\*|import)/.test(l))!;
 		expect(line).toMatch(/__ILYA_RECORDER__\s*&&\s*captureFileEnabled\(\)\)\s*mountRecorderPanel\(measurePicker\(search\)\)/);
+	});
+});
+
+/* LANE 66, Step 2. The panel follows the session: every call sets the picker and rewrites the words, and the card names the last take's stamp and what
+   the address gave. The words are pure functions, pinned as `panelFace` is; the order of the code is pinned from the source. */
+describe('the recorder panel follows the session (lane 66, Step 2)', () => {
+	it('the card names the picker in use, the picker stamped on the last take, and what the address gave', () => {
+		expect(panelPickerLine('path')).toBe('Picker in use: path');
+		expect(panelLastTakeLine(null)).toBe('Last take: no take yet');
+		expect(panelLastTakeLine('shipped')).toBe('Last take stamped: shipped');
+		expect(panelAddressLine('open')).toBe('Address: measure=open');
+		expect(panelAddressLine(null)).toBe('Address: no measure in the address');
+	});
+
+	it('an empty measure is not the same as none: the two together tell "the address lost its query" from "the picker ignored it"', () => {
+		expect(panelAddressLine('')).not.toBe(panelAddressLine(null));
+		expect(panelAddressLine('')).toBe('Address: measure=');
+	});
+
+	it('the picker stamped on a held take reaches the card, and a take with none is stamped as the sidecar stamps it', () => {
+		clearHeld();
+		const y = synthFry({ formants: [300, 1700, 2600, 3300, 3900], bandwidths: [60, 90, 120, 180, 250], rate: 50, jitter: 0.05, levelDb: 0, durationS: 1, seed: 1 });
+		const rec = { vowel: 'i', sampleRate: SYNTH_SR, trimS: 0, outcome: { outcome: 'threw' as const, message: 'x' }, trace: null };
+		expect(lastHeldPicker()).toBeNull();
+		holdCapture(y, { ...rec, picker: 'path' });
+		expect(lastHeldPicker()).toBe('path');
+		expect(JSON.parse(new TextDecoder().decode(parseZip(heldZip())[1].bytes)).picker).toBe('path');
+		holdCapture(y, rec);
+		expect(lastHeldPicker()).toBe('shipped');
+		expect(JSON.parse(new TextDecoder().decode(parseZip(heldZip())[3].bytes)).picker).toBe('shipped');
+		clearHeld();
+		expect(lastHeldPicker()).toBeNull();
+	});
+
+	it('every call sets the picker and the address before it looks for a panel, and an existing panel is rewritten', () => {
+		const code = stripComments(read('capture-file.ts'));
+		const body = code.slice(code.indexOf('export function mountRecorderPanel'));
+		const set = body.indexOf('panelPicker = picker');
+		const addr = body.indexOf("get('measure')");
+		const exists = body.indexOf('getElementById(PANEL_ID)');
+		expect(set).toBeGreaterThan(-1);
+		expect(addr).toBeGreaterThan(set);
+		expect(exists).toBeGreaterThan(addr);
+		expect(body.slice(exists, exists + 80)).toMatch(/refreshPanel\(\); return;/);
+	});
+
+	it('the sidecar still falls back to shipped for a record with no picker; the file still imports only analyze and extract', () => {
+		expect(read('capture-file.ts')).toMatch(/picker: rec\.picker \?\? 'shipped'/);
+		const imports = [...read('capture-file.ts').matchAll(/^import .* from '([^']+)'/gm)].map((m) => m[1]).sort();
+		expect(imports).toEqual(['./analyze', './extract']);
 	});
 });

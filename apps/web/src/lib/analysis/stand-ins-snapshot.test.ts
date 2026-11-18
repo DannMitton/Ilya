@@ -12,11 +12,14 @@ describe('a sung value off the shape', () => {
 	const f = (f1: number, f2: number, extra: Partial<CalibratedFormant> = {}): CalibratedFormant =>
 		({ f1, f2, f2Quality: 'clear', confidence: 'high', reading: 'captured', source: 'measured-user', ...extra }) as CalibratedFormant;
 
-	it('excludes and reports a 1063 Hz [i], which the guard fails, and fills [i] with a stand-in', () => {
-		const { snapshot, standIns } = buildVoiceProfileSnapshot({ i: f(1063, 2250), u: f(330, 800), ɑ: f(640, 1050) } as Partial<Record<Vowel, CalibratedFormant>>, undefined, undefined, undefined, 'bass');
-		expect(snapshot.fR1Source?.i).toBe('surrogate');
-		expect(snapshot.fR1.i).not.toBe(1063);
-		expect(standIns?.retake).toContainEqual({ vowel: 'i', reason: 'implausible' });
+	it('uses a 1063 Hz [i], which the guard fails, as it uses a kept one (lane 66, Step 5): sung, and reported as off the shape by the fit alone', () => {
+		const sung = { u: f(330, 800), ɑ: f(640, 1050) };
+		const bad = buildVoiceProfileSnapshot({ i: f(1063, 2250), ...sung } as Partial<Record<Vowel, CalibratedFormant>>, undefined, undefined, undefined, 'bass');
+		const kept = buildVoiceProfileSnapshot({ i: f(1063, 2250, { plausibilityOverride: true, plausibility: 'implausible' }), ...sung } as Partial<Record<Vowel, CalibratedFormant>>, undefined, undefined, undefined, 'bass');
+		expect(bad.snapshot.fR1Source?.i).toBe('sung');
+		expect(bad.snapshot.fR1.i).toBe(1063);
+		expect(bad).toEqual(kept);
+		expect(bad.standIns?.retake.every((r) => r.reason === 'off-shape')).toBe(true);
 	});
 
 	it('leaves a kept 1063 Hz [i] in place, takes it out of the fit, and reports it as off the shape', () => {
@@ -95,11 +98,12 @@ describe('a declared voice type with nothing sung (row 166)', () => {
 		expect(a.completeness).toEqual({ formants: true, range: false, tessitura: false, passaggio: false });
 	});
 
-	it('a voice whose every reading the guard fails still takes the placeholders, and reports the retakes', () => {
-		const bad = { i: f(1063, 2250) } as Partial<Record<Vowel, CalibratedFormant>>;
-		const a = buildVoiceProfileSnapshot(bad, undefined, undefined, undefined, 'bass');
-		expect(a.generic).toBe(true);
-		expect(a.snapshot.fR1Source?.i).toBe('surrogate');
-		expect(a.standIns?.retake).toContainEqual({ vowel: 'i', reason: 'implausible' });
+	it('a voice whose only reading the guard fails counts it: sung, not generic, the same as the same voice with it kept (lane 66, Step 5)', () => {
+		const a = buildVoiceProfileSnapshot({ i: f(1063, 2250) } as Partial<Record<Vowel, CalibratedFormant>>, undefined, undefined, undefined, 'bass');
+		const kept = buildVoiceProfileSnapshot({ i: { ...f(1063, 2250), plausibilityOverride: true as const, plausibility: 'implausible' as const } } as Partial<Record<Vowel, CalibratedFormant>>, undefined, undefined, undefined, 'bass');
+		expect(a.generic).toBe(false);
+		expect(a.snapshot.fR1Source?.i).toBe('sung');
+		expect(a.snapshot.fR1.i).toBe(1063);
+		expect(a).toEqual(kept);
 	});
 });

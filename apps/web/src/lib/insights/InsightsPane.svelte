@@ -84,7 +84,7 @@
 	import { paginate, type Segment } from '$lib/insights/paginate';
 	import { browserStore, rangeOfferDeclined, recordRangeOfferDecline } from '$lib/insights/range-offer-decline';
 	import { composeIdentityLine, genericLede, isGenericMethodKey, methodLineKey, placeholderLabel, restsOnSamples } from '$lib/insights/identity';
-	import { isUsable } from '$lib/voice/engine/plausibility';
+	import { isSung } from '$lib/voice/engine/sung';
 	import type { VoiceTypeChoice } from '$lib/voice/profileStore';
 
 	interface Props {
@@ -237,12 +237,12 @@
 		}).filter((c) => !c.treble && speaks(c));
 		return selectComments(all, { phraseCount: new Set(commentNotes.map((n) => n.phrase.index)).size });
 	});
-	/* Vowels the singer sang, by the adapter's own usability gate; a derived
+	/* Vowels the singer sang, by the adapter's own test of "sung" (`isSung`); a derived
 	   fR1 is not a measured value for rule 1 of r2 §0. */
 	const measuredVowels = $derived(
 		new Set(
 			Object.entries(formants)
-				.filter(([, f]) => !!f && typeof f.f1 === 'number' && f.f1 > 0 && isUsable(f))
+				.filter(([, f]) => isSung(f))
 				.map(([v]) => v),
 		),
 	);

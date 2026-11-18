@@ -558,8 +558,9 @@
 	 *
 	 * Derived from the snapshot itself rather than re-testing `reading`, so it
 	 * can never drift from what `analyzeScore` is actually given. §A.48 admits
-	 * provisional and unchecked readings into fR1 and excludes only those the
-	 * plausibility guard judged implausible. Before that ruling a provisional
+	 * provisional and unchecked readings into fR1, and since lane 66 (Step 5) it
+	 * admits a reading the plausibility guard judged implausible as well: every
+	 * sung reading counts. Before that ruling a provisional
 	 * reading was excluded, and the old capture-status count happened to match;
 	 * it no longer does, which is why this exists.
 	 */

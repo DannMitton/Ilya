@@ -41,14 +41,23 @@ describe('the pane’s seven sentence states, English and French, as ratified', 
 	});
 });
 
-describe('a profile whose readings are all implausible prints the nothing-recorded sentence', () => {
-	const refused = { f1: 90, confidence: 'high', reading: 'provisional', source: 'measured-user', plausibility: 'implausible' } as const;
-	it('usableReadingCount is 0 while two readings are stored, so the pane says nothing is recorded', () => {
-		const stored = { a: refused, e: refused };
+describe('a profile whose readings are all beyond the reference values counts them (lane 66, Step 5)', () => {
+	const beyond = { f1: 90, confidence: 'high', reading: 'provisional', source: 'measured-user', plausibility: 'implausible' } as const;
+	it('usableReadingCount is 2 while two such readings are stored, as it is with both kept: the pane counts what was sung', () => {
+		const stored = { a: beyond, e: beyond };
+		const kept = { a: { ...beyond, plausibilityOverride: true as const }, e: { ...beyond, plausibilityOverride: true as const } };
+		expect(usableReadingCount(stored)).toBe(2);
+		expect(usableReadingCount(stored)).toBe(usableReadingCount(kept));
+		expect(paneState(S(usableReadingCount(stored)))).toBe(paneState(S(usableReadingCount(kept))));
+		expect(recordDoorKey(usableReadingCount(stored))).toBe('calib.pane.door.carryOn');
+		expect(recordDoorKey(usableReadingCount(stored))).toBe(recordDoorKey(usableReadingCount(kept)));
+	});
+	it('a stored estimate, or a take that placed no first resonance, is not a sung reading: the pane says nothing is recorded', () => {
+		const stored = { a: { ...beyond, reading: 'estimated' }, e: { ...beyond, f1: 0 } } as const;
 		expect(Object.keys(stored).length).toBe(2);
 		expect(usableReadingCount(stored)).toBe(0);
-		expect(paneState(S(usableReadingCount(stored)))).toBe('none');
-		expect(recordDoorKey(usableReadingCount(stored))).toBe('calib.pane.door.record');
+		expect(paneState(S(0))).toBe('none');
+		expect(recordDoorKey(0)).toBe('calib.pane.door.record');
 	});
 });
 

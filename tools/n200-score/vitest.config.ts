@@ -19,12 +19,15 @@
  *                          from them are never public (`docs/memory/PRODUCT.md`, "COLLEAGUES' RECORDINGS ARE NEVER PUBLIC").
  *   synth-gate.run.ts      the synthetic gate of N.200 Step 3. Writes `N200_SYNTH_OUT` (a JSON file) when set.
  *   golden.run.ts          the golden of `runCapture` on the 600 primary takes; about 468 s. Compares to `__golden__/`;
- *                          `N200_GOLDEN=write` writes it instead.
+ *                          `N200_GOLDEN=write` writes it instead; `N200_GOLDEN=write-path` writes the path picker's golden (lane 64).
  *   burg-check.run.ts      the Burg numbers for a report. Needs Python 3 with numpy and scipy; skips, and says so, without them.
  *                          By file name only (it has no variable).
- *   measure.run.ts         the path picker on the synthetic set, rows to `N200_OUT`. `N200_SET=primary|held`, `N200_TYPE=0..4|all`,
+ *   measure.run.ts         the path picker on the synthetic set, rows to `N200_OUT`. `N200_SET=primary|held|third` (lane 64's third set), `N200_TYPE=0..4|all`,
  *                          `N200_STEP5=1`. By file name; it skips unless `N200_SET` and `N200_OUT` are both set.
  *   measure-report.run.ts  the tables from those rows (`N200_SET`, `N200_OUT`). By file name; it skips unless both are set.
+ *   lane66-measure.run.ts  lane 66, Step 4: the reading outside the reference values against today's replacement, and what moves when it counts. Golden
+ *                          run by file name (`N200_LANE66_OUT=<file>` writes the tables); or a folder of the recorder's files with `N200_LANE66_DIR=<folder>`
+ *                          and `N200_LANE66_TYPE=<declared type>`, tables to `<folder>-lane66-out/`, never into the repository.
  *   e.g. `N200_DIR=/path/to/folder pnpm --filter @ilya/web exec vitest run <cfg> score.run.ts`
  *   (a path given after `--` on the command line is read too). `tsx` is not installed, so this runs under vitest.
  */
@@ -34,7 +37,7 @@ import { fileURLToPath } from 'node:url';
 const here = path.dirname(fileURLToPath(import.meta.url));
 const repo = path.resolve(here, '../..');
 
-const TESTS = ['fidelity-set.test.ts', 'score-core.test.ts'];
+const TESTS = ['fidelity-set.test.ts', 'score-core.test.ts', 'lane66-core.test.ts'];
 
 /** A runner and the variables that, when any is set, include it without its name on the command line (`[]`: by name only). */
 const RUNNERS: [file: string, variables: string[]][] = [
@@ -44,6 +47,7 @@ const RUNNERS: [file: string, variables: string[]][] = [
 	['burg-check.run.ts', []],
 	['measure.run.ts', []],
 	['measure-report.run.ts', []],
+	['lane66-measure.run.ts', ['N200_LANE66_DIR']],
 ];
 const argv = process.argv.slice(2).filter((a) => !a.startsWith('-'));
 const runners = RUNNERS.filter(([file, vars]) => argv.some((a) => a.includes(file)) || vars.some((v) => process.env[v])).map(([file]) => file);

@@ -58,6 +58,7 @@
 	import VoiceTypeFirst from '$lib/voice/VoiceTypeFirst.svelte';
 	import OutsideNote from '$lib/voice/OutsideNote.svelte';
 	import { outsideVowels } from '$lib/voice/outside';
+	import { judgeUnchecked } from '$lib/voice/engine/resolve-values';
 	import type { CaptureSession } from '$lib/voice/engine/session';
 	import {
 		READINESS_CAPTURE_MS,
@@ -250,15 +251,16 @@
 	 * a directly sampled [ɨ] skipped the check entirely — the standing
 	 * correctness gap). Engine spec §7, relocation Option A: a sampled [ɨ] is
 	 * checked against the expectation built from the singer's own [i] and
-	 * [u]; divergence, or a missing/Provisional anchor, resolves [ɨ] to
-	 * Provisional (Dann's locked anchor rule). Runs on every profile
+	 * [u]. Since lane 64 the pass describes the divergence and never changes
+	 * the reading's status, which stays what its own evidence left it, a
+	 * missing or divergent [i] or [u] included (Dann 2026-11-13,
+	 * `docs/memory/PRODUCT.md:1269-1270`). Runs on every profile
 	 * mutation; a no-op unless a direct [ɨ] sample exists. The pass mutates,
-	 * so it runs on a clone, and the internal isDivergent flag is stripped —
-	 * the §9 boundary keeps that flag internal, and the resolved reading is
-	 * the whole outcome the UI and the store need.
+	 * so it runs on a clone, and the internal isDivergent flag is stripped:
+	 * the §9 boundary keeps that flag internal.
 	 *
-	 * The capture screen reads the guarded profile this pass writes, so a
-	 * downgraded [ɨ] is drawn as the profile holds it.
+	 * The capture screen reads the profile this pass returns, so an [ɨ] is
+	 * drawn as the profile holds it.
 	 */
 	function withIghPass(
 		map: Partial<Record<Vowel, CalibratedFormant>>
@@ -326,7 +328,7 @@
 		});
 	});
 
-	let outside = $derived(outsideVowels(profile, ALL_VOWELS)); // The summary's one note (`outside.ts`).
+	let outside = $derived(outsideVowels(judgeUnchecked(profile), ALL_VOWELS)); // The summary's one note (`outside.ts`), over the judged copy: a reading stored with no verdict is named too.
 	// The voice type is asked before the first vowel only if the voice had none on arrival (Dann, 2026-09-30 12:44).
 	let askTypeFirst = $state(false);
 	$effect(() => { if (phase === 'welcome' && store.activeId) askTypeFirst = !untrack(() => voiceType); });
@@ -644,8 +646,8 @@
 		const checked = withPlausibility(vowel, formant);
 		profile = withIghPass({ ...profile, [vowel]: checked });
 		persist();
-		// The announcement uses the post-pass reading: a divergent [ɨ] that the
-		// pass resolved to Provisional must not be announced as captured.
+		// The announcement uses the post-pass reading, as the profile holds it
+		// (the pass never changes a status, so it is the reading's own).
 		const effective = profile[vowel] ?? checked;
 		// The polite data delivery (Kimi, 2026-07-10): the number's first
 		// availability to non-visual users. Speakable name, never the raw glyph

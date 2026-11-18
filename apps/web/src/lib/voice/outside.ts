@@ -6,8 +6,14 @@
  * any other, and the verdict waits here. The summary names every such reading
  * the singer has not kept, once, and offers Keep or Re-take. The verdict is
  * the one stored at capture (`withPlausibility` in `CalibrationWizard.svelte`),
- * the same field Markup and Insights read through `isUsable`, so the note and
- * the documents cannot disagree.
+ * or, for a reading stored with none, the one `judgeUnchecked` gives
+ * (`engine/resolve-values.ts`); the wizard passes the judged copy.
+ *
+ * THIS NOTE IS THE ONLY READER OF THE VERDICT (lane 66, Step 5). MELODY, INSIGHTS,
+ * the VOICE pane, and the chart count every sung reading (`engine/sung.ts`), a
+ * reading beyond Ilya's reference values as a kept one; Keep changes no number.
+ * What still tells the two apart is this note, and the "Beyond Ilya's reference
+ * values" mark, which follows `plausibilityOverride`.
  */
 import type { CalibratedFormant, Vowel } from './engine/types';
 import { isTier1 } from './voiceTypes';

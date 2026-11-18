@@ -64,8 +64,10 @@ function stubFormant(vowel: Vowel, outcome: Exclude<StubOutcome, 'error-no-audio
 		return { ...base, confidence: 'low', reading: 'provisional' };
 	}
 	if (outcome === 'provisional-divergent') {
-		// A divergent velar-i: the fry was clean, but it falls outside the
-		// retracted-[i] model, so the engine resolves the reading to provisional.
+		// A scripted state the engine no longer produces: a divergent velar-i
+		// used to resolve to provisional, and since lane 64 it does not (the
+		// divergence pass describes only). The stub keeps it as [ɨ]'s default
+		// so the screens that show a Provisional reading still have one to show.
 		return { ...base, reading: 'provisional' };
 	}
 	return base;

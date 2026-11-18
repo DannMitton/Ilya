@@ -227,9 +227,9 @@ export function stackActions(
  * line already uses, for the same reason: it reads "Voice: {voice}" and its
  * French is ratified. A voice with readings but no name falls out of the line
  * rather than printing an empty pair of guillemets, which is `VoiceAnchor`'s
- * own rule and this is the second reader of it. The count is of USABLE
+ * own rule and this is the second reader of it. The count is of SUNG
  * readings (`usableReadingCount`), as the anchor's "calibrated" is; a voice
- * whose readings were all refused prints the name with no count.
+ * with none prints the name with no count.
  *
  * NO VOICE RETURNS '', band and nothing under it. The export keeps its name
  * `scoreStateLine`: the band id is still `scoreMarkup`, a wire value.

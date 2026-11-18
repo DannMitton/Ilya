@@ -1,5 +1,5 @@
 /**
- * ratified-strings.test.ts: the calibration screen's and the sheet's strings, ratified by Dann 2026-11-13 (`OPEN.md` section N.199: 01:05, 10:30 to
+ * ratified-strings.test.ts: the calibration screen's, the sheet's, and the wizard's voice type line's strings, ratified by Dann 2026-11-13 (`OPEN.md` section N.199: 01:05, 10:30 to
  * 10:50, 11:35, 11:52, 12:01; `sheet.legend.zones` superseded at 15:41), pinned character for character in both languages, as `insights/ratified-lines.test.ts` pins its own. The French has U+2019
  * apostrophes and U+00A0 before « : ». These are literals, not read from `i18n.ts`, so a change to a ratified line fails here and is a decision, not
  * an accident; ratification is approval at that moment, never fossilization (`CONTRACT.md` section 1, 11a), and the desk changes the text and its pin

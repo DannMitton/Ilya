@@ -3,9 +3,9 @@
  * recording, and whether "Your vowel space" shows. Pure, so the seven sentence states are tested without a browser. The eighth state of the
  * pane, with no voice saved, is the first-launch form (`ProfileSwitcher.svelte`), not a sentence.
  *
- * "Recorded" means usable: the count the closed pane's line prints (`usableReadingCount`, `profileStore.ts`), so a voice whose readings
- * were all refused by the plausibility guard says nothing is recorded, where the capture screen's `sungSet` and the summary's table, which
- * count every stored reading, draw them.
+ * "Recorded" means sung: the count the closed pane's line prints (`usableReadingCount`, `profileStore.ts`; `isSung`, `voice/engine/sung.ts`), so a
+ * reading beyond Ilya's reference values counts as a kept one does (lane 66, Step 5), and a stored estimate or a take with no first resonance does not,
+ * where the summary's table, which draws every stored reading, draws them.
  */
 import { t, type Language } from '$lib/i18n';
 import { hasPlaceholderProfile } from '$lib/voice/engine/stand-ins';

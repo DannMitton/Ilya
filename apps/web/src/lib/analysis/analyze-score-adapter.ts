@@ -107,8 +107,9 @@ export function completenessOf(s: VoiceProfileSnapshot): AnalysisCompleteness {
  * it is sandbox-testable the way `analyzeScore` is.
  *
  * @param sampled the active voice's direct-sample formants (captured or
- *   provisional); a reading with no usable f1, or one the plausibility guard
- *   judged implausible, contributes no fR1 (§B.4). A derivable vowel absent
+ *   provisional); a reading with no usable f1 contributes no fR1, and one the
+ *   plausibility guard judged implausible counts as a kept one does (lane 66,
+ *   Step 5; it replaces §B.4's exclusion). A derivable vowel absent
  *   from this map is derived from its anchors here, per snapshot and never
  *   stored (N.109).
  * @param characteristics the typed range/tessitura/passaggio, or undefined

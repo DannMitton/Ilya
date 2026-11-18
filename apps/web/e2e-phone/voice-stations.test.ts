@@ -95,3 +95,47 @@ test('"Add your range" with the takeover up on Welcome leaves the takeover and l
 	expect(box!.y).toBeGreaterThanOrEqual(0);
 	expect(box!.y).toBeLessThan(800);
 });
+
+/* LANE 66, Step 3 (phone, 390 by 844): the VOICE pane's three rows open one at a time. The voice type row is a station of the tier (`voiceType`), so
+   opening it shuts an open station, opening a station shuts it, and a link that opens a station while the type row is open still lands on it. */
+const typeRow = (page: Page) => page.locator('[data-vp-row="voiceType"] button.station-disclosure, [data-vp-row="voiceType"] [aria-expanded]').first();
+
+test('the voice type row open, then "Describe your voice": the type row is closed', async ({ page }) => {
+	await open(page);
+	const row = typeRow(page);
+	await expect(row).toHaveAttribute('aria-expanded', 'false');
+	await row.click();
+	await expect(row).toHaveAttribute('aria-expanded', 'true');
+	await expect(page.locator('#voice-type-body')).toBeVisible();
+	const describe = band(page, /^describe your voice$/i);
+	await describe.scrollIntoViewIfNeeded();
+	await describe.click();
+	await expect(describe).toHaveAttribute('aria-expanded', 'true');
+	await expect(row).toHaveAttribute('aria-expanded', 'false');
+	await expect(page.locator('#voice-type-body')).toHaveCount(0);
+	// And the reverse: the type row shuts Describe.
+	await row.scrollIntoViewIfNeeded();
+	await row.click();
+	await expect(row).toHaveAttribute('aria-expanded', 'true');
+	await expect(describe).toHaveAttribute('aria-expanded', 'false');
+});
+
+test('the voice type row open, then a link to a station: the station lands in view and the type row is closed', async ({ page }) => {
+	test.setTimeout(90_000);
+	await openWithScore(page);
+	await page.locator('.drawer-pull').click();
+	await band(page, /^voice$/i).click();
+	const row = typeRow(page);
+	await row.click();
+	await expect(row).toHaveAttribute('aria-expanded', 'true');
+	await page.locator('.drawer-pull').click(); // lowered over INSIGHTS, the type row left open
+	await expect(offer(page)).toBeVisible({ timeout: 20_000 });
+	await offer(page).click();
+	await expect(band(page, /^describe your voice$/i)).toHaveAttribute('aria-expanded', 'true');
+	await expect(row).toHaveAttribute('aria-expanded', 'false');
+	await page.waitForTimeout(800);
+	const box = await page.locator('[data-describe="range"]').boundingBox();
+	// A top aligned to the window's top can land a fraction of a pixel above it (measured -0.09 here): one pixel of slack, no more.
+	expect(box!.y, 'the Range pickers are inside the window').toBeGreaterThanOrEqual(-1);
+	expect(box!.y).toBeLessThan(844);
+});

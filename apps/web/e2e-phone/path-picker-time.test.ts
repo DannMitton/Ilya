@@ -8,7 +8,7 @@
  * It times, per take and per picker, one `runCapture` call (the guard, the detector, and the picker, as the app runs them), on five
  * synthetic fry takes (`engine/fry-synth.ts`), and reports the median. For the path picker it also times Burg at each ceiling of the ladder
  * (`burgFrames`, per ceiling) and counts the frames of each ceiling. It reports; it asserts only that each call finishes in two minutes.
- * The bar the desk wrote first (Step 4): the median with `?measure=path` no more than 1,000 ms above the median without it, on the iPhone.
+ * The bar the desk wrote first (Step 4): the median with `?measure=path` no more than 1,000 ms above the median with `?measure=shipped`, on the iPhone (the path picker is the default since lane 64).
  * Run: `playwright test --project=phone path-picker-time`; the lines are printed and written to `test-results/`.
  */
 import { test, expect } from '@playwright/test';

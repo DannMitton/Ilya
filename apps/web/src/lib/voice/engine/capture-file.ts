@@ -101,7 +101,7 @@ export interface CaptureRecord {
 	sampleRate: number;
 	/** Seconds trimmed from each end of the sweep before this buffer. */
 	trimS: number;
-	/** Which picker made the reading (`?measure=open` selects `open`, `?measure=path` selects `path`), from N.200 Step 3. */
+	/** Which picker made the reading (`?measure=open` selects `open`, `?measure=shipped` selects `shipped`, and anything else, no `measure` included, selects `path`: `chart/measure-switch.ts`), from N.200 Step 3. */
 	picker?: Picker;
 	/** Milliseconds `runCapture` took on this take, whole, for every picker (N.200 path picker, Step 4). Set by `live.ts`; absent from a record made elsewhere. */
 	analysisMs?: number;
@@ -116,6 +116,8 @@ const held: HeldTake[] = [];
 let savedCount = 0;
 let sung: string | null = null;
 let sungRead = false;
+/** The picker stamped on the last held take (what its sidecar says), or null before any take (lane 66, Step 2). */
+let lastTakePicker: string | null = null;
 
 /** The sung vowel: `&sung=<vowel>` in the address until the panel's field changes it. Null when never stated. */
 export function sungVowel(): string | null {
@@ -149,6 +151,7 @@ export function holdCapture(y: Float64Array, rec: CaptureRecord): void {
 		const base = takeBase(rec.vowel, s, stamp);
 		const json = JSON.stringify({ file: `${base}.wav`, samples: y.length, asked: rec.vowel, sung: s, build: __ILYA_BUILD__, picker: rec.picker ?? 'shipped', ...rec }, null, 1);
 		held.push({ base, wav: wavBytes(y, rec.sampleRate), json });
+		lastTakePicker = rec.picker ?? 'shipped';
 		refreshPanel();
 	} catch (e) {
 		console.warn('[voice-live] capture not held:', e);
@@ -156,6 +159,9 @@ export function holdCapture(y: Float64Array, rec: CaptureRecord): void {
 }
 
 export function heldCount(): number { return held.length; }
+
+/** The picker the last held take was stamped with, or null when none is held. */
+export function lastHeldPicker(): string | null { return lastTakePicker; }
 
 /** Every held take as one ZIP, for one download. */
 export function heldZip(): Uint8Array {
@@ -177,7 +183,7 @@ export function saveAllCaptures(): number {
 	return held.length;
 }
 
-export function clearHeld(): void { held.length = 0; savedCount = 0; refreshPanel(); }
+export function clearHeld(): void { held.length = 0; savedCount = 0; lastTakePicker = null; refreshPanel(); }
 
 // --- the panel: a folded tab by default; unfolded, one field for the sung vowel, one Save button, and the picker in use ---
 //
@@ -195,11 +201,29 @@ export const PANEL_TAB_WIDTH_PX = 14;
 /** How far the tab stands above the bottom of the screen, in px: clear of the DRAWER bar (44 px) on a phone. */
 export const PANEL_TAB_BOTTOM_PX = 140;
 
-let panelPicker: Picker = 'shipped';
+// LANE 66, STEP 2. The wizard builds a capture session each time it mounts, and each session reads the address again, so the picker in use can change
+// under a panel that is already on the page. Every call of `mountRecorderPanel` now sets the picker and rewrites the words, whether or not the panel exists.
+// The card also says what the last take was stamped with, and what the address gave, so "the address lost its query" and "the picker ignored it" can be told apart.
+let panelPicker: Picker = 'path';
+/** `measure` as the address gave it when the session was built (null: the address has no `measure`). */
+let panelMeasure: string | null = null;
 
 /** The folded tab's words. English only: the panel is a test instrument. */
 export function panelFace(picker: Picker, takes: number, unsaved: number): string {
 	return `rec \u00b7 ${picker} \u00b7 ${takes}${unsaved > 0 ? '*' : ''}`;
+}
+
+/** The card's lines, in words. English only. Pure, so they are pinned without a page. */
+export function panelPickerLine(picker: Picker): string {
+	return `Picker in use: ${picker}`;
+}
+/** The picker the last held take was stamped with, or "no take yet". */
+export function panelLastTakeLine(stamped: string | null): string {
+	return stamped === null ? 'Last take: no take yet' : `Last take stamped: ${stamped}`;
+}
+/** What the address gave for `measure` when the session was built. An empty value (`?measure=`) is not the same as none. */
+export function panelAddressLine(measure: string | null): string {
+	return measure === null ? 'Address: no measure in the address' : `Address: measure=${measure}`;
 }
 
 function refreshPanel(): void {
@@ -209,6 +233,12 @@ function refreshPanel(): void {
 	const save = p.querySelector<HTMLButtonElement>('[data-recorder="save"]');
 	const count = p.querySelector<HTMLElement>('[data-recorder="count"]');
 	const tab = p.querySelector<HTMLButtonElement>('[data-recorder="tab"]');
+	const which = p.querySelector<HTMLElement>('[data-recorder="picker"]');
+	const lastTake = p.querySelector<HTMLElement>('[data-recorder="last-take"]');
+	const address = p.querySelector<HTMLElement>('[data-recorder="address"]');
+	if (which) which.textContent = panelPickerLine(panelPicker);
+	if (lastTake) lastTake.textContent = panelLastTakeLine(lastTakePicker);
+	if (address) address.textContent = panelAddressLine(panelMeasure);
 	const unsaved = Math.max(0, held.length - savedCount);
 	if (save) { save.disabled = held.length === 0; save.style.opacity = held.length === 0 ? '0.5' : '1'; save.textContent = `Save ${held.length} take${held.length === 1 ? '' : 's'}`; }
 	if (count) count.textContent = savedCount === held.length && held.length > 0 ? 'all saved' : held.length > savedCount ? `${held.length - savedCount} not saved` : '';
@@ -219,10 +249,12 @@ function refreshPanel(): void {
 	}
 }
 
-/** Mounts the recorder's panel once, folded. Only called when `captureFileEnabled()` is true. */
-export function mountRecorderPanel(picker: Picker = 'shipped'): void {
-	if (typeof document === 'undefined' || document.getElementById(PANEL_ID)) return;
+/** Mounts the recorder's panel once, folded. Only called when `captureFileEnabled()` is true. Called again, it rewrites the face and the card for the session now in use. */
+export function mountRecorderPanel(picker: Picker = 'path'): void {
+	if (typeof document === 'undefined') return;
 	panelPicker = picker;
+	panelMeasure = typeof location === 'undefined' ? null : new URLSearchParams(location.search).get('measure');
+	if (document.getElementById(PANEL_ID)) { refreshPanel(); return; }
 	const p = document.createElement('div');
 	p.id = PANEL_ID;
 	p.setAttribute('role', 'region');
@@ -233,8 +265,14 @@ export function mountRecorderPanel(picker: Picker = 'shipped'): void {
 	card.setAttribute('data-recorder', 'card');
 	card.style.cssText = 'display:none;gap:8px;align-items:center;flex-wrap:wrap;max-width:calc(100vw - 40px);margin-right:6px;padding:8px 10px;background:#1b1b1b;color:#f2f2f2;border:1px solid #555;border-radius:8px;pointer-events:auto';
 	const which = document.createElement('div');
-	which.setAttribute('data-recorder', 'picker'); which.textContent = `Picker in use: ${picker}`;
+	which.setAttribute('data-recorder', 'picker');
 	which.style.cssText = 'flex-basis:100%;font-weight:600';
+	const lastTake = document.createElement('div');
+	lastTake.setAttribute('data-recorder', 'last-take');
+	lastTake.style.cssText = 'flex-basis:100%';
+	const address = document.createElement('div');
+	address.setAttribute('data-recorder', 'address');
+	address.style.cssText = 'flex-basis:100%';
 	const label = document.createElement('label');
 	label.textContent = 'Recorder. Sung vowel ';
 	const input = document.createElement('input');
@@ -252,7 +290,7 @@ export function mountRecorderPanel(picker: Picker = 'shipped'): void {
 	const fold = document.createElement('button');
 	fold.type = 'button'; fold.setAttribute('data-recorder', 'fold'); fold.textContent = 'Fold';
 	fold.style.cssText = 'font:inherit;padding:6px 12px;min-height:44px;border-radius:6px;border:1px solid #888;background:transparent;color:#f2f2f2;cursor:pointer';
-	card.append(which, label, save, count, fold);
+	card.append(which, lastTake, address, label, save, count, fold);
 	const tab = document.createElement('button');
 	tab.type = 'button'; tab.setAttribute('data-recorder', 'tab'); tab.setAttribute('aria-expanded', 'false');
 	tab.style.cssText = `width:${PANEL_TAB_WIDTH_PX}px;height:130px;padding:0;writing-mode:vertical-rl;font:600 10px/${PANEL_TAB_WIDTH_PX}px system-ui,sans-serif;white-space:nowrap;background:#1b1b1b;color:#f2f2f2;border:1px solid #555;border-right:none;border-radius:6px 0 0 6px;pointer-events:auto;cursor:pointer`;

@@ -10,10 +10,10 @@ import {
 	BAND_SOURCES,
 	FLOOR_MARGIN_SEMITONES,
 	CEILING_MARGIN_SEMITONES,
-	isUsable,
 	keepReading
 } from './plausibility';
 import { usableAnchor } from './derivations';
+import { isSung } from './sung';
 
 const FLOOR = Math.pow(2, FLOOR_MARGIN_SEMITONES / 12);
 const CEILING = Math.pow(2, CEILING_MARGIN_SEMITONES / 12);
@@ -174,16 +174,24 @@ describe('citation integrity', () => {
 /**
  * 2026-09-30, "Keep my reading" (brief-code-voice-intake-order-and-keep-reading_r1,
  * item 2). Dann's bass [i] read 247 Hz against a 246.9 Hz window floor. A kept
- * reading keeps its verdict, carries the flag, and is used; without the flag it
- * is not.
+ * reading keeps its verdict and carries the flag. Since lane 66, Step 5, every
+ * sung reading is used, kept or not (`sung.ts`); Keep changes no number.
  */
 describe('keep my reading', () => {
 	const implausible = { f1: 240, confidence: 'high' as const, reading: 'provisional' as const, plausibility: 'implausible' as const, source: 'measured-user' as const };
 
-	it('is not used without the flag, and is used with it', () => {
-		expect(isUsable(implausible)).toBe(false);
-		expect(isUsable(keepReading(implausible))).toBe(true);
-		expect(isUsable({ ...implausible, plausibility: 'plausible' })).toBe(true);
+	it('is used with or without the flag: the verdict takes no part in whether a reading is sung (lane 66, Step 5)', () => {
+		expect(isSung(implausible)).toBe(true);
+		expect(isSung(keepReading(implausible))).toBe(true);
+		expect(isSung({ ...implausible, plausibility: 'plausible' })).toBe(true);
+	});
+
+	it('is the one test of "sung": a positive number that is not an estimate', () => {
+		expect(isSung(undefined)).toBe(false);
+		expect(isSung({ ...implausible, f1: 0 })).toBe(false);
+		expect(isSung({ ...implausible, f1: -1 })).toBe(false);
+		expect(isSung({ ...implausible, reading: 'estimated' })).toBe(false);
+		expect(isSung({ ...implausible, reading: 'provisional', plausibility: undefined })).toBe(true);
 	});
 
 	it('keeps the verdict and returns the reading to what its confidence earns', () => {
@@ -194,9 +202,11 @@ describe('keep my reading', () => {
 		expect(keepReading({ ...implausible, confidence: 'low' }).reading).toBe('provisional');
 	});
 
-	it('lets a kept [i] anchor a derived vowel', () => {
+	it('lets a kept [i] anchor a derived vowel, and an unkept one too (lane 66, Step 5)', () => {
 		const i = { ...implausible, f2: 2000 };
-		expect(usableAnchor(i)).toBe(false);
+		expect(usableAnchor(i)).toBe(true);
 		expect(usableAnchor(keepReading(i))).toBe(true);
+		expect(usableAnchor({ ...i, f1: 0 })).toBe(false);
+		expect(usableAnchor({ ...i, f2: undefined })).toBe(false);
 	});
 });

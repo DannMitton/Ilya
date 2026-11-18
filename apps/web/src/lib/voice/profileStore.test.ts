@@ -92,24 +92,28 @@ describe('saveStore', () => {
 	});
 });
 
-/* Closing polish lane, step 1 (39-6): a reading the guard refused is not a usable reading, so the anchor does not call the voice calibrated. */
+/* Closing polish lane, step 1 (39-6) counted a reading the guard refused as not usable. Lane 66, Step 5 reverses it (Dann 2026-11-13, `docs/memory/PRODUCT.md:1269-1273`): every sung reading counts. */
 describe('usableReadingCount', () => {
 	const ok = { f1: 600, confidence: 'high', reading: 'captured', source: 'measured-user' } as const;
 	const refused = { f1: 90, confidence: 'high', reading: 'provisional', source: 'measured-user', plausibility: 'implausible' } as const;
 
-	it('counts every reading the guard has not refused', () => {
+	it('counts every sung reading', () => {
 		expect(usableReadingCount({})).toBe(0);
 		expect(usableReadingCount({ a: ok, e: { ...ok, plausibility: 'plausible' }, i: { ...ok, plausibility: 'unchecked' } })).toBe(3);
 	});
 
-	it('does not count a refused reading, unless the singer kept it', () => {
-		expect(usableReadingCount({ a: refused, e: refused })).toBe(0);
-		expect(usableReadingCount({ a: refused, e: ok })).toBe(1);
+	it('counts a reading beyond the reference values, kept or not', () => {
+		expect(usableReadingCount({ a: refused, e: refused })).toBe(2);
+		expect(usableReadingCount({ a: refused, e: ok })).toBe(2);
 		expect(usableReadingCount({ a: { ...refused, plausibilityOverride: true } })).toBe(1);
 	});
 
-	it('differs from hasAnyReadings on a voice whose only readings are refused, on purpose', () => {
-		const f = { a: refused };
+	it('does not count a stored estimate, or a take with no first resonance', () => {
+		expect(usableReadingCount({ a: { ...ok, reading: 'estimated' }, e: { ...ok, f1: 0 }, i: ok })).toBe(1);
+	});
+
+	it('differs from hasAnyReadings on a voice whose only stored readings are not sung, on purpose', () => {
+		const f = { a: { ...ok, reading: 'estimated' as const } };
 		expect(hasAnyReadings(f)).toBe(true);
 		expect(usableReadingCount(f)).toBe(0);
 	});

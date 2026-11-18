@@ -3,14 +3,18 @@ import { readFileSync } from 'node:fs';
 import { scoreStateLine } from './bandState';
 import { usableReadingCount } from '../../voice/profileStore';
 
-/* Rewritten from `voice-anchor-usable.test.ts` (N.203 lane 60, Step 2), which pinned the Drawer's anchor and went with it. A voice whose only readings are `implausible`, with no override, has nothing the app can use: the closed Voice band names the voice with no count, and the pane at rest says nothing is recorded (`voice-pane.test.ts`). */
+/* Rewritten from `voice-anchor-usable.test.ts` (N.203 lane 60, Step 2), which pinned the Drawer's anchor and went with it. Lane 66, Step 5: every sung reading counts, so a voice whose only readings are `implausible`, with no override, is counted as it is with them kept; only a stored estimate, or a take with no first resonance, is left out (`voice-pane.test.ts`). */
 const refused = { f1: 90, confidence: 'high', reading: 'provisional', source: 'measured-user', plausibility: 'implausible' } as const;
 const kept = { ...refused, plausibilityOverride: true } as const;
 
 describe('the closed Voice band and the pane follow the usable readings', () => {
-	it('prints the band’s voice with no count when every reading was refused', () => {
-		expect(scoreStateLine('Dann', usableReadingCount({ a: refused, e: refused }), 10, 'en')).toBe('Voice: Dann');
-		expect(scoreStateLine('Dann', usableReadingCount({ a: refused, e: kept }), 10, 'en')).not.toBe('Voice: Dann');
+	it('prints the band’s count for a reading beyond the reference values, as it does for a kept one', () => {
+		expect(scoreStateLine('Dann', usableReadingCount({ a: refused, e: refused }), 10, 'en')).not.toBe('Voice: Dann');
+		expect(scoreStateLine('Dann', usableReadingCount({ a: refused, e: refused }), 10, 'en')).toBe(scoreStateLine('Dann', usableReadingCount({ a: kept, e: kept }), 10, 'en'));
+	});
+	it('prints the band’s voice with no count when nothing sung is stored', () => {
+		expect(scoreStateLine('Dann', usableReadingCount({}), 10, 'en')).toBe('Voice: Dann');
+		expect(scoreStateLine('Dann', usableReadingCount({ a: { ...refused, reading: 'estimated' } }), 10, 'en')).toBe('Voice: Dann');
 	});
 
 	/* The page is the one reader of the count: the band's line and the pane's sentence. Neither may count raw keys again; the wider test the wizard's opening phase uses is `hasAnyReadings`, named. */

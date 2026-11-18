@@ -1,7 +1,7 @@
 /**
  * ONE SET OF VALUES PER VOWEL (N.199 Step 1; `CONTRACT.md` section 4). The adapter's resolution of a voice's
- * stored readings into a fR1 and a fR2 for every vowel it can give one: judge what the guard never judged, take the
- * sung readings the guard allows, derive the four derivable vowels from their anchors, and fill what is left from
+ * stored readings into a fR1 and a fR2 for every vowel it can give one: judge what the guard never judged, take
+ * every sung reading, derive the four derivable vowels from their anchors, and fill what is left from
  * Bozeman's staff fitted to the singer. It stood inline in `analysis/analyze-score-adapter.ts`
  * (`buildVoiceProfileSnapshot`, from QUEUE row 11 through row 17 and row 166); it lives here so the forecast and the
  * calibration chart read one function, not two copies. Pure: no store, no DOM, nothing written to the stored profile.
@@ -19,7 +19,8 @@
  */
 import type { CalibratedFormant, Vowel } from './types';
 import { DERIV_SOURCE, deriveFrom } from './derivations';
-import { checkPlausibility, isUsable } from './plausibility';
+import { checkPlausibility } from './plausibility';
+import { isSung } from './sung';
 import { fillStandIns, hasPlaceholderProfile, type Provenance, type StandInReport } from './stand-ins';
 
 /** The six vowels the guard judges against Bozeman's bands; the other four are judged against windows derived from these. */
@@ -83,9 +84,7 @@ export interface ResolvedValues {
 	fR2: Record<string, number>;
 	fR1Source: Record<string, Provenance>;
 	fR2Source: Record<string, Provenance>;
-	/** Sampled vowels the guard judged implausible and the singer did not keep. */
-	implausible: Vowel[];
-	/** A usable sung fR1 exists. */
+	/** A sung fR1 exists (`isSung`). */
 	anySung: boolean;
 	/** QUEUE row 166's internal word: nothing sung, and the declared type has a placeholder profile. Under `'always'` it is still this, not "the stand-ins ran". */
 	generic: boolean;
@@ -105,38 +104,32 @@ export function resolveVowelValues(
 	// or a reading with no usable f1, contributes nothing: the engine already
 	// omits any event whose vowel has no fR1, so silence here is honest.
 	//
-	// §B.4 RULED (Dann, 2026-07-15): the same silence extends to a reading the
-	// plausibility guard judged IMPLAUSIBLE, and to nothing else. Markup will not
-	// build acoustic marks on a number the engine has already decided cannot be
-	// that vowel (the motivating class: fR1 ≈ 1063 Hz extracted for a sung [i]).
+	// EVERY SUNG READING COUNTS (lane 66, Step 5; Dann 2026-11-13, `docs/memory/PRODUCT.md:1269-1273`: "The neighbourhood is a
+	// description set beside the reading, never applied to it. It never demotes, discards, or blocks a reading."). The plausibility
+	// verdict is judged above and kept on the judged copy, and it gates nothing here: a reading judged implausible enters the
+	// snapshot exactly as a kept one did. This replaces §B.4 (Dann, 2026-07-15), which excluded the number the guard judged
+	// implausible; the ruling of 2026-11-13 supersedes it. A stand-in never replaces a sung reading ("a user-provided sample is real
+	// data versus our placeholder data", `docs/memory/OPEN.md:3799`). The test of "sung" is `isSung` (`sung.ts`).
 	//
-	// What is deliberately NOT excluded, and why: `reading: 'provisional'` is a
-	// SIGNAL-QUALITY verdict, not a physical one. analyze.ts:30-34 sets it from
-	// `confidence === 'low'`, which means no stable window, a rejected detection,
-	// or SNR under 12 dB. A noisy capture of an honest vowel is still an honest
-	// vowel, and analyze.ts:26-29 records that real-room captures land there
-	// routinely. Excluding on `reading` would silently drop good data for any
-	// singer without a quiet room. Plausibility and confidence are orthogonal by
-	// ruling (engine/types.ts), and only plausibility speaks to whether the
-	// number can be the vowel.
+	// `reading: 'provisional'` is a SIGNAL-QUALITY verdict, not a physical one (`analyze.ts` sets it from `confidence === 'low'`: no
+	// stable window, a rejected detection, or SNR under 12 dB), and a noisy capture of an honest vowel is still an honest vowel.
+	// Plausibility and confidence are orthogonal by ruling (`engine/types.ts`), and neither gates a number.
 	//
-	// `plausibility` absent means the guard never ran. Since QUEUE row 11 such a
-	// reading is judged first (`judgeUnchecked`, above), so it reaches this gate
-	// with a verdict. `unchecked`, the guard's own answer where no window exists,
-	// is still kept: the tri-state ruling says absence of a window is not a failure.
+	// `plausibility` absent means the guard never ran. Such a reading is judged first (`judgeUnchecked`, above), so the note can
+	// name it, and counts like any other.
 	const fR1: Record<string, number> = {};
 	// QUEUE row 12: where each number came from (`VoiceProfileSnapshot.fR1Source`).
 	const fR1Source: Record<string, Provenance> = {};
 	const fR2Source: Record<string, Provenance> = {};
 	for (const [vowel, formant] of Object.entries(formants) as [Vowel, CalibratedFormant | undefined][]) {
-		if (formant && typeof formant.f1 === 'number' && formant.f1 > 0 && isUsable(formant)) {
+		if (isSung(formant)) {
 			fR1[vowel] = formant.f1;
 			fR1Source[vowel] = 'sung';
 		}
 	}
 
 	// fR2 per vowel, for the higher-voice second-resonance work. Mirrors the
-	// fR1 gating (a positive number, not judged implausible) plus the f2-specific
+	// fR1 gating (a sung reading, `isSung`) plus the f2-specific
 	// quality: an `absent` read contributes nothing. `marginal` is KEPT, parallel
 	// to fR1 keeping `provisional` above (a signal-quality verdict, not a physical
 	// one); tighten this to `clear`-only if smoke shows marginal fR2 misfiring. A
@@ -145,7 +138,7 @@ export function resolveVowelValues(
 	// honest and inert.
 	const fR2: Record<string, number> = {};
 	for (const [vowel, formant] of Object.entries(formants) as [Vowel, CalibratedFormant | undefined][]) {
-		if (formant && typeof formant.f2 === 'number' && formant.f2 > 0 && formant.f2Quality !== 'absent' && isUsable(formant)) {
+		if (isSung(formant) && typeof formant.f2 === 'number' && formant.f2 > 0 && formant.f2Quality !== 'absent') {
 			fR2[vowel] = formant.f2;
 			fR2Source[vowel] = 'sung';
 		}
@@ -171,10 +164,8 @@ export function resolveVowelValues(
 	//
 	// A MEASURED READING ALWAYS WINS. Each channel is filled only where the
 	// loops above left it empty, so a sung [ɨ] is never displaced by a derived
-	// one. `deriveFrom` gates every anchor on a positive f1 and f2 and on the
-	// plausibility guard's verdict, carrying §B.4 inward: the analysis will not build a
-	// derived value on a number the engine has already decided cannot be that
-	// vowel. The derived fR2 is gated as the measured fR2 loop is — the derived
+	// one. `deriveFrom` gates every anchor on a sung reading with a positive f2 (`usableAnchor`),
+	// and not on the plausibility verdict: a derived value rests on whatever the singer sang. The derived fR2 is gated as the measured fR2 loop is — the derived
 	// reading carries no f2Quality and no plausibility, both of which mean "not
 	// assessed" and pass, so the live condition is a positive number.
 	//
@@ -203,13 +194,10 @@ export function resolveVowelValues(
 	// flagged 'surrogate' and `generic` true. Contralto, countertenor, bass-baritone,
 	// "Not sure", and no type keep the page that says nothing was measured: DESK DEFAULT,
 	// which row 167 lifts. Range, tessitura, and passaggio stay as typed, in the adapter.
-	const implausible = (Object.entries(formants) as [Vowel, CalibratedFormant | undefined][])
-		.filter(([, f]) => f && !isUsable(f))
-		.map(([v]) => v);
 	const anySung = Object.values(fR1Source).includes('sung');
 	const generic = !anySung && hasPlaceholderProfile(voiceType);
 	const standIns: StandInReport | undefined =
-		anySung || generic || placeholders === 'always' ? fillStandIns({ fR1, fR2, fR1Source, fR2Source }, voiceType, implausible) : undefined;
+		anySung || generic || placeholders === 'always' ? fillStandIns({ fR1, fR2, fR1Source, fR2Source }, voiceType) : undefined;
 
-	return { formants, fR1, fR2, fR1Source, fR2Source, implausible, anySung, generic, ...(standIns ? { standIns } : {}) };
+	return { formants, fR1, fR2, fR1Source, fR2Source, anySung, generic, ...(standIns ? { standIns } : {}) };
 }

@@ -29,7 +29,7 @@ export interface Span {
  * so a second tap that finds the singer scrolled down brings them back.
  *
  * DESKTOP, AND A LINK ON ANY SCREEN: nothing above the target closed, so it
- * may sit past the window's foot (a station under the VOICE pane's doors). Only
+ * may sit past the window's foot (a station of the VOICE pane; the stations stand above its doors). Only
  * when the target is outside the window, align its top to the window's top
  * (`link` true: the desk rule on a phone too, DESK DEFAULT of brief r3).
  */

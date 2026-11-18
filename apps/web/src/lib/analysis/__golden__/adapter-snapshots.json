@@ -449,48 +449,48 @@
    "fR1": {
     "u": 346,
     "ɑ": 617,
+    "i": 1063,
+    "ɨ": 1451,
     "a": 709.6,
-    "i": 323.9,
-    "e": 502.4,
-    "ɛ": 554.2,
-    "o": 490.9,
-    "ɨ": 442.1,
-    "ɪ": 518.2,
+    "e": 911.7,
+    "ɛ": 1005.7,
+    "o": 890.8,
+    "ɪ": 940.4,
     "ʌ": 617
    },
    "fR1Source": {
     "u": "sung",
     "ɑ": "sung",
+    "i": "sung",
+    "ɨ": "derived",
     "a": "derived",
-    "i": "surrogate",
     "e": "surrogate",
     "ɛ": "surrogate",
     "o": "surrogate",
-    "ɨ": "surrogate",
     "ɪ": "surrogate",
     "ʌ": "surrogate"
    },
    "fR2": {
     "u": 804,
     "ɑ": 1013,
+    "i": 2250,
+    "ɨ": 1281.2,
     "a": 1114.3,
-    "i": 1705,
-    "e": 1532,
-    "ɛ": 1311,
-    "o": 826,
-    "ɨ": 1101.3,
-    "ɪ": 1599.5,
-    "ʌ": 1168
+    "e": 1905.7,
+    "ɛ": 1533,
+    "o": 804.2,
+    "ɪ": 2040,
+    "ʌ": 1283.4
    },
    "fR2Source": {
     "u": "sung",
     "ɑ": "sung",
+    "i": "sung",
+    "ɨ": "derived",
     "a": "derived",
-    "i": "surrogate",
     "e": "surrogate",
     "ɛ": "surrogate",
     "o": "surrogate",
-    "ɨ": "surrogate",
     "ɪ": "surrogate",
     "ʌ": "surrogate"
    },
@@ -499,18 +499,17 @@
   "standIns": {
    "bucket": "middle",
    "steps": {
-    "i": "shift",
     "e": "shift",
     "ɛ": "shift",
     "o": "shift",
-    "ɨ": "derived",
     "ɪ": "derived",
     "ʌ": "derived"
    },
    "retake": [
     {
-     "vowel": "i",
-     "reason": "implausible"
+     "vowel": "u",
+     "reason": "off-shape",
+     "semitones": -10.2
     }
    ]
   },
@@ -1272,48 +1271,48 @@
    "fR1": {
     "u": 346,
     "ɑ": 617,
+    "i": 1063,
+    "ɨ": 1451,
     "a": 709.6,
-    "i": 323.9,
-    "e": 502.4,
-    "ɛ": 554.2,
-    "o": 490.9,
-    "ɨ": 442.1,
-    "ɪ": 518.2,
+    "e": 911.7,
+    "ɛ": 1005.7,
+    "o": 890.8,
+    "ɪ": 940.4,
     "ʌ": 617
    },
    "fR1Source": {
     "u": "sung",
     "ɑ": "sung",
+    "i": "sung",
+    "ɨ": "derived",
     "a": "derived",
-    "i": "surrogate",
     "e": "surrogate",
     "ɛ": "surrogate",
     "o": "surrogate",
-    "ɨ": "surrogate",
     "ɪ": "surrogate",
     "ʌ": "surrogate"
    },
    "fR2": {
     "u": 804,
     "ɑ": 1013,
+    "i": 2250,
+    "ɨ": 1281.2,
     "a": 1114.3,
-    "i": 1705,
-    "e": 1532,
-    "ɛ": 1311,
-    "o": 826,
-    "ɨ": 1101.3,
-    "ɪ": 1599.5,
-    "ʌ": 1168
+    "e": 1905.7,
+    "ɛ": 1533,
+    "o": 804.2,
+    "ɪ": 2040,
+    "ʌ": 1283.4
    },
    "fR2Source": {
     "u": "sung",
     "ɑ": "sung",
+    "i": "sung",
+    "ɨ": "derived",
     "a": "derived",
-    "i": "surrogate",
     "e": "surrogate",
     "ɛ": "surrogate",
     "o": "surrogate",
-    "ɨ": "surrogate",
     "ɪ": "surrogate",
     "ʌ": "surrogate"
    },
@@ -1322,18 +1321,17 @@
   "standIns": {
    "bucket": "middle",
    "steps": {
-    "i": "shift",
     "e": "shift",
     "ɛ": "shift",
     "o": "shift",
-    "ɨ": "derived",
     "ɪ": "derived",
     "ʌ": "derived"
    },
    "retake": [
     {
-     "vowel": "i",
-     "reason": "implausible"
+     "vowel": "u",
+     "reason": "off-shape",
+     "semitones": -10.2
     }
    ]
   },
@@ -2157,48 +2155,48 @@
    "fR1": {
     "u": 346,
     "ɑ": 617,
+    "i": 1063,
+    "ɨ": 1451,
     "a": 709.6,
-    "i": 331.5,
-    "e": 496.6,
-    "ɛ": 526.2,
-    "o": 496.6,
-    "ɨ": 452.5,
-    "ɪ": 512.2,
+    "e": 909,
+    "ɛ": 963.1,
+    "o": 909,
+    "ɪ": 937.6,
     "ʌ": 617
    },
    "fR1Source": {
     "u": "sung",
     "ɑ": "sung",
+    "i": "sung",
+    "ɨ": "derived",
     "a": "derived",
-    "i": "surrogate",
     "e": "surrogate",
     "ɛ": "surrogate",
     "o": "surrogate",
-    "ɨ": "surrogate",
     "ɪ": "surrogate",
     "ʌ": "surrogate"
    },
    "fR2": {
     "u": 804,
     "ɑ": 1013,
+    "i": 2250,
+    "ɨ": 1281.2,
     "a": 1114.3,
-    "i": 1705,
-    "e": 1532,
-    "ɛ": 1311,
-    "o": 826,
-    "ɨ": 1101.3,
-    "ɪ": 1599.5,
-    "ʌ": 1168
+    "e": 1905.7,
+    "ɛ": 1533,
+    "o": 804.2,
+    "ɪ": 2040,
+    "ʌ": 1283.4
    },
    "fR2Source": {
     "u": "sung",
     "ɑ": "sung",
+    "i": "sung",
+    "ɨ": "derived",
     "a": "derived",
-    "i": "surrogate",
     "e": "surrogate",
     "ɛ": "surrogate",
     "o": "surrogate",
-    "ɨ": "surrogate",
     "ɪ": "surrogate",
     "ʌ": "surrogate"
    },
@@ -2207,18 +2205,17 @@
   "standIns": {
    "bucket": "soprano",
    "steps": {
-    "i": "shift",
     "e": "shift",
     "ɛ": "shift",
     "o": "shift",
-    "ɨ": "derived",
     "ɪ": "derived",
     "ʌ": "derived"
    },
    "retake": [
     {
-     "vowel": "i",
-     "reason": "implausible"
+     "vowel": "u",
+     "reason": "off-shape",
+     "semitones": -10.3
     }
    ]
   },
@@ -3054,48 +3051,48 @@
    "fR1": {
     "u": 346,
     "ɑ": 617,
+    "i": 1063,
+    "ɨ": 1451,
     "a": 709.6,
-    "i": 308.4,
-    "e": 518.6,
-    "ɛ": 549.5,
-    "o": 489.5,
-    "ɨ": 421,
-    "ɪ": 534.9,
+    "e": 963.1,
+    "ɛ": 1020.4,
+    "o": 909,
+    "ɪ": 993.4,
     "ʌ": 617
    },
    "fR1Source": {
     "u": "sung",
     "ɑ": "sung",
+    "i": "sung",
+    "ɨ": "derived",
     "a": "derived",
-    "i": "surrogate",
     "e": "surrogate",
     "ɛ": "surrogate",
     "o": "surrogate",
-    "ɨ": "surrogate",
     "ɪ": "surrogate",
     "ʌ": "surrogate"
    },
    "fR2": {
     "u": 804,
     "ɑ": 1013,
+    "i": 2250,
+    "ɨ": 1281.2,
     "a": 1114.3,
-    "i": 1705,
-    "e": 1532,
-    "ɛ": 1311,
-    "o": 826,
-    "ɨ": 1101.3,
-    "ɪ": 1599.5,
-    "ʌ": 1168
+    "e": 1905.7,
+    "ɛ": 1533,
+    "o": 804.2,
+    "ɪ": 2040,
+    "ʌ": 1283.4
    },
    "fR2Source": {
     "u": "sung",
     "ɑ": "sung",
+    "i": "sung",
+    "ɨ": "derived",
     "a": "derived",
-    "i": "surrogate",
     "e": "surrogate",
     "ɛ": "surrogate",
     "o": "surrogate",
-    "ɨ": "surrogate",
     "ɪ": "surrogate",
     "ʌ": "surrogate"
    },
@@ -3104,18 +3101,17 @@
   "standIns": {
    "bucket": "tenor-mezzo",
    "steps": {
-    "i": "shift",
     "e": "shift",
     "ɛ": "shift",
     "o": "shift",
-    "ɨ": "derived",
     "ɪ": "derived",
     "ʌ": "derived"
    },
    "retake": [
     {
-     "vowel": "i",
-     "reason": "implausible"
+     "vowel": "u",
+     "reason": "off-shape",
+     "semitones": -10.4
     }
    ]
   },
@@ -3899,48 +3895,48 @@
    "fR1": {
     "u": 346,
     "ɑ": 617,
+    "i": 1063,
+    "ɨ": 1451,
     "a": 709.6,
-    "i": 308.4,
-    "e": 518.6,
-    "ɛ": 549.5,
-    "o": 489.5,
-    "ɨ": 421,
-    "ɪ": 534.9,
+    "e": 963.1,
+    "ɛ": 1020.4,
+    "o": 909,
+    "ɪ": 993.4,
     "ʌ": 617
    },
    "fR1Source": {
     "u": "sung",
     "ɑ": "sung",
+    "i": "sung",
+    "ɨ": "derived",
     "a": "derived",
-    "i": "surrogate",
     "e": "surrogate",
     "ɛ": "surrogate",
     "o": "surrogate",
-    "ɨ": "surrogate",
     "ɪ": "surrogate",
     "ʌ": "surrogate"
    },
    "fR2": {
     "u": 804,
     "ɑ": 1013,
+    "i": 2250,
+    "ɨ": 1281.2,
     "a": 1114.3,
-    "i": 1705,
-    "e": 1532,
-    "ɛ": 1311,
-    "o": 826,
-    "ɨ": 1101.3,
-    "ɪ": 1599.5,
-    "ʌ": 1168
+    "e": 1905.7,
+    "ɛ": 1533,
+    "o": 804.2,
+    "ɪ": 2040,
+    "ʌ": 1283.4
    },
    "fR2Source": {
     "u": "sung",
     "ɑ": "sung",
+    "i": "sung",
+    "ɨ": "derived",
     "a": "derived",
-    "i": "surrogate",
     "e": "surrogate",
     "ɛ": "surrogate",
     "o": "surrogate",
-    "ɨ": "surrogate",
     "ɪ": "surrogate",
     "ʌ": "surrogate"
    },
@@ -3949,18 +3945,17 @@
   "standIns": {
    "bucket": "tenor-mezzo",
    "steps": {
-    "i": "shift",
     "e": "shift",
     "ɛ": "shift",
     "o": "shift",
-    "ɨ": "derived",
     "ɪ": "derived",
     "ʌ": "derived"
    },
    "retake": [
     {
-     "vowel": "i",
-     "reason": "implausible"
+     "vowel": "u",
+     "reason": "off-shape",
+     "semitones": -10.4
     }
    ]
   },
@@ -4744,48 +4739,48 @@
    "fR1": {
     "u": 346,
     "ɑ": 617,
+    "i": 1063,
+    "ɨ": 1451,
     "a": 709.6,
-    "i": 308.4,
-    "e": 518.6,
-    "ɛ": 549.5,
-    "o": 489.5,
-    "ɨ": 421,
-    "ɪ": 534.9,
+    "e": 963.1,
+    "ɛ": 1020.4,
+    "o": 909,
+    "ɪ": 993.4,
     "ʌ": 617
    },
    "fR1Source": {
     "u": "sung",
     "ɑ": "sung",
+    "i": "sung",
+    "ɨ": "derived",
     "a": "derived",
-    "i": "surrogate",
     "e": "surrogate",
     "ɛ": "surrogate",
     "o": "surrogate",
-    "ɨ": "surrogate",
     "ɪ": "surrogate",
     "ʌ": "surrogate"
    },
    "fR2": {
     "u": 804,
     "ɑ": 1013,
+    "i": 2250,
+    "ɨ": 1281.2,
     "a": 1114.3,
-    "i": 1705,
-    "e": 1532,
-    "ɛ": 1311,
-    "o": 826,
-    "ɨ": 1101.3,
-    "ɪ": 1599.5,
-    "ʌ": 1168
+    "e": 1905.7,
+    "ɛ": 1533,
+    "o": 804.2,
+    "ɪ": 2040,
+    "ʌ": 1283.4
    },
    "fR2Source": {
     "u": "sung",
     "ɑ": "sung",
+    "i": "sung",
+    "ɨ": "derived",
     "a": "derived",
-    "i": "surrogate",
     "e": "surrogate",
     "ɛ": "surrogate",
     "o": "surrogate",
-    "ɨ": "surrogate",
     "ɪ": "surrogate",
     "ʌ": "surrogate"
    },
@@ -4794,18 +4789,17 @@
   "standIns": {
    "bucket": "tenor-mezzo",
    "steps": {
-    "i": "shift",
     "e": "shift",
     "ɛ": "shift",
     "o": "shift",
-    "ɨ": "derived",
     "ɪ": "derived",
     "ʌ": "derived"
    },
    "retake": [
     {
-     "vowel": "i",
-     "reason": "implausible"
+     "vowel": "u",
+     "reason": "off-shape",
+     "semitones": -10.4
     }
    ]
   },
@@ -5651,48 +5645,48 @@
    "fR1": {
     "u": 346,
     "ɑ": 617,
+    "i": 1063,
+    "ɨ": 1451,
     "a": 709.6,
-    "i": 308.4,
-    "e": 518.6,
-    "ɛ": 549.5,
-    "o": 489.5,
-    "ɨ": 421,
-    "ɪ": 534.9,
+    "e": 963.1,
+    "ɛ": 1020.4,
+    "o": 909,
+    "ɪ": 993.4,
     "ʌ": 617
    },
    "fR1Source": {
     "u": "sung",
     "ɑ": "sung",
+    "i": "sung",
+    "ɨ": "derived",
     "a": "derived",
-    "i": "surrogate",
     "e": "surrogate",
     "ɛ": "surrogate",
     "o": "surrogate",
-    "ɨ": "surrogate",
     "ɪ": "surrogate",
     "ʌ": "surrogate"
    },
    "fR2": {
     "u": 804,
     "ɑ": 1013,
+    "i": 2250,
+    "ɨ": 1281.2,
     "a": 1114.3,
-    "i": 1705,
-    "e": 1532,
-    "ɛ": 1311,
-    "o": 826,
-    "ɨ": 1101.3,
-    "ɪ": 1599.5,
-    "ʌ": 1168
+    "e": 1905.7,
+    "ɛ": 1533,
+    "o": 804.2,
+    "ɪ": 2040,
+    "ʌ": 1283.4
    },
    "fR2Source": {
     "u": "sung",
     "ɑ": "sung",
+    "i": "sung",
+    "ɨ": "derived",
     "a": "derived",
-    "i": "surrogate",
     "e": "surrogate",
     "ɛ": "surrogate",
     "o": "surrogate",
-    "ɨ": "surrogate",
     "ɪ": "surrogate",
     "ʌ": "surrogate"
    },
@@ -5701,18 +5695,17 @@
   "standIns": {
    "bucket": "tenor-mezzo",
    "steps": {
-    "i": "shift",
     "e": "shift",
     "ɛ": "shift",
     "o": "shift",
-    "ɨ": "derived",
     "ɪ": "derived",
     "ʌ": "derived"
    },
    "retake": [
     {
-     "vowel": "i",
-     "reason": "implausible"
+     "vowel": "u",
+     "reason": "off-shape",
+     "semitones": -10.4
     }
    ]
   },
@@ -6496,48 +6489,48 @@
    "fR1": {
     "u": 346,
     "ɑ": 617,
+    "i": 1063,
+    "ɨ": 1451,
     "a": 709.6,
-    "i": 308.4,
-    "e": 518.6,
-    "ɛ": 549.5,
-    "o": 489.5,
-    "ɨ": 421,
-    "ɪ": 534.9,
+    "e": 963.1,
+    "ɛ": 1020.4,
+    "o": 909,
+    "ɪ": 993.4,
     "ʌ": 617
    },
    "fR1Source": {
     "u": "sung",
     "ɑ": "sung",
+    "i": "sung",
+    "ɨ": "derived",
     "a": "derived",
-    "i": "surrogate",
     "e": "surrogate",
     "ɛ": "surrogate",
     "o": "surrogate",
-    "ɨ": "surrogate",
     "ɪ": "surrogate",
     "ʌ": "surrogate"
    },
    "fR2": {
     "u": 804,
     "ɑ": 1013,
+    "i": 2250,
+    "ɨ": 1281.2,
     "a": 1114.3,
-    "i": 1705,
-    "e": 1532,
-    "ɛ": 1311,
-    "o": 826,
-    "ɨ": 1101.3,
-    "ɪ": 1599.5,
-    "ʌ": 1168
+    "e": 1905.7,
+    "ɛ": 1533,
+    "o": 804.2,
+    "ɪ": 2040,
+    "ʌ": 1283.4
    },
    "fR2Source": {
     "u": "sung",
     "ɑ": "sung",
+    "i": "sung",
+    "ɨ": "derived",
     "a": "derived",
-    "i": "surrogate",
     "e": "surrogate",
     "ɛ": "surrogate",
     "o": "surrogate",
-    "ɨ": "surrogate",
     "ɪ": "surrogate",
     "ʌ": "surrogate"
    },
@@ -6546,18 +6539,17 @@
   "standIns": {
    "bucket": "tenor-mezzo",
    "steps": {
-    "i": "shift",
     "e": "shift",
     "ɛ": "shift",
     "o": "shift",
-    "ɨ": "derived",
     "ɪ": "derived",
     "ʌ": "derived"
    },
    "retake": [
     {
-     "vowel": "i",
-     "reason": "implausible"
+     "vowel": "u",
+     "reason": "off-shape",
+     "semitones": -10.4
     }
    ]
   },
@@ -7391,48 +7383,48 @@
    "fR1": {
     "u": 346,
     "ɑ": 617,
+    "i": 1063,
+    "ɨ": 1451,
     "a": 709.6,
-    "i": 346.1,
     "e": 518.6,
     "ɛ": 582.1,
     "o": 518.6,
-    "ɨ": 472.4,
     "ɪ": 534.9,
     "ʌ": 617
    },
    "fR1Source": {
     "u": "sung",
     "ɑ": "sung",
+    "i": "sung",
+    "ɨ": "derived",
     "a": "derived",
-    "i": "surrogate",
     "e": "surrogate",
     "ɛ": "surrogate",
     "o": "surrogate",
-    "ɨ": "surrogate",
     "ɪ": "surrogate",
     "ʌ": "surrogate"
    },
    "fR2": {
     "u": 804,
     "ɑ": 1013,
+    "i": 2250,
+    "ɨ": 1281.2,
     "a": 1114.3,
-    "i": 1705,
-    "e": 1532,
-    "ɛ": 1311,
-    "o": 826,
-    "ɨ": 1101.3,
-    "ɪ": 1599.5,
-    "ʌ": 1168
+    "e": 1905.7,
+    "ɛ": 1533,
+    "o": 804.2,
+    "ɪ": 2040,
+    "ʌ": 1283.4
    },
    "fR2Source": {
     "u": "sung",
     "ɑ": "sung",
+    "i": "sung",
+    "ɨ": "derived",
     "a": "derived",
-    "i": "surrogate",
     "e": "surrogate",
     "ɛ": "surrogate",
     "o": "surrogate",
-    "ɨ": "surrogate",
     "ɪ": "surrogate",
     "ʌ": "surrogate"
    },
@@ -7441,18 +7433,17 @@
   "standIns": {
    "bucket": "baritone",
    "steps": {
-    "i": "shift",
     "e": "shift",
     "ɛ": "shift",
     "o": "shift",
-    "ɨ": "derived",
     "ɪ": "derived",
     "ʌ": "derived"
    },
    "retake": [
     {
      "vowel": "i",
-     "reason": "implausible"
+     "reason": "off-shape",
+     "semitones": 9.7
     }
    ]
   },
@@ -8264,48 +8255,48 @@
    "fR1": {
     "u": 346,
     "ɑ": 617,
+    "i": 1063,
+    "ɨ": 1451,
     "a": 709.6,
-    "i": 326.7,
-    "e": 462,
-    "ɛ": 565.6,
-    "o": 462,
-    "ɨ": 445.9,
-    "ɪ": 476.6,
+    "e": 821.6,
+    "ɛ": 1005.7,
+    "o": 821.6,
+    "ɪ": 847.5,
     "ʌ": 617
    },
    "fR1Source": {
     "u": "sung",
     "ɑ": "sung",
+    "i": "sung",
+    "ɨ": "derived",
     "a": "derived",
-    "i": "surrogate",
     "e": "surrogate",
     "ɛ": "surrogate",
     "o": "surrogate",
-    "ɨ": "surrogate",
     "ɪ": "surrogate",
     "ʌ": "surrogate"
    },
    "fR2": {
     "u": 804,
     "ɑ": 1013,
+    "i": 2250,
+    "ɨ": 1281.2,
     "a": 1114.3,
-    "i": 1705,
-    "e": 1532,
-    "ɛ": 1311,
-    "o": 826,
-    "ɨ": 1101.3,
-    "ɪ": 1599.5,
-    "ʌ": 1168
+    "e": 1905.7,
+    "ɛ": 1533,
+    "o": 804.2,
+    "ɪ": 2040,
+    "ʌ": 1283.4
    },
    "fR2Source": {
     "u": "sung",
     "ɑ": "sung",
+    "i": "sung",
+    "ɨ": "derived",
     "a": "derived",
-    "i": "surrogate",
     "e": "surrogate",
     "ɛ": "surrogate",
     "o": "surrogate",
-    "ɨ": "surrogate",
     "ɪ": "surrogate",
     "ʌ": "surrogate"
    },
@@ -8314,18 +8305,17 @@
   "standIns": {
    "bucket": "bass",
    "steps": {
-    "i": "shift",
     "e": "shift",
     "ɛ": "shift",
     "o": "shift",
-    "ɨ": "derived",
     "ɪ": "derived",
     "ʌ": "derived"
    },
    "retake": [
     {
-     "vowel": "i",
-     "reason": "implausible"
+     "vowel": "u",
+     "reason": "off-shape",
+     "semitones": -9.9
     }
    ]
   },
@@ -9058,48 +9048,48 @@
    "fR1": {
     "u": 346,
     "ɑ": 617,
+    "i": 1063,
+    "ɨ": 1451,
     "a": 709.6,
-    "i": 326.7,
-    "e": 462,
-    "ɛ": 565.6,
-    "o": 462,
-    "ɨ": 445.9,
-    "ɪ": 476.6,
+    "e": 821.6,
+    "ɛ": 1005.7,
+    "o": 821.6,
+    "ɪ": 847.5,
     "ʌ": 617
    },
    "fR1Source": {
     "u": "sung",
     "ɑ": "sung",
+    "i": "sung",
+    "ɨ": "derived",
     "a": "derived",
-    "i": "surrogate",
     "e": "surrogate",
     "ɛ": "surrogate",
     "o": "surrogate",
-    "ɨ": "surrogate",
     "ɪ": "surrogate",
     "ʌ": "surrogate"
    },
    "fR2": {
     "u": 804,
     "ɑ": 1013,
+    "i": 2250,
+    "ɨ": 1281.2,
     "a": 1114.3,
-    "i": 1705,
-    "e": 1532,
-    "ɛ": 1311,
-    "o": 826,
-    "ɨ": 1101.3,
-    "ɪ": 1599.5,
-    "ʌ": 1168
+    "e": 1905.7,
+    "ɛ": 1533,
+    "o": 804.2,
+    "ɪ": 2040,
+    "ʌ": 1283.4
    },
    "fR2Source": {
     "u": "sung",
     "ɑ": "sung",
+    "i": "sung",
+    "ɨ": "derived",
     "a": "derived",
-    "i": "surrogate",
     "e": "surrogate",
     "ɛ": "surrogate",
     "o": "surrogate",
-    "ɨ": "surrogate",
     "ɪ": "surrogate",
     "ʌ": "surrogate"
    },
@@ -9108,18 +9098,17 @@
   "standIns": {
    "bucket": "bass",
    "steps": {
-    "i": "shift",
     "e": "shift",
     "ɛ": "shift",
     "o": "shift",
-    "ɨ": "derived",
     "ɪ": "derived",
     "ʌ": "derived"
    },
    "retake": [
     {
-     "vowel": "i",
-     "reason": "implausible"
+     "vowel": "u",
+     "reason": "off-shape",
+     "semitones": -9.9
     }
    ]
   },
@@ -9864,48 +9853,48 @@
    "fR1": {
     "u": 346,
     "ɑ": 617,
+    "i": 1063,
+    "ɨ": 1451,
     "a": 709.6,
-    "i": 323.9,
-    "e": 502.4,
-    "ɛ": 554.2,
-    "o": 490.9,
-    "ɨ": 442.1,
-    "ɪ": 518.2,
+    "e": 911.7,
+    "ɛ": 1005.7,
+    "o": 890.8,
+    "ɪ": 940.4,
     "ʌ": 617
    },
    "fR1Source": {
     "u": "sung",
     "ɑ": "sung",
+    "i": "sung",
+    "ɨ": "derived",
     "a": "derived",
-    "i": "surrogate",
     "e": "surrogate",
     "ɛ": "surrogate",
     "o": "surrogate",
-    "ɨ": "surrogate",
     "ɪ": "surrogate",
     "ʌ": "surrogate"
    },
    "fR2": {
     "u": 804,
     "ɑ": 1013,
+    "i": 2250,
+    "ɨ": 1281.2,
     "a": 1114.3,
-    "i": 1705,
-    "e": 1532,
-    "ɛ": 1311,
-    "o": 826,
-    "ɨ": 1101.3,
-    "ɪ": 1599.5,
-    "ʌ": 1168
+    "e": 1905.7,
+    "ɛ": 1533,
+    "o": 804.2,
+    "ɪ": 2040,
+    "ʌ": 1283.4
    },
    "fR2Source": {
     "u": "sung",
     "ɑ": "sung",
+    "i": "sung",
+    "ɨ": "derived",
     "a": "derived",
-    "i": "surrogate",
     "e": "surrogate",
     "ɛ": "surrogate",
     "o": "surrogate",
-    "ɨ": "surrogate",
     "ɪ": "surrogate",
     "ʌ": "surrogate"
    },
@@ -9914,18 +9903,17 @@
   "standIns": {
    "bucket": "middle",
    "steps": {
-    "i": "shift",
     "e": "shift",
     "ɛ": "shift",
     "o": "shift",
-    "ɨ": "derived",
     "ɪ": "derived",
     "ʌ": "derived"
    },
    "retake": [
     {
-     "vowel": "i",
-     "reason": "implausible"
+     "vowel": "u",
+     "reason": "off-shape",
+     "semitones": -10.2
     }
    ]
   },

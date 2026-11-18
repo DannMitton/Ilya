@@ -11,8 +11,8 @@
 	 *
 	 * The three rows open in place, as NOTATION opens in ANALYSIS (Dann 2026-11-15 20:20: "they are analogous to text;'s Notation section"). The
 	 * two stations (N.203 lane 61, Step 1) are closed on arrival, never stored open (`UNPERSISTED_STATIONS`), and on a phone one at a time across
-	 * the station tier. The voice type row is not a station of `STATION_IDS`: its open state is local (`typeOpen`), never stored, closed on arrival,
-	 * and the station tier's one-at-a-time rule does not reach it. They have no state line when closed: no words for one are ratified. Each answer
+	 * the station tier. The voice type row is a station of `STATION_IDS` too (`voiceType`, lane 66, Step 3), so all three open one at a time on a phone;
+	 * like the other two it is never stored and closed on arrival. They have no state line when closed: no words for one are ratified. Each answer
 	 * and each note saves as it changes, through the seam.
 	 *
 	 * This component decides nothing about the voices: it renders the published seam (`voice/seam.ts`) and calls its commands. The sentence,
@@ -53,7 +53,6 @@
 	}
 	let { language, seam, voiceType, usable, hasStoredReading, restWorkedOut = false, onopen, sections, characteristics, intake }: Props = $props();
 
-	let typeOpen = $state(false);
 	const typeLabel = $derived(typeControlLabel(voiceType, language));
 	const sentence = $derived(paneSentence({ usable, voiceType: voiceType?.voiceType, restWorkedOut }, language));
 	const T = (key: string) => t(key, language);
@@ -76,11 +75,11 @@
 			<div class="vp-station" data-vp-row="voiceType">
 				<StationHeader
 					label={typeLabel ?? T('calib.pane.chooseType')}
-					expanded={typeOpen}
-					ontoggle={() => (typeOpen = !typeOpen)}
+					expanded={sections.has(STATION_IDS.voiceType)}
+					ontoggle={() => sections.toggle(STATION_IDS.voiceType)}
 					controls="voice-type-body"
 				/>
-				{#if typeOpen}
+				{#if sections.has(STATION_IDS.voiceType)}
 					<div class="vp-station-body" id="voice-type-body"><VoiceTypeIntake value={voiceType ?? {}} {language} onchange={(next) => seam?.setOwn(next)} /></div>
 				{/if}
 			</div>

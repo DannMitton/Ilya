@@ -102,7 +102,7 @@ export function readingListRows(
 
 /** The roster's marks, kept in the summary's one table (N.203 lane 60, Step 5; sheet line 26). Each is true only where it applies. */
 export interface RowMarks {
-	/** The reading is Provisional (the plausibility guard or the [ɨ] pass resolved it so). */
+	/** The reading is Provisional: its own evidence left it so (a stored reading the old guard or the old [ɨ] pass demoted keeps that status until sung again). */
 	provisional: boolean;
 	/** The singer kept a reading beyond Ilya's reference values. */
 	beyond: boolean;

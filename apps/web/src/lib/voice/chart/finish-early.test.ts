@@ -51,9 +51,10 @@ describe('the state of the control', () => {
 		expect(state(p)?.kind).toBe('use-recorded');
 	});
 
-	it('[o] recorded but implausible and not kept takes a stand-in: use what I have recorded', () => {
+	it('[o] recorded but implausible and not kept counts as a kept one does (lane 66, Step 5): the rest is worked out', () => {
 		const p = profileOf(TOUR_SEVEN, { o: R(1063, 900, { plausibility: 'implausible' }) });
-		expect(state(p)?.kind).toBe('use-recorded');
+		expect(state(p)?.kind).toBe('work-out');
+		expect(state(p)).toEqual(state(profileOf(TOUR_SEVEN, { o: R(1063, 900, { plausibility: 'implausible', plausibilityOverride: true } as Partial<CalibratedFormant>) })));
 	});
 
 	it('"Not sure" with three recorded: use what I have recorded', () => {
@@ -61,12 +62,13 @@ describe('the state of the control', () => {
 		expect(s).toEqual({ kind: 'use-recorded', remaining: ['ɪ', 'ɨ', 'ɛ', 'a', 'ɑ', 'ʌ', 'o'], anyUsable: true });
 	});
 
-	it('one recorded vowel, implausible and not kept: the button stands, and says nothing was usable', () => {
+	it('one recorded vowel, implausible and not kept: it is usable, as a kept one is (lane 66, Step 5)', () => {
 		const p = profileOf([], { i: R(1063, 2200, { plausibility: 'implausible' }) });
-		expect(state(p)).toEqual({ kind: 'use-recorded', remaining: VOWELS.filter((v) => v !== 'i'), anyUsable: false });
+		expect(state(p)).toEqual({ kind: 'use-recorded', remaining: VOWELS.filter((v) => v !== 'i'), anyUsable: true });
+		expect(state(p)).toEqual(state(profileOf([], { i: R(1063, 2200, { plausibility: 'implausible', plausibilityOverride: true } as Partial<CalibratedFormant>) })));
 	});
 
-	it('a kept implausible reading counts again', () => {
+	it('a kept implausible reading counts, and so does one not kept', () => {
 		const p = profileOf(TOUR_SEVEN, { o: R(1063, 900, { plausibility: 'implausible', plausibilityOverride: true } as Partial<CalibratedFormant>) });
 		expect(state(p)?.kind).toBe('work-out');
 	});
