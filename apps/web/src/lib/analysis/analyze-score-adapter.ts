@@ -57,9 +57,9 @@ export interface AdaptedProfile {
 	snapshot: VoiceProfileSnapshot;
 	completeness: AnalysisCompleteness;
 	/**
-	 * QUEUE row 17: what the stand-ins did, absent when nothing is sung. `retake`
-	 * lists sung vowels the fit left out (off its shape),
-	 * for the calibration summary to offer a retake; nothing draws it yet.
+	 * QUEUE row 17: what the stand-ins did, absent when nothing is sung (below five
+	 * core vowels is nothing sung, lane 67): the shape used and the step that made
+	 * each value (`stand-ins.ts`). Nothing draws it.
 	 */
 	standIns?: StandInReport;
 	/**

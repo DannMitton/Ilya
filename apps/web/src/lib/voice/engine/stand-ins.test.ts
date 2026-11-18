@@ -6,7 +6,7 @@
 import { describe, expect, it } from 'vitest';
 import { VOWELS, type Vowel } from './types';
 import { CORE_BANDS } from './plausibility';
-import { BOZEMAN_VOWELS, MITTON_FR2, fillStandIns, fitResonance, standInBucket, template, type Provenance } from './stand-ins';
+import { BOZEMAN_VOWELS, MITTON_FR2, fillStandIns, standInBucket, template, tractScale, type Provenance } from './stand-ins';
 
 const centre = (b: keyof typeof CORE_BANDS, v: (typeof BOZEMAN_VOWELS)[number]) => Math.sqrt(CORE_BANDS[b][v][0] * CORE_BANDS[b][v][1]);
 
@@ -88,30 +88,72 @@ describe('no vowel left blank', () => {
 	});
 });
 
-describe('the fit', () => {
-	it('slides the template by the mean log offset of two sung vowels', () => {
-		const t = template('bass').f1;
-		const sung = { i: 330, u: 300 };
-		const shift = (Math.log(330 / t.i) + Math.log(300 / t.u)) / 2;
-		const fit = fitResonance(t, sung);
-		expect(fit.step).toBe('shift');
-		for (const v of BOZEMAN_VOWELS) expect(fit.predict[v]).toBeCloseTo(t[v] * Math.exp(shift), 6);
+describe('the tract scale (lane 67)', () => {
+	const middle = template('middle');
+	const sungOfShape = (scale: number, drop?: string) => {
+		const sung: Partial<Record<Vowel, [number, number]>> = {};
+		for (const v of BOZEMAN_VOWELS) if (v !== drop) sung[v] = [middle.f1[v] * scale, middle.f2[v] * scale];
+		return sung;
+	};
+
+	it('is 1 for the shape itself and the ratio for the shape times a number, in either resonance alone', () => {
+		expect(tractScale(middle.f1, middle.f2, middle)).toBeCloseTo(1, 10);
+		expect(tractScale({ i: middle.f1.i * 1.2, u: middle.f1.u * 1.2 }, {}, middle)).toBeCloseTo(1.2, 10);
+		expect(tractScale({}, { ɑ: middle.f2.ɑ * 0.9 }, middle)).toBeCloseTo(0.9, 10);
+		expect(tractScale({}, {}, middle)).toBeNaN();
 	});
 
-	it('recovers a known shift and spread from three vowels across the arc', () => {
-		const t = template('baritone').f1;
-		// A synthetic singer: log f = c + b (log T − m), with b = 1.3 and c, m chosen here.
-		const m = Math.log(450);
-		const c = Math.log(470);
-		const b = 1.3;
-		const truth = (v: (typeof BOZEMAN_VOWELS)[number]) => Math.exp(c + b * (Math.log(t[v]) - m));
-		const fit = fitResonance(t, { i: truth('i'), ɑ: truth('ɑ'), u: truth('u') });
-		expect(fit.step).toBe('shift-and-spread');
-		for (const v of BOZEMAN_VOWELS) expect(fit.predict[v]).toBeCloseTo(truth(v), 6);
+	it('is the geometric mean of the ratios, both resonances where sung', () => {
+		const k = tractScale({ i: middle.f1.i * 1.1, e: middle.f1.e * 1.3 }, { i: middle.f2.i * 1.2 }, middle);
+		expect(k).toBeCloseTo(Math.exp((Math.log(1.1) + Math.log(1.3) + Math.log(1.2)) / 3), 10);
 	});
 
-	it('uses a shift alone for three vowels that do not span the arc', () => {
-		const t = template('bass').f1;
-		expect(fitResonance(t, { i: 300, e: 420, u: 330 }).step).toBe('shift');
+	it('five sung core vowels give the sixth at the middle shape times k, in both resonances, whatever the declared type', () => {
+		for (const type of ['bass', 'soprano', 'contralto', undefined, 'not-sure']) {
+			const m = maps(sungOfShape(1.25, 'ɛ'));
+			const report = fillStandIns(m, type);
+			expect(m.fR1.ɛ, String(type)).toBeCloseTo(middle.f1.ɛ * 1.25, 0);
+			expect(m.fR2.ɛ, String(type)).toBeCloseTo(middle.f2.ɛ * 1.25, 0);
+			expect(m.fR1Source.ɛ).toBe('surrogate');
+			expect(report.steps.ɛ).toBe('scale');
+			expect(report.bucket).toBe('middle');
+		}
+	});
+
+	it('takes no outlier out: one odd sung vowel moves k, and the missing vowel with it', () => {
+		const even = maps(sungOfShape(1, 'ɛ'));
+		fillStandIns(even, 'bass');
+		const odd = maps({ ...sungOfShape(1, 'ɛ'), i: [middle.f1.i * 3, middle.f2.i] });
+		const report = fillStandIns(odd, 'bass');
+		expect(odd.fR1.ɛ).toBeGreaterThan(even.fR1.ɛ * 1.05);
+		expect(Object.keys(report)).toEqual(['bucket', 'steps']); // no retake list
+	});
+
+	it('a sung core vowel with no usable fR2 takes shape fR2 times k for that resonance only', () => {
+		const sung = sungOfShape(1.1);
+		const m = maps(sung);
+		delete m.fR2.e;
+		delete m.fR2Source.e;
+		fillStandIns(m, 'bass');
+		expect(m.fR1Source.e).toBe('sung');
+		expect(m.fR2Source.e).toBe('surrogate');
+		expect(m.fR2.e).toBeCloseTo(middle.f2.e * 1.1, 0);
+	});
+
+	it('a voice with nothing sung takes the declared type\'s template whole', () => {
+		const m = maps({});
+		const report = fillStandIns(m, 'soprano');
+		const t = template('soprano');
+		expect(report.bucket).toBe('soprano');
+		for (const v of BOZEMAN_VOWELS) { expect(m.fR1[v]).toBeCloseTo(t.f1[v], 0); expect(report.steps[v]).toBe('template'); }
+	});
+
+	it('the four derived vowels are still derived from sung anchors, and flagged as the anchors are', () => {
+		const m = maps(sungOfShape(1.1));
+		fillStandIns(m, 'bass');
+		expect(m.fR1Source['ɨ']).toBe('derived');
+		const missing = maps(sungOfShape(1.1, 'u'));
+		fillStandIns(missing, 'bass');
+		expect(missing.fR1Source['ɨ']).toBe('surrogate'); // built on the scaled [u]
 	});
 });

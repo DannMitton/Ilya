@@ -13,26 +13,25 @@ describe('a sung value off the shape', () => {
 	const f = (f1: number, f2: number, extra: Partial<CalibratedFormant> = {}): CalibratedFormant =>
 		({ f1, f2, f2Quality: 'clear', confidence: 'high', reading: 'captured', source: 'measured-user', ...extra }) as CalibratedFormant;
 
-	it('uses a 1063 Hz [i], which the guard fails, as it uses a kept one (lane 66, Step 5): sung, and reported as off the shape by the fit alone', () => {
+	it('uses a 1063 Hz [i], which the guard fails, as it uses a kept one (lane 66, Step 5): sung, and counts like any other', () => {
 		const sung = pick(['e', 'ɛ', 'ɑ', 'o', 'u']); // five core vowels with the [i]: personal (lane 67)
 		const bad = buildVoiceProfileSnapshot({ i: f(1063, 2250), ...sung } as Partial<Record<Vowel, CalibratedFormant>>, undefined, undefined, undefined, 'bass');
 		const kept = buildVoiceProfileSnapshot({ i: f(1063, 2250, { plausibilityOverride: true, plausibility: 'implausible' }), ...sung } as Partial<Record<Vowel, CalibratedFormant>>, undefined, undefined, undefined, 'bass');
 		expect(bad.snapshot.fR1Source?.i).toBe('sung');
 		expect(bad.snapshot.fR1.i).toBe(1063);
 		expect(bad).toEqual(kept);
-		expect(bad.standIns?.retake.every((r) => r.reason === 'off-shape')).toBe(true);
 	});
 
-	it('leaves a kept 1063 Hz [i] in place, takes it out of the fit, and reports it as off the shape', () => {
-		const t = template('bass').f1;
-		const onShape = (v: 'e' | 'ɛ' | 'ɑ' | 'o' | 'u') => f(t[v] * 1.05, MITTON_FR2[v] * 1.05);
-		const formants = { i: f(1063, 2250, { plausibilityOverride: true, plausibility: 'implausible' }), e: onShape('e'), ɛ: onShape('ɛ'), ɑ: onShape('ɑ'), o: onShape('o'), u: onShape('u') };
-		const { snapshot, standIns } = buildVoiceProfileSnapshot(formants as Partial<Record<Vowel, CalibratedFormant>>, undefined, undefined, undefined, 'bass');
-		expect(snapshot.fR1.i).toBe(1063);
-		expect(snapshot.fR1Source?.i).toBe('sung');
-		const off = standIns?.retake.find((r) => r.vowel === 'i');
-		expect(off?.reason).toBe('off-shape');
-		expect(off!.semitones!).toBeGreaterThan(3);
+	it('leaves a kept 1063 Hz [i] in place, and the missing sixth core vowel follows the tract scale it moves (lane 67): no outlier is taken out', () => {
+		const sung = pick(['e', 'ɛ', 'ɑ', 'o']); // [u] is the sixth core vowel, not sung
+		const withOdd = buildVoiceProfileSnapshot({ ...sung, i: f(1063, 2250, { plausibilityOverride: true, plausibility: 'implausible' }) } as Partial<Record<Vowel, CalibratedFormant>>, undefined, undefined, undefined, 'bass');
+		const withOwn = buildVoiceProfileSnapshot({ ...sung, i: f(296, 1705) } as Partial<Record<Vowel, CalibratedFormant>>, undefined, undefined, undefined, 'bass');
+		expect(withOdd.snapshot.fR1.i).toBe(1063);
+		expect(withOdd.snapshot.fR1Source?.i).toBe('sung');
+		expect(withOdd.snapshot.fR1Source?.u).toBe('surrogate');
+		expect(withOdd.snapshot.fR1.u).toBeGreaterThan(withOwn.snapshot.fR1.u * 1.1);
+		expect(withOdd.standIns?.steps.u).toBe('scale');
+		expect(withOdd.standIns?.bucket).toBe('middle');
 	});
 
 	it('adds nothing to a voice with no sung vowel and no placeholder type: the page still says nothing was measured', () => {
@@ -67,7 +66,6 @@ describe('a declared voice type with nothing sung (row 166)', () => {
 			}
 			expect(a.standIns?.bucket).toBe(BUCKET[id]);
 			expect(Object.values(a.standIns!.steps).filter((s) => s !== 'derived').every((s) => s === 'template')).toBe(true);
-			expect(a.standIns?.retake).toEqual([]);
 		});
 	}
 

@@ -5,7 +5,9 @@
  * THE QUESTION. A singer has sung five of the six core vowels. What does Ilya say for the sixth, three ways?
  *   shape    the `middle` template times the tract scale k (the brief's rule for a personal voice, Step 3);
  *   declared the declared type's template times k (what putting the voice type back above the threshold would do);
- *   fit      today's stand-in fit, the tree's own `fillStandIns` through `resolveVowelValues` (`engine/stand-ins.ts`), run on the untouched engine.
+ *   fit      the tree's own resolution, `fillStandIns` through `resolveVowelValues` (`engine/stand-ins.ts`). The report of 2026-11-18 ran it on the untouched
+ *            engine, where it was the fitted shift and spread. Since Step 3 of lane 67 the tree takes the tract scale, so this arm equals `shape` to the tree's
+ *            rounding; the report's `fit` column is the record of what the fit was.
  *
  * THE TRACT SCALE k (brief section 2): the geometric mean, over every sung core vowel and both resonances where sung (fR1 always; fR2 where
  * `resolve-values.ts` would take it: a positive f2 whose `f2Quality` is not `absent`), of the sung value over the shape's value. A sung core

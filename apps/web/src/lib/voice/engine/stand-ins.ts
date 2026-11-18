@@ -15,40 +15,30 @@
  *    template is Mitton (2020) Table 5.3's fR2 for the six vowels (p. 81),
  *    scaled into the bucket by the geometric mean of the bucket's fR1 template
  *    over the bass bucket's (DESK DEFAULT in the brief, flagged).
- * 2. ONE OR TWO SUNG VOWELS slide the whole template by their mean log offset,
- *    per resonance: uniform scaling (Anikin, Barreda & Reby 2024, *Behavior
- *    Research Methods* 56(6): 5588-5604).
- * 3. THREE OR MORE spanning the arc (one of [i] or [e], one of [ɛ] or [ɑ], one
- *    of [o] or [u]) also fit a spread about the mean by least squares in log
- *    frequency: the arc's height for fR1, the diagonal's slope for fR2. The
- *    desk's extension, ruled in by Dann 2026-10-01 02:56.
+ * 2. A PERSONAL VOICE (five of the six core vowels sung, `sung.ts`, `isPersonal`; lane 67) takes its missing core vowel from the singer's own tract:
+ *    the `middle` template times one number, the tract scale k (`tractScale`), the geometric mean of the sung value over the shape's value, over every
+ *    sung core vowel and both resonances where sung (quarter-wave reasoning: the vowels are shapes of one tract; Dann 2026-11-17 23:25). The shape is
+ *    `middle` whatever the declared type, so the voice type's values never mix with the singer's own vowels. A sung core vowel with no usable fR2
+ *    takes shape fR2 times k for that resonance only. No spread, no outlier removal: one number. (Before lane 67 a fitted shift and spread, with the
+ *    off-shape vowels set aside for a retake; measured against it in `tools/n200-score/lane67-core.ts`.)
+ * 3. A voice with nothing sung (or below five core vowels, which resolves as nothing sung) takes the declared type's template whole, as before.
  * 4. A sung value is never changed: sung beats derived beats surrogate.
- * 5. A sung vowel more than `OFF_SHAPE_SEMITONES` from its fitted value is not
- *    absorbed: it leaves the fit and is reported as a retake candidate. Its
- *    stored reading is not touched.
- * 6. [ɨ], [ɪ], [ʌ], and [a] keep their derivations (`derivations.ts`), from
+ * 5. [ɨ], [ɪ], [ʌ], and [a] keep their derivations (`derivations.ts`), from
  *    the best anchors there are; one built on a stand-in anchor is itself a
  *    stand-in.
  *
  * Computed per snapshot and never stored (`CONTRACT.md` §6).
  */
-import { CORE_BANDS, FLOOR_MARGIN_SEMITONES, type BozemanVowel } from './plausibility';
+import { CORE_BANDS, type BozemanVowel } from './plausibility';
 import { DERIVE_ANCHORS, derive } from './derivations';
 import type { Vowel } from './types';
 
 export type StandInBucket = 'soprano' | 'tenor-mezzo' | 'baritone' | 'bass' | 'middle';
 export type Provenance = 'sung' | 'derived' | 'surrogate';
 /** The step that made a value: Dann's step 4, "every stand-in is flagged with the step that made it". */
-export type StandInStep = 'template' | 'shift' | 'shift-and-spread' | 'derived';
+export type StandInStep = 'template' | 'scale' | 'derived';
 
 export const BOZEMAN_VOWELS: readonly BozemanVowel[] = ['i', 'e', 'ɛ', 'ɑ', 'o', 'u'];
-
-/**
- * A sung vowel this far from its fitted value, in semitones, is reported for a
- * retake rather than absorbed. DESK DEFAULT in the brief, matching the guard's
- * floor margin (`plausibility.ts`, `FLOOR_MARGIN_SEMITONES`).
- */
-export const OFF_SHAPE_SEMITONES = FLOOR_MARGIN_SEMITONES;
 
 /** Mitton (2020), Table 5.3, p. 81: fR2 in Hz for the six Bozeman vowels, a bass's (read by the desk 2026-10-01). */
 export const MITTON_FR2: Readonly<Record<BozemanVowel, number>> = { i: 1705, e: 1532, ɛ: 1311, ɑ: 1013, o: 826, u: 804 };
@@ -105,67 +95,19 @@ export function template(bucket: StandInBucket): { f1: Record<BozemanVowel, numb
 	return { f1, f2 };
 }
 
-const spansArc = (vs: readonly BozemanVowel[]) =>
-	vs.some((v) => v === 'i' || v === 'e') && vs.some((v) => v === 'ɛ' || v === 'ɑ') && vs.some((v) => v === 'o' || v === 'u');
-
-/** A fitted resonance: the prediction for every Bozeman vowel, and the step that made it. */
-export interface Fit {
-	predict: Record<BozemanVowel, number>;
-	step: 'template' | 'shift' | 'shift-and-spread';
-	/** The sung vowels the fit used. */
-	used: BozemanVowel[];
-}
+type Shape = { f1: Record<BozemanVowel, number>; f2: Record<BozemanVowel, number> };
 
 /**
- * Fit one resonance's template to the sung values. Shift alone for one or two,
- * or for three that do not span the arc; shift and spread for three or more
- * that do. In log frequency: x is the template, y the sung value; the spread is
- * the least-squares slope about the means, the shift the means' difference.
+ * THE TRACT SCALE k (lane 67): the geometric mean, over every sung core vowel and both resonances where sung, of the sung value over the shape's value. One
+ * number per voice. `sungF1` and `sungF2` hold the sung values by core vowel (fR1 always; fR2 only where the resolver took it). NaN when nothing is sung.
  */
-export function fitResonance(tmpl: Record<BozemanVowel, number>, sung: Partial<Record<BozemanVowel, number>>): Fit {
-	const used = BOZEMAN_VOWELS.filter((v) => typeof sung[v] === 'number' && sung[v]! > 0);
-	if (used.length === 0) return { predict: { ...tmpl }, step: 'template', used };
-	const xs = used.map((v) => Math.log(tmpl[v]));
-	const ys = used.map((v) => Math.log(sung[v]!));
-	const mx = xs.reduce((a, b) => a + b, 0) / xs.length;
-	const my = ys.reduce((a, b) => a + b, 0) / ys.length;
-	let slope = 1;
-	let step: Fit['step'] = 'shift';
-	const sxx = xs.reduce((a, x) => a + (x - mx) ** 2, 0);
-	if (used.length >= 3 && spansArc(used) && sxx > 1e-9) {
-		slope = xs.reduce((a, x, k) => a + (x - mx) * (ys[k] - my), 0) / sxx;
-		step = 'shift-and-spread';
+export function tractScale(sungF1: Partial<Record<BozemanVowel, number>>, sungF2: Partial<Record<BozemanVowel, number>>, shape: Shape): number {
+	const logs: number[] = [];
+	for (const v of BOZEMAN_VOWELS) {
+		if (typeof sungF1[v] === 'number' && sungF1[v]! > 0) logs.push(Math.log(sungF1[v]! / shape.f1[v]));
+		if (typeof sungF2[v] === 'number' && sungF2[v]! > 0) logs.push(Math.log(sungF2[v]! / shape.f2[v]));
 	}
-	const predict = {} as Record<BozemanVowel, number>;
-	for (const v of BOZEMAN_VOWELS) predict[v] = Math.exp(my + slope * (Math.log(tmpl[v]) - mx));
-	return { predict, step, used };
-}
-
-const semitones = (a: number, b: number) => 12 * Math.log2(a / b);
-
-/**
- * Fit, then take out the worst sung vowel while it lies more than
- * `OFF_SHAPE_SEMITONES` from the fit, and fit again. Only with three or more
- * sung vowels: with two, nothing says which of them is off (DESK DEFAULT).
- */
-export function fitWithoutOutliers(
-	tmpl: Record<BozemanVowel, number>,
-	sung: Partial<Record<BozemanVowel, number>>,
-): { fit: Fit; offShape: Array<{ vowel: BozemanVowel; semitones: number }> } {
-	const pool: Partial<Record<BozemanVowel, number>> = { ...sung };
-	const offShape: Array<{ vowel: BozemanVowel; semitones: number }> = [];
-	for (;;) {
-		const fit = fitResonance(tmpl, pool);
-		if (fit.used.length < 3) return { fit, offShape };
-		let worst: { vowel: BozemanVowel; semitones: number } | null = null;
-		for (const v of fit.used) {
-			const d = semitones(pool[v]!, fit.predict[v]);
-			if (!worst || Math.abs(d) > Math.abs(worst.semitones)) worst = { vowel: v, semitones: d };
-		}
-		if (!worst || Math.abs(worst.semitones) <= OFF_SHAPE_SEMITONES) return { fit, offShape };
-		offShape.push(worst);
-		delete pool[worst.vowel];
-	}
+	return logs.length ? Math.exp(logs.reduce((a, x) => a + x, 0) / logs.length) : NaN;
 }
 
 export interface StandInInput {
@@ -176,11 +118,10 @@ export interface StandInInput {
 }
 
 export interface StandInReport {
+	/** The shape the stand-ins came from: the declared type's staff for a voice with nothing sung, `middle` for a personal voice (scaled by the tract scale). */
 	bucket: StandInBucket;
 	/** The step that made each stand-in, by vowel. */
 	steps: Record<string, StandInStep>;
-	/** Sung vowels left out of the fit, to offer for a retake. A sung reading is always used for its own vowel; the fit may leave it out of what it works out for the others (lane 66: the reason 'implausible' is gone). */
-	retake: Array<{ vowel: Vowel; reason: 'off-shape'; semitones?: number }>;
 }
 
 /**
@@ -189,26 +130,28 @@ export interface StandInReport {
  * value is never touched; only a vowel with no number gets one.
  */
 export function fillStandIns(m: StandInInput, voiceType: string | undefined): StandInReport {
-	const bucket = standInBucket(voiceType);
-	const tmpl = template(bucket);
-	const steps: Record<string, StandInStep> = {};
 	const sungOf = (map: Record<string, number>, src: Record<string, Provenance>) => {
 		const out: Partial<Record<BozemanVowel, number>> = {};
 		for (const v of BOZEMAN_VOWELS) if (src[v] === 'sung' && map[v] > 0) out[v] = map[v];
 		return out;
 	};
-	const r1 = fitWithoutOutliers(tmpl.f1, sungOf(m.fR1, m.fR1Source));
-	const r2 = fitWithoutOutliers(tmpl.f2, sungOf(m.fR2, m.fR2Source));
+	// A voice with sung core vowels is personal (the resolver sends nothing else here with anything sung): `middle` times the tract scale. Otherwise the type's template, whole.
+	const k = tractScale(sungOf(m.fR1, m.fR1Source), sungOf(m.fR2, m.fR2Source), template('middle'));
+	const scaled = Number.isFinite(k);
+	const bucket: StandInBucket = scaled ? 'middle' : standInBucket(voiceType);
+	const shape = template(bucket);
+	const step: StandInStep = scaled ? 'scale' : 'template';
+	const steps: Record<string, StandInStep> = {};
 	for (const v of BOZEMAN_VOWELS) {
 		if (m.fR1[v] === undefined) {
-			m.fR1[v] = Math.round(r1.fit.predict[v] * 10) / 10;
+			m.fR1[v] = Math.round(shape.f1[v] * (scaled ? k : 1) * 10) / 10;
 			m.fR1Source[v] = 'surrogate';
-			steps[v] = r1.fit.step;
+			steps[v] = step;
 		}
 		if (m.fR2[v] === undefined) {
-			m.fR2[v] = Math.round(r2.fit.predict[v] * 10) / 10;
+			m.fR2[v] = Math.round(shape.f2[v] * (scaled ? k : 1) * 10) / 10;
 			m.fR2Source[v] = 'surrogate';
-			steps[v] ??= r2.fit.step;
+			steps[v] ??= step;
 		}
 	}
 	// The four derived vowels, from whatever anchors now stand; a stand-in anchor makes a stand-in.
@@ -230,6 +173,5 @@ export function fillStandIns(m: StandInInput, voiceType: string | undefined): St
 		}
 		steps[vowel] = 'derived';
 	}
-	const retake: StandInReport['retake'] = r1.offShape.map((o) => ({ vowel: o.vowel as Vowel, reason: 'off-shape' as const, semitones: Math.round(o.semitones * 10) / 10 }));
-	return { bucket, steps, retake };
+	return { bucket, steps };
 }

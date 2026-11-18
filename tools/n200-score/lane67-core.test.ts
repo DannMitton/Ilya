@@ -46,10 +46,12 @@ describe('the estimates', () => {
 		expect(e.f1).toBeCloseTo(t.f1.ɛ, 6);
 		expect(e.f2).toBeCloseTo(t.f2.ɛ, 6);
 	});
-	it('fit: returns today\'s stand-in for the missing vowel (a surrogate near the singer\'s own shape)', () => {
-		const t = template('bass');
-		const e = estimate('fit', sungFrom('bass', 1, 'u'), 'u', 'bass');
-		expect(e.f1).toBeCloseTo(t.f1.u, 0);
+	it('fit: the tree\'s own resolution. Since lane 67, Step 3, that is the tract scale, so it equals `shape` to the tree\'s rounding (0.1 Hz)', () => {
+		const p = sungFrom('bass', 1, 'u');
+		const a = estimate('fit', p, 'u', 'bass');
+		const b = estimate('shape', p, 'u', 'bass');
+		expect(Math.abs(a.f1 - b.f1)).toBeLessThanOrEqual(0.05 + 1e-9);
+		expect(Math.abs(a.f2 - b.f2)).toBeLessThanOrEqual(0.05 + 1e-9);
 	});
 });
 

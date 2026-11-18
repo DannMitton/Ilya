@@ -123,14 +123,7 @@
   },
   "standIns": {
    "bucket": "middle",
-   "steps": {},
-   "retake": [
-    {
-     "vowel": "e",
-     "reason": "off-shape",
-     "semitones": -3.9
-    }
-   ]
+   "steps": {}
   },
   "completeness": {
    "formants": true,
@@ -194,14 +187,7 @@
   },
   "standIns": {
    "bucket": "middle",
-   "steps": {},
-   "retake": [
-    {
-     "vowel": "e",
-     "reason": "off-shape",
-     "semitones": -3.9
-    }
-   ]
+   "steps": {}
   },
   "completeness": {
    "formants": true,
@@ -279,19 +265,7 @@
   },
   "standIns": {
    "bucket": "middle",
-   "steps": {},
-   "retake": [
-    {
-     "vowel": "i",
-     "reason": "off-shape",
-     "semitones": 10
-    },
-    {
-     "vowel": "e",
-     "reason": "off-shape",
-     "semitones": -4
-    }
-   ]
+   "steps": {}
   },
   "completeness": {
    "formants": true,
@@ -341,7 +315,7 @@
     "ɪ": 393,
     "ʌ": 617,
     "a": 709.6,
-    "o": 491.1
+    "o": 459.3
    },
    "fR1Source": {
     "i": "sung",
@@ -365,7 +339,7 @@
     "ɪ": 1599.5,
     "ʌ": 1168,
     "a": 1114.3,
-    "o": 826
+    "o": 827.2
    },
    "fR2Source": {
     "i": "sung",
@@ -384,15 +358,8 @@
   "standIns": {
    "bucket": "middle",
    "steps": {
-    "o": "shift-and-spread"
-   },
-   "retake": [
-    {
-     "vowel": "e",
-     "reason": "off-shape",
-     "semitones": -3.7
-    }
-   ]
+    "o": "scale"
+   }
   },
   "completeness": {
    "formants": true,
@@ -526,14 +493,7 @@
   },
   "standIns": {
    "bucket": "middle",
-   "steps": {},
-   "retake": [
-    {
-     "vowel": "e",
-     "reason": "off-shape",
-     "semitones": -3.9
-    }
-   ]
+   "steps": {}
   },
   "completeness": {
    "formants": true,
@@ -597,14 +557,7 @@
   },
   "standIns": {
    "bucket": "middle",
-   "steps": {},
-   "retake": [
-    {
-     "vowel": "e",
-     "reason": "off-shape",
-     "semitones": -3.9
-    }
-   ]
+   "steps": {}
   },
   "completeness": {
    "formants": true,
@@ -682,19 +635,7 @@
   },
   "standIns": {
    "bucket": "middle",
-   "steps": {},
-   "retake": [
-    {
-     "vowel": "i",
-     "reason": "off-shape",
-     "semitones": 10
-    },
-    {
-     "vowel": "e",
-     "reason": "off-shape",
-     "semitones": -4
-    }
-   ]
+   "steps": {}
   },
   "completeness": {
    "formants": true,
@@ -744,7 +685,7 @@
     "ɪ": 393,
     "ʌ": 617,
     "a": 709.6,
-    "o": 491.1
+    "o": 459.3
    },
    "fR1Source": {
     "i": "sung",
@@ -768,7 +709,7 @@
     "ɪ": 1599.5,
     "ʌ": 1168,
     "a": 1114.3,
-    "o": 826
+    "o": 827.2
    },
    "fR2Source": {
     "i": "sung",
@@ -787,15 +728,8 @@
   "standIns": {
    "bucket": "middle",
    "steps": {
-    "o": "shift-and-spread"
-   },
-   "retake": [
-    {
-     "vowel": "e",
-     "reason": "off-shape",
-     "semitones": -3.7
-    }
-   ]
+    "o": "scale"
+   }
   },
   "completeness": {
    "formants": true,
@@ -870,8 +804,7 @@
     "ɪ": "derived",
     "ʌ": "derived",
     "a": "derived"
-   },
-   "retake": []
+   }
   },
   "completeness": {
    "formants": true,
@@ -946,8 +879,7 @@
     "ɪ": "derived",
     "ʌ": "derived",
     "a": "derived"
-   },
-   "retake": []
+   }
   },
   "completeness": {
    "formants": true,
@@ -1022,8 +954,7 @@
     "ɪ": "derived",
     "ʌ": "derived",
     "a": "derived"
-   },
-   "retake": []
+   }
   },
   "completeness": {
    "formants": true,
@@ -1098,8 +1029,7 @@
     "ɪ": "derived",
     "ʌ": "derived",
     "a": "derived"
-   },
-   "retake": []
+   }
   },
   "completeness": {
    "formants": true,
@@ -1174,8 +1104,7 @@
     "ɪ": "derived",
     "ʌ": "derived",
     "a": "derived"
-   },
-   "retake": []
+   }
   },
   "completeness": {
    "formants": true,
@@ -1238,15 +1167,8 @@
    "label": "golden"
   },
   "standIns": {
-   "bucket": "soprano",
-   "steps": {},
-   "retake": [
-    {
-     "vowel": "e",
-     "reason": "off-shape",
-     "semitones": -4
-    }
-   ]
+   "bucket": "middle",
+   "steps": {}
   },
   "completeness": {
    "formants": true,
@@ -1309,15 +1231,8 @@
    "label": "golden"
   },
   "standIns": {
-   "bucket": "soprano",
-   "steps": {},
-   "retake": [
-    {
-     "vowel": "e",
-     "reason": "off-shape",
-     "semitones": -4
-    }
-   ]
+   "bucket": "middle",
+   "steps": {}
   },
   "completeness": {
    "formants": true,
@@ -1392,8 +1307,7 @@
     "ɪ": "derived",
     "ʌ": "derived",
     "a": "derived"
-   },
-   "retake": []
+   }
   },
   "completeness": {
    "formants": true,
@@ -1456,20 +1370,8 @@
    "label": "golden"
   },
   "standIns": {
-   "bucket": "soprano",
-   "steps": {},
-   "retake": [
-    {
-     "vowel": "i",
-     "reason": "off-shape",
-     "semitones": 9.5
-    },
-    {
-     "vowel": "e",
-     "reason": "off-shape",
-     "semitones": -4
-    }
-   ]
+   "bucket": "middle",
+   "steps": {}
   },
   "completeness": {
    "formants": true,
@@ -1544,8 +1446,7 @@
     "ɪ": "derived",
     "ʌ": "derived",
     "a": "derived"
-   },
-   "retake": []
+   }
   },
   "completeness": {
    "formants": true,
@@ -1620,8 +1521,7 @@
     "ɪ": "derived",
     "ʌ": "derived",
     "a": "derived"
-   },
-   "retake": []
+   }
   },
   "completeness": {
    "formants": true,
@@ -1643,7 +1543,7 @@
     "ɪ": 393,
     "ʌ": 617,
     "a": 709.6,
-    "o": 512.2
+    "o": 459.3
    },
    "fR1Source": {
     "i": "sung",
@@ -1667,7 +1567,7 @@
     "ɪ": 1599.5,
     "ʌ": 1168,
     "a": 1114.3,
-    "o": 826
+    "o": 827.2
    },
    "fR2Source": {
     "i": "sung",
@@ -1684,17 +1584,10 @@
    "label": "golden"
   },
   "standIns": {
-   "bucket": "soprano",
+   "bucket": "middle",
    "steps": {
-    "o": "shift-and-spread"
-   },
-   "retake": [
-    {
-     "vowel": "e",
-     "reason": "off-shape",
-     "semitones": -3.9
-    }
-   ]
+    "o": "scale"
+   }
   },
   "completeness": {
    "formants": true,
@@ -1769,8 +1662,7 @@
     "ɪ": "derived",
     "ʌ": "derived",
     "a": "derived"
-   },
-   "retake": []
+   }
   },
   "completeness": {
    "formants": true,
@@ -1845,8 +1737,7 @@
     "ɪ": "derived",
     "ʌ": "derived",
     "a": "derived"
-   },
-   "retake": []
+   }
   },
   "completeness": {
    "formants": true,
@@ -1921,8 +1812,7 @@
     "ɪ": "derived",
     "ʌ": "derived",
     "a": "derived"
-   },
-   "retake": []
+   }
   },
   "completeness": {
    "formants": true,
@@ -1997,8 +1887,7 @@
     "ɪ": "derived",
     "ʌ": "derived",
     "a": "derived"
-   },
-   "retake": []
+   }
   },
   "completeness": {
    "formants": true,
@@ -2073,8 +1962,7 @@
     "ɪ": "derived",
     "ʌ": "derived",
     "a": "derived"
-   },
-   "retake": []
+   }
   },
   "completeness": {
    "formants": true,
@@ -2137,15 +2025,8 @@
    "label": "golden"
   },
   "standIns": {
-   "bucket": "tenor-mezzo",
-   "steps": {},
-   "retake": [
-    {
-     "vowel": "e",
-     "reason": "off-shape",
-     "semitones": -4.4
-    }
-   ]
+   "bucket": "middle",
+   "steps": {}
   },
   "completeness": {
    "formants": true,
@@ -2208,15 +2089,8 @@
    "label": "golden"
   },
   "standIns": {
-   "bucket": "tenor-mezzo",
-   "steps": {},
-   "retake": [
-    {
-     "vowel": "e",
-     "reason": "off-shape",
-     "semitones": -4.4
-    }
-   ]
+   "bucket": "middle",
+   "steps": {}
   },
   "completeness": {
    "formants": true,
@@ -2291,8 +2165,7 @@
     "ɪ": "derived",
     "ʌ": "derived",
     "a": "derived"
-   },
-   "retake": []
+   }
   },
   "completeness": {
    "formants": true,
@@ -2355,30 +2228,8 @@
    "label": "golden"
   },
   "standIns": {
-   "bucket": "tenor-mezzo",
-   "steps": {},
-   "retake": [
-    {
-     "vowel": "u",
-     "reason": "off-shape",
-     "semitones": -9.5
-    },
-    {
-     "vowel": "e",
-     "reason": "off-shape",
-     "semitones": -6.3
-    },
-    {
-     "vowel": "o",
-     "reason": "off-shape",
-     "semitones": -4.6
-    },
-    {
-     "vowel": "i",
-     "reason": "off-shape",
-     "semitones": 14
-    }
-   ]
+   "bucket": "middle",
+   "steps": {}
   },
   "completeness": {
    "formants": true,
@@ -2453,8 +2304,7 @@
     "ɪ": "derived",
     "ʌ": "derived",
     "a": "derived"
-   },
-   "retake": []
+   }
   },
   "completeness": {
    "formants": true,
@@ -2529,8 +2379,7 @@
     "ɪ": "derived",
     "ʌ": "derived",
     "a": "derived"
-   },
-   "retake": []
+   }
   },
   "completeness": {
    "formants": true,
@@ -2552,7 +2401,7 @@
     "ɪ": 393,
     "ʌ": 617,
     "a": 709.6,
-    "o": 494.7
+    "o": 459.3
    },
    "fR1Source": {
     "i": "sung",
@@ -2576,7 +2425,7 @@
     "ɪ": 1599.5,
     "ʌ": 1168,
     "a": 1114.3,
-    "o": 826
+    "o": 827.2
    },
    "fR2Source": {
     "i": "sung",
@@ -2593,17 +2442,10 @@
    "label": "golden"
   },
   "standIns": {
-   "bucket": "tenor-mezzo",
+   "bucket": "middle",
    "steps": {
-    "o": "shift-and-spread"
-   },
-   "retake": [
-    {
-     "vowel": "e",
-     "reason": "off-shape",
-     "semitones": -4.2
-    }
-   ]
+    "o": "scale"
+   }
   },
   "completeness": {
    "formants": true,
@@ -2736,15 +2578,8 @@
    "label": "golden"
   },
   "standIns": {
-   "bucket": "tenor-mezzo",
-   "steps": {},
-   "retake": [
-    {
-     "vowel": "e",
-     "reason": "off-shape",
-     "semitones": -4.4
-    }
-   ]
+   "bucket": "middle",
+   "steps": {}
   },
   "completeness": {
    "formants": true,
@@ -2807,15 +2642,8 @@
    "label": "golden"
   },
   "standIns": {
-   "bucket": "tenor-mezzo",
-   "steps": {},
-   "retake": [
-    {
-     "vowel": "e",
-     "reason": "off-shape",
-     "semitones": -4.4
-    }
-   ]
+   "bucket": "middle",
+   "steps": {}
   },
   "completeness": {
    "formants": true,
@@ -2892,30 +2720,8 @@
    "label": "golden"
   },
   "standIns": {
-   "bucket": "tenor-mezzo",
-   "steps": {},
-   "retake": [
-    {
-     "vowel": "u",
-     "reason": "off-shape",
-     "semitones": -9.5
-    },
-    {
-     "vowel": "e",
-     "reason": "off-shape",
-     "semitones": -6.3
-    },
-    {
-     "vowel": "o",
-     "reason": "off-shape",
-     "semitones": -4.6
-    },
-    {
-     "vowel": "i",
-     "reason": "off-shape",
-     "semitones": 14
-    }
-   ]
+   "bucket": "middle",
+   "steps": {}
   },
   "completeness": {
    "formants": true,
@@ -2965,7 +2771,7 @@
     "ɪ": 393,
     "ʌ": 617,
     "a": 709.6,
-    "o": 494.7
+    "o": 459.3
    },
    "fR1Source": {
     "i": "sung",
@@ -2989,7 +2795,7 @@
     "ɪ": 1599.5,
     "ʌ": 1168,
     "a": 1114.3,
-    "o": 826
+    "o": 827.2
    },
    "fR2Source": {
     "i": "sung",
@@ -3006,17 +2812,10 @@
    "label": "golden"
   },
   "standIns": {
-   "bucket": "tenor-mezzo",
+   "bucket": "middle",
    "steps": {
-    "o": "shift-and-spread"
-   },
-   "retake": [
-    {
-     "vowel": "e",
-     "reason": "off-shape",
-     "semitones": -4.2
-    }
-   ]
+    "o": "scale"
+   }
   },
   "completeness": {
    "formants": true,
@@ -3149,15 +2948,8 @@
    "label": "golden"
   },
   "standIns": {
-   "bucket": "tenor-mezzo",
-   "steps": {},
-   "retake": [
-    {
-     "vowel": "e",
-     "reason": "off-shape",
-     "semitones": -4.4
-    }
-   ]
+   "bucket": "middle",
+   "steps": {}
   },
   "completeness": {
    "formants": true,
@@ -3220,15 +3012,8 @@
    "label": "golden"
   },
   "standIns": {
-   "bucket": "tenor-mezzo",
-   "steps": {},
-   "retake": [
-    {
-     "vowel": "e",
-     "reason": "off-shape",
-     "semitones": -4.4
-    }
-   ]
+   "bucket": "middle",
+   "steps": {}
   },
   "completeness": {
    "formants": true,
@@ -3305,30 +3090,8 @@
    "label": "golden"
   },
   "standIns": {
-   "bucket": "tenor-mezzo",
-   "steps": {},
-   "retake": [
-    {
-     "vowel": "u",
-     "reason": "off-shape",
-     "semitones": -9.5
-    },
-    {
-     "vowel": "e",
-     "reason": "off-shape",
-     "semitones": -6.3
-    },
-    {
-     "vowel": "o",
-     "reason": "off-shape",
-     "semitones": -4.6
-    },
-    {
-     "vowel": "i",
-     "reason": "off-shape",
-     "semitones": 14
-    }
-   ]
+   "bucket": "middle",
+   "steps": {}
   },
   "completeness": {
    "formants": true,
@@ -3378,7 +3141,7 @@
     "ɪ": 393,
     "ʌ": 617,
     "a": 709.6,
-    "o": 494.7
+    "o": 459.3
    },
    "fR1Source": {
     "i": "sung",
@@ -3402,7 +3165,7 @@
     "ɪ": 1599.5,
     "ʌ": 1168,
     "a": 1114.3,
-    "o": 826
+    "o": 827.2
    },
    "fR2Source": {
     "i": "sung",
@@ -3419,17 +3182,10 @@
    "label": "golden"
   },
   "standIns": {
-   "bucket": "tenor-mezzo",
+   "bucket": "middle",
    "steps": {
-    "o": "shift-and-spread"
-   },
-   "retake": [
-    {
-     "vowel": "e",
-     "reason": "off-shape",
-     "semitones": -4.2
-    }
-   ]
+    "o": "scale"
+   }
   },
   "completeness": {
    "formants": true,
@@ -3504,8 +3260,7 @@
     "ɪ": "derived",
     "ʌ": "derived",
     "a": "derived"
-   },
-   "retake": []
+   }
   },
   "completeness": {
    "formants": true,
@@ -3580,8 +3335,7 @@
     "ɪ": "derived",
     "ʌ": "derived",
     "a": "derived"
-   },
-   "retake": []
+   }
   },
   "completeness": {
    "formants": true,
@@ -3656,8 +3410,7 @@
     "ɪ": "derived",
     "ʌ": "derived",
     "a": "derived"
-   },
-   "retake": []
+   }
   },
   "completeness": {
    "formants": true,
@@ -3732,8 +3485,7 @@
     "ɪ": "derived",
     "ʌ": "derived",
     "a": "derived"
-   },
-   "retake": []
+   }
   },
   "completeness": {
    "formants": true,
@@ -3808,8 +3560,7 @@
     "ɪ": "derived",
     "ʌ": "derived",
     "a": "derived"
-   },
-   "retake": []
+   }
   },
   "completeness": {
    "formants": true,
@@ -3872,15 +3623,8 @@
    "label": "golden"
   },
   "standIns": {
-   "bucket": "tenor-mezzo",
-   "steps": {},
-   "retake": [
-    {
-     "vowel": "e",
-     "reason": "off-shape",
-     "semitones": -4.4
-    }
-   ]
+   "bucket": "middle",
+   "steps": {}
   },
   "completeness": {
    "formants": true,
@@ -3943,15 +3687,8 @@
    "label": "golden"
   },
   "standIns": {
-   "bucket": "tenor-mezzo",
-   "steps": {},
-   "retake": [
-    {
-     "vowel": "e",
-     "reason": "off-shape",
-     "semitones": -4.4
-    }
-   ]
+   "bucket": "middle",
+   "steps": {}
   },
   "completeness": {
    "formants": true,
@@ -4026,8 +3763,7 @@
     "ɪ": "derived",
     "ʌ": "derived",
     "a": "derived"
-   },
-   "retake": []
+   }
   },
   "completeness": {
    "formants": true,
@@ -4090,30 +3826,8 @@
    "label": "golden"
   },
   "standIns": {
-   "bucket": "tenor-mezzo",
-   "steps": {},
-   "retake": [
-    {
-     "vowel": "u",
-     "reason": "off-shape",
-     "semitones": -9.5
-    },
-    {
-     "vowel": "e",
-     "reason": "off-shape",
-     "semitones": -6.3
-    },
-    {
-     "vowel": "o",
-     "reason": "off-shape",
-     "semitones": -4.6
-    },
-    {
-     "vowel": "i",
-     "reason": "off-shape",
-     "semitones": 14
-    }
-   ]
+   "bucket": "middle",
+   "steps": {}
   },
   "completeness": {
    "formants": true,
@@ -4188,8 +3902,7 @@
     "ɪ": "derived",
     "ʌ": "derived",
     "a": "derived"
-   },
-   "retake": []
+   }
   },
   "completeness": {
    "formants": true,
@@ -4264,8 +3977,7 @@
     "ɪ": "derived",
     "ʌ": "derived",
     "a": "derived"
-   },
-   "retake": []
+   }
   },
   "completeness": {
    "formants": true,
@@ -4287,7 +3999,7 @@
     "ɪ": 393,
     "ʌ": 617,
     "a": 709.6,
-    "o": 494.7
+    "o": 459.3
    },
    "fR1Source": {
     "i": "sung",
@@ -4311,7 +4023,7 @@
     "ɪ": 1599.5,
     "ʌ": 1168,
     "a": 1114.3,
-    "o": 826
+    "o": 827.2
    },
    "fR2Source": {
     "i": "sung",
@@ -4328,17 +4040,10 @@
    "label": "golden"
   },
   "standIns": {
-   "bucket": "tenor-mezzo",
+   "bucket": "middle",
    "steps": {
-    "o": "shift-and-spread"
-   },
-   "retake": [
-    {
-     "vowel": "e",
-     "reason": "off-shape",
-     "semitones": -4.2
-    }
-   ]
+    "o": "scale"
+   }
   },
   "completeness": {
    "formants": true,
@@ -4471,15 +4176,8 @@
    "label": "golden"
   },
   "standIns": {
-   "bucket": "tenor-mezzo",
-   "steps": {},
-   "retake": [
-    {
-     "vowel": "e",
-     "reason": "off-shape",
-     "semitones": -4.4
-    }
-   ]
+   "bucket": "middle",
+   "steps": {}
   },
   "completeness": {
    "formants": true,
@@ -4542,15 +4240,8 @@
    "label": "golden"
   },
   "standIns": {
-   "bucket": "tenor-mezzo",
-   "steps": {},
-   "retake": [
-    {
-     "vowel": "e",
-     "reason": "off-shape",
-     "semitones": -4.4
-    }
-   ]
+   "bucket": "middle",
+   "steps": {}
   },
   "completeness": {
    "formants": true,
@@ -4627,30 +4318,8 @@
    "label": "golden"
   },
   "standIns": {
-   "bucket": "tenor-mezzo",
-   "steps": {},
-   "retake": [
-    {
-     "vowel": "u",
-     "reason": "off-shape",
-     "semitones": -9.5
-    },
-    {
-     "vowel": "e",
-     "reason": "off-shape",
-     "semitones": -6.3
-    },
-    {
-     "vowel": "o",
-     "reason": "off-shape",
-     "semitones": -4.6
-    },
-    {
-     "vowel": "i",
-     "reason": "off-shape",
-     "semitones": 14
-    }
-   ]
+   "bucket": "middle",
+   "steps": {}
   },
   "completeness": {
    "formants": true,
@@ -4700,7 +4369,7 @@
     "ɪ": 393,
     "ʌ": 617,
     "a": 709.6,
-    "o": 494.7
+    "o": 459.3
    },
    "fR1Source": {
     "i": "sung",
@@ -4724,7 +4393,7 @@
     "ɪ": 1599.5,
     "ʌ": 1168,
     "a": 1114.3,
-    "o": 826
+    "o": 827.2
    },
    "fR2Source": {
     "i": "sung",
@@ -4741,17 +4410,10 @@
    "label": "golden"
   },
   "standIns": {
-   "bucket": "tenor-mezzo",
+   "bucket": "middle",
    "steps": {
-    "o": "shift-and-spread"
-   },
-   "retake": [
-    {
-     "vowel": "e",
-     "reason": "off-shape",
-     "semitones": -4.2
-    }
-   ]
+    "o": "scale"
+   }
   },
   "completeness": {
    "formants": true,
@@ -4826,8 +4488,7 @@
     "ɪ": "derived",
     "ʌ": "derived",
     "a": "derived"
-   },
-   "retake": []
+   }
   },
   "completeness": {
    "formants": true,
@@ -4902,8 +4563,7 @@
     "ɪ": "derived",
     "ʌ": "derived",
     "a": "derived"
-   },
-   "retake": []
+   }
   },
   "completeness": {
    "formants": true,
@@ -4978,8 +4638,7 @@
     "ɪ": "derived",
     "ʌ": "derived",
     "a": "derived"
-   },
-   "retake": []
+   }
   },
   "completeness": {
    "formants": true,
@@ -5054,8 +4713,7 @@
     "ɪ": "derived",
     "ʌ": "derived",
     "a": "derived"
-   },
-   "retake": []
+   }
   },
   "completeness": {
    "formants": true,
@@ -5130,8 +4788,7 @@
     "ɪ": "derived",
     "ʌ": "derived",
     "a": "derived"
-   },
-   "retake": []
+   }
   },
   "completeness": {
    "formants": true,
@@ -5194,15 +4851,8 @@
    "label": "golden"
   },
   "standIns": {
-   "bucket": "baritone",
-   "steps": {},
-   "retake": [
-    {
-     "vowel": "e",
-     "reason": "off-shape",
-     "semitones": -3.9
-    }
-   ]
+   "bucket": "middle",
+   "steps": {}
   },
   "completeness": {
    "formants": true,
@@ -5265,15 +4915,8 @@
    "label": "golden"
   },
   "standIns": {
-   "bucket": "baritone",
-   "steps": {},
-   "retake": [
-    {
-     "vowel": "e",
-     "reason": "off-shape",
-     "semitones": -3.9
-    }
-   ]
+   "bucket": "middle",
+   "steps": {}
   },
   "completeness": {
    "formants": true,
@@ -5348,8 +4991,7 @@
     "ɪ": "derived",
     "ʌ": "derived",
     "a": "derived"
-   },
-   "retake": []
+   }
   },
   "completeness": {
    "formants": true,
@@ -5412,20 +5054,8 @@
    "label": "golden"
   },
   "standIns": {
-   "bucket": "baritone",
-   "steps": {},
-   "retake": [
-    {
-     "vowel": "i",
-     "reason": "off-shape",
-     "semitones": 10.7
-    },
-    {
-     "vowel": "e",
-     "reason": "off-shape",
-     "semitones": -4
-    }
-   ]
+   "bucket": "middle",
+   "steps": {}
   },
   "completeness": {
    "formants": true,
@@ -5500,8 +5130,7 @@
     "ɪ": "derived",
     "ʌ": "derived",
     "a": "derived"
-   },
-   "retake": []
+   }
   },
   "completeness": {
    "formants": true,
@@ -5576,8 +5205,7 @@
     "ɪ": "derived",
     "ʌ": "derived",
     "a": "derived"
-   },
-   "retake": []
+   }
   },
   "completeness": {
    "formants": true,
@@ -5599,7 +5227,7 @@
     "ɪ": 393,
     "ʌ": 617,
     "a": 709.6,
-    "o": 506.5
+    "o": 459.3
    },
    "fR1Source": {
     "i": "sung",
@@ -5623,7 +5251,7 @@
     "ɪ": 1599.5,
     "ʌ": 1168,
     "a": 1114.3,
-    "o": 826
+    "o": 827.2
    },
    "fR2Source": {
     "i": "sung",
@@ -5640,17 +5268,10 @@
    "label": "golden"
   },
   "standIns": {
-   "bucket": "baritone",
+   "bucket": "middle",
    "steps": {
-    "o": "shift-and-spread"
-   },
-   "retake": [
-    {
-     "vowel": "e",
-     "reason": "off-shape",
-     "semitones": -3.8
-    }
-   ]
+    "o": "scale"
+   }
   },
   "completeness": {
    "formants": true,
@@ -5725,8 +5346,7 @@
     "ɪ": "derived",
     "ʌ": "derived",
     "a": "derived"
-   },
-   "retake": []
+   }
   },
   "completeness": {
    "formants": true,
@@ -5801,8 +5421,7 @@
     "ɪ": "derived",
     "ʌ": "derived",
     "a": "derived"
-   },
-   "retake": []
+   }
   },
   "completeness": {
    "formants": true,
@@ -5877,8 +5496,7 @@
     "ɪ": "derived",
     "ʌ": "derived",
     "a": "derived"
-   },
-   "retake": []
+   }
   },
   "completeness": {
    "formants": true,
@@ -5953,8 +5571,7 @@
     "ɪ": "derived",
     "ʌ": "derived",
     "a": "derived"
-   },
-   "retake": []
+   }
   },
   "completeness": {
    "formants": true,
@@ -6029,8 +5646,7 @@
     "ɪ": "derived",
     "ʌ": "derived",
     "a": "derived"
-   },
-   "retake": []
+   }
   },
   "completeness": {
    "formants": true,
@@ -6093,9 +5709,8 @@
    "label": "golden"
   },
   "standIns": {
-   "bucket": "bass",
-   "steps": {},
-   "retake": []
+   "bucket": "middle",
+   "steps": {}
   },
   "completeness": {
    "formants": true,
@@ -6158,9 +5773,8 @@
    "label": "golden"
   },
   "standIns": {
-   "bucket": "bass",
-   "steps": {},
-   "retake": []
+   "bucket": "middle",
+   "steps": {}
   },
   "completeness": {
    "formants": true,
@@ -6235,8 +5849,7 @@
     "ɪ": "derived",
     "ʌ": "derived",
     "a": "derived"
-   },
-   "retake": []
+   }
   },
   "completeness": {
    "formants": true,
@@ -6299,15 +5912,8 @@
    "label": "golden"
   },
   "standIns": {
-   "bucket": "bass",
-   "steps": {},
-   "retake": [
-    {
-     "vowel": "i",
-     "reason": "off-shape",
-     "semitones": 11.2
-    }
-   ]
+   "bucket": "middle",
+   "steps": {}
   },
   "completeness": {
    "formants": true,
@@ -6382,8 +5988,7 @@
     "ɪ": "derived",
     "ʌ": "derived",
     "a": "derived"
-   },
-   "retake": []
+   }
   },
   "completeness": {
    "formants": true,
@@ -6458,8 +6063,7 @@
     "ɪ": "derived",
     "ʌ": "derived",
     "a": "derived"
-   },
-   "retake": []
+   }
   },
   "completeness": {
    "formants": true,
@@ -6481,7 +6085,7 @@
     "ɪ": 393,
     "ʌ": 617,
     "a": 709.6,
-    "o": 438.1
+    "o": 459.3
    },
    "fR1Source": {
     "i": "sung",
@@ -6505,7 +6109,7 @@
     "ɪ": 1599.5,
     "ʌ": 1168,
     "a": 1114.3,
-    "o": 826
+    "o": 827.2
    },
    "fR2Source": {
     "i": "sung",
@@ -6522,11 +6126,10 @@
    "label": "golden"
   },
   "standIns": {
-   "bucket": "bass",
+   "bucket": "middle",
    "steps": {
-    "o": "shift-and-spread"
-   },
-   "retake": []
+    "o": "scale"
+   }
   },
   "completeness": {
    "formants": true,
@@ -6659,9 +6262,8 @@
    "label": "golden"
   },
   "standIns": {
-   "bucket": "bass",
-   "steps": {},
-   "retake": []
+   "bucket": "middle",
+   "steps": {}
   },
   "completeness": {
    "formants": true,
@@ -6724,9 +6326,8 @@
    "label": "golden"
   },
   "standIns": {
-   "bucket": "bass",
-   "steps": {},
-   "retake": []
+   "bucket": "middle",
+   "steps": {}
   },
   "completeness": {
    "formants": true,
@@ -6803,15 +6404,8 @@
    "label": "golden"
   },
   "standIns": {
-   "bucket": "bass",
-   "steps": {},
-   "retake": [
-    {
-     "vowel": "i",
-     "reason": "off-shape",
-     "semitones": 11.2
-    }
-   ]
+   "bucket": "middle",
+   "steps": {}
   },
   "completeness": {
    "formants": true,
@@ -6861,7 +6455,7 @@
     "ɪ": 393,
     "ʌ": 617,
     "a": 709.6,
-    "o": 438.1
+    "o": 459.3
    },
    "fR1Source": {
     "i": "sung",
@@ -6885,7 +6479,7 @@
     "ɪ": 1599.5,
     "ʌ": 1168,
     "a": 1114.3,
-    "o": 826
+    "o": 827.2
    },
    "fR2Source": {
     "i": "sung",
@@ -6902,11 +6496,10 @@
    "label": "golden"
   },
   "standIns": {
-   "bucket": "bass",
+   "bucket": "middle",
    "steps": {
-    "o": "shift-and-spread"
-   },
-   "retake": []
+    "o": "scale"
+   }
   },
   "completeness": {
    "formants": true,
@@ -7040,14 +6633,7 @@
   },
   "standIns": {
    "bucket": "middle",
-   "steps": {},
-   "retake": [
-    {
-     "vowel": "e",
-     "reason": "off-shape",
-     "semitones": -3.9
-    }
-   ]
+   "steps": {}
   },
   "completeness": {
    "formants": true,
@@ -7111,14 +6697,7 @@
   },
   "standIns": {
    "bucket": "middle",
-   "steps": {},
-   "retake": [
-    {
-     "vowel": "e",
-     "reason": "off-shape",
-     "semitones": -3.9
-    }
-   ]
+   "steps": {}
   },
   "completeness": {
    "formants": true,
@@ -7196,19 +6775,7 @@
   },
   "standIns": {
    "bucket": "middle",
-   "steps": {},
-   "retake": [
-    {
-     "vowel": "i",
-     "reason": "off-shape",
-     "semitones": 10
-    },
-    {
-     "vowel": "e",
-     "reason": "off-shape",
-     "semitones": -4
-    }
-   ]
+   "steps": {}
   },
   "completeness": {
    "formants": true,
@@ -7258,7 +6825,7 @@
     "ɪ": 393,
     "ʌ": 617,
     "a": 709.6,
-    "o": 491.1
+    "o": 459.3
    },
    "fR1Source": {
     "i": "sung",
@@ -7282,7 +6849,7 @@
     "ɪ": 1599.5,
     "ʌ": 1168,
     "a": 1114.3,
-    "o": 826
+    "o": 827.2
    },
    "fR2Source": {
     "i": "sung",
@@ -7301,15 +6868,8 @@
   "standIns": {
    "bucket": "middle",
    "steps": {
-    "o": "shift-and-spread"
-   },
-   "retake": [
-    {
-     "vowel": "e",
-     "reason": "off-shape",
-     "semitones": -3.7
-    }
-   ]
+    "o": "scale"
+   }
   },
   "completeness": {
    "formants": true,

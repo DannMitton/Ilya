@@ -63,12 +63,13 @@ describe('every sung reading counts: the adapter golden\'s grid', () => {
 		}
 	});
 
-	it('nothing is left out as "implausible": the retake list holds only the fit\'s own off-shape readings', () => {
+	it('nothing is left out as "implausible", and no sung vowel is set aside: every sung core vowel of a personal voice keeps its own number (lane 67)', () => {
 		for (const [, p] of Object.entries(SETS)) {
 			for (const type of TYPES) {
 				const r = resolveVowelValues(clone(p), type, { placeholders: 'always' });
 				expect(Object.keys(r)).not.toContain('implausible');
-				expect(r.standIns?.retake.every((x) => x.reason === 'off-shape') ?? true).toBe(true);
+				expect(Object.keys(r.standIns ?? {}).every((k) => k === 'bucket' || k === 'steps')).toBe(true);
+				if (r.anySung) for (const v of VOWELS) if (isSung(p[v])) expect(r.fR1Source[v], `${type} ${v}`).toBe('sung');
 			}
 		}
 	});
