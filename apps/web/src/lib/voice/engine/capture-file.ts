@@ -179,9 +179,28 @@ export function saveAllCaptures(): number {
 
 export function clearHeld(): void { held.length = 0; savedCount = 0; refreshPanel(); }
 
-// --- the panel: one field for the sung vowel, one Save button ---
+// --- the panel: a folded tab by default; unfolded, one field for the sung vowel, one Save button, and the picker in use ---
+//
+// LANE 65, STEP 3 (`docs/sessions/brief-code-lane65-walk-fixes_r2_2026-11-17.md`). The panel used to stand open at the bottom right and, on an
+// iPhone at 390 by 844, covered the welcome sheet's Begin, the Home Screen card's button, and the DRAWER bar (Dann's screenshots, 2026-11-17 14:52
+// to 14:55). It now rests folded as a vertical tab in the page's right-hand gutter: 14 px wide at the edge of the screen. On the six screens of the
+// take path (the welcome sheet, the Home Screen card, the page with the Drawer down, the Drawer up with VOICE open, the wizard's first screen, the
+// take screen) no control reaches into that gutter (the widest ends 16 px short of the edge), so the folded tab covers none. The singer unfolds it on
+// purpose, and it then covers what it covers until folded again. It folds on every load.
+// The face names the picker in use: on 2026-11-17 five takes sung at `?measure=shipped` were read by the path picker, and nobody could see why.
 
 const PANEL_ID = 'ilya-recorder-panel';
+/** The folded tab's width, in px: the page's right-hand gutter on a 390 px phone is 16 px at its narrowest. */
+export const PANEL_TAB_WIDTH_PX = 14;
+/** How far the tab stands above the bottom of the screen, in px: clear of the DRAWER bar (44 px) on a phone. */
+export const PANEL_TAB_BOTTOM_PX = 140;
+
+let panelPicker: Picker = 'shipped';
+
+/** The folded tab's words. English only: the panel is a test instrument. */
+export function panelFace(picker: Picker, takes: number, unsaved: number): string {
+	return `rec \u00b7 ${picker} \u00b7 ${takes}${unsaved > 0 ? '*' : ''}`;
+}
 
 function refreshPanel(): void {
 	if (typeof document === 'undefined') return;
@@ -189,18 +208,33 @@ function refreshPanel(): void {
 	if (!p) return;
 	const save = p.querySelector<HTMLButtonElement>('[data-recorder="save"]');
 	const count = p.querySelector<HTMLElement>('[data-recorder="count"]');
+	const tab = p.querySelector<HTMLButtonElement>('[data-recorder="tab"]');
+	const unsaved = Math.max(0, held.length - savedCount);
 	if (save) { save.disabled = held.length === 0; save.style.opacity = held.length === 0 ? '0.5' : '1'; save.textContent = `Save ${held.length} take${held.length === 1 ? '' : 's'}`; }
 	if (count) count.textContent = savedCount === held.length && held.length > 0 ? 'all saved' : held.length > savedCount ? `${held.length - savedCount} not saved` : '';
+	if (tab) {
+		tab.textContent = panelFace(panelPicker, held.length, unsaved);
+		tab.style.background = unsaved > 0 ? '#8a5a00' : '#1b1b1b';
+		tab.setAttribute('aria-label', `Recorder. Picker ${panelPicker}. ${held.length} take${held.length === 1 ? '' : 's'} held${unsaved > 0 ? `, ${unsaved} not saved` : ''}.`);
+	}
 }
 
-/** Mounts the recorder's panel once. Only called when `captureFileEnabled()` is true. */
-export function mountRecorderPanel(): void {
+/** Mounts the recorder's panel once, folded. Only called when `captureFileEnabled()` is true. */
+export function mountRecorderPanel(picker: Picker = 'shipped'): void {
 	if (typeof document === 'undefined' || document.getElementById(PANEL_ID)) return;
+	panelPicker = picker;
 	const p = document.createElement('div');
 	p.id = PANEL_ID;
 	p.setAttribute('role', 'region');
 	p.setAttribute('aria-label', 'Recorder');
-	p.style.cssText = 'position:fixed;right:12px;bottom:12px;z-index:2147483000;display:flex;gap:8px;align-items:center;flex-wrap:wrap;max-width:calc(100vw - 24px);padding:8px 10px;background:#1b1b1b;color:#f2f2f2;border:1px solid #555;border-radius:8px;font:14px/1.3 system-ui,sans-serif';
+	// The wrapper takes no touches of its own: only the tab and, when unfolded, the card do.
+	p.style.cssText = `position:fixed;right:0;bottom:${PANEL_TAB_BOTTOM_PX}px;z-index:2147483000;display:flex;align-items:flex-end;pointer-events:none;max-width:100vw;font:14px/1.3 system-ui,sans-serif`;
+	const card = document.createElement('div');
+	card.setAttribute('data-recorder', 'card');
+	card.style.cssText = 'display:none;gap:8px;align-items:center;flex-wrap:wrap;max-width:calc(100vw - 40px);margin-right:6px;padding:8px 10px;background:#1b1b1b;color:#f2f2f2;border:1px solid #555;border-radius:8px;pointer-events:auto';
+	const which = document.createElement('div');
+	which.setAttribute('data-recorder', 'picker'); which.textContent = `Picker in use: ${picker}`;
+	which.style.cssText = 'flex-basis:100%;font-weight:600';
 	const label = document.createElement('label');
 	label.textContent = 'Recorder. Sung vowel ';
 	const input = document.createElement('input');
@@ -215,7 +249,18 @@ export function mountRecorderPanel(): void {
 	save.addEventListener('click', () => { saveAllCaptures(); });
 	const count = document.createElement('span');
 	count.setAttribute('data-recorder', 'count'); count.setAttribute('aria-live', 'polite');
-	p.append(label, save, count);
+	const fold = document.createElement('button');
+	fold.type = 'button'; fold.setAttribute('data-recorder', 'fold'); fold.textContent = 'Fold';
+	fold.style.cssText = 'font:inherit;padding:6px 12px;min-height:44px;border-radius:6px;border:1px solid #888;background:transparent;color:#f2f2f2;cursor:pointer';
+	card.append(which, label, save, count, fold);
+	const tab = document.createElement('button');
+	tab.type = 'button'; tab.setAttribute('data-recorder', 'tab'); tab.setAttribute('aria-expanded', 'false');
+	tab.style.cssText = `width:${PANEL_TAB_WIDTH_PX}px;height:130px;padding:0;writing-mode:vertical-rl;font:600 10px/${PANEL_TAB_WIDTH_PX}px system-ui,sans-serif;white-space:nowrap;background:#1b1b1b;color:#f2f2f2;border:1px solid #555;border-right:none;border-radius:6px 0 0 6px;pointer-events:auto;cursor:pointer`;
+	// `display` is set inline, not through the `hidden` attribute, which an inline `display` would override.
+	const setFolded = (folded: boolean) => { card.style.display = folded ? 'none' : 'flex'; tab.setAttribute('aria-expanded', String(!folded)); };
+	tab.addEventListener('click', () => setFolded(card.style.display !== 'none'));
+	fold.addEventListener('click', () => setFolded(true));
+	p.append(card, tab);
 	document.body.appendChild(p);
 	window.addEventListener('beforeunload', (e) => { if (held.length > savedCount) { e.preventDefault(); e.returnValue = ''; } });
 	refreshPanel();

@@ -2,15 +2,18 @@
 	/**
 	 * THE VOICE PANE AT REST (N.203 lane 60, Step 2; plan r4 sections 4.1 and 4.2). It replaces `VoiceAnchor`.
 	 *
-	 * In order: the voice line (the voice's name with the built switcher and its list, then the voice type, or "Choose a voice type", which
-	 * opens the built voice type control in place); the voice's sentence; the doors. With no voice saved it shows the built first-launch form
-	 * and nothing else. The one filled control in the pane is that form's Start (`ProfileSwitcher.svelte`), as the Drawer fills one pill at
-	 * rest (`docs/memory/PRODUCT.md:522`); every door is quiet, because the next thing on the path is the piece, which INPUT already fills.
+	 * In order (Dann 2026-11-17 15:04, his option 2; lane 65 Step 1): the voice's name with the built switcher and its list; three rows of
+	 * equal weight, each a full-width `StationHeader`: "Choose a voice type" (or the type chosen), which opens the built voice type control in
+	 * place; "Describe your voice"; and "What INSIGHTS shares, and how"; then the voice's sentence; then the doors. With no voice saved it shows
+	 * the built first-launch form and nothing else. The one filled control in the pane is that form's Start (`ProfileSwitcher.svelte`), as the
+	 * Drawer fills one pill at rest (`docs/memory/PRODUCT.md:522`); every door is quiet, because the next thing on the path is the piece, which
+	 * INPUT already fills.
 	 *
-	 * Below the doors stand the two stations (N.203 lane 61, Step 1): "Describe your voice" and "What INSIGHTS shares, and how". They open in
-	 * place, as NOTATION opens in ANALYSIS (Dann 2026-11-15 20:20: "they are analogous to text;'s Notation section"), closed on arrival and never
-	 * stored open (`UNPERSISTED_STATIONS`); on a phone one at a time across the station tier. They have no state line when closed: no words for
-	 * one are ratified. Each answer and each note saves as it changes, through the seam.
+	 * The three rows open in place, as NOTATION opens in ANALYSIS (Dann 2026-11-15 20:20: "they are analogous to text;'s Notation section"). The
+	 * two stations (N.203 lane 61, Step 1) are closed on arrival, never stored open (`UNPERSISTED_STATIONS`), and on a phone one at a time across
+	 * the station tier. The voice type row is not a station of `STATION_IDS`: its open state is local (`typeOpen`), never stored, closed on arrival,
+	 * and the station tier's one-at-a-time rule does not reach it. They have no state line when closed: no words for one are ratified. Each answer
+	 * and each note saves as it changes, through the seam.
 	 *
 	 * This component decides nothing about the voices: it renders the published seam (`voice/seam.ts`) and calls its commands. The sentence,
 	 * the door names, and the vowel-space rule are in `voice-pane.ts`. The pane is never on screen beside the capture screen (the takeover
@@ -70,17 +73,15 @@
 			onDelete={seam.remove}
 		/>
 		{#if seam.voices.length}
-			<button type="button" class="vp-type" aria-expanded={typeOpen} onclick={() => (typeOpen = !typeOpen)}>
-				{typeLabel ?? T('calib.pane.chooseType')}
-			</button>
-			{#if typeOpen}
-				<div class="vp-type-body"><VoiceTypeIntake value={voiceType ?? {}} {language} onchange={(next) => seam?.setOwn(next)} /></div>
-			{/if}
-			<p class="vp-sentence">{sentence}</p>
-			<div class="vp-doors">
-				<button type="button" class="vp-door" onclick={() => onopen('record')}>{T(recordDoorKey(usable))}</button>
-				{#if showVowelSpaceDoor(hasStoredReading, voiceType?.voiceType)}
-					<button type="button" class="vp-door" onclick={() => onopen('summary')}>{T('calib.pane.door.space')}</button>
+			<div class="vp-station" data-vp-row="voiceType">
+				<StationHeader
+					label={typeLabel ?? T('calib.pane.chooseType')}
+					expanded={typeOpen}
+					ontoggle={() => (typeOpen = !typeOpen)}
+					controls="voice-type-body"
+				/>
+				{#if typeOpen}
+					<div class="vp-station-body" id="voice-type-body"><VoiceTypeIntake value={voiceType ?? {}} {language} onchange={(next) => seam?.setOwn(next)} /></div>
 				{/if}
 			</div>
 			<div class="vp-station" data-station="describeVoice">
@@ -116,6 +117,13 @@
 					</div>
 				{/if}
 			</div>
+			<p class="vp-sentence">{sentence}</p>
+			<div class="vp-doors">
+				<button type="button" class="vp-door" onclick={() => onopen('record')}>{T(recordDoorKey(usable))}</button>
+				{#if showVowelSpaceDoor(hasStoredReading, voiceType?.voiceType)}
+					<button type="button" class="vp-door" onclick={() => onopen('summary')}>{T('calib.pane.door.space')}</button>
+				{/if}
+			</div>
 		{/if}
 	</div>
 {/if}
@@ -128,21 +136,6 @@
 		gap: 0.6rem;
 		padding: 0.25rem 0 0.5rem;
 		font-family: var(--font-sans);
-	}
-	.vp-type {
-		align-self: center;
-		background: none;
-		border: none;
-		padding: 0.25rem 0.5rem;
-		font: inherit;
-		font-size: 0.8125rem;
-		color: var(--lavender-ink);
-		text-decoration: underline;
-		text-underline-offset: 0.2em;
-		cursor: pointer;
-	}
-	.vp-type-body {
-		padding: 0 0.25rem;
 	}
 	.vp-station-body {
 		padding: 0 0.25rem 0.25rem;
@@ -176,16 +169,12 @@
 		border-color: var(--lavender);
 		color: var(--lavender-ink);
 	}
-	.vp-door:focus-visible,
-	.vp-type:focus-visible {
+	.vp-door:focus-visible {
 		outline: 2px solid var(--ink-primary);
 		outline-offset: 2px;
 	}
 	@media (pointer: coarse) {
 		.vp-door {
-			min-height: 44px;
-		}
-		.vp-type {
 			min-height: 44px;
 		}
 	}

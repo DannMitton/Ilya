@@ -28,7 +28,7 @@ declare global {
 
 export function captureSessionFor(search: string = here()): CaptureSession {
 	// The recorder's panel (`engine/capture-file.ts`): present only where `__ILYA_RECORDER__` is true and `?harness=1` is in the address.
-	if (__ILYA_RECORDER__ && captureFileEnabled()) mountRecorderPanel();
+	if (__ILYA_RECORDER__ && captureFileEnabled()) mountRecorderPanel(measurePicker(search));
 	if (!captureStubOn(search)) return new LiveCaptureSession(measurePicker(search));
 	const stub = new StubCaptureSession(undefined, (typeof window === 'undefined' ? undefined : window.__ilyaStubReadiness) ?? 'clear', () => (typeof window === 'undefined' ? undefined : window.__ilyaStubNext?.shift()));
 	if (typeof window !== 'undefined') window.__ilyaStubSession = stub;
