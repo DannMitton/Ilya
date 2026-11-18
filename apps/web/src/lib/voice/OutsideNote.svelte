@@ -67,8 +67,11 @@
 		text-align: center;
 		line-height: 1.45;
 	}
+	/* Wraps, and no button breaks inside a word: on a phone the three buttons of the far-off [ɨ]'s note stand two and one, each on one line (lane 67, Step 8). */
 	.outside-actions {
 		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
 		gap: 0.5rem;
 	}
 	.outside-actions button {
@@ -81,6 +84,7 @@
 		background: #ffffff;
 		color: var(--ink-secondary);
 		cursor: pointer;
+		hyphens: none;
 	}
 	.outside-actions button:hover {
 		border-color: var(--sage);
