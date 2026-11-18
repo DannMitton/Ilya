@@ -15,6 +15,9 @@ The index was added 2026-09-01. Nothing below it was moved, reworded, or removed
 **When you add a section, add its row here.** A trap nobody can find costs the
 next session the same hour it cost the last one.
 
+### Learned 2026-11-18 (Opus desk: lanes 66 to 68)
+- `LEARNED BY THE OPUS DESK, 2026-11-18` (last section of this file): the cloud workspace restarts and kills background gate runs; a merge code-identical to a lane tip stands on the lane's gates; the desk stays in its turn while a lane runs; the bridge shell can drop mid-session
+
 ### Learned 2026-11-17 (Fable desk: lane 65 as built)
 - `LEARNED BY THE FABLE DESK, 2026-11-17` (last section of this file): a Fable desk's own as-built read and gate run with no helper; Playwright on a merge in the workspace and what it costs in minutes; 26 pictures seen as nine sheets; a review file with no memo under its header; appending to a memory file; the ship script's gate lines by grep.
 
@@ -5411,3 +5414,12 @@ The page is https://dannmitton.com/ilya, built in GoDaddy Website Builder (Urban
 - **ESTIMATES, actual:** a Fable review of a 147-line brief with no scout packet, asked for design reach as well as citations: 355,550 tokens, 89 tool uses, 18.4 min (cap 370k). It found two blockers; say 370k for a brief that changes what numbers reach the documents.
 - **ESTIMATES, actual:** a resumed reviewer's delta round on two changed steps: 62,220 tokens, 9 tool uses, 7.0 min (cap 120k).
 - **When each amendment adds a special case to keep "exactly as today", the design is the wrong one.** The desk answered a blocker with a guard of its own (lane 66 r2); the delta review then needed a second derivation loop handled, two meanings of one flag, and two counts for one sentence. The simple rule (r3: a sung reading counts as a kept one does) was already built and tested, and Dann had stated its principle on 2026-11-13. Reach for the rule the ruling states before a protection of the desk's own (tether 13).
+
+## LEARNED BY THE OPUS DESK, 2026-11-18
+
+- **The cloud workspace restarts without warning and kills background processes.** The desk's eight-gate run on a trial merge died twice (2026-11-17 about 23:0x and 23:18), once when Dann's message interrupted the desk's wait, once on a restart notice. Files survive; processes do not. A foreground command is capped at 10 minutes, and gate 4 alone ran past 580 s.
+- **A merge whose code is identical to a lane's tip stands on the lane's gates.** Check with `git diff --stat <lane tip> <trial merge>`: if only `docs/memory/` differs, the lane's end gates plus the Mac ship script's eight gates are the measure. Used for lanes 66, 67, 68.
+- **The desk stays in its turn while a lane runs** (Dann 2026-11-17 22:50: he returned before to a desk that had stopped and waited). Poll `git ls-remote` or `git fetch` in loops of at most 10 minutes inside the turn; tell him how long the quiet will be first.
+- **The bridge shell (`device_bash`) can drop mid-session and come back** (2026-11-17 22:11): stage and list still work while it is gone; ToolSearch finds nothing for it; it reappears unannounced.
+- **A lane in Dann's Chrome starts by typing into the New session box and pressing Send by its ref** (`find` "Send button"); Chrome let the desk's Send through on 2026-11-18 for lanes 67 and 68.
+

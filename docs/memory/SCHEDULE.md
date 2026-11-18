@@ -59,6 +59,7 @@ r6, written by the desk (Opus 5.5) 2026-11-16 13:2x at Dann's request of 13:17 (
 ---
 
 ## Changes
+- r6 ticked 2026-11-18 16:1x (Opus desk close): lanes 66, 67, 68 SHIPPED (`f2b87049`, `753f1506`, `aba5f76b`): every sampled vowel counts from the first; the profile completes at five stable core vowels; one calm flag on unstable takes; the far-off [ɨ] choice built; Dann's lines ratified. Owed: lane 69 (two small fixes), the bands lane, N.204, the walk of lanes 59 to 68. The Claude doc copy is still NOT updated since 2026-11-16 13:2x (owed).
 - r6 ticked 2026-11-17 22:02 (Fable desk close): lane 65 (the walk fixes) SHIPPED `2201330b`; lane 66 (the follow-ups of lanes 63 to 65: every sung reading counts, the VOICE rows on a phone, the recorder panel) RUNNING from 21:5x on brief r3, shipped `ab67b836`. Owed under item 3, and found unlisted by this desk: the far-off [ɨ] choice at the summary (ruled 2026-11-13, not built); then the bands lane. Item 4, the audit: the first unit's read is held for the 5-hour limit. The Claude doc copy is still NOT updated since 2026-11-16 13:2x (owed).
 - r6 ticked 2026-11-17 20:1x (desk close): lane 61 SHIPPED; N.200 path picker (lane 62) and its switch-on (lane 64) SHIPPED `a058646b`; lane 65 (walk fixes) running; lane 66 (lane 64 follow-ups) owed. The Claude doc copy is still NOT updated since 2026-11-16 13:2x (owed).
 - r6 ticked 2026-11-16 22:3x (late desk): lane 61 and N.200 lines. The Claude doc copy is NOT updated since 13:2x (owed).

@@ -70,6 +70,10 @@ Open for Dann (French, flagged by the audit): the storage messages say "syllable
 - **A message says what is there and what to do next** (Dann 2026-11-15; `SKILL.md`, "Say what is there, not what is missing"). A page with nothing to show names what it reads and where the singer gives it. **Reason:** a singer who has done nothing wrong reads "no", "nothing", and "cannot" as a fault, and a sentence about what is missing gives no next step. A refusal that protects the singer's work is still said plainly.
 These apply where they help a singer find the way, never as decoration (ratified 2026-10-31).
 
+- **Relevant and actionable** (Dann 2026-11-18 13:28, transcribed as written: *"Our lines must be relevant, and must be curative (curational?). We help the user, not jsut declare that there is a problem."*). A line fits the singer's actual state and ends on what to do next; it never only names a problem.
+- **True enough to act on** (Dann 2026-11-18 13:59: *"what the user needs is a statement that ins basically true, while seriving their nee4d for a curated user experience."*). A line is judged by whether the singer can act on it, not by whether it maps every case in the code.
+- **Fry is sampled, never sung** (Dann 2026-11-18 13:53: *"I am wary of using the word sing to desccribe intoning in vocal fry."*). The words for fry are "sample", "fry sample", and "record"; the word "sing" is kept for singing.
+
 ## 5. Musician's words, not the machine's
 
 A string speaks the notation: a bar, a note, a dotted half, your score (`CONTRACT.md` §3 tether 22). Never a flag, a token, a reading, a seat. Pitches name the letter and the octave index in both languages (A4, C4). « plis vocaux », never « cordes vocales ».
