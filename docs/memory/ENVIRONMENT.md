@@ -5385,3 +5385,10 @@ The page is https://dannmitton.com/ilya, built in GoDaddy Website Builder (Urban
 - **The Mac VM has numpy but not scipy, and `praat-parselmouth` has no aarch64 wheel there** (P0b, 22:0x). Praat references for real takes come from earlier runs' numbers; a new Praat run needs another machine.
 - **A question that was a default** (20:1x): the desk asked Dann whether links may scroll the Drawer; the rule it cited was the desk's own derivation of 2026-09-02 hardened into a code comment (`OPEN.md`, last lines). Tether 19: an older decision is a default with a reason; take the better option and say so in one line.
 - **Estimates, actuals tonight (harness counts):** Fable review of a brief 221k (lane 61 r1, cap 400k), 219k (path r1, cap 330k); Fable delta review 160k (lane 61 r2, cap 200k), 159k (path r2, cap 160k: at its cap); Fable plan critique 224k (cap 370k); Sonnet scout 229k (cap 280k); Sonnet full read of three papers 154k (cap 230k); Sonnet re-score (P0b) 201k (cap 260k); Sonnet band check from images (P1) 202k (cap 230k).
+
+## LEARNED BY THE OPUS DESK, 2026-11-17
+
+- **The desk stops watching when its turn ends.** Nothing wakes it but Dann's next message or a helper's hand-back. Lane 64 finished about 16:5x and sat unread until Dann asked at 19:46. Rule: when a lane is near its end and no helper is running, say in the last message that the desk will not see the lane finish, and name what Dann's next "Proceed" will trigger. A running helper (Agent tool) does wake the desk when it returns.
+- **A background job through the bridge dies when the call ends.** `setsid nohup` inside `device_bash` is killed with the call; run the job in the foreground (the bridge allows up to 180 s a call) or in the desk's own workspace.
+- **`gh repo clone` fails in the desk workspace (GraphQL blocked); plain `git clone https://github.com/DannMitton/Ilya` works.** Sonnet eight-gate measure of one tip: 99k tokens, 15.7 min, gate 4 alone 641 s.
+- **A lane's Playwright run in the cloud needs `PW_CHROMIUM_PATH`** pointing at the pre-installed Chromium; the first run fails on every test as an environment error, not a test result.

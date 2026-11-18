@@ -59,5 +59,6 @@ r6, written by the desk (Opus 5.5) 2026-11-16 13:2x at Dann's request of 13:17 (
 ---
 
 ## Changes
+- r6 ticked 2026-11-17 20:1x (desk close): lane 61 SHIPPED; N.200 path picker (lane 62) and its switch-on (lane 64) SHIPPED `a058646b`; lane 65 (walk fixes) running; lane 66 (lane 64 follow-ups) owed. The Claude doc copy is still NOT updated since 2026-11-16 13:2x (owed).
 - r6 ticked 2026-11-16 22:3x (late desk): lane 61 and N.200 lines. The Claude doc copy is NOT updated since 13:2x (owed).
 - r6, 2026-11-16 13:2x: rewritten at Dann's request as the one tracking document, before and after the release. N.200 moved from "a decision on what ships" to "solved well" (Dann 13:17). Added: the code audit, the video (after), Joanne Bozeman, the page images yes.
