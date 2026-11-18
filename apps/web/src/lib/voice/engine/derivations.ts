@@ -69,10 +69,10 @@ export const DERIVE_ANCHORS: Partial<Record<Vowel, Vowel[]>> = {
  * anchor the guard has already decided cannot be that vowel. `unchecked` and
  * absent both mean the guard never ran, which is not a verdict, so both pass.
  *
- * The locked anchor rule (a Provisional [i]/[u] resolves [ɨ] to Provisional)
- * belongs to the engine's resolution pass (`applyIghDivergence`, not yet
- * wired). Until that pass takes over, a derived value stays labelled
- * Estimated on the roster and unlabelled in the forecast.
+ * No pass demotes an [ɨ] for a missing, Provisional, or divergent [i] or [u]:
+ * `applyIghDivergence` (`divergence.ts`) describes and changes no status
+ * (Dann 2026-11-13, `docs/memory/PRODUCT.md:1269-1270`). A derived value
+ * stays labelled Estimated on the roster and unlabelled in the forecast.
  */
 export function usableAnchor(f: CalibratedFormant | undefined): f is CalibratedFormant & { f2: number } {
 	return (

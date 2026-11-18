@@ -17,9 +17,12 @@
 	 * the preview falls back to primitive shapes, the same degradation
 	 * the score renderer accepts: a picker is never blocked on a font.
 	 *
-	 * Clef is auto-chosen per note (bass below middle C, treble from
-	 * middle C up, by sounding pitch), so a bass's low D2 and a soprano's
-	 * high C6 each sit near their staff. The preview's box is sized for
+	 * Clef is chosen per note by `clefFor`: the declared voice type's clef
+	 * when there is one (bass for a bass, bass-baritone, or baritone; treble
+	 * for the other types), and the pitch rule otherwise (bass below middle
+	 * C, treble from middle C up, by sounding pitch). A note the type's clef
+	 * could not show takes the pitch rule's clef. A bass's low D2 and a
+	 * soprano's high C6 each sit near their staff. The preview's box is sized for
 	 * C1–B6 (the octave controls' span), so no legal note ever clips.
 	 *
 	 * Every field is optional (the phase is skippable, never a gate):

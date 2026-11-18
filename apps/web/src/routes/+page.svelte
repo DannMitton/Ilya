@@ -4177,7 +4177,8 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 					     rendered from the `voiceTakeover` snippet above, not here.
 
 					     THE PANE AT REST (N.203 lane 60) replaces the anchor: the voice, its
-					     sentence, its doors, and (lane 61) its two stations (`VoicePane.svelte`).
+					     three rows (the voice type and, from lane 61, the two stations), its
+					     sentence, then its doors (`VoicePane.svelte`).
 					     "Recorded" is `usableReadingCount`; the wizard's opening phase uses a
 					     wider test, on purpose. -->
 					<div class="station">

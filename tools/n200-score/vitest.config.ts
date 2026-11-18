@@ -19,10 +19,10 @@
  *                          from them are never public (`docs/memory/PRODUCT.md`, "COLLEAGUES' RECORDINGS ARE NEVER PUBLIC").
  *   synth-gate.run.ts      the synthetic gate of N.200 Step 3. Writes `N200_SYNTH_OUT` (a JSON file) when set.
  *   golden.run.ts          the golden of `runCapture` on the 600 primary takes; about 468 s. Compares to `__golden__/`;
- *                          `N200_GOLDEN=write` writes it instead.
+ *                          `N200_GOLDEN=write` writes it instead; `N200_GOLDEN=write-path` writes the path picker's golden (lane 64).
  *   burg-check.run.ts      the Burg numbers for a report. Needs Python 3 with numpy and scipy; skips, and says so, without them.
  *                          By file name only (it has no variable).
- *   measure.run.ts         the path picker on the synthetic set, rows to `N200_OUT`. `N200_SET=primary|held`, `N200_TYPE=0..4|all`,
+ *   measure.run.ts         the path picker on the synthetic set, rows to `N200_OUT`. `N200_SET=primary|held|third` (lane 64's third set), `N200_TYPE=0..4|all`,
  *                          `N200_STEP5=1`. By file name; it skips unless `N200_SET` and `N200_OUT` are both set.
  *   measure-report.run.ts  the tables from those rows (`N200_SET`, `N200_OUT`). By file name; it skips unless both are set.
  *   e.g. `N200_DIR=/path/to/folder pnpm --filter @ilya/web exec vitest run <cfg> score.run.ts`

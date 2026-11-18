@@ -36,9 +36,11 @@ export interface CaptureHandlers {
 	onStableFry(): void;
 	/**
 	 * Extraction complete. CalibratedFormant.reading already encodes the
-	 * captured or provisional outcome (a divergent velar-i resolves to
-	 * provisional), so the UI needs no separate isDivergent flag; the §9 batch
-	 * boundary keeps isDivergent internally.
+	 * captured or provisional outcome, which comes from the take's own evidence
+	 * alone. A divergent velar-i does not change it (the divergence pass
+	 * describes and never demotes, `divergence.ts`), so the UI needs no
+	 * separate isDivergent flag; the §9 batch boundary keeps isDivergent
+	 * internally.
 	 */
 	onComplete(formant: CalibratedFormant): void;
 	onError(error: CaptureError): void;

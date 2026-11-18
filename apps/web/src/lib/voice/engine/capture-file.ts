@@ -101,7 +101,7 @@ export interface CaptureRecord {
 	sampleRate: number;
 	/** Seconds trimmed from each end of the sweep before this buffer. */
 	trimS: number;
-	/** Which picker made the reading (`?measure=open` selects `open`, `?measure=path` selects `path`), from N.200 Step 3. */
+	/** Which picker made the reading (`?measure=open` selects `open`, `?measure=shipped` selects `shipped`, and anything else, no `measure` included, selects `path`: `chart/measure-switch.ts`), from N.200 Step 3. */
 	picker?: Picker;
 	/** Milliseconds `runCapture` took on this take, whole, for every picker (N.200 path picker, Step 4). Set by `live.ts`; absent from a record made elsewhere. */
 	analysisMs?: number;
