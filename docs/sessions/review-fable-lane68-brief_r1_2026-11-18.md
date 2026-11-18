@@ -1,0 +1,52 @@
+# Review: brief to Code, lane 68 (`brief-code-lane68-every-sample-counts_r1_2026-11-18.md`), r1, 2026-11-18
+
+Reviewer: Fable 5.2. Read at `/home/claude/ilya`, `753f1506`. Nothing changed, no test run; every finding is from reading. Paths are under `apps/web/src/lib/` unless they begin with `apps/`, `packages/`, `tools/`, `docs/`, or are `vercel.json`.
+
+## Verdict
+
+SEND WITH AMENDMENTS. Sections 1 and 2 deliver the ruling for the six core vowels: sampled values enter at any count, the missing ones take the type's template unscaled, and the scale waits for five. Two gaps would make the session build something he did not rule, or print a ratified line that is false: the four hard vowels below five (amendment 1), and what "stable" does to a singer who has sampled five or more (amendment 2). Both are closed by text in the brief; neither changes a ratified string.
+
+## Blockers
+
+None once amendments 1 and 2 are in. Without them:
+
+- **Hard vowels below five are unspecified, and the built loops mix.** The brief's Step 1.3 speaks of "every missing core vowel" only. With `formants` no longer emptied (`voice/engine/resolve-values.ts:55`), the resolver's loop derives [ɨ], [ɪ], [ʌ], [a] from sampled anchors at any count, source `'derived'` (`resolve-values.ts:126-138`), and `fillStandIns` derives the rest "from whatever anchors now stand" (`voice/engine/stand-ins.ts:157-175`): a sampled [i] with a template [u] gives a placeholder [ɨ] that moves with one take. That contradicts the brief's own section 1 item 2 ("one odd take cannot move the others") and section 1 item 3 (derivation is listed under five only). A `'derived'` value is not a placeholder (`packages/score-parser/src/overlay-engine.ts:231`; `analysis/placeholder-line.ts:12-13`), so it is drawn solid while the ratified line says "unsampled vowels are assigned placeholder values".
+- **"Stable" makes two ratified lines false for a singer with unstable takes.** With `coreCount` counting `confidence !== 'low'` only: six core vowels sampled, two unstable, gives {n} 4 and "Until you provide 1 more, unsampled vowels are assigned placeholder values" to a singer with no unsampled core vowel. The action the line names (sample more) is not the one that works (re-take). If the singer pressed "Keep them", the unstable note is gone (`voice/outside.ts:25`, `plausibilityOverride`) and nothing names the vowels to re-take. With ten sampled and two core unstable, the pane says "You have recorded all ten vowels. Your resonance profile is complete." because `usable >= 10` is tested first (`components/Drawer/voice-pane.ts:33`, before `:36`), while INSIGHTS says the profile is incomplete.
+
+## Amendments
+
+1. **Section 1, new item after 2, and Step 1.2 to 1.3.** Add: "Below five stable core vowels, an unsampled hard vowel ([ɨ], [ɪ], [ʌ], [a]) is a placeholder too: derived from the declared type's template anchors alone, source `'surrogate'`, step `'derived'`. No value below five is built from a mix of a sampled anchor and a template anchor. DESK DEFAULT, flagged to Dann." In Step 1.2: "the derived loop (`resolve-values.ts:126-138`) runs only when personal." In Step 1.3: "when not personal, the derived loop (`stand-ins.ts:157-175`) reads its anchors from `template(standInBucket(type))`, not from the maps." One reader serves the forecast, the chart, and the finish control (`resolve-values.ts:47`, `voice/chart/zones.ts:89-91`, `voice/chart/finish-early.ts:36`), so they stay in agreement. The alternative (derive from sampled anchors below five, as built) uses more of what the singer gave and leaves the ratified line loose; it is the desk's choice to put to him.
+2. **Section 1 item 4.** State what the singer with five or more core vowels sampled, fewer than five stable, is told. Recommended DESK DEFAULT, flagged to Dann: a reading the singer has kept ("Keep it", "Keep them"; `plausibilityOverride`, "whose name now means kept", `voice/outside.ts:8`) counts as stable, so every reading that blocks five is named by the unstable note with Re-take and Keep beside it. Add to Step 2.2: "`paneState` tests below-five before `usable >= 10` (`voice-pane.ts:33`, `:36`)." If the desk leaves kept readings uncounted, that case goes to Dann before sending: it is the "relevant and bears consequences" case of his 13:58 words.
+3. **Step 1.3, signature.** "`fillStandIns(m, voiceType, personal)`; the resolver passes `isPersonal(sampled)`. Scaled only when `personal` and k is finite (`stand-ins.ts:139-143`). The tests that scale from fewer than five sung values (`voice/engine/stand-ins.test.ts:68-156`) pass `personal` true or are rewritten; list each." This is clean: one boolean beside the existing `scaled` flag, and nothing sampled still takes the template whole.
+4. **Step 1.7.** The golden has no script. Replace "by its script" with "`UPDATE_ADAPTER_GOLDEN=1` on `analysis/adapter-golden.test.ts` (`:8`, `:32`)". Add: "the lane 67 test at `adapter-golden.test.ts:57-60` (sets under five equal their `none` twins) is rewritten to the new rule." "Sets at five or six do not move" holds: the one set with `confidence: 'low'` is under five (`analysis/adapter-grid.ts:32`).
+5. **Step 2.1, where the swap lives.** "Inside `placeholderLine` (`analysis/placeholder-line.ts:47-51`), with the stored readings as a new last argument; the two call sites change in place (`insights/InsightsPane.svelte:515`, `markup/MarkupPane.svelte:740`), no line added." Both panes hold `formants` (`InsightsPane.svelte:244`, `MarkupPane.svelte:450`). State also: "the line shows whenever the page has an analysis, including a song that uses no placeholder vowel (today's line is null then, `placeholder-line.ts:48`); with no analysis, nothing." DESK DEFAULT.
+6. **Step 2.1 and section 5, `vowelList`.** Two functions have that name. Name `analysis/placeholder-line.ts:31`. It gives "[i], [e], and [u]" and « [i], [e] et [u] », "[i] and [u]" for two (`i18n.ts:1505-1507`), which reads correctly inside the parentheses in both languages; core vowels in its roster order are `CORE_VOWELS` order (`placeholder-line.ts:21`, `voice/engine/sung.ts:18`). The other (`voice/chart/finish-early.ts:45`) prints the same lists by its own code.
+7. **Section 5, {n} 0.** The rule "an empty list is left out with its parentheses" is written under the pane only. Say it applies to `placeholder.line.belowCore` and the MELODY line too (a hard vowel alone, or core takes all unstable).
+8. **Step 2.2 and section 3, Owns.** The pane sentence now needs the vowels, and `VoicePane` receives a count (`routes/+page.svelte:4187`, `components/Drawer/VoicePane.svelte:43-44`, `:59`). Add to Owns: "`routes/+page.svelte:4187` only, changed in place (5532 of 5534, `scripts/ratchets.json:8`): `core` becomes the list of stable core vowels, from a new `stableCore(formants)` in `sung.ts`, of which `coreCount` is the length." Add to Owns for comments: `voice/chart/finish-early.ts` (`:11`), `tools/n200-score/lane66-core.ts` (`:134`), `lane67-strings.test.ts` (`:10-13` pin the four retired strings).
+9. **Step 3, Fix 1.** After Step 1.6, `MarkupPane.svelte` no longer reads `isPersonal` (`:450` was its one use; `:64`). Write: "Fix 1's import at `:64` is `{ isSung }` alone."
+10. **Step 1.4, say what `generic` false brings back.** With anything sampled, `restsOnSamples` is true (`insights/identity.ts:41-43`), so the lines of a sampled voice return for a voice with one vowel sampled: "calibrated {date}" (`i18n.ts:1814`, `InsightsPane.svelte:280`), "computed from your calibration of {date}" (`i18n.ts:1885-1886`, `InsightsPane.svelte:292`), "from your resonance profile, measured in VOICE" (`i18n.ts:1899`), "your measured resonances" (`i18n.ts:1073`, `MarkupPane.svelte:850`), and MELODY's subtitle (`MarkupPane.svelte:552`). This is what stood before lane 67 and each is true of the sampled vowels; no line says "measured" of a placeholder finding, since `measuredVowels` reads `isSung` (`InsightsPane.svelte:242-247`) and placeholder findings carry `placeholder.comment`. Add to Step 0's list: "name each line that `generic` false switches on, and picture INSIGHTS with one vowel sampled." For Dann's eye, not a blocker.
+11. **Step 1.5, citation.** `standInBucket` is `stand-ins.ts:53-60`, not `:63-70`. In Step 1.2, the fR1 loop is `resolve-values.ts:76-81`.
+12. **Step 5.3.** Add `pages-without-gaps` (desktop) to the end suites: the header note grows by several lines on MELODY and INSIGHTS, and that suite measures what reaches a footer (`apps/web/e2e/pages-without-gaps.test.ts:248`). Whether it seeds a voice under five: NOT ESTABLISHED.
+
+## Checked and found sound
+
+- Citations: `resolve-values.ts:55`; row 166 at `:149-150`; `InsightsPane.svelte:244`; `MarkupPane.svelte:450`; `voice/VowelCapture.svelte:282`; `i18n.ts:1436-1439`, `:2057`, `:1352`; the four ceilings (`scripts/ratchets.json:8`, `:14`, `:16`, `:18`, against `wc -l`); `vercel.json:3`, `:47` name `cloud-lane-67`.
+- Step 1.5: with anything sampled the stand-ins run for every type (`resolve-values.ts:149-152`), so the five types with no placeholder profile draw.
+- Step 1.6: "any sampled vowel" restores the forms lane 67 replaced (commit `31ac2f9f`; MELODY's was `Object.keys(formants).length > 0`).
+- Step 2.3: the note and its button are one component and one key function (`voice/OutsideNote.svelte:41`, `voice/outside.ts:50`); the count is in hand.
+- Key names follow the file's patterns (`placeholder.line.markup.many`, `calib.pane.fillsOne`). Seven new keys; the count line is `i18n.ts:19`.
+- Strings: none flagged beyond the cases in amendments 2 and 7.
+- Order: workable unattended. Step 1 before Step 3 matters (amendment 9); Steps 0 and 4 need no input from the desk beyond the commit.
+
+## What I could not establish
+
+- How often a take is `confidence: 'low'`, so how common amendment 2's case is.
+- Any gate or Playwright count; nothing was run.
+- Whether `components/Drawer/voice-pane.ts` may import from `analysis/` under a layering rule (no Drawer file does today).
+- Whether the longer pane sentence worsens the phone flake of Step 4 (lane 67's review left its cause open).
+- The golden entries that will move, key by key.
+- The French of section 5 against the glossary; I compared no string character for character, since none is built yet.
+
+## Terms
+
+Adopted from the brief: "stable", "personal", "below five", "placeholder", "tract scale". Coined here: `stableCore` (a proposed function name).
