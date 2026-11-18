@@ -11,7 +11,8 @@
  * (`i18n.ts`: `calib.summary.outside`, `calib.summary.outsideNoType`, `calib.roster.kept`).
  */
 import type { CalibratedFormant, Vowel } from './engine/types';
-import { isSung } from './engine/sung';
+import { applyIghDivergence, type IghReading } from './engine/divergence';
+import { isPersonal, isSung } from './engine/sung';
 
 /** The unstable readings among `order`, kept ones excluded, in the order given (the roster's). A reading counts here only if it is sung (`isSung`). */
 export function outsideVowels(
@@ -20,11 +21,32 @@ export function outsideVowels(
 ): Vowel[] {
 	return order.filter((g) => {
 		const f = profile[g];
-		return isSung(f) && f.confidence === 'low' && !f.plausibilityOverride;
+		// A far-off [ɨ] that is also unstable is named by its own note only, so the summary holds one note per vowel.
+		return isSung(f) && f.confidence === 'low' && !f.plausibilityOverride && !(g === 'ɨ' && farOffIgh(profile));
 	});
 }
 
-/** The note's string key: one sentence, no voice type in it. */
-export function outsideNote(): { key: string } {
-	return { key: 'calib.summary.unstable' };
+/**
+ * THE FAR-OFF [ɨ] (ruled 2026-11-13 15:13, message ratified 15:29, `docs/memory/OPEN.md:3800-3801`; lane 67, Step 7): a sung [ɨ] far from where the singer's [i] and [u]
+ * place it (`applyIghDivergence`, `engine/divergence.ts`: 50 Hz in fR1 or 100 Hz in fR2 off the formula), for a PERSONAL voice only. Below five core vowels
+ * Ilya uses no value built from the singer's [i] and [u], so the message would not be true. The note goes quiet on Keep (`plausibilityOverride`), on the mark
+ * (`useEstimate`, which `isSung` reads), or on a fresh take, which replaces the reading object. Pure: the pass describes on a clone and the profile is untouched.
+ */
+export function farOffIgh(profile: Partial<Record<Vowel, CalibratedFormant>>): boolean {
+	const igh = profile['ɨ'];
+	if (!isPersonal(profile) || !isSung(igh) || igh.plausibilityOverride) return false;
+	const clone: Partial<Record<Vowel, IghReading>> = { ...profile, ɨ: { ...igh } };
+	applyIghDivergence(clone);
+	return clone['ɨ']?.isDivergent === true;
+}
+
+/** The profile with the singer's choice "Use Ilya's estimate for now" marked on [ɨ]: a new profile; the reading itself stays stored. */
+export function markUseEstimate(profile: Partial<Record<Vowel, CalibratedFormant>>): Partial<Record<Vowel, CalibratedFormant>> {
+	const igh = profile['ɨ'];
+	return igh ? { ...profile, ɨ: { ...igh, useEstimate: true } } : profile;
+}
+
+/** The note's string key: the unstable readings' sentence, or the far-off [ɨ]'s (`kind` 'igh', `calib.summary.outsideIgh`, ratified 2026-11-13 15:29). No voice type in either. */
+export function outsideNote(kind: 'unstable' | 'igh' = 'unstable'): { key: string } {
+	return { key: kind === 'igh' ? 'calib.summary.outsideIgh' : 'calib.summary.unstable' };
 }

@@ -18,25 +18,29 @@
 		tag: Snippet<[Vowel]>;
 		onkeep: () => void;
 		onretake: () => void;
+		/** 'igh': the far-off [ɨ]'s note (lane 67, Step 7): its own sentence, and Keep it, Re-take, and "Use Ilya's estimate for now". */
+		kind?: 'unstable' | 'igh';
+		onuseestimate?: () => void;
 	}
 
-	let { vowels, language, tag, onkeep, onretake }: Props = $props();
+	let { vowels, language, tag, onkeep, onretake, kind = 'unstable', onuseestimate }: Props = $props();
 
 	const T = (key: string) => t(key, language);
-	/* {type} is the Tier 1 label in lower case; {vowels} is the list of tags. */
+	/* {vowels} is the list of tags (the unstable note only; the [ɨ] note names its vowel in its own words). */
 	const parts = $derived.by(() => {
-		const [before, after = ''] = T(outsideNote().key).split('{vowels}');
+		const [before, after = ''] = T(outsideNote(kind).key).split('{vowels}');
 		return { before, after };
 	});
 </script>
 
 <div class="outside-note" role="status">
 	<p>
-		{parts.before}{#each vowels as g, i (g)}{#if i > 0}{', '}{/if}{@render tag(g)}{/each}{parts.after}
+		{parts.before}{#if kind === 'unstable'}{#each vowels as g, i (g)}{#if i > 0}{', '}{/if}{@render tag(g)}{/each}{/if}{parts.after}
 	</p>
 	<div class="outside-actions">
-		<button type="button" onclick={onkeep}>{T('calib.summary.keepAll')}</button>
+		<button type="button" onclick={onkeep}>{T(kind === 'igh' ? 'calib.summary.keepOne' : 'calib.summary.keepAll')}</button>
 		<button type="button" onclick={onretake}>{T('calib.common.retake')}</button>
+		{#if kind === 'igh'}<button type="button" onclick={onuseestimate}>{T('calib.summary.useEstimate')}</button>{/if}
 	</div>
 </div>
 

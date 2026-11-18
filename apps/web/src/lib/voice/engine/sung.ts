@@ -1,7 +1,8 @@
 import type { CalibratedFormant, Vowel } from './types';
 
 /**
- * THE ONE TEST OF "SUNG" (lane 66, Step 5). A stored reading counts as sung when it holds a number above zero and is not an estimate. It is the whole of
+ * THE ONE TEST OF "SUNG" (lane 66, Step 5). A stored reading counts as sung when it holds a number above zero, is not an estimate, and is not one the singer set aside
+ * with "Use Ilya's estimate for now" (`useEstimate`, lane 67: [ɨ] only; the reading stays stored). It is the whole of
  * the test: the plausibility verdict, the singer's Keep, the signal-quality status, and the quality of the second resonance take no part in it. What a
  * singer sings is what Ilya uses (Dann 2026-11-13, `docs/memory/PRODUCT.md:1269-1273`: a neighbourhood "never demotes, discards, or blocks a reading").
  *
@@ -10,7 +11,8 @@ import type { CalibratedFormant, Vowel } from './types';
  * and by the chart's own dots and the capture screen's "recorded" (`voice/chart/zones.ts`, `finish-early.ts`). Before this lane four sites held four
  * tests, and `analyze.ts:175` can set `f1: 0`; `runCapture` refuses such a take (`:216`), so only data stored by other means can hold one, and two of the four tests counted it.
  */
-export const isSung = (f: CalibratedFormant | undefined): f is CalibratedFormant => !!f && f.reading !== 'estimated' && typeof f.f1 === 'number' && f.f1 > 0;
+export const isSung = (f: CalibratedFormant | undefined): f is CalibratedFormant =>
+	!!f && f.reading !== 'estimated' && f.useEstimate !== true && typeof f.f1 === 'number' && f.f1 > 0;
 
 /** The six core vowels, Bozeman's six and Dann's "core six" (2026-11-17 23:31): the ones a singer can reliably make on command. */
 export const CORE_VOWELS: readonly Vowel[] = ['i', 'e', 'ɛ', 'ɑ', 'o', 'u'];

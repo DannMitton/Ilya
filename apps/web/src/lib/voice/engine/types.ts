@@ -73,6 +73,13 @@ export interface CalibratedFormant {
 	 */
 	plausibilityOverride?: true;
 	/**
+	 * The singer chose "Use Ilya's estimate for now" for this reading (lane 67, Step 7; Dann 2026-11-13 15:13, `docs/memory/OPEN.md:3800`): [ɨ] only, at the summary,
+	 * when a sung [ɨ] sits far from where the singer's [i] and [u] place it (`voice/engine/divergence.ts`). The reading stays stored, and in the take record; `isSung`
+	 * (`voice/engine/sung.ts`) returns false for it, so every site (the count, the chart, INSIGHTS, the resolution) shows Ilya's estimate. A fresh take replaces the
+	 * reading object, so it carries no mark; a re-take that is less clear does not replace the reading, so the mark stays.
+	 */
+	useEstimate?: true;
+	/**
 	 * Which picker read this reading's resonances: `path` unless the address said otherwise (the default since lane 64), `shipped` for the picker the app used until then
 	 * (`?measure=shipped`), `open` for `?measure=open`. A reading stored before lane 64 and taken by the shipped picker has none: absent still means shipped.
 	 * A record of how the reading was taken, never a judgement of it. A reading keeps the field as stored; nothing is re-measured.
