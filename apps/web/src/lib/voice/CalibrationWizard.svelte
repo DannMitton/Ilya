@@ -58,6 +58,7 @@
 	import VoiceTypeFirst from '$lib/voice/VoiceTypeFirst.svelte';
 	import OutsideNote from '$lib/voice/OutsideNote.svelte';
 	import { outsideVowels } from '$lib/voice/outside';
+	import { judgeUnchecked } from '$lib/voice/engine/resolve-values';
 	import type { CaptureSession } from '$lib/voice/engine/session';
 	import {
 		READINESS_CAPTURE_MS,
@@ -327,7 +328,7 @@
 		});
 	});
 
-	let outside = $derived(outsideVowels(profile, ALL_VOWELS)); // The summary's one note (`outside.ts`).
+	let outside = $derived(outsideVowels(judgeUnchecked(profile), ALL_VOWELS)); // The summary's one note (`outside.ts`), over the judged copy: a reading stored with no verdict is named too.
 	// The voice type is asked before the first vowel only if the voice had none on arrival (Dann, 2026-09-30 12:44).
 	let askTypeFirst = $state(false);
 	$effect(() => { if (phase === 'welcome' && store.activeId) askTypeFirst = !untrack(() => voiceType); });

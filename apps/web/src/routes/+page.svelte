@@ -1626,7 +1626,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	/**
 	 * Whether the active voice holds a reading the app may use (closing polish
 	 * lane, 2026-11-12). `usableReadingCount` in `profileStore.ts` counts the
-	 * readings the plausibility guard has not refused, so the voice anchor's
+	 * sung readings (`isSung`, lane 66), so the voice anchor's
 	 * button and the Voice band's count give one answer. The wizard's opening
 	 * phase keeps `hasAnyReadings`, the wider test, on purpose. The Print guard
 	 * this once served is gone (the note below).

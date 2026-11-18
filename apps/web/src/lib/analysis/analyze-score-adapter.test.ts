@@ -105,26 +105,25 @@ describe('buildVoiceProfileSnapshot mapping', () => {
 		expect(completeness.formants).toBe(true);
 	});
 
-	// §B.4 (Dann, 2026-07-15): plausibility excludes, confidence does not. The
-	// two are orthogonal by ruling, and only plausibility says whether the
-	// number can be the vowel.
-	it('excludes a reading the plausibility guard judged implausible', () => {
-		const { snapshot } = buildVoiceProfileSnapshot(
-			{
-				a: formant(800),
-				// The motivating class: 1063 Hz extracted for a sung [i]. The guard
-				// demotes an implausible capture to provisional AND records the verdict.
-				i: {
-					f1: 1063,
-					confidence: 'high',
-					reading: 'provisional',
-					source: 'measured-user',
-					plausibility: 'implausible',
-				},
-			} as Partial<Record<'a' | 'i', CalibratedFormant>>,
-			undefined,
-		);
-		expect(own(snapshot)).toEqual({ a: 800 });
+	// Lane 66, Step 5 (Dann 2026-11-13, `docs/memory/PRODUCT.md:1269-1273`): the verdict describes a reading and never
+	// excludes it. It replaces §B.4 (2026-07-15), which excluded the number the guard judged implausible: every sung
+	// reading counts as a kept one does.
+	it('uses a reading the plausibility guard judged implausible, as it uses a kept one', () => {
+		const bad = {
+			a: formant(800),
+			// The motivating class: 1063 Hz extracted for a sung [i]. The guard records the verdict beside the reading.
+			i: {
+				f1: 1063,
+				confidence: 'high',
+				reading: 'provisional',
+				source: 'measured-user',
+				plausibility: 'implausible',
+			},
+		} as Partial<Record<'a' | 'i', CalibratedFormant>>;
+		const { snapshot } = buildVoiceProfileSnapshot(bad, undefined);
+		expect(own(snapshot)).toEqual({ a: 800, i: 1063 });
+		const kept = { ...bad, i: { ...bad.i, plausibilityOverride: true as const } } as Partial<Record<'a' | 'i', CalibratedFormant>>;
+		expect(buildVoiceProfileSnapshot(bad, undefined)).toEqual(buildVoiceProfileSnapshot(kept, undefined));
 	});
 
 	it('keeps a provisional reading with no implausible verdict: a noisy room is not a bad vowel', () => {
@@ -140,8 +139,9 @@ describe('buildVoiceProfileSnapshot mapping', () => {
 		expect(completeness.formants).toBe(true);
 	});
 
-	// QUEUE row 11: a reading the guard never judged is judged first, with no voice type (the union bands).
-	it('judges a reading the guard never judged: kept inside the union window, dropped outside it', () => {
+	// QUEUE row 11: a reading the guard never judged is judged first, with no voice type (the union bands), so the summary's note can name it.
+	// Lane 66, Step 5: the verdict gates no number, so it is used wherever it falls.
+	it('judges a reading the guard never judged, and uses it inside the union window and outside it', () => {
 		const { snapshot } = buildVoiceProfileSnapshot(
 			{
 				u: formantF2(320, 800, 'clear'), // no plausibility field, inside the union [u] window
@@ -152,16 +152,18 @@ describe('buildVoiceProfileSnapshot mapping', () => {
 		);
 		expect(own(snapshot).u).toBe(320);
 		expect(own(snapshot).o).toBe(500);
-		expect(own(snapshot).i).toBeUndefined();
-		expect(own2(snapshot)?.i).toBeUndefined();
+		expect(own(snapshot).i).toBe(1063);
+		expect(own2(snapshot)?.i).toBe(2250);
+		// The verdict is still given, on the judged copy the note reads, and still not stored.
+		expect(judgeUnchecked({ i: formantF2(1063, 2250, 'clear') } as Partial<Record<'i', CalibratedFormant>>).i?.plausibility).toBe('implausible');
 	});
 
-	it('derives no [ɨ] or [ɪ] from an unjudged [i] the union window fails', () => {
+	it('derives [ɨ] and [ɪ] from an unjudged [i] the union window fails, as it does from one that passes (lane 66, Step 5)', () => {
 		const anchors = { u: formantF2(320, 800, 'clear'), e: formantF2(450, 1900, 'clear') };
 		const judged = buildVoiceProfileSnapshot({ ...anchors, i: formantF2(1063, 2250, 'clear') } as Partial<Record<'u' | 'e' | 'i', CalibratedFormant>>, undefined).snapshot;
-		expect(own(judged)['ɨ']).toBeUndefined();
-		expect(own(judged)['ɪ']).toBeUndefined();
-		// The same [i] at an honest 300 Hz anchors both, so the gate is the verdict and nothing else.
+		expect(own(judged)['ɨ']).toBeCloseTo(1.365 * 1063, 0);
+		expect(own(judged)['ɪ']).toBeGreaterThan(0);
+		// An honest 300 Hz anchors both too: the verdict gates nothing, and the number follows the reading.
 		const honest = buildVoiceProfileSnapshot({ ...anchors, i: formantF2(300, 2250, 'clear') } as Partial<Record<'u' | 'e' | 'i', CalibratedFormant>>, undefined).snapshot;
 		expect(own(honest)['ɨ']).toBeGreaterThan(0);
 		expect(own(honest)['ɪ']).toBeGreaterThan(0);
@@ -244,7 +246,7 @@ describe('buildVoiceProfileSnapshot mapping', () => {
 		expect(own(snapshot)).toEqual({ i: 296, e: 381, a: 800, o: 489, 'ɪ': 393 });
 	});
 
-	it('excludes an fR2 from a reading the plausibility guard judged implausible', () => {
+	it('uses the fR2 of a reading the plausibility guard judged implausible (lane 66, Step 5)', () => {
 		const { snapshot } = buildVoiceProfileSnapshot(
 			{
 				i: formantF2(296, 1705, 'clear'),
@@ -260,7 +262,7 @@ describe('buildVoiceProfileSnapshot mapping', () => {
 			} as Partial<Record<'i' | 'a', CalibratedFormant>>,
 			COMPLETE,
 		);
-		expect(own2(snapshot)).toEqual({ i: 1705 });
+		expect(own2(snapshot)).toEqual({ i: 1705, a: 1200 });
 	});
 
 	it('reports every dimension broad when characteristics are absent', () => {
@@ -411,13 +413,14 @@ describe('derived vowels reach the forecast (N.109)', () => {
 		expect(own(snapshot).i).toBe(300);
 	});
 
-	it('an implausible anchor derives nothing', () => {
+	it('an implausible anchor derives as a kept one does (lane 66, Step 5): the verdict gates nothing', () => {
 		const bad = anchor(1063, 2200, 'implausible');
 		const { snapshot } = buildVoiceProfileSnapshot({ i: bad, u: U }, undefined);
-		expect(own(snapshot)['ɨ']).toBeUndefined();
-		expect(own2(snapshot)?.['ɨ']).toBeUndefined();
-		// §B.4 already dropped the implausible reading itself.
-		expect(own(snapshot).i).toBeUndefined();
+		expect(own(snapshot)['ɨ']).toBeCloseTo(1.365 * 1063, 0);
+		expect(own2(snapshot)?.['ɨ']).toBeGreaterThan(0);
+		expect(own(snapshot).i).toBe(1063);
+		const kept = { ...bad, plausibilityOverride: true as const };
+		expect(buildVoiceProfileSnapshot({ i: bad, u: U }, undefined)).toEqual(buildVoiceProfileSnapshot({ i: kept, u: U }, undefined));
 	});
 
 	it('a sung ɨ is kept: a measured reading always wins over a derived one', () => {

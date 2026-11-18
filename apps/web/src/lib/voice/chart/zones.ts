@@ -25,6 +25,7 @@
 import type { CalibratedFormant, Vowel } from '../engine/types';
 import { VOWELS } from '../engine/types';
 import { anchorF1sFor, applyMargins, bucketFor, windowFor, type VoiceTypeBucket } from '../engine/plausibility';
+import { isSung } from '../engine/sung';
 import { resolveVowelValues } from '../engine/resolve-values';
 
 /**
@@ -77,9 +78,6 @@ export interface ZoneSet {
 	/** One for every vowel with no stored reading, in the same order. */
 	placeholders: PlaceholderDot[];
 }
-
-/** Whether a stored reading counts as sung: a positive fR1 that is not an estimate (the guard's own test, `anchorF1sFor`). */
-const isSung = (f: CalibratedFormant | undefined): f is CalibratedFormant => !!f && f.reading !== 'estimated' && typeof f.f1 === 'number' && f.f1 > 0;
 
 /**
  * @param profile the stored readings of the active voice (what the wizard calls `profile`).

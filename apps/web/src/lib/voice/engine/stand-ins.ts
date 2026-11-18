@@ -179,8 +179,8 @@ export interface StandInReport {
 	bucket: StandInBucket;
 	/** The step that made each stand-in, by vowel. */
 	steps: Record<string, StandInStep>;
-	/** Sung vowels left out of the fit, to offer for a retake. */
-	retake: Array<{ vowel: Vowel; reason: 'off-shape' | 'implausible'; semitones?: number }>;
+	/** Sung vowels left out of the fit, to offer for a retake. A sung reading is always used for its own vowel; the fit may leave it out of what it works out for the others (lane 66: the reason 'implausible' is gone). */
+	retake: Array<{ vowel: Vowel; reason: 'off-shape'; semitones?: number }>;
 }
 
 /**
@@ -188,7 +188,7 @@ export interface StandInReport {
  * snapshot builder's own locals) and returns what it did. A sung or derived
  * value is never touched; only a vowel with no number gets one.
  */
-export function fillStandIns(m: StandInInput, voiceType: string | undefined, implausible: readonly Vowel[] = []): StandInReport {
+export function fillStandIns(m: StandInInput, voiceType: string | undefined): StandInReport {
 	const bucket = standInBucket(voiceType);
 	const tmpl = template(bucket);
 	const steps: Record<string, StandInStep> = {};
@@ -230,9 +230,6 @@ export function fillStandIns(m: StandInInput, voiceType: string | undefined, imp
 		}
 		steps[vowel] = 'derived';
 	}
-	const retake: StandInReport['retake'] = [
-		...implausible.map((vowel) => ({ vowel, reason: 'implausible' as const })),
-		...r1.offShape.map((o) => ({ vowel: o.vowel as Vowel, reason: 'off-shape' as const, semitones: Math.round(o.semitones * 10) / 10 })),
-	];
+	const retake: StandInReport['retake'] = r1.offShape.map((o) => ({ vowel: o.vowel as Vowel, reason: 'off-shape' as const, semitones: Math.round(o.semitones * 10) / 10 }));
 	return { bucket, steps, retake };
 }

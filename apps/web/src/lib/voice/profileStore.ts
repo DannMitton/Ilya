@@ -37,7 +37,7 @@ import type { IntakeAnswers } from '@ilya/score-parser';
 import type { TakeRecord } from './takes';
 import type { Vowel, CalibratedFormant, VoiceCharacteristics, VoiceType } from './engine/types';
 import type { FryRangeVerdict } from './engine/readiness';
-import { isUsable } from './engine/plausibility';
+import { isSung } from './engine/sung';
 import type { Outcome } from '$lib/library/types';
 import { profileSave } from './profile-save.svelte';
 
@@ -176,25 +176,25 @@ export interface ProfileStore {
  *
  * LIFTED here from CalibrationWizard.svelte by N.73 S3, unchanged. It decides
  * which phase the wizard opens on. It no longer decides what the drawer's voice
- * anchor says: the anchor follows `usableReadingCount`, because a voice whose
- * readings were all refused has nothing the app can use and the button must say
- * Calibrate. The wizard keeps this wider test on purpose, so that a singer whose
- * readings were all refused still opens on the summary, where each reading can
- * be retaken. The two differ by design (desk default, 2026-11-12).
+ * anchor says: the anchor follows `usableReadingCount`, which counts sung readings
+ * (a stored estimate, or a take with no first resonance, is not one). The wizard keeps
+ * this wider test on purpose, so that a singer whose stored readings are all of that
+ * kind still opens on the summary, where each can be retaken. The two differ by
+ * design (desk default, 2026-11-12).
  */
 export function hasAnyReadings(f: Partial<Record<Vowel, CalibratedFormant>>): boolean {
 	return Object.keys(f).length > 0;
 }
 
 /**
- * How many of a working profile's readings the app may use: not refused by the
- * plausibility guard, or refused and kept by the singer (`isUsable`,
- * `voice/engine/plausibility.ts`). The Drawer's voice anchor says "calibrated"
- * when this is above zero, and the Voice band's state line prints it as its
- * count. The wizard does not use it (see `hasAnyReadings`).
+ * How many of a working profile's readings the app uses: every sung reading
+ * (`isSung`, `voice/engine/sung.ts`). The plausibility verdict takes no part: a
+ * reading beyond Ilya's reference values counts as a kept one does (lane 66).
+ * The pane's sentence, its doors, and the Voice band's state line print it.
+ * The wizard does not use it (see `hasAnyReadings`).
  */
 export function usableReadingCount(f: Partial<Record<Vowel, CalibratedFormant>>): number {
-	return Object.values(f).filter((r) => r !== undefined && isUsable(r)).length;
+	return Object.values(f).filter(isSung).length;
 }
 
 /** A collision-safe id; crypto.randomUUID with a time-random fallback. */

@@ -311,20 +311,15 @@ export function buildPlausibilityEvent(
 }
 
 /**
- * Whether Markup and Insights may use a reading: not judged implausible, or
- * judged so and kept by the singer (`plausibilityOverride`, 2026-09-30).
- */
-export function isUsable(f: { plausibility?: Plausibility; plausibilityOverride?: true }): boolean {
-	return f.plausibility !== 'implausible' || f.plausibilityOverride === true;
-}
-
-/**
  * The singer's "Keep my reading". The verdict stays; the flag records the
  * decision; the reading returns to what its confidence alone earns
  * (`analyze.ts`: low is Provisional, anything else Captured). Since lane 64 the
  * guard changes no status, so for a reading held as it was captured this
  * returns the status it already had; a reading stored before lane 64 that the
- * old guard demoted returns to what its confidence earns.
+ * old guard demoted returns to what its confidence earns. Keep changes no
+ * number: every sung reading counts (`sung.ts`). It records the singer's word
+ * for the reading, which marks it "Beyond Ilya's reference values" and quiets
+ * the summary's note (`outside.ts`).
  */
 export function keepReading(f: CalibratedFormant): CalibratedFormant {
 	return { ...f, plausibilityOverride: true, reading: f.confidence === 'low' ? 'provisional' : 'captured' };

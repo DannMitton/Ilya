@@ -1,4 +1,5 @@
 import type { CalibratedFormant, Vowel } from './types';
+import { isSung } from './sung';
 
 export const DERIV_SOURCE: Record<string, CalibratedFormant['source']> = {
 	ɨ: 'derived-retracted-i', ɪ: 'derived-interpolated', ʌ: 'derived-interpolated', a: 'derived-interpolated',
@@ -54,8 +55,9 @@ export const DERIVE_ANCHORS: Partial<Record<Vowel, Vowel[]>> = {
 };
 
 /**
- * Usable as a derivation anchor: both resonances present as positive numbers,
- * and not judged implausible.
+ * Usable as a derivation anchor: a sung reading (`sung.ts`) with the second
+ * resonance present as a positive number. The plausibility verdict takes no
+ * part (lane 66, Step 5).
  *
  * A Provisional anchor still derives (Dann, 2026-07-11): a greyed synthetic
  * value beats an empty cell, and the derivation math needs numbers, not
@@ -64,10 +66,11 @@ export const DERIVE_ANCHORS: Partial<Record<Vowel, Vowel[]>> = {
  * most wants the full picture. `reading` and `confidence` are signal-quality
  * verdicts, and neither speaks to whether the number can be the vowel.
  *
- * `plausibility` does speak to that, and it is the one gate here (N.109,
- * carrying §B.4's rule inward). The calibration will not build a derived value on an
- * anchor the guard has already decided cannot be that vowel. `unchecked` and
- * absent both mean the guard never ran, which is not a verdict, so both pass.
+ * `plausibility` is a description beside the reading, never applied to it
+ * (Dann 2026-11-13, `docs/memory/PRODUCT.md:1269-1270`): a derived value is
+ * built on a sung anchor whatever the guard said of it, as a kept one was
+ * before this lane. Until lane 66 an anchor judged implausible and not kept
+ * derived nothing (N.109, carrying §B.4's rule inward); that rule is gone.
  *
  * No pass demotes an [ɨ] for a missing, Provisional, or divergent [i] or [u]:
  * `applyIghDivergence` (`divergence.ts`) describes and changes no status
@@ -75,16 +78,7 @@ export const DERIVE_ANCHORS: Partial<Record<Vowel, Vowel[]>> = {
  * stays labelled Estimated on the roster and unlabelled in the forecast.
  */
 export function usableAnchor(f: CalibratedFormant | undefined): f is CalibratedFormant & { f2: number } {
-	return (
-		!!f &&
-		typeof f.f1 === 'number' &&
-		f.f1 > 0 &&
-		typeof f.f2 === 'number' &&
-		f.f2 > 0 &&
-		// A kept reading (the singer's own decision, 2026-09-30) anchors too; inline, not
-		// `isUsable`, because `plausibility.ts` already imports from this file.
-		(f.plausibility !== 'implausible' || f.plausibilityOverride === true)
-	);
+	return isSung(f) && typeof f.f2 === 'number' && f.f2 > 0;
 }
 
 /**

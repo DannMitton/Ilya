@@ -17,6 +17,7 @@
 import { t, tv, type Language } from '$lib/i18n';
 import { VOWELS, type CalibratedFormant, type Vowel } from '../engine/types';
 import { resolveVowelValues } from '../engine/resolve-values';
+import { isSung } from '../engine/sung';
 
 export interface FinishEarly {
 	kind: 'work-out' | 'use-recorded';
@@ -31,7 +32,7 @@ export interface FinishEarly {
  * recorded; this function answers for any profile (with none recorded, `remaining` is all ten and the kind is `use-recorded`).
  */
 export function finishEarlyState(profile: Partial<Record<Vowel, CalibratedFormant>>, voiceType: string | undefined): FinishEarly {
-	const remaining = VOWELS.filter((v) => !(profile[v] && profile[v]!.reading !== 'estimated' && profile[v]!.f1 > 0));
+	const remaining = VOWELS.filter((v) => !isSung(profile[v]));
 	const r = resolveVowelValues(profile, voiceType, { placeholders: 'always' });
 	const standIn = VOWELS.some((v) => r.fR1Source[v] === 'surrogate' || r.fR2Source[v] === 'surrogate');
 	return { kind: !standIn && remaining.length > 0 ? 'work-out' : 'use-recorded', remaining, anyUsable: r.anySung };

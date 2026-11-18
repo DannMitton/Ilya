@@ -45,11 +45,20 @@ describe('the two counts', () => {
 		const ok = judge(BASS, 'bass');
 		expect(setAside(ok, resolve(ok, 'bass'))).toEqual([]);
 		const bad = judge({ ...BASS, i: fm(1063, 1705) }, 'bass');
-		// Today the excluded reading is set aside; once Step 5 counts every sung reading this is empty (the test of that is the adapter's).
-		const aside = setAside(bad, resolve(bad, 'bass'));
-		const kept = setAside(counted(bad, ['i']), resolve(counted(bad, ['i']), 'bass'));
-		expect(kept).toEqual([]);
-		expect(aside.length === 0 || aside.join() === 'i').toBe(true);
+		// Since lane 66, Step 5 every sung reading counts, so an outside reading is not set aside, kept or not.
+		expect(setAside(bad, resolve(bad, 'bass'))).toEqual([]);
+		expect(setAside(counted(bad, ['i']), resolve(counted(bad, ['i']), 'bass'))).toEqual([]);
+		// What is set aside is a sung vowel whose number comes from elsewhere: a stored take that placed no first resonance.
+		const none = judge({ ...BASS, e: fm(0, 1532) }, 'bass');
+		expect(setAside(none, resolve(none, 'bass'))).toEqual([]);
+	});
+	it('a sung vowel whose value comes from the fit or a derivation would be named (the count has teeth)', () => {
+		const p = judge(BASS, 'bass');
+		const r = resolve(p, 'bass');
+		const forged = { ...r, fR1Source: { ...r.fR1Source, i: 'surrogate' as const } };
+		expect(setAside(p, forged)).toEqual(['i']);
+		const forged2 = { ...r, fR2Source: { ...r.fR2Source, u: 'derived' as const } };
+		expect(setAside(p, forged2)).toEqual(['u']);
 	});
 	it('a take with no fR2 is not set aside for want of one', () => {
 		const p = judge({ ...BASS, e: fm(381, undefined) }, 'bass');
@@ -97,5 +106,21 @@ describe('a folder of the recorder\'s files', () => {
 	it('the runner reads no N200_DIR, and writes nothing inside the repository by itself', () => {
 		const src = readFileSync(path.join(path.dirname(fileURLToPath(import.meta.url)), 'lane66-measure.run.ts'), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
 		expect(src).not.toMatch(/process\.env\.N200_DIR/);
+	});
+});
+
+describe('the grid, today (Step 5): judged outside is unchanged, set aside is zero, and a plain case equals its kept twin', () => {
+	it('on the path picker\'s golden', async () => {
+		const rows = (JSON.parse(readFileSync(path.join(path.dirname(fileURLToPath(import.meta.url)), '__golden__', 'path-600.json'), 'utf8')) as { rows: import('./lane66-core').GoldenRow[] }).rows;
+		const { countsTable, profilesFromGolden, outsideCases, moveCases } = await import('./lane66-core');
+		const profiles = profilesFromGolden(rows);
+		const ct = countsTable(profiles);
+		expect(ct.outside).toBe(72);
+		expect(ct.aside).toBe(0);
+		const { cases } = outsideCases(profiles);
+		const mc = moveCases(profiles, cases);
+		expect(mc.cross.length).toBe(198);
+		expect(mc.bass1063.length).toBe(45);
+		expect([...mc.cross, ...mc.bass1063].every((c) => c.plainEqualsCounted && c.setAsidePlain.length === 0)).toBe(true);
 	});
 });
