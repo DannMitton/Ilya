@@ -40,6 +40,8 @@
 		voiceType: VoiceTypeChoice | undefined;
 		/** `usableReadingCount(voiceFormants)`. */
 		usable: number;
+		/** `coreCount(voiceFormants)`: the core vowels sung, 0 to 6 (lane 67). */
+		core: number;
 		/** Whether the active voice has any stored reading, usable or not. */
 		hasStoredReading: boolean;
 		/** Whether every vowel left can be worked out (lane 59's `finishEarlyState`); `false` until that lane is merged. */
@@ -51,10 +53,10 @@
 		characteristics: VoiceCharacteristics | undefined;
 		intake: IntakeAnswers | undefined;
 	}
-	let { language, seam, voiceType, usable, hasStoredReading, restWorkedOut = false, onopen, sections, characteristics, intake }: Props = $props();
+	let { language, seam, voiceType, usable, core, hasStoredReading, restWorkedOut = false, onopen, sections, characteristics, intake }: Props = $props();
 
 	const typeLabel = $derived(typeControlLabel(voiceType, language));
-	const sentence = $derived(paneSentence({ usable, voiceType: voiceType?.voiceType, restWorkedOut }, language));
+	const sentence = $derived(paneSentence({ usable, core, voiceType: voiceType?.voiceType, restWorkedOut }, language));
 	const T = (key: string) => t(key, language);
 </script>
 

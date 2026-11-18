@@ -16,7 +16,7 @@
    tree on 2026-11-02 (consistency batch 2). Paths are under `apps/web/src/`;
    a prefix is listed with the files that use it most and its key count.
 
-   This file holds 1,329 keys.
+   This file holds 1,333 keys.
 
    A key built at run time (`watch.key.letter.${letter}`, `comment.<register>.<part>`)
    has no literal reference, so a search for the whole key can come back empty
@@ -27,7 +27,7 @@
    analysis.       7  lib/analysis/analyze-score-adapter.ts (the broad-analysis note), lib/components/Drawer/bandState.ts (ANALYSIS's closed line)
    app.            2  the page's hidden heading, lib/components/HeaderBar.svelte (`app.subtitle` has no literal consumer)
    binder.        10  lib/library/exchange.ts, lib/components/Drawer/RootPanel.svelte
-   calib.        121  lib/voice/CalibrationWizard.svelte, lib/voice/ProfileSwitcher.svelte, lib/components/Drawer/VoicePane.svelte
+   calib.        125  lib/voice/CalibrationWizard.svelte, lib/voice/ProfileSwitcher.svelte, lib/components/Drawer/VoicePane.svelte
    capture.       55  the calibration screen: lib/voice/VowelCapture.svelte, lib/voice/chart/screen-logic.ts, lib/voice/chart/VowelChart.svelte
    clitic.         3  no literal consumer found (lib/score/clitic-seat.ts does the seating)
    collide.        5  routes/+page.svelte
@@ -1429,6 +1429,11 @@ const strings: Record<string, Record<Language, string>> = {
 	'calib.pane.notSure': { en: 'Ilya builds your resonance profile from your own vowels, recorded in vocal fry. Record them to begin.', fr: 'Ilya établit votre profil de résonances à partir de vos propres voyelles, captées en friture vocale. Captez-les pour commencer.' },
 	'calib.pane.fills': { en: 'You have recorded {n} of the 10 vowels. Ilya fills the other {m} from what you have recorded so far.', fr: 'Vous avez capté {n} des 10 voyelles. Ilya complète les {m} autres à partir de ce que vous avez capté jusqu\u2019ici.' },
 	'calib.pane.fillsOne': { en: 'You have recorded {n} of the 10 vowels. Ilya fills the last one from what you have recorded so far.', fr: 'Vous avez capté {n} des 10 voyelles. Ilya complète la dernière à partir de ce que vous avez capté jusqu\u2019ici.' },
+	// Lane 67 (Dann 2026-11-17 23:31; RATIFIED 2026-11-18 10:49, English and French, brief r2 section 6): under five of the six core vowels. {n} is the core count, {m} is 5 minus {n}.
+	'calib.pane.coreGeneric': { en: 'You have recorded {n} of the 6 core vowels. Record {m} more, and Ilya builds your resonance profile. Until then, it uses generic values for a {voiceType} voice.', fr: 'Vous avez capté {n} des 6 voyelles de base. Captez-en {m} de plus, et Ilya établit votre profil de résonances. D\u2019ici là, il utilise des valeurs par défaut pour une voix type de {voiceType}.' },
+	'calib.pane.coreGenericOne': { en: 'You have recorded 4 of the 6 core vowels. Record one more, and Ilya builds your resonance profile. Until then, it uses generic values for a {voiceType} voice.', fr: 'Vous avez capté 4 des 6 voyelles de base. Captez-en une de plus, et Ilya établit votre profil de résonances. D\u2019ici là, il utilise des valeurs par défaut pour une voix type de {voiceType}.' },
+	'calib.pane.core': { en: 'You have recorded {n} of the 6 core vowels. Record {m} more, and Ilya builds your resonance profile.', fr: 'Vous avez capté {n} des 6 voyelles de base. Captez-en {m} de plus, et Ilya établit votre profil de résonances.' },
+	'calib.pane.coreOne': { en: 'You have recorded 4 of the 6 core vowels. Record one more, and Ilya builds your resonance profile.', fr: 'Vous avez capté 4 des 6 voyelles de base. Captez-en une de plus, et Ilya établit votre profil de résonances.' },
 	'calib.pane.worksOut': { en: 'You have recorded {n} of the 10 vowels. Ilya works out the other {m} from your own vowels.', fr: 'Vous avez capté {n} des 10 voyelles. Ilya déduit les {m} autres de vos propres voyelles.' },
 	'calib.pane.worksOutOne': { en: 'You have recorded {n} of the 10 vowels. Ilya works out the last one from your own vowels.', fr: 'Vous avez capté {n} des 10 voyelles. Ilya déduit la dernière de vos propres voyelles.' },
 	'calib.pane.all': { en: 'You have recorded all ten vowels. Your resonance profile is complete.', fr: 'Vous avez capté les dix voyelles. Votre profil de résonances est complet.' },

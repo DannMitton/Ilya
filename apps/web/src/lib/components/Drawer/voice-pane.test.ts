@@ -4,7 +4,8 @@ import { t } from '$lib/i18n';
 import { usableReadingCount, assignToVoice, type StoredVoice } from '$lib/voice/profileStore';
 import { withTier1 } from '$lib/voice/voiceTypes';
 
-const S = (usable: number, voiceType?: string, restWorkedOut = false) => ({ usable, voiceType, restWorkedOut });
+/** `core` defaults to 6: the first seven states are those of a voice with five or more core vowels (or none sung, where `core` is 0 and `usable` is 0). */
+const S = (usable: number, voiceType?: string, restWorkedOut = false, core = usable === 0 ? 0 : 6) => ({ usable, core, voiceType, restWorkedOut });
 
 describe('the pane’s seven sentence states, English and French, as ratified', () => {
 	const cases: [string, ReturnType<typeof S>, PaneState, string, string][] = [
@@ -58,6 +59,54 @@ describe('a profile whose readings are all beyond the reference values counts th
 		expect(usableReadingCount(stored)).toBe(0);
 		expect(paneState(S(0))).toBe('none');
 		expect(recordDoorKey(0)).toBe('calib.pane.door.record');
+	});
+});
+
+describe('below five core vowels (lane 67): how many more, and what Ilya uses until then', () => {
+	const EN = (n: number, tail: string) => `You have recorded ${n} of the 6 core vowels. Record ${5 - n === 1 ? 'one' : 5 - n} more, and Ilya builds your resonance profile.${tail}`;
+	const FR = (n: number, tail: string) => `Vous avez capté ${n} des 6 voyelles de base. Captez-en ${5 - n === 1 ? 'une' : 5 - n} de plus, et Ilya établit votre profil de résonances.${tail}`;
+	it('prints the ratified sentence with the core count, for core counts 1 to 4, with a type that has generic values (a bass)', () => {
+		for (const n of [1, 2, 3, 4]) {
+			const input = S(n, 'bass', false, n);
+			expect(paneState(input)).toBe('core-generic');
+			expect(paneSentence(input, 'en')).toBe(EN(n, ' Until then, it uses generic values for a bass voice.'));
+			expect(paneSentence(input, 'fr')).toBe(FR(n, ' D’ici là, il utilise des valeurs par défaut pour une voix type de basse.'));
+		}
+	});
+	it('prints the shorter sentence for a type with no generic values, "Not sure", and no type', () => {
+		for (const type of ['contralto', 'countertenor', 'bass-baritone', 'not-sure', undefined]) {
+			for (const n of [1, 2, 3, 4]) {
+				const input = S(n, type, false, n);
+				expect(paneState(input), `${type} ${n}`).toBe('core');
+				expect(paneSentence(input, 'en')).toBe(EN(n, ''));
+				expect(paneSentence(input, 'fr')).toBe(FR(n, ''));
+			}
+		}
+	});
+	it('a voice with only a hard vowel sung (usable 1, core 0) is below five: it needs 5 more, and the pane does not say Ilya fills the other 9', () => {
+		const input = S(1, 'bass', false, 0);
+		expect(paneState(input)).toBe('core-generic');
+		expect(paneSentence(input, 'en')).toBe(EN(0, ' Until then, it uses generic values for a bass voice.'));
+		expect(paneSentence(S(2, undefined, false, 0), 'en')).toBe(EN(0, ''));
+		expect(paneSentence(input, 'en')).not.toMatch(/fills|other 9/);
+	});
+	it('at five and six core vowels the existing states apply unchanged', () => {
+		expect(paneState(S(5, 'bass', false, 5))).toBe('some-fills');
+		expect(paneState(S(5, 'bass', true, 5))).toBe('some-works-out');
+		expect(paneState(S(6, 'bass', true, 6))).toBe('some-works-out');
+		expect(paneState(S(10, 'bass', false, 6))).toBe('all');
+		expect(paneSentence(S(5, 'bass', false, 5), 'en')).toBe('You have recorded 5 of the 10 vowels. Ilya fills the other 5 from what you have recorded so far.');
+	});
+	it('nothing sung keeps the four states with nothing recorded', () => {
+		expect(paneState(S(0, 'bass'))).toBe('typed-generic');
+		expect(paneState(S(0))).toBe('none');
+	});
+	it('every sentence carries no unfilled placeholder; the type is elided in French as the other fills elide it', () => {
+		for (const type of ['soprano', 'tenor', 'bass', 'baritone', 'mezzo-soprano']) for (const n of [0, 1, 4]) for (const l of ['en', 'fr'] as const) expect(paneSentence(S(1, type, false, n), l)).not.toMatch(/[{}]/);
+		expect(paneSentence(S(2, 'mezzo-soprano', false, 2), 'fr')).toContain('voix type de mezzo-soprano');
+	});
+	it('the door names are unchanged', () => {
+		expect(recordDoorKey(3)).toBe('calib.pane.door.carryOn');
 	});
 });
 

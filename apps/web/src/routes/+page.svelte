@@ -132,6 +132,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 	// N.73 S3: the one predicate for "is this voice calibrated", lifted out of
 	// the wizard so the voice anchor reads the same answer the wizard does.
 	import { hasAnyReadings, usableReadingCount, type VoiceTypeChoice } from '$lib/voice/profileStore';
+	import { coreCount } from '$lib/voice/engine/sung';
 	import { profileSave } from '$lib/voice/profile-save.svelte';
 	// N.115: the ten sung vowels as a value, so Score markup's state line can
 	// count the denominator of "10 of 10" without reading the wizard's queue.
@@ -4183,7 +4184,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 					     wider test, on purpose. -->
 					<div class="station">
 						<div class="station-body">
-							<VoicePane {language} seam={voiceSeam} voiceType={voiceTypeChoice} usable={usableReadingCount(voiceFormants)}
+							<VoicePane {language} seam={voiceSeam} voiceType={voiceTypeChoice} usable={usableReadingCount(voiceFormants)} core={coreCount(voiceFormants)}
 								hasStoredReading={hasAnyReadings(voiceFormants)} restWorkedOut={finishEarlyState(voiceFormants, voiceTypeChoice?.voiceType).kind === 'work-out'} onopen={openVoice} {sections} characteristics={voiceCharacteristics} intake={voiceIntake} />
 						</div>
 					</div>
