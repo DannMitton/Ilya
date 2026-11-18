@@ -82,8 +82,8 @@ describe('N.108 the open set migrates once', () => {
 		).toEqual(['repertoire', 'piece', 'input', 'analysis', 'scoreMarkup']);
 	});
 
-	it('leaves binder, notation, and the two VOICE stations (N.203 lane 61) as the only stations', () => {
-		expect(Object.values(STATION_IDS)).toEqual(['binder', 'notation', 'describeVoice', 'insightsShares']);
+	it('leaves binder, notation, and the three VOICE rows (N.203 lane 61; the voice type row joined in lane 66) as the only stations', () => {
+		expect(Object.values(STATION_IDS)).toEqual(['binder', 'notation', 'voiceType', 'describeVoice', 'insightsShares']);
 	});
 
 	it('knows a band id from a station id', () => {
@@ -516,7 +516,7 @@ describe('N.203 lane 61: the two VOICE stations', () => {
 		return set;
 	};
 	it('are stations, not bands, and are never on first run', () => {
-		for (const id of [STATION_IDS.describeVoice, STATION_IDS.insightsShares]) {
+		for (const id of [STATION_IDS.voiceType, STATION_IDS.describeVoice, STATION_IDS.insightsShares]) {
 			expect(tierOf(id)).toBe('station');
 			expect(FIRST_RUN_STATIONS.includes(id)).toBe(false);
 			expect(UNPERSISTED_STATIONS).toContain(id);
@@ -528,8 +528,48 @@ describe('N.203 lane 61: the two VOICE stations', () => {
 		set.reveal('scoreMarkup');
 		set.reveal(STATION_IDS.describeVoice);
 		set.reveal(STATION_IDS.insightsShares);
+		set.reveal(STATION_IDS.voiceType);
 		expect(set.has(STATION_IDS.describeVoice)).toBe(true);
+		expect(set.has(STATION_IDS.voiceType)).toBe(true);
 		expect(JSON.parse(store.get(KEY)!).open).toEqual(['input', 'scoreMarkup']);
+	});
+	it('the voice type row is held but never written, whatever else is toggled around it (lane 66, Step 3)', () => {
+		const store = stub();
+		const set = make(['input'], true);
+		set.toggle(STATION_IDS.voiceType);
+		set.toggle('notation');
+		set.toggle(STATION_IDS.voiceType);
+		set.toggle(STATION_IDS.describeVoice);
+		for (const [, v] of store) expect(JSON.parse(v).open).not.toContain(STATION_IDS.voiceType);
+		expect(UNPERSISTED_STATIONS).toContain(STATION_IDS.voiceType);
+	});
+	it('on a phone, opening the voice type row shuts an open VOICE station or NOTATION, and the reverse (lane 66, Step 3)', () => {
+		stub();
+		const set = make(['input', 'scoreMarkup', STATION_IDS.describeVoice], true);
+		set.toggle(STATION_IDS.voiceType);
+		expect(set.has(STATION_IDS.voiceType)).toBe(true);
+		expect(set.has(STATION_IDS.describeVoice)).toBe(false);
+		expect(set.has('scoreMarkup')).toBe(true);
+		set.toggle(STATION_IDS.insightsShares);
+		expect(set.has(STATION_IDS.voiceType)).toBe(false);
+		expect(set.has(STATION_IDS.insightsShares)).toBe(true);
+		set.toggle(STATION_IDS.voiceType);
+		expect(set.has(STATION_IDS.insightsShares)).toBe(false);
+		set.toggle('notation');
+		expect(set.has(STATION_IDS.voiceType)).toBe(false);
+		set.reveal(STATION_IDS.voiceType);
+		expect(set.has('notation')).toBe(false);
+	});
+	it('on a desk, the voice type row stays open beside the others, and stays open when the pane is remounted (the page holds the set)', () => {
+		stub();
+		const set = make(['scoreMarkup'], false);
+		set.toggle(STATION_IDS.voiceType);
+		set.toggle(STATION_IDS.describeVoice);
+		expect(set.has(STATION_IDS.voiceType) && set.has(STATION_IDS.describeVoice)).toBe(true);
+	});
+	it('the id "voice" stays struck: it is not the voice type row (lane 66, Step 3)', () => {
+		expect(Object.values(STATION_IDS)).not.toContain('voice');
+		expect(migrateOpenStations(['voice'], false)).toEqual([]);
 	});
 	it('on a phone, opening one shuts the other and shuts NOTATION; the bands stay', () => {
 		stub();

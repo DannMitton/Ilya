@@ -53,8 +53,9 @@ export const OPEN_STATIONS_KEY = 'ilya:openStations';
 export const FIRST_RUN_STATIONS: readonly string[] = ['input'];
 
 /**
- * THE TWO VOICE STATIONS JOIN NOTATION HERE (N.203 lane 61, Step 1; plan r4 D1, DESK DEFAULT): "Describe your voice" and "What INSIGHTS
- * shares, and how" open in place, closed on arrival and never stored open, as NOTATION is.
+ * THE VOICE PANE'S THREE ROWS JOIN NOTATION HERE (N.203 lane 61, Step 1; plan r4 D1, DESK DEFAULT; the voice type row joined in lane 66, Step 3):
+ * "Choose a voice type" (or the type chosen), "Describe your voice", and "What INSIGHTS shares, and how" open in place, closed on arrival and
+ * never stored open, as NOTATION is. The row's state lives in the page's set, so it stays open across a remount of the pane within one page load.
  *
  * NOTATION DOES NOT JOIN THE PERSISTED SET, AND THIS IS DELIBERATE (§B.4).
  * `+page.svelte`'s own comment carries the reason and it is unchanged: "a
@@ -62,7 +63,7 @@ export const FIRST_RUN_STATIONS: readonly string[] = ['input'];
  * NOTATION keeps its ruled collapsed-on-arrival default, so it is filtered out
  * on the way to storage and is never read back in. Do not tidy this away.
  */
-export const UNPERSISTED_STATIONS: readonly string[] = ['notation', 'describeVoice', 'insightsShares'];
+export const UNPERSISTED_STATIONS: readonly string[] = ['notation', 'voiceType', 'describeVoice', 'insightsShares'];
 
 /**
  * The station ids, which are WIRE VALUES: they are written to `localStorage`
@@ -73,6 +74,9 @@ export const UNPERSISTED_STATIONS: readonly string[] = ['notation', 'describeVoi
 export const STATION_IDS = {
 	binder: 'binder',
 	notation: 'notation',
+	/* N.203 lane 66: the VOICE pane's voice type row, a station of this tier so the pane's three rows open one at a time on a phone.
+	   Not `voice`: that id is struck (`migrateOpenStations`). `UNPERSISTED_STATIONS` keeps it from storage. */
+	voiceType: 'voiceType',
 	/* N.203 lane 61: the VOICE pane's two stations, wire values (`UNPERSISTED_STATIONS` keeps them from storage). */
 	describeVoice: 'describeVoice',
 	insightsShares: 'insightsShares',
