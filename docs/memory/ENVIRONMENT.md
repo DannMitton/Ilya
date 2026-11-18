@@ -15,6 +15,9 @@ The index was added 2026-09-01. Nothing below it was moved, reworded, or removed
 **When you add a section, add its row here.** A trap nobody can find costs the
 next session the same hour it cost the last one.
 
+### Learned 2026-11-17 (Fable desk: lane 65 as built)
+- `LEARNED BY THE FABLE DESK, 2026-11-17` (last section of this file): a Fable desk's own as-built read and gate run with no helper; Playwright on a merge in the workspace and what it costs in minutes; 26 pictures seen as nine sheets; a review file with no memo under its header; appending to a memory file; the ship script's gate lines by grep.
+
 ### Learned 2026-11-16 (late Opus desk: lanes 61 and 62, N.200 plan and papers)
 - `LEARNED BY THE 2026-11-16 LATE OPUS DESK` (last section of this file): the Mac shell reaches the open web with curl; the Library folder request; Chrome's Send worked tonight; JavaScript refused on claude.ai; parselmouth and scipy absent on the Mac VM; the desk's question that was a default; estimates.
 
@@ -5392,3 +5395,13 @@ The page is https://dannmitton.com/ilya, built in GoDaddy Website Builder (Urban
 - **A background job through the bridge dies when the call ends.** `setsid nohup` inside `device_bash` is killed with the call; run the job in the foreground (the bridge allows up to 180 s a call) or in the desk's own workspace.
 - **`gh repo clone` fails in the desk workspace (GraphQL blocked); plain `git clone https://github.com/DannMitton/Ilya` works.** Sonnet eight-gate measure of one tip: 99k tokens, 15.7 min, gate 4 alone 641 s.
 - **A lane's Playwright run in the cloud needs `PW_CHROMIUM_PATH`** pointing at the pre-installed Chromium; the first run fails on every test as an environment error, not a test result.
+
+## LEARNED BY THE FABLE DESK, 2026-11-17 (20:18 on; lane 65 as built)
+
+- **A desk on Fable does the as-built read itself and runs the gates in a background shell of its own workspace.** No helper: `git clone https://github.com/DannMitton/ilya`, a detached worktree of `origin/Shane`, `git merge --no-edit --no-ff origin/<lane>`, `pnpm install --frozen-lockfile`, then the ship script's eight commands with `NO_COLOR=1 FORCE_COLOR=0`. Gates 1, 2, 3, 5, 6, 7, 8 took 37 s together and gate 4 took 498 s; the desk read the diff, the reports, and the pictures while gate 4 ran. Check each log against the ship script's own string, not the exit code.
+- **Playwright on a merge, in the workspace:** from `apps/web`, `PW_CHROMIUM_PATH=/opt/pw-browsers/chromium ./node_modules/.bin/playwright test --project=chromium --trace off <suite names>`; it starts `pnpm dev` itself. One worker: 88 desktop tests in 17.6 min (`calibrate-new` is 37 of them and most of the time), 9 phone tests in 1.1 min. Run on the merged tree the suites the lane did not run, when another lane landed in between. Count this wait in the silence told to Dann: the desk told him 25 minutes and needed about 35.
+- **26 pictures are seen as nine images.** Phone pictures (780 by 1688 at 2x) halved and set three to a sheet with PIL; desk pictures (2880 by 1800) halved, one seen whole and the rest cropped to the Drawer (x 0 to 520). Each sheet shows the page at its real size.
+- **A review file can be a header with no memo under it:** `../sessions/review-fable-lane65-brief_r1_2026-11-17.md` is four lines. After filing a helper's memo, `wc -l` the file.
+- **Appending to a memory file:** these files end in a newline, so append `line + '\n'`; `'\n' + line` left a blank line in `INBOX.md` (20:2x, repaired at once).
+- **The ship script's gate lines without its history:** `grep -n '^gate \|^G4=' ~/Downloads/ilya-ship.sh`. Printing the whole script costs about 9k tokens of old comments.
+- **ESTIMATES, actuals:** no helper. The opening read (README, CONTRACT, STATE, and QUEUE in full, the lane's brief, the ENVIRONMENT sections named by the index) is most of what this desk spent; `QUEUE.md` alone is 200 kB, and its closed rows still wait for the archive.
