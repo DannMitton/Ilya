@@ -1,6 +1,6 @@
 {
   "installCommand": "pnpm install",
-  "buildCommand": "if [ \"$VERCEL_GIT_COMMIT_REF\" = \"cloud-lane-66\" ]; then export PUBLIC_RECORDER=1; fi; pnpm --filter @ilya/web build",
+  "buildCommand": "if [ \"$VERCEL_GIT_COMMIT_REF\" = \"cloud-lane-67\" ]; then export PUBLIC_RECORDER=1; fi; pnpm --filter @ilya/web build",
   "outputDirectory": "apps/web/build",
   "framework": null,
   "headers": [
@@ -44,7 +44,7 @@
       "**": false,
       "Shane": true,
       "main": true,
-      "cloud-lane-66": true
+      "cloud-lane-67": true
     }
   }
 }
