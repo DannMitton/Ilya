@@ -51,18 +51,33 @@ describe('the placeholder flag', () => {
 		for (const type of FIVE) expect(resolveVowelValues({}, type, { placeholders: 'always' })).toEqual(resolveVowelValues({}, type));
 	});
 
-	it('once anything is sung the flag changes nothing', () => {
-		const sung: Partial<Record<Vowel, CalibratedFormant>> = { i: f(296, 1705), u: f(346, 804) };
+	const FIVE_CORE: Partial<Record<Vowel, CalibratedFormant>> = { i: f(296, 1705), e: f(381, 1532), ɛ: f(577, 1311), o: f(489, 826), u: f(346, 804) };
+
+	it('below five core vowels the flag and the values are those of nothing sung, whatever is stored (lane 67)', () => {
+		for (const sung of [{ u: f(346, 804) }, { i: f(296, 1705), e: f(381, 1532), ɛ: f(577, 1311), ɑ: f(617, 1013) }, { u: f(346, 804), 'ɨ': f(404, 1100) }] as Partial<Record<Vowel, CalibratedFormant>>[]) {
+			for (const type of [...WITHHELD, ...FIVE]) {
+				for (const placeholders of ['always', 'declared-types'] as const) {
+					const a = resolveVowelValues(sung, type, { placeholders });
+					const none = resolveVowelValues({}, type, { placeholders });
+					const strip = (r: typeof a) => ({ fR1: r.fR1, fR2: r.fR2, fR1Source: r.fR1Source, fR2Source: r.fR2Source, anySung: r.anySung, generic: r.generic, standIns: r.standIns });
+					expect(strip(a), `${type} ${placeholders}`).toEqual(strip(none));
+				}
+			}
+		}
+	});
+
+	it('once five core vowels are sung the flag changes nothing', () => {
+		const sung = FIVE_CORE;
 		for (const type of [...WITHHELD, ...FIVE]) {
 			expect(resolveVowelValues(sung, type, { placeholders: 'always' })).toEqual(resolveVowelValues(sung, type));
 		}
 	});
 
 	it('keeps a sung value and marks it sung; a derived one is derived', () => {
-		const r = resolveVowelValues({ i: f(296, 1705), u: f(346, 804) }, 'bass', { placeholders: 'always' });
+		const r = resolveVowelValues(FIVE_CORE, 'bass', { placeholders: 'always' });
 		expect(r.fR1.i).toBe(296);
 		expect(r.fR1Source.i).toBe('sung');
 		expect(r.fR1Source['ɨ']).toBe('derived');
-		expect(r.fR1Source.e).toBe('surrogate');
+		expect(r.fR1Source.ɑ).toBe('surrogate');
 	});
 });

@@ -22,7 +22,7 @@
 	import type { CaptureError } from './engine/errors';
 	import type { CalibratedFormant, Vowel } from './engine/types';
 	import { VOWELS } from './engine/types';
-	import { isSung } from './engine/sung';
+	import { isPersonal, isSung } from './engine/sung';
 	import { createCaptureRitual, GLIDE_MS, type RitualCue } from './capture-ritual.svelte';
 	import TakeLine from './TakeLine.svelte';
 	import { TAKE_PART_IDS, TAKE_WEIGHTS } from './take-line';
@@ -277,9 +277,9 @@
 			ritual.cancel();
 		}
 	}
-	/** The quiet control at the foot, from the first recorded vowel to the ninth, at rest: what it offers and what it says (`chart/finish-early.ts`). */
+	/** The quiet control at the foot, from the fifth core vowel (`isPersonal`, `engine/sung.ts`) to the ninth recorded, at rest: what it offers and what it says (`chart/finish-early.ts`). */
 	const finishWords = $derived.by(() => {
-		const state = ritual.phase === 'idle' && sungSet.size >= 1 && !finished ? finishEarlyState(profile, voiceType) : null;
+		const state = ritual.phase === 'idle' && isPersonal(profile) && !finished ? finishEarlyState(profile, voiceType) : null;
 		return state ? finishEarlyText(state, language) : null;
 	});
 	const seeSpaceShown = $derived(ritual.phase === 'idle' && finished);

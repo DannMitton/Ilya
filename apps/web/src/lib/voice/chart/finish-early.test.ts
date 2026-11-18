@@ -57,15 +57,25 @@ describe('the state of the control', () => {
 		expect(state(p)).toEqual(state(profileOf(TOUR_SEVEN, { o: R(1063, 900, { plausibility: 'implausible', plausibilityOverride: true } as Partial<CalibratedFormant>) })));
 	});
 
-	it('"Not sure" with three recorded: use what I have recorded', () => {
-		const s = state(profileOf(['i', 'e', 'u']), 'not-sure');
-		expect(s).toEqual({ kind: 'use-recorded', remaining: ['ɪ', 'ɨ', 'ɛ', 'a', 'ɑ', 'ʌ', 'o'], anyUsable: true });
+	it('"Not sure" with five core vowels recorded: use what I have recorded (the sixth is a stand-in)', () => {
+		const s = state(profileOf(['i', 'e', 'ɛ', 'ɑ', 'o']), 'not-sure');
+		expect(s).toEqual({ kind: 'use-recorded', remaining: ['ɪ', 'ɨ', 'a', 'ʌ', 'u'], anyUsable: true });
 	});
 
-	it('one recorded vowel, implausible and not kept: it is usable, as a kept one is (lane 66, Step 5)', () => {
-		const p = profileOf([], { i: R(1063, 2200, { plausibility: 'implausible' }) });
-		expect(state(p)).toEqual({ kind: 'use-recorded', remaining: VOWELS.filter((v) => v !== 'i'), anyUsable: true });
-		expect(state(p)).toEqual(state(profileOf([], { i: R(1063, 2200, { plausibility: 'implausible', plausibilityOverride: true } as Partial<CalibratedFormant>) })));
+	it('below five core vowels nothing recorded is usable: the voice resolves as one with nothing recorded (lane 67)', () => {
+		for (const vs of [['i'], ['i', 'e', 'u'], ['i', 'e', 'ɛ', 'ɑ']] as Vowel[][]) {
+			const s = state(profileOf(vs), 'not-sure');
+			expect(s.anyUsable, vs.join()).toBe(false);
+			expect(s.kind, vs.join()).toBe('use-recorded');
+		}
+		expect(state(profileOf(['u', 'ɨ'])).anyUsable).toBe(false);
+	});
+
+	it('a reading implausible and not kept is usable, as a kept one is (lane 66, Step 5), at five core vowels', () => {
+		const five = ['e', 'ɛ', 'ɑ', 'o', 'u'] as Vowel[];
+		const p = profileOf(five, { i: R(1063, 2200, { plausibility: 'implausible' }) });
+		expect(state(p)).toEqual({ kind: 'work-out', remaining: ['ɪ', 'ɨ', 'a', 'ʌ'], anyUsable: true });
+		expect(state(p)).toEqual(state(profileOf(five, { i: R(1063, 2200, { plausibility: 'implausible', plausibilityOverride: true } as Partial<CalibratedFormant>) })));
 	});
 
 	it('a kept implausible reading counts, and so does one not kept', () => {

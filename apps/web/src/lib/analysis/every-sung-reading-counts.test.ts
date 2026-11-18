@@ -18,7 +18,7 @@ import { outsideVowels } from '$lib/voice/outside';
 import { usableReadingCount } from '$lib/voice/profileStore';
 import { isSung } from '$lib/voice/engine/sung';
 import { buildVoiceProfileSnapshot } from './analyze-score-adapter';
-import { SETS, TYPES, f } from './adapter-grid';
+import { SETS, TYPES, f, pick } from './adapter-grid';
 
 type Profile = Partial<Record<Vowel, CalibratedFormant>>;
 const clone = (p: Profile): Profile => JSON.parse(JSON.stringify(p));
@@ -115,8 +115,8 @@ describe('one test of "sung"', () => {
 		expect(isSung(undefined)).toBe(false);
 	});
 	it('the count the pane and its doors read, the values INSIGHTS and MELODY read, and the chart all use it: a take that placed no first resonance is counted by none', () => {
-		const p: Profile = { i: { ...f(0, 1700) }, e: f(381, 1532) };
-		expect(usableReadingCount(p)).toBe(1);
+		const p: Profile = pick(['e', 'ɛ', 'ɑ', 'o', 'u'], { i: { ...f(0, 1700) } }); // five core vowels sung: personal (lane 67)
+		expect(usableReadingCount(p)).toBe(5);
 		expect(resolveVowelValues(p, 'bass', { placeholders: 'always' }).fR1Source.i).not.toBe('sung');
 		expect(resolveVowelValues(p, 'bass', { placeholders: 'always' }).fR1Source.e).toBe('sung');
 		expect(finishEarlyState(p, 'bass').remaining).toContain('i');

@@ -61,6 +61,7 @@
 	import { readingClef } from '$lib/score/clef-choice';
 	import { t, type Language } from '$lib/i18n';
 	import { spokenName } from '$lib/voice/vowel-names';
+	import { isPersonal } from '$lib/voice/engine/sung';
 	import type { Vowel, CalibratedFormant, VoiceCharacteristics } from '$lib/voice/engine/types';
 	import { buildMarkupLegend } from '$lib/markup/legend';
 	import {
@@ -446,7 +447,7 @@
 	let provisionalVowels = $derived(
 		ROSTER_ORDER.filter((g) => formants[g]?.reading === 'provisional')
 	);
-	let hasReadings = $derived(Object.keys(formants).length > 0);
+	let hasReadings = $derived(isPersonal(formants)); // lane 67: below five core vowels MELODY says what it says for nothing recorded
 
 	/**
 	 * The Markup legend: one entry, the withheld-syllable sigla (N.10b). The

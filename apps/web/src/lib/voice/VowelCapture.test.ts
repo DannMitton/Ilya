@@ -61,17 +61,22 @@ describe('the screen at rest', () => {
 		expect(text(html({ profile: pick('i') }))).not.toContain('First sing it as you usually do');
 	});
 
-	it('offers a re-take for a sung selection, and a way back to the summary as soon as one vowel is sung, not before', () => {
+	it('offers a re-take for a sung selection, and a way back to the summary from the fifth core vowel, not before (lane 67)', () => {
 		const none = html();
 		expect(none).not.toContain('Use what I’ve recorded');
 		expect(none).not.toContain('Let Ilya work out');
 		const one = html({ profile: pick('i') });
-		expect(one).toContain('Use what I’ve recorded');
-		expect(text(one)).toContain('If you wish, you can stop here: Ilya fills the other nine from what you have recorded so far.');
+		// Below five core vowels recording unlocks nothing personal, so the control that would stop here and use them is not shown.
+		expect(one).not.toContain('Use what I’ve recorded');
+		expect(one).not.toContain('Let Ilya work out');
+		expect(html({ profile: pick('i', 'e', 'ɛ', 'ɑ') })).not.toContain('Use what I’ve recorded');
 		expect(one).not.toContain('See your vowel space');
 		expect(one).toContain('Re-take [i]');
 		expect(text(one)).toContain('is captured.');
 		expect(text(one)).toContain('A re-take replaces [i] only if the new reading is as clear.');
+		const five = html({ profile: pick('i', 'e', 'ɛ', 'ɑ', 'o') });
+		expect(five).toContain('Use what I’ve recorded');
+		expect(text(five)).toContain('If you wish, you can stop here: Ilya fills the other five from what you have recorded so far.');
 	});
 
 	it('shows the stored reading of the selected vowel in black, as Hz through the resonance symbol, and “Try again” for a missing fR2', () => {
@@ -153,7 +158,7 @@ describe('the screen at rest', () => {
 	it('renders for every voice type and none, and in French, every string French and none missing', () => {
 		for (const voiceType of [undefined, 'soprano', 'contralto', 'countertenor', 'bass-baritone', 'not-sure']) expect(buttons(html({ voiceType }))).toHaveLength(10);
 		const fr = html({ language: 'fr', profile: pick('i') });
-		expect(text(fr)).toContain('Utiliser ce que j’ai capté');
+		expect(text(html({ language: 'fr', profile: pick('i', 'e', 'ɛ', 'ɑ', 'o') }))).toContain('Utiliser ce que j’ai capté');
 		expect(text(fr)).toContain('Tout recommencer');
 		expect(text(fr)).toContain('Vos résonances');
 		expect(text(fr)).toContain('1 sur 10');

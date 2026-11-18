@@ -102,28 +102,27 @@ describe('zones stay, placeholders move', () => {
 		});
 	}
 
-	it('the placeholder dots move after one, two, and three sung vowels', () => {
+	it('the placeholder dots stay the type\'s own below five core vowels, and move at five (lane 67)', () => {
 		// Different offsets per vowel, so the fit's mean offset differs at each step (one common factor would not move it).
-		const OFFSET: Partial<Record<Vowel, number>> = { i: 1.3, e: 1.1, ɛ: 1.2 };
+		const OFFSET: Partial<Record<Vowel, number>> = { i: 1.3, e: 1.1, ɛ: 1.2, o: 1.15, u: 1.25 };
 		const at = (vs: Vowel[]) => {
 			const shifted = Object.fromEntries(vs.map((v) => [v, { ...BASS[v], f1: BASS[v].f1 * OFFSET[v]!, f2: BASS[v].f2! * OFFSET[v]! }])) as Partial<Record<Vowel, CalibratedFormant>>;
 			return Object.fromEntries(computeZones(shifted, 'bass').placeholders.map((p) => [p.vowel, p]));
 		};
 		const p0 = at([]);
-		const p1 = at(['i']);
-		const p2 = at(['i', 'e']);
-		const p3 = at(['i', 'e', 'ɛ']);
-		// ɑ is unsung in all four: its placeholder is a fit of what is sung, so it differs at each step, in both resonances.
-		const seq = [p0, p1, p2, p3].map((p) => p.ɑ);
-		for (let k = 1; k < seq.length; k++) {
-			expect(seq[k].f1, `fR1 step ${k}`).not.toBe(seq[k - 1].f1);
-			expect(seq[k].f2, `fR2 step ${k}`).not.toBe(seq[k - 1].f2);
+		// Below five core vowels the singer's recordings unlock nothing personal: ɑ, unsung in every case, keeps the type's own value, in both resonances.
+		for (const vs of [['i'], ['i', 'e'], ['i', 'e', 'ɛ'], ['i', 'e', 'ɛ', 'o']] as Vowel[][]) {
+			const p = at(vs);
+			expect(p.ɑ.f1, vs.join()).toBe(p0.ɑ.f1);
+			expect(p.ɑ.f2, vs.join()).toBe(p0.ɑ.f2);
 		}
-		// The shift is toward the singer's higher values.
-		expect(p3.ɑ.f1).toBeGreaterThan(p0.ɑ.f1);
+		// At five, the singer's own tract moves it, toward the singer's higher values.
+		const p5 = at(['i', 'e', 'ɛ', 'o', 'u']);
+		expect(p5.ɑ.f1).toBeGreaterThan(p0.ɑ.f1);
+		expect(p5.ɑ.f2).not.toBe(p0.ɑ.f2);
 		// A sung vowel has no placeholder.
-		expect(p1.i).toBeUndefined();
-		expect(p3.e).toBeUndefined();
+		expect(at(['i']).i).toBeUndefined();
+		expect(p5.e).toBeUndefined();
 	});
 
 	it('equals the forecast’s value: the placeholder is `resolveVowelValues`’s, not a second computation', () => {
@@ -136,10 +135,10 @@ describe('zones stay, placeholders move', () => {
 	});
 
 	it('marks derived placeholders derived and the rest surrogate', () => {
-		const ps = Object.fromEntries(computeZones(sung('i', 'u'), 'bass').placeholders.map((p) => [p.vowel, p.source]));
+		const ps = Object.fromEntries(computeZones(sung('i', 'e', 'ɛ', 'o', 'u'), 'bass').placeholders.map((p) => [p.vowel, p.source]));
 		expect(ps['ɨ']).toBe('derived');
-		expect(ps.e).toBe('surrogate');
-		expect(ps['ɪ']).toBe('surrogate'); // built on a stand-in [e]
+		expect(ps.ɑ).toBe('surrogate');
+		expect(ps['ʌ']).toBe('surrogate'); // built on a stand-in [ɑ]
 	});
 });
 

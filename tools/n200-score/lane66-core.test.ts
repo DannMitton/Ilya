@@ -121,6 +121,11 @@ describe('the grid, today (Step 5): judged outside is unchanged, set aside is ze
 		const mc = moveCases(profiles, cases);
 		expect(mc.cross.length).toBe(198);
 		expect(mc.bass1063.length).toBe(45);
-		expect([...mc.cross, ...mc.bass1063].every((c) => c.plainEqualsCounted && c.setAsidePlain.length === 0)).toBe(true);
+		const all = [...mc.cross, ...mc.bass1063];
+		// Lane 67: a cut of fewer than five core vowels resolves as a voice with nothing recorded (`voice/engine/sung.ts`, `isPersonal`), so every sung vowel of it is
+		// "set aside" by the threshold, and by nothing to do with the verdict. The claim of lane 66 holds for the cuts that are personal.
+		expect(all.every((c) => c.plainEqualsCounted)).toBe(true);
+		expect(all.filter((c) => c.n >= 5).every((c) => c.setAsidePlain.length === 0)).toBe(true);
+		expect(all.filter((c) => c.n < 5).every((c) => c.setAsidePlain.length === c.n)).toBe(true);
 	});
 });

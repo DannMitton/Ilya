@@ -8,7 +8,7 @@
  *     [ʌ], and each is worked out from recorded anchors (`DERIVE_ANCHORS`, `engine/derivations.ts`, whose `usableAnchor` the resolution applies).
  *   - `use-recorded`: every other state. Its caption says Ilya "fills" the rest, and prints only when something was recorded that the resolution can use
  *     (`anyUsable`): with nothing usable the fill is the voice type's template alone, and the sentence would not be true.
- * It shows from the first recorded vowel to the ninth (the screen decides that). The control is the screen's; it adds no control and never moves the focus.
+ * It shows from the fifth core vowel (`isPersonal`, `engine/sung.ts`, lane 67) to the ninth recorded (the screen decides that): below five nothing recorded unlocks anything personal, so there is nothing to stop and use. The control is the screen's; it adds no control and never moves the focus.
  *
  * THE WORDS are the ratified counted forms and consent captions (sheet-english r2 and sheet-french r1, "Counted forms and consent captions", Dann 2026-11-16
  * 01:35): numbers in words from two to nine, "the last one" for one, and the vowels listed in brackets in `VOWELS` order with an Oxford comma in English and
@@ -28,7 +28,7 @@ export interface FinishEarly {
 }
 
 /**
- * Pure. "Recorded" is the screen's own test: a stored reading that is not an estimate, with a positive fR1. The screen shows the control only from one to nine
+ * Pure. "Recorded" is the screen's own test: a stored reading that is not an estimate, with a positive fR1. The screen shows the control only from five core vowels to nine
  * recorded; this function answers for any profile (with none recorded, `remaining` is all ten and the kind is `use-recorded`).
  */
 export function finishEarlyState(profile: Partial<Record<Vowel, CalibratedFormant>>, voiceType: string | undefined): FinishEarly {

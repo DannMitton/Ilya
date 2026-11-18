@@ -20,7 +20,7 @@
 import type { CalibratedFormant, Vowel } from './types';
 import { DERIV_SOURCE, deriveFrom } from './derivations';
 import { checkPlausibility } from './plausibility';
-import { isSung } from './sung';
+import { isPersonal, isSung } from './sung';
 import { fillStandIns, hasPlaceholderProfile, type Provenance, type StandInReport } from './stand-ins';
 
 /** The six vowels the guard judges against Bozeman's bands; the other four are judged against windows derived from these. */
@@ -99,7 +99,10 @@ export function resolveVowelValues(
 ): ResolvedValues {
 	const placeholders = options.placeholders ?? 'declared-types';
 	// QUEUE row 11: the judged copy is returned as `formants`; no gate below reads its verdict.
-	const formants = judgeUnchecked(sampled);
+	const judged = judgeUnchecked(sampled);
+	// THE THRESHOLD (lane 67, `sung.ts`): below five of the six core vowels the voice resolves exactly as one with nothing sung. The stored readings stay in
+	// the returned `formants`; the values below are built from `formants`, which is empty then.
+	const formants = isPersonal(sampled) ? judged : {};
 	// fR1 per vowel from the measured formants. A vowel the singer never sang,
 	// or a reading with no usable f1, contributes nothing: the engine already
 	// omits any event whose vowel has no fR1, so silence here is honest.
@@ -199,5 +202,5 @@ export function resolveVowelValues(
 	const standIns: StandInReport | undefined =
 		anySung || generic || placeholders === 'always' ? fillStandIns({ fR1, fR2, fR1Source, fR2Source }, voiceType) : undefined;
 
-	return { formants, fR1, fR2, fR1Source, fR2Source, anySung, generic, ...(standIns ? { standIns } : {}) };
+	return { formants: judged, fR1, fR2, fR1Source, fR2Source, anySung, generic, ...(standIns ? { standIns } : {}) };
 }

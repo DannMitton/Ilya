@@ -6,6 +6,7 @@
 import { describe, expect, it } from 'vitest';
 import { composeIdentityLine, genericLede, methodLineKey, restsOnSamples } from './identity';
 import { buildVoiceProfileSnapshot } from '$lib/analysis/analyze-score-adapter';
+import { pick } from '$lib/analysis/adapter-grid';
 import { t } from '$lib/i18n';
 import { OTHER } from '$lib/voice/voiceTypes';
 
@@ -59,8 +60,10 @@ describe('row 166: the identity head of a placeholder voice', () => {
 	});
 
 	it('a voice with a sung vowel is still calibrated, and a voice with nothing is still not', () => {
-		const sung = buildVoiceProfileSnapshot({ u: { f1: 330, f2: 800, f2Quality: 'clear', confidence: 'high', reading: 'captured', source: 'measured-user' } as never }, undefined, undefined, undefined, 'baritone');
+		const sung = buildVoiceProfileSnapshot(pick(['e', 'ɛ', 'ɑ', 'o', 'u']), undefined, undefined, undefined, 'baritone'); // five core vowels: the singer's own profile (lane 67)
 		expect(restsOnSamples(sung)).toBe(true);
+		// Four core vowels unlock nothing personal: the page rests on the type's generic values, as for nothing recorded (lane 67).
+		expect(restsOnSamples(buildVoiceProfileSnapshot(pick(['e', 'ɛ', 'ɑ', 'o']), undefined, undefined, undefined, 'baritone'))).toBe(false);
 		expect(restsOnSamples(un('contralto'))).toBe(false);
 		expect(restsOnSamples(un(undefined))).toBe(false);
 	});
@@ -85,7 +88,7 @@ describe('row 166: the identity head of a placeholder voice', () => {
 	});
 
 	it('the three states, from real profiles: a measured voice, a typed voice with generic values, a voice with neither', () => {
-		const sung = buildVoiceProfileSnapshot({ u: { f1: 330, f2: 800, f2Quality: 'clear', confidence: 'high', reading: 'captured', source: 'measured-user' } as never }, undefined, undefined, undefined, 'baritone');
+		const sung = buildVoiceProfileSnapshot(pick(['e', 'ɛ', 'ɑ', 'o', 'u']), undefined, undefined, undefined, 'baritone'); // five core vowels: the singer's own profile (lane 67)
 		const key = (a: Parameters<typeof restsOnSamples>[0]) => methodLineKey({ generic: a.generic, typed: false, noScore: true, samples: restsOnSamples(a) });
 		expect(key(sung)).toBe('insights.method.noScore.samples');
 		expect(key(un('baritone'))).toBe('insights.method.noScore.generic');
