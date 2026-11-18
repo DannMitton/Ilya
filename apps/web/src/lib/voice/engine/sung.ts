@@ -8,6 +8,6 @@ import type { CalibratedFormant } from './types';
  * Read by the count the VOICE pane and its doors print (`voice/profileStore.ts`, `usableReadingCount`), by the vowels INSIGHTS calls measured
  * (`insights/InsightsPane.svelte`), by the resolution of values for MELODY, INSIGHTS, and the chart (`voice/engine/resolve-values.ts`, `derivations.ts`),
  * and by the chart's own dots and the capture screen's "recorded" (`voice/chart/zones.ts`, `finish-early.ts`). Before this lane four sites held four
- * tests, and `analyze.ts` can write `f1: 0` for a take whose first resonance it could not place, which two of them counted.
+ * tests, and `analyze.ts:175` can set `f1: 0`; `runCapture` refuses such a take (`:216`), so only data stored by other means can hold one, and two of the four tests counted it.
  */
 export const isSung = (f: CalibratedFormant | undefined): f is CalibratedFormant => !!f && f.reading !== 'estimated' && typeof f.f1 === 'number' && f.f1 > 0;

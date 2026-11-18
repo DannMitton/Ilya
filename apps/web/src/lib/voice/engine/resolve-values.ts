@@ -98,7 +98,7 @@ export function resolveVowelValues(
 	options: ResolveOptions = {}
 ): ResolvedValues {
 	const placeholders = options.placeholders ?? 'declared-types';
-	// QUEUE row 11: every gate below, and `deriveFrom`, reads the judged copy.
+	// QUEUE row 11: the judged copy is returned as `formants`; no gate below reads its verdict.
 	const formants = judgeUnchecked(sampled);
 	// fR1 per vowel from the measured formants. A vowel the singer never sang,
 	// or a reading with no usable f1, contributes nothing: the engine already
@@ -115,8 +115,8 @@ export function resolveVowelValues(
 	// stable window, a rejected detection, or SNR under 12 dB), and a noisy capture of an honest vowel is still an honest vowel.
 	// Plausibility and confidence are orthogonal by ruling (`engine/types.ts`), and neither gates a number.
 	//
-	// `plausibility` absent means the guard never ran. Such a reading is judged first (`judgeUnchecked`, above), so the note can
-	// name it, and counts like any other.
+	// `plausibility` absent means the guard never ran. Such a reading counts like any other; the summary's note judges it for
+	// itself (`judgeUnchecked`, `CalibrationWizard.svelte`).
 	const fR1: Record<string, number> = {};
 	// QUEUE row 12: where each number came from (`VoiceProfileSnapshot.fR1Source`).
 	const fR1Source: Record<string, Provenance> = {};
@@ -166,8 +166,8 @@ export function resolveVowelValues(
 	// loops above left it empty, so a sung [ɨ] is never displaced by a derived
 	// one. `deriveFrom` gates every anchor on a sung reading with a positive f2 (`usableAnchor`),
 	// and not on the plausibility verdict: a derived value rests on whatever the singer sang. The derived fR2 is gated as the measured fR2 loop is — the derived
-	// reading carries no f2Quality and no plausibility, both of which mean "not
-	// assessed" and pass, so the live condition is a positive number.
+	// reading carries no f2Quality, which means "not assessed" and passes, so
+	// the live condition is a positive number.
 	//
 	// No anchor is itself derivable, and `formants` is the sampled map, so
 	// nothing here derives from a derived value.

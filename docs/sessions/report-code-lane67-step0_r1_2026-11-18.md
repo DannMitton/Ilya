@@ -23,7 +23,7 @@ Each reader, with file:line and what it decides for the singer. "Tests" excluded
 
 **`anySung`** (a sung fR1 exists)
 - Defined `voice/engine/resolve-values.ts:88`, set `:197`. Decides whether stand-ins fill from the fit (a sung voice) or from the whole template (`generic`), `:198-200`.
-- `voice/chart/finish-early.ts:38` (`anyUsable`): whether the capture screen's "Use what I've recorded" caption prints (`:97`).
+- `voice/chart/finish-early.ts:38` (`anyUsable`): whether the capture screen's "Use what I've recorded" caption prints (`finish-early.ts:68`).
 - No other reader found outside tests (grep over `lib` and `routes`).
 
 **`generic`** (`ResolvedValues.generic`, `AdaptedProfile.generic`)

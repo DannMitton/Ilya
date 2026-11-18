@@ -8,6 +8,7 @@
 import { centsBetween, hzToPitch, pitchToHz } from '@ilya/score-parser';
 import type { CalibratedFormant, Vowel } from '../engine/types';
 import { VOWELS } from '../engine/types';
+import { isSung } from '../engine/sung';
 import { pitchName } from '../note-picker';
 import type { PlaceholderDot } from './zones';
 
@@ -48,8 +49,6 @@ export function noteReading(hz: number, language: 'en' | 'fr' = 'en'): NoteReadi
 	return { hz, hzText: String(Math.round(hz)), note, cents, centsText, text: `${note} ${centsText}` };
 }
 
-const isSung = (f: CalibratedFormant | undefined): f is CalibratedFormant => !!f && f.reading !== 'estimated' && typeof f.f1 === 'number' && f.f1 > 0;
-
 /** The rows for the stored profile: every sung vowel, in Grayson's inventory order. A reading with no fR2 has no `fR2`. */
 export function readingRows(profile: Partial<Record<Vowel, CalibratedFormant>>, language: 'en' | 'fr' = 'en'): ReadingRow[] {
 	const rows: ReadingRow[] = [];
@@ -77,7 +76,7 @@ export interface ListRow {
 
 /**
  * The capture screen's readings list (N.199 readings brief, Step 1), as data: all ten vowels in Grayson's order, the ten buttons'.
- * A sung vowel ("sung" is the chart's own test, `zones.ts` `isSung`) takes its stored values; one not yet sung takes the values of the
+ * A sung vowel ("sung" is the one test, `engine/sung.ts` `isSung`) takes its stored values; one not yet sung takes the values of the
  * placeholder handed in, which is what the chart draws its hollow dot from, so a dot and its row are one number. No second call to
  * `resolveVowelValues`: a vowel with neither a sung reading nor a placeholder has no row.
  */

@@ -22,6 +22,7 @@
 	import type { CaptureError } from './engine/errors';
 	import type { CalibratedFormant, Vowel } from './engine/types';
 	import { VOWELS } from './engine/types';
+	import { isSung } from './engine/sung';
 	import { createCaptureRitual, GLIDE_MS, type RitualCue } from './capture-ritual.svelte';
 	import TakeLine from './TakeLine.svelte';
 	import { TAKE_PART_IDS, TAKE_WEIGHTS } from './take-line';
@@ -105,7 +106,7 @@
 	let returnWhenIdle = $state(false);
 	let reducedMotion = $state(false);
 
-	const sungSet = $derived(new Set(VOWELS.filter((v) => profile[v] && profile[v]!.reading !== 'estimated' && profile[v]!.f1 > 0)));
+	const sungSet = $derived(new Set(VOWELS.filter((v) => isSung(profile[v]))));
 	const model = $derived(buildChartModel(profile, voiceType));
 	const listRows = $derived(readingListRows(profile, model.placeholders, language));
 
