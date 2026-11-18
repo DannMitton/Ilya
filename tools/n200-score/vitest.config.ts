@@ -37,7 +37,7 @@ import { fileURLToPath } from 'node:url';
 const here = path.dirname(fileURLToPath(import.meta.url));
 const repo = path.resolve(here, '../..');
 
-const TESTS = ['fidelity-set.test.ts', 'score-core.test.ts', 'lane66-core.test.ts'];
+const TESTS = ['fidelity-set.test.ts', 'score-core.test.ts', 'lane66-core.test.ts', 'lane67-core.test.ts'];
 
 /** A runner and the variables that, when any is set, include it without its name on the command line (`[]`: by name only). */
 const RUNNERS: [file: string, variables: string[]][] = [
@@ -48,6 +48,7 @@ const RUNNERS: [file: string, variables: string[]][] = [
 	['measure.run.ts', []],
 	['measure-report.run.ts', []],
 	['lane66-measure.run.ts', ['N200_LANE66_DIR']],
+	['lane67-measure.run.ts', []],
 ];
 const argv = process.argv.slice(2).filter((a) => !a.startsWith('-'));
 const runners = RUNNERS.filter(([file, vars]) => argv.some((a) => a.includes(file)) || vars.some((v) => process.env[v])).map(([file]) => file);
