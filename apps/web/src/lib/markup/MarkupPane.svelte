@@ -445,7 +445,7 @@
 	// the singer may want to re-take. That is a different question from what
 	// the forecast is built on; see `analysedVowels` below (§B.2).
 	let provisionalVowels = $derived(
-		ROSTER_ORDER.filter((g) => formants[g]?.reading === 'provisional')
+		ROSTER_ORDER.filter((g) => isSung(formants[g]) && formants[g]?.reading === 'provisional')
 	);
 	let hasReadings = $derived(Object.values(formants).some(isSung)); // lane 68: any sampled vowel, at any count
 

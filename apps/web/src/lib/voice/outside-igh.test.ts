@@ -33,6 +33,13 @@ describe('when the note shows: a personal voice, a sung [ɨ] far from [i] and [u
 		expect(farOffIgh(SIX)).toBe(false);
 		expect(farOffIgh({ ...SIX, ɨ: FAR, i: r(296, 1705, { reading: 'provisional', confidence: 'low' }) })).toBe(false);
 	});
+	it('does not show for a sung [ɨ] with no usable second resonance: the pass would read it as 0 and call a missing number far-off (lane 68, Fix 2)', () => {
+		const noF2 = { f1: FAR.f1, f2Quality: 'absent', confidence: 'high', reading: 'captured', source: 'measured-user' } as CalibratedFormant;
+		expect(farOffIgh({ ...SIX, ɨ: noF2 })).toBe(false);
+		expect(farOffIgh({ ...SIX, ɨ: { ...FAR, f2: 0 } })).toBe(false);
+		expect(farOffIgh({ ...SIX, ɨ: { ...FAR, f2Quality: 'absent' } })).toBe(false);
+		expect(farOffIgh({ ...SIX, ɨ: FAR })).toBe(true);
+	});
 	it('does not show below five core vowels: Ilya then uses no value built from the singer\'s [i] and [u]', () => {
 		const four = { i: SIX.i, e: SIX.e, ɛ: SIX.ɛ, u: SIX.u, ɨ: FAR };
 		expect(farOffIgh(four)).toBe(false);

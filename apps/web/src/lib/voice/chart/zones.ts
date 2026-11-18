@@ -17,7 +17,7 @@
  *
  * ONE SET OF VALUES. The fR2 centre and every placeholder dot come from `resolveVowelValues` with
  * `placeholders: 'always'`, the function the forecast reads. Every zone's fR2 centre is the type's template with
- * nothing sung, so no zone slides under the dot; a placeholder dot is the value the fit gives for that
+ * nothing sung, so no zone slides under the dot; a placeholder dot is the value the tract scale (`stand-ins.ts`) gives for that
  * vowel now, so it moves as Ilya learns the voice. THE ONE COMPUTATION THIS CHANGES: the chart shows a placeholder for
  * every voice, including the types the adapter withholds them from (contralto, countertenor, bass-baritone, "Not
  * sure", and no type); the forecast's own behaviour is unchanged (`resolve-values.ts`, the flag).
@@ -61,7 +61,7 @@ export interface PlaceholderDot {
 	vowel: Vowel;
 	f1: number;
 	f2: number;
-	/** `derived`: from sung anchors by the four derivations. `surrogate`: Bozeman's staff fitted to the singer, or the template. */
+	/** `derived`: from sung anchors by the four derivations. `surrogate`: Bozeman's staff scaled to the singer (the tract scale, `stand-ins.ts`), or the template. */
 	source: 'derived' | 'surrogate';
 }
 

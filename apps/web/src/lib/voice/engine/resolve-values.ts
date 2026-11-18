@@ -2,7 +2,7 @@
  * ONE SET OF VALUES PER VOWEL (N.199 Step 1; `CONTRACT.md` section 4). The adapter's resolution of a voice's
  * stored readings into a fR1 and a fR2 for every vowel it can give one: take
  * every sung reading, at any count (lane 68); for a personal voice (five stable core vowels, `sung.ts`) derive the four derivable vowels from their anchors; and fill what is left from
- * Bozeman's staff, fitted to the singer when personal and the declared type's own, unscaled, when not. It stood inline in `analysis/analyze-score-adapter.ts`
+ * Bozeman's staff, scaled to the singer (the tract scale, `stand-ins.ts`) when personal and the declared type's own, unscaled, when not. It stood inline in `analysis/analyze-score-adapter.ts`
  * (`buildVoiceProfileSnapshot`, from QUEUE row 11 through row 17 and row 166); it lives here so the forecast and the
  * calibration chart read one function, not two copies. Pure: no store, no DOM, nothing written to the stored profile.
  *
@@ -142,8 +142,8 @@ export function resolveVowelValues(
 	}
 
 	// QUEUE row 17: no vowel left blank (Dann 2026-09-16; the method ruled 2026-10-01 02:56).
-	// Every gap the loops above left takes a stand-in from Bozeman's staff fitted to the
-	// singer, flagged 'surrogate' (`stand-ins.ts`).
+	// Every gap the loops above left takes a stand-in from Bozeman's staff, flagged 'surrogate' (`stand-ins.ts`): scaled to the singer (the tract scale)
+	// when the voice is personal, else the declared type's own, unscaled.
 	//
 	// QUEUE row 166 (Dann ratified 2026-10-31 13:19 to 13:21): with NO vowel sung, a declared
 	// soprano, mezzo-soprano, tenor, baritone, or bass takes the template whole, every vowel

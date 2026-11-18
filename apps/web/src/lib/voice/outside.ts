@@ -35,6 +35,8 @@ export function outsideVowels(
 export function farOffIgh(profile: Partial<Record<Vowel, CalibratedFormant>>): boolean {
 	const igh = profile['ɨ'];
 	if (!isPersonal(profile) || !isSung(igh) || igh.plausibilityOverride) return false;
+	// A sung [ɨ] with no usable second resonance is never far-off: the pass would read the missing fR2 as 0 and call it divergent, and the singer would be told [ɨ] sits away from [i] and [u] when only its fR2 is missing (lane 68, Fix 2).
+	if (!(typeof igh.f2 === 'number' && igh.f2 > 0) || igh.f2Quality === 'absent') return false;
 	const clone: Partial<Record<Vowel, IghReading>> = { ...profile, ɨ: { ...igh } };
 	applyIghDivergence(clone);
 	return clone['ɨ']?.isDivergent === true;

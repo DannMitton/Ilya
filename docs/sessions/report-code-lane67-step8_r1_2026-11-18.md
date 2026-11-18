@@ -49,6 +49,8 @@ Re-run of the five changed tests and their neighbours (`-g`): **9 passed, 1 fail
 
 The two phone failures are sub-pixel: `insights-links` "L1 with the Drawer open on VOICE lands on its station, in view" read the station's `y` as -0.0625 and `voice-stations` "Add your range with the Drawer raised" read -0.09375, against `>= 0`. Run twice more unchanged, the phone project gave 11 passed, then 10 passed and 1 failed (the first test again, -0.06). So they are **intermittent**, and I changed neither. NOT ESTABLISHED: whether they were intermittent before this lane (the pane's sentence for these seeds, three core vowels, is now three lines instead of two on a phone, which moves the page by a line; I did not test the seeds with five core vowels). Lane 66's report has these phone tests passing once.
 
+2026-11-18 (lane 68, Fix 5 of `review-fable-lane67-as-built_r1_2026-11-18.md`): the rolled-back re-take test (`e2e/calibrate-new.test.ts:233`, "a rolled-back re-take keeps the reading and says so; an error says what happened; both leave a record") was run three times in a row on its own, desktop project, on `cloud-lane-68` after lane 68's Step 2: **passed 3 of 3** (40.5 s, 39.4 s, 41.1 s). That is three runs, one machine; it does not show the test cannot fail.
+
 ## 6. Comments corrected, by the lane
 
 Each step's report lists its own. In Step 8: `voice/OutsideNote.svelte` (the style comment for the wrapping actions).
