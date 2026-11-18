@@ -11,7 +11,9 @@ import { describe, expect, it } from 'vitest';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { buildVoiceProfileSnapshot } from './analyze-score-adapter';
-import { BASS, SETS, TYPES, pick } from './adapter-grid';
+import { SETS, TYPES, pick } from './adapter-grid';
+import { VOWELS } from '$lib/voice/engine/types';
+import { resolveVowelValues } from '$lib/voice/engine/resolve-values';
 
 const GOLDEN = fileURLToPath(new URL('./__golden__/adapter-snapshots.json', import.meta.url));
 
@@ -38,25 +40,42 @@ describe('the adapter output on the grid is unchanged', () => {
 });
 
 /**
- * Lane 67, Step 2: a golden voice with four core vowels sung gives byte for byte the snapshot of the same voice with none sung, under every type; with five it does not.
- * The moved entries of the golden file are exactly the sets under five core vowels ('i', 'i,u', 'i,e,ɑ', 'e,ɛ,ɑ,o', 'bad i (1063), no override', 'no fR2 on [e]',
- * 'provisional [u], [ɨ] sung'), each now equal to its 'none' twin of the same type.
+ * Lane 68, Step 1 (it replaces lane 67's rule that a set under five core vowels equals its 'none' twin): every sampled vowel is used as sampled, from the first. A golden
+ * voice under five stable core vowels carries each sampled vowel's own values, flagged sung, and every vowel not sampled takes the placeholder of the declared type's
+ * staff (`standInBucket`), unscaled, flagged surrogate: the same number the chart's placeholder dot shows (`resolveVowelValues({}, type, { placeholders: 'always' })`). The
+ * moved entries of the golden file are exactly the sets under five stable core vowels ('i', 'i,u', 'i,e,ɑ', 'e,ɛ,ɑ,o', 'bad i (1063), no override', 'no fR2 on [e]',
+ * 'provisional [u], [ɨ] sung'), under every type; with five or more they do not move.
  */
-describe('the threshold in the adapter (lane 67)', () => {
+describe('every sample counts from the first (lane 68)', () => {
 	const snap = (sung: Parameters<typeof buildVoiceProfileSnapshot>[0], type: string | undefined) => JSON.parse(JSON.stringify(buildVoiceProfileSnapshot(JSON.parse(JSON.stringify(sung)), undefined, 'golden', undefined, type)));
-	it('four core vowels sung equal none sung, for every type', () => {
+	const BELOW = ['i', 'i,u', 'i,e,ɑ', 'e,ɛ,ɑ,o', 'bad i (1063), no override', 'no fR2 on [e]', 'provisional [u], [ɨ] sung'];
+	const checkBelow = (get: (type: string | undefined, name: string) => { fR1: Record<string, number>; fR2?: Record<string, number>; fR1Source?: Record<string, string>; fR2Source?: Record<string, string> }) => {
 		for (const type of TYPES) {
-			for (const sung of [pick(['i', 'e', 'ɛ', 'ɑ']), pick(['e', 'ɛ', 'ɑ', 'o']), pick(['i', 'u', 'ɑ', 'o'], { ɨ: BASS['ɨ'], a: BASS.a })]) {
-				expect(snap(sung, type), String(type)).toEqual(snap({}, type));
+			const placeholder = resolveVowelValues({}, type, { placeholders: 'always' });
+			for (const name of BELOW) {
+				const snapshot = get(type, name);
+				for (const v of VOWELS) {
+					const own = SETS[name][v];
+					const label = `${type} | ${name} | ${v}`;
+					if (own) {
+						expect([snapshot.fR1[v], snapshot.fR1Source?.[v]], label).toEqual([own.f1, 'sung']);
+						if (own.f2 !== undefined) expect([snapshot.fR2?.[v], snapshot.fR2Source?.[v]], label).toEqual([own.f2, 'sung']);
+					} else {
+						expect([snapshot.fR1[v], snapshot.fR1Source?.[v]], label).toEqual([placeholder.fR1[v], 'surrogate']);
+					}
+				}
 			}
 		}
+	};
+	it('a set under five stable core vowels carries its sampled values and the type\'s placeholders, for every type', () => {
+		checkBelow((type, name) => snap(SETS[name], type).snapshot);
 	});
-	it('five core vowels sung do not equal none sung, under a type with generic values', () => {
+	it('five core vowels sampled do not equal none sampled, under a type with placeholder values', () => {
 		for (const type of ['soprano', 'tenor', 'baritone', 'bass']) expect(snap(pick(['i', 'e', 'ɛ', 'ɑ', 'o']), type)).not.toEqual(snap({}, type));
 	});
-	it('the sets under five core vowels are their none twins in the golden file, and the others are not changed by it', () => {
-		const golden = JSON.parse(readFileSync(GOLDEN, 'utf8')) as Record<string, unknown>;
-		const below = ['i', 'i,u', 'i,e,ɑ', 'e,ɛ,ɑ,o', 'bad i (1063), no override', 'no fR2 on [e]', 'provisional [u], [ɨ] sung'];
-		for (const type of TYPES) for (const name of below) expect(golden[`${type ?? '(undefined)'} | ${name}`], `${type} | ${name}`).toEqual(golden[`${type ?? '(undefined)'} | none`]);
+	it('the golden file holds the sets under five as this rule says, and the sets at five or six as the singer\'s own profile', () => {
+		const golden = JSON.parse(readFileSync(GOLDEN, 'utf8')) as Record<string, { snapshot: { fR1: Record<string, number>; fR2?: Record<string, number>; fR1Source?: Record<string, string>; fR2Source?: Record<string, string> } }>;
+		checkBelow((type, name) => golden[`${type ?? '(undefined)'} | ${name}`].snapshot);
+		for (const type of TYPES) for (const name of ['six', 'all ten', 'bad i kept, six', 'verdict stored']) expect(golden[`${type ?? '(undefined)'} | ${name}`].snapshot.fR1Source?.i, `${type} | ${name}`).toBe('sung');
 	});
 });

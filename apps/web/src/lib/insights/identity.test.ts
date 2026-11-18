@@ -62,8 +62,9 @@ describe('row 166: the identity head of a placeholder voice', () => {
 	it('a voice with a sung vowel is still calibrated, and a voice with nothing is still not', () => {
 		const sung = buildVoiceProfileSnapshot(pick(['e', 'ɛ', 'ɑ', 'o', 'u']), undefined, undefined, undefined, 'baritone'); // five core vowels: the singer's own profile (lane 67)
 		expect(restsOnSamples(sung)).toBe(true);
-		// Four core vowels unlock nothing personal: the page rests on the type's generic values, as for nothing recorded (lane 67).
-		expect(restsOnSamples(buildVoiceProfileSnapshot(pick(['e', 'ɛ', 'ɑ', 'o']), undefined, undefined, undefined, 'baritone'))).toBe(false);
+		// Every sampled vowel counts from the first (lane 68): four core vowels, and one, rest on the singer's samples.
+		expect(restsOnSamples(buildVoiceProfileSnapshot(pick(['e', 'ɛ', 'ɑ', 'o']), undefined, undefined, undefined, 'baritone'))).toBe(true);
+		expect(restsOnSamples(buildVoiceProfileSnapshot(pick(['u']), undefined, undefined, undefined, 'contralto'))).toBe(true);
 		expect(restsOnSamples(un('contralto'))).toBe(false);
 		expect(restsOnSamples(un(undefined))).toBe(false);
 	});

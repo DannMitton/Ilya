@@ -15,16 +15,18 @@
  *    template is Mitton (2020) Table 5.3's fR2 for the six vowels (p. 81),
  *    scaled into the bucket by the geometric mean of the bucket's fR1 template
  *    over the bass bucket's (DESK DEFAULT in the brief, flagged).
- * 2. A PERSONAL VOICE (five of the six core vowels sung, `sung.ts`, `isPersonal`; lane 67) takes its missing core vowel from the singer's own tract:
+ * 2. A PERSONAL VOICE (five stable core vowels sampled, `sung.ts`, `isPersonal`; lane 67 and 68) takes its missing core vowel from the singer's own tract:
  *    the `middle` template times one number, the tract scale k (`tractScale`), the geometric mean of the sung value over the shape's value, over every
  *    sung core vowel and both resonances where sung (quarter-wave reasoning: the vowels are shapes of one tract; Dann 2026-11-17 23:25). The shape is
  *    `middle` whatever the declared type, so the voice type's values never mix with the singer's own vowels. A sung core vowel with no usable fR2
  *    takes shape fR2 times k for that resonance only. No spread, no outlier removal: one number. (Before lane 67 a fitted shift and spread, with the
  *    off-shape vowels set aside for a retake; measured against it in `tools/n200-score/lane67-core.ts`.)
- * 3. A voice with nothing sung (or below five core vowels, which resolves as nothing sung) takes the declared type's template whole, as before.
+ * 3. A voice NOT YET PERSONAL (fewer than five stable core vowels, or nothing sampled; lane 68) takes the declared type's template whole for every vowel it has not
+ *    sampled, unscaled (`middle` for "Not sure" and none): nothing is scaled from fewer than five, so one odd take cannot move the others. The four hard vowels it has
+ *    not sampled are derived from the template's own anchors alone and flagged 'surrogate'. A sampled vowel is used as sampled.
  * 4. A sung value is never changed: sung beats derived beats surrogate.
  * 5. [ɨ], [ɪ], [ʌ], and [a] keep their derivations (`derivations.ts`), from
- *    the best anchors there are; one built on a stand-in anchor is itself a
+ *    the best anchors there are for a personal voice; one built on a stand-in anchor is itself a
  *    stand-in.
  *
  * Computed per snapshot and never stored (`CONTRACT.md` §6).
@@ -118,7 +120,7 @@ export interface StandInInput {
 }
 
 export interface StandInReport {
-	/** The shape the stand-ins came from: the declared type's staff for a voice with nothing sung, `middle` for a personal voice (scaled by the tract scale). */
+	/** The shape the stand-ins came from: the declared type's staff for a voice not yet personal, `middle` for a personal voice (scaled by the tract scale). */
 	bucket: StandInBucket;
 	/** The step that made each stand-in, by vowel. */
 	steps: Record<string, StandInStep>;
@@ -128,16 +130,20 @@ export interface StandInReport {
  * Fill every gap in the ten vowels. Mutates the four maps handed in (the
  * snapshot builder's own locals) and returns what it did. A sung or derived
  * value is never touched; only a vowel with no number gets one.
+ *
+ * `personal` (`isPersonal`, `sung.ts`; lane 68): five stable core vowels are sampled. Only then is anything scaled (`middle` times the tract scale k, when k is finite),
+ * and only then do the hard vowels come from the maps' own anchors. When not personal, every missing core vowel takes `template(standInBucket(voiceType))` unscaled, and
+ * every missing hard vowel is derived from that template's anchors alone, flagged 'surrogate'.
  */
-export function fillStandIns(m: StandInInput, voiceType: string | undefined): StandInReport {
+export function fillStandIns(m: StandInInput, voiceType: string | undefined, personal: boolean): StandInReport {
 	const sungOf = (map: Record<string, number>, src: Record<string, Provenance>) => {
 		const out: Partial<Record<BozemanVowel, number>> = {};
 		for (const v of BOZEMAN_VOWELS) if (src[v] === 'sung' && map[v] > 0) out[v] = map[v];
 		return out;
 	};
-	// A voice with sung core vowels is personal (the resolver sends nothing else here with anything sung): `middle` times the tract scale. Otherwise the type's template, whole.
-	const k = tractScale(sungOf(m.fR1, m.fR1Source), sungOf(m.fR2, m.fR2Source), template('middle'));
+	const k = personal ? tractScale(sungOf(m.fR1, m.fR1Source), sungOf(m.fR2, m.fR2Source), template('middle')) : NaN;
 	const scaled = Number.isFinite(k);
+	const round1 = (x: number) => Math.round(x * 10) / 10; // the template anchors as the stand-ins hold them, so a voice with nothing sampled derives what it derived before lane 68
 	const bucket: StandInBucket = scaled ? 'middle' : standInBucket(voiceType);
 	const shape = template(bucket);
 	const step: StandInStep = scaled ? 'scale' : 'template';
@@ -154,14 +160,15 @@ export function fillStandIns(m: StandInInput, voiceType: string | undefined): St
 			steps[v] ??= step;
 		}
 	}
-	// The four derived vowels, from whatever anchors now stand; a stand-in anchor makes a stand-in.
+	// The four derived vowels. A personal voice derives from whatever anchors now stand (a stand-in anchor makes a stand-in). A voice not yet personal derives from the
+	// template's anchors alone, so no value mixes a sampled anchor with a template one (lane 68, amendment 1).
 	for (const [vowel, anchors] of Object.entries(DERIVE_ANCHORS) as [Vowel, Vowel[]][]) {
 		if (m.fR1[vowel] !== undefined && m.fR2[vowel] !== undefined) continue;
 		const cap: Record<string, { f1: number; f2: number }> = {};
-		for (const a of anchors) cap[a] = { f1: m.fR1[a], f2: m.fR2[a] };
+		for (const a of anchors) cap[a] = personal ? { f1: m.fR1[a], f2: m.fR2[a] } : { f1: round1(shape.f1[a as BozemanVowel]), f2: round1(shape.f2[a as BozemanVowel]) };
 		const d = derive(vowel, cap);
 		if (!d) continue;
-		const fromStandIn = anchors.some((a) => m.fR1Source[a] === 'surrogate' || m.fR2Source[a] === 'surrogate');
+		const fromStandIn = !personal || anchors.some((a) => m.fR1Source[a] === 'surrogate' || m.fR2Source[a] === 'surrogate');
 		const src: Provenance = fromStandIn ? 'surrogate' : 'derived';
 		if (m.fR1[vowel] === undefined) {
 			m.fR1[vowel] = d.f1;

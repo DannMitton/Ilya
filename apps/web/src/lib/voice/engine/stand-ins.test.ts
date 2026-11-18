@@ -6,6 +6,7 @@
 import { describe, expect, it } from 'vitest';
 import { VOWELS, type Vowel } from './types';
 import { CORE_BANDS } from './plausibility';
+import { derive } from './derivations';
 import { BOZEMAN_VOWELS, MITTON_FR2, fillStandIns, standInBucket, template, tractScale, type Provenance } from './stand-ins';
 
 const centre = (b: keyof typeof CORE_BANDS, v: (typeof BOZEMAN_VOWELS)[number]) => Math.sqrt(CORE_BANDS[b][v][0] * CORE_BANDS[b][v][1]);
@@ -65,7 +66,7 @@ describe('no vowel left blank', () => {
 		];
 		for (const sung of sets) {
 			const m = maps(sung);
-			fillStandIns(m, 'bass');
+			fillStandIns(m, 'bass', false);
 			expect(allTen(m), JSON.stringify(sung)).toBe(true);
 		}
 	});
@@ -73,7 +74,7 @@ describe('no vowel left blank', () => {
 	it('never changes a sung value', () => {
 		const sung = { i: [300, 2200], u: [330, 800] } as Partial<Record<Vowel, [number, number]>>;
 		const m = maps(sung);
-		fillStandIns(m, 'bass');
+		fillStandIns(m, 'bass', false);
 		expect([m.fR1.i, m.fR2.i, m.fR1.u, m.fR2.u]).toEqual([300, 2200, 330, 800]);
 		expect([m.fR1Source.i, m.fR1Source.u]).toEqual(['sung', 'sung']);
 	});
@@ -81,7 +82,7 @@ describe('no vowel left blank', () => {
 	it('flags a derivation built on a stand-in anchor as a stand-in', () => {
 		// [ɨ] derives from [i] and [u]; only [i] is sung, so [u] is a stand-in and so is [ɨ].
 		const m = maps({ i: [300, 2200] });
-		const report = fillStandIns(m, 'bass');
+		const report = fillStandIns(m, 'bass', false);
 		expect(m.fR1Source.u).toBe('surrogate');
 		expect(m.fR1Source['ɨ']).toBe('surrogate');
 		expect(report.steps['ɨ']).toBe('derived');
@@ -111,7 +112,7 @@ describe('the tract scale (lane 67)', () => {
 	it('five sung core vowels give the sixth at the middle shape times k, in both resonances, whatever the declared type', () => {
 		for (const type of ['bass', 'soprano', 'contralto', undefined, 'not-sure']) {
 			const m = maps(sungOfShape(1.25, 'ɛ'));
-			const report = fillStandIns(m, type);
+			const report = fillStandIns(m, type, true);
 			expect(m.fR1.ɛ, String(type)).toBeCloseTo(middle.f1.ɛ * 1.25, 0);
 			expect(m.fR2.ɛ, String(type)).toBeCloseTo(middle.f2.ɛ * 1.25, 0);
 			expect(m.fR1Source.ɛ).toBe('surrogate');
@@ -122,9 +123,9 @@ describe('the tract scale (lane 67)', () => {
 
 	it('takes no outlier out: one odd sung vowel moves k, and the missing vowel with it', () => {
 		const even = maps(sungOfShape(1, 'ɛ'));
-		fillStandIns(even, 'bass');
+		fillStandIns(even, 'bass', true);
 		const odd = maps({ ...sungOfShape(1, 'ɛ'), i: [middle.f1.i * 3, middle.f2.i] });
-		const report = fillStandIns(odd, 'bass');
+		const report = fillStandIns(odd, 'bass', true);
 		expect(odd.fR1.ɛ).toBeGreaterThan(even.fR1.ɛ * 1.05);
 		expect(Object.keys(report)).toEqual(['bucket', 'steps']); // no retake list
 	});
@@ -134,7 +135,7 @@ describe('the tract scale (lane 67)', () => {
 		const m = maps(sung);
 		delete m.fR2.e;
 		delete m.fR2Source.e;
-		fillStandIns(m, 'bass');
+		fillStandIns(m, 'bass', true);
 		expect(m.fR1Source.e).toBe('sung');
 		expect(m.fR2Source.e).toBe('surrogate');
 		expect(m.fR2.e).toBeCloseTo(middle.f2.e * 1.1, 0);
@@ -142,7 +143,7 @@ describe('the tract scale (lane 67)', () => {
 
 	it('a voice with nothing sung takes the declared type\'s template whole', () => {
 		const m = maps({});
-		const report = fillStandIns(m, 'soprano');
+		const report = fillStandIns(m, 'soprano', false);
 		const t = template('soprano');
 		expect(report.bucket).toBe('soprano');
 		for (const v of BOZEMAN_VOWELS) { expect(m.fR1[v]).toBeCloseTo(t.f1[v], 0); expect(report.steps[v]).toBe('template'); }
@@ -150,10 +151,55 @@ describe('the tract scale (lane 67)', () => {
 
 	it('the four derived vowels are still derived from sung anchors, and flagged as the anchors are', () => {
 		const m = maps(sungOfShape(1.1));
-		fillStandIns(m, 'bass');
+		fillStandIns(m, 'bass', true);
 		expect(m.fR1Source['ɨ']).toBe('derived');
 		const missing = maps(sungOfShape(1.1, 'u'));
-		fillStandIns(missing, 'bass');
+		fillStandIns(missing, 'bass', true);
 		expect(missing.fR1Source['ɨ']).toBe('surrogate'); // built on the scaled [u]
+	});
+});
+
+describe('a voice not yet personal (lane 68): every sample counts, the rest is the placeholder, nothing scaled', () => {
+	const t = (b: Parameters<typeof template>[0]) => template(b);
+
+	it('takes every missing core vowel from the declared type\'s template, unscaled, whatever the sampled ones are', () => {
+		const m = maps({ i: [300, 2200], u: [330, 800], e: [900, 3000] });
+		const report = fillStandIns(m, 'bass', false);
+		const bass = t('bass');
+		for (const v of ['ɛ', 'ɑ', 'o'] as const) {
+			expect(m.fR1[v]).toBeCloseTo(bass.f1[v], 0);
+			expect(m.fR2[v]).toBeCloseTo(bass.f2[v], 0);
+			expect(m.fR1Source[v]).toBe('surrogate');
+			expect(report.steps[v]).toBe('template');
+		}
+		expect(report.bucket).toBe('bass');
+		expect([m.fR1.i, m.fR1.u, m.fR1.e, m.fR1Source.e]).toEqual([300, 330, 900, 'sung']);
+	});
+
+	it('a type with no placeholder profile uses its bucket: contralto and countertenor tenor-mezzo, bass-baritone bass, "Not sure" and none middle', () => {
+		const want: Array<[string | undefined, Parameters<typeof template>[0]]> = [['contralto', 'tenor-mezzo'], ['countertenor', 'tenor-mezzo'], ['bass-baritone', 'bass'], ['not-sure', 'middle'], [undefined, 'middle']];
+		for (const [type, bucket] of want) {
+			const m = maps({ i: [300, 2200] });
+			const report = fillStandIns(m, type, false);
+			expect(report.bucket, String(type)).toBe(bucket);
+			expect(m.fR1.u, String(type)).toBeCloseTo(t(bucket).f1.u, 0);
+		}
+	});
+
+	it('derives an unsampled hard vowel from the template\'s anchors alone, never a mix with a sampled anchor', () => {
+		const m = maps({ i: [300, 2200], u: [330, 800] });
+		const report = fillStandIns(m, 'bass', false);
+		const bass = t('bass');
+		const expected = derive('ɨ', { i: { f1: bass.f1.i, f2: bass.f2.i }, u: { f1: bass.f1.u, f2: bass.f2.u } })!;
+		expect(m.fR1['ɨ']).toBe(expected.f1);
+		expect(m.fR2['ɨ']).toBe(expected.f2);
+		expect(m.fR1Source['ɨ']).toBe('surrogate');
+		expect(report.steps['ɨ']).toBe('derived');
+	});
+
+	it('uses a sampled hard vowel as sampled', () => {
+		const m = maps({ ɨ: [350, 1300] });
+		fillStandIns(m, 'baritone', false);
+		expect([m.fR1['ɨ'], m.fR2['ɨ'], m.fR1Source['ɨ']]).toEqual([350, 1300, 'sung']);
 	});
 });

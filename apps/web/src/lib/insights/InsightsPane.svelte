@@ -84,7 +84,7 @@
 	import { paginate, type Segment } from '$lib/insights/paginate';
 	import { browserStore, rangeOfferDeclined, recordRangeOfferDecline } from '$lib/insights/range-offer-decline';
 	import { composeIdentityLine, genericLede, isGenericMethodKey, methodLineKey, placeholderLabel, restsOnSamples } from '$lib/insights/identity';
-	import { isPersonal, isSung } from '$lib/voice/engine/sung';
+	import { isSung } from '$lib/voice/engine/sung';
 	import type { VoiceTypeChoice } from '$lib/voice/profileStore';
 
 	interface Props {
@@ -241,7 +241,7 @@
 	   fR1 is not a measured value for rule 1 of r2 §0. */
 	const measuredVowels = $derived(
 		new Set(
-			Object.entries(isPersonal(formants) ? formants : {}) // below five core vowels nothing is measured (lane 67)
+			Object.entries(formants) // lane 68: every sampled vowel, at any count
 				.filter(([, f]) => isSung(f))
 				.map(([v]) => v),
 		),

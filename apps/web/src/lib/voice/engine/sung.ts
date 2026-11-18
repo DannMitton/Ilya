@@ -18,15 +18,24 @@ export const isSung = (f: CalibratedFormant | undefined): f is CalibratedFormant
 export const CORE_VOWELS: readonly Vowel[] = ['i', 'e', 'ɛ', 'ɑ', 'o', 'u'];
 
 /**
- * How many of the six core vowels the singer has sung (`isSung`). An unstable reading counts: the flag invites a re-take and blocks nothing (DESK DEFAULT on
- * Dann's word "proper", from `docs/memory/PRODUCT.md:1269-1270`, a status never blocks a reading). A hard vowel ([ɨ], [ɪ], [ʌ], [a]) is not counted.
+ * THE STABLE CORE VOWELS (lane 68; Dann 2026-11-18 13:57 and 14:00: "at least 5 stable fry samples"): the core vowels, in `CORE_VOWELS` order, that are sung (`isSung`) and
+ * stable: `confidence !== 'low'`, or a reading the singer kept (`plausibilityOverride === true`, "Keep it" or "Keep them"), whatever its confidence. An unstable take is
+ * still used for its own vowel by every site that reads values (`resolve-values.ts`); it only does not count toward the five that complete the profile. A hard vowel
+ * ([ɨ], [ɪ], [ʌ], [a]) is not counted.
  */
-export const coreCount = (formants: Partial<Record<Vowel, CalibratedFormant>>): number => CORE_VOWELS.filter((v) => isSung(formants[v])).length;
+export const stableCore = (formants: Partial<Record<Vowel, CalibratedFormant>>): Vowel[] =>
+	CORE_VOWELS.filter((v) => {
+		const f = formants[v];
+		return isSung(f) && (f.confidence !== 'low' || f.plausibilityOverride === true);
+	});
+
+/** How many of the six core vowels are stable (`stableCore`). */
+export const coreCount = (formants: Partial<Record<Vowel, CalibratedFormant>>): number => stableCore(formants).length;
 
 /**
- * THE THRESHOLD (lane 67; Dann 2026-11-17 23:31, `docs/memory/OPEN.md`, "VOICE: HOW ILYA MEETS A VOICE, AND A BREAK"): five of the six core vowels sung unlock the
- * singer's own profile. Below five, what is recorded stays stored and shown in the VOICE pane and the chart, and unlocks nothing personal: every site that reads
- * values treats the voice as one with nothing recorded. The one test; every site calls it.
+ * THE THRESHOLD (lane 67; Dann 2026-11-17 23:31, `docs/memory/OPEN.md`, "VOICE: HOW ILYA MEETS A VOICE, AND A BREAK"; lane 68, Dann 2026-11-18 13:42 to 14:00): five stable
+ * core vowels (`stableCore`) complete the singer's own profile. Below five, every sampled vowel is still used as sampled, and the vowels not yet sampled take the declared
+ * type's placeholder values unscaled (`stand-ins.ts`). The one test; every site calls it.
  */
 export const PERSONAL_CORE_MIN = 5;
 export const isPersonal = (formants: Partial<Record<Vowel, CalibratedFormant>>): boolean => coreCount(formants) >= PERSONAL_CORE_MIN;

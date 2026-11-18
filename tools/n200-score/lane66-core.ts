@@ -131,7 +131,7 @@ export function counted(judged: Profile, vowels: readonly Vowel[]): Profile {
 /** The values for a voice type with the chart's stand-ins (`'always'`), so a value exists for every vowel in both cases. */
 export const resolve = (profile: Profile, type: string | undefined): ResolvedValues => resolveVowelValues(profile, type, { placeholders: 'always' });
 
-/** SET ASIDE (see the header): the sung vowels whose number does not come from the singer. Since lane 67 every sung vowel of a profile with fewer than five core vowels is set aside by the threshold (`voice/engine/sung.ts`, `isPersonal`), whatever its verdict. */
+/** SET ASIDE (see the header): the sung vowels whose number does not come from the singer. Lane 67 set aside every sung vowel of a profile with fewer than five core vowels; lane 68 (Dann 2026-11-18 13:42) reversed that: below five every sampled vowel is used as sampled, so the threshold (`voice/engine/sung.ts`, `isPersonal`) sets none aside. This function reads the tree's own resolution and has not been re-run since. */
 export function setAside(profile: Profile, resolved: ResolvedValues): Vowel[] {
 	return VOWELS.filter((v) => {
 		const x = profile[v];

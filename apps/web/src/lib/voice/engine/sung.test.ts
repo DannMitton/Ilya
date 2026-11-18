@@ -4,7 +4,7 @@
  */
 import { describe, expect, it } from 'vitest';
 import type { CalibratedFormant, Vowel } from './types';
-import { CORE_VOWELS, coreCount, isPersonal } from './sung';
+import { CORE_VOWELS, coreCount, isPersonal, stableCore } from './sung';
 
 const r = (f1: number, extra: Partial<CalibratedFormant> = {}): CalibratedFormant =>
 	({ f1, f2: 1500, f2Quality: 'clear', confidence: 'high', reading: 'captured', source: 'measured-user', ...extra }) as CalibratedFormant;
@@ -27,9 +27,24 @@ describe('isPersonal: five of the six core vowels', () => {
 		expect(isPersonal(of(['ɨ', 'ɪ', 'ʌ', 'a', 'u', 'i', 'e', 'ɛ']))).toBe(false);
 		expect(isPersonal(of(['ɨ', 'ɪ', 'ʌ', 'a', 'u', 'i', 'e', 'ɛ', 'o']))).toBe(true);
 	});
-	it('counts an unstable reading (confidence low, reading provisional): the flag invites a re-take and blocks nothing', () => {
+	it('does not count an unstable reading (confidence low) toward five: four stable and one unstable is not personal (lane 68)', () => {
 		const p = of(['i', 'e', 'ɛ', 'ɑ'], { o: r(450, { confidence: 'low', reading: 'provisional' }) });
+		expect(coreCount(p)).toBe(4);
+		expect(isPersonal(p)).toBe(false);
+	});
+	it('counts five stable and one unstable as five: the unstable take is neither counted nor in the way', () => {
+		const p = of(['i', 'e', 'ɛ', 'ɑ', 'o'], { u: r(300, { confidence: 'low', reading: 'provisional' }) });
+		expect(coreCount(p)).toBe(5);
 		expect(isPersonal(p)).toBe(true);
+		expect(stableCore(p)).toEqual(['i', 'e', 'ɛ', 'ɑ', 'o']);
+	});
+	it('counts an unstable reading the singer kept (plausibilityOverride) as stable (lane 68, amendment 2)', () => {
+		const p = of(['i', 'e', 'ɛ', 'ɑ'], { o: r(450, { confidence: 'low', reading: 'provisional', plausibilityOverride: true }) });
+		expect(coreCount(p)).toBe(5);
+		expect(isPersonal(p)).toBe(true);
+	});
+	it('stableCore lists the stable core vowels in roster order, never a hard vowel', () => {
+		expect(stableCore(of(['u', 'i', 'ɨ', 'o']))).toEqual(['i', 'o', 'u']);
 	});
 	it('counts a reading beyond Ilya\'s reference values, kept or not', () => {
 		expect(isPersonal(of(['e', 'ɛ', 'ɑ', 'o'], { i: r(1063, { plausibility: 'implausible' }) }))).toBe(true);

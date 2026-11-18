@@ -57,8 +57,8 @@ export interface AdaptedProfile {
 	snapshot: VoiceProfileSnapshot;
 	completeness: AnalysisCompleteness;
 	/**
-	 * QUEUE row 17: what the stand-ins did, absent when nothing is sung (below five
-	 * core vowels is nothing sung, lane 67): the shape used and the step that made
+	 * QUEUE row 17: what the stand-ins did, absent when nothing is sampled and the type has no placeholder profile
+	 * (lane 68: anything sampled, at any count, runs the stand-ins): the shape used and the step that made
 	 * each value (`stand-ins.ts`). Nothing draws it.
 	 */
 	standIns?: StandInReport;

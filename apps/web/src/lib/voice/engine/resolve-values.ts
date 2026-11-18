@@ -1,8 +1,8 @@
 /**
  * ONE SET OF VALUES PER VOWEL (N.199 Step 1; `CONTRACT.md` section 4). The adapter's resolution of a voice's
  * stored readings into a fR1 and a fR2 for every vowel it can give one: take
- * every sung reading of a personal voice (five of the six core vowels, `sung.ts`), derive the four derivable vowels from their anchors, and fill what is left from
- * Bozeman's staff fitted to the singer. It stood inline in `analysis/analyze-score-adapter.ts`
+ * every sung reading, at any count (lane 68); for a personal voice (five stable core vowels, `sung.ts`) derive the four derivable vowels from their anchors; and fill what is left from
+ * Bozeman's staff, fitted to the singer when personal and the declared type's own, unscaled, when not. It stood inline in `analysis/analyze-score-adapter.ts`
  * (`buildVoiceProfileSnapshot`, from QUEUE row 11 through row 17 and row 166); it lives here so the forecast and the
  * calibration chart read one function, not two copies. Pure: no store, no DOM, nothing written to the stored profile.
  *
@@ -38,7 +38,7 @@ export interface ResolvedValues {
 	fR2Source: Record<string, Provenance>;
 	/** A sung fR1 exists (`isSung`). */
 	anySung: boolean;
-	/** QUEUE row 166's internal word: nothing sung, and the declared type has a placeholder profile. Under `'always'` it is still this, not "the stand-ins ran". */
+	/** QUEUE row 166's internal word: nothing sung (not one sampled vowel, lane 68), and the declared type has a placeholder profile. Under `'always'` it is still this, not "the stand-ins ran". */
 	generic: boolean;
 	/** What the stand-ins did; absent when they did not run. */
 	standIns?: StandInReport;
@@ -50,9 +50,11 @@ export function resolveVowelValues(
 	options: ResolveOptions = {}
 ): ResolvedValues {
 	const placeholders = options.placeholders ?? 'declared-types';
-	// THE THRESHOLD (lane 67, `sung.ts`): below five of the six core vowels the voice resolves exactly as one with nothing sung. The stored readings are not
-	// touched; the values below are built from `formants`, which is empty then.
-	const formants = isPersonal(sampled) ? sampled : {};
+	// EVERY SAMPLE COUNTS FROM THE FIRST (lane 68; Dann 2026-11-18 13:42: "we use whatever the user provides"). Every sampled reading enters, at any count. Five
+	// stable core vowels (`sung.ts`, `isPersonal`) complete the profile: the sixth core vowel from the tract scale and the four hard vowels from sampled anchors. Below
+	// five, the vowels not sampled are placeholders from the declared type's template, unscaled, and no hard vowel is built from a sampled anchor (`stand-ins.ts`).
+	const formants = sampled;
+	const personal = isPersonal(sampled);
 	// fR1 per vowel from the measured formants. A vowel the singer never sang,
 	// or a reading with no usable f1, contributes nothing: the engine already
 	// omits any event whose vowel has no fR1, so silence here is honest.
@@ -123,7 +125,9 @@ export function resolveVowelValues(
 	//
 	// No anchor is itself derivable, and `formants` is the sampled map, so
 	// nothing here derives from a derived value.
-	for (const vowel of Object.keys(DERIV_SOURCE) as Vowel[]) {
+	// Only for a personal voice (lane 68, amendment 1): below five stable core vowels an unsampled hard vowel is a placeholder, derived from the template's anchors alone
+	// in `fillStandIns`, so no value is built from a mix of a sampled anchor and a template anchor.
+	for (const vowel of personal ? (Object.keys(DERIV_SOURCE) as Vowel[]) : []) {
 		if (fR1[vowel] !== undefined && fR2[vowel] !== undefined) continue;
 		const derived = deriveFrom(vowel, formants);
 		if (!derived) continue;
@@ -149,7 +153,7 @@ export function resolveVowelValues(
 	const anySung = Object.values(fR1Source).includes('sung');
 	const generic = !anySung && hasPlaceholderProfile(voiceType);
 	const standIns: StandInReport | undefined =
-		anySung || generic || placeholders === 'always' ? fillStandIns({ fR1, fR2, fR1Source, fR2Source }, voiceType) : undefined;
+		anySung || generic || placeholders === 'always' ? fillStandIns({ fR1, fR2, fR1Source, fR2Source }, voiceType, personal) : undefined;
 
 	return { fR1, fR2, fR1Source, fR2Source, anySung, generic, ...(standIns ? { standIns } : {}) };
 }

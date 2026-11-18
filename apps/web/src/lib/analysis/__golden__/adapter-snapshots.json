@@ -15,12 +15,72 @@
  },
  "(undefined) | i": {
   "snapshot": {
-   "fR1": {},
-   "fR1Source": {},
+   "fR1": {
+    "i": 296,
+    "e": 529.3,
+    "ɛ": 583.9,
+    "ɑ": 647.9,
+    "o": 517.2,
+    "u": 365.7,
+    "ɨ": 465.9,
+    "ɪ": 546,
+    "ʌ": 647.9,
+    "a": 745.1
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1727.9,
+    "ɛ": 1478.7,
+    "ɑ": 1142.5,
+    "o": 931.6,
+    "u": 906.8,
+    "ɨ": 1242.1,
+    "ɪ": 1804,
+    "ʌ": 1317.3,
+    "a": 1256.8
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
    "label": "golden"
   },
+  "standIns": {
+   "bucket": "middle",
+   "steps": {
+    "e": "template",
+    "ɛ": "template",
+    "ɑ": "template",
+    "o": "template",
+    "u": "template",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   }
+  },
   "completeness": {
-   "formants": false,
+   "formants": true,
    "range": false,
    "tessitura": false,
    "passaggio": false
@@ -29,12 +89,71 @@
  },
  "(undefined) | i,u": {
   "snapshot": {
-   "fR1": {},
-   "fR1Source": {},
+   "fR1": {
+    "i": 296,
+    "u": 346,
+    "e": 529.3,
+    "ɛ": 583.9,
+    "ɑ": 647.9,
+    "o": 517.2,
+    "ɨ": 465.9,
+    "ɪ": 546,
+    "ʌ": 647.9,
+    "a": 745.1
+   },
+   "fR1Source": {
+    "i": "sung",
+    "u": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "u": 804,
+    "e": 1727.9,
+    "ɛ": 1478.7,
+    "ɑ": 1142.5,
+    "o": 931.6,
+    "ɨ": 1242.1,
+    "ɪ": 1804,
+    "ʌ": 1317.3,
+    "a": 1256.8
+   },
+   "fR2Source": {
+    "i": "sung",
+    "u": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
    "label": "golden"
   },
+  "standIns": {
+   "bucket": "middle",
+   "steps": {
+    "e": "template",
+    "ɛ": "template",
+    "ɑ": "template",
+    "o": "template",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   }
+  },
   "completeness": {
-   "formants": false,
+   "formants": true,
    "range": false,
    "tessitura": false,
    "passaggio": false
@@ -43,12 +162,70 @@
  },
  "(undefined) | i,e,ɑ": {
   "snapshot": {
-   "fR1": {},
-   "fR1Source": {},
+   "fR1": {
+    "i": 296,
+    "e": 381,
+    "ɑ": 617,
+    "ɛ": 583.9,
+    "o": 517.2,
+    "u": 365.7,
+    "ɨ": 465.9,
+    "ɪ": 546,
+    "ʌ": 647.9,
+    "a": 745.1
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɑ": "sung",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɑ": 1013,
+    "ɛ": 1478.7,
+    "o": 931.6,
+    "u": 906.8,
+    "ɨ": 1242.1,
+    "ɪ": 1804,
+    "ʌ": 1317.3,
+    "a": 1256.8
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɑ": "sung",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
    "label": "golden"
   },
+  "standIns": {
+   "bucket": "middle",
+   "steps": {
+    "ɛ": "template",
+    "o": "template",
+    "u": "template",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   }
+  },
   "completeness": {
-   "formants": false,
+   "formants": true,
    "range": false,
    "tessitura": false,
    "passaggio": false
@@ -57,12 +234,69 @@
  },
  "(undefined) | e,ɛ,ɑ,o": {
   "snapshot": {
-   "fR1": {},
-   "fR1Source": {},
+   "fR1": {
+    "e": 381,
+    "ɛ": 577,
+    "ɑ": 617,
+    "o": 489,
+    "i": 341.3,
+    "u": 365.7,
+    "ɨ": 465.9,
+    "ɪ": 546,
+    "ʌ": 647.9,
+    "a": 745.1
+   },
+   "fR1Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "i": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "i": 1923,
+    "u": 906.8,
+    "ɨ": 1242.1,
+    "ɪ": 1804,
+    "ʌ": 1317.3,
+    "a": 1256.8
+   },
+   "fR2Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "i": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
    "label": "golden"
   },
+  "standIns": {
+   "bucket": "middle",
+   "steps": {
+    "i": "template",
+    "u": "template",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   }
+  },
   "completeness": {
-   "formants": false,
+   "formants": true,
    "range": false,
    "tessitura": false,
    "passaggio": false
@@ -199,12 +433,70 @@
  },
  "(undefined) | bad i (1063), no override": {
   "snapshot": {
-   "fR1": {},
-   "fR1Source": {},
+   "fR1": {
+    "u": 346,
+    "ɑ": 617,
+    "i": 1063,
+    "e": 529.3,
+    "ɛ": 583.9,
+    "o": 517.2,
+    "ɨ": 465.9,
+    "ɪ": 546,
+    "ʌ": 647.9,
+    "a": 745.1
+   },
+   "fR1Source": {
+    "u": "sung",
+    "ɑ": "sung",
+    "i": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "u": 804,
+    "ɑ": 1013,
+    "i": 2250,
+    "e": 1727.9,
+    "ɛ": 1478.7,
+    "o": 931.6,
+    "ɨ": 1242.1,
+    "ɪ": 1804,
+    "ʌ": 1317.3,
+    "a": 1256.8
+   },
+   "fR2Source": {
+    "u": "sung",
+    "ɑ": "sung",
+    "i": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
    "label": "golden"
   },
+  "standIns": {
+   "bucket": "middle",
+   "steps": {
+    "e": "template",
+    "ɛ": "template",
+    "o": "template",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   }
+  },
   "completeness": {
-   "formants": false,
+   "formants": true,
    "range": false,
    "tessitura": false,
    "passaggio": false
@@ -277,12 +569,70 @@
  },
  "(undefined) | no fR2 on [e]": {
   "snapshot": {
-   "fR1": {},
-   "fR1Source": {},
+   "fR1": {
+    "i": 296,
+    "ɑ": 617,
+    "o": 489,
+    "e": 381,
+    "ɛ": 583.9,
+    "u": 365.7,
+    "ɨ": 465.9,
+    "ɪ": 546,
+    "ʌ": 647.9,
+    "a": 745.1
+   },
+   "fR1Source": {
+    "i": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "e": "sung",
+    "ɛ": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "ɑ": 1013,
+    "o": 826,
+    "e": 1727.9,
+    "ɛ": 1478.7,
+    "u": 906.8,
+    "ɨ": 1242.1,
+    "ɪ": 1804,
+    "ʌ": 1317.3,
+    "a": 1256.8
+   },
+   "fR2Source": {
+    "i": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
    "label": "golden"
   },
+  "standIns": {
+   "bucket": "middle",
+   "steps": {
+    "e": "template",
+    "ɛ": "template",
+    "u": "template",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   }
+  },
   "completeness": {
-   "formants": false,
+   "formants": true,
    "range": false,
    "tessitura": false,
    "passaggio": false
@@ -291,12 +641,70 @@
  },
  "(undefined) | provisional [u], [ɨ] sung": {
   "snapshot": {
-   "fR1": {},
-   "fR1Source": {},
+   "fR1": {
+    "i": 296,
+    "ɨ": 404,
+    "u": 346,
+    "e": 529.3,
+    "ɛ": 583.9,
+    "ɑ": 647.9,
+    "o": 517.2,
+    "ɪ": 546,
+    "ʌ": 647.9,
+    "a": 745.1
+   },
+   "fR1Source": {
+    "i": "sung",
+    "ɨ": "sung",
+    "u": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "ɨ": 1100,
+    "u": 804,
+    "e": 1727.9,
+    "ɛ": 1478.7,
+    "ɑ": 1142.5,
+    "o": 931.6,
+    "ɪ": 1804,
+    "ʌ": 1317.3,
+    "a": 1256.8
+   },
+   "fR2Source": {
+    "i": "sung",
+    "ɨ": "sung",
+    "u": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
    "label": "golden"
   },
+  "standIns": {
+   "bucket": "middle",
+   "steps": {
+    "e": "template",
+    "ɛ": "template",
+    "ɑ": "template",
+    "o": "template",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   }
+  },
   "completeness": {
-   "formants": false,
+   "formants": true,
    "range": false,
    "tessitura": false,
    "passaggio": false
@@ -385,12 +793,72 @@
  },
  " | i": {
   "snapshot": {
-   "fR1": {},
-   "fR1Source": {},
+   "fR1": {
+    "i": 296,
+    "e": 529.3,
+    "ɛ": 583.9,
+    "ɑ": 647.9,
+    "o": 517.2,
+    "u": 365.7,
+    "ɨ": 465.9,
+    "ɪ": 546,
+    "ʌ": 647.9,
+    "a": 745.1
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1727.9,
+    "ɛ": 1478.7,
+    "ɑ": 1142.5,
+    "o": 931.6,
+    "u": 906.8,
+    "ɨ": 1242.1,
+    "ɪ": 1804,
+    "ʌ": 1317.3,
+    "a": 1256.8
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
    "label": "golden"
   },
+  "standIns": {
+   "bucket": "middle",
+   "steps": {
+    "e": "template",
+    "ɛ": "template",
+    "ɑ": "template",
+    "o": "template",
+    "u": "template",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   }
+  },
   "completeness": {
-   "formants": false,
+   "formants": true,
    "range": false,
    "tessitura": false,
    "passaggio": false
@@ -399,12 +867,71 @@
  },
  " | i,u": {
   "snapshot": {
-   "fR1": {},
-   "fR1Source": {},
+   "fR1": {
+    "i": 296,
+    "u": 346,
+    "e": 529.3,
+    "ɛ": 583.9,
+    "ɑ": 647.9,
+    "o": 517.2,
+    "ɨ": 465.9,
+    "ɪ": 546,
+    "ʌ": 647.9,
+    "a": 745.1
+   },
+   "fR1Source": {
+    "i": "sung",
+    "u": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "u": 804,
+    "e": 1727.9,
+    "ɛ": 1478.7,
+    "ɑ": 1142.5,
+    "o": 931.6,
+    "ɨ": 1242.1,
+    "ɪ": 1804,
+    "ʌ": 1317.3,
+    "a": 1256.8
+   },
+   "fR2Source": {
+    "i": "sung",
+    "u": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
    "label": "golden"
   },
+  "standIns": {
+   "bucket": "middle",
+   "steps": {
+    "e": "template",
+    "ɛ": "template",
+    "ɑ": "template",
+    "o": "template",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   }
+  },
   "completeness": {
-   "formants": false,
+   "formants": true,
    "range": false,
    "tessitura": false,
    "passaggio": false
@@ -413,12 +940,70 @@
  },
  " | i,e,ɑ": {
   "snapshot": {
-   "fR1": {},
-   "fR1Source": {},
+   "fR1": {
+    "i": 296,
+    "e": 381,
+    "ɑ": 617,
+    "ɛ": 583.9,
+    "o": 517.2,
+    "u": 365.7,
+    "ɨ": 465.9,
+    "ɪ": 546,
+    "ʌ": 647.9,
+    "a": 745.1
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɑ": "sung",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɑ": 1013,
+    "ɛ": 1478.7,
+    "o": 931.6,
+    "u": 906.8,
+    "ɨ": 1242.1,
+    "ɪ": 1804,
+    "ʌ": 1317.3,
+    "a": 1256.8
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɑ": "sung",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
    "label": "golden"
   },
+  "standIns": {
+   "bucket": "middle",
+   "steps": {
+    "ɛ": "template",
+    "o": "template",
+    "u": "template",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   }
+  },
   "completeness": {
-   "formants": false,
+   "formants": true,
    "range": false,
    "tessitura": false,
    "passaggio": false
@@ -427,12 +1012,69 @@
  },
  " | e,ɛ,ɑ,o": {
   "snapshot": {
-   "fR1": {},
-   "fR1Source": {},
+   "fR1": {
+    "e": 381,
+    "ɛ": 577,
+    "ɑ": 617,
+    "o": 489,
+    "i": 341.3,
+    "u": 365.7,
+    "ɨ": 465.9,
+    "ɪ": 546,
+    "ʌ": 647.9,
+    "a": 745.1
+   },
+   "fR1Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "i": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "i": 1923,
+    "u": 906.8,
+    "ɨ": 1242.1,
+    "ɪ": 1804,
+    "ʌ": 1317.3,
+    "a": 1256.8
+   },
+   "fR2Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "i": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
    "label": "golden"
   },
+  "standIns": {
+   "bucket": "middle",
+   "steps": {
+    "i": "template",
+    "u": "template",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   }
+  },
   "completeness": {
-   "formants": false,
+   "formants": true,
    "range": false,
    "tessitura": false,
    "passaggio": false
@@ -569,12 +1211,70 @@
  },
  " | bad i (1063), no override": {
   "snapshot": {
-   "fR1": {},
-   "fR1Source": {},
+   "fR1": {
+    "u": 346,
+    "ɑ": 617,
+    "i": 1063,
+    "e": 529.3,
+    "ɛ": 583.9,
+    "o": 517.2,
+    "ɨ": 465.9,
+    "ɪ": 546,
+    "ʌ": 647.9,
+    "a": 745.1
+   },
+   "fR1Source": {
+    "u": "sung",
+    "ɑ": "sung",
+    "i": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "u": 804,
+    "ɑ": 1013,
+    "i": 2250,
+    "e": 1727.9,
+    "ɛ": 1478.7,
+    "o": 931.6,
+    "ɨ": 1242.1,
+    "ɪ": 1804,
+    "ʌ": 1317.3,
+    "a": 1256.8
+   },
+   "fR2Source": {
+    "u": "sung",
+    "ɑ": "sung",
+    "i": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
    "label": "golden"
   },
+  "standIns": {
+   "bucket": "middle",
+   "steps": {
+    "e": "template",
+    "ɛ": "template",
+    "o": "template",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   }
+  },
   "completeness": {
-   "formants": false,
+   "formants": true,
    "range": false,
    "tessitura": false,
    "passaggio": false
@@ -647,12 +1347,70 @@
  },
  " | no fR2 on [e]": {
   "snapshot": {
-   "fR1": {},
-   "fR1Source": {},
+   "fR1": {
+    "i": 296,
+    "ɑ": 617,
+    "o": 489,
+    "e": 381,
+    "ɛ": 583.9,
+    "u": 365.7,
+    "ɨ": 465.9,
+    "ɪ": 546,
+    "ʌ": 647.9,
+    "a": 745.1
+   },
+   "fR1Source": {
+    "i": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "e": "sung",
+    "ɛ": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "ɑ": 1013,
+    "o": 826,
+    "e": 1727.9,
+    "ɛ": 1478.7,
+    "u": 906.8,
+    "ɨ": 1242.1,
+    "ɪ": 1804,
+    "ʌ": 1317.3,
+    "a": 1256.8
+   },
+   "fR2Source": {
+    "i": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
    "label": "golden"
   },
+  "standIns": {
+   "bucket": "middle",
+   "steps": {
+    "e": "template",
+    "ɛ": "template",
+    "u": "template",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   }
+  },
   "completeness": {
-   "formants": false,
+   "formants": true,
    "range": false,
    "tessitura": false,
    "passaggio": false
@@ -661,12 +1419,70 @@
  },
  " | provisional [u], [ɨ] sung": {
   "snapshot": {
-   "fR1": {},
-   "fR1Source": {},
+   "fR1": {
+    "i": 296,
+    "ɨ": 404,
+    "u": 346,
+    "e": 529.3,
+    "ɛ": 583.9,
+    "ɑ": 647.9,
+    "o": 517.2,
+    "ɪ": 546,
+    "ʌ": 647.9,
+    "a": 745.1
+   },
+   "fR1Source": {
+    "i": "sung",
+    "ɨ": "sung",
+    "u": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "ɨ": 1100,
+    "u": 804,
+    "e": 1727.9,
+    "ɛ": 1478.7,
+    "ɑ": 1142.5,
+    "o": 931.6,
+    "ɪ": 1804,
+    "ʌ": 1317.3,
+    "a": 1256.8
+   },
+   "fR2Source": {
+    "i": "sung",
+    "ɨ": "sung",
+    "u": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
    "label": "golden"
   },
+  "standIns": {
+   "bucket": "middle",
+   "steps": {
+    "e": "template",
+    "ɛ": "template",
+    "ɑ": "template",
+    "o": "template",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   }
+  },
   "completeness": {
-   "formants": false,
+   "formants": true,
    "range": false,
    "tessitura": false,
    "passaggio": false
@@ -817,7 +1633,7 @@
  "soprano | i": {
   "snapshot": {
    "fR1": {
-    "i": 380.8,
+    "i": 296,
     "e": 570.6,
     "ɛ": 604.5,
     "ɑ": 678.6,
@@ -829,7 +1645,7 @@
     "a": 780.4
    },
    "fR1Source": {
-    "i": "surrogate",
+    "i": "sung",
     "e": "surrogate",
     "ɛ": "surrogate",
     "ɑ": "surrogate",
@@ -841,7 +1657,7 @@
     "a": "surrogate"
    },
    "fR2": {
-    "i": 2087,
+    "i": 1705,
     "e": 1875.3,
     "ɛ": 1604.7,
     "ɑ": 1240,
@@ -853,7 +1669,7 @@
     "a": 1364
    },
    "fR2Source": {
-    "i": "surrogate",
+    "i": "sung",
     "e": "surrogate",
     "ɛ": "surrogate",
     "ɑ": "surrogate",
@@ -869,7 +1685,6 @@
   "standIns": {
    "bucket": "soprano",
    "steps": {
-    "i": "template",
     "e": "template",
     "ɛ": "template",
     "ɑ": "template",
@@ -887,53 +1702,53 @@
    "tessitura": false,
    "passaggio": false
   },
-  "generic": true
+  "generic": false
  },
  "soprano | i,u": {
   "snapshot": {
    "fR1": {
-    "i": 380.8,
+    "i": 296,
+    "u": 346,
     "e": 570.6,
     "ɛ": 604.5,
     "ɑ": 678.6,
     "o": 570.6,
-    "u": 415.3,
     "ɨ": 519.8,
     "ɪ": 588.6,
     "ʌ": 678.6,
     "a": 780.4
    },
    "fR1Source": {
-    "i": "surrogate",
+    "i": "sung",
+    "u": "sung",
     "e": "surrogate",
     "ɛ": "surrogate",
     "ɑ": "surrogate",
     "o": "surrogate",
-    "u": "surrogate",
     "ɨ": "surrogate",
     "ɪ": "surrogate",
     "ʌ": "surrogate",
     "a": "surrogate"
    },
    "fR2": {
-    "i": 2087,
+    "i": 1705,
+    "u": 804,
     "e": 1875.3,
     "ɛ": 1604.7,
     "ɑ": 1240,
     "o": 1011.1,
-    "u": 984.1,
     "ɨ": 1348.1,
     "ɪ": 1957.9,
     "ʌ": 1429.6,
     "a": 1364
    },
    "fR2Source": {
-    "i": "surrogate",
+    "i": "sung",
+    "u": "sung",
     "e": "surrogate",
     "ɛ": "surrogate",
     "ɑ": "surrogate",
     "o": "surrogate",
-    "u": "surrogate",
     "ɨ": "surrogate",
     "ɪ": "surrogate",
     "ʌ": "surrogate",
@@ -944,12 +1759,10 @@
   "standIns": {
    "bucket": "soprano",
    "steps": {
-    "i": "template",
     "e": "template",
     "ɛ": "template",
     "ɑ": "template",
     "o": "template",
-    "u": "template",
     "ɨ": "derived",
     "ɪ": "derived",
     "ʌ": "derived",
@@ -962,15 +1775,15 @@
    "tessitura": false,
    "passaggio": false
   },
-  "generic": true
+  "generic": false
  },
  "soprano | i,e,ɑ": {
   "snapshot": {
    "fR1": {
-    "i": 380.8,
-    "e": 570.6,
+    "i": 296,
+    "e": 381,
+    "ɑ": 617,
     "ɛ": 604.5,
-    "ɑ": 678.6,
     "o": 570.6,
     "u": 415.3,
     "ɨ": 519.8,
@@ -979,10 +1792,10 @@
     "a": 780.4
    },
    "fR1Source": {
-    "i": "surrogate",
-    "e": "surrogate",
+    "i": "sung",
+    "e": "sung",
+    "ɑ": "sung",
     "ɛ": "surrogate",
-    "ɑ": "surrogate",
     "o": "surrogate",
     "u": "surrogate",
     "ɨ": "surrogate",
@@ -991,10 +1804,10 @@
     "a": "surrogate"
    },
    "fR2": {
-    "i": 2087,
-    "e": 1875.3,
+    "i": 1705,
+    "e": 1532,
+    "ɑ": 1013,
     "ɛ": 1604.7,
-    "ɑ": 1240,
     "o": 1011.1,
     "u": 984.1,
     "ɨ": 1348.1,
@@ -1003,10 +1816,10 @@
     "a": 1364
    },
    "fR2Source": {
-    "i": "surrogate",
-    "e": "surrogate",
+    "i": "sung",
+    "e": "sung",
+    "ɑ": "sung",
     "ɛ": "surrogate",
-    "ɑ": "surrogate",
     "o": "surrogate",
     "u": "surrogate",
     "ɨ": "surrogate",
@@ -1019,10 +1832,7 @@
   "standIns": {
    "bucket": "soprano",
    "steps": {
-    "i": "template",
-    "e": "template",
     "ɛ": "template",
-    "ɑ": "template",
     "o": "template",
     "u": "template",
     "ɨ": "derived",
@@ -1037,16 +1847,16 @@
    "tessitura": false,
    "passaggio": false
   },
-  "generic": true
+  "generic": false
  },
  "soprano | e,ɛ,ɑ,o": {
   "snapshot": {
    "fR1": {
+    "e": 381,
+    "ɛ": 577,
+    "ɑ": 617,
+    "o": 489,
     "i": 380.8,
-    "e": 570.6,
-    "ɛ": 604.5,
-    "ɑ": 678.6,
-    "o": 570.6,
     "u": 415.3,
     "ɨ": 519.8,
     "ɪ": 588.6,
@@ -1054,11 +1864,11 @@
     "a": 780.4
    },
    "fR1Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
     "i": "surrogate",
-    "e": "surrogate",
-    "ɛ": "surrogate",
-    "ɑ": "surrogate",
-    "o": "surrogate",
     "u": "surrogate",
     "ɨ": "surrogate",
     "ɪ": "surrogate",
@@ -1066,11 +1876,11 @@
     "a": "surrogate"
    },
    "fR2": {
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
     "i": 2087,
-    "e": 1875.3,
-    "ɛ": 1604.7,
-    "ɑ": 1240,
-    "o": 1011.1,
     "u": 984.1,
     "ɨ": 1348.1,
     "ɪ": 1957.9,
@@ -1078,11 +1888,11 @@
     "a": 1364
    },
    "fR2Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
     "i": "surrogate",
-    "e": "surrogate",
-    "ɛ": "surrogate",
-    "ɑ": "surrogate",
-    "o": "surrogate",
     "u": "surrogate",
     "ɨ": "surrogate",
     "ɪ": "surrogate",
@@ -1095,10 +1905,6 @@
    "bucket": "soprano",
    "steps": {
     "i": "template",
-    "e": "template",
-    "ɛ": "template",
-    "ɑ": "template",
-    "o": "template",
     "u": "template",
     "ɨ": "derived",
     "ɪ": "derived",
@@ -1112,7 +1918,7 @@
    "tessitura": false,
    "passaggio": false
   },
-  "generic": true
+  "generic": false
  },
  "soprano | six": {
   "snapshot": {
@@ -1245,48 +2051,48 @@
  "soprano | bad i (1063), no override": {
   "snapshot": {
    "fR1": {
-    "i": 380.8,
+    "u": 346,
+    "ɑ": 617,
+    "i": 1063,
     "e": 570.6,
     "ɛ": 604.5,
-    "ɑ": 678.6,
     "o": 570.6,
-    "u": 415.3,
     "ɨ": 519.8,
     "ɪ": 588.6,
     "ʌ": 678.6,
     "a": 780.4
    },
    "fR1Source": {
-    "i": "surrogate",
+    "u": "sung",
+    "ɑ": "sung",
+    "i": "sung",
     "e": "surrogate",
     "ɛ": "surrogate",
-    "ɑ": "surrogate",
     "o": "surrogate",
-    "u": "surrogate",
     "ɨ": "surrogate",
     "ɪ": "surrogate",
     "ʌ": "surrogate",
     "a": "surrogate"
    },
    "fR2": {
-    "i": 2087,
+    "u": 804,
+    "ɑ": 1013,
+    "i": 2250,
     "e": 1875.3,
     "ɛ": 1604.7,
-    "ɑ": 1240,
     "o": 1011.1,
-    "u": 984.1,
     "ɨ": 1348.1,
     "ɪ": 1957.9,
     "ʌ": 1429.6,
     "a": 1364
    },
    "fR2Source": {
-    "i": "surrogate",
+    "u": "sung",
+    "ɑ": "sung",
+    "i": "sung",
     "e": "surrogate",
     "ɛ": "surrogate",
-    "ɑ": "surrogate",
     "o": "surrogate",
-    "u": "surrogate",
     "ɨ": "surrogate",
     "ɪ": "surrogate",
     "ʌ": "surrogate",
@@ -1297,12 +2103,9 @@
   "standIns": {
    "bucket": "soprano",
    "steps": {
-    "i": "template",
     "e": "template",
     "ɛ": "template",
-    "ɑ": "template",
     "o": "template",
-    "u": "template",
     "ɨ": "derived",
     "ɪ": "derived",
     "ʌ": "derived",
@@ -1315,7 +2118,7 @@
    "tessitura": false,
    "passaggio": false
   },
-  "generic": true
+  "generic": false
  },
  "soprano | bad i kept, six": {
   "snapshot": {
@@ -1384,11 +2187,11 @@
  "soprano | no fR2 on [e]": {
   "snapshot": {
    "fR1": {
-    "i": 380.8,
-    "e": 570.6,
+    "i": 296,
+    "ɑ": 617,
+    "o": 489,
+    "e": 381,
     "ɛ": 604.5,
-    "ɑ": 678.6,
-    "o": 570.6,
     "u": 415.3,
     "ɨ": 519.8,
     "ɪ": 588.6,
@@ -1396,11 +2199,11 @@
     "a": 780.4
    },
    "fR1Source": {
-    "i": "surrogate",
-    "e": "surrogate",
+    "i": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "e": "sung",
     "ɛ": "surrogate",
-    "ɑ": "surrogate",
-    "o": "surrogate",
     "u": "surrogate",
     "ɨ": "surrogate",
     "ɪ": "surrogate",
@@ -1408,11 +2211,11 @@
     "a": "surrogate"
    },
    "fR2": {
-    "i": 2087,
+    "i": 1705,
+    "ɑ": 1013,
+    "o": 826,
     "e": 1875.3,
     "ɛ": 1604.7,
-    "ɑ": 1240,
-    "o": 1011.1,
     "u": 984.1,
     "ɨ": 1348.1,
     "ɪ": 1957.9,
@@ -1420,11 +2223,11 @@
     "a": 1364
    },
    "fR2Source": {
-    "i": "surrogate",
+    "i": "sung",
+    "ɑ": "sung",
+    "o": "sung",
     "e": "surrogate",
     "ɛ": "surrogate",
-    "ɑ": "surrogate",
-    "o": "surrogate",
     "u": "surrogate",
     "ɨ": "surrogate",
     "ɪ": "surrogate",
@@ -1436,11 +2239,8 @@
   "standIns": {
    "bucket": "soprano",
    "steps": {
-    "i": "template",
     "e": "template",
     "ɛ": "template",
-    "ɑ": "template",
-    "o": "template",
     "u": "template",
     "ɨ": "derived",
     "ɪ": "derived",
@@ -1454,54 +2254,54 @@
    "tessitura": false,
    "passaggio": false
   },
-  "generic": true
+  "generic": false
  },
  "soprano | provisional [u], [ɨ] sung": {
   "snapshot": {
    "fR1": {
-    "i": 380.8,
+    "i": 296,
+    "ɨ": 404,
+    "u": 346,
     "e": 570.6,
     "ɛ": 604.5,
     "ɑ": 678.6,
     "o": 570.6,
-    "u": 415.3,
-    "ɨ": 519.8,
     "ɪ": 588.6,
     "ʌ": 678.6,
     "a": 780.4
    },
    "fR1Source": {
-    "i": "surrogate",
+    "i": "sung",
+    "ɨ": "sung",
+    "u": "sung",
     "e": "surrogate",
     "ɛ": "surrogate",
     "ɑ": "surrogate",
     "o": "surrogate",
-    "u": "surrogate",
-    "ɨ": "surrogate",
     "ɪ": "surrogate",
     "ʌ": "surrogate",
     "a": "surrogate"
    },
    "fR2": {
-    "i": 2087,
+    "i": 1705,
+    "ɨ": 1100,
+    "u": 804,
     "e": 1875.3,
     "ɛ": 1604.7,
     "ɑ": 1240,
     "o": 1011.1,
-    "u": 984.1,
-    "ɨ": 1348.1,
     "ɪ": 1957.9,
     "ʌ": 1429.6,
     "a": 1364
    },
    "fR2Source": {
-    "i": "surrogate",
+    "i": "sung",
+    "ɨ": "sung",
+    "u": "sung",
     "e": "surrogate",
     "ɛ": "surrogate",
     "ɑ": "surrogate",
     "o": "surrogate",
-    "u": "surrogate",
-    "ɨ": "surrogate",
     "ɪ": "surrogate",
     "ʌ": "surrogate",
     "a": "surrogate"
@@ -1511,13 +2311,10 @@
   "standIns": {
    "bucket": "soprano",
    "steps": {
-    "i": "template",
     "e": "template",
     "ɛ": "template",
     "ɑ": "template",
     "o": "template",
-    "u": "template",
-    "ɨ": "derived",
     "ɪ": "derived",
     "ʌ": "derived",
     "a": "derived"
@@ -1529,7 +2326,7 @@
    "tessitura": false,
    "passaggio": false
   },
-  "generic": true
+  "generic": false
  },
  "soprano | verdict stored": {
   "snapshot": {
@@ -1675,7 +2472,7 @@
  "mezzo-soprano | i": {
   "snapshot": {
    "fR1": {
-    "i": 339.3,
+    "i": 296,
     "e": 570.6,
     "ɛ": 604.5,
     "ɑ": 678.6,
@@ -1687,7 +2484,7 @@
     "a": 780.4
    },
    "fR1Source": {
-    "i": "surrogate",
+    "i": "sung",
     "e": "surrogate",
     "ɛ": "surrogate",
     "ɑ": "surrogate",
@@ -1699,7 +2496,7 @@
     "a": "surrogate"
    },
    "fR2": {
-    "i": 1998.5,
+    "i": 1705,
     "e": 1795.7,
     "ɛ": 1536.7,
     "ɑ": 1187.4,
@@ -1711,7 +2508,7 @@
     "a": 1306.1
    },
    "fR2Source": {
-    "i": "surrogate",
+    "i": "sung",
     "e": "surrogate",
     "ɛ": "surrogate",
     "ɑ": "surrogate",
@@ -1727,7 +2524,6 @@
   "standIns": {
    "bucket": "tenor-mezzo",
    "steps": {
-    "i": "template",
     "e": "template",
     "ɛ": "template",
     "ɑ": "template",
@@ -1745,53 +2541,53 @@
    "tessitura": false,
    "passaggio": false
   },
-  "generic": true
+  "generic": false
  },
  "mezzo-soprano | i,u": {
   "snapshot": {
    "fR1": {
-    "i": 339.3,
+    "i": 296,
+    "u": 346,
     "e": 570.6,
     "ɛ": 604.5,
     "ɑ": 678.6,
     "o": 538.6,
-    "u": 380.8,
     "ɨ": 463.1,
     "ɪ": 588.6,
     "ʌ": 678.6,
     "a": 780.4
    },
    "fR1Source": {
-    "i": "surrogate",
+    "i": "sung",
+    "u": "sung",
     "e": "surrogate",
     "ɛ": "surrogate",
     "ɑ": "surrogate",
     "o": "surrogate",
-    "u": "surrogate",
     "ɨ": "surrogate",
     "ɪ": "surrogate",
     "ʌ": "surrogate",
     "a": "surrogate"
    },
    "fR2": {
-    "i": 1998.5,
+    "i": 1705,
+    "u": 804,
     "e": 1795.7,
     "ɛ": 1536.7,
     "ɑ": 1187.4,
     "o": 968.2,
-    "u": 942.4,
     "ɨ": 1290.9,
     "ɪ": 1874.8,
     "ʌ": 1369,
     "a": 1306.1
    },
    "fR2Source": {
-    "i": "surrogate",
+    "i": "sung",
+    "u": "sung",
     "e": "surrogate",
     "ɛ": "surrogate",
     "ɑ": "surrogate",
     "o": "surrogate",
-    "u": "surrogate",
     "ɨ": "surrogate",
     "ɪ": "surrogate",
     "ʌ": "surrogate",
@@ -1802,12 +2598,10 @@
   "standIns": {
    "bucket": "tenor-mezzo",
    "steps": {
-    "i": "template",
     "e": "template",
     "ɛ": "template",
     "ɑ": "template",
     "o": "template",
-    "u": "template",
     "ɨ": "derived",
     "ɪ": "derived",
     "ʌ": "derived",
@@ -1820,15 +2614,15 @@
    "tessitura": false,
    "passaggio": false
   },
-  "generic": true
+  "generic": false
  },
  "mezzo-soprano | i,e,ɑ": {
   "snapshot": {
    "fR1": {
-    "i": 339.3,
-    "e": 570.6,
+    "i": 296,
+    "e": 381,
+    "ɑ": 617,
     "ɛ": 604.5,
-    "ɑ": 678.6,
     "o": 538.6,
     "u": 380.8,
     "ɨ": 463.1,
@@ -1837,10 +2631,10 @@
     "a": 780.4
    },
    "fR1Source": {
-    "i": "surrogate",
-    "e": "surrogate",
+    "i": "sung",
+    "e": "sung",
+    "ɑ": "sung",
     "ɛ": "surrogate",
-    "ɑ": "surrogate",
     "o": "surrogate",
     "u": "surrogate",
     "ɨ": "surrogate",
@@ -1849,10 +2643,10 @@
     "a": "surrogate"
    },
    "fR2": {
-    "i": 1998.5,
-    "e": 1795.7,
+    "i": 1705,
+    "e": 1532,
+    "ɑ": 1013,
     "ɛ": 1536.7,
-    "ɑ": 1187.4,
     "o": 968.2,
     "u": 942.4,
     "ɨ": 1290.9,
@@ -1861,10 +2655,10 @@
     "a": 1306.1
    },
    "fR2Source": {
-    "i": "surrogate",
-    "e": "surrogate",
+    "i": "sung",
+    "e": "sung",
+    "ɑ": "sung",
     "ɛ": "surrogate",
-    "ɑ": "surrogate",
     "o": "surrogate",
     "u": "surrogate",
     "ɨ": "surrogate",
@@ -1877,10 +2671,7 @@
   "standIns": {
    "bucket": "tenor-mezzo",
    "steps": {
-    "i": "template",
-    "e": "template",
     "ɛ": "template",
-    "ɑ": "template",
     "o": "template",
     "u": "template",
     "ɨ": "derived",
@@ -1895,16 +2686,16 @@
    "tessitura": false,
    "passaggio": false
   },
-  "generic": true
+  "generic": false
  },
  "mezzo-soprano | e,ɛ,ɑ,o": {
   "snapshot": {
    "fR1": {
+    "e": 381,
+    "ɛ": 577,
+    "ɑ": 617,
+    "o": 489,
     "i": 339.3,
-    "e": 570.6,
-    "ɛ": 604.5,
-    "ɑ": 678.6,
-    "o": 538.6,
     "u": 380.8,
     "ɨ": 463.1,
     "ɪ": 588.6,
@@ -1912,11 +2703,11 @@
     "a": 780.4
    },
    "fR1Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
     "i": "surrogate",
-    "e": "surrogate",
-    "ɛ": "surrogate",
-    "ɑ": "surrogate",
-    "o": "surrogate",
     "u": "surrogate",
     "ɨ": "surrogate",
     "ɪ": "surrogate",
@@ -1924,11 +2715,11 @@
     "a": "surrogate"
    },
    "fR2": {
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
     "i": 1998.5,
-    "e": 1795.7,
-    "ɛ": 1536.7,
-    "ɑ": 1187.4,
-    "o": 968.2,
     "u": 942.4,
     "ɨ": 1290.9,
     "ɪ": 1874.8,
@@ -1936,11 +2727,11 @@
     "a": 1306.1
    },
    "fR2Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
     "i": "surrogate",
-    "e": "surrogate",
-    "ɛ": "surrogate",
-    "ɑ": "surrogate",
-    "o": "surrogate",
     "u": "surrogate",
     "ɨ": "surrogate",
     "ɪ": "surrogate",
@@ -1953,10 +2744,6 @@
    "bucket": "tenor-mezzo",
    "steps": {
     "i": "template",
-    "e": "template",
-    "ɛ": "template",
-    "ɑ": "template",
-    "o": "template",
     "u": "template",
     "ɨ": "derived",
     "ɪ": "derived",
@@ -1970,7 +2757,7 @@
    "tessitura": false,
    "passaggio": false
   },
-  "generic": true
+  "generic": false
  },
  "mezzo-soprano | six": {
   "snapshot": {
@@ -2103,48 +2890,48 @@
  "mezzo-soprano | bad i (1063), no override": {
   "snapshot": {
    "fR1": {
-    "i": 339.3,
+    "u": 346,
+    "ɑ": 617,
+    "i": 1063,
     "e": 570.6,
     "ɛ": 604.5,
-    "ɑ": 678.6,
     "o": 538.6,
-    "u": 380.8,
     "ɨ": 463.1,
     "ɪ": 588.6,
     "ʌ": 678.6,
     "a": 780.4
    },
    "fR1Source": {
-    "i": "surrogate",
+    "u": "sung",
+    "ɑ": "sung",
+    "i": "sung",
     "e": "surrogate",
     "ɛ": "surrogate",
-    "ɑ": "surrogate",
     "o": "surrogate",
-    "u": "surrogate",
     "ɨ": "surrogate",
     "ɪ": "surrogate",
     "ʌ": "surrogate",
     "a": "surrogate"
    },
    "fR2": {
-    "i": 1998.5,
+    "u": 804,
+    "ɑ": 1013,
+    "i": 2250,
     "e": 1795.7,
     "ɛ": 1536.7,
-    "ɑ": 1187.4,
     "o": 968.2,
-    "u": 942.4,
     "ɨ": 1290.9,
     "ɪ": 1874.8,
     "ʌ": 1369,
     "a": 1306.1
    },
    "fR2Source": {
-    "i": "surrogate",
+    "u": "sung",
+    "ɑ": "sung",
+    "i": "sung",
     "e": "surrogate",
     "ɛ": "surrogate",
-    "ɑ": "surrogate",
     "o": "surrogate",
-    "u": "surrogate",
     "ɨ": "surrogate",
     "ɪ": "surrogate",
     "ʌ": "surrogate",
@@ -2155,12 +2942,9 @@
   "standIns": {
    "bucket": "tenor-mezzo",
    "steps": {
-    "i": "template",
     "e": "template",
     "ɛ": "template",
-    "ɑ": "template",
     "o": "template",
-    "u": "template",
     "ɨ": "derived",
     "ɪ": "derived",
     "ʌ": "derived",
@@ -2173,7 +2957,7 @@
    "tessitura": false,
    "passaggio": false
   },
-  "generic": true
+  "generic": false
  },
  "mezzo-soprano | bad i kept, six": {
   "snapshot": {
@@ -2242,11 +3026,11 @@
  "mezzo-soprano | no fR2 on [e]": {
   "snapshot": {
    "fR1": {
-    "i": 339.3,
-    "e": 570.6,
+    "i": 296,
+    "ɑ": 617,
+    "o": 489,
+    "e": 381,
     "ɛ": 604.5,
-    "ɑ": 678.6,
-    "o": 538.6,
     "u": 380.8,
     "ɨ": 463.1,
     "ɪ": 588.6,
@@ -2254,11 +3038,11 @@
     "a": 780.4
    },
    "fR1Source": {
-    "i": "surrogate",
-    "e": "surrogate",
+    "i": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "e": "sung",
     "ɛ": "surrogate",
-    "ɑ": "surrogate",
-    "o": "surrogate",
     "u": "surrogate",
     "ɨ": "surrogate",
     "ɪ": "surrogate",
@@ -2266,11 +3050,11 @@
     "a": "surrogate"
    },
    "fR2": {
-    "i": 1998.5,
+    "i": 1705,
+    "ɑ": 1013,
+    "o": 826,
     "e": 1795.7,
     "ɛ": 1536.7,
-    "ɑ": 1187.4,
-    "o": 968.2,
     "u": 942.4,
     "ɨ": 1290.9,
     "ɪ": 1874.8,
@@ -2278,11 +3062,11 @@
     "a": 1306.1
    },
    "fR2Source": {
-    "i": "surrogate",
+    "i": "sung",
+    "ɑ": "sung",
+    "o": "sung",
     "e": "surrogate",
     "ɛ": "surrogate",
-    "ɑ": "surrogate",
-    "o": "surrogate",
     "u": "surrogate",
     "ɨ": "surrogate",
     "ɪ": "surrogate",
@@ -2294,11 +3078,8 @@
   "standIns": {
    "bucket": "tenor-mezzo",
    "steps": {
-    "i": "template",
     "e": "template",
     "ɛ": "template",
-    "ɑ": "template",
-    "o": "template",
     "u": "template",
     "ɨ": "derived",
     "ɪ": "derived",
@@ -2312,54 +3093,54 @@
    "tessitura": false,
    "passaggio": false
   },
-  "generic": true
+  "generic": false
  },
  "mezzo-soprano | provisional [u], [ɨ] sung": {
   "snapshot": {
    "fR1": {
-    "i": 339.3,
+    "i": 296,
+    "ɨ": 404,
+    "u": 346,
     "e": 570.6,
     "ɛ": 604.5,
     "ɑ": 678.6,
     "o": 538.6,
-    "u": 380.8,
-    "ɨ": 463.1,
     "ɪ": 588.6,
     "ʌ": 678.6,
     "a": 780.4
    },
    "fR1Source": {
-    "i": "surrogate",
+    "i": "sung",
+    "ɨ": "sung",
+    "u": "sung",
     "e": "surrogate",
     "ɛ": "surrogate",
     "ɑ": "surrogate",
     "o": "surrogate",
-    "u": "surrogate",
-    "ɨ": "surrogate",
     "ɪ": "surrogate",
     "ʌ": "surrogate",
     "a": "surrogate"
    },
    "fR2": {
-    "i": 1998.5,
+    "i": 1705,
+    "ɨ": 1100,
+    "u": 804,
     "e": 1795.7,
     "ɛ": 1536.7,
     "ɑ": 1187.4,
     "o": 968.2,
-    "u": 942.4,
-    "ɨ": 1290.9,
     "ɪ": 1874.8,
     "ʌ": 1369,
     "a": 1306.1
    },
    "fR2Source": {
-    "i": "surrogate",
+    "i": "sung",
+    "ɨ": "sung",
+    "u": "sung",
     "e": "surrogate",
     "ɛ": "surrogate",
     "ɑ": "surrogate",
     "o": "surrogate",
-    "u": "surrogate",
-    "ɨ": "surrogate",
     "ɪ": "surrogate",
     "ʌ": "surrogate",
     "a": "surrogate"
@@ -2369,13 +3150,10 @@
   "standIns": {
    "bucket": "tenor-mezzo",
    "steps": {
-    "i": "template",
     "e": "template",
     "ɛ": "template",
     "ɑ": "template",
     "o": "template",
-    "u": "template",
-    "ɨ": "derived",
     "ɪ": "derived",
     "ʌ": "derived",
     "a": "derived"
@@ -2387,7 +3165,7 @@
    "tessitura": false,
    "passaggio": false
   },
-  "generic": true
+  "generic": false
  },
  "mezzo-soprano | verdict stored": {
   "snapshot": {
@@ -2471,12 +3249,72 @@
  },
  "mezzo | i": {
   "snapshot": {
-   "fR1": {},
-   "fR1Source": {},
+   "fR1": {
+    "i": 296,
+    "e": 570.6,
+    "ɛ": 604.5,
+    "ɑ": 678.6,
+    "o": 538.6,
+    "u": 380.8,
+    "ɨ": 463.1,
+    "ɪ": 588.6,
+    "ʌ": 678.6,
+    "a": 780.4
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1795.7,
+    "ɛ": 1536.7,
+    "ɑ": 1187.4,
+    "o": 968.2,
+    "u": 942.4,
+    "ɨ": 1290.9,
+    "ɪ": 1874.8,
+    "ʌ": 1369,
+    "a": 1306.1
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
    "label": "golden"
   },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "e": "template",
+    "ɛ": "template",
+    "ɑ": "template",
+    "o": "template",
+    "u": "template",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   }
+  },
   "completeness": {
-   "formants": false,
+   "formants": true,
    "range": false,
    "tessitura": false,
    "passaggio": false
@@ -2485,12 +3323,71 @@
  },
  "mezzo | i,u": {
   "snapshot": {
-   "fR1": {},
-   "fR1Source": {},
+   "fR1": {
+    "i": 296,
+    "u": 346,
+    "e": 570.6,
+    "ɛ": 604.5,
+    "ɑ": 678.6,
+    "o": 538.6,
+    "ɨ": 463.1,
+    "ɪ": 588.6,
+    "ʌ": 678.6,
+    "a": 780.4
+   },
+   "fR1Source": {
+    "i": "sung",
+    "u": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "u": 804,
+    "e": 1795.7,
+    "ɛ": 1536.7,
+    "ɑ": 1187.4,
+    "o": 968.2,
+    "ɨ": 1290.9,
+    "ɪ": 1874.8,
+    "ʌ": 1369,
+    "a": 1306.1
+   },
+   "fR2Source": {
+    "i": "sung",
+    "u": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
    "label": "golden"
   },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "e": "template",
+    "ɛ": "template",
+    "ɑ": "template",
+    "o": "template",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   }
+  },
   "completeness": {
-   "formants": false,
+   "formants": true,
    "range": false,
    "tessitura": false,
    "passaggio": false
@@ -2499,12 +3396,70 @@
  },
  "mezzo | i,e,ɑ": {
   "snapshot": {
-   "fR1": {},
-   "fR1Source": {},
+   "fR1": {
+    "i": 296,
+    "e": 381,
+    "ɑ": 617,
+    "ɛ": 604.5,
+    "o": 538.6,
+    "u": 380.8,
+    "ɨ": 463.1,
+    "ɪ": 588.6,
+    "ʌ": 678.6,
+    "a": 780.4
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɑ": "sung",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɑ": 1013,
+    "ɛ": 1536.7,
+    "o": 968.2,
+    "u": 942.4,
+    "ɨ": 1290.9,
+    "ɪ": 1874.8,
+    "ʌ": 1369,
+    "a": 1306.1
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɑ": "sung",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
    "label": "golden"
   },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "ɛ": "template",
+    "o": "template",
+    "u": "template",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   }
+  },
   "completeness": {
-   "formants": false,
+   "formants": true,
    "range": false,
    "tessitura": false,
    "passaggio": false
@@ -2513,12 +3468,69 @@
  },
  "mezzo | e,ɛ,ɑ,o": {
   "snapshot": {
-   "fR1": {},
-   "fR1Source": {},
+   "fR1": {
+    "e": 381,
+    "ɛ": 577,
+    "ɑ": 617,
+    "o": 489,
+    "i": 339.3,
+    "u": 380.8,
+    "ɨ": 463.1,
+    "ɪ": 588.6,
+    "ʌ": 678.6,
+    "a": 780.4
+   },
+   "fR1Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "i": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "i": 1998.5,
+    "u": 942.4,
+    "ɨ": 1290.9,
+    "ɪ": 1874.8,
+    "ʌ": 1369,
+    "a": 1306.1
+   },
+   "fR2Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "i": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
    "label": "golden"
   },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "i": "template",
+    "u": "template",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   }
+  },
   "completeness": {
-   "formants": false,
+   "formants": true,
    "range": false,
    "tessitura": false,
    "passaggio": false
@@ -2655,12 +3667,70 @@
  },
  "mezzo | bad i (1063), no override": {
   "snapshot": {
-   "fR1": {},
-   "fR1Source": {},
+   "fR1": {
+    "u": 346,
+    "ɑ": 617,
+    "i": 1063,
+    "e": 570.6,
+    "ɛ": 604.5,
+    "o": 538.6,
+    "ɨ": 463.1,
+    "ɪ": 588.6,
+    "ʌ": 678.6,
+    "a": 780.4
+   },
+   "fR1Source": {
+    "u": "sung",
+    "ɑ": "sung",
+    "i": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "u": 804,
+    "ɑ": 1013,
+    "i": 2250,
+    "e": 1795.7,
+    "ɛ": 1536.7,
+    "o": 968.2,
+    "ɨ": 1290.9,
+    "ɪ": 1874.8,
+    "ʌ": 1369,
+    "a": 1306.1
+   },
+   "fR2Source": {
+    "u": "sung",
+    "ɑ": "sung",
+    "i": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
    "label": "golden"
   },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "e": "template",
+    "ɛ": "template",
+    "o": "template",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   }
+  },
   "completeness": {
-   "formants": false,
+   "formants": true,
    "range": false,
    "tessitura": false,
    "passaggio": false
@@ -2733,12 +3803,70 @@
  },
  "mezzo | no fR2 on [e]": {
   "snapshot": {
-   "fR1": {},
-   "fR1Source": {},
+   "fR1": {
+    "i": 296,
+    "ɑ": 617,
+    "o": 489,
+    "e": 381,
+    "ɛ": 604.5,
+    "u": 380.8,
+    "ɨ": 463.1,
+    "ɪ": 588.6,
+    "ʌ": 678.6,
+    "a": 780.4
+   },
+   "fR1Source": {
+    "i": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "e": "sung",
+    "ɛ": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "ɑ": 1013,
+    "o": 826,
+    "e": 1795.7,
+    "ɛ": 1536.7,
+    "u": 942.4,
+    "ɨ": 1290.9,
+    "ɪ": 1874.8,
+    "ʌ": 1369,
+    "a": 1306.1
+   },
+   "fR2Source": {
+    "i": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
    "label": "golden"
   },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "e": "template",
+    "ɛ": "template",
+    "u": "template",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   }
+  },
   "completeness": {
-   "formants": false,
+   "formants": true,
    "range": false,
    "tessitura": false,
    "passaggio": false
@@ -2747,12 +3875,70 @@
  },
  "mezzo | provisional [u], [ɨ] sung": {
   "snapshot": {
-   "fR1": {},
-   "fR1Source": {},
+   "fR1": {
+    "i": 296,
+    "ɨ": 404,
+    "u": 346,
+    "e": 570.6,
+    "ɛ": 604.5,
+    "ɑ": 678.6,
+    "o": 538.6,
+    "ɪ": 588.6,
+    "ʌ": 678.6,
+    "a": 780.4
+   },
+   "fR1Source": {
+    "i": "sung",
+    "ɨ": "sung",
+    "u": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "ɨ": 1100,
+    "u": 804,
+    "e": 1795.7,
+    "ɛ": 1536.7,
+    "ɑ": 1187.4,
+    "o": 968.2,
+    "ɪ": 1874.8,
+    "ʌ": 1369,
+    "a": 1306.1
+   },
+   "fR2Source": {
+    "i": "sung",
+    "ɨ": "sung",
+    "u": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
    "label": "golden"
   },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "e": "template",
+    "ɛ": "template",
+    "ɑ": "template",
+    "o": "template",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   }
+  },
   "completeness": {
-   "formants": false,
+   "formants": true,
    "range": false,
    "tessitura": false,
    "passaggio": false
@@ -2841,12 +4027,72 @@
  },
  "contralto | i": {
   "snapshot": {
-   "fR1": {},
-   "fR1Source": {},
+   "fR1": {
+    "i": 296,
+    "e": 570.6,
+    "ɛ": 604.5,
+    "ɑ": 678.6,
+    "o": 538.6,
+    "u": 380.8,
+    "ɨ": 463.1,
+    "ɪ": 588.6,
+    "ʌ": 678.6,
+    "a": 780.4
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1795.7,
+    "ɛ": 1536.7,
+    "ɑ": 1187.4,
+    "o": 968.2,
+    "u": 942.4,
+    "ɨ": 1290.9,
+    "ɪ": 1874.8,
+    "ʌ": 1369,
+    "a": 1306.1
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
    "label": "golden"
   },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "e": "template",
+    "ɛ": "template",
+    "ɑ": "template",
+    "o": "template",
+    "u": "template",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   }
+  },
   "completeness": {
-   "formants": false,
+   "formants": true,
    "range": false,
    "tessitura": false,
    "passaggio": false
@@ -2855,12 +4101,71 @@
  },
  "contralto | i,u": {
   "snapshot": {
-   "fR1": {},
-   "fR1Source": {},
+   "fR1": {
+    "i": 296,
+    "u": 346,
+    "e": 570.6,
+    "ɛ": 604.5,
+    "ɑ": 678.6,
+    "o": 538.6,
+    "ɨ": 463.1,
+    "ɪ": 588.6,
+    "ʌ": 678.6,
+    "a": 780.4
+   },
+   "fR1Source": {
+    "i": "sung",
+    "u": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "u": 804,
+    "e": 1795.7,
+    "ɛ": 1536.7,
+    "ɑ": 1187.4,
+    "o": 968.2,
+    "ɨ": 1290.9,
+    "ɪ": 1874.8,
+    "ʌ": 1369,
+    "a": 1306.1
+   },
+   "fR2Source": {
+    "i": "sung",
+    "u": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
    "label": "golden"
   },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "e": "template",
+    "ɛ": "template",
+    "ɑ": "template",
+    "o": "template",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   }
+  },
   "completeness": {
-   "formants": false,
+   "formants": true,
    "range": false,
    "tessitura": false,
    "passaggio": false
@@ -2869,12 +4174,70 @@
  },
  "contralto | i,e,ɑ": {
   "snapshot": {
-   "fR1": {},
-   "fR1Source": {},
+   "fR1": {
+    "i": 296,
+    "e": 381,
+    "ɑ": 617,
+    "ɛ": 604.5,
+    "o": 538.6,
+    "u": 380.8,
+    "ɨ": 463.1,
+    "ɪ": 588.6,
+    "ʌ": 678.6,
+    "a": 780.4
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɑ": "sung",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɑ": 1013,
+    "ɛ": 1536.7,
+    "o": 968.2,
+    "u": 942.4,
+    "ɨ": 1290.9,
+    "ɪ": 1874.8,
+    "ʌ": 1369,
+    "a": 1306.1
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɑ": "sung",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
    "label": "golden"
   },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "ɛ": "template",
+    "o": "template",
+    "u": "template",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   }
+  },
   "completeness": {
-   "formants": false,
+   "formants": true,
    "range": false,
    "tessitura": false,
    "passaggio": false
@@ -2883,12 +4246,69 @@
  },
  "contralto | e,ɛ,ɑ,o": {
   "snapshot": {
-   "fR1": {},
-   "fR1Source": {},
+   "fR1": {
+    "e": 381,
+    "ɛ": 577,
+    "ɑ": 617,
+    "o": 489,
+    "i": 339.3,
+    "u": 380.8,
+    "ɨ": 463.1,
+    "ɪ": 588.6,
+    "ʌ": 678.6,
+    "a": 780.4
+   },
+   "fR1Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "i": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "i": 1998.5,
+    "u": 942.4,
+    "ɨ": 1290.9,
+    "ɪ": 1874.8,
+    "ʌ": 1369,
+    "a": 1306.1
+   },
+   "fR2Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "i": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
    "label": "golden"
   },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "i": "template",
+    "u": "template",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   }
+  },
   "completeness": {
-   "formants": false,
+   "formants": true,
    "range": false,
    "tessitura": false,
    "passaggio": false
@@ -3025,12 +4445,70 @@
  },
  "contralto | bad i (1063), no override": {
   "snapshot": {
-   "fR1": {},
-   "fR1Source": {},
+   "fR1": {
+    "u": 346,
+    "ɑ": 617,
+    "i": 1063,
+    "e": 570.6,
+    "ɛ": 604.5,
+    "o": 538.6,
+    "ɨ": 463.1,
+    "ɪ": 588.6,
+    "ʌ": 678.6,
+    "a": 780.4
+   },
+   "fR1Source": {
+    "u": "sung",
+    "ɑ": "sung",
+    "i": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "u": 804,
+    "ɑ": 1013,
+    "i": 2250,
+    "e": 1795.7,
+    "ɛ": 1536.7,
+    "o": 968.2,
+    "ɨ": 1290.9,
+    "ɪ": 1874.8,
+    "ʌ": 1369,
+    "a": 1306.1
+   },
+   "fR2Source": {
+    "u": "sung",
+    "ɑ": "sung",
+    "i": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
    "label": "golden"
   },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "e": "template",
+    "ɛ": "template",
+    "o": "template",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   }
+  },
   "completeness": {
-   "formants": false,
+   "formants": true,
    "range": false,
    "tessitura": false,
    "passaggio": false
@@ -3103,12 +4581,70 @@
  },
  "contralto | no fR2 on [e]": {
   "snapshot": {
-   "fR1": {},
-   "fR1Source": {},
+   "fR1": {
+    "i": 296,
+    "ɑ": 617,
+    "o": 489,
+    "e": 381,
+    "ɛ": 604.5,
+    "u": 380.8,
+    "ɨ": 463.1,
+    "ɪ": 588.6,
+    "ʌ": 678.6,
+    "a": 780.4
+   },
+   "fR1Source": {
+    "i": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "e": "sung",
+    "ɛ": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "ɑ": 1013,
+    "o": 826,
+    "e": 1795.7,
+    "ɛ": 1536.7,
+    "u": 942.4,
+    "ɨ": 1290.9,
+    "ɪ": 1874.8,
+    "ʌ": 1369,
+    "a": 1306.1
+   },
+   "fR2Source": {
+    "i": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
    "label": "golden"
   },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "e": "template",
+    "ɛ": "template",
+    "u": "template",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   }
+  },
   "completeness": {
-   "formants": false,
+   "formants": true,
    "range": false,
    "tessitura": false,
    "passaggio": false
@@ -3117,12 +4653,70 @@
  },
  "contralto | provisional [u], [ɨ] sung": {
   "snapshot": {
-   "fR1": {},
-   "fR1Source": {},
+   "fR1": {
+    "i": 296,
+    "ɨ": 404,
+    "u": 346,
+    "e": 570.6,
+    "ɛ": 604.5,
+    "ɑ": 678.6,
+    "o": 538.6,
+    "ɪ": 588.6,
+    "ʌ": 678.6,
+    "a": 780.4
+   },
+   "fR1Source": {
+    "i": "sung",
+    "ɨ": "sung",
+    "u": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "ɨ": 1100,
+    "u": 804,
+    "e": 1795.7,
+    "ɛ": 1536.7,
+    "ɑ": 1187.4,
+    "o": 968.2,
+    "ɪ": 1874.8,
+    "ʌ": 1369,
+    "a": 1306.1
+   },
+   "fR2Source": {
+    "i": "sung",
+    "ɨ": "sung",
+    "u": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
    "label": "golden"
   },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "e": "template",
+    "ɛ": "template",
+    "ɑ": "template",
+    "o": "template",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   }
+  },
   "completeness": {
-   "formants": false,
+   "formants": true,
    "range": false,
    "tessitura": false,
    "passaggio": false
@@ -3273,7 +4867,7 @@
  "tenor | i": {
   "snapshot": {
    "fR1": {
-    "i": 339.3,
+    "i": 296,
     "e": 570.6,
     "ɛ": 604.5,
     "ɑ": 678.6,
@@ -3285,7 +4879,7 @@
     "a": 780.4
    },
    "fR1Source": {
-    "i": "surrogate",
+    "i": "sung",
     "e": "surrogate",
     "ɛ": "surrogate",
     "ɑ": "surrogate",
@@ -3297,7 +4891,7 @@
     "a": "surrogate"
    },
    "fR2": {
-    "i": 1998.5,
+    "i": 1705,
     "e": 1795.7,
     "ɛ": 1536.7,
     "ɑ": 1187.4,
@@ -3309,7 +4903,7 @@
     "a": 1306.1
    },
    "fR2Source": {
-    "i": "surrogate",
+    "i": "sung",
     "e": "surrogate",
     "ɛ": "surrogate",
     "ɑ": "surrogate",
@@ -3325,7 +4919,6 @@
   "standIns": {
    "bucket": "tenor-mezzo",
    "steps": {
-    "i": "template",
     "e": "template",
     "ɛ": "template",
     "ɑ": "template",
@@ -3343,53 +4936,53 @@
    "tessitura": false,
    "passaggio": false
   },
-  "generic": true
+  "generic": false
  },
  "tenor | i,u": {
   "snapshot": {
    "fR1": {
-    "i": 339.3,
+    "i": 296,
+    "u": 346,
     "e": 570.6,
     "ɛ": 604.5,
     "ɑ": 678.6,
     "o": 538.6,
-    "u": 380.8,
     "ɨ": 463.1,
     "ɪ": 588.6,
     "ʌ": 678.6,
     "a": 780.4
    },
    "fR1Source": {
-    "i": "surrogate",
+    "i": "sung",
+    "u": "sung",
     "e": "surrogate",
     "ɛ": "surrogate",
     "ɑ": "surrogate",
     "o": "surrogate",
-    "u": "surrogate",
     "ɨ": "surrogate",
     "ɪ": "surrogate",
     "ʌ": "surrogate",
     "a": "surrogate"
    },
    "fR2": {
-    "i": 1998.5,
+    "i": 1705,
+    "u": 804,
     "e": 1795.7,
     "ɛ": 1536.7,
     "ɑ": 1187.4,
     "o": 968.2,
-    "u": 942.4,
     "ɨ": 1290.9,
     "ɪ": 1874.8,
     "ʌ": 1369,
     "a": 1306.1
    },
    "fR2Source": {
-    "i": "surrogate",
+    "i": "sung",
+    "u": "sung",
     "e": "surrogate",
     "ɛ": "surrogate",
     "ɑ": "surrogate",
     "o": "surrogate",
-    "u": "surrogate",
     "ɨ": "surrogate",
     "ɪ": "surrogate",
     "ʌ": "surrogate",
@@ -3400,12 +4993,10 @@
   "standIns": {
    "bucket": "tenor-mezzo",
    "steps": {
-    "i": "template",
     "e": "template",
     "ɛ": "template",
     "ɑ": "template",
     "o": "template",
-    "u": "template",
     "ɨ": "derived",
     "ɪ": "derived",
     "ʌ": "derived",
@@ -3418,15 +5009,15 @@
    "tessitura": false,
    "passaggio": false
   },
-  "generic": true
+  "generic": false
  },
  "tenor | i,e,ɑ": {
   "snapshot": {
    "fR1": {
-    "i": 339.3,
-    "e": 570.6,
+    "i": 296,
+    "e": 381,
+    "ɑ": 617,
     "ɛ": 604.5,
-    "ɑ": 678.6,
     "o": 538.6,
     "u": 380.8,
     "ɨ": 463.1,
@@ -3435,10 +5026,10 @@
     "a": 780.4
    },
    "fR1Source": {
-    "i": "surrogate",
-    "e": "surrogate",
+    "i": "sung",
+    "e": "sung",
+    "ɑ": "sung",
     "ɛ": "surrogate",
-    "ɑ": "surrogate",
     "o": "surrogate",
     "u": "surrogate",
     "ɨ": "surrogate",
@@ -3447,10 +5038,10 @@
     "a": "surrogate"
    },
    "fR2": {
-    "i": 1998.5,
-    "e": 1795.7,
+    "i": 1705,
+    "e": 1532,
+    "ɑ": 1013,
     "ɛ": 1536.7,
-    "ɑ": 1187.4,
     "o": 968.2,
     "u": 942.4,
     "ɨ": 1290.9,
@@ -3459,10 +5050,10 @@
     "a": 1306.1
    },
    "fR2Source": {
-    "i": "surrogate",
-    "e": "surrogate",
+    "i": "sung",
+    "e": "sung",
+    "ɑ": "sung",
     "ɛ": "surrogate",
-    "ɑ": "surrogate",
     "o": "surrogate",
     "u": "surrogate",
     "ɨ": "surrogate",
@@ -3475,10 +5066,7 @@
   "standIns": {
    "bucket": "tenor-mezzo",
    "steps": {
-    "i": "template",
-    "e": "template",
     "ɛ": "template",
-    "ɑ": "template",
     "o": "template",
     "u": "template",
     "ɨ": "derived",
@@ -3493,16 +5081,16 @@
    "tessitura": false,
    "passaggio": false
   },
-  "generic": true
+  "generic": false
  },
  "tenor | e,ɛ,ɑ,o": {
   "snapshot": {
    "fR1": {
+    "e": 381,
+    "ɛ": 577,
+    "ɑ": 617,
+    "o": 489,
     "i": 339.3,
-    "e": 570.6,
-    "ɛ": 604.5,
-    "ɑ": 678.6,
-    "o": 538.6,
     "u": 380.8,
     "ɨ": 463.1,
     "ɪ": 588.6,
@@ -3510,11 +5098,11 @@
     "a": 780.4
    },
    "fR1Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
     "i": "surrogate",
-    "e": "surrogate",
-    "ɛ": "surrogate",
-    "ɑ": "surrogate",
-    "o": "surrogate",
     "u": "surrogate",
     "ɨ": "surrogate",
     "ɪ": "surrogate",
@@ -3522,11 +5110,11 @@
     "a": "surrogate"
    },
    "fR2": {
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
     "i": 1998.5,
-    "e": 1795.7,
-    "ɛ": 1536.7,
-    "ɑ": 1187.4,
-    "o": 968.2,
     "u": 942.4,
     "ɨ": 1290.9,
     "ɪ": 1874.8,
@@ -3534,11 +5122,11 @@
     "a": 1306.1
    },
    "fR2Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
     "i": "surrogate",
-    "e": "surrogate",
-    "ɛ": "surrogate",
-    "ɑ": "surrogate",
-    "o": "surrogate",
     "u": "surrogate",
     "ɨ": "surrogate",
     "ɪ": "surrogate",
@@ -3551,10 +5139,6 @@
    "bucket": "tenor-mezzo",
    "steps": {
     "i": "template",
-    "e": "template",
-    "ɛ": "template",
-    "ɑ": "template",
-    "o": "template",
     "u": "template",
     "ɨ": "derived",
     "ɪ": "derived",
@@ -3568,7 +5152,7 @@
    "tessitura": false,
    "passaggio": false
   },
-  "generic": true
+  "generic": false
  },
  "tenor | six": {
   "snapshot": {
@@ -3701,48 +5285,48 @@
  "tenor | bad i (1063), no override": {
   "snapshot": {
    "fR1": {
-    "i": 339.3,
+    "u": 346,
+    "ɑ": 617,
+    "i": 1063,
     "e": 570.6,
     "ɛ": 604.5,
-    "ɑ": 678.6,
     "o": 538.6,
-    "u": 380.8,
     "ɨ": 463.1,
     "ɪ": 588.6,
     "ʌ": 678.6,
     "a": 780.4
    },
    "fR1Source": {
-    "i": "surrogate",
+    "u": "sung",
+    "ɑ": "sung",
+    "i": "sung",
     "e": "surrogate",
     "ɛ": "surrogate",
-    "ɑ": "surrogate",
     "o": "surrogate",
-    "u": "surrogate",
     "ɨ": "surrogate",
     "ɪ": "surrogate",
     "ʌ": "surrogate",
     "a": "surrogate"
    },
    "fR2": {
-    "i": 1998.5,
+    "u": 804,
+    "ɑ": 1013,
+    "i": 2250,
     "e": 1795.7,
     "ɛ": 1536.7,
-    "ɑ": 1187.4,
     "o": 968.2,
-    "u": 942.4,
     "ɨ": 1290.9,
     "ɪ": 1874.8,
     "ʌ": 1369,
     "a": 1306.1
    },
    "fR2Source": {
-    "i": "surrogate",
+    "u": "sung",
+    "ɑ": "sung",
+    "i": "sung",
     "e": "surrogate",
     "ɛ": "surrogate",
-    "ɑ": "surrogate",
     "o": "surrogate",
-    "u": "surrogate",
     "ɨ": "surrogate",
     "ɪ": "surrogate",
     "ʌ": "surrogate",
@@ -3753,12 +5337,9 @@
   "standIns": {
    "bucket": "tenor-mezzo",
    "steps": {
-    "i": "template",
     "e": "template",
     "ɛ": "template",
-    "ɑ": "template",
     "o": "template",
-    "u": "template",
     "ɨ": "derived",
     "ɪ": "derived",
     "ʌ": "derived",
@@ -3771,7 +5352,7 @@
    "tessitura": false,
    "passaggio": false
   },
-  "generic": true
+  "generic": false
  },
  "tenor | bad i kept, six": {
   "snapshot": {
@@ -3840,11 +5421,11 @@
  "tenor | no fR2 on [e]": {
   "snapshot": {
    "fR1": {
-    "i": 339.3,
-    "e": 570.6,
+    "i": 296,
+    "ɑ": 617,
+    "o": 489,
+    "e": 381,
     "ɛ": 604.5,
-    "ɑ": 678.6,
-    "o": 538.6,
     "u": 380.8,
     "ɨ": 463.1,
     "ɪ": 588.6,
@@ -3852,11 +5433,11 @@
     "a": 780.4
    },
    "fR1Source": {
-    "i": "surrogate",
-    "e": "surrogate",
+    "i": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "e": "sung",
     "ɛ": "surrogate",
-    "ɑ": "surrogate",
-    "o": "surrogate",
     "u": "surrogate",
     "ɨ": "surrogate",
     "ɪ": "surrogate",
@@ -3864,11 +5445,11 @@
     "a": "surrogate"
    },
    "fR2": {
-    "i": 1998.5,
+    "i": 1705,
+    "ɑ": 1013,
+    "o": 826,
     "e": 1795.7,
     "ɛ": 1536.7,
-    "ɑ": 1187.4,
-    "o": 968.2,
     "u": 942.4,
     "ɨ": 1290.9,
     "ɪ": 1874.8,
@@ -3876,11 +5457,11 @@
     "a": 1306.1
    },
    "fR2Source": {
-    "i": "surrogate",
+    "i": "sung",
+    "ɑ": "sung",
+    "o": "sung",
     "e": "surrogate",
     "ɛ": "surrogate",
-    "ɑ": "surrogate",
-    "o": "surrogate",
     "u": "surrogate",
     "ɨ": "surrogate",
     "ɪ": "surrogate",
@@ -3892,11 +5473,8 @@
   "standIns": {
    "bucket": "tenor-mezzo",
    "steps": {
-    "i": "template",
     "e": "template",
     "ɛ": "template",
-    "ɑ": "template",
-    "o": "template",
     "u": "template",
     "ɨ": "derived",
     "ɪ": "derived",
@@ -3910,54 +5488,54 @@
    "tessitura": false,
    "passaggio": false
   },
-  "generic": true
+  "generic": false
  },
  "tenor | provisional [u], [ɨ] sung": {
   "snapshot": {
    "fR1": {
-    "i": 339.3,
+    "i": 296,
+    "ɨ": 404,
+    "u": 346,
     "e": 570.6,
     "ɛ": 604.5,
     "ɑ": 678.6,
     "o": 538.6,
-    "u": 380.8,
-    "ɨ": 463.1,
     "ɪ": 588.6,
     "ʌ": 678.6,
     "a": 780.4
    },
    "fR1Source": {
-    "i": "surrogate",
+    "i": "sung",
+    "ɨ": "sung",
+    "u": "sung",
     "e": "surrogate",
     "ɛ": "surrogate",
     "ɑ": "surrogate",
     "o": "surrogate",
-    "u": "surrogate",
-    "ɨ": "surrogate",
     "ɪ": "surrogate",
     "ʌ": "surrogate",
     "a": "surrogate"
    },
    "fR2": {
-    "i": 1998.5,
+    "i": 1705,
+    "ɨ": 1100,
+    "u": 804,
     "e": 1795.7,
     "ɛ": 1536.7,
     "ɑ": 1187.4,
     "o": 968.2,
-    "u": 942.4,
-    "ɨ": 1290.9,
     "ɪ": 1874.8,
     "ʌ": 1369,
     "a": 1306.1
    },
    "fR2Source": {
-    "i": "surrogate",
+    "i": "sung",
+    "ɨ": "sung",
+    "u": "sung",
     "e": "surrogate",
     "ɛ": "surrogate",
     "ɑ": "surrogate",
     "o": "surrogate",
-    "u": "surrogate",
-    "ɨ": "surrogate",
     "ɪ": "surrogate",
     "ʌ": "surrogate",
     "a": "surrogate"
@@ -3967,13 +5545,10 @@
   "standIns": {
    "bucket": "tenor-mezzo",
    "steps": {
-    "i": "template",
     "e": "template",
     "ɛ": "template",
     "ɑ": "template",
     "o": "template",
-    "u": "template",
-    "ɨ": "derived",
     "ɪ": "derived",
     "ʌ": "derived",
     "a": "derived"
@@ -3985,7 +5560,7 @@
    "tessitura": false,
    "passaggio": false
   },
-  "generic": true
+  "generic": false
  },
  "tenor | verdict stored": {
   "snapshot": {
@@ -4069,12 +5644,72 @@
  },
  "countertenor | i": {
   "snapshot": {
-   "fR1": {},
-   "fR1Source": {},
+   "fR1": {
+    "i": 296,
+    "e": 570.6,
+    "ɛ": 604.5,
+    "ɑ": 678.6,
+    "o": 538.6,
+    "u": 380.8,
+    "ɨ": 463.1,
+    "ɪ": 588.6,
+    "ʌ": 678.6,
+    "a": 780.4
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1795.7,
+    "ɛ": 1536.7,
+    "ɑ": 1187.4,
+    "o": 968.2,
+    "u": 942.4,
+    "ɨ": 1290.9,
+    "ɪ": 1874.8,
+    "ʌ": 1369,
+    "a": 1306.1
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
    "label": "golden"
   },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "e": "template",
+    "ɛ": "template",
+    "ɑ": "template",
+    "o": "template",
+    "u": "template",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   }
+  },
   "completeness": {
-   "formants": false,
+   "formants": true,
    "range": false,
    "tessitura": false,
    "passaggio": false
@@ -4083,12 +5718,71 @@
  },
  "countertenor | i,u": {
   "snapshot": {
-   "fR1": {},
-   "fR1Source": {},
+   "fR1": {
+    "i": 296,
+    "u": 346,
+    "e": 570.6,
+    "ɛ": 604.5,
+    "ɑ": 678.6,
+    "o": 538.6,
+    "ɨ": 463.1,
+    "ɪ": 588.6,
+    "ʌ": 678.6,
+    "a": 780.4
+   },
+   "fR1Source": {
+    "i": "sung",
+    "u": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "u": 804,
+    "e": 1795.7,
+    "ɛ": 1536.7,
+    "ɑ": 1187.4,
+    "o": 968.2,
+    "ɨ": 1290.9,
+    "ɪ": 1874.8,
+    "ʌ": 1369,
+    "a": 1306.1
+   },
+   "fR2Source": {
+    "i": "sung",
+    "u": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
    "label": "golden"
   },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "e": "template",
+    "ɛ": "template",
+    "ɑ": "template",
+    "o": "template",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   }
+  },
   "completeness": {
-   "formants": false,
+   "formants": true,
    "range": false,
    "tessitura": false,
    "passaggio": false
@@ -4097,12 +5791,70 @@
  },
  "countertenor | i,e,ɑ": {
   "snapshot": {
-   "fR1": {},
-   "fR1Source": {},
+   "fR1": {
+    "i": 296,
+    "e": 381,
+    "ɑ": 617,
+    "ɛ": 604.5,
+    "o": 538.6,
+    "u": 380.8,
+    "ɨ": 463.1,
+    "ɪ": 588.6,
+    "ʌ": 678.6,
+    "a": 780.4
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɑ": "sung",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɑ": 1013,
+    "ɛ": 1536.7,
+    "o": 968.2,
+    "u": 942.4,
+    "ɨ": 1290.9,
+    "ɪ": 1874.8,
+    "ʌ": 1369,
+    "a": 1306.1
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɑ": "sung",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
    "label": "golden"
   },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "ɛ": "template",
+    "o": "template",
+    "u": "template",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   }
+  },
   "completeness": {
-   "formants": false,
+   "formants": true,
    "range": false,
    "tessitura": false,
    "passaggio": false
@@ -4111,12 +5863,69 @@
  },
  "countertenor | e,ɛ,ɑ,o": {
   "snapshot": {
-   "fR1": {},
-   "fR1Source": {},
+   "fR1": {
+    "e": 381,
+    "ɛ": 577,
+    "ɑ": 617,
+    "o": 489,
+    "i": 339.3,
+    "u": 380.8,
+    "ɨ": 463.1,
+    "ɪ": 588.6,
+    "ʌ": 678.6,
+    "a": 780.4
+   },
+   "fR1Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "i": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "i": 1998.5,
+    "u": 942.4,
+    "ɨ": 1290.9,
+    "ɪ": 1874.8,
+    "ʌ": 1369,
+    "a": 1306.1
+   },
+   "fR2Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "i": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
    "label": "golden"
   },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "i": "template",
+    "u": "template",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   }
+  },
   "completeness": {
-   "formants": false,
+   "formants": true,
    "range": false,
    "tessitura": false,
    "passaggio": false
@@ -4253,12 +6062,70 @@
  },
  "countertenor | bad i (1063), no override": {
   "snapshot": {
-   "fR1": {},
-   "fR1Source": {},
+   "fR1": {
+    "u": 346,
+    "ɑ": 617,
+    "i": 1063,
+    "e": 570.6,
+    "ɛ": 604.5,
+    "o": 538.6,
+    "ɨ": 463.1,
+    "ɪ": 588.6,
+    "ʌ": 678.6,
+    "a": 780.4
+   },
+   "fR1Source": {
+    "u": "sung",
+    "ɑ": "sung",
+    "i": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "u": 804,
+    "ɑ": 1013,
+    "i": 2250,
+    "e": 1795.7,
+    "ɛ": 1536.7,
+    "o": 968.2,
+    "ɨ": 1290.9,
+    "ɪ": 1874.8,
+    "ʌ": 1369,
+    "a": 1306.1
+   },
+   "fR2Source": {
+    "u": "sung",
+    "ɑ": "sung",
+    "i": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
    "label": "golden"
   },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "e": "template",
+    "ɛ": "template",
+    "o": "template",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   }
+  },
   "completeness": {
-   "formants": false,
+   "formants": true,
    "range": false,
    "tessitura": false,
    "passaggio": false
@@ -4331,12 +6198,70 @@
  },
  "countertenor | no fR2 on [e]": {
   "snapshot": {
-   "fR1": {},
-   "fR1Source": {},
+   "fR1": {
+    "i": 296,
+    "ɑ": 617,
+    "o": 489,
+    "e": 381,
+    "ɛ": 604.5,
+    "u": 380.8,
+    "ɨ": 463.1,
+    "ɪ": 588.6,
+    "ʌ": 678.6,
+    "a": 780.4
+   },
+   "fR1Source": {
+    "i": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "e": "sung",
+    "ɛ": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "ɑ": 1013,
+    "o": 826,
+    "e": 1795.7,
+    "ɛ": 1536.7,
+    "u": 942.4,
+    "ɨ": 1290.9,
+    "ɪ": 1874.8,
+    "ʌ": 1369,
+    "a": 1306.1
+   },
+   "fR2Source": {
+    "i": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
    "label": "golden"
   },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "e": "template",
+    "ɛ": "template",
+    "u": "template",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   }
+  },
   "completeness": {
-   "formants": false,
+   "formants": true,
    "range": false,
    "tessitura": false,
    "passaggio": false
@@ -4345,12 +6270,70 @@
  },
  "countertenor | provisional [u], [ɨ] sung": {
   "snapshot": {
-   "fR1": {},
-   "fR1Source": {},
+   "fR1": {
+    "i": 296,
+    "ɨ": 404,
+    "u": 346,
+    "e": 570.6,
+    "ɛ": 604.5,
+    "ɑ": 678.6,
+    "o": 538.6,
+    "ɪ": 588.6,
+    "ʌ": 678.6,
+    "a": 780.4
+   },
+   "fR1Source": {
+    "i": "sung",
+    "ɨ": "sung",
+    "u": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "ɨ": 1100,
+    "u": 804,
+    "e": 1795.7,
+    "ɛ": 1536.7,
+    "ɑ": 1187.4,
+    "o": 968.2,
+    "ɪ": 1874.8,
+    "ʌ": 1369,
+    "a": 1306.1
+   },
+   "fR2Source": {
+    "i": "sung",
+    "ɨ": "sung",
+    "u": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
    "label": "golden"
   },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "e": "template",
+    "ɛ": "template",
+    "ɑ": "template",
+    "o": "template",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   }
+  },
   "completeness": {
-   "formants": false,
+   "formants": true,
    "range": false,
    "tessitura": false,
    "passaggio": false
@@ -4501,7 +6484,7 @@
  "baritone | i": {
   "snapshot": {
    "fR1": {
-    "i": 339.3,
+    "i": 296,
     "e": 508.4,
     "ɛ": 570.6,
     "ɑ": 604.5,
@@ -4513,7 +6496,7 @@
     "a": 695.2
    },
    "fR1Source": {
-    "i": "surrogate",
+    "i": "sung",
     "e": "surrogate",
     "ɛ": "surrogate",
     "ɑ": "surrogate",
@@ -4525,7 +6508,7 @@
     "a": "surrogate"
    },
    "fR2": {
-    "i": 1850.4,
+    "i": 1705,
     "e": 1662.6,
     "ɛ": 1422.8,
     "ɑ": 1099.4,
@@ -4537,7 +6520,7 @@
     "a": 1209.3
    },
    "fR2Source": {
-    "i": "surrogate",
+    "i": "sung",
     "e": "surrogate",
     "ɛ": "surrogate",
     "ɑ": "surrogate",
@@ -4553,7 +6536,6 @@
   "standIns": {
    "bucket": "baritone",
    "steps": {
-    "i": "template",
     "e": "template",
     "ɛ": "template",
     "ɑ": "template",
@@ -4571,53 +6553,53 @@
    "tessitura": false,
    "passaggio": false
   },
-  "generic": true
+  "generic": false
  },
  "baritone | i,u": {
   "snapshot": {
    "fR1": {
-    "i": 339.3,
+    "i": 296,
+    "u": 346,
     "e": 508.4,
     "ɛ": 570.6,
     "ɑ": 604.5,
     "o": 508.4,
-    "u": 339.3,
     "ɨ": 463.1,
     "ɪ": 524.4,
     "ʌ": 604.5,
     "a": 695.2
    },
    "fR1Source": {
-    "i": "surrogate",
+    "i": "sung",
+    "u": "sung",
     "e": "surrogate",
     "ɛ": "surrogate",
     "ɑ": "surrogate",
     "o": "surrogate",
-    "u": "surrogate",
     "ɨ": "surrogate",
     "ɪ": "surrogate",
     "ʌ": "surrogate",
     "a": "surrogate"
    },
    "fR2": {
-    "i": 1850.4,
+    "i": 1705,
+    "u": 804,
     "e": 1662.6,
     "ɛ": 1422.8,
     "ɑ": 1099.4,
     "o": 896.4,
-    "u": 872.6,
     "ɨ": 1195.3,
     "ɪ": 1735.8,
     "ʌ": 1267.6,
     "a": 1209.3
    },
    "fR2Source": {
-    "i": "surrogate",
+    "i": "sung",
+    "u": "sung",
     "e": "surrogate",
     "ɛ": "surrogate",
     "ɑ": "surrogate",
     "o": "surrogate",
-    "u": "surrogate",
     "ɨ": "surrogate",
     "ɪ": "surrogate",
     "ʌ": "surrogate",
@@ -4628,12 +6610,10 @@
   "standIns": {
    "bucket": "baritone",
    "steps": {
-    "i": "template",
     "e": "template",
     "ɛ": "template",
     "ɑ": "template",
     "o": "template",
-    "u": "template",
     "ɨ": "derived",
     "ɪ": "derived",
     "ʌ": "derived",
@@ -4646,15 +6626,15 @@
    "tessitura": false,
    "passaggio": false
   },
-  "generic": true
+  "generic": false
  },
  "baritone | i,e,ɑ": {
   "snapshot": {
    "fR1": {
-    "i": 339.3,
-    "e": 508.4,
+    "i": 296,
+    "e": 381,
+    "ɑ": 617,
     "ɛ": 570.6,
-    "ɑ": 604.5,
     "o": 508.4,
     "u": 339.3,
     "ɨ": 463.1,
@@ -4663,10 +6643,10 @@
     "a": 695.2
    },
    "fR1Source": {
-    "i": "surrogate",
-    "e": "surrogate",
+    "i": "sung",
+    "e": "sung",
+    "ɑ": "sung",
     "ɛ": "surrogate",
-    "ɑ": "surrogate",
     "o": "surrogate",
     "u": "surrogate",
     "ɨ": "surrogate",
@@ -4675,10 +6655,10 @@
     "a": "surrogate"
    },
    "fR2": {
-    "i": 1850.4,
-    "e": 1662.6,
+    "i": 1705,
+    "e": 1532,
+    "ɑ": 1013,
     "ɛ": 1422.8,
-    "ɑ": 1099.4,
     "o": 896.4,
     "u": 872.6,
     "ɨ": 1195.3,
@@ -4687,10 +6667,10 @@
     "a": 1209.3
    },
    "fR2Source": {
-    "i": "surrogate",
-    "e": "surrogate",
+    "i": "sung",
+    "e": "sung",
+    "ɑ": "sung",
     "ɛ": "surrogate",
-    "ɑ": "surrogate",
     "o": "surrogate",
     "u": "surrogate",
     "ɨ": "surrogate",
@@ -4703,10 +6683,7 @@
   "standIns": {
    "bucket": "baritone",
    "steps": {
-    "i": "template",
-    "e": "template",
     "ɛ": "template",
-    "ɑ": "template",
     "o": "template",
     "u": "template",
     "ɨ": "derived",
@@ -4721,16 +6698,16 @@
    "tessitura": false,
    "passaggio": false
   },
-  "generic": true
+  "generic": false
  },
  "baritone | e,ɛ,ɑ,o": {
   "snapshot": {
    "fR1": {
+    "e": 381,
+    "ɛ": 577,
+    "ɑ": 617,
+    "o": 489,
     "i": 339.3,
-    "e": 508.4,
-    "ɛ": 570.6,
-    "ɑ": 604.5,
-    "o": 508.4,
     "u": 339.3,
     "ɨ": 463.1,
     "ɪ": 524.4,
@@ -4738,11 +6715,11 @@
     "a": 695.2
    },
    "fR1Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
     "i": "surrogate",
-    "e": "surrogate",
-    "ɛ": "surrogate",
-    "ɑ": "surrogate",
-    "o": "surrogate",
     "u": "surrogate",
     "ɨ": "surrogate",
     "ɪ": "surrogate",
@@ -4750,11 +6727,11 @@
     "a": "surrogate"
    },
    "fR2": {
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
     "i": 1850.4,
-    "e": 1662.6,
-    "ɛ": 1422.8,
-    "ɑ": 1099.4,
-    "o": 896.4,
     "u": 872.6,
     "ɨ": 1195.3,
     "ɪ": 1735.8,
@@ -4762,11 +6739,11 @@
     "a": 1209.3
    },
    "fR2Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
     "i": "surrogate",
-    "e": "surrogate",
-    "ɛ": "surrogate",
-    "ɑ": "surrogate",
-    "o": "surrogate",
     "u": "surrogate",
     "ɨ": "surrogate",
     "ɪ": "surrogate",
@@ -4779,10 +6756,6 @@
    "bucket": "baritone",
    "steps": {
     "i": "template",
-    "e": "template",
-    "ɛ": "template",
-    "ɑ": "template",
-    "o": "template",
     "u": "template",
     "ɨ": "derived",
     "ɪ": "derived",
@@ -4796,7 +6769,7 @@
    "tessitura": false,
    "passaggio": false
   },
-  "generic": true
+  "generic": false
  },
  "baritone | six": {
   "snapshot": {
@@ -4929,48 +6902,48 @@
  "baritone | bad i (1063), no override": {
   "snapshot": {
    "fR1": {
-    "i": 339.3,
+    "u": 346,
+    "ɑ": 617,
+    "i": 1063,
     "e": 508.4,
     "ɛ": 570.6,
-    "ɑ": 604.5,
     "o": 508.4,
-    "u": 339.3,
     "ɨ": 463.1,
     "ɪ": 524.4,
     "ʌ": 604.5,
     "a": 695.2
    },
    "fR1Source": {
-    "i": "surrogate",
+    "u": "sung",
+    "ɑ": "sung",
+    "i": "sung",
     "e": "surrogate",
     "ɛ": "surrogate",
-    "ɑ": "surrogate",
     "o": "surrogate",
-    "u": "surrogate",
     "ɨ": "surrogate",
     "ɪ": "surrogate",
     "ʌ": "surrogate",
     "a": "surrogate"
    },
    "fR2": {
-    "i": 1850.4,
+    "u": 804,
+    "ɑ": 1013,
+    "i": 2250,
     "e": 1662.6,
     "ɛ": 1422.8,
-    "ɑ": 1099.4,
     "o": 896.4,
-    "u": 872.6,
     "ɨ": 1195.3,
     "ɪ": 1735.8,
     "ʌ": 1267.6,
     "a": 1209.3
    },
    "fR2Source": {
-    "i": "surrogate",
+    "u": "sung",
+    "ɑ": "sung",
+    "i": "sung",
     "e": "surrogate",
     "ɛ": "surrogate",
-    "ɑ": "surrogate",
     "o": "surrogate",
-    "u": "surrogate",
     "ɨ": "surrogate",
     "ɪ": "surrogate",
     "ʌ": "surrogate",
@@ -4981,12 +6954,9 @@
   "standIns": {
    "bucket": "baritone",
    "steps": {
-    "i": "template",
     "e": "template",
     "ɛ": "template",
-    "ɑ": "template",
     "o": "template",
-    "u": "template",
     "ɨ": "derived",
     "ɪ": "derived",
     "ʌ": "derived",
@@ -4999,7 +6969,7 @@
    "tessitura": false,
    "passaggio": false
   },
-  "generic": true
+  "generic": false
  },
  "baritone | bad i kept, six": {
   "snapshot": {
@@ -5068,11 +7038,11 @@
  "baritone | no fR2 on [e]": {
   "snapshot": {
    "fR1": {
-    "i": 339.3,
-    "e": 508.4,
+    "i": 296,
+    "ɑ": 617,
+    "o": 489,
+    "e": 381,
     "ɛ": 570.6,
-    "ɑ": 604.5,
-    "o": 508.4,
     "u": 339.3,
     "ɨ": 463.1,
     "ɪ": 524.4,
@@ -5080,11 +7050,11 @@
     "a": 695.2
    },
    "fR1Source": {
-    "i": "surrogate",
-    "e": "surrogate",
+    "i": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "e": "sung",
     "ɛ": "surrogate",
-    "ɑ": "surrogate",
-    "o": "surrogate",
     "u": "surrogate",
     "ɨ": "surrogate",
     "ɪ": "surrogate",
@@ -5092,11 +7062,11 @@
     "a": "surrogate"
    },
    "fR2": {
-    "i": 1850.4,
+    "i": 1705,
+    "ɑ": 1013,
+    "o": 826,
     "e": 1662.6,
     "ɛ": 1422.8,
-    "ɑ": 1099.4,
-    "o": 896.4,
     "u": 872.6,
     "ɨ": 1195.3,
     "ɪ": 1735.8,
@@ -5104,11 +7074,11 @@
     "a": 1209.3
    },
    "fR2Source": {
-    "i": "surrogate",
+    "i": "sung",
+    "ɑ": "sung",
+    "o": "sung",
     "e": "surrogate",
     "ɛ": "surrogate",
-    "ɑ": "surrogate",
-    "o": "surrogate",
     "u": "surrogate",
     "ɨ": "surrogate",
     "ɪ": "surrogate",
@@ -5120,11 +7090,8 @@
   "standIns": {
    "bucket": "baritone",
    "steps": {
-    "i": "template",
     "e": "template",
     "ɛ": "template",
-    "ɑ": "template",
-    "o": "template",
     "u": "template",
     "ɨ": "derived",
     "ɪ": "derived",
@@ -5138,54 +7105,54 @@
    "tessitura": false,
    "passaggio": false
   },
-  "generic": true
+  "generic": false
  },
  "baritone | provisional [u], [ɨ] sung": {
   "snapshot": {
    "fR1": {
-    "i": 339.3,
+    "i": 296,
+    "ɨ": 404,
+    "u": 346,
     "e": 508.4,
     "ɛ": 570.6,
     "ɑ": 604.5,
     "o": 508.4,
-    "u": 339.3,
-    "ɨ": 463.1,
     "ɪ": 524.4,
     "ʌ": 604.5,
     "a": 695.2
    },
    "fR1Source": {
-    "i": "surrogate",
+    "i": "sung",
+    "ɨ": "sung",
+    "u": "sung",
     "e": "surrogate",
     "ɛ": "surrogate",
     "ɑ": "surrogate",
     "o": "surrogate",
-    "u": "surrogate",
-    "ɨ": "surrogate",
     "ɪ": "surrogate",
     "ʌ": "surrogate",
     "a": "surrogate"
    },
    "fR2": {
-    "i": 1850.4,
+    "i": 1705,
+    "ɨ": 1100,
+    "u": 804,
     "e": 1662.6,
     "ɛ": 1422.8,
     "ɑ": 1099.4,
     "o": 896.4,
-    "u": 872.6,
-    "ɨ": 1195.3,
     "ɪ": 1735.8,
     "ʌ": 1267.6,
     "a": 1209.3
    },
    "fR2Source": {
-    "i": "surrogate",
+    "i": "sung",
+    "ɨ": "sung",
+    "u": "sung",
     "e": "surrogate",
     "ɛ": "surrogate",
     "ɑ": "surrogate",
     "o": "surrogate",
-    "u": "surrogate",
-    "ɨ": "surrogate",
     "ɪ": "surrogate",
     "ʌ": "surrogate",
     "a": "surrogate"
@@ -5195,13 +7162,10 @@
   "standIns": {
    "bucket": "baritone",
    "steps": {
-    "i": "template",
     "e": "template",
     "ɛ": "template",
     "ɑ": "template",
     "o": "template",
-    "u": "template",
-    "ɨ": "derived",
     "ɪ": "derived",
     "ʌ": "derived",
     "a": "derived"
@@ -5213,7 +7177,7 @@
    "tessitura": false,
    "passaggio": false
   },
-  "generic": true
+  "generic": false
  },
  "baritone | verdict stored": {
   "snapshot": {
@@ -5359,7 +7323,7 @@
  "bass | i": {
   "snapshot": {
    "fR1": {
-    "i": 311.1,
+    "i": 296,
     "e": 440,
     "ɛ": 538.6,
     "ɑ": 604.5,
@@ -5371,7 +7335,7 @@
     "a": 695.2
    },
    "fR1Source": {
-    "i": "surrogate",
+    "i": "sung",
     "e": "surrogate",
     "ɛ": "surrogate",
     "ɑ": "surrogate",
@@ -5395,7 +7359,7 @@
     "a": 1114.3
    },
    "fR2Source": {
-    "i": "surrogate",
+    "i": "sung",
     "e": "surrogate",
     "ɛ": "surrogate",
     "ɑ": "surrogate",
@@ -5411,7 +7375,6 @@
   "standIns": {
    "bucket": "bass",
    "steps": {
-    "i": "template",
     "e": "template",
     "ɛ": "template",
     "ɑ": "template",
@@ -5429,29 +7392,29 @@
    "tessitura": false,
    "passaggio": false
   },
-  "generic": true
+  "generic": false
  },
  "bass | i,u": {
   "snapshot": {
    "fR1": {
-    "i": 311.1,
+    "i": 296,
+    "u": 346,
     "e": 440,
     "ɛ": 538.6,
     "ɑ": 604.5,
     "o": 440,
-    "u": 320.2,
     "ɨ": 424.7,
     "ɪ": 453.9,
     "ʌ": 604.5,
     "a": 695.2
    },
    "fR1Source": {
-    "i": "surrogate",
+    "i": "sung",
+    "u": "sung",
     "e": "surrogate",
     "ɛ": "surrogate",
     "ɑ": "surrogate",
     "o": "surrogate",
-    "u": "surrogate",
     "ɨ": "surrogate",
     "ɪ": "surrogate",
     "ʌ": "surrogate",
@@ -5459,23 +7422,23 @@
    },
    "fR2": {
     "i": 1705,
+    "u": 804,
     "e": 1532,
     "ɛ": 1311,
     "ɑ": 1013,
     "o": 826,
-    "u": 804,
     "ɨ": 1101.3,
     "ɪ": 1599.5,
     "ʌ": 1168,
     "a": 1114.3
    },
    "fR2Source": {
-    "i": "surrogate",
+    "i": "sung",
+    "u": "sung",
     "e": "surrogate",
     "ɛ": "surrogate",
     "ɑ": "surrogate",
     "o": "surrogate",
-    "u": "surrogate",
     "ɨ": "surrogate",
     "ɪ": "surrogate",
     "ʌ": "surrogate",
@@ -5486,12 +7449,10 @@
   "standIns": {
    "bucket": "bass",
    "steps": {
-    "i": "template",
     "e": "template",
     "ɛ": "template",
     "ɑ": "template",
     "o": "template",
-    "u": "template",
     "ɨ": "derived",
     "ɪ": "derived",
     "ʌ": "derived",
@@ -5504,15 +7465,15 @@
    "tessitura": false,
    "passaggio": false
   },
-  "generic": true
+  "generic": false
  },
  "bass | i,e,ɑ": {
   "snapshot": {
    "fR1": {
-    "i": 311.1,
-    "e": 440,
+    "i": 296,
+    "e": 381,
+    "ɑ": 617,
     "ɛ": 538.6,
-    "ɑ": 604.5,
     "o": 440,
     "u": 320.2,
     "ɨ": 424.7,
@@ -5521,10 +7482,10 @@
     "a": 695.2
    },
    "fR1Source": {
-    "i": "surrogate",
-    "e": "surrogate",
+    "i": "sung",
+    "e": "sung",
+    "ɑ": "sung",
     "ɛ": "surrogate",
-    "ɑ": "surrogate",
     "o": "surrogate",
     "u": "surrogate",
     "ɨ": "surrogate",
@@ -5535,8 +7496,8 @@
    "fR2": {
     "i": 1705,
     "e": 1532,
-    "ɛ": 1311,
     "ɑ": 1013,
+    "ɛ": 1311,
     "o": 826,
     "u": 804,
     "ɨ": 1101.3,
@@ -5545,10 +7506,10 @@
     "a": 1114.3
    },
    "fR2Source": {
-    "i": "surrogate",
-    "e": "surrogate",
+    "i": "sung",
+    "e": "sung",
+    "ɑ": "sung",
     "ɛ": "surrogate",
-    "ɑ": "surrogate",
     "o": "surrogate",
     "u": "surrogate",
     "ɨ": "surrogate",
@@ -5561,10 +7522,7 @@
   "standIns": {
    "bucket": "bass",
    "steps": {
-    "i": "template",
-    "e": "template",
     "ɛ": "template",
-    "ɑ": "template",
     "o": "template",
     "u": "template",
     "ɨ": "derived",
@@ -5579,16 +7537,16 @@
    "tessitura": false,
    "passaggio": false
   },
-  "generic": true
+  "generic": false
  },
  "bass | e,ɛ,ɑ,o": {
   "snapshot": {
    "fR1": {
+    "e": 381,
+    "ɛ": 577,
+    "ɑ": 617,
+    "o": 489,
     "i": 311.1,
-    "e": 440,
-    "ɛ": 538.6,
-    "ɑ": 604.5,
-    "o": 440,
     "u": 320.2,
     "ɨ": 424.7,
     "ɪ": 453.9,
@@ -5596,11 +7554,11 @@
     "a": 695.2
    },
    "fR1Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
     "i": "surrogate",
-    "e": "surrogate",
-    "ɛ": "surrogate",
-    "ɑ": "surrogate",
-    "o": "surrogate",
     "u": "surrogate",
     "ɨ": "surrogate",
     "ɪ": "surrogate",
@@ -5608,11 +7566,11 @@
     "a": "surrogate"
    },
    "fR2": {
-    "i": 1705,
     "e": 1532,
     "ɛ": 1311,
     "ɑ": 1013,
     "o": 826,
+    "i": 1705,
     "u": 804,
     "ɨ": 1101.3,
     "ɪ": 1599.5,
@@ -5620,11 +7578,11 @@
     "a": 1114.3
    },
    "fR2Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
     "i": "surrogate",
-    "e": "surrogate",
-    "ɛ": "surrogate",
-    "ɑ": "surrogate",
-    "o": "surrogate",
     "u": "surrogate",
     "ɨ": "surrogate",
     "ɪ": "surrogate",
@@ -5637,10 +7595,6 @@
    "bucket": "bass",
    "steps": {
     "i": "template",
-    "e": "template",
-    "ɛ": "template",
-    "ɑ": "template",
-    "o": "template",
     "u": "template",
     "ɨ": "derived",
     "ɪ": "derived",
@@ -5654,7 +7608,7 @@
    "tessitura": false,
    "passaggio": false
   },
-  "generic": true
+  "generic": false
  },
  "bass | six": {
   "snapshot": {
@@ -5787,48 +7741,48 @@
  "bass | bad i (1063), no override": {
   "snapshot": {
    "fR1": {
-    "i": 311.1,
+    "u": 346,
+    "ɑ": 617,
+    "i": 1063,
     "e": 440,
     "ɛ": 538.6,
-    "ɑ": 604.5,
     "o": 440,
-    "u": 320.2,
     "ɨ": 424.7,
     "ɪ": 453.9,
     "ʌ": 604.5,
     "a": 695.2
    },
    "fR1Source": {
-    "i": "surrogate",
+    "u": "sung",
+    "ɑ": "sung",
+    "i": "sung",
     "e": "surrogate",
     "ɛ": "surrogate",
-    "ɑ": "surrogate",
     "o": "surrogate",
-    "u": "surrogate",
     "ɨ": "surrogate",
     "ɪ": "surrogate",
     "ʌ": "surrogate",
     "a": "surrogate"
    },
    "fR2": {
-    "i": 1705,
+    "u": 804,
+    "ɑ": 1013,
+    "i": 2250,
     "e": 1532,
     "ɛ": 1311,
-    "ɑ": 1013,
     "o": 826,
-    "u": 804,
     "ɨ": 1101.3,
     "ɪ": 1599.5,
     "ʌ": 1168,
     "a": 1114.3
    },
    "fR2Source": {
-    "i": "surrogate",
+    "u": "sung",
+    "ɑ": "sung",
+    "i": "sung",
     "e": "surrogate",
     "ɛ": "surrogate",
-    "ɑ": "surrogate",
     "o": "surrogate",
-    "u": "surrogate",
     "ɨ": "surrogate",
     "ɪ": "surrogate",
     "ʌ": "surrogate",
@@ -5839,12 +7793,9 @@
   "standIns": {
    "bucket": "bass",
    "steps": {
-    "i": "template",
     "e": "template",
     "ɛ": "template",
-    "ɑ": "template",
     "o": "template",
-    "u": "template",
     "ɨ": "derived",
     "ɪ": "derived",
     "ʌ": "derived",
@@ -5857,7 +7808,7 @@
    "tessitura": false,
    "passaggio": false
   },
-  "generic": true
+  "generic": false
  },
  "bass | bad i kept, six": {
   "snapshot": {
@@ -5926,11 +7877,11 @@
  "bass | no fR2 on [e]": {
   "snapshot": {
    "fR1": {
-    "i": 311.1,
-    "e": 440,
+    "i": 296,
+    "ɑ": 617,
+    "o": 489,
+    "e": 381,
     "ɛ": 538.6,
-    "ɑ": 604.5,
-    "o": 440,
     "u": 320.2,
     "ɨ": 424.7,
     "ɪ": 453.9,
@@ -5938,11 +7889,11 @@
     "a": 695.2
    },
    "fR1Source": {
-    "i": "surrogate",
-    "e": "surrogate",
+    "i": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "e": "sung",
     "ɛ": "surrogate",
-    "ɑ": "surrogate",
-    "o": "surrogate",
     "u": "surrogate",
     "ɨ": "surrogate",
     "ɪ": "surrogate",
@@ -5951,10 +7902,10 @@
    },
    "fR2": {
     "i": 1705,
-    "e": 1532,
-    "ɛ": 1311,
     "ɑ": 1013,
     "o": 826,
+    "e": 1532,
+    "ɛ": 1311,
     "u": 804,
     "ɨ": 1101.3,
     "ɪ": 1599.5,
@@ -5962,11 +7913,11 @@
     "a": 1114.3
    },
    "fR2Source": {
-    "i": "surrogate",
+    "i": "sung",
+    "ɑ": "sung",
+    "o": "sung",
     "e": "surrogate",
     "ɛ": "surrogate",
-    "ɑ": "surrogate",
-    "o": "surrogate",
     "u": "surrogate",
     "ɨ": "surrogate",
     "ɪ": "surrogate",
@@ -5978,11 +7929,8 @@
   "standIns": {
    "bucket": "bass",
    "steps": {
-    "i": "template",
     "e": "template",
     "ɛ": "template",
-    "ɑ": "template",
-    "o": "template",
     "u": "template",
     "ɨ": "derived",
     "ɪ": "derived",
@@ -5996,54 +7944,54 @@
    "tessitura": false,
    "passaggio": false
   },
-  "generic": true
+  "generic": false
  },
  "bass | provisional [u], [ɨ] sung": {
   "snapshot": {
    "fR1": {
-    "i": 311.1,
+    "i": 296,
+    "ɨ": 404,
+    "u": 346,
     "e": 440,
     "ɛ": 538.6,
     "ɑ": 604.5,
     "o": 440,
-    "u": 320.2,
-    "ɨ": 424.7,
     "ɪ": 453.9,
     "ʌ": 604.5,
     "a": 695.2
    },
    "fR1Source": {
-    "i": "surrogate",
+    "i": "sung",
+    "ɨ": "sung",
+    "u": "sung",
     "e": "surrogate",
     "ɛ": "surrogate",
     "ɑ": "surrogate",
     "o": "surrogate",
-    "u": "surrogate",
-    "ɨ": "surrogate",
     "ɪ": "surrogate",
     "ʌ": "surrogate",
     "a": "surrogate"
    },
    "fR2": {
     "i": 1705,
+    "ɨ": 1100,
+    "u": 804,
     "e": 1532,
     "ɛ": 1311,
     "ɑ": 1013,
     "o": 826,
-    "u": 804,
-    "ɨ": 1101.3,
     "ɪ": 1599.5,
     "ʌ": 1168,
     "a": 1114.3
    },
    "fR2Source": {
-    "i": "surrogate",
+    "i": "sung",
+    "ɨ": "sung",
+    "u": "sung",
     "e": "surrogate",
     "ɛ": "surrogate",
     "ɑ": "surrogate",
     "o": "surrogate",
-    "u": "surrogate",
-    "ɨ": "surrogate",
     "ɪ": "surrogate",
     "ʌ": "surrogate",
     "a": "surrogate"
@@ -6053,13 +8001,10 @@
   "standIns": {
    "bucket": "bass",
    "steps": {
-    "i": "template",
     "e": "template",
     "ɛ": "template",
     "ɑ": "template",
     "o": "template",
-    "u": "template",
-    "ɨ": "derived",
     "ɪ": "derived",
     "ʌ": "derived",
     "a": "derived"
@@ -6071,7 +8016,7 @@
    "tessitura": false,
    "passaggio": false
   },
-  "generic": true
+  "generic": false
  },
  "bass | verdict stored": {
   "snapshot": {
@@ -6155,12 +8100,72 @@
  },
  "bass-baritone | i": {
   "snapshot": {
-   "fR1": {},
-   "fR1Source": {},
+   "fR1": {
+    "i": 296,
+    "e": 440,
+    "ɛ": 538.6,
+    "ɑ": 604.5,
+    "o": 440,
+    "u": 320.2,
+    "ɨ": 424.7,
+    "ɪ": 453.9,
+    "ʌ": 604.5,
+    "a": 695.2
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
    "label": "golden"
   },
+  "standIns": {
+   "bucket": "bass",
+   "steps": {
+    "e": "template",
+    "ɛ": "template",
+    "ɑ": "template",
+    "o": "template",
+    "u": "template",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   }
+  },
   "completeness": {
-   "formants": false,
+   "formants": true,
    "range": false,
    "tessitura": false,
    "passaggio": false
@@ -6169,12 +8174,71 @@
  },
  "bass-baritone | i,u": {
   "snapshot": {
-   "fR1": {},
-   "fR1Source": {},
+   "fR1": {
+    "i": 296,
+    "u": 346,
+    "e": 440,
+    "ɛ": 538.6,
+    "ɑ": 604.5,
+    "o": 440,
+    "ɨ": 424.7,
+    "ɪ": 453.9,
+    "ʌ": 604.5,
+    "a": 695.2
+   },
+   "fR1Source": {
+    "i": "sung",
+    "u": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "u": 804,
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "i": "sung",
+    "u": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
    "label": "golden"
   },
+  "standIns": {
+   "bucket": "bass",
+   "steps": {
+    "e": "template",
+    "ɛ": "template",
+    "ɑ": "template",
+    "o": "template",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   }
+  },
   "completeness": {
-   "formants": false,
+   "formants": true,
    "range": false,
    "tessitura": false,
    "passaggio": false
@@ -6183,12 +8247,70 @@
  },
  "bass-baritone | i,e,ɑ": {
   "snapshot": {
-   "fR1": {},
-   "fR1Source": {},
+   "fR1": {
+    "i": 296,
+    "e": 381,
+    "ɑ": 617,
+    "ɛ": 538.6,
+    "o": 440,
+    "u": 320.2,
+    "ɨ": 424.7,
+    "ɪ": 453.9,
+    "ʌ": 604.5,
+    "a": 695.2
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɑ": "sung",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɑ": 1013,
+    "ɛ": 1311,
+    "o": 826,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɑ": "sung",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
    "label": "golden"
   },
+  "standIns": {
+   "bucket": "bass",
+   "steps": {
+    "ɛ": "template",
+    "o": "template",
+    "u": "template",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   }
+  },
   "completeness": {
-   "formants": false,
+   "formants": true,
    "range": false,
    "tessitura": false,
    "passaggio": false
@@ -6197,12 +8319,69 @@
  },
  "bass-baritone | e,ɛ,ɑ,o": {
   "snapshot": {
-   "fR1": {},
-   "fR1Source": {},
+   "fR1": {
+    "e": 381,
+    "ɛ": 577,
+    "ɑ": 617,
+    "o": 489,
+    "i": 311.1,
+    "u": 320.2,
+    "ɨ": 424.7,
+    "ɪ": 453.9,
+    "ʌ": 604.5,
+    "a": 695.2
+   },
+   "fR1Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "i": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "i": 1705,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "i": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
    "label": "golden"
   },
+  "standIns": {
+   "bucket": "bass",
+   "steps": {
+    "i": "template",
+    "u": "template",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   }
+  },
   "completeness": {
-   "formants": false,
+   "formants": true,
    "range": false,
    "tessitura": false,
    "passaggio": false
@@ -6339,12 +8518,70 @@
  },
  "bass-baritone | bad i (1063), no override": {
   "snapshot": {
-   "fR1": {},
-   "fR1Source": {},
+   "fR1": {
+    "u": 346,
+    "ɑ": 617,
+    "i": 1063,
+    "e": 440,
+    "ɛ": 538.6,
+    "o": 440,
+    "ɨ": 424.7,
+    "ɪ": 453.9,
+    "ʌ": 604.5,
+    "a": 695.2
+   },
+   "fR1Source": {
+    "u": "sung",
+    "ɑ": "sung",
+    "i": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "u": 804,
+    "ɑ": 1013,
+    "i": 2250,
+    "e": 1532,
+    "ɛ": 1311,
+    "o": 826,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "u": "sung",
+    "ɑ": "sung",
+    "i": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
    "label": "golden"
   },
+  "standIns": {
+   "bucket": "bass",
+   "steps": {
+    "e": "template",
+    "ɛ": "template",
+    "o": "template",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   }
+  },
   "completeness": {
-   "formants": false,
+   "formants": true,
    "range": false,
    "tessitura": false,
    "passaggio": false
@@ -6417,12 +8654,70 @@
  },
  "bass-baritone | no fR2 on [e]": {
   "snapshot": {
-   "fR1": {},
-   "fR1Source": {},
+   "fR1": {
+    "i": 296,
+    "ɑ": 617,
+    "o": 489,
+    "e": 381,
+    "ɛ": 538.6,
+    "u": 320.2,
+    "ɨ": 424.7,
+    "ɪ": 453.9,
+    "ʌ": 604.5,
+    "a": 695.2
+   },
+   "fR1Source": {
+    "i": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "e": "sung",
+    "ɛ": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "ɑ": 1013,
+    "o": 826,
+    "e": 1532,
+    "ɛ": 1311,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "i": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
    "label": "golden"
   },
+  "standIns": {
+   "bucket": "bass",
+   "steps": {
+    "e": "template",
+    "ɛ": "template",
+    "u": "template",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   }
+  },
   "completeness": {
-   "formants": false,
+   "formants": true,
    "range": false,
    "tessitura": false,
    "passaggio": false
@@ -6431,12 +8726,70 @@
  },
  "bass-baritone | provisional [u], [ɨ] sung": {
   "snapshot": {
-   "fR1": {},
-   "fR1Source": {},
+   "fR1": {
+    "i": 296,
+    "ɨ": 404,
+    "u": 346,
+    "e": 440,
+    "ɛ": 538.6,
+    "ɑ": 604.5,
+    "o": 440,
+    "ɪ": 453.9,
+    "ʌ": 604.5,
+    "a": 695.2
+   },
+   "fR1Source": {
+    "i": "sung",
+    "ɨ": "sung",
+    "u": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "ɨ": 1100,
+    "u": 804,
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "i": "sung",
+    "ɨ": "sung",
+    "u": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
    "label": "golden"
   },
+  "standIns": {
+   "bucket": "bass",
+   "steps": {
+    "e": "template",
+    "ɛ": "template",
+    "ɑ": "template",
+    "o": "template",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   }
+  },
   "completeness": {
-   "formants": false,
+   "formants": true,
    "range": false,
    "tessitura": false,
    "passaggio": false
@@ -6525,12 +8878,72 @@
  },
  "not-sure | i": {
   "snapshot": {
-   "fR1": {},
-   "fR1Source": {},
+   "fR1": {
+    "i": 296,
+    "e": 529.3,
+    "ɛ": 583.9,
+    "ɑ": 647.9,
+    "o": 517.2,
+    "u": 365.7,
+    "ɨ": 465.9,
+    "ɪ": 546,
+    "ʌ": 647.9,
+    "a": 745.1
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1727.9,
+    "ɛ": 1478.7,
+    "ɑ": 1142.5,
+    "o": 931.6,
+    "u": 906.8,
+    "ɨ": 1242.1,
+    "ɪ": 1804,
+    "ʌ": 1317.3,
+    "a": 1256.8
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
    "label": "golden"
   },
+  "standIns": {
+   "bucket": "middle",
+   "steps": {
+    "e": "template",
+    "ɛ": "template",
+    "ɑ": "template",
+    "o": "template",
+    "u": "template",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   }
+  },
   "completeness": {
-   "formants": false,
+   "formants": true,
    "range": false,
    "tessitura": false,
    "passaggio": false
@@ -6539,12 +8952,71 @@
  },
  "not-sure | i,u": {
   "snapshot": {
-   "fR1": {},
-   "fR1Source": {},
+   "fR1": {
+    "i": 296,
+    "u": 346,
+    "e": 529.3,
+    "ɛ": 583.9,
+    "ɑ": 647.9,
+    "o": 517.2,
+    "ɨ": 465.9,
+    "ɪ": 546,
+    "ʌ": 647.9,
+    "a": 745.1
+   },
+   "fR1Source": {
+    "i": "sung",
+    "u": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "u": 804,
+    "e": 1727.9,
+    "ɛ": 1478.7,
+    "ɑ": 1142.5,
+    "o": 931.6,
+    "ɨ": 1242.1,
+    "ɪ": 1804,
+    "ʌ": 1317.3,
+    "a": 1256.8
+   },
+   "fR2Source": {
+    "i": "sung",
+    "u": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
    "label": "golden"
   },
+  "standIns": {
+   "bucket": "middle",
+   "steps": {
+    "e": "template",
+    "ɛ": "template",
+    "ɑ": "template",
+    "o": "template",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   }
+  },
   "completeness": {
-   "formants": false,
+   "formants": true,
    "range": false,
    "tessitura": false,
    "passaggio": false
@@ -6553,12 +9025,70 @@
  },
  "not-sure | i,e,ɑ": {
   "snapshot": {
-   "fR1": {},
-   "fR1Source": {},
+   "fR1": {
+    "i": 296,
+    "e": 381,
+    "ɑ": 617,
+    "ɛ": 583.9,
+    "o": 517.2,
+    "u": 365.7,
+    "ɨ": 465.9,
+    "ɪ": 546,
+    "ʌ": 647.9,
+    "a": 745.1
+   },
+   "fR1Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɑ": "sung",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɑ": 1013,
+    "ɛ": 1478.7,
+    "o": 931.6,
+    "u": 906.8,
+    "ɨ": 1242.1,
+    "ɪ": 1804,
+    "ʌ": 1317.3,
+    "a": 1256.8
+   },
+   "fR2Source": {
+    "i": "sung",
+    "e": "sung",
+    "ɑ": "sung",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
    "label": "golden"
   },
+  "standIns": {
+   "bucket": "middle",
+   "steps": {
+    "ɛ": "template",
+    "o": "template",
+    "u": "template",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   }
+  },
   "completeness": {
-   "formants": false,
+   "formants": true,
    "range": false,
    "tessitura": false,
    "passaggio": false
@@ -6567,12 +9097,69 @@
  },
  "not-sure | e,ɛ,ɑ,o": {
   "snapshot": {
-   "fR1": {},
-   "fR1Source": {},
+   "fR1": {
+    "e": 381,
+    "ɛ": 577,
+    "ɑ": 617,
+    "o": 489,
+    "i": 341.3,
+    "u": 365.7,
+    "ɨ": 465.9,
+    "ɪ": 546,
+    "ʌ": 647.9,
+    "a": 745.1
+   },
+   "fR1Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "i": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "i": 1923,
+    "u": 906.8,
+    "ɨ": 1242.1,
+    "ɪ": 1804,
+    "ʌ": 1317.3,
+    "a": 1256.8
+   },
+   "fR2Source": {
+    "e": "sung",
+    "ɛ": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "i": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
    "label": "golden"
   },
+  "standIns": {
+   "bucket": "middle",
+   "steps": {
+    "i": "template",
+    "u": "template",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   }
+  },
   "completeness": {
-   "formants": false,
+   "formants": true,
    "range": false,
    "tessitura": false,
    "passaggio": false
@@ -6709,12 +9296,70 @@
  },
  "not-sure | bad i (1063), no override": {
   "snapshot": {
-   "fR1": {},
-   "fR1Source": {},
+   "fR1": {
+    "u": 346,
+    "ɑ": 617,
+    "i": 1063,
+    "e": 529.3,
+    "ɛ": 583.9,
+    "o": 517.2,
+    "ɨ": 465.9,
+    "ɪ": 546,
+    "ʌ": 647.9,
+    "a": 745.1
+   },
+   "fR1Source": {
+    "u": "sung",
+    "ɑ": "sung",
+    "i": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "u": 804,
+    "ɑ": 1013,
+    "i": 2250,
+    "e": 1727.9,
+    "ɛ": 1478.7,
+    "o": 931.6,
+    "ɨ": 1242.1,
+    "ɪ": 1804,
+    "ʌ": 1317.3,
+    "a": 1256.8
+   },
+   "fR2Source": {
+    "u": "sung",
+    "ɑ": "sung",
+    "i": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "o": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
    "label": "golden"
   },
+  "standIns": {
+   "bucket": "middle",
+   "steps": {
+    "e": "template",
+    "ɛ": "template",
+    "o": "template",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   }
+  },
   "completeness": {
-   "formants": false,
+   "formants": true,
    "range": false,
    "tessitura": false,
    "passaggio": false
@@ -6787,12 +9432,70 @@
  },
  "not-sure | no fR2 on [e]": {
   "snapshot": {
-   "fR1": {},
-   "fR1Source": {},
+   "fR1": {
+    "i": 296,
+    "ɑ": 617,
+    "o": 489,
+    "e": 381,
+    "ɛ": 583.9,
+    "u": 365.7,
+    "ɨ": 465.9,
+    "ɪ": 546,
+    "ʌ": 647.9,
+    "a": 745.1
+   },
+   "fR1Source": {
+    "i": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "e": "sung",
+    "ɛ": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "ɑ": 1013,
+    "o": 826,
+    "e": 1727.9,
+    "ɛ": 1478.7,
+    "u": 906.8,
+    "ɨ": 1242.1,
+    "ɪ": 1804,
+    "ʌ": 1317.3,
+    "a": 1256.8
+   },
+   "fR2Source": {
+    "i": "sung",
+    "ɑ": "sung",
+    "o": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
    "label": "golden"
   },
+  "standIns": {
+   "bucket": "middle",
+   "steps": {
+    "e": "template",
+    "ɛ": "template",
+    "u": "template",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   }
+  },
   "completeness": {
-   "formants": false,
+   "formants": true,
    "range": false,
    "tessitura": false,
    "passaggio": false
@@ -6801,12 +9504,70 @@
  },
  "not-sure | provisional [u], [ɨ] sung": {
   "snapshot": {
-   "fR1": {},
-   "fR1Source": {},
+   "fR1": {
+    "i": 296,
+    "ɨ": 404,
+    "u": 346,
+    "e": 529.3,
+    "ɛ": 583.9,
+    "ɑ": 647.9,
+    "o": 517.2,
+    "ɪ": 546,
+    "ʌ": 647.9,
+    "a": 745.1
+   },
+   "fR1Source": {
+    "i": "sung",
+    "ɨ": "sung",
+    "u": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "ɨ": 1100,
+    "u": 804,
+    "e": 1727.9,
+    "ɛ": 1478.7,
+    "ɑ": 1142.5,
+    "o": 931.6,
+    "ɪ": 1804,
+    "ʌ": 1317.3,
+    "a": 1256.8
+   },
+   "fR2Source": {
+    "i": "sung",
+    "ɨ": "sung",
+    "u": "sung",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
    "label": "golden"
   },
+  "standIns": {
+   "bucket": "middle",
+   "steps": {
+    "e": "template",
+    "ɛ": "template",
+    "ɑ": "template",
+    "o": "template",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   }
+  },
   "completeness": {
-   "formants": false,
+   "formants": true,
    "range": false,
    "tessitura": false,
    "passaggio": false

@@ -62,13 +62,14 @@ describe('the state of the control', () => {
 		expect(s).toEqual({ kind: 'use-recorded', remaining: ['ɪ', 'ɨ', 'a', 'ʌ', 'u'], anyUsable: true });
 	});
 
-	it('below five core vowels nothing recorded is usable: the voice resolves as one with nothing recorded (lane 67)', () => {
+	it('below five stable core vowels what is recorded is usable, and the rest is a placeholder, so nothing is worked out (lane 68)', () => {
 		for (const vs of [['i'], ['i', 'e', 'u'], ['i', 'e', 'ɛ', 'ɑ']] as Vowel[][]) {
 			const s = state(profileOf(vs), 'not-sure');
-			expect(s.anyUsable, vs.join()).toBe(false);
+			expect(s.anyUsable, vs.join()).toBe(true);
 			expect(s.kind, vs.join()).toBe('use-recorded');
 		}
-		expect(state(profileOf(['u', 'ɨ'])).anyUsable).toBe(false);
+		expect(state(profileOf(['u', 'ɨ'])).anyUsable).toBe(true);
+		expect(state(profileOf([])).anyUsable).toBe(false);
 	});
 
 	it('a reading implausible and not kept is usable, as a kept one is (lane 66, Step 5), at five core vowels', () => {

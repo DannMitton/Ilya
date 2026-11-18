@@ -80,20 +80,31 @@ describe('a declared voice type with nothing sung (row 166)', () => {
 		});
 	}
 
-	it('one to four core vowels sung resolve as a voice with nothing sung: the type\'s template whole, generic true, the sung value not used (lane 67)', () => {
-		for (const sung of [pick(['u']), pick(['i', 'e', 'ɛ', 'ɑ']), pick(['u'], { 'ɨ': f(404, 1100) })]) {
+	it('one to four stable core vowels sampled: each is used as sampled, the rest are the type\'s placeholders unscaled, generic false (lane 68)', () => {
+		const none = buildVoiceProfileSnapshot({}, undefined, undefined, undefined, 'baritone');
+		for (const [names, sung] of [[['u'], pick(['u'])], [['i', 'e', 'ɛ', 'ɑ'], pick(['i', 'e', 'ɛ', 'ɑ'])], [['u', 'ɨ'], pick(['u'], { 'ɨ': f(404, 1100) })]] as const) {
 			const a = buildVoiceProfileSnapshot(sung, undefined, undefined, undefined, 'baritone');
-			const none = buildVoiceProfileSnapshot({}, undefined, undefined, undefined, 'baritone');
-			expect(a.generic).toBe(true);
-			expect(a.snapshot).toEqual(none.snapshot);
-			expect(a.standIns).toEqual(none.standIns);
-			expect(a.snapshot.fR1Source?.u).toBe('surrogate');
+			expect(a.generic, names.join()).toBe(false);
+			for (const [v, fm] of Object.entries(sung) as [Vowel, CalibratedFormant][]) {
+				expect([a.snapshot.fR1[v], a.snapshot.fR1Source?.[v]], `${names.join()} ${v}`).toEqual([fm.f1, 'sung']);
+			}
+			for (const v of ['o', 'ɛ', 'ɑ', 'e', 'i', 'u'] as Vowel[]) {
+				if (v in sung) continue;
+				expect(a.snapshot.fR1[v], `${names.join()} ${v}`).toBe(none.snapshot.fR1[v]); // the baritone template, unscaled
+				expect(a.snapshot.fR1Source?.[v]).toBe('surrogate');
+				expect(a.standIns?.steps[v]).toBe('template');
+			}
+			expect(a.standIns?.bucket).toBe('baritone');
 		}
-		// A type with no generic values: the page that says nothing was measured, as for nothing recorded.
+		// A type with no placeholder profile and nothing sampled: the page that says nothing was measured. With one vowel sampled it draws (lane 68).
+		const none2 = buildVoiceProfileSnapshot({}, undefined, undefined, undefined, 'contralto');
+		expect(none2.snapshot.fR1).toEqual({});
 		const c = buildVoiceProfileSnapshot(pick(['u', 'o']), undefined, undefined, undefined, 'contralto');
 		expect(c.generic).toBe(false);
-		expect(c.snapshot.fR1).toEqual({});
-		expect(c.completeness.formants).toBe(false);
+		expect(c.completeness.formants).toBe(true);
+		expect(c.snapshot.fR1.u).toBe(346);
+		expect(c.standIns?.bucket).toBe('tenor-mezzo');
+		expect(c.snapshot.fR1Source?.i).toBe('surrogate');
 	});
 
 	it('five core vowels sung is the singer\'s own profile: sung values used, generic false', () => {
