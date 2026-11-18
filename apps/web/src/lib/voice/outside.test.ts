@@ -58,6 +58,13 @@ describe('the summary note (lane 67): the take\'s own steadiness', () => {
 		expect(outsideNote()).toEqual({ key: 'calib.summary.unstable' });
 	});
 
+	it('one reading takes its own sentence, two or more the plural one (lane 68)', () => {
+		expect(outsideNote('unstable', 1)).toEqual({ key: 'calib.summary.unstableOne' });
+		expect(outsideNote('unstable', 2)).toEqual({ key: 'calib.summary.unstable' });
+		expect(outsideNote('unstable', 3)).toEqual({ key: 'calib.summary.unstable' });
+		expect(outsideNote('igh', 1)).toEqual({ key: 'calib.summary.outsideIgh' });
+	});
+
 	it('has the ratified string in both languages, with its placeholder and the OQLF space', () => {
 		expect(t('calib.summary.unstable', 'en')).toBe('These readings were unstable: {vowels}. Another try may help.');
 		expect(t('calib.summary.unstable', 'fr')).toBe('Ces lectures étaient instables\u00a0: {vowels}. Une reprise pourrait aider.');

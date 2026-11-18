@@ -512,7 +512,7 @@
 		translator=""
 		opus=""
 		{language}
-		note={[keyRuler?.header(language), genericLede(adapted.generic && !!model, voiceType, language), placeholderLine(placeholders, language)]}
+		note={[keyRuler?.header(language), genericLede(adapted.generic && !!model, voiceType, language), placeholderLine(placeholders, language, 'insights', { formants, analysed: !!analyzed })]}
 		onheightchange={(h) => (headerHeight = h)}
 		markAccent="var(--rose-ink)"
 		ruleAccent="var(--rose)"

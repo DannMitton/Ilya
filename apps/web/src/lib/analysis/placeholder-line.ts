@@ -16,6 +16,8 @@
  */
 import type { AnalyzedScore } from '@ilya/score-parser';
 import { t, type Language } from '$lib/i18n';
+import type { CalibratedFormant, Vowel } from '$lib/voice/engine/types';
+import { PERSONAL_CORE_MIN, isPersonal, isSung, stableCore } from '$lib/voice/engine/sung';
 
 /** Grayson's ten, in the roster's order (as `MarkupPane.svelte` lists them). */
 const ROSTER_ORDER = ['i', 'e', 'ɛ', 'a', 'ɑ', 'o', 'u', 'ɨ', 'ɪ', 'ʌ'];
@@ -43,11 +45,36 @@ export function vowelList(vowels: readonly string[], language: Language): string
 		.join('');
 }
 
-/** The line at the top of the page, or null when the page uses no placeholder. Markup's ends "drawn hollow or dashed". */
-export function placeholderLine(vowels: readonly string[], language: Language, page: 'insights' | 'markup' = 'insights'): string | null {
+/**
+ * The sentence for a voice not yet personal (lane 68; Dann 2026-11-18 13:53 to 14:00, `i18n.ts` `placeholder.line.belowCore` and `calib.pane.belowCore`): how many of the six core
+ * vowels are sampled and stable, which, and how many more complete the profile. `base` is the key without its "One" form; {m} is 5 minus the stable count, and the "One"
+ * form (where {m} is 1) holds "1 more" in its own words. With none stable the list is left out with its parentheses.
+ */
+export function belowCoreText(base: string, stable: readonly Vowel[], language: Language): string {
+	const m = PERSONAL_CORE_MIN - stable.length;
+	const text = t(m === 1 ? `${base}One` : base, language).replaceAll('{n}', String(stable.length)).replaceAll('{m}', String(m));
+	return stable.length === 0 ? text.replace(' ({vowels})', '') : text.replace('{vowels}', vowelList(stable, language));
+}
+
+/**
+ * The line at the top of the page, or null when there is none to show. Markup's ends "drawn hollow or dashed".
+ *
+ * `stored` (lane 68): the voice's stored readings and whether the page has an analysis. When the page has an analysis, something is sampled (`isSung`), and the voice is not
+ * yet personal (fewer than five stable core vowels), the below-five sentence replaces the placeholder line, whether or not this song uses a placeholder vowel. With no
+ * analysis it shows nothing. Otherwise the line is as before: the placeholder vowels this page rests on.
+ */
+export function placeholderLine(
+	vowels: readonly string[],
+	language: Language,
+	page: 'insights' | 'markup' = 'insights',
+	stored?: { formants: Partial<Record<Vowel, CalibratedFormant>>; analysed: boolean },
+): string | null {
+	const prefix = `placeholder.line${page === 'markup' ? '.markup' : ''}`;
+	if (stored && Object.values(stored.formants).some(isSung) && !isPersonal(stored.formants)) {
+		return stored.analysed ? belowCoreText(`${prefix}.belowCore`, stableCore(stored.formants), language) : null;
+	}
 	if (vowels.length === 0) return null;
-	const key = `placeholder.line${page === 'markup' ? '.markup' : ''}.${vowels.length === 1 ? 'one' : 'many'}`;
-	return t(key, language).replace('{vowels}', vowelList(vowels, language));
+	return t(`${prefix}.${vowels.length === 1 ? 'one' : 'many'}`, language).replace('{vowels}', vowelList(vowels, language));
 }
 
 /** A comment's own sentences when its vowel is a placeholder: the finding, then the remedy (RATIFIED 19:49). */

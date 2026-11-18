@@ -1,0 +1,19 @@
+# Report, lane 68, Step 2: the lines
+
+2026-11-18. Branch `cloud-lane-68`. Tests run (the files this step changed or added): `analysis/placeholder-line.test.ts`, `components/Drawer/voice-pane.test.ts`, `lane68-strings.test.ts` (new), `lane67-strings.test.ts`, `voice/outside.test.ts`, `i18n-index.test.ts`, `i18n.test.ts`: 7 files, 77 tests, all passed. `svelte-check`: 0 errors, 12 warnings. Ratchets OK; no ceiling file gained a line (`CalibrationWizard` 1124, `MarkupPane` 1353, `InsightsPane` 742, `+page.svelte` 5532, all at or under their ceilings).
+
+## What changed
+
+1. **INSIGHTS and MELODY line** (`analysis/placeholder-line.ts`). `placeholderLine(vowels, language, page, stored?)` takes the stored readings and whether the page has an analysis as a new last argument (amendment 5). With an analysis, something sampled (`isSung`), and the voice not personal, it returns the section 5 line (`placeholder.line.belowCore`, `placeholder.line.markup.belowCore`, and the `…One` forms where {m} is 1), whether or not the song uses a placeholder vowel. With no analysis it returns nothing. Personal, or nothing sampled: today's lines. {n} is the stable core count, {m} is 5 minus {n}, {vowels} the stable core vowels in `CORE_VOWELS` order through `vowelList`; with {n} 0 the list and its parentheses are left out, in every line (amendment 7). The fill is one exported function, `belowCoreText`, which the pane reuses. The two call sites changed in place, no line added: `insights/InsightsPane.svelte:515`, `markup/MarkupPane.svelte:740`.
+2. **VOICE pane** (`components/Drawer/voice-pane.ts`). `core` is now the list of stable core vowels (amendment 8: `stableCore` in `voice/engine/sung.ts`, passed by `routes/+page.svelte:4187`, changed in place; `VoicePane.svelte` takes the list). The two below-five states became one, `below-core`, tested before `usable >= 10` (amendment 2), so ten readings with four stable core vowels print the below-five sentence. It prints `calib.pane.belowCore` / `belowCoreOne` for every type. The four retired keys (`calib.pane.coreGeneric`, `coreGenericOne`, `core`, `coreOne`) are marked UNUSED in place, with their French kept; `lane67-strings.test.ts` keeps their pins, with a comment saying so.
+3. **The unstable note** (`voice/outside.ts`, `voice/OutsideNote.svelte`). With one named reading: `calib.summary.unstableOne` and the button `calib.summary.keepOne`. With two or more: today's `calib.summary.unstable` and `calib.summary.keepAll`. `outsideNote(kind, count = 2)`.
+4. **Strings and index** (`i18n.ts`). Seven keys added, built from section 5 character for character, with U+00A0 before each French colon and U+2019 as the apostrophe: `placeholder.line.belowCore`, `placeholder.line.belowCoreOne`, `placeholder.line.markup.belowCore`, `placeholder.line.markup.belowCoreOne`, `calib.pane.belowCore`, `calib.pane.belowCoreOne`, `calib.summary.unstableOne`. Key count 1,335 to 1,342; `calib.` 127 to 130; `placeholder.` 8 to 12. `i18n-index.test.ts` passes. `lane68-strings.test.ts` pins all seven in both languages.
+
+## Not changed
+- No English or French outside section 5 was written. The old pane's "Until then, it uses generic values for a {voiceType} voice" is gone with its key, so the pane no longer fills a voice type name.
+
+## Comments corrected in this commit
+- `components/Drawer/voice-pane.ts` header and `PaneSentenceInput.core` doc; `components/Drawer/VoicePane.svelte` `core` doc; `voice/OutsideNote.svelte` header; `i18n.ts` comment above the retired pane keys.
+
+## NOT ESTABLISHED
+- The pane at `usable >= 10` with all ten sampled and fewer than five stable core vowels (for example ten unstable takes) now prints the below-five sentence. That follows amendment 2. Whether the singer sees a "profile complete" door in that case was not looked at; Step 5 pictures cover three stable vowels only.

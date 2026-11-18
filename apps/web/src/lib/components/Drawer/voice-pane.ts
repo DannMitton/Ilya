@@ -3,21 +3,24 @@
  * recording, and whether "Your vowel space" shows. Pure, so the seven sentence states are tested without a browser. The eighth state of the
  * pane, with no voice saved, is the first-launch form (`ProfileSwitcher.svelte`), not a sentence.
  *
- * BELOW FIVE CORE VOWELS (lane 67) the sentence says how many core vowels are recorded and how many more unlock the singer's own profile; the count of the other states is
+ * BELOW FIVE STABLE CORE VOWELS (lanes 67 and 68; Dann 2026-11-18 13:57 and 14:00) one sentence, for every type, says how many of the six core vowels are sampled and stable, which, and how many
+ * more complete the singer's own profile (`calib.pane.belowCore`); it is tested before the count of ten, since five stable core vowels, not ten vowels, complete a profile. The count of the other states is
  * every sung vowel. "Recorded" means sung: the count the closed pane's line prints (`usableReadingCount`, `profileStore.ts`; `isSung`, `voice/engine/sung.ts`), so a
  * reading beyond Ilya's reference values counts as a kept one does (lane 66, Step 5), and a stored estimate or a take with no first resonance does not,
  * where the summary's table, which draws every stored reading, draws them.
  */
 import { t, type Language } from '$lib/i18n';
 import { PERSONAL_CORE_MIN } from '$lib/voice/engine/sung';
+import type { Vowel } from '$lib/voice/engine/types';
+import { belowCoreText } from '$lib/analysis/placeholder-line';
 import { hasPlaceholderProfile } from '$lib/voice/engine/stand-ins';
 import { fillVoiceType, isTier1, voiceTypePrint } from '$lib/voice/voiceTypes';
 
 export interface PaneSentenceInput {
 	/** `usableReadingCount(voiceFormants)`, 0 to 10. */
 	usable: number;
-	/** `coreCount(voiceFormants)`, 0 to 6 (`voice/engine/sung.ts`): how many of the six core vowels are sung. Under five, what is recorded unlocks nothing personal (lane 67). */
-	core: number;
+	/** `stableCore(voiceFormants)` (`voice/engine/sung.ts`): the core vowels sampled and stable, in roster order, 0 to 6 of them. Under five, the profile is not yet complete (lane 68). */
+	core: readonly Vowel[];
 	/** The stored Tier 1 id, if any. An id this build does not know counts as none. */
 	voiceType?: string;
 	/**
@@ -27,20 +30,20 @@ export interface PaneSentenceInput {
 	restWorkedOut: boolean;
 }
 
-export type PaneState = 'none' | 'typed-generic' | 'typed-none' | 'not-sure' | 'core-generic' | 'core' | 'some-fills' | 'some-works-out' | 'all';
+export type PaneState = 'none' | 'typed-generic' | 'typed-none' | 'not-sure' | 'below-core' | 'some-fills' | 'some-works-out' | 'all';
 
 export function paneState(i: PaneSentenceInput): PaneState {
+	// Anything sung and fewer than five stable core vowels (a voice with only a hard vowel sung has `usable >= 1` and no stable core vowel; so has ten readings with four stable): what is recorded
+	// is used and shown, and the sentence says how many more core vowels complete the profile (lane 68; Dann 2026-11-18 13:57 and 14:00). It is tested before ten usable.
+	if (i.usable >= 1 && i.core.length < PERSONAL_CORE_MIN) return 'below-core';
 	if (i.usable >= 10) return 'all';
-	// Anything sung and fewer than five core vowels (a voice with only a hard vowel sung has `usable >= 1` and `core` 0): what is recorded is kept and shown, and says
-	// how many more core vowels are needed. With a type that has generic values it says Ilya uses them until then (lane 67; Dann 2026-11-17 23:31).
-	if (i.usable >= 1 && i.core < PERSONAL_CORE_MIN) return isTier1(i.voiceType) && hasPlaceholderProfile(i.voiceType) ? 'core-generic' : 'core';
 	if (i.usable >= 1) return i.restWorkedOut ? 'some-works-out' : 'some-fills';
 	if (!isTier1(i.voiceType)) return 'none';
 	if (i.voiceType === 'not-sure') return 'not-sure';
 	return hasPlaceholderProfile(i.voiceType) ? 'typed-generic' : 'typed-none';
 }
 
-const KEY: Record<Exclude<PaneState, 'core-generic' | 'core' | 'some-fills' | 'some-works-out'>, string> = {
+const KEY: Record<Exclude<PaneState, 'below-core' | 'some-fills' | 'some-works-out'>, string> = {
 	none: 'calib.pane.none',
 	'typed-generic': 'calib.pane.typedGeneric',
 	'typed-none': 'calib.pane.typedNone',
@@ -51,12 +54,7 @@ const KEY: Record<Exclude<PaneState, 'core-generic' | 'core' | 'some-fills' | 's
 /** The sentence. Numerals in the count; the counted forms for one vowel left are the ratified "last one" forms. */
 export function paneSentence(i: PaneSentenceInput, language: Language): string {
 	const state = paneState(i);
-	if (state === 'core-generic' || state === 'core') {
-		const m = PERSONAL_CORE_MIN - i.core;
-		const base = state === 'core-generic' ? 'calib.pane.coreGeneric' : 'calib.pane.core';
-		const text = t(m === 1 ? `${base}One` : base, language).replace('{n}', String(i.core)).replace('{m}', String(m));
-		return state === 'core-generic' ? fillVoiceType(text, voiceTypePrint({ voiceType: i.voiceType }, language) ?? '', language) : text;
-	}
+	if (state === 'below-core') return belowCoreText('calib.pane.belowCore', i.core, language);
 	if (state === 'some-fills' || state === 'some-works-out') {
 		const m = 10 - i.usable;
 		const base = state === 'some-fills' ? 'calib.pane.fills' : 'calib.pane.worksOut';

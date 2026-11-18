@@ -3,7 +3,7 @@
 	 * The summary's one note (Dann, 2026-09-30 12:43; brief
 	 * `docs/sessions/brief-code-calibration-first-moments_r1_2026-09-30.md`).
 	 * It names the unstable readings (lane 67), once, and
-	 * offers Keep or Re-take. Strings ratified 2026-11-18 10:49, verbatim. Which readings,
+	 * offers Keep or Re-take; with one reading, its own sentence and "Keep it" (lane 68). Strings ratified 2026-11-18 10:49 and 14:00, verbatim. Which readings,
 	 * and which sentence, come from `outside.ts`; the wizard owns the profile.
 	 */
 	import type { Snippet } from 'svelte';
@@ -28,7 +28,7 @@
 	const T = (key: string) => t(key, language);
 	/* {vowels} is the list of tags (the unstable note only; the [ɨ] note names its vowel in its own words). */
 	const parts = $derived.by(() => {
-		const [before, after = ''] = T(outsideNote(kind).key).split('{vowels}');
+		const [before, after = ''] = T(outsideNote(kind, vowels.length).key).split('{vowels}');
 		return { before, after };
 	});
 </script>
@@ -38,7 +38,7 @@
 		{parts.before}{#if kind === 'unstable'}{#each vowels as g, i (g)}{#if i > 0}{', '}{/if}{@render tag(g)}{/each}{/if}{parts.after}
 	</p>
 	<div class="outside-actions">
-		<button type="button" onclick={onkeep}>{T(kind === 'igh' ? 'calib.summary.keepOne' : 'calib.summary.keepAll')}</button>
+		<button type="button" onclick={onkeep}>{T(kind === 'igh' || vowels.length === 1 ? 'calib.summary.keepOne' : 'calib.summary.keepAll')}</button>
 		<button type="button" onclick={onretake}>{T('calib.common.retake')}</button>
 		{#if kind === 'igh'}<button type="button" onclick={onuseestimate}>{T('calib.summary.useEstimate')}</button>{/if}
 	</div>

@@ -6,6 +6,7 @@ import { describe, expect, it } from 'vitest';
 import { t } from '$lib/i18n';
 
 const A = '’'; // the French apostrophe, as the table writes it
+// The four `calib.pane.*` pins below are of strings RETIRED by lane 68 (`UNUSED SINCE LANE 68` in `i18n.ts`, replaced by `calib.pane.belowCore`; `lane68-strings.test.ts`): they stay in the table, with their ratified French, and these pins keep them from drifting.
 const SEVEN: [string, string, string][] = [
 	['calib.pane.coreGeneric', 'You have recorded {n} of the 6 core vowels. Record {m} more, and Ilya builds your resonance profile. Until then, it uses generic values for a {voiceType} voice.', `Vous avez capté {n} des 6 voyelles de base. Captez-en {m} de plus, et Ilya établit votre profil de résonances. D${A}ici là, il utilise des valeurs par défaut pour une voix type de {voiceType}.`],
 	['calib.pane.coreGenericOne', 'You have recorded 4 of the 6 core vowels. Record one more, and Ilya builds your resonance profile. Until then, it uses generic values for a {voiceType} voice.', `Vous avez capté 4 des 6 voyelles de base. Captez-en une de plus, et Ilya établit votre profil de résonances. D${A}ici là, il utilise des valeurs par défaut pour une voix type de {voiceType}.`],
@@ -16,7 +17,7 @@ const SEVEN: [string, string, string][] = [
 	['calib.summary.useEstimate', "Use Ilya's estimate for now", `Utiliser l${A}estimation d${A}Ilya pour l${A}instant`]
 ];
 
-describe('the seven ratified strings of lane 67', () => {
+describe('the seven ratified strings of lane 67 (the first four retired by lane 68 and kept)', () => {
 	for (const [key, en, fr] of SEVEN) {
 		it(key, () => {
 			expect(t(key, 'en')).toBe(en);

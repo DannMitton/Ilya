@@ -8,6 +8,7 @@
 import { describe, expect, it } from 'vitest';
 import type { AnalyzedScore } from '@ilya/score-parser';
 import { placeholderCommentSentence, placeholderLine, placeholderVowels, vowelList } from './placeholder-line';
+import type { CalibratedFormant, Vowel } from '$lib/voice/engine/types';
 
 const analysed = (events: Array<[string, boolean]>): AnalyzedScore =>
 	({
@@ -79,5 +80,43 @@ describe('the line', () => {
 	it('joins a pair on the profile separators', () => {
 		expect(vowelList(['o', 'u'], 'en')).toBe('[o] and [u]');
 		expect(vowelList(['o', 'u'], 'fr')).toBe('[o] et [u]');
+	});
+});
+
+describe('the below-five line (lane 68)', () => {
+	const fm = (f1: number, extra: Partial<CalibratedFormant> = {}): CalibratedFormant => ({ f1, f2: 1500, f2Quality: 'clear', confidence: 'high', reading: 'captured', source: 'measured-user', ...extra }) as CalibratedFormant;
+	const of = (vs: Vowel[], over: Partial<Record<Vowel, CalibratedFormant>> = {}) => ({ ...Object.fromEntries(vs.map((v) => [v, fm(400)])), ...over }) as Partial<Record<Vowel, CalibratedFormant>>;
+	const on = (formants: Partial<Record<Vowel, CalibratedFormant>>, analysed = true) => ({ formants, analysed });
+
+	it('replaces the placeholder line when the page has an analysis, something is sampled, and the voice is not personal: n, the list, and m', () => {
+		const en = placeholderLine(['ɛ', 'o'], 'en', 'insights', on(of(['i', 'e', 'u'])))!;
+		expect(en).toContain('You have sampled 3 so far ([i], [e], and [u]). Until you provide 2 more, unsampled vowels are assigned placeholder values. Findings that rest on a placeholder are drawn dashed.');
+		expect(en.startsWith('To complete your personal vowel space, Ilya needs you to sample at least 5 of these 6 core vowels: [i], [e], [ɛ], [ɑ], [o], and [u].')).toBe(true);
+		const fr = placeholderLine([], 'fr', 'insights', on(of(['i', 'e', 'u'])))!;
+		expect(fr).toContain('Vous en avez échantillonné 3 jusqu’ici ([i], [e] et [u]). D’ici à ce que vous en fournissiez 2 de plus');
+	});
+	it('shows for a song that uses no placeholder vowel, and for MELODY with "hollow or dashed"', () => {
+		expect(placeholderLine([], 'en', 'insights', on(of(['i'])))).toContain('You have sampled 1 so far ([i]).');
+		expect(placeholderLine([], 'en', 'markup', on(of(['i'])))).toContain('drawn hollow or dashed. You can add new fry samples anytime');
+		expect(placeholderLine([], 'fr', 'markup', on(of(['i'])))).toContain('tracés évidés ou en pointillé. Vous pouvez');
+	});
+	it('with one more to go, "1 more" and « une de plus »', () => {
+		expect(placeholderLine([], 'en', 'insights', on(of(['i', 'e', 'ɛ', 'ɑ'])))).toContain('Until you provide 1 more,');
+		expect(placeholderLine([], 'fr', 'insights', on(of(['i', 'e', 'ɛ', 'ɑ'])))).toContain('fournissiez une de plus,');
+	});
+	it('counts only stable core vowels: an unstable one is not counted or listed; a hard vowel alone prints 0 with no list and no parentheses', () => {
+		const line = placeholderLine([], 'en', 'insights', on(of(['i', 'e'], { u: fm(300, { confidence: 'low' }) })))!;
+		expect(line).toContain('You have sampled 2 so far ([i] and [e]). Until you provide 3 more');
+		const hardOnly = placeholderLine([], 'en', 'insights', on(of(['ɨ'])))!;
+		expect(hardOnly).toContain('You have sampled 0 so far. Until you provide 5 more');
+		expect(hardOnly).not.toMatch(/\(|\{/);
+		expect(placeholderLine([], 'fr', 'insights', on(of(['ɨ'])))).toContain('Vous en avez échantillonné 0 jusqu’ici. D’ici à ce que vous en fournissiez 5 de plus');
+	});
+	it('with no analysis shows nothing; personal or nothing sampled gives today\'s line', () => {
+		expect(placeholderLine([], 'en', 'insights', on(of(['i']), false))).toBeNull();
+		expect(placeholderLine(['ɛ'], 'en', 'insights', on(of(['i']), false))).toBeNull();
+		expect(placeholderLine(['ɛ'], 'en', 'insights', on(of(['i', 'e', 'o', 'ɑ', 'u'])))).toBe(placeholderLine(['ɛ'], 'en'));
+		expect(placeholderLine(['ɛ'], 'en', 'insights', on({}))).toBe(placeholderLine(['ɛ'], 'en'));
+		expect(placeholderLine([], 'en', 'insights', on({}))).toBeNull();
 	});
 });

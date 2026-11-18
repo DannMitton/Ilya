@@ -26,7 +26,7 @@
 	import InsightsShares from '$lib/voice/InsightsShares.svelte';
 	import type { OpenKind, VoiceSeam } from '$lib/voice/seam';
 	import type { VoiceTypeChoice } from '$lib/voice/profileStore';
-	import type { VoiceCharacteristics } from '$lib/voice/engine/types';
+	import type { VoiceCharacteristics, Vowel } from '$lib/voice/engine/types';
 	import type { IntakeAnswers } from '@ilya/score-parser';
 	import StationHeader from './StationHeader.svelte';
 	import { STATION_IDS, type SectionSet } from './sections.svelte';
@@ -40,8 +40,8 @@
 		voiceType: VoiceTypeChoice | undefined;
 		/** `usableReadingCount(voiceFormants)`. */
 		usable: number;
-		/** `coreCount(voiceFormants)`: the core vowels sung, 0 to 6 (lane 67). */
-		core: number;
+		/** `stableCore(voiceFormants)`: the core vowels sampled and stable, in roster order (lane 68). */
+		core: readonly Vowel[];
 		/** Whether the active voice has any stored reading, usable or not. */
 		hasStoredReading: boolean;
 		/** Whether every vowel left can be worked out (lane 59's `finishEarlyState`); `false` until that lane is merged. */

@@ -46,7 +46,10 @@ export function markUseEstimate(profile: Partial<Record<Vowel, CalibratedFormant
 	return igh ? { ...profile, ɨ: { ...igh, useEstimate: true } } : profile;
 }
 
-/** The note's string key: the unstable readings' sentence, or the far-off [ɨ]'s (`kind` 'igh', `calib.summary.outsideIgh`, ratified 2026-11-13 15:29). No voice type in either. */
-export function outsideNote(kind: 'unstable' | 'igh' = 'unstable'): { key: string } {
-	return { key: kind === 'igh' ? 'calib.summary.outsideIgh' : 'calib.summary.unstable' };
+/**
+ * The note's string key: the unstable readings' sentence (`count` is how many readings it names: one takes `calib.summary.unstableOne`, "This reading was unstable", lane 68;
+ * two or more take `calib.summary.unstable`), or the far-off [ɨ]'s (`kind` 'igh', `calib.summary.outsideIgh`, ratified 2026-11-13 15:29). No voice type in either.
+ */
+export function outsideNote(kind: 'unstable' | 'igh' = 'unstable', count = 2): { key: string } {
+	return { key: kind === 'igh' ? 'calib.summary.outsideIgh' : count === 1 ? 'calib.summary.unstableOne' : 'calib.summary.unstable' };
 }

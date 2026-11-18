@@ -3,9 +3,10 @@ import { paneSentence, paneState, recordDoorKey, showVowelSpaceDoor, typeControl
 import { t } from '$lib/i18n';
 import { usableReadingCount, assignToVoice, type StoredVoice } from '$lib/voice/profileStore';
 import { withTier1 } from '$lib/voice/voiceTypes';
+import { CORE_VOWELS } from '$lib/voice/engine/sung';
 
-/** `core` defaults to 6: the first seven states are those of a voice with five or more core vowels (or none sung, where `core` is 0 and `usable` is 0). */
-const S = (usable: number, voiceType?: string, restWorkedOut = false, core = usable === 0 ? 0 : 6) => ({ usable, core, voiceType, restWorkedOut });
+/** `core` is the number of stable core vowels (the first `core` of the roster's six; the pane takes the list), and defaults to 6: the first seven states are those of a voice with five or more core vowels (or none sung, where `core` is 0 and `usable` is 0). */
+const S = (usable: number, voiceType?: string, restWorkedOut = false, core = usable === 0 ? 0 : 6) => ({ usable, core: CORE_VOWELS.slice(0, core), voiceType, restWorkedOut });
 
 describe('the pane’s seven sentence states, English and French, as ratified', () => {
 	const cases: [string, ReturnType<typeof S>, PaneState, string, string][] = [
@@ -62,33 +63,35 @@ describe('a profile whose readings are all beyond the reference values counts th
 	});
 });
 
-describe('below five core vowels (lane 67): how many more, and what Ilya uses until then', () => {
-	const EN = (n: number, tail: string) => `You have recorded ${n} of the 6 core vowels. Record ${5 - n === 1 ? 'one' : 5 - n} more, and Ilya builds your resonance profile.${tail}`;
-	const FR = (n: number, tail: string) => `Vous avez capté ${n} des 6 voyelles de base. Captez-en ${5 - n === 1 ? 'une' : 5 - n} de plus, et Ilya établit votre profil de résonances.${tail}`;
-	it('prints the ratified sentence with the core count, for core counts 1 to 4, with a type that has generic values (a bass)', () => {
-		for (const n of [1, 2, 3, 4]) {
-			const input = S(n, 'bass', false, n);
-			expect(paneState(input)).toBe('core-generic');
-			expect(paneSentence(input, 'en')).toBe(EN(n, ' Until then, it uses generic values for a bass voice.'));
-			expect(paneSentence(input, 'fr')).toBe(FR(n, ' D’ici là, il utilise des valeurs par défaut pour une voix type de basse.'));
-		}
-	});
-	it('prints the shorter sentence for a type with no generic values, "Not sure", and no type', () => {
-		for (const type of ['contralto', 'countertenor', 'bass-baritone', 'not-sure', undefined]) {
+describe('below five stable core vowels (lane 68): how many, which, and how many more complete the profile', () => {
+	const EN = (n: number, list: string) => `You have sampled ${n} of the 6 core vowels so far${list}. To complete your personal vowel space, Ilya needs at least 5 stable fry samples. Until you provide ${5 - n} more, unsampled vowels are assigned placeholder values.`;
+	const FR = (n: number, list: string) => `Vous avez échantillonné ${n} des 6 voyelles de base jusqu’ici${list}. Pour compléter votre espace vocalique personnel, Ilya a besoin d’au moins 5 échantillons stables en friture vocale. D’ici à ce que vous en fournissiez ${5 - n === 1 ? 'une' : 5 - n} de plus, les voyelles non échantillonnées reçoivent des valeurs par défaut.`;
+	const LISTS_EN = [' ([i])', ' ([i] and [e])', ' ([i], [e], and [ɛ])', ' ([i], [e], [ɛ], and [ɑ])'];
+	const LISTS_FR = [' ([i])', ' ([i] et [e])', ' ([i], [e] et [ɛ])', ' ([i], [e], [ɛ] et [ɑ])'];
+	it('prints the ratified sentence with the count, the list, and what is left, for 1 to 4 stable core vowels, for every type', () => {
+		for (const type of ['bass', 'soprano', 'contralto', 'countertenor', 'bass-baritone', 'not-sure', undefined]) {
 			for (const n of [1, 2, 3, 4]) {
 				const input = S(n, type, false, n);
-				expect(paneState(input), `${type} ${n}`).toBe('core');
-				expect(paneSentence(input, 'en')).toBe(EN(n, ''));
-				expect(paneSentence(input, 'fr')).toBe(FR(n, ''));
+				expect(paneState(input), `${type} ${n}`).toBe('below-core');
+				expect(paneSentence(input, 'en'), `${type} ${n}`).toBe(EN(n, LISTS_EN[n - 1]));
+				expect(paneSentence(input, 'fr'), `${type} ${n}`).toBe(FR(n, LISTS_FR[n - 1]));
 			}
 		}
 	});
-	it('a voice with only a hard vowel sung (usable 1, core 0) is below five: it needs 5 more, and the pane does not say Ilya fills the other 9', () => {
+	it('with one more to go, the "one more" forms: "Until you provide 1 more" and « D’ici à ce que vous en fournissiez une de plus »', () => {
+		expect(paneSentence(S(4, 'bass', false, 4), 'en')).toContain('Until you provide 1 more, unsampled');
+		expect(paneSentence(S(4, 'bass', false, 4), 'fr')).toContain('D’ici à ce que vous en fournissiez une de plus, les voyelles');
+	});
+	it('a voice with only a hard vowel sampled (usable 1, no core vowel) prints "0" and leaves out the list with its parentheses', () => {
 		const input = S(1, 'bass', false, 0);
-		expect(paneState(input)).toBe('core-generic');
-		expect(paneSentence(input, 'en')).toBe(EN(0, ' Until then, it uses generic values for a bass voice.'));
-		expect(paneSentence(S(2, undefined, false, 0), 'en')).toBe(EN(0, ''));
-		expect(paneSentence(input, 'en')).not.toMatch(/fills|other 9/);
+		expect(paneState(input)).toBe('below-core');
+		expect(paneSentence(input, 'en')).toBe(EN(0, ''));
+		expect(paneSentence(input, 'fr')).toBe(FR(0, ''));
+		expect(paneSentence(input, 'en')).not.toMatch(/fills|other 9|\(|\)/);
+	});
+	it('is tested before ten usable: ten readings with four stable core vowels is still below five', () => {
+		expect(paneState(S(10, 'bass', false, 4))).toBe('below-core');
+		expect(paneState(S(10, 'bass', false, 5))).toBe('all');
 	});
 	it('at five and six core vowels the existing states apply unchanged', () => {
 		expect(paneState(S(5, 'bass', false, 5))).toBe('some-fills');
@@ -101,9 +104,8 @@ describe('below five core vowels (lane 67): how many more, and what Ilya uses un
 		expect(paneState(S(0, 'bass'))).toBe('typed-generic');
 		expect(paneState(S(0))).toBe('none');
 	});
-	it('every sentence carries no unfilled placeholder; the type is elided in French as the other fills elide it', () => {
+	it('every sentence carries no unfilled placeholder', () => {
 		for (const type of ['soprano', 'tenor', 'bass', 'baritone', 'mezzo-soprano']) for (const n of [0, 1, 4]) for (const l of ['en', 'fr'] as const) expect(paneSentence(S(1, type, false, n), l)).not.toMatch(/[{}]/);
-		expect(paneSentence(S(2, 'mezzo-soprano', false, 2), 'fr')).toContain('voix type de mezzo-soprano');
 	});
 	it('the door names are unchanged', () => {
 		expect(recordDoorKey(3)).toBe('calib.pane.door.carryOn');

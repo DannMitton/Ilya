@@ -737,7 +737,7 @@
 	);
 	// QUEUE row 69: the vowels this page rests on that the singer never sampled, named under the title;
 	// Markup's line ends "drawn hollow or dashed" (row 78a, Dann 2026-10-11 20:06).
-	const placeholderNote = $derived(placeholderLine(placeholderVowels(analyzed), language, 'markup'));
+	const placeholderNote = $derived(placeholderLine(placeholderVowels(analyzed), language, 'markup', { formants, analysed: !!analyzed }));
 
 	// ── The "For your consideration" list (design C) ─────────────────────
 	// Built purely from the marks the overlay already computed (watchlist.ts);
