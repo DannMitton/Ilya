@@ -29,7 +29,7 @@
 
 ## Comments corrected in this commit
 
-`resolve-values.ts` (the file header, the §B.4 block, the fR2 and derivation comments), `derivations.ts` (the `usableAnchor` doc), `plausibility.ts` (`keepReading`), `stand-ins.ts` (the `retake` type), `profileStore.ts` (`hasAnyReadings`, `usableReadingCount`), `outside.ts`, `voice-pane.ts` (the header), `bandState.ts`, `markup/MarkupPane.svelte:562`, `analysis/analyze-score-adapter.ts:111`, `+page.svelte:1628`, `InsightsPane.svelte` (the measured-vowels comment), and the header of `analysis/adapter-golden.test.ts` is unchanged in words.
+`resolve-values.ts` (the file header, the §B.4 block, the fR2 and derivation comments), `derivations.ts` (the `usableAnchor` doc), `plausibility.ts` (`keepReading`), `stand-ins.ts` (the `retake` type), `profileStore.ts` (`hasAnyReadings`, `usableReadingCount`), `outside.ts`, `voice-pane.ts` (the header), `bandState.ts`, `markup/MarkupPane.svelte:562`, `analysis/analyze-score-adapter.ts:111`, `+page.svelte:1628`, and `InsightsPane.svelte` (the measured-vowels comment).
 
 ## Files
 
