@@ -188,8 +188,17 @@ test.describe('the new capture screen on the stub', () => {
 		await settled(page);
 		expect(await selected(page)).toBe('i'); // round the seven from [u]: wraps to the first unsung
 		await expect(cue(page)).toHaveText('Ready for [i].');
+		// Lane 67: below five core vowels nothing recorded unlocks anything personal, so there is nothing to stop and use: the control does not show after one vowel.
+		await expect(page.getByRole('button', { name: /^Use what I.ve recorded$/ })).toHaveCount(0);
+	});
+
+	test('Use what I’ve recorded shows from the fifth core vowel, and opens the summary with the five rows (lane 67)', async ({ page }) => {
+		test.setTimeout(120_000);
+		await open(page, { formants: { i: READING(296, 1705), e: READING(381, 1532), 'ɛ': READING(577, 1311), 'ɑ': READING(617, 1013), o: READING(489, 826) } });
+		await page.getByRole('button', { name: /^carry on recording$/i }).click();
+		await expect(page.locator('.capture')).toBeVisible();
 		await page.getByRole('button', { name: /^Use what I.ve recorded$/ }).click();
-		await expect(page.locator('.vowel-sheet tr[data-row]:not(.placed)')).toHaveCount(1); // one recorded row (the lede is gone)
+		await expect(page.locator('.vowel-sheet tr[data-row]:not(.placed)')).toHaveCount(5);
 	});
 
 	test('a cancel in each phase ends the take, saves no reading, and records a cancel', async ({ page }) => {
@@ -223,9 +232,10 @@ test.describe('the new capture screen on the stub', () => {
 
 	test('a rolled-back re-take keeps the reading and says so; an error says what happened; both leave a record', async ({ page }) => {
 		test.setTimeout(120_000);
-		await open(page, { formants: { i: { ...READING(296, 1705), plausibility: 'implausible' }, e: READING(381, 1532), u: READING(346, 804) }, next: ['provisional-low', 'error-no-audio'] });
-		await page.getByRole('button', { name: /^your vowel space$/i }).click();
-		await page.getByRole('button', { name: /^re-take$/i }).first().click(); // the note's Re-take: [i], a pass of one
+		// Lane 67: the summary's note is now on an unstable take, and a re-take is rolled back only when the stored reading is the clearer one, so this re-takes a steady [i] from the capture screen.
+		await open(page, { formants: { i: READING(296, 1705), e: READING(381, 1532), 'ɛ': READING(577, 1311), 'ɑ': READING(617, 1013), o: READING(489, 826), u: READING(346, 804) }, next: ['provisional-low', 'error-no-audio'] });
+		await page.getByRole('button', { name: /^carry on recording$/i }).click();
+		await btn(page, /^cardinal-i/).click(); // focus [i]: Start re-takes it
 		await expect(page.locator('.capture')).toBeVisible();
 		await page.locator('.main').click();
 		await expect(cue(page)).toContainText('previous one was kept', { timeout: 40_000 });
@@ -239,13 +249,13 @@ test.describe('the new capture screen on the stub', () => {
 		v = await stored(page);
 		expect(v.takes.map((t: { outcome: string; errorCode?: string }) => [t.outcome, t.errorCode])).toEqual([['rolled-back', undefined], ['failed', 'NO_AUDIO_INPUT']]);
 		await expect(page.locator('.main')).toBeEnabled(); // a way back in
-		await page.getByRole('button', { name: /^Use what I.ve recorded$/ }).click();
-		await expect(page.locator('.vowel-sheet tr[data-row]:not(.placed)')).toHaveCount(3); // the lede is gone
+		await page.getByRole('button', { name: /^Let Ilya work out the other four$/ }).click(); // six core vowels: the four left can all be worked out (`finish-early.ts`)
+		await expect(page.locator('.vowel-sheet tr[data-row]:not(.placed)')).toHaveCount(6); // the lede is gone; six core vowels recorded (lane 67: the note is on an unstable [i], and the control needs five)
 	});
 
 	test('a re-take from the summary walks its pass and returns by itself when the take is clean', async ({ page }) => {
 		test.setTimeout(120_000);
-		await open(page, { formants: { i: { ...READING(296, 1705), plausibility: 'implausible' }, u: READING(346, 804) } });
+		await open(page, { formants: { i: { ...READING(296, 1705), confidence: 'low', reading: 'provisional' }, u: READING(346, 804) } });
 		await page.getByRole('button', { name: /^your vowel space$/i }).click();
 		await page.getByRole('button', { name: /^re-take$/i }).first().click(); // the note's Re-take walks its pass
 		await page.locator('.main').click();
@@ -254,7 +264,7 @@ test.describe('the new capture screen on the stub', () => {
 
 	test('a tap during the dwell at the end of a re-take pass keeps the screen: it does not return to the summary under the singer (follow-up fix 4)', async ({ page }) => {
 		test.setTimeout(90_000);
-		await open(page, { formants: { i: { ...READING(296, 1705), plausibility: 'implausible' }, u: READING(346, 804) }, next: ['captured'] });
+		await open(page, { formants: { i: { ...READING(296, 1705), confidence: 'low', reading: 'provisional' }, u: READING(346, 804) }, next: ['captured'] });
 		await page.getByRole('button', { name: /^your vowel space$/i }).click();
 		await page.getByRole('button', { name: /^re-take$/i }).first().click(); // the note's Re-take: a pass of one
 		await page.locator('.main').click();

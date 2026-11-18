@@ -108,9 +108,9 @@ test.describe('L4: a link to record vowels, beside L1, where the findings rest o
 		await toInsights(page);
 		await expect(page.locator('.insights-container').getByRole('button', { name: 'Capter vos voyelles' })).toBeVisible({ timeout: 20_000 });
 	});
-	test('is not drawn when a vowel is recorded (the Method line then rests on the singer’s samples)', async ({ page }) => {
+	test('is not drawn when the singer\'s own profile stands, five of the six core vowels (the Method line then rests on the singer’s samples; lane 67)', async ({ page }) => {
 		test.setTimeout(90_000);
-		await open(page);
+		await open(page, { formants: { ...FOUR, 'ɛ': R(577, 1311), 'ɑ': R(617, 1013) } });
 		await toInsights(page);
 		await expect(shares(page)).toBeVisible({ timeout: 20_000 });
 		await expect(page.locator('.insights-container').getByRole('button', { name: /^(Record your vowels|Carry on recording|Record a vowel again)$/ })).toHaveCount(0);

@@ -300,7 +300,7 @@ test.describe('INSIGHTS "Add your range" and the seam', () => {
 		await open(page, [{ id: 'v', name: 'Dann', voiceType: 'bass', formants: { i: R(296, 1705), e: R(381, 1532), u: R(346, 804), a: R(600, 1250) } }]);
 		await loadScoreAndInsights(page);
 		await expect(offer(page)).toBeVisible({ timeout: 20_000 });
-		await door(page, /^carry on recording$/i).click();
+		await page.locator('.vp-door').filter({ hasText: /^carry on recording$/i }).click(); // lane 67: below five core vowels INSIGHTS offers the same words as a link, so the pane's door is named by its class
 		await expect(page.locator('.capture')).toBeVisible();
 		await offer(page).click(); // INSIGHTS' link, pressed while the capture screen is showing
 		await page.waitForTimeout(1500);
