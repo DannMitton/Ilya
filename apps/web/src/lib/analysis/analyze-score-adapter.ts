@@ -37,10 +37,6 @@ import type { CalibratedFormant, VoiceCharacteristics, Vowel } from '$lib/voice/
 import { resolveVowelValues } from '$lib/voice/engine/resolve-values';
 import type { StandInReport } from '$lib/voice/engine/stand-ins';
 
-// N.199 Step 1: the judging of unjudged readings moved with the value resolution, to `voice/engine/resolve-values.ts`.
-// Kept exported here because the adapter's tests and the older notes name it by this module.
-export { judgeUnchecked } from '$lib/voice/engine/resolve-values';
-
 /**
  * Which analysis dimensions rest on real singer input. Derived from the
  * snapshot (`completenessOf`), never tracked independently of it.

@@ -58,7 +58,6 @@
 	import VoiceTypeFirst from '$lib/voice/VoiceTypeFirst.svelte';
 	import OutsideNote from '$lib/voice/OutsideNote.svelte';
 	import { outsideVowels } from '$lib/voice/outside';
-	import { judgeUnchecked } from '$lib/voice/engine/resolve-values';
 	import type { CaptureSession } from '$lib/voice/engine/session';
 	import {
 		READINESS_CAPTURE_MS,
@@ -328,7 +327,7 @@
 		});
 	});
 
-	let outside = $derived(outsideVowels(judgeUnchecked(profile), ALL_VOWELS)); // The summary's one note (`outside.ts`), over the judged copy: a reading stored with no verdict is named too.
+	let outside = $derived(outsideVowels(profile, ALL_VOWELS)); // The summary's one note (`outside.ts`): the unstable readings, not kept.
 	// The voice type is asked before the first vowel only if the voice had none on arrival (Dann, 2026-09-30 12:44).
 	let askTypeFirst = $state(false);
 	$effect(() => { if (phase === 'welcome' && store.activeId) askTypeFirst = !untrack(() => voiceType); });
@@ -860,7 +859,7 @@
 			{:else if phase === 'summary'}
 				<!-- YOUR VOWEL SPACE (N.203 lane 60, Step 5; plan r4 section 4.5). The sheet is the whole summary: the note on readings outside Ilya's values, then the chart, the one table with the roster's marks in it, the legend, the sources, and Print (`VowelSpaceSheet.svelte`). Finish is filled and leads; the way back to the ten vowels and Start over are quiet (Dann 2026-09-10, "Filled Finish ... in that order"). Finish writes nothing: every reading was saved when it was captured, so a singer who only looked must not re-date them. -->
 				<div class="wizard-phase">
-					{#if outside.length}<OutsideNote vowels={outside} {voiceType} {language} tag={vowelTag} onkeep={() => keepOutside(outside)} onretake={() => retakeFromSummary(outside[0], ...outside.slice(1))} />{/if}
+					{#if outside.length}<OutsideNote vowels={outside} {language} tag={vowelTag} onkeep={() => keepOutside(outside)} onretake={() => retakeFromSummary(outside[0], ...outside.slice(1))} />{/if}
 					<SummarySheet {profile} {voiceType} {language} voiceName={activeVoice?.name} {onOpenLearnNote} />
 					<button type="button" class="wizard-primary" onclick={finish}>{T('calib.summary.finishButton')}</button>
 					<button type="button" class="wizard-secondary" onclick={backToTen}>{T('calib.summary.backToTen')}</button>

@@ -104,10 +104,11 @@ describe('the summary’s one table (N.203 lane 60, Step 5)', () => {
 	});
 	it('prints the roster’s marks only where they apply', () => {
 		const none = html({ profile: pick('i', 'o') }).replace(/&#39;|&#x27;/g, "'");
-		for (const k of ['calib.roster.reading.provisional', 'calib.roster.kept', 'calib.roster.noiseFloorLabel'] as const) expect(none).not.toContain(t(k, 'en'));
+		for (const k of ['calib.roster.reading.provisional', 'calib.roster.noiseFloorLabel'] as const) expect(none).not.toContain(t(k, 'en'));
 		const h = html({ profile: { i: marked('i', { reading: 'provisional' }), e: marked('e', { plausibilityOverride: true }), o: marked('o', { noiseFloor: 'unmeasured' }) } }).replace(/&#39;|&#x27;/g, "'");
 		expect(count(h, /Provisional/g)).toBe(1);
-		expect(h).toContain(t('calib.roster.kept', 'en'));
+		// Lane 67: the "Beyond Ilya's reference values" mark is retired; a kept reading carries no mark of its own.
+		expect(h).not.toContain(t('calib.roster.kept', 'en'));
 		expect(h).toContain(t('calib.roster.noiseFloorLabel', 'en'));
 	});
 	it('draws the ⓘ beside [o] only when handed a handler, and never on paper', () => {

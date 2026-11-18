@@ -318,8 +318,8 @@ export function buildPlausibilityEvent(
  * returns the status it already had; a reading stored before lane 64 that the
  * old guard demoted returns to what its confidence earns. Keep changes no
  * number: every sung reading counts (`sung.ts`). It records the singer's word
- * for the reading, which marks it "Beyond Ilya's reference values" and quiets
- * the summary's note (`outside.ts`).
+ * for the reading, which quiets the summary's note on an unstable reading
+ * (`outside.ts`, lane 67). The field's name stays; it now means "kept".
  */
 export function keepReading(f: CalibratedFormant): CalibratedFormant {
 	return { ...f, plausibilityOverride: true, reading: f.confidence === 'low' ? 'provisional' : 'captured' };

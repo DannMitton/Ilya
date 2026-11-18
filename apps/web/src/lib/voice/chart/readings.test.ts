@@ -146,10 +146,10 @@ describe('the summary’s ten rows, with the roster’s marks (N.203 lane 60, St
 	it('marks a recorded vowel only where a mark applies, and never a placeholder', () => {
 		const rows = summaryRows(profile, ph);
 		const m = (v: Vowel) => rows.find((r) => r.vowel === v)!.marks;
-		expect(m('i')).toEqual({ provisional: true, beyond: false, noiseFloorUnmeasured: false });
-		expect(m('e')).toEqual({ provisional: false, beyond: true, noiseFloorUnmeasured: false });
-		expect(m('o')).toEqual({ provisional: false, beyond: false, noiseFloorUnmeasured: true });
-		expect(m('u')).toEqual({ provisional: false, beyond: false, noiseFloorUnmeasured: false });
-		for (const r of rows.filter((x) => x.kind === 'placed')) expect(r.marks).toEqual({ provisional: false, beyond: false, noiseFloorUnmeasured: false });
+		expect(m('i')).toEqual({ provisional: true, noiseFloorUnmeasured: false });
+		expect(m('e')).toEqual({ provisional: false, noiseFloorUnmeasured: false });
+		expect(m('o')).toEqual({ provisional: false, noiseFloorUnmeasured: true });
+		expect(m('u')).toEqual({ provisional: false, noiseFloorUnmeasured: false });
+		for (const r of rows.filter((x) => x.kind === 'placed')) expect(r.marks).toEqual({ provisional: false, noiseFloorUnmeasured: false });
 	});
 });

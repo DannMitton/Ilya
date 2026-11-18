@@ -103,8 +103,6 @@ export function readingListRows(
 export interface RowMarks {
 	/** The reading is Provisional: its own evidence left it so (a stored reading the old guard or the old [ɨ] pass demoted keeps that status until sung again). */
 	provisional: boolean;
-	/** The singer kept a reading beyond Ilya's reference values. */
-	beyond: boolean;
 	/** The room's noise floor could not be measured for this reading. */
 	noiseFloorUnmeasured: boolean;
 }
@@ -128,7 +126,6 @@ export function summaryRows(
 			...row,
 			marks: {
 				provisional: f?.reading === 'provisional',
-				beyond: !!f?.plausibilityOverride,
 				noiseFloorUnmeasured: f?.noiseFloor === 'unmeasured'
 			}
 		};

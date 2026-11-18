@@ -16,7 +16,7 @@
    tree on 2026-11-02 (consistency batch 2). Paths are under `apps/web/src/`;
    a prefix is listed with the files that use it most and its key count.
 
-   This file holds 1,328 keys.
+   This file holds 1,329 keys.
 
    A key built at run time (`watch.key.letter.${letter}`, `comment.<register>.<part>`)
    has no literal reference, so a search for the whole key can come back empty
@@ -27,7 +27,7 @@
    analysis.       7  lib/analysis/analyze-score-adapter.ts (the broad-analysis note), lib/components/Drawer/bandState.ts (ANALYSIS's closed line)
    app.            2  the page's hidden heading, lib/components/HeaderBar.svelte (`app.subtitle` has no literal consumer)
    binder.        10  lib/library/exchange.ts, lib/components/Drawer/RootPanel.svelte
-   calib.        120  lib/voice/CalibrationWizard.svelte, lib/voice/ProfileSwitcher.svelte, lib/components/Drawer/VoicePane.svelte
+   calib.        121  lib/voice/CalibrationWizard.svelte, lib/voice/ProfileSwitcher.svelte, lib/components/Drawer/VoicePane.svelte
    capture.       55  the calibration screen: lib/voice/VowelCapture.svelte, lib/voice/chart/screen-logic.ts, lib/voice/chart/VowelChart.svelte
    clitic.         3  no literal consumer found (lib/score/clitic-seat.ts does the seating)
    collide.        5  routes/+page.svelte
@@ -1334,15 +1334,20 @@ const strings: Record<string, Record<Language, string>> = {
 	// The implausible hold, its "Try again?", and "Keep my reading" are gone (Dann, 2026-09-30 12:43):
 	// capture asks nothing, and the summary's one note asks once
 	// (`brief-code-calibration-first-moments_r1_2026-09-30.md`). RATIFIED by Dann 2026-09-30 12:49, verbatim.
+	// UNUSED SINCE LANE 67 (Dann 2026-11-17 23:21 to 23:38: the summary no longer compares a reading with reference values; the mark is retired). Kept and marked in place, with its ratified French.
 	'calib.roster.kept': { en: 'Beyond Ilya’s reference values', fr: 'Au-delà des valeurs de référence d’Ilya' },
 	'calib.voiceTypeFirst.heading': { en: 'Your voice type', fr: 'Votre type de voix' },
 	// Re-ratified by Dann 2026-11-17 15:46 (en) and 15:47 (fr), after the block above was ratified 2026-09-30 verbatim: the voice type is scaffolding only (PRODUCT.md:1271).
 	'calib.voiceTypeFirst.hint': { en: 'Ilya can use generic values with your guidance, until you record your own vowels. This doesn’t change what Ilya measures. “Not sure” is a valid answer.', fr: 'Ilya peut utiliser des valeurs par défaut selon vos indications, jusqu’à ce que vous captiez vos propres voyelles. Cela ne change pas ce qu’Ilya mesure. « Je ne sais pas » est une réponse valable.' },
+	// UNUSED SINCE LANE 67 (same: the one note is on the take's own steadiness, `calib.summary.unstable`). Kept and marked in place, with its ratified French.
 	'calib.summary.outside': { en: 'These readings sit outside the values Ilya draws on for {type} voices: {vowels}. Keep them as they are, or sing them again.', fr: 'Ces lectures se situent hors des valeurs sur lesquelles Ilya s’appuie pour les voix de {type} : {vowels}. Gardez-les telles quelles, ou chantez-les de nouveau.' },
+	// UNUSED SINCE LANE 67 (same). Kept and marked in place, with its ratified French.
 	'calib.summary.outsideNoType': { en: 'These readings sit outside the values Ilya draws on for any voice type: {vowels}. Keep them as they are, or sing them again.', fr: 'Ces lectures se situent hors des valeurs sur lesquelles Ilya s’appuie pour tous les types de voix : {vowels}. Gardez-les telles quelles, ou chantez-les de nouveau.' },
 	// The far-off [ɨ] message, RATIFIED by Dann 2026-11-13 15:29 (`docs/memory/OPEN.md`, "THE FAR-OFF [ɨ] MESSAGE"). Shown at the summary beside
 	// "use Ilya's estimate for now". NO READER YET: the summary's third choice for [ɨ] is N.200 Step 5.10, and until it is built nothing prints this.
 	'calib.summary.outsideIgh': { en: 'Your current [ɨ] sits away from where your [i] and [u] would likely place it. For now, Ilya has an estimate ready, built from your own [i] and [u], so you can carry on. You can offer new vowel samples anytime.', fr: 'Votre [ɨ] actuel ne se trouve pas tout à fait là où vos [i] et [u] le placeraient probablement. Pour l’instant, Ilya a une estimation prête, calculée à partir de vos propres [i] et [u] : vous pouvez donc continuer. Vous pouvez fournir de nouveaux échantillons de voyelles à tout moment.' },
+	// RATIFIED by Dann 2026-11-18 10:49, English and French (lane 67 brief r2, section 6). French: U+00A0 before the colon (OQLF).
+	'calib.summary.unstable': { en: 'These readings were unstable: {vowels}. Another try may help.', fr: 'Ces lectures étaient instables\u00a0: {vowels}. Une reprise pourrait aider.' },
 	'calib.summary.keepAll': { en: 'Keep them', fr: 'Les garder' },
 	// UNUSED SINCE N.199 (Step 8, Dann 2026-11-14 21:03): the wheel's capture branch of the wizard (queue, hold banner, Pause) is deleted and nothing reads this key. Kept and marked in place, with its ratified French.
 	'calib.capture.hold.noted': { en: 'Noted, moving on. You can re-take it from the summary.', fr: 'C\u2019est noté, on poursuit. Vous pourrez la refaire depuis le sommaire.' },

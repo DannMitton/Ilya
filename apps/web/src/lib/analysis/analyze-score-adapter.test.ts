@@ -17,7 +17,7 @@
 import { describe, expect, it } from 'vitest';
 import { analyzeScore } from '@ilya/score-parser';
 import type { ParsedScore, Pitch, VocalLineEvent, VowelResolver } from '@ilya/score-parser';
-import { buildVoiceProfileSnapshot, completenessOf, composeBroadNote, isBroadAnalysis, judgeUnchecked } from './analyze-score-adapter';
+import { buildVoiceProfileSnapshot, completenessOf, composeBroadNote, isBroadAnalysis } from './analyze-score-adapter';
 import type { CalibratedFormant, VoiceCharacteristics } from '$lib/voice/engine/types';
 
 // ── fixtures ────────────────────────────────────────────────────────
@@ -150,9 +150,8 @@ describe('buildVoiceProfileSnapshot mapping', () => {
 		expect(completeness.formants).toBe(true);
 	});
 
-	// QUEUE row 11: a reading the guard never judged is judged first, with no voice type (the union bands), so the summary's note can name it.
-	// Lane 66, Step 5: the verdict gates no number, so it is used wherever it falls.
-	it('judges a reading the guard never judged, and uses it inside the union window and outside it', () => {
+	// A reading the guard never judged (no `plausibility` field) counts like any other, inside the union window and outside it (lane 66, Step 5; lane 67 removed the judging).
+	it('uses a reading the guard never judged inside the union window and outside it', () => {
 		const { snapshot } = buildVoiceProfileSnapshot(
 			personal({
 				u: formantF2(320, 800, 'clear'), // no plausibility field, inside the union [u] window
@@ -165,8 +164,6 @@ describe('buildVoiceProfileSnapshot mapping', () => {
 		expect(own(snapshot).o).toBe(500);
 		expect(own(snapshot).i).toBe(1063);
 		expect(own2(snapshot)?.i).toBe(2250);
-		// The verdict is still given, on the judged copy the note reads, and still not stored.
-		expect(judgeUnchecked({ i: formantF2(1063, 2250, 'clear') } as Partial<Record<'i', CalibratedFormant>>).i?.plausibility).toBe('implausible');
 	});
 
 	it('derives [ɨ] and [ɪ] from an unjudged [i] the union window fails, as it does from one that passes (lane 66, Step 5)', () => {
@@ -189,8 +186,6 @@ describe('buildVoiceProfileSnapshot mapping', () => {
 		const { snapshot } = buildVoiceProfileSnapshot(formants, undefined);
 		expect(own(snapshot).i).toBe(1063);
 		expect(JSON.stringify(formants)).toBe(before);
-		expect(judgeUnchecked(formants).i).toEqual(formants.i);
-		expect(judgeUnchecked(formants).u?.plausibility).toBe('plausible');
 	});
 
 	// QUEUE row 12: the snapshot says where each vowel's number came from (Dann, 2026-09-16).

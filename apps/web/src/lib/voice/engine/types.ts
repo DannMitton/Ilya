@@ -63,12 +63,13 @@ export interface CalibratedFormant {
 	 */
 	plausibility?: 'plausible' | 'implausible' | 'unchecked';
 	/**
-	 * The singer kept a reading the guard judged implausible (Dann, 2026-09-28
-	 * 15:38 to 15:40, `brief-code-voice-intake-order-and-keep-reading_r1`):
-	 * Bozeman's bands are approximate, and a measured voice outranks an
-	 * approximate chart. A record of the singer's decision, not a derived value
-	 * (CONTRACT §6). The verdict itself stays `implausible`, so the record keeps
-	 * both facts. A re-take is a new reading and carries no flag.
+	 * The singer kept a reading (Dann, 2026-09-28 15:38 to 15:40,
+	 * `brief-code-voice-intake-order-and-keep-reading_r1`, which first kept a
+	 * reading the guard judged implausible; since lane 67 the summary's note is on
+	 * an unstable take, `outside.ts`, and Keep quiets it). The field keeps its
+	 * name and now means "kept". A record of the singer's decision, not a derived
+	 * value (CONTRACT §6). The verdict, where one is stored, stays as it was, so
+	 * the record keeps both facts. A re-take is a new reading and carries no flag.
 	 */
 	plausibilityOverride?: true;
 	/**

@@ -9,8 +9,8 @@ import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import type { CalibratedFormant, Vowel } from '$lib/voice/engine/types';
 import { VOWELS } from '$lib/voice/engine/types';
-import { judgeUnchecked, resolveVowelValues } from '$lib/voice/engine/resolve-values';
-import { keepReading } from '$lib/voice/engine/plausibility';
+import { resolveVowelValues } from '$lib/voice/engine/resolve-values';
+import { checkPlausibility, keepReading } from '$lib/voice/engine/plausibility';
 import { computeZones } from '$lib/voice/chart/zones';
 import { finishEarlyState } from '$lib/voice/chart/finish-early';
 import { summaryRows } from '$lib/voice/chart/readings';
@@ -22,8 +22,8 @@ import { SETS, TYPES, f, pick } from './adapter-grid';
 
 type Profile = Partial<Record<Vowel, CalibratedFormant>>;
 const clone = (p: Profile): Profile => JSON.parse(JSON.stringify(p));
-/** The vowels a profile has outside the union window and not kept: what the adapter judges (`judgeUnchecked`, no type). */
-const outsideOf = (p: Profile): Vowel[] => outsideVowels(judgeUnchecked(p), VOWELS);
+/** The vowels a profile has beyond the union window (no type): the readings the guard would judge implausible. They count like any other (lane 66); only the guard's verdict, stored beside them, tells them apart. */
+const outsideOf = (p: Profile): Vowel[] => VOWELS.filter((v) => !!p[v] && isSung(p[v]) && checkPlausibility(p[v]!.f1, v).plausibility === 'implausible' && !p[v]!.plausibilityOverride);
 /** The same profile with those readings kept, as the singer's Keep leaves them. */
 const keptTwin = (p: Profile, vowels: readonly Vowel[]): Profile => {
 	const out = clone(p);
@@ -74,34 +74,34 @@ describe('every sung reading counts: the adapter golden\'s grid', () => {
 	});
 });
 
-describe('what still tells a reading beyond the reference values from a kept one', () => {
-	const bad: Profile = { i: f(1063, 2250), u: f(330, 800), ɑ: f(640, 1050) };
+describe('what the summary\'s note does (lane 67): it follows the take\'s own steadiness, never the reference values', () => {
+	const five = pick(['e', 'ɛ', 'ɑ', 'o', 'u']);
+	const bad: Profile = { ...five, i: f(1063, 2250) };
+	const shaky: Profile = { ...five, i: f(300, 1700, { confidence: 'low', reading: 'provisional' }) };
 
-	it('the summary\'s note names it, and Keep quiets it, without changing a number', () => {
-		const judged = judgeUnchecked(bad);
-		expect(outsideVowels(judged, VOWELS)).toEqual(['i']);
+	it('a steady reading far beyond the reference values is not named, and counts exactly as the same reading kept', () => {
+		expect(outsideVowels(bad, VOWELS)).toEqual([]);
 		const kept = keptTwin(bad, ['i']);
-		expect(outsideVowels(judgeUnchecked(kept), VOWELS)).toEqual([]);
+		expect(outsideVowels(kept, VOWELS)).toEqual([]);
 		expect(buildVoiceProfileSnapshot(clone(bad), undefined)).toEqual(buildVoiceProfileSnapshot(clone(kept), undefined));
 	});
 
-	it('the note names a reading stored with no verdict, because the wizard passes the judged copy; the stored profile alone names nothing', () => {
-		expect(outsideVowels(bad, VOWELS)).toEqual([]);
-		expect(outsideVowels(judgeUnchecked(bad), VOWELS)).toEqual(['i']);
+	it('an unstable reading is named, Keep quiets it, and Keep changes no number', () => {
+		expect(outsideVowels(shaky, VOWELS)).toEqual(['i']);
+		const kept = keptTwin(shaky, ['i']);
+		expect(outsideVowels(kept, VOWELS)).toEqual([]);
+		expect(buildVoiceProfileSnapshot(clone(shaky), undefined)).toEqual(buildVoiceProfileSnapshot(clone(kept), undefined));
+	});
+
+	it('the wizard hands the note the stored profile as it is: no verdict is computed for it', () => {
 		const src = readFileSync(join(__dirname, '../voice/CalibrationWizard.svelte'), 'utf8');
-		expect(src).toContain('outsideVowels(judgeUnchecked(profile), ALL_VOWELS)');
+		expect(src).toContain('outsideVowels(profile, ALL_VOWELS)');
+		expect(src).not.toContain('judgeUnchecked');
 	});
 
-	it('the "Beyond Ilya\'s reference values" mark follows the override alone', () => {
-		const rows = (p: Profile) => summaryRows(p, [], 'en').filter((r) => r.kind === 'sung').map((r) => [r.vowel, r.marks.beyond]);
-		expect(rows(bad).every(([, beyond]) => beyond === false)).toBe(true);
-		expect(rows(keptTwin(bad, ['i'])).find(([v]) => v === 'i')![1]).toBe(true);
-	});
-
-	it('the judged copy is a copy: nothing is written to the stored profile', () => {
-		const before = JSON.stringify(bad);
-		judgeUnchecked(bad);
-		expect(JSON.stringify(bad)).toBe(before);
+	it('the "Beyond Ilya\'s reference values" mark is retired: a kept reading carries no mark of its own', () => {
+		const rows = summaryRows(keptTwin(bad, ['i']), [], 'en').filter((r) => r.kind === 'sung');
+		for (const r of rows) expect(Object.keys(r.marks).sort()).toEqual(['noiseFloorUnmeasured', 'provisional']);
 	});
 });
 

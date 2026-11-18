@@ -2,8 +2,8 @@
 	/**
 	 * The summary's one note (Dann, 2026-09-30 12:43; brief
 	 * `docs/sessions/brief-code-calibration-first-moments_r1_2026-09-30.md`).
-	 * It names the readings outside the values for the declared type, once, and
-	 * offers Keep or Re-take. Strings ratified 12:49, verbatim. Which readings,
+	 * It names the unstable readings (lane 67), once, and
+	 * offers Keep or Re-take. Strings ratified 2026-11-18 10:49, verbatim. Which readings,
 	 * and which sentence, come from `outside.ts`; the wizard owns the profile.
 	 */
 	import type { Snippet } from 'svelte';
@@ -13,7 +13,6 @@
 
 	interface Props {
 		vowels: Vowel[];
-		voiceType: string | undefined;
 		language: Language;
 		/** The wizard's `vowelTag`, so a vowel reads here as it does in the roster. */
 		tag: Snippet<[Vowel]>;
@@ -21,14 +20,12 @@
 		onretake: () => void;
 	}
 
-	let { vowels, voiceType, language, tag, onkeep, onretake }: Props = $props();
+	let { vowels, language, tag, onkeep, onretake }: Props = $props();
 
 	const T = (key: string) => t(key, language);
 	/* {type} is the Tier 1 label in lower case; {vowels} is the list of tags. */
 	const parts = $derived.by(() => {
-		const { key, typeId } = outsideNote(voiceType);
-		const type = typeId ? T(`voiceType.type.${typeId}`).toLocaleLowerCase(language) : '';
-		const [before, after = ''] = T(key).replace('{type}', type).split('{vowels}');
+		const [before, after = ''] = T(outsideNote().key).split('{vowels}');
 		return { before, after };
 	});
 </script>

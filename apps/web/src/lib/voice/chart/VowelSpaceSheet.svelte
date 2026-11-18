@@ -121,7 +121,6 @@
 								<button type="button" class="row-info" aria-label={t('calib.roster.oNoteAria', language)} onclick={onLearnNote}>ⓘ</button>
 							{/if}
 							{#if r.marks.provisional}<span class="row-mark-word is-provisional">{t('calib.roster.reading.provisional', language)}</span>{/if}
-							{#if r.marks.beyond}<span class="row-mark-word">{t('calib.roster.kept', language)}</span>{/if}
 							{#if r.marks.noiseFloorUnmeasured}<span class="row-mark-word" title={t('calib.roster.noiseFloorTitle', language)}>{t('calib.roster.noiseFloorLabel', language)}</span>{/if}
 						</th>
 						<td><span class="num">{r.fR1.hzText} {hz}</span> <span class="note">{r.fR1.text}</span></td>
