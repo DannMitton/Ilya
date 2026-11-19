@@ -2,7 +2,7 @@ import { test, expect, type Page } from '@playwright/test';
 
 /*
  * Lane 69 Step 3: MELODY with no score attached. Its page draws three lines; the second says where the voice stands. Below five stable core vowels it is the
- * sentence the VOICE pane and INSIGHTS print, counted from what the singer sampled. At five it is "Your profile is now set with five vowels measured."
+ * sentence the VOICE pane prints, counted from what the singer sampled. At five it is "Your profile is now set with five vowels measured."
  * No test before this one read the sentence, and the wiring guard in `markup/profile-status.test.ts` cannot see the page.
  *
  * Every seeded reading carries `confidence: 'high'`: a reading with `confidence: 'low'` is not stable (`voice/engine/sung.ts:29`), and the first case would print 0 of 6.

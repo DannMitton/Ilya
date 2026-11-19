@@ -29,7 +29,8 @@ function countWord(n: number, language: Language): string {
 // which includes provisional and unstable ones, and "successfully captured"
 // would overclaim their quality. Below five stable core vowels the profile is
 // not set, so the line says where the voice stands, in the words the VOICE pane
-// and INSIGHTS print (`calib.pane.belowCore`).
+// prints (`calib.pane.belowCore`). INSIGHTS and MELODY with a score say the same
+// in their own sentence (`placeholder.line.belowCore`).
 export function statusLineFor(
 	{ sampledCount, personal, core }: { sampledCount: number; personal: boolean; core: readonly Vowel[] },
 	language: Language

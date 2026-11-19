@@ -4001,3 +4001,44 @@ The design for the VOICE work after lane 66. Settled; the desk asks nothing more
 Principle (Dann 23:21): prepare, then meet reality; be transparent about what happened, why an outcome may differ from expectation, and how to recover. Not every calamity is solved.
 
 - **Strings RATIFIED by Dann 2026-11-18 10:49** (*"I ratify them all"*): the seven of `../sessions/brief-code-lane67-voice-threshold_r2_2026-11-18.md` section 6, EN and FR; « voyelles de base » for "core vowels".
+
+## THE DRAWER ADVICE IS DEVICE-DEPENDENT. Ruled by Dann 2026-11-18 22:28
+
+Occasion: the desk's look at lane 69's pictures. On the phone, MELODY's page with no score ends on "You can update these values anytime through the DRAWER on the left", and the picture shows the DRAWER at the bottom edge of the screen (`docs/sessions/pictures-lane69/melody-no-score-1core-phone-en.png`, read by the desk 2026-11-18 22:2x).
+
+Dann, transcribed as written: *"Yes the advice should be device-depemndent, and phones need the correct instructions for mobile i.e. Drawer location expands up from the bottom"*.
+
+The rule: a line that tells the singer where a control is says where it is on the device in front of them. On a phone the DRAWER expands up from the bottom, so the line says that; on a desktop it stays as written.
+
+The strings that carry the desktop wording today (`apps/web/src/lib/i18n.ts`, read by the desk 2026-11-18 22:3x):
+
+| line | key |
+|---|---|
+| 1014 | `paper.empty` ("Enter your Cyrillic text in the DRAWER on the left.") |
+| 1499 | `profile.provisional.noneMessage` |
+| 1503 | `profile.provisional.sentenceSingular` |
+| 1504 | `profile.provisional.sentencePlural` |
+| 2057, 2058 | `placeholder.line.many`, `placeholder.line.one` |
+| 2060, 2061 | `placeholder.line.belowCore`, `placeholder.line.belowCoreOne` |
+| 2065, 2066 | `placeholder.line.markup.many`, `placeholder.line.markup.one` |
+| 2067, 2068 | `placeholder.line.markup.belowCore`, `placeholder.line.markup.belowCoreOne` |
+
+Eleven keys, each in English and French. `calib.pane.belowCore` (`:1443`) carries no DRAWER pointer and needs none.
+
+**RULED by Dann 2026-11-18 22:35, on the desk's three options: name the section, not the surface, and give no direction at all** (transcribed as written: *"Yes, I lkilke not namingthe Drqawe in the instricutsion, but rather naming the section. That's really good. And that way the user finds themselves searching for header titles that are apparent in the coloured section headings. I love it!"*). A line that tells the singer where to go names the labelled section it is sending them to, which is printed on screen in its own coloured heading: VOICE for a voice value, INPUT for text to paste. No position word, on any device, so nothing goes stale when a layout moves and the same string is true everywhere. This supersedes the device-dependent wording of 22:28 as the way to meet it: the lines stop naming a position, so there is nothing left to make device-dependent.
+
+Open, for its own lane, NOT started: which section each of the eleven lines names, the English, and the French, which reaches Dann as a marked draft. The desk has built nothing; lane 69 does not touch these strings.
+
+**One consequence, for the drafting, not a question:** on a phone the coloured section headings are inside the surface and not on screen until the singer opens it (`docs/sessions/pictures-lane69/melody-no-score-1core-phone-en.png`: the bottom bar alone). So "in VOICE" is true on a phone and one tap away, where on a desktop it is in sight. That is an argument for the bar's own label carrying its weight, which is the open naming question below, and not an argument against this ruling.
+
+## THE NAME OF THE CONTROL SURFACE IS OPEN. Dann 2026-11-18 22:34; NOTHING CHOSEN
+
+Dann, transcribed as written: *"Yes, I was thinking about this the othert day. We named the left control panel the Drawer because it retractedin the original designl. Now that it doesn't, that metaphor doens't seem to apply as well? If you want to change the name of the control surface from Drawer to something else, that's fine. Just make sure the entire code is updated to refefct whatever we choose."*
+
+Decision rights: his, as a name a singer reads. He has granted the change in principle and set one condition, that the whole tree move with the name. Nothing is chosen, and the desk has proposed nothing yet.
+
+**What the desk can see, and it qualifies the premise.** On a phone the surface still retracts: `docs/sessions/pictures-lane69/melody-no-score-1core-phone-en.png` (read by the desk 2026-11-18 22:2x) shows a bar at the bottom edge reading "DRAWER" above an upward chevron, and Dann ruled at 22:28 that it "expands up from the bottom". On the desktop, at the same state, the surface is open down the left with its sections REPERTOIRE, PIECE, INPUT, ANALYSIS, and VOICE, and the word "DRAWER" appears nowhere on the screen. So the metaphor is live on one device and stale on the other, and one name has to cover both behaviours. Whether the desktop surface can still retract is NOT ESTABLISHED by the desk; `i18n.ts:1027-1028` keeps an old string, marked old, that read "Tap the chevron on the left to open the drawer."
+
+**What a rename costs, NOT YET MEASURED.** The name is one of the five names in capitals settled under `CONTRACT.md` section 1 item 6a, it appears in English and French strings, in the Guide and Learn, in component and file names (`components/Drawer/`), in tests, in pictures already filed, and in these memory files. The desk measures that before proposing anything.
+
+Related and prior: "THE DRAWER ADVICE IS DEVICE-DEPENDENT" (22:28, above). If the eleven lines there stop naming a position and name the section instead (VOICE, INPUT), several of them may stop naming the surface at all, which changes what a rename has to touch. Do the measure before either lane.

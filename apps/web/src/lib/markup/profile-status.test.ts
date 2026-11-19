@@ -22,7 +22,7 @@ describe('the Markup profile status lines', () => {
 		expect(statusLineFor(set(11), 'en')).toBe('Your profile is now set with 11 vowels measured.');
 	});
 
-	it('below five stable core vowels, says where the voice stands, in the sentence the other surfaces print', () => {
+	it('below five stable core vowels, says where the voice stands, in the sentence the VOICE pane prints', () => {
 		expect(statusLineFor(below(1, ['i']), 'en')).toBe(
 			'You have sampled 1 of the 6 core vowels so far ([i]). To complete your personal vowel space, Ilya needs at least 5 stable fry samples. Until you provide 4 more, unsampled vowels are assigned placeholder values.'
 		);
