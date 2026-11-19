@@ -31,8 +31,8 @@ test.describe('INSIGHTS with no score', () => {
 			? 'INSIGHTS measures a piece from its score, and connects it to your voice. Add a score in the INPUT pane to begin.'
 			: 'Les APERÇUS mesurent une pièce à partir de sa partition, et la relient à votre voix. Ajoutez une partition dans le volet ENTRÉE pour commencer.';
 		const methods = language === 'en'
-			? ['Method: from your resonance profile, measured in VOICE.', 'Method: from generic values for your voice type, until you record your own vowels.', 'Method: record your vowels in VOICE, and this page computes from your voice.']
-			: ['Méthode : à partir de votre profil de résonances, mesuré dans VOIX.', 'Méthode : à partir de valeurs par défaut pour votre type de voix, jusqu’à ce que vous captiez vos propres voyelles.', 'Méthode : captez vos voyelles dans VOIX, et cette page calcule à partir de votre voix.'];
+			? ['Method: from your resonance profile, measured in VOICE.', 'Method: from placeholder values, until you record your own vowels.', 'Method: record your vowels in VOICE, and this page computes from your voice.']
+			: ['Méthode : à partir de votre profil de résonances, mesuré dans VOIX.', 'Méthode : à partir de valeurs par défaut, jusqu’à ce que vous captiez vos propres voyelles.', 'Méthode : captez vos voyelles dans VOIX, et cette page calcule à partir de votre voix.'];
 
 		test(`${language}: a voice that rests on the singer's own samples`, async ({ page }) => {
 			await openInsightsWithNoScore(page, { language, voiceType: 'bass', formants: SAMPLES });
@@ -52,13 +52,25 @@ test.describe('INSIGHTS with no score', () => {
 			expect(t).not.toContain(methods[2]);
 		});
 
-		test(`${language}: a voice with nothing usable and no generic values (a contralto)`, async ({ page }) => {
-			await openInsightsWithNoScore(page, { language, voiceType: 'contralto' });
+		test(`${language}: a voice with nothing usable and no generic values ("Not sure")`, async ({ page }) => {
+			await openInsightsWithNoScore(page, { language, voiceType: 'not-sure' });
 			const t = await text(page);
 			expect(t).toContain(sentence);
 			expect(t).toContain(methods[2]);
 			expect(t).not.toContain(methods[0]);
 			expect(t).not.toContain(methods[1]);
+		});
+
+		// QUEUE row 167 (ruling of 2026-11-19): a contralto has generic values, borrowed from the mezzo-soprano staff, and the page says so with no score loaded.
+		test(`${language}: a contralto with nothing recorded reads the generic method line and the borrowing line`, async ({ page }) => {
+			await openInsightsWithNoScore(page, { language, voiceType: 'contralto' });
+			const t = await text(page);
+			expect(t).toContain(sentence);
+			expect(t).toContain(methods[1]);
+			expect(t).toContain(language === 'en'
+				? 'The field has not yet published resonance values for a contralto, so Ilya is using its mezzo-soprano values until you sample your own vowels in VOICE.'
+				: 'La recherche n’a pas encore publié de valeurs de résonance pour un contralto. Ilya utilise donc ses valeurs de mezzo-soprano jusqu’à ce que vous échantillonniez vos propres voyelles dans VOIX.');
+			expect(t).not.toContain(methods[2]);
 		});
 	}
 });

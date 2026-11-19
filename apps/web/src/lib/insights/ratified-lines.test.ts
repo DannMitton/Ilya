@@ -419,23 +419,73 @@ describe('row 166: the six ratified placeholder strings', () => {
 		expect(t('insights.silence.noScore', 'fr')).toBe('Les APERÇUS mesurent une pièce à partir de sa partition, et la relient à votre voix. Ajoutez une partition dans le volet ENTRÉE pour commencer.');
 		expect(t('insights.method.noScore.samples', 'en')).toBe('Method: from your resonance profile, measured in VOICE.');
 		expect(t('insights.method.noScore.samples', 'fr')).toBe('Méthode\u00a0: à partir de votre profil de résonances, mesuré dans VOIX.');
-		expect(t('insights.method.noScore.generic', 'en')).toBe('Method: from generic values for your voice type, until you record your own vowels.');
-		expect(t('insights.method.noScore.generic', 'fr')).toBe('Méthode\u00a0: à partir de valeurs par défaut pour votre type de voix, jusqu’à ce que vous captiez vos propres voyelles.');
+		// RATIFIED by Dann 2026-11-19 12:01 (QUEUE row 167): it no longer says "your voice type", since a contralto's placeholders are a mezzo-soprano's.
+		expect(t('insights.method.noScore.generic', 'en')).toBe('Method: from placeholder values, until you record your own vowels.');
+		expect(t('insights.method.noScore.generic', 'fr')).toBe('Méthode\u00a0: à partir de valeurs par défaut, jusqu’à ce que vous captiez vos propres voyelles.');
 		expect(t('insights.method.noScore.none', 'en')).toBe('Method: record your vowels in VOICE, and this page computes from your voice.');
 		expect(t('insights.method.noScore.none', 'fr')).toBe('Méthode\u00a0: captez vos voyelles dans VOIX, et cette page calcule à partir de votre voix.');
 	});
 	it('the method lines: the two placeholder forms, and "including repeats" in the two calibrated forms (French unchanged)', () => {
-		expect(t('insights.method.generic.typed', 'en')).toBe('Method: computed from placeholder values for your voice type, the voice characteristics you typed, and the score as sung, including repeats.');
-		expect(t('insights.method.generic.untyped', 'en')).toBe('Method: computed from placeholder values for your voice type and the score as sung, including repeats.');
-		expect(t('insights.method.generic.typed', 'fr')).toBe('Méthode\u00a0: calculé à partir de valeurs par défaut pour votre type de voix, des caractéristiques vocales que vous avez indiquées et de la partition telle que chantée, reprises comprises.');
-		expect(t('insights.method.generic.untyped', 'fr')).toBe('Méthode\u00a0: calculé à partir de valeurs par défaut pour votre type de voix et de la partition telle que chantée, reprises comprises.');
+		// RATIFIED by Dann 2026-11-19 12:01 (QUEUE row 167): "for your voice type" is out of all four.
+		expect(t('insights.method.generic.typed', 'en')).toBe('Method: computed from placeholder values, the voice characteristics you typed, and the score as sung, including repeats.');
+		expect(t('insights.method.generic.untyped', 'en')).toBe('Method: computed from placeholder values and the score as sung, including repeats.');
+		expect(t('insights.method.generic.typed', 'fr')).toBe('Méthode\u00a0: calculé à partir de valeurs par défaut, des caractéristiques vocales que vous avez indiquées et de la partition telle que chantée, reprises comprises.');
+		expect(t('insights.method.generic.untyped', 'fr')).toBe('Méthode\u00a0: calculé à partir de valeurs par défaut et de la partition telle que chantée, reprises comprises.');
 		expect(t('insights.method.typed', 'en')).toBe('Method: computed from your calibration of {date}, the voice characteristics you typed, and the score as sung, including repeats.');
 		expect(t('insights.method.untyped', 'en')).toBe('Method: computed from your calibration of {date} and the score as sung, including repeats.');
 		expect(t('insights.method.typed', 'fr')).toContain('reprises comprises.');
 	});
 	it('the broad note for a placeholder voice', () => {
-		expect(t('analysis.broad.body.generic', 'en')).toBe('Broad analysis: this score is shown without {items}, because the matching voice characteristics were left blank. The forecast uses placeholder values for your voice type.');
-		expect(t('analysis.broad.body.generic', 'fr')).toBe('Analyse large\u00a0: cette partition est présentée sans {items}, car les caractéristiques vocales correspondantes ont été laissées vides. La prévision repose sur des valeurs par défaut pour votre type de voix.');
+		// RATIFIED by Dann 2026-11-19 12:01 (QUEUE row 167): the closing sentence no longer says "for your voice type".
+		expect(t('analysis.broad.body.generic', 'en')).toBe('Broad analysis: this score is shown without {items}, because the matching voice characteristics were left blank. The forecast uses placeholder values.');
+		expect(t('analysis.broad.body.generic', 'fr')).toBe('Analyse large\u00a0: cette partition est présentée sans {items}, car les caractéristiques vocales correspondantes ont été laissées vides. La prévision repose sur des valeurs par défaut.');
+	});
+});
+
+/* QUEUE row 167 (lane 71). The strings Dann ratified 2026-11-19 (`docs/sessions/ratified-voice-type-stand-ins_2026-11-19.md`): the borrowing line and the three staff labels (09:43 English, 09:52
+   French), the Guide passage (09:42, redrafted; French 09:52), `calib.pane.notSure` (11:59), and the Method strings, the broad note, the sheet's sources note, and the capture hint (12:01). Every
+   French colon is preceded by U+00A0 and every apostrophe is U+2019. `sheet.provenance` and `capture.hint.placed.typed` are pinned in `voice/chart/ratified-strings.test.ts` with the rest of the
+   sheet; the Method strings and the broad note are pinned in the row 166 block above, where they now read as 12:01 ruled them. */
+describe('row 167: the borrowing strings (Dann 2026-11-19)', () => {
+	it('the borrowing line, EN 09:43 and FR 09:52', () => {
+		expect(t('placeholder.borrowing', 'en')).toBe('The field has not yet published resonance values for a {type}, so Ilya is using its {borrowed} values until you sample your own vowels in VOICE.');
+		expect(t('placeholder.borrowing', 'fr')).toBe('La recherche n’a pas encore publié de valeurs de résonance pour un {type}. Ilya utilise donc ses valeurs de {borrowed} jusqu’à ce que vous échantillonniez vos propres voyelles dans VOIX.');
+	});
+	it('the three staff labels, EN 09:43 and FR 09:52', () => {
+		expect([t('voiceType.staff.mezzo-soprano', 'en'), t('voiceType.staff.bass', 'en'), t('voiceType.staff.mezzo-tenor', 'en')]).toEqual(['mezzo-soprano', 'bass', 'mezzo and tenor']);
+		expect([t('voiceType.staff.mezzo-soprano', 'fr'), t('voiceType.staff.bass', 'fr'), t('voiceType.staff.mezzo-tenor', 'fr')]).toEqual(['mezzo-soprano', 'basse', 'mezzo et ténor']);
+	});
+	it('the "Not sure" sentence of the VOICE pane, EN and FR (11:59), and the unused "typed, none" string with its ratified French', () => {
+		expect(t('calib.pane.notSure', 'en')).toBe('Not knowing is a fine answer. Record your vowels in vocal fry and Ilya works from your own voice, which also gives you evidence in your own search. Or choose a voice type, and Ilya starts from published values for it.');
+		expect(t('calib.pane.notSure', 'fr')).toBe('Ne pas savoir est une réponse valable. Captez vos voyelles en friture vocale et Ilya travaille à partir de votre propre voix, ce qui vous donne aussi des indices dans votre propre recherche. Ou choisissez un type de voix, et Ilya part de valeurs publiées pour celui-ci.');
+		expect(t('calib.pane.typedNone', 'en')).toBe('Ilya has no generic values for a {voiceType} voice yet, so it works from your own vowels. Record them to begin.');
+		expect(t('calib.pane.typedNone', 'fr')).toBe('Ilya n\u2019a pas encore de valeurs par défaut pour une voix de {voiceType}; il travaille donc à partir de vos propres voyelles. Captez-les pour commencer.');
+	});
+	it('the six sentences ratified 2026-11-19 10:08 keep their words, and fill with the staff (the subtitle and the lede)', () => {
+		expect(t('profile.subtitlePlaceholder', 'en')).toBe('Resonance profile: placeholder values for a generic {voiceType}, not yet your own resonances.');
+		expect(t('insights.generic.lede', 'en')).toBe('These findings use placeholder values for a generic {voiceType}, not your specific voice.');
+	});
+});
+
+describe('row 167: the Guide passage is seated whole, EN (09:42) and FR (09:52)', () => {
+	const EN = 'When Ilya has not yet heard your voice, it starts from published resonance values for your voice type. For contralto, countertenor, and bass-baritone there are none. Nineteen sources were read in full, and none gives them. Ilya will not invent them. It borrows instead from the nearest voice it can defend, and says so on the page every time: mezzo-soprano for a contralto, bass for a bass-baritone, and the mezzo and tenor staff for a countertenor, because resonance follows the length of the tract rather than the range sung. If you have not named a type, Ilya starts from the middle of its five staves. These are working concessions, not findings. Every borrowed value is marked as a stand-in, every one is replaced the moment you sample that vowel yourself, and each will give way to measured values when peer-reviewed ones are published.';
+	const FR = 'Tant qu’Ilya n’a pas entendu votre voix, il part des valeurs de résonance publiées pour votre type de voix. Pour le contralto, le contre-ténor et le baryton-basse, il n’en existe aucune. Dix-neuf sources ont été lues intégralement, et aucune ne les donne. Ilya ne les inventera pas. Il emprunte plutôt à la voix la plus proche qu’il puisse défendre, et le dit sur la page chaque fois : mezzo-soprano pour un contralto, basse pour un baryton-basse, et la portée mezzo et ténor pour un contre-ténor, car la résonance suit la longueur du tractus vocal plutôt que l’étendue chantée. Si vous n’avez indiqué aucun type, Ilya part du milieu de ses cinq portées. Ce sont des concessions de travail, et non des constats. Chaque valeur empruntée est signalée comme valeur par défaut, chacune est remplacée dès que vous échantillonnez vous-même la voyelle, et toutes céderont la place à des valeurs mesurées lorsque des valeurs évaluées par les pairs seront publiées.';
+	const passage = (lang: 'en' | 'fr') => {
+		const m = branches[lang].match(/<p id="guide-markup-stand-ins">([\s\S]*?)<\/p>/);
+		return m ? m[1].replace(/<\/?em>/g, '') : '';
+	};
+	it('English: the passage, nothing struck, the sentence about the middle of the five staves included', () => {
+		expect(passage('en')).toBe(EN);
+		expect(passage('en')).toContain('If you have not named a type, Ilya starts from the middle of its five staves.');
+	});
+	it('French: the passage, nothing struck, with U+2019 apostrophes and U+00A0 before the colon', () => {
+		expect(passage('fr')).toBe(FR);
+		expect(passage('fr')).toContain('Si vous n’avez indiqué aucun type, Ilya part du milieu de ses cinq portées.');
+		expect(passage('fr')).toContain('chaque fois\u00a0: mezzo-soprano');
+	});
+	it('carries its anchor in both languages, and the id is the one the link will point at', () => {
+		expect(branches.en).toContain('id="guide-markup-stand-ins"');
+		expect(branches.fr).toContain('id="guide-markup-stand-ins"');
 	});
 });
 

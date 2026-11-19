@@ -34,8 +34,8 @@ describe('a sung value off the shape', () => {
 		expect(withOdd.standIns?.bucket).toBe('middle');
 	});
 
-	it('adds nothing to a voice with no sung vowel and no placeholder type: the page still says nothing was measured', () => {
-		const { snapshot, standIns, generic } = buildVoiceProfileSnapshot({}, undefined, undefined, undefined, 'contralto');
+	it('adds nothing to a voice with no sung vowel and no placeholder type ("Not sure"): the page still says nothing was measured', () => {
+		const { snapshot, standIns, generic } = buildVoiceProfileSnapshot({}, undefined, undefined, undefined, 'not-sure');
 		expect(snapshot.fR1).toEqual({});
 		expect(standIns).toBeUndefined();
 		expect(generic).toBe(false);
@@ -45,14 +45,16 @@ describe('a sung value off the shape', () => {
 /**
  * QUEUE row 166 (Dann ratified 2026-10-31 13:19 to 13:21): a declared type alone, nothing sung.
  * The five Tier 1 ids take the template whole, every vowel a placeholder; the rest keep the empty profile.
+ * QUEUE row 167 (ruling of 2026-11-19, sections 1 and 8): contralto, countertenor, and bass-baritone join them on a neighbour's staff;
+ * "Not sure" and no type keep the empty profile.
  */
 describe('a declared voice type with nothing sung (row 166)', () => {
 	const TEN = ['i', 'e', 'ɛ', 'a', 'ɑ', 'o', 'u', 'ɨ', 'ɪ', 'ʌ'];
-	const BUCKET = { soprano: 'soprano', 'mezzo-soprano': 'tenor-mezzo', tenor: 'tenor-mezzo', baritone: 'baritone', bass: 'bass' } as const;
+	const BUCKET = { soprano: 'soprano', 'mezzo-soprano': 'tenor-mezzo', contralto: 'tenor-mezzo', countertenor: 'tenor-mezzo', tenor: 'tenor-mezzo', baritone: 'baritone', 'bass-baritone': 'bass', bass: 'bass' } as const;
 	const f = (f1: number, f2: number): CalibratedFormant =>
 		({ f1, f2, f2Quality: 'clear', confidence: 'high', reading: 'captured', source: 'measured-user' }) as CalibratedFormant;
 
-	for (const id of ['soprano', 'mezzo-soprano', 'tenor', 'baritone', 'bass'] as const) {
+	for (const id of ['soprano', 'mezzo-soprano', 'contralto', 'countertenor', 'tenor', 'baritone', 'bass-baritone', 'bass'] as const) {
 		it(`${id}: the template's six Bozeman values, ten vowels, all 'surrogate', generic true`, () => {
 			const a = buildVoiceProfileSnapshot({}, undefined, undefined, undefined, id);
 			const t = template(BUCKET[id]);
@@ -69,7 +71,7 @@ describe('a declared voice type with nothing sung (row 166)', () => {
 		});
 	}
 
-	for (const id of ['contralto', 'countertenor', 'bass-baritone', 'not-sure', 'other-text', undefined]) {
+	for (const id of ['not-sure', 'other-text', undefined]) {
 		it(`${id ?? 'no type'}: today's empty profile, generic false`, () => {
 			const a = buildVoiceProfileSnapshot({}, undefined, undefined, undefined, id);
 			expect(a.snapshot.fR1).toEqual({});
@@ -96,8 +98,8 @@ describe('a declared voice type with nothing sung (row 166)', () => {
 			}
 			expect(a.standIns?.bucket).toBe('baritone');
 		}
-		// A type with no placeholder profile and nothing sampled: the page that says nothing was measured. With one vowel sampled it draws (lane 68).
-		const none2 = buildVoiceProfileSnapshot({}, undefined, undefined, undefined, 'contralto');
+		// A type with no placeholder profile ("Not sure") and nothing sampled: the page that says nothing was measured. With one vowel sampled it draws (lane 68).
+		const none2 = buildVoiceProfileSnapshot({}, undefined, undefined, undefined, 'not-sure');
 		expect(none2.snapshot.fR1).toEqual({});
 		const c = buildVoiceProfileSnapshot(pick(['u', 'o']), undefined, undefined, undefined, 'contralto');
 		expect(c.generic).toBe(false);

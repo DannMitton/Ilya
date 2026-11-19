@@ -40,9 +40,9 @@ describe('the hint', () => {
 		const t = hintText(hintsFor({ ...base, sung: S('i', 'e'), selected: 'i' }), 'en');
 		expect(t).toBe('A re-take replaces [i] only if the new reading is as clear. 8 to go, in any order. Ilya keeps a placeholder for each until you record it.');
 	});
-	it('says a placeholder stands in for an unsung selection, from the voice type or from typical voices, never that it is wrong', () => {
+	it('says a placeholder stands in for an unsung selection, from the staff Ilya took or from typical voices, never that it is wrong (QUEUE row 167)', () => {
 		const typed = hintText(hintsFor({ ...base, sung: S('i'), selected: 'ɑ', voiceType: 'bass' }), 'en');
-		expect(typed).toBe('Ilya has placed [ɑ] from your voice type for now. Its placeholder moves as you record. 9 to go, in any order. Ilya keeps a placeholder for each until you record it.');
+		expect(typed).toBe('Ilya has placed [ɑ] from its bass values for now. Its placeholder moves as you record. 9 to go, in any order. Ilya keeps a placeholder for each until you record it.');
 		for (const type of [undefined, '', 'not-sure']) {
 			expect(hintText(hintsFor({ ...base, sung: S('i'), selected: 'ɑ', voiceType: type }), 'en')).toContain('from typical voices');
 		}

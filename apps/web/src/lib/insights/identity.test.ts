@@ -4,7 +4,7 @@
  * line is exactly the line before the slice.
  */
 import { describe, expect, it } from 'vitest';
-import { composeIdentityLine, genericLede, methodLineKey, restsOnSamples } from './identity';
+import { composeIdentityLine, genericLede, methodLineKey, placeholderLabel, restsOnSamples } from './identity';
 import { buildVoiceProfileSnapshot } from '$lib/analysis/analyze-score-adapter';
 import { pick } from '$lib/analysis/adapter-grid';
 import { t } from '$lib/i18n';
@@ -66,6 +66,7 @@ describe('row 166: the identity head of a placeholder voice', () => {
 		expect(restsOnSamples(buildVoiceProfileSnapshot(pick(['e', 'ɛ', 'ɑ', 'o']), undefined, undefined, undefined, 'baritone'))).toBe(true);
 		expect(restsOnSamples(buildVoiceProfileSnapshot(pick(['u']), undefined, undefined, undefined, 'contralto'))).toBe(true);
 		expect(restsOnSamples(un('contralto'))).toBe(false);
+		expect(restsOnSamples(un('not-sure'))).toBe(false);
 		expect(restsOnSamples(un(undefined))).toBe(false);
 	});
 
@@ -93,7 +94,9 @@ describe('row 166: the identity head of a placeholder voice', () => {
 		const key = (a: Parameters<typeof restsOnSamples>[0]) => methodLineKey({ generic: a.generic, typed: false, noScore: true, samples: restsOnSamples(a) });
 		expect(key(sung)).toBe('insights.method.noScore.samples');
 		expect(key(un('baritone'))).toBe('insights.method.noScore.generic');
-		expect(key(un('contralto'))).toBe('insights.method.noScore.none');
+		// QUEUE row 167 (ruling of 2026-11-19): a contralto, a countertenor, and a bass-baritone have generic values now; "Not sure" and no type take none.
+		for (const id of ['contralto', 'countertenor', 'bass-baritone']) expect(key(un(id)), id).toBe('insights.method.noScore.generic');
+		expect(key(un('not-sure'))).toBe('insights.method.noScore.none');
 		expect(key(un(undefined))).toBe('insights.method.noScore.none');
 	});
 
@@ -114,5 +117,30 @@ describe('row 166: the identity head of a placeholder voice', () => {
 			);
 		}
 		expect(genericLede(false, { voiceType: 'baritone' }, 'en')).toBeNull();
+	});
+
+	// QUEUE row 167, ruling of 2026-11-19 section 6 (RATIFIED 10:08): a sentence never tells a singer the values are their own type's when they are a neighbour's.
+	it('the lede for a contralto, a countertenor, and a bass-baritone names the staff the values came from, and never the declared type', () => {
+		const rows: Array<[string, string, string]> = [
+			['contralto', 'mezzo-soprano', 'mezzo-soprano'],
+			['countertenor', 'mezzo and tenor', 'mezzo et ténor'],
+			['bass-baritone', 'bass', 'basse'],
+		];
+		for (const [id, en, fr] of rows) {
+			expect(genericLede(true, { voiceType: id }, 'en')).toBe(`These findings use placeholder values for a generic ${en}, not your specific voice.`);
+			expect(genericLede(true, { voiceType: id }, 'fr')).toBe(`Ces constats reposent sur des valeurs par défaut pour une voix type de ${fr}, et non sur votre voix en particulier.`);
+			// A Tier 2 label or Other's text does not reach the fill.
+			for (const own of [{ voiceTypeSpecific: OTHER, voiceTypeOther: 'My Own Name' }, { voiceTypeSpecific: id === 'countertenor' ? 'haute-contre' : id }]) {
+				expect(genericLede(true, { voiceType: id, ...own }, 'en'), id).toBe(`These findings use placeholder values for a generic ${en}, not your specific voice.`);
+			}
+		}
+	});
+
+	it('"Not sure" and no type have no lede and no label, whatever Other holds', () => {
+		for (const v of [{ voiceType: 'not-sure' }, { voiceType: 'not-sure', voiceTypeSpecific: OTHER, voiceTypeOther: 'Russian Bass' }, {}, { voiceType: 'zzz' }, undefined]) {
+			expect(genericLede(false, v, 'en')).toBeNull();
+			expect(placeholderLabel(false, v, 'en')).toBeUndefined();
+			expect(placeholderLabel(true, v, 'en'), JSON.stringify(v)).toBeUndefined();
+		}
 	});
 });

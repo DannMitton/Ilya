@@ -26,7 +26,9 @@ const RATIFIED: Array<[string, string, string]> = [
 	['sheet.axis.front', 'tongue forward', 'langue avancée'],
 	['sheet.axis.back', 'tongue back', 'langue reculée'],
 	['sheet.axis.open', 'mouth more open', 'bouche plus ouverte'],
-	['sheet.provenance', 'Zones along the first resonance: Bozeman, *Kinesthetic Voice Pedagogy*, 2nd ed. (2021), Figs. 8 to 10; for baritones, Bozeman, “Levels of Acoustic Registration” (kenbozeman.com). The second resonance’s range: Bozeman, *Practical Vocal Acoustics*, 2nd ed. (2025), p. 35. Placeholder values: the centre of each zone for the first resonance, and Mitton (2020), Table 5.3, scaled to your voice type, for the second. Each zone’s width along the second resonance is Ilya’s own estimate.', 'Zones le long de la première résonance : Bozeman, *Kinesthetic Voice Pedagogy*, 2e éd. (2021), fig. 8 à 10; pour les barytons, Bozeman, “Levels of Acoustic Registration” (kenbozeman.com). Étendue de la deuxième résonance : Bozeman, *Practical Vocal Acoustics*, 2e éd. (2025), p. 35. Valeurs par défaut : le centre de chaque zone pour la première résonance, et Mitton (2020), tableau 5.3, ajusté à votre type de voix, pour la deuxième. La largeur de chaque zone le long de la deuxième résonance est une estimation d’Ilya.'],
+	// QUEUE row 167: `sheet.provenance` RATIFIED by Dann 2026-11-19 12:01 (last clause names the staff, `{borrowed}`); `sheet.provenance.undeclared` is the DESK DEFAULT assembled from his ratified Guide wording "the middle of its five staves", not separately ratified.
+	['sheet.provenance', 'Zones along the first resonance: Bozeman, *Kinesthetic Voice Pedagogy*, 2nd ed. (2021), Figs. 8 to 10; for baritones, Bozeman, “Levels of Acoustic Registration” (kenbozeman.com). The second resonance’s range: Bozeman, *Practical Vocal Acoustics*, 2nd ed. (2025), p. 35. Placeholder values: the centre of each zone for the first resonance, and Mitton (2020), Table 5.3, scaled to the {borrowed} staff, for the second. Each zone’s width along the second resonance is Ilya’s own estimate.', 'Zones le long de la première résonance : Bozeman, *Kinesthetic Voice Pedagogy*, 2e éd. (2021), fig. 8 à 10; pour les barytons, Bozeman, “Levels of Acoustic Registration” (kenbozeman.com). Étendue de la deuxième résonance : Bozeman, *Practical Vocal Acoustics*, 2e éd. (2025), p. 35. Valeurs par défaut : le centre de chaque zone pour la première résonance, et Mitton (2020), tableau 5.3, ajusté à la portée de {borrowed}, pour la deuxième. La largeur de chaque zone le long de la deuxième résonance est une estimation d’Ilya.'],
+	['sheet.provenance.undeclared', 'Zones along the first resonance: Bozeman, *Kinesthetic Voice Pedagogy*, 2nd ed. (2021), Figs. 8 to 10; for baritones, Bozeman, “Levels of Acoustic Registration” (kenbozeman.com). The second resonance’s range: Bozeman, *Practical Vocal Acoustics*, 2nd ed. (2025), p. 35. Placeholder values: the centre of each zone for the first resonance, and Mitton (2020), Table 5.3, scaled to the middle of Ilya’s five staves, for the second. Each zone’s width along the second resonance is Ilya’s own estimate.', 'Zones le long de la première résonance : Bozeman, *Kinesthetic Voice Pedagogy*, 2e éd. (2021), fig. 8 à 10; pour les barytons, Bozeman, “Levels of Acoustic Registration” (kenbozeman.com). Étendue de la deuxième résonance : Bozeman, *Practical Vocal Acoustics*, 2e éd. (2025), p. 35. Valeurs par défaut : le centre de chaque zone pour la première résonance, et Mitton (2020), tableau 5.3, ajusté au milieu des cinq portées d’Ilya, pour la deuxième. La largeur de chaque zone le long de la deuxième résonance est une estimation d’Ilya.'],
 	['capture.title', 'Your resonances', 'Vos résonances'],
 	['capture.count', '{n} of 10', '{n} sur 10'],
 	['capture.explain', 'Each dot is one of your vowels: the higher your tongue, the higher the dot; the further forward, the nearer the front edge.', 'Chaque point est l’une de vos voyelles : plus votre langue est haute, plus le point est haut; plus elle est avancée, plus il s’approche du bord avant.'],
@@ -67,7 +69,8 @@ const RATIFIED: Array<[string, string, string]> = [
 	['capture.hint.first', 'Tap a vowel to focus on it. Tap Start to record it.', 'Touchez une voyelle pour l’afficher. Touchez Commencer pour la capter.'],
 	['capture.hint.active', 'Stop ends this take and sets it aside.', 'Arrêter met fin à cette prise et la met de côté.'],
 	['capture.hint.retake', 'A re-take replaces {v} only if the new reading is as clear.', 'Une reprise ne remplace {v} que si la nouvelle lecture est aussi nette.'],
-	['capture.hint.placed.typed', 'Ilya has placed {v} from your voice type for now. Its placeholder moves as you record.', 'Ilya a placé {v} d’après votre type de voix, pour l’instant. Sa valeur par défaut évolue à mesure que vous captez vos voyelles.'],
+	// QUEUE row 167, RATIFIED by Dann 2026-11-19 12:01.
+	['capture.hint.placed.typed', 'Ilya has placed {v} from its {borrowed} values for now. Its placeholder moves as you record.', 'Ilya a placé {v} d’après ses valeurs de {borrowed}, pour l’instant. Sa valeur par défaut évolue à mesure que vous captez vos voyelles.'],
 	['capture.hint.placed.untyped', 'Ilya has placed {v} from typical voices for now. Its placeholder moves as you record.', 'Ilya a placé {v} d’après des voix typiques, pour l’instant. Sa valeur par défaut évolue à mesure que vous captez vos voyelles.'],
 	['capture.hint.toGo', '{count} to go, in any order. Ilya keeps a placeholder for each until you record it.', 'Il en reste {count}, dans l’ordre de votre choix. Ilya garde une valeur par défaut pour chaque voyelle jusqu’à ce que vous la captiez.'],
 	['capture.hint.finished', 'Tap any vowel to focus on it. Re-take records it again.', 'Touchez une voyelle pour l’afficher. Reprendre la capte de nouveau.'],
@@ -87,8 +90,8 @@ const RATIFIED: Array<[string, string, string]> = [
 ];
 
 describe('the ratified calibration and sheet strings', () => {
-	it('pins all seventy-one, in both languages', () => {
-		expect(RATIFIED).toHaveLength(71);
+	it('pins all seventy-two, in both languages', () => {
+		expect(RATIFIED).toHaveLength(72);
 		for (const [key, en, fr] of RATIFIED) {
 			expect(t(key, 'en'), `${key} en`).toBe(en);
 			expect(t(key, 'fr'), `${key} fr`).toBe(fr);

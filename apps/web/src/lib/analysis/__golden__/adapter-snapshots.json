@@ -4013,17 +4013,78 @@
  },
  "contralto | none": {
   "snapshot": {
-   "fR1": {},
-   "fR1Source": {},
+   "fR1": {
+    "i": 339.3,
+    "e": 570.6,
+    "ɛ": 604.5,
+    "ɑ": 678.6,
+    "o": 538.6,
+    "u": 380.8,
+    "ɨ": 463.1,
+    "ɪ": 588.6,
+    "ʌ": 678.6,
+    "a": 780.4
+   },
+   "fR1Source": {
+    "i": "surrogate",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1998.5,
+    "e": 1795.7,
+    "ɛ": 1536.7,
+    "ɑ": 1187.4,
+    "o": 968.2,
+    "u": 942.4,
+    "ɨ": 1290.9,
+    "ɪ": 1874.8,
+    "ʌ": 1369,
+    "a": 1306.1
+   },
+   "fR2Source": {
+    "i": "surrogate",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
    "label": "golden"
   },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "i": "template",
+    "e": "template",
+    "ɛ": "template",
+    "ɑ": "template",
+    "o": "template",
+    "u": "template",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   }
+  },
   "completeness": {
-   "formants": false,
+   "formants": true,
    "range": false,
    "tessitura": false,
    "passaggio": false
   },
-  "generic": false
+  "generic": true
  },
  "contralto | i": {
   "snapshot": {
@@ -5630,17 +5691,78 @@
  },
  "countertenor | none": {
   "snapshot": {
-   "fR1": {},
-   "fR1Source": {},
+   "fR1": {
+    "i": 339.3,
+    "e": 570.6,
+    "ɛ": 604.5,
+    "ɑ": 678.6,
+    "o": 538.6,
+    "u": 380.8,
+    "ɨ": 463.1,
+    "ɪ": 588.6,
+    "ʌ": 678.6,
+    "a": 780.4
+   },
+   "fR1Source": {
+    "i": "surrogate",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1998.5,
+    "e": 1795.7,
+    "ɛ": 1536.7,
+    "ɑ": 1187.4,
+    "o": 968.2,
+    "u": 942.4,
+    "ɨ": 1290.9,
+    "ɪ": 1874.8,
+    "ʌ": 1369,
+    "a": 1306.1
+   },
+   "fR2Source": {
+    "i": "surrogate",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
    "label": "golden"
   },
+  "standIns": {
+   "bucket": "tenor-mezzo",
+   "steps": {
+    "i": "template",
+    "e": "template",
+    "ɛ": "template",
+    "ɑ": "template",
+    "o": "template",
+    "u": "template",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   }
+  },
   "completeness": {
-   "formants": false,
+   "formants": true,
    "range": false,
    "tessitura": false,
    "passaggio": false
   },
-  "generic": false
+  "generic": true
  },
  "countertenor | i": {
   "snapshot": {
@@ -8086,17 +8208,78 @@
  },
  "bass-baritone | none": {
   "snapshot": {
-   "fR1": {},
-   "fR1Source": {},
+   "fR1": {
+    "i": 311.1,
+    "e": 440,
+    "ɛ": 538.6,
+    "ɑ": 604.5,
+    "o": 440,
+    "u": 320.2,
+    "ɨ": 424.7,
+    "ɪ": 453.9,
+    "ʌ": 604.5,
+    "a": 695.2
+   },
+   "fR1Source": {
+    "i": "surrogate",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
+   "fR2": {
+    "i": 1705,
+    "e": 1532,
+    "ɛ": 1311,
+    "ɑ": 1013,
+    "o": 826,
+    "u": 804,
+    "ɨ": 1101.3,
+    "ɪ": 1599.5,
+    "ʌ": 1168,
+    "a": 1114.3
+   },
+   "fR2Source": {
+    "i": "surrogate",
+    "e": "surrogate",
+    "ɛ": "surrogate",
+    "ɑ": "surrogate",
+    "o": "surrogate",
+    "u": "surrogate",
+    "ɨ": "surrogate",
+    "ɪ": "surrogate",
+    "ʌ": "surrogate",
+    "a": "surrogate"
+   },
    "label": "golden"
   },
+  "standIns": {
+   "bucket": "bass",
+   "steps": {
+    "i": "template",
+    "e": "template",
+    "ɛ": "template",
+    "ɑ": "template",
+    "o": "template",
+    "u": "template",
+    "ɨ": "derived",
+    "ɪ": "derived",
+    "ʌ": "derived",
+    "a": "derived"
+   }
+  },
   "completeness": {
-   "formants": false,
+   "formants": true,
    "range": false,
    "tessitura": false,
    "passaggio": false
   },
-  "generic": false
+  "generic": true
  },
  "bass-baritone | i": {
   "snapshot": {

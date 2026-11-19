@@ -11,10 +11,11 @@ import { template } from './stand-ins';
 const f = (f1: number, f2: number): CalibratedFormant => ({ f1, f2, f2Quality: 'clear', confidence: 'high', reading: 'captured', source: 'measured-user' }) as CalibratedFormant;
 
 describe('the placeholder flag', () => {
-	const WITHHELD = ['contralto', 'countertenor', 'bass-baritone', 'not-sure', undefined, ''];
-	const FIVE = ['soprano', 'mezzo-soprano', 'tenor', 'baritone', 'bass'];
+	// QUEUE row 167 (ruling of 2026-11-19, sections 1 and 8): eight declared types have a starting profile; "Not sure" and no type take none.
+	const WITHHELD = ['not-sure', undefined, ''];
+	const FIVE = ['soprano', 'mezzo-soprano', 'contralto', 'countertenor', 'tenor', 'baritone', 'bass-baritone', 'bass'];
 
-	it('declared-types (the adapter, and the default) withholds stand-ins from a voice that has sung nothing and is not one of the five', () => {
+	it('declared-types (the adapter, and the default) withholds stand-ins from a voice that has sung nothing and is not one of the eight', () => {
 		for (const type of WITHHELD) {
 			const r = resolveVowelValues({}, type);
 			expect(r.standIns, String(type)).toBeUndefined();
@@ -24,7 +25,7 @@ describe('the placeholder flag', () => {
 		}
 	});
 
-	it('declared-types fills a voice of the five whole, every vowel a surrogate, and calls it generic', () => {
+	it('declared-types fills a voice of the eight whole, every vowel a surrogate, and calls it generic', () => {
 		for (const type of FIVE) {
 			const r = resolveVowelValues({}, type);
 			expect(r.generic, type).toBe(true);
@@ -36,7 +37,7 @@ describe('the placeholder flag', () => {
 		}
 	});
 
-	it('always gives every voice, including the withheld ones, all ten values, and still says generic only for the five', () => {
+	it('always gives every voice, including the withheld ones, all ten values, and still says generic only for the eight', () => {
 		for (const type of [...WITHHELD, ...FIVE]) {
 			const r = resolveVowelValues({}, type, { placeholders: 'always' });
 			expect(r.standIns, String(type)).toBeDefined();
@@ -48,7 +49,7 @@ describe('the placeholder flag', () => {
 		}
 	});
 
-	it('for the five, always and declared-types give the same answer', () => {
+	it('for the eight, always and declared-types give the same answer', () => {
 		for (const type of FIVE) expect(resolveVowelValues({}, type, { placeholders: 'always' })).toEqual(resolveVowelValues({}, type));
 	});
 
