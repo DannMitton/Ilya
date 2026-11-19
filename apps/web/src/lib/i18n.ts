@@ -1348,9 +1348,9 @@ const strings: Record<string, Record<Language, string>> = {
 	'calib.summary.outsideIgh': { en: 'Your current [ɨ] sits away from where your [i] and [u] would likely place it. For now, Ilya has an estimate ready, built from your own [i] and [u], so you can carry on. You can offer new vowel samples anytime.', fr: 'Votre [ɨ] actuel ne se trouve pas tout à fait là où vos [i] et [u] le placeraient probablement. Pour l’instant, Ilya a une estimation prête, calculée à partir de vos propres [i] et [u] : vous pouvez donc continuer. Vous pouvez fournir de nouveaux échantillons de voyelles à tout moment.' },
 	// RATIFIED by Dann 2026-11-18 10:49, English and French (lane 67 brief r2, section 6). French: U+00A0 before the colon (OQLF).
 	'calib.summary.unstable': { en: 'These readings were unstable: {vowels}. Another try may help.', fr: 'Ces lectures étaient instables\u00a0: {vowels}. Une reprise pourrait aider.' },
-	// RATIFIED by Dann 2026-11-18 10:49, English and French (lane 67 brief r2, section 6): the far-off [ɨ]'s two buttons. « Le garder »: a vowel named alone is masculine.
 	// Lane 68 (Dann 2026-11-18 14:00, RATIFIED): the note for one unstable reading. Its button is `calib.summary.keepOne`.
 	'calib.summary.unstableOne': { en: 'This reading was unstable: {vowels}. Another try may help.', fr: 'Cette lecture \u00e9tait instable\u00a0: {vowels}. Une reprise pourrait aider.' },
+	// RATIFIED by Dann 2026-11-18 10:49, English and French (lane 67 brief r2, section 6): the far-off [ɨ]'s two buttons. « Le garder »: a vowel named alone is masculine.
 	'calib.summary.keepOne': { en: 'Keep it', fr: 'Le garder' },
 	'calib.summary.useEstimate': { en: 'Use Ilya\'s estimate for now', fr: 'Utiliser l\u2019estimation d\u2019Ilya pour l\u2019instant' },
 	'calib.summary.keepAll': { en: 'Keep them', fr: 'Les garder' },
