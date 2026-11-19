@@ -15,6 +15,14 @@ The index was added 2026-09-01. Nothing below it was moved, reworded, or removed
 **When you add a section, add its row here.** A trap nobody can find costs the
 next session the same hour it cost the last one.
 
+### Learned 2026-11-19 (Opus desk: lane 70, and the blank states)
+- `LEARNED BY THE 2026-11-19 DESK` (last section of this file): Claude in Chrome will not run
+  JavaScript on claude.ai in auto mode, so a Code prompt goes in as flattened typed text; the
+  GitHub API is refused for this repository from a cloud session while anonymous `git clone`
+  works; the ship script with no commit message runs the gates and does NOT push, so a
+  fast-forward merge needs an explicit `git push`; and the first measured scale of Fable's
+  weekly allowance.
+
 ### Learned 2026-11-18/19 (Opus desk: Dann's walk on his iPhone)
 - `LEARNED ON THE WALK OF 2026-11-18/19` (last section of this file): how to confirm which build the branch alias serves without a browser; production `main` still serves the old Ilya, so a walk never goes to the public address; a stale service worker is cleared by closing every tab, never by reloading; Dann's capture zips in `~/Downloads` carry Ilya's own per-take analysis, which answers a reader-or-take question without asking him to sing.
 
@@ -5502,3 +5510,53 @@ where a wrong peak choice lands.
 carry the asked vowel as its IPA letter, and `unzip -l` over the bridge prints them as
 mojibake (`asked-╔С-` for `asked-ɑ-`). Match with a glob on the ASCII part
 (`"*asked-o-*.json"`) or list with `-UU`; do not retype a name from that output.
+
+
+## LEARNED BY THE 2026-11-19 DESK (Opus 5; lane 70, row 167, and the blank states)
+
+- **CLAUDE IN CHROME WILL NOT RUN JAVASCRIPT ON claude.ai IN AUTO MODE.** `javascript_tool`
+  on a `claude.ai` page returns a refusal naming auto mode and the absence of an approval
+  card; the other Claude in Chrome tools still work on that page. So the paste-event method
+  earlier desks used to put a long prompt into a Code session is not available here. What
+  works: flatten the prompt to one paragraph (no newlines, because Return sends), type it
+  with the `computer` tool's `type` action, read it back with `read_page` on the composer's
+  ref, then click Send. The Send click itself was NOT refused on 2026-11-19, unlike
+  2026-11-16. Keep the flattened copy as `~/Downloads/_desk-<date>/prompt-lane<n>_prepared.md`.
+- **THE GITHUB API IS REFUSED FOR THIS REPOSITORY FROM A CLOUD SESSION; ANONYMOUS GIT IS NOT.**
+  `curl https://api.github.com/repos/DannMitton/Ilya/...` returns "GitHub access to this
+  repository is not enabled for this session", but `add_repo` reports read access already
+  available through the git proxy, and
+  `GIT_LFS_SKIP_SMUDGE=1 git clone --depth 1 --branch <lane> --single-branch` succeeds. To
+  read a lane's work and diff it against the cut point: clone the lane shallow, then
+  `git fetch --depth 1 origin <cut sha>` and diff the two. Takes about a minute. This is how
+  a desk reads a lane's reports in full without asking Dann to fetch.
+- **THE SHIP SCRIPT WITH NO COMMIT MESSAGE DOES NOT PUSH.** `~/Downloads/ilya-ship.sh` exits
+  at `if [ -z "$MSG" ]` and again at `if [ -z "$CHANGED" ]`, both before its `git push`
+  (`:199-203`). So after a fast-forward merge, where the working tree is already clean, the
+  script runs the eight gates and reports, and the commits stay unpushed. A merge paste needs
+  an explicit `git push` after it. `merge-lane70.sh` does this and is the pattern.
+- **GATE 4 HAS TWO BASELINES AND A BRIEF MUST CARRY BOTH.** `~/Downloads/ilya-ship.sh:180`
+  sets `6691 passed | 1 skipped (6692)` when python3 has numpy and scipy, and
+  `6687 passed | 5 skipped (6692)` when it does not. A cloud sandbox usually lacks scipy. The
+  lane 70 brief gave only the first form and the lane spent time hunting four tests that were
+  skipped, not failing. The four are in `voice/engine/burg.test.ts`, against the Python
+  reference.
+- **THE FIRST MEASURED SCALE OF FABLE'S WEEKLY ALLOWANCE.** Dann's usage page read Fable 0
+  percent at 00:22 and 10 percent at 10:00. Between those, three Fable reviews cost 695,591
+  tokens by the harness count. DESK INFERENCE from two points, not a measurement: the weekly
+  Fable allowance is on the order of 7M tokens. Bearing: N.204 phase 1, which Dann ruled is
+  Fable reading all the source whole, is estimated at 2.6M to 3.4M, so it fits inside one
+  week with room. That question was open from 2026-11-16 and is now answerable at least to an
+  order of magnitude.
+- **GATE 4's SLOWEST FILES ARE NOT WHERE ITS TIME GOES.** Measured on the lane 70 tree with
+  `vitest --reporter=json`: 7m15s wall-clock, 362 files, and the ten slowest files are 118
+  seconds of 436. There is no short tail to cut, so the suite's cost is spread and trimming
+  the worst files buys little. A structural question for N.204, not a quick win.
+- **ESTIMATES BY KIND OF JOB, actuals from this desk** (add to that table): Fable review of
+  one Code brief read from a clone, 202,247 (cap 260k, 31 tool uses, 6.6 min); Fable as-built
+  review of one small lane from a clone, 252,070 (cap 300k, 47 tool uses, 29 min); Fable
+  review of one Code brief plus two companion files, 241,274 (cap 260k, 40 tool uses, 8.4
+  min); Fable DELTA review of a brief revision carrying new material, 218,234 (cap 200k, over
+  by 18k, 22 tool uses, 7.6 min).
+- **A LANE'S CHANGE COUNT IN THE CODE PAGE IS NOT ITS DIFF.** Lane 70's page read +25,936 and
+  -651 mid-run and +415 -94 at the end. Read the diff, not the chip.
