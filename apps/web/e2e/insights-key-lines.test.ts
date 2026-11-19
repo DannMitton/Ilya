@@ -39,8 +39,8 @@ function storedVoice(name: string) {
 	return { version: 2, activeId: 'v-test', voices: [{ id: 'v-test', name, createdAt: now, updatedAt: now, calibratedAt: now, formants, voiceType: type, characteristics: { ...chars, source: 'manual' } }] };
 }
 
-/** The page's own root: the letter pages on the desk, the one column on a phone. */
-const rootOf = (width: 'desktop' | 'phone') => (width === 'phone' ? '.insights-flow' : '.insights-container');
+/** The page's own root: the letter pages, for both viewports. A phone sees the same pages scaled by `PageFit`, so the root no longer depends on the width. */
+const rootOf = (_width: 'desktop' | 'phone') => '.insights-container';
 
 async function openInsights(page: Page, voice: string, width: 'desktop' | 'phone') {
 	await page.addInitScript(
@@ -66,7 +66,7 @@ async function openInsights(page: Page, voice: string, width: 'desktop' | 'phone
 async function shoot(page: Page, name: string, width: 'desktop' | 'phone') {
 	if (!SHOTS) return;
 	mkdirSync(SHOTS, { recursive: true });
-	await page.locator(width === 'phone' ? '.insights-flow .block-conclusion' : '.insights-container .paper-page').first().screenshot({ path: path.join(SHOTS, `${name}-${width}.png`) });
+	await page.locator('.insights-container .paper-page').first().screenshot({ path: path.join(SHOTS, `${name}-${width}.png`) });
 }
 
 /** The conclusion and the opened reveal in one picture: the reveal is its own block, directly after the conclusion. */
