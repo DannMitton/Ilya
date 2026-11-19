@@ -4,6 +4,7 @@
  * Words are `i18n.ts`'s, English and French, through `t()` and `tv()` (N.199 Step 7).
  */
 import { t, tv, type Language } from '$lib/i18n';
+import { borrowedStaffLabel, fillVoiceType } from '$lib/voice/voiceTypes';
 import type { Vowel } from '../engine/types';
 import { VOWELS } from '../engine/types';
 import { spoken, spokenName } from '../vowel-names';
@@ -43,6 +44,8 @@ export interface HintInput {
 export interface Hint {
 	key: string;
 	vars: Record<string, string | number>;
+	/** The Tier 1 id whose staff fills `{borrowed}` (QUEUE row 167); set only on `capture.hint.placed.typed`, which `hintText` fills through `fillVoiceType`. */
+	staffOf?: string;
 }
 
 /**
@@ -60,13 +63,26 @@ export function hintsFor(h: HintInput): Hint[] {
 	out.push(
 		h.sung.has(h.selected)
 			? { key: 'capture.hint.retake', vars: v }
-			: { key: hasDeclaredType(h.voiceType) ? 'capture.hint.placed.typed' : 'capture.hint.placed.untyped', vars: v }
+			: borrowedStaffLabel(h.voiceType, 'en') !== undefined
+			? { key: 'capture.hint.placed.typed', vars: v, staffOf: h.voiceType }
+			: { key: 'capture.hint.placed.untyped', vars: v }
 	);
 	out.push({ key: 'capture.hint.toGo', vars: { count: VOWELS.length - h.sung.size } });
 	return out;
 }
 
-export const hintText = (hints: Hint[], language: Language): string => hints.map((x) => tv(x.key, language, x.vars)).join(' ');
+export const hintText = (hints: Hint[], language: Language): string =>
+	hints.map((x) => (x.staffOf ? fillVoiceType(tv(x.key, language, x.vars), borrowedStaffLabel(x.staffOf, language) ?? '', language, 'borrowed') : tv(x.key, language, x.vars))).join(' ');
+
+/**
+ * The vowel-space sheet's sources note (QUEUE row 167; brief r4 section 4.10). Its last clause names the staff the placeholder values were scaled to: `{borrowed}`, through
+ * `fillVoiceType`. A voice with no staff to name takes the undeclared form, which says "the middle of Ilya's five staves". The branch is on `borrowedStaffLabel` being
+ * `undefined`, never on `hasDeclaredType`: "Not sure", no type, and an id this build does not know all draw the undeclared form, and a declared type never draws a raw token.
+ */
+export function sheetProvenance(voiceType: string | undefined, language: Language): string {
+	const staff = borrowedStaffLabel(voiceType, language);
+	return staff === undefined ? tv('sheet.provenance.undeclared', language) : fillVoiceType(tv('sheet.provenance', language), staff, language, 'borrowed');
+}
 
 export type MainButton = { kind: 'start' | 'retake' | 'inProgress'; label: string; disabled: boolean };
 

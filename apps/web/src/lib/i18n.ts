@@ -16,7 +16,7 @@
    tree on 2026-11-02 (consistency batch 2). Paths are under `apps/web/src/`;
    a prefix is listed with the files that use it most and its key count.
 
-   This file holds 1,346 keys.
+   This file holds 1,347 keys.
 
    A key built at run time (`watch.key.letter.${letter}`, `comment.<register>.<part>`)
    has no literal reference, so a search for the whole key can come back empty
@@ -67,7 +67,7 @@
    result.         1  no literal consumer found
    ribbon.         6  lib/components/Drawer/InspectorPanel.svelte
    select.         5  lib/components/Drawer/SearchableSelect.svelte
-   sheet.         16  the vowel-space sheet and the capture screen's readings list: lib/voice/chart/VowelSpaceSheet.svelte, lib/voice/VowelCapture.svelte
+   sheet.         17  the vowel-space sheet and the capture screen's readings list: lib/voice/chart/VowelSpaceSheet.svelte, lib/voice/VowelCapture.svelte
    shiftLyrics.    5  lib/score/CorrectionSurface.svelte
    song.           2  lib/omr/scan.ts, lib/library/notices.ts, routes/+page.svelte
    songs.         15  routes/+page.svelte, lib/components/Drawer/SongList.svelte, lib/components/Drawer/bandState.ts
@@ -2576,7 +2576,9 @@ const strings: Record<string, Record<Language, string>> = {
 	'sheet.axis.front': { en: 'tongue forward', fr: 'langue avancée' },
 	'sheet.axis.back': { en: 'tongue back', fr: 'langue reculée' },
 	'sheet.axis.open': { en: 'mouth more open', fr: 'bouche plus ouverte' },
-	'sheet.provenance': { en: 'Zones along the first resonance: Bozeman, *Kinesthetic Voice Pedagogy*, 2nd ed. (2021), Figs. 8 to 10; for baritones, Bozeman, “Levels of Acoustic Registration” (kenbozeman.com). The second resonance’s range: Bozeman, *Practical Vocal Acoustics*, 2nd ed. (2025), p. 35. Placeholder values: the centre of each zone for the first resonance, and Mitton (2020), Table 5.3, scaled to your voice type, for the second. Each zone’s width along the second resonance is Ilya’s own estimate.', fr: 'Zones le long de la première résonance : Bozeman, *Kinesthetic Voice Pedagogy*, 2e éd. (2021), fig. 8 à 10; pour les barytons, Bozeman, “Levels of Acoustic Registration” (kenbozeman.com). Étendue de la deuxième résonance : Bozeman, *Practical Vocal Acoustics*, 2e éd. (2025), p. 35. Valeurs par défaut : le centre de chaque zone pour la première résonance, et Mitton (2020), tableau 5.3, ajusté à votre type de voix, pour la deuxième. La largeur de chaque zone le long de la deuxième résonance est une estimation d’Ilya.' },
+	// QUEUE row 167, RATIFIED by Dann 2026-11-19 12:01 (`docs/sessions/ratified-voice-type-stand-ins_2026-11-19.md`; brief r4 section 4.10): the sources note names the staff the placeholder values were scaled to, `{borrowed}` (`borrowedStaffLabel`). The `.undeclared` form is for a voice with no staff to name ("Not sure", no type, an id this build does not know): its last clause is Dann's own ratified Guide wording, "the middle of its five staves" (DESK DEFAULT, not separately ratified).
+	'sheet.provenance': { en: 'Zones along the first resonance: Bozeman, *Kinesthetic Voice Pedagogy*, 2nd ed. (2021), Figs. 8 to 10; for baritones, Bozeman, “Levels of Acoustic Registration” (kenbozeman.com). The second resonance’s range: Bozeman, *Practical Vocal Acoustics*, 2nd ed. (2025), p. 35. Placeholder values: the centre of each zone for the first resonance, and Mitton (2020), Table 5.3, scaled to the {borrowed} staff, for the second. Each zone’s width along the second resonance is Ilya’s own estimate.', fr: 'Zones le long de la première résonance : Bozeman, *Kinesthetic Voice Pedagogy*, 2e éd. (2021), fig. 8 à 10; pour les barytons, Bozeman, “Levels of Acoustic Registration” (kenbozeman.com). Étendue de la deuxième résonance : Bozeman, *Practical Vocal Acoustics*, 2e éd. (2025), p. 35. Valeurs par défaut : le centre de chaque zone pour la première résonance, et Mitton (2020), tableau 5.3, ajusté à la portée de {borrowed}, pour la deuxième. La largeur de chaque zone le long de la deuxième résonance est une estimation d’Ilya.' },
+	'sheet.provenance.undeclared': { en: 'Zones along the first resonance: Bozeman, *Kinesthetic Voice Pedagogy*, 2nd ed. (2021), Figs. 8 to 10; for baritones, Bozeman, “Levels of Acoustic Registration” (kenbozeman.com). The second resonance’s range: Bozeman, *Practical Vocal Acoustics*, 2nd ed. (2025), p. 35. Placeholder values: the centre of each zone for the first resonance, and Mitton (2020), Table 5.3, scaled to the middle of Ilya’s five staves, for the second. Each zone’s width along the second resonance is Ilya’s own estimate.', fr: 'Zones le long de la première résonance : Bozeman, *Kinesthetic Voice Pedagogy*, 2e éd. (2021), fig. 8 à 10; pour les barytons, Bozeman, “Levels of Acoustic Registration” (kenbozeman.com). Étendue de la deuxième résonance : Bozeman, *Practical Vocal Acoustics*, 2e éd. (2025), p. 35. Valeurs par défaut : le centre de chaque zone pour la première résonance, et Mitton (2020), tableau 5.3, ajusté au milieu des cinq portées d’Ilya, pour la deuxième. La largeur de chaque zone le long de la deuxième résonance est une estimation d’Ilya.' },
 	'capture.title': { en: 'Your resonances', fr: 'Vos résonances' },
 	'capture.count': { en: '{n} of 10', fr: '{n} sur 10' },
 	'capture.explain': { en: 'Each dot is one of your vowels: the higher your tongue, the higher the dot; the further forward, the nearer the front edge.', fr: 'Chaque point est l’une de vos voyelles : plus votre langue est haute, plus le point est haut; plus elle est avancée, plus il s’approche du bord avant.' },
@@ -2626,7 +2628,8 @@ const strings: Record<string, Record<Language, string>> = {
 	// N.203 sheet-english r2 / sheet-french r1, RATIFIED by Dann 2026-11-16 (01:13 English, 01:20 French), line 19.
 	'capture.hint.active': { en: 'Stop ends this take and sets it aside.', fr: 'Arrêter met fin à cette prise et la met de côté.' },
 	'capture.hint.retake': { en: 'A re-take replaces {v} only if the new reading is as clear.', fr: 'Une reprise ne remplace {v} que si la nouvelle lecture est aussi nette.' },
-	'capture.hint.placed.typed': { en: 'Ilya has placed {v} from your voice type for now. Its placeholder moves as you record.', fr: 'Ilya a placé {v} d’après votre type de voix, pour l’instant. Sa valeur par défaut évolue à mesure que vous captez vos voyelles.' },
+	// RATIFIED by Dann 2026-11-19 12:01 (brief r4 section 4.10): the old text said "from your voice type", which was false for contralto, countertenor, and bass-baritone (`stand-ins.ts` takes a neighbour's staff). `{borrowed}` is `borrowedStaffLabel` on the Tier 1 id.
+	'capture.hint.placed.typed': { en: 'Ilya has placed {v} from its {borrowed} values for now. Its placeholder moves as you record.', fr: 'Ilya a placé {v} d’après ses valeurs de {borrowed}, pour l’instant. Sa valeur par défaut évolue à mesure que vous captez vos voyelles.' },
 	'capture.hint.placed.untyped': { en: 'Ilya has placed {v} from typical voices for now. Its placeholder moves as you record.', fr: 'Ilya a placé {v} d’après des voix typiques, pour l’instant. Sa valeur par défaut évolue à mesure que vous captez vos voyelles.' },
 	'capture.hint.toGo': { en: '{count} to go, in any order. Ilya keeps a placeholder for each until you record it.', fr: 'Il en reste {count}, dans l’ordre de votre choix. Ilya garde une valeur par défaut pour chaque voyelle jusqu’à ce que vous la captiez.' },
 	// N.203 sheet-english r2 / sheet-french r1, RATIFIED by Dann 2026-11-16 (01:13 English, 01:20 French), line 20.

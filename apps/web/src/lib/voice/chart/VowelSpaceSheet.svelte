@@ -23,6 +23,7 @@
 	import { labelSizeFor } from './geometry';
 	import { summaryRows } from './readings';
 	import { zoneColour } from './colours';
+	import { sheetProvenance } from './screen-logic';
 
 	let {
 		profile,
@@ -160,7 +161,7 @@
 		</li>
 	</ul>
 
-	<p class="provenance"><Italics text={tv('sheet.provenance', language)} /></p>
+	<p class="provenance"><Italics text={sheetProvenance(voiceType, language)} /></p>
 
 	{#if onprint && !forPrint}
 		<button type="button" class="sheet-print-btn" onclick={onprint}>{tv('sheet.print', language)}</button>
