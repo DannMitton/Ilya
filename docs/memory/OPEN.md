@@ -4138,3 +4138,38 @@ His words are in `INBOX.md` under those times, transcribed as written. This sect
 **Established by the desk 2026-11-19 14:5x, and it reorders the work:** consistency batch 3 has NOT run (`apps/web/src/lib/markup/` exists, `apps/web/src/lib/melody/` does not). Three parts of the comment convention wait on it: the generated module map, the header-comment test, and the sweep of line-number comments. `ARCHITECTURE.md` holds no generated map (grep). **Batch 3 therefore runs before any unit read that touches `markup/`.** Plan r2 listed its status as NOT ESTABLISHED; it is established now.
 
 **THE TEST A COMMENT MUST PASS, ruled 15:00** (transcribed as written: *"The purpose of comments in code is to curate the code for future developers."*). This is the measure, and the three purposes of `../house-style/code-conventions.md` section 5 are how it is met, not a separate standard. **What it settles without a further question:** a comment that curates nothing for a reader arriving cold comes out. That covers, by name, every finding unit a filed as C14: the version tags (`v5.11.10`, `v5.11.45`, `v5.10.20`, `v5.11.1`, `v5.5.1`, `v5.11.18`, `v5.11.21`, `v6.0.115`), the prototype history ("In the prototype…", "This was RuleRegistry.deriveRule() in the prototype"), the bare step and item numbers that carry no date or words ("Step 10", "N.13", "(N.12)"), and the comments that restate the line below them. A comment carrying one of Dann's rulings stays, because its date and words are what a future developer cannot reconstruct; `CONTRACT.md` section 1 item 6's rule that a ruling keeps a pointer to where it lives applies. **The two credit lines in `poetic-normalizer.ts` are the one case this test does not decide, because crediting a contributor is Dann's taste and not a developer's need.**
+
+## ROW 167: THE CONCESSION IS MADE AT THE MOMENT OF CHOICE. Ruled by Dann 2026-11-19 18:33, on the desk's alternative to his own 18:27 proposal
+
+**His 18:27 proposal, considered and withdrawn by him:** remove contralto, countertenor, and bass-baritone from Ilya entirely, so that cohort self-selects from the types the field does publish and is complicit in the inexact choice. His words are in `INBOX.md` under 18:27.
+
+**Why the desk recommended against it, three readings taken at 18:2x.** A contralto already routes exactly where a mezzo-soprano routes, and a bass-baritone exactly where a bass routes, in all three places Ilya sorts a voice: the formant guard (`voice/engine/plausibility.ts:138`, `:141`), the stand-in staff (`voice/engine/stand-ins.ts:58`, `:60`), and the range picker's clef (`voice/note-picker.ts:46-48`). So removal would change no number for either of them and would delete only the sentence that names the borrowing, which costs the transparency he ruled at 09:41 and 10:08 and gains nothing. A countertenor is the opposite case: he is deliberately left in the widest `union` guard band (`plausibility.ts:134`, `:142`), and every type he could pick instead lands him in `tenor-mezzo` (`:138`), narrower than the literature carries, against Dann's own reading of Chenez 2011 recorded at `PRODUCT.md:1220`.
+
+**RULED.** The three types stay. The concession moves to the moment of choice. Dann, transcribed as written: *"Yes! this eases my conscience: \"That can live in the picker: choosing one of the three names says, at that moment, that the field has published nothing for this type and offers two doors, the neighbouring staff or your own samples.\""* Offered by the desk, ruled by Dann; the words he quoted are the desk's.
+
+**What it means.** Choosing contralto, countertenor, or bass-baritone shows a note in place, before anything is computed, that says the field has published no resonance values for that type and names both paths open to the singer: Ilya starts from the neighbouring staff, or the singer records their own vowels and Ilya works from their voice. Neither path is a new control. Doing nothing takes the first; `calib.pane.door.record` (`i18n.ts:1450`) is already the second.
+
+**Where the note goes, read 2026-11-19 18:3x.** Ilya has two Tier 1 pickers and both iterate `TIER1`, so both carry the note or the concession depends on which door the singer came through:
+
+| picker | file | the radio group | where it is shown |
+|---|---|---|---|
+| Voice characteristics, in the VOICE pane | `voice/VoiceTypeIntake.svelte:67-78` | one column | `components/Drawer/VoicePane.svelte:85` |
+| the one optional question before the first vowel | `voice/VoiceTypeFirst.svelte:30-36` | a two-column grid, read downward | `voice/CalibrationWizard.svelte:810` |
+
+**What it does not displace.** The borrowing line on MELODY and INSIGHTS (`placeholder.borrowing`, `analysis/placeholder-line.ts:108-118`) stays as built. **DESK DEFAULT, Dann's to overrule:** the VOICE pane at rest also still gains the reason, which is lane 74's item 1 and his own finding of 18:13, because the picker's note is read once at the moment of choosing and the pane's sentence is what a returning singer reads.
+
+**Strings:** assembled by the desk from his own ratified `placeholder.borrowing` (`i18n.ts:2052`, 09:43 and 09:52) and `calib.pane.notSure` (`i18n.ts:1436`, 11:59), so the only new wording is the clause that joins them. English for his ratification, French as a marked draft for his ruling, put to him 2026-11-19 18:4x.
+
+**RATIFIED by Dann 2026-11-19 18:36**, English and French in one word (*"I ratify both the french and the english"*, transcribed as written). One key, two fills, the same two tokens `placeholder.borrowing` takes. **DESK DEFAULT on the key name, his to overrule: `voiceType.borrowing`**, beside `voiceType.heading` and `voiceType.hint`, because it belongs to the picker and not to the pane.
+
+English, character for character:
+
+> The field has not yet published resonance values for a {type}. Ilya can start from the {borrowed} staff, or you can record your vowels in vocal fry and Ilya works from your own voice.
+
+French, character for character:
+
+> La recherche n’a pas encore publié de valeurs de résonance pour un {type}. Ilya peut partir de la portée de {borrowed}, ou vous pouvez capter vos voyelles en friture vocale et Ilya travaille à partir de votre propre voix.
+
+The apostrophe in « n’a » is U+2019, matching every other French string in `i18n.ts` and OQLF typography (settled, `CONTRACT.md` section 1 item 6a); the chat draft Dann read carried the straight U+0027 and the record was corrected to the tree's convention at 18:5x, a DESK DEFAULT on typography and not on his words. `{type}` is the Tier 1 name (`voiceTypePrint` on the id alone), so the French is masculine for all three; `{borrowed}` is `borrowedStaffLabel`. Agreement checked by the desk against its referent: « la portée » is feminine and nothing in the sentence agrees with `{borrowed}`, which sits after « de » with no article. No coined words. Every phrase is lifted from `placeholder.borrowing` (`i18n.ts:2052`) and `calib.pane.notSure` (`i18n.ts:1436`); the one new clause is the join, "Ilya can start from the {borrowed} staff, or" and « Ilya peut partir de la portée de {borrowed}, ou », built on `sheet.provenance`'s own construction (`i18n.ts:2580`). The clause is the desk's.
+
+Built by lane 74, item 4 (`../sessions/brief-code-lane74-voice-type-followup_r2_2026-11-19.md`, md5 `013d7d1a`).

@@ -5649,3 +5649,8 @@ A shallow clone cannot answer an ancestry question (`git merge-base --is-ancesto
 ### ESTIMATES BY KIND OF JOB, actuals from the 2026-11-19 evening desk
 
 - **Fable as-built review of one lane, read from its own clone of the branch, with browser probes:** 291,665 tokens (cap 350k, 48 tool uses, 24.4 min). Lane 71: 28 changed files, +822 -121, eleven singer-facing sites rendered in a real browser for six voice types.
+
+### ESTIMATES BY KIND OF JOB, actuals from the 2026-11-19 night desk
+
+- **Fable review of one Code brief, read from the tree through the bridge:** 245,984 tokens (cap 260k, 29 tool uses, 7.7 min). Lane 74 r1, a 13.1 kB brief of three items, 35 citations checked against the tree. Quoted range was 150k to 260k; the actual sits near its top, so the range holds and the cap was right. Add it to the table at `ESTIMATES BY KIND OF JOB`, which now has two actuals for this kind (176,112 and 245,984).
+- **A brief written while Dann is still ruling goes stale under the reviewer.** The lane 74 r1 review opened at 18:27 and handed back at 18:35; between those, Dann asked his 18:27 question and ruled at 18:33, and the reviewer read the uncommitted `INBOX.md` appends mid-run and raised the gap itself as its first blocker. Nothing was lost, and the review spent tokens checking an item the ruling had moved. For next time: when a ruling is in flight on the same subject as a running review, say so in the review's own prompt, or wait for the ruling. Desk note, 2026-11-19 18:4x.
