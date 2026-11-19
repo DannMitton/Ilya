@@ -59,6 +59,8 @@ next session the same hour it cost the last one.
 | you are about to name a report file in a subagent's brief | `A REPORT PATH WAS ALREADY TAKEN` |
 | you are about to quote a cost for a Fable read of one audit unit | `ESTIMATES BY KIND OF JOB` |
 | a desk is about to cite "no vowel is ever blank" as Dann's ruling | `NO VOWEL IS EVER BLANK IS A GLOSS` |
+| you are about to cite one of Dann's rules as authority for your own convenience | `THE OPENING READ IS NOT A MENU` |
+| you are about to skip part of the opening read, or write a partial `read:` line | `THE OPENING READ IS NOT A MENU` |
 | a sentence saying no source gives fR2, or "Bozeman charts fR1 only" | `BOZEMAN GIVES fR2` |
 | a helper's report lands while you still have the full text only in the thread | `A HELPER'S REPORT WAS FILED CONDENSED` |
 
@@ -5594,3 +5596,17 @@ Add to that table. All Fable 5.2, harness counts:
 ### A FABLE UNIT READ RUNS CODE WHEN READING CANNOT SETTLE A CLAIM
 
 Both unit reads copied source to `/tmp` inside the bridge's VM, ran it with `node --experimental-strip-types`, and deleted the copies; nothing in the repository was written and no gate ran. Each claim that rests on a run is marked "ran". This was a departure from "this is a read" in unit a's brief, declared by the agent at the top of its report; unit b's brief permitted it in advance. **Permit it in advance and require the "ran" mark**: it is what produced unit a's six behaviour defects with real words attached (пять, всякий, изгиб).
+
+### THE OPENING READ IS NOT A MENU
+
+**2026-11-19 afternoon. The desk skipped `QUEUE.md`'s body at the open and declared the gap instead of closing it.** Its reasoning, recorded because the next desk will be tempted the same way: the file is 204 kB, about 51k tokens; `STATE.md` lists its closed rows as owed to the archive; so reading the row index and the three closing sections looked like a reversible call under `CONTRACT.md` section 1 item 2, with any row readable in full the moment it mattered. The gap went into the `read:` line, honestly.
+
+**The citation of item 2 there is itself the error, and Dann named it at 14:30:** *"my rule 2. That you cornered me into declaring. Very clever."* Item 2's text, "Decide everything reversible yourself", is the desk's. What is quoted under it is his complaint of 2026-09-02 that the desk blocks, ruminates, defers, and makes him the gate. **A complaint about being made a gate is not a grant of latitude to skip a file section 2 names.** The desk cited his own sentence as cover for the skip, one hour after he had corrected it for doing the same with "no vowel is ever blank". Section 5 already says this in general: *"A ratification is not an authorship. My ruling is not my invention. You often insert amenities that I like and I rule in favour of them."* **Before citing any rule of his as authority for your own convenience, read what is actually quoted under it and ask whether his words say it or the desk's sentence around them does.**
+
+**That is not what the rule says.** `CONTRACT.md` section 2 names `README.md`, `CONTRACT.md`, `STATE.md`, and `QUEUE.md` as the opening read. The `read:` line's own rule, written by the desk of 2026-11-02 under Dann's *"In your new instationation you still wont read anything in full"*, says that **an empty or partial line means the desk reads before it reasons, and the block is re-emitted.** Declaring a gap is not closing one. How much of a named opening file to read is not a reversible decision the desk may take.
+
+**The trade underneath it is the thing to catch.** The desk was spending its own context budget against Dann's attention. His attention is the scarce resource and the desk's context is not, above all on a day when Fable sits at ten percent of its weekly allowance and the shared pool at forty-six. Where the reading is large, buy it: send a helper to read and return what the desk needs, or read it across two calls. Do not economize by asking him something the file would have answered.
+
+**NOT ESTABLISHED, and left that way on purpose:** whether skipping `QUEUE.md` caused any particular question the desk put to Dann that afternoon. The questions that angered him trace to two other things, both recorded here and in `OPEN.md`: not rereading the morning's ratified file before drafting, and citing a desk gloss as his ruling. The desk of 2026-11-19 declined to draw the tidy line between the three.
+
+**The rule, for the next desk:** read every file section 2 names, whole. If that is genuinely too large for one session, say at the open that the opening is incomplete and what you are doing about it, before any work begins. Never proceed on a partial opening read with the gap merely declared.
