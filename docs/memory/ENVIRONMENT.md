@@ -394,6 +394,8 @@ next session the same hour it cost the last one.
 | prune `STATE.md`, or script an edit inside a blockquote | `PRUNING A MEMORY FILE` |
 | quote Ilya's size, or a byte count of anything | `ILYA'S SIZE` |
 | `git worktree list` from the bridge says a Mac worktree is prunable | `WORKTREE PRUNABLE IS A BRIDGE ARTEFACT` |
+| you need to build, measure or gate this tree without the Mac | `THE DESK'S OWN CONTAINER BUILDS THIS TREE` |
+| two builds of one tree differ, or a lane shows differences that mean nothing | `THE BUILD IS NOT BYTE-DETERMINISTIC` |
 | about to read a long source (a dissertation, a book, a 1,500-line file) | `A LONG READ DIES AT THE COMPACTION` |
 | a file Dann names is not under Desktop or Downloads | `THE BRIDGE CARRIES A THIRD FOLDER` |
 | a research session needs his sources, or a subagent needs his files | `A FOURTH FOLDER, AND SUBAGENTS ON THE BRIDGE` |
@@ -5622,3 +5624,28 @@ Both unit reads copied source to `/tmp` inside the bridge's VM, ran it with `nod
 **The rule:** a worktree's state, like any other fact keyed to a Mac path, is NOT ESTABLISHED from the bridge. Read it on the Mac, or do not report it. This is tether 11 with a new instrument: the desk reported a reading without asking what could make the instrument lie.
 
 **What is true from here, because it is inside the mounted repository:** `.claude/worktrees/objective-wright-7aea5b` exists, holds 22 entries, is dated 2026-09-07, and carries a detached HEAD at `acf7db48`. A worktree inside the repository is the grep-doubling trap recorded as `THE WORKTREE DOUBLES EVERY GREP`; a `find` or `grep` scoped to `apps/`, `packages/`, and `tools/` does not meet it.
+
+
+### THE DESK'S OWN CONTAINER BUILDS THIS TREE
+
+**2026-11-19 15:1x.** The desk's cloud container (not the bridge VM, which cannot run vitest) clones, installs, builds, and measures this repository end to end. `GIT_LFS_SKIP_SMUDGE=1 git clone --depth 1 --branch Shane --single-branch https://github.com/DannMitton/Ilya.git` takes about a minute for 735 MB; `pnpm install --frozen-lockfile` 3.6 s warm; `pnpm build` in `apps/web` 21.2 s of vite, 29 s wall. Node 22.23.5, pnpm 10.28.0.
+
+**It has numpy 2.5.3 AND scipy 1.18.1, so it runs gate 4's Mac form**, where a cloud Code sandbox has numpy and not scipy and runs the other form. That is why the desk can confirm a lane's Mac figure without asking Dann to run anything: lane 71's 6727 was measured here before his ship printed the same number.
+
+A shallow clone cannot answer an ancestry question (`git merge-base --is-ancestor` exits 1 for want of history, not for want of ancestry). `git fetch --deepen 10` first, then ask.
+
+### THE BUILD IS NOT BYTE-DETERMINISTIC
+
+**2026-11-19 15:1x, measured.** Two consecutive `pnpm build` runs on an unchanged tree produce **15 differing files** of the 53 under `build/_app`, `build/sw.js`, and `build/index.html`.
+
+**Cause, read and confirmed:** `apps/web/svelte.config.js:18-22` sets `version.pollInterval: 0` and does not set `version.name`, so SvelteKit falls back to `Date.now()`. The timestamp lands in `build/_app/version.json` and is inlined into a chunk; changing that chunk changes its content hash, which renames it, which rewrites every entry chunk and `index.html` that point at it. `build/sw.js` stamps its own `CACHE_VERSION` separately.
+
+**Why it matters:** N.204's behaviour baseline is the instrument every lane is diffed against, and against this build every lane shows 15 differences that mean nothing.
+
+**The repair, ruled in by Dann 2026-11-19 15:20, and it adds no mechanism:** `apps/web/vite.config.ts:13-18`, `buildId()`, already returns the 8-character commit from `VERCEL_GIT_COMMIT_SHA` or `git rev-parse`, exposed as `__ILYA_BUILD__` and read at `version.ts:16`. Point `kit.version.name` at it. N.72 survives intact, because a commit still differs on every real deploy; `build/sw.js`'s own header records why a byte-identical worker was the bug. It also ends a second waste Dann ruled on: every deploy renames the entry chunks even when no source changed, so a returning singer re-fetches 73.8 kB for nothing.
+
+**Two version labels, not one.** `ILYA_VERSION` (`version.ts:10`, `2026b`) is the version a singer reads; its letter advances when `main` moves (N.202). SvelteKit's `version.name` is invisible and must change on every deploy. They cannot be merged: a browser keyed to the letter would see every push between releases as unchanged.
+
+### ESTIMATES BY KIND OF JOB, actuals from the 2026-11-19 evening desk
+
+- **Fable as-built review of one lane, read from its own clone of the branch, with browser probes:** 291,665 tokens (cap 350k, 48 tool uses, 24.4 min). Lane 71: 28 changed files, +822 -121, eleven singer-facing sites rendered in a real browser for six voice types.
