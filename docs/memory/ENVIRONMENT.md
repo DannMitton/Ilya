@@ -55,6 +55,10 @@ next session the same hour it cost the last one.
 
 | you are about to, or you are seeing | search for |
 |---|---|
+| a subagent leaves a `.bak` file in the tree that nothing can delete | `A SUBAGENT'S .bak CANNOT BE DELETED` |
+| you are about to name a report file in a subagent's brief | `A REPORT PATH WAS ALREADY TAKEN` |
+| you are about to quote a cost for a Fable read of one audit unit | `ESTIMATES BY KIND OF JOB` |
+| a desk is about to cite "no vowel is ever blank" as Dann's ruling | `NO VOWEL IS EVER BLANK IS A GLOSS` |
 | a sentence saying no source gives fR2, or "Bozeman charts fR1 only" | `BOZEMAN GIVES fR2` |
 | a helper's report lands while you still have the full text only in the thread | `A HELPER'S REPORT WAS FILED CONDENSED` |
 
@@ -5560,3 +5564,33 @@ mojibake (`asked-╔С-` for `asked-ɑ-`). Match with a glob on the ASCII part
   by 18k, 22 tool uses, 7.6 min).
 - **A LANE'S CHANGE COUNT IN THE CODE PAGE IS NOT ITS DIFF.** Lane 70's page read +25,936 and
   -651 mid-run and +415 -94 at the end. Read the diff, not the chip.
+
+---
+
+## LEARNED BY THE 2026-11-19 AFTERNOON OPUS DESK
+
+### A SUBAGENT'S .bak CANNOT BE DELETED
+
+A Fable subagent editing its own report in place left `review-fable-lane71-voice-type-brief_r1_2026-11-19.md.bak` untracked in `docs/sessions/`. The bridge refuses `rm`, so the desk moved it to `docs/sessions/_to_delete/` (`CONTRACT.md` section 4). **Put "Create no `.bak` file; the bridge cannot delete one" in every subagent brief that has the agent write a file.** Every brief after the first one that day carried the line and no further `.bak` appeared.
+
+### A REPORT PATH WAS ALREADY TAKEN
+
+**It happened twice in one afternoon, and the first time a committed document was overwritten.** The desk told its first Fable reviewer to write to `docs/sessions/review-fable-lane71-brief_r1_2026-11-19.md`. That path already held the MORNING desk's review of the **blank-states** brief r1, committed at `b79e33e9`, 26,961 bytes, five blockers. The agent overwrote it and the desk did not notice for three hours, until `git status` at the close showed the file as modified. Recovered with `git --no-optional-locks --no-pager show b79e33e9:<path> > <path>`, which is a read and a shell redirect, not a git write, so it is allowed under section 4. The voice-type review was re-filed as `review-fable-lane71-voice-type-brief_r1_2026-11-19.md` and every citation of it repointed.
+
+The desk told a Fable reviewer to write to `docs/sessions/review-fable-lane71-brief_r2-delta_2026-11-19.md`. That path already held the delta review of the **blank-states** brief r2, committed at `b79e33e9`, and the ruling file cites it. The agent noticed, did not overwrite, and filed under `review-fable-lane71-voice-type-brief_r2-delta_2026-11-19.md` instead. **Lane numbers are not unique across subjects on a day when two briefs share a lane number. Check with `ls` before naming a report path in a brief, and tell the agent to check and to say which name it used.**
+
+### NO VOWEL IS EVER BLANK IS A GLOSS
+
+**"no vowel is ever blank" is not Dann's ruling.** It appears in the desk-written summary line of 2026-09-16 in `INBOX.md` and in the header of `apps/web/src/lib/voice/engine/stand-ins.ts:1-8`; what he is quoted saying that day is about Grayson's ten-vowel schema. The 2026-11-19 desk cited the gloss as his and used it to argue for keeping the five-staff average, and he corrected it at 14:21, angry, having already rejected the average twice. His rule, which supersedes the gloss: five or more sampled core vowels give a full set by scaling; a declared type under five takes the type's published values; **no type and under five gets no full set at all.** `OPEN.md`, "ROW 167", holds it. Before citing any rule of his that reads as an absolute, check whether his quoted words say it or a desk sentence around them does.
+
+### ESTIMATES BY KIND OF JOB, actuals from this desk
+
+Add to that table. All Fable 5.2, harness counts:
+
+- Fable review of one Code brief read from the tree through the bridge: **180,962** (lane 71 r1, cap 260k, 21 tool uses, 6.1 min).
+- Fable DELTA review of a brief revision carrying new material: **196,090** (lane 71 r2, cap 200k, 15 tool uses, 6.8 min); **164,319** (lane 71 r3, cap 200k, 15 tool uses, 4.7 min).
+- **Fable judgement read of one audit unit, all source read whole, NEW KIND:** unit a, 23 files and about 72k tokens of source, **300,258** (cap 400k, 28 tool uses, 10.7 min); unit b, 27 files and about 112k tokens of source, **367,358** (cap 600k, 42 tool uses, 12.4 min). **Range to quote: about 4 times the unit's source-token figure for a small unit, falling to about 3.3 times at 112k.** Both reads were complete, every file read whole.
+
+### A FABLE UNIT READ RUNS CODE WHEN READING CANNOT SETTLE A CLAIM
+
+Both unit reads copied source to `/tmp` inside the bridge's VM, ran it with `node --experimental-strip-types`, and deleted the copies; nothing in the repository was written and no gate ran. Each claim that rests on a run is marked "ran". This was a departure from "this is a read" in unit a's brief, declared by the agent at the top of its report; unit b's brief permitted it in advance. **Permit it in advance and require the "ran" mark**: it is what produced unit a's six behaviour defects with real words attached (пять, всякий, изгиб).

@@ -4098,3 +4098,25 @@ His walk of lanes 59 to 68 on his iPhone, English and French, 23:21 to 00:09, on
 ### What the walk settled about his own [o]
 
 His stored [o] read fR1 334 Hz and fR2 2241 Hz, which he judged indefensible at 23:43, and the chart plotted Russian-o at the forward edge, away from every zone, with nothing on the screen naming it. Ilya's own analysis of his 2026-11-17 [o] capture reads fR1 384.9 Hz and fR2 741.0 Hz, confidence high, reading captured, f2Quality clear, steady on both halves (`~/Downloads/ilya-captures-19cc17e5-2026-11-17T20-26-43-700Z.zip`, `ilya-capture-asked-o-sung-unstated-2026-11-17T20-26-05-243Z.json`, build 19cc17e5, picker `path`). He then re-took [o] on his iPhone at 00:08 against the desk's stated expectation of fR2 near 741 Hz and fR1 near 385 Hz: **measured fR1 389 Hz, fR2 770 Hz**, no instability. So the reader is sound on his [o] on this build and this device, the stored 2241 Hz was not this build's reading of a good take, and **what wrote 2241 Hz stays NOT ESTABLISHED**. The take's own envelope carries peaks at 2223 Hz and 2521 Hz, so a reader taking the wrong peak lands there. Not chased further: his ruling of 23:45 makes it recoverable for any singer, and its worth is now demonstrated rather than argued.
+
+## ROW 167: ALL EIGHT DECLARED TYPES GET A STARTING PROFILE, AND A BORROWING IS NAMED ON THE PAGE. Ruled by Dann 2026-11-19 09:38 to 10:08, amended by him 11:55 to 14:21
+
+The full record, with his words transcribed, is `../sessions/ratified-voice-type-stand-ins_2026-11-19.md` (md5 `8d3f8a4f`). This section is its home in the rulings file, as `README.md`'s closing step 2 requires. Its sections 1 to 7 are the morning's ruling; its section 8 is the amendment.
+
+**The principle, ratified 09:41 and again at 10:08.** Transparency is paramount: the concession is stated on the page, in the line itself, never only behind a link. And **a sentence never tells a singer the values are their own type's when they are a neighbour's.**
+
+**The borrowings, ruled 09:38.** Contralto takes the mezzo-soprano staff, bass-baritone takes bass, countertenor takes the mezzo and tenor staff. The countertenor amendment is the desk's and he took it: resonance follows the length of the tract, not the range sung. The field publishes no values for these three, and Ilya will not invent them.
+
+**`PLACEHOLDER_PROFILE_TYPES` widens to EIGHT**, the five published plus those three. **`not-sure` stays out, and so does no type at all** (his amendment of 11:56 and 11:57).
+
+**THE AVERAGE. Ruled 11:56 and 11:57, refined 14:21.** *"No average. / I don't know is a valiud response / But encouraging personal samples is the best / next after that is using a proven generic voice type / I think math csorcery is the wrong answer. Human voices don't align that way"*. At 13:58, asked whether that reached every path or the starting path only, he answered *"A) it reaches the starting path only"*. At 14:21 he set the rule that governs all of it, in three cases:
+
+1. **Five or more sampled core vowels:** a full set, supported mathematically from the singer's own tract (`isPersonal`, `voice/engine/sung.ts:41`; `stand-ins.ts:144-147`). Built.
+2. **A declared voice type with fewer than five:** the type's published values. Built; row 167 extends it to the three borrowings.
+3. **No declared type and fewer than five: NO full set.** Ilya does not manufacture one. `stand-ins.ts:61` and `:147` do manufacture one today, from `template('middle')`. **That comes out. Its own item, not lane 71.**
+
+**"No vowel is ever blank" is a desk gloss, not Dann's ruling** (his words, 14:21: *"That doesn't sound like my ruling, that sounds like a ruling you cornered me into declaring."*). It appears in the desk-written summary of 2026-09-16 (`INBOX.md`) and in the header of `apps/web/src/lib/voice/engine/stand-ins.ts:1-8`; what he is quoted saying on 2026-09-16 is about Grayson's ten-vowel schema. **The three cases above supersede the gloss wherever it is cited.**
+
+**The strings, all his, all ratified 2026-11-19:** the templated borrowing line and its three fills, the link, and the Guide passage whole (09:42 to 09:52); the subtitle and lede fills (10:08); `calib.pane.notSure` (11:59); the three Method strings, the broad-analysis note, `sheet.provenance`, and `capture.hint.placed.typed` (12:01). Texts in the ruling file and in `../sessions/brief-code-lane71-voice-type-stand-ins_r4_2026-11-19.md` sections 4.4, 4.5, and 4.10.
+
+**How to work with him on this, learned the hard way on 2026-11-19.** He settled the borrowings at 09:38 and the desk put five further rounds of voice-type questions to him that afternoon, which made him vexed and then angry (14:18, 14:19, 14:21, `INBOX.md`). A settled design is applied, not re-opened in new wrapping. Where a line of French or English is the only thing outstanding, assemble it from words he has already ratified before putting a question to him.

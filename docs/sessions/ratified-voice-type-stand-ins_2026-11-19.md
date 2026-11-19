@@ -1,5 +1,8 @@
 # Voice types with no published values: what Ilya borrows, and what it says
 
+> **AMENDED by Dann 2026-11-19, 11:55 to 11:57.** Everything about "Not sure" in
+> sections 2, 3, and 6 is WITHDRAWN. Read the last section of this file before any of it.
+
 Ruled by Dann 2026-11-19, 09:38 to 09:43. This closes QUEUE row 167, which had been on the
 after-release list; it comes forward because lane 71's blank states depend on it. His words
 are transcribed as written.
@@ -184,3 +187,70 @@ depends on it. Blank states follow. DESK DEFAULT, 2026-11-19 10:08.
 and gains the voice ask beside its withheld statement (`markup/MarkupPane.svelte:831`,
 `:1015`). Taking a drawn score away to show a squircle would be a worse page than the one
 there now.
+
+---
+
+## 8. AMENDMENT: "Not sure" takes no profile. Ruled by Dann 2026-11-19, 11:55 to 11:57
+
+His words, transcribed as written:
+
+> *"If a user is not sure, we should be offering them the generic voice types but also telling
+> tham its okaty that they are not sure, and that the sampels they provide may cgive them more
+> information in their search process"*
+
+> *"I reject this now: \"Ilya averages its five voice types as a starting point.\": this is a
+> bad idea"*
+
+> *"No average. / I don't know is a valiud response / But encouraging personal samples is the
+> best / next after that is using a proven generic voice type / I think math csorcery is the
+> wrong answer. Human voices don't align that way"*
+
+**What it changes.**
+
+1. `PLACEHOLDER_PROFILE_TYPES` widens to **eight**, not nine: the five published types plus
+   contralto, countertenor, and bass-baritone. `not-sure` stays out. A singer who is not sure
+   gets no starting profile, as before this ruling.
+2. The "Not sure" line ratified at 09:50, and section 6's "an average of Ilya's five voice
+   types" subtitle sentence ratified at 10:08, are WITHDRAWN and go nowhere near the tree.
+3. Section 6's "Not sure" case disappears with them: with no profile, `generic` is false
+   (`voice/engine/resolve-values.ts:154`), so MELODY's subtitle falls through and INSIGHTS'
+   lede returns null (`markup/subtitle.ts:11`, `insights/identity.ts:52`). Nothing to repair.
+4. The order Ilya encourages, in his words: **personal samples first, a proven generic voice
+   type next, and "I don't know" remains a valid answer that costs the singer nothing.**
+5. A singer who is not sure is told that their own samples are information they can use in
+   their own search for their type. Ilya does not claim to name the type.
+
+**Why the average was rejected, his reason, which outranks the desk's arithmetic:** human
+voices do not align that way. A geometric mean of five band centres corresponds to no vocal
+tract, whatever its distance in hertz from any one staff.
+
+**What the desk had measured, recorded because it was put to him and did not decide it:** the
+middle sits 0.7 to 2.1 semitones from each staff on average and beats a wrong forced pick for
+all four, while each published band is about 5 semitones wide (`voice/engine/plausibility.ts:50`,
+centres as `stand-ins.ts:91` takes them). Dann ruled against the average notwithstanding, on
+the ground above.
+
+**What this does NOT change:** sections 1, 4, 5, and 7 stand as ratified, and so does every
+part of sections 2, 3, and 6 that governs contralto, countertenor, and bass-baritone.
+
+### The "Not sure" line. RATIFIED by Dann 2026-11-19 11:59 ("Ratified"), English and French
+
+Replaces `calib.pane.notSure` (`i18n.ts:1434`), whose live text says Ilya builds the profile
+from the singer's own vowels and offers no type.
+
+> Not knowing is a fine answer. Record your vowels in vocal fry and Ilya works from your own
+> voice, which also gives you evidence in your own search. Or choose a voice type, and Ilya
+> starts from published values for it.
+
+> « Ne pas savoir est une réponse valable. Captez vos voyelles en friture vocale et Ilya
+> travaille à partir de votre propre voix, ce qui vous donne aussi des indices dans votre
+> propre recherche. Ou choisissez un type de voix, et Ilya part de valeurs publiées pour
+> celui-ci. »
+
+Desk's choices, named to him before he ruled: « des indices » for "evidence", against the
+forensic « preuves » and the empty « éléments »; « réponse valable » for "a fine answer"; and
+"evidence in your own search" in place of naming the voice type, so Ilya never implies it can
+tell a singer what they are.
+
+The control the last sentence points at is already on the screen: the VOICE pane draws
+`VoiceTypeIntake` in its own station (`components/Drawer/VoicePane.svelte:85`). No new control.
