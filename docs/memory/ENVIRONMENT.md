@@ -15,6 +15,9 @@ The index was added 2026-09-01. Nothing below it was moved, reworded, or removed
 **When you add a section, add its row here.** A trap nobody can find costs the
 next session the same hour it cost the last one.
 
+### Learned 2026-11-18/19 (Opus desk: Dann's walk on his iPhone)
+- `LEARNED ON THE WALK OF 2026-11-18/19` (last section of this file): how to confirm which build the branch alias serves without a browser; production `main` still serves the old Ilya, so a walk never goes to the public address; a stale service worker is cleared by closing every tab, never by reloading; Dann's capture zips in `~/Downloads` carry Ilya's own per-take analysis, which answers a reader-or-take question without asking him to sing.
+
 ### Learned 2026-11-18 (Opus desk: lanes 66 to 68)
 - `LEARNED BY THE OPUS DESK, 2026-11-18` (last section of this file): the cloud workspace restarts and kills background gate runs; a merge code-identical to a lane tip stands on the lane's gates; the desk stays in its turn while a lane runs; the bridge shell can drop mid-session
 
@@ -5448,3 +5451,54 @@ The page is https://dannmitton.com/ilya, built in GoDaddy Website Builder (Urban
 **`markup/` may import `analysis/` and `voice/`.** The module table is `scripts/ratchets.mjs:78-85`, and a path outside the six named modules is unconstrained. `components/` is not in the table.
 
 **The Claude Code web session backgrounds its long runs and the transcript goes quiet.** Lane 69's end run (gate 4 whole, the desktop Playwright suites, then two phone files three times each) sat behind an `until grep -q FINALDONE` watcher for about forty minutes with nothing printed. A hook re-prompts the session when the watcher finishes. Do not read the silence as a stall before about forty-five minutes, and say so to Dann rather than going quiet yourself.
+---
+
+## LEARNED ON THE WALK OF 2026-11-18/19
+
+**WHICH BUILD THE BRANCH ALIAS SERVES, WITHOUT A BROWSER.** Before sending Dann to
+`ilya-git-shane-dannmittons-projects.vercel.app` for a walk, read the alias record
+itself: the Vercel connector's `get_alias` on that hostname (slug
+`dannmittons-projects`) returns the deployment id and `updatedAt`, and
+`list_deployments` with `branch: Shane` gives each deployment's
+`githubCommitSha` and message. On 2026-11-18 at 23:1x the alias pointed at
+`dpl_Da6xSmKEXFpQbGhiQQbr43qVWsRw`, `fe1e0e30`, the lane 69 merge, while the close
+commit `09c085d4` showed as CANCELED, which is the Ignored Build Step working as set
+for a docs-only commit. This is a check the desk can make silently; it complements
+`THE BRANCH ALIAS LAGS READY` above, which is about the alias trailing a READY
+deployment, not about which deployment it names.
+
+**PRODUCTION `main` IS STILL THE OLD ILYA.** `list_deployments` with
+`target: production` returns one deployment, `main` at `2b980e7b`, "N.153 stage 3b:
+the loupe derives its own spacing on one measure". So `ilya.dannmitton.com` does not
+show the work of the last two months, and **no walk is ever sent to the public
+address**. `main` moves on release day (`SCHEDULE.md` item 10).
+
+**A STALE SERVICE WORKER IS CLEARED BY CLOSING EVERY TAB, NEVER BY RELOADING.**
+`apps/web/static/sw.js:16-18` says so in its own words: the file deliberately carries
+no `skipWaiting` and no `clients.claim` (N.72, Dann 2026-08-16), so a new worker waits
+until every client is gone. Page navigations are network-first with a 3000 ms wait
+(`networkFirstPage`), so a plain reload usually does deliver the new page, but when a
+walk shows an old string the instruction to Dann is to close every Ilya tab and open
+the address again, not to reload. **Never tell him to clear website data: his readings
+live in `localStorage`** (already above, under the branch alias).
+
+**DANN'S CAPTURE ZIPS ANSWER "THE READER OR THE TAKE?" WITHOUT ASKING HIM TO SING.**
+`~/Downloads/ilya-captures-<build>-<ISO>.zip` holds, for each take, a `.wav` and a
+`.json`. The JSON carries Ilya's own analysis of that take: `outcome.formant`
+(`f1`, `f2`, `confidence`, `reading`, `source`, `f2Quality`), `outcome.guard`
+(the plausibility window and its diagnostics), `outcome.steadiness` (both halves of
+the take, `spread`, `steady`), and `trace.envelopePeaks` with each peak's prominence
+in dB. Two sets existed on 2026-11-18: `19cc17e5-2026-11-17T20-26-43-700Z.zip`
+(ten takes) and `58b6f3eb-2026-11-15T23-23-04-830Z.zip` (thirteen). Read one over the
+bridge with `unzip -o -j "<zip>" "*asked-o-*.json"` into a scratch directory in the
+session home (not under `mnt/`), then `python3 -I`. Worked example, 2026-11-19 00:0x:
+his stored [o] read fR2 2241 Hz on his phone, and the 2026-11-17 take's JSON read
+fR1 384.9 Hz and fR2 741.0 Hz with high confidence and both halves steady, which
+showed the reader was sound and the stored value stale, before he sang anything. The
+same take's `envelopePeaks` carried 2223 Hz at 3.2 dB and 2521 Hz at 29.1 dB, which is
+where a wrong peak choice lands.
+
+**THE IPA IN A FILE NAME COMES BACK MANGLED FROM `unzip -l`.** The capture file names
+carry the asked vowel as its IPA letter, and `unzip -l` over the bridge prints them as
+mojibake (`asked-╔С-` for `asked-ɑ-`). Match with a glob on the ASCII part
+(`"*asked-o-*.json"`) or list with `-UU`; do not retype a name from that output.
