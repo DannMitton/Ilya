@@ -16,7 +16,7 @@
 	 * measures it, and `paginate.ts` breaks the blocks into letter pages, a
 	 * squircle continuing across a page break open at the break. Nothing is
 	 * placed past a page's room: "collisions and overlaps are forbidden" (Dann,
-	 * 03:42). On the phone the same blocks run in one column (the phone board).
+	 * 03:42). Under 1400 px the page is drawn once and `PageFit` scales it to the screen.
 	 *
 	 * READ-ONLY, as N.127 ruled, with the controls it already had: the range
 	 * offer (N.164), "Try this key" (N.94 slice 2), and the comments behind
@@ -485,18 +485,6 @@
 	});
 	const totalPages = $derived(pages.length);
 
-	let flowWidth = $state(358);
-	/* The phone's one column: each free block alone, each squircle's blocks together. */
-	const flowSegments = $derived.by((): Segment[] => {
-		const out: Segment[] = [];
-		blocks.forEach((b, k) => {
-			const last = out[out.length - 1];
-			if (b.group !== 'free' && last?.group === b.group) last.blocks.push(k);
-			else out.push({ group: b.group, blocks: [k], openTop: false, openBottom: false });
-		});
-		return out;
-	});
-
 	const runningHeader = $derived(formatRunningHeader(composer, scoreTitle ?? '', poet));
 	const tryKey = (stop: KeyChoice) => keyRuler?.tryKey(stop);
 </script>
@@ -574,43 +562,31 @@
 </div>
 
 
-{#if isMobile}
-	<!-- THE PHONE, one column (the phone board, Dann 03:11: "this reads well"). -->
-	<div class="insights-flow">
-		<div class="flow-head">{@render header()}</div>
-		<div class="flow-body" bind:clientWidth={flowWidth}>
-			{#each flowSegments as seg, j (j)}{@render segment(seg, flowWidth, flowWidth - 2 * 17)}{/each}
+<!-- INSIGHTS draws the page and `PageFit` scales it under 1400 px, as Text and the marked score do. Ruled by Dann, 2026-11-18 23:36. -->
+<PageFit fit={isMobile} pageWidth={dims.width}>
+	{#snippet content()}
+		<div class="insights-container">
+			{#each pages as page, n (n)}
+				<article
+					class="paper-page insights-page"
+					style="width: {dims.width}px; height: {dims.height}px;"
+					aria-label={fill(T('insights.pageAria'), { n: n + 1, total: totalPages })}
+				>
+					{#if n === 0}
+						{@render header()}
+					{:else}
+						<RunningHeader headerText={runningHeader} tabName={T('tab.insights')} accent="var(--rose)" onheightchange={(h) => (runningHeight = h)} />
+					{/if}
+					<div class="column" style="top: {n === 0 ? contentTop : subsequentTop}px;">
+						{#each page as s, j (j)}{@render segment(s, COLUMN, INSIDE)}{/each}
+					</div>
+					<!-- QUEUE row 79: the footnote and the method line are endnotes now, in Notes; every page's footer is the same. -->
+					<PageFooter pageNumber={n + 1} {totalPages} {language} hairlineAccent="var(--rose)" />
+				</article>
+			{/each}
 		</div>
-		<div class="flow-foot">
-			<PageFooter pageNumber={1} totalPages={1} {language} hairlineAccent="var(--rose)" />
-		</div>
-	</div>
-{:else}
-	<PageFit fit={false} pageWidth={dims.width}>
-		{#snippet content()}
-			<div class="insights-container">
-				{#each pages as page, n (n)}
-					<article
-						class="paper-page insights-page"
-						style="width: {dims.width}px; height: {dims.height}px;"
-						aria-label={fill(T('insights.pageAria'), { n: n + 1, total: totalPages })}
-					>
-						{#if n === 0}
-							{@render header()}
-						{:else}
-							<RunningHeader headerText={runningHeader} tabName={T('tab.insights')} accent="var(--rose)" onheightchange={(h) => (runningHeight = h)} />
-						{/if}
-						<div class="column" style="top: {n === 0 ? contentTop : subsequentTop}px;">
-							{#each page as s, j (j)}{@render segment(s, COLUMN, INSIDE)}{/each}
-						</div>
-						<!-- QUEUE row 79: the footnote and the method line are endnotes now, in Notes; every page's footer is the same. -->
-						<PageFooter pageNumber={n + 1} {totalPages} {language} hairlineAccent="var(--rose)" />
-					</article>
-				{/each}
-			</div>
-		{/snippet}
-	</PageFit>
-{/if}
+	{/snippet}
+</PageFit>
 
 <style>
 	/* The page stack: `MarkupPane`'s `.markup-paper-container`, whose
@@ -685,47 +661,6 @@
 
 	/* The probe's footer sits in flow, so its height is the footer's own. */
 	.foot-probe :global(.page-footer) {
-		position: static;
-	}
-
-	/* ── The phone: one column, the same blocks ── */
-	.insights-flow {
-		box-sizing: border-box;
-		background: var(--paper-cream);
-		padding: 24px 16px 32px;
-		display: flex;
-		flex-direction: column;
-		gap: 16px;
-		max-width: 100%;
-	}
-
-	.flow-head {
-		position: relative;
-	}
-
-	.flow-head :global(.title-header),
-	.flow-head :global(.tab-mark) {
-		position: relative;
-		top: 0;
-		left: 0;
-		right: 0;
-	}
-
-	.flow-head :global(.tab-mark) {
-		text-align: right;
-	}
-
-	.flow-body {
-		display: flex;
-		flex-direction: column;
-		gap: 16px;
-	}
-
-	.flow-body .squircle {
-		padding: 14px 16px;
-	}
-
-	.flow-foot :global(.page-footer) {
 		position: static;
 	}
 
