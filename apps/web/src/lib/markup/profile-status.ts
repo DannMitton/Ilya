@@ -4,10 +4,12 @@
  * Moved out of `MarkupPane.svelte` unchanged in behaviour (N.94 slice 1, the
  * brief's addendum of 2026-09-28 21:40), so the pane could take the
  * Transposition ruler's wiring and stay at its size ceilings
- * (`ARCHITECTURE.md` invariant 12). PURE: counts and a language in, strings
- * out.
+ * (`ARCHITECTURE.md` invariant 12). PURE: the voice's state (what was sampled,
+ * whether the profile is complete) and a language in, strings out.
  */
 import { t, type Language } from '$lib/i18n';
+import type { Vowel } from '$lib/voice/engine/types';
+import { belowCoreText } from '$lib/analysis/placeholder-line';
 
 // Counts are spelled out in the locked copy's register ("Seven vowels
 // are captured"), so the words live here; the roster caps at ten.
@@ -23,17 +25,23 @@ function countWord(n: number, language: Language): string {
 // block-boundary whitespace trimming (the "setwith" bug, caught by
 // Dann in live testing, 2026-07-12).
 // DRAFT copy, flagged for Dann (§B.2). "measured" replaces "successfully
-// captured": the count now spans every reading the forecast reads, which
-// includes provisional ones, and "successfully captured" would overclaim
-// their quality.
-export function statusLineFor(analysedCount: number, language: Language): string {
+// captured": the count spans every reading the singer sampled (`isSung`),
+// which includes provisional and unstable ones, and "successfully captured"
+// would overclaim their quality. Below five stable core vowels the profile is
+// not set, so the line says where the voice stands, in the words the VOICE pane
+// and INSIGHTS print (`calib.pane.belowCore`).
+export function statusLineFor(
+	{ sampledCount, personal, core }: { sampledCount: number; personal: boolean; core: readonly Vowel[] },
+	language: Language
+): string {
 	const T = (key: string) => t(key, language);
-	return analysedCount === 0
+	if (!personal) return belowCoreText('calib.pane.belowCore', core, language);
+	return sampledCount === 0
 		? T('profile.statusSetPlain')
-		: (analysedCount === 1
+		: (sampledCount === 1
 				? T('profile.statusSetMeasuredSingular')
 				: T('profile.statusSetMeasuredPlural')
-			).replace('{count}', countWord(analysedCount, language).toLowerCase());
+			).replace('{count}', countWord(sampledCount, language).toLowerCase());
 }
 
 // N.22: split around {vowels} so the glyph snippet renders in the gap. The

@@ -61,7 +61,7 @@
 	import { readingClef } from '$lib/score/clef-choice';
 	import { t, type Language } from '$lib/i18n';
 	import { spokenName } from '$lib/voice/vowel-names';
-	import { isSung } from '$lib/voice/engine/sung';
+	import { isPersonal, isSung, stableCore } from '$lib/voice/engine/sung';
 	import type { Vowel, CalibratedFormant, VoiceCharacteristics } from '$lib/voice/engine/types';
 	import { buildMarkupLegend } from '$lib/markup/legend';
 	import {
@@ -443,7 +443,7 @@
 
 	// The provisional roster still reads capture STATUS: it names which vowels
 	// the singer may want to re-take. That is a different question from what
-	// the forecast is built on; see `analysedVowels` below (§B.2).
+	// the singer sampled, which the status line counts (`sampledVowels`, §B.2).
 	let provisionalVowels = $derived(
 		ROSTER_ORDER.filter((g) => isSung(formants[g]) && formants[g]?.reading === 'provisional')
 	);
@@ -552,20 +552,16 @@
 	const subtitle = $derived(profileSubtitle({ generic: adapted.generic, voiceName, voiceType: voiceTypeChoice, language }));
 
 	/**
-	 * The vowels the FORECAST reads, which is not the same as the vowels that
-	 * were cleanly captured (Dann's §B.2 ruling, 2026-07-15: the pane's count
-	 * reports what the analysis used; capture quality is the drawer's job,
-	 * where Re-take lives).
-	 *
-	 * Derived from the snapshot itself rather than re-testing `reading`, so it
-	 * can never drift from what `analyzeScore` is actually given. §A.48 admits
-	 * provisional and unchecked readings into fR1, and since lane 66 (Step 5) it
-	 * admits a reading the plausibility guard judged implausible as well: every
-	 * sung reading counts. Before that ruling a provisional
-	 * reading was excluded, and the old capture-status count happened to match;
-	 * it no longer does, which is why this exists.
+	 * The vowels the singer SAMPLED, by the one test of "sung" (`isSung`,
+	 * `voice/engine/sung.ts:14-15`): the same count `usableReadingCount` makes
+	 * elsewhere (`voice/profileStore.ts:196-198`). Provisional and unstable takes
+	 * count; capture quality is the drawer's job (section B.2, Dann 2026-07-15,
+	 * recorded at `cfcd0ba6`). The snapshot is not read here: it holds stand-in
+	 * values for every unsampled vowel (QUEUE row 17), so counting it reports
+	 * values the singer never gave. This line prints on a page with no score, where
+	 * no marks are drawn for the count to match.
 	 */
-	const analysedVowels = $derived(ROSTER_ORDER.filter((g) => adapted.snapshot.fR1[g] !== undefined));
+	const sampledVowels = $derived(ROSTER_ORDER.filter((g) => isSung(formants[g])));
 
 	// ── Vocal reading octave (denigma treble-8vb repair) ─────────────────
 	// A treble-notated lower-voice line arrives an octave too high (denigma flattens the octave clef). The
@@ -946,7 +942,7 @@
 	const tabName = $derived(T('tab.markedScore'));
 
 	// The status lines' words (`profile-status.ts`).
-	let statusLine = $derived(statusLineFor(analysedVowels.length, language));
+	let statusLine = $derived(statusLineFor({ sampledCount: sampledVowels.length, personal: isPersonal(formants), core: stableCore(formants) }, language));
 	let provisionalParts = $derived(provisionalPartsFor(provisionalVowels.length, language));
 </script>
 
