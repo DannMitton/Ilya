@@ -93,7 +93,7 @@
 	import { applyNotationPreferences } from '@ilya/phonology';
 	import { resolveAdvice } from '$lib/analysis/advice-resolver';
 	import { buildVoiceProfileSnapshot, composeBroadNote, isBroadAnalysis } from '$lib/analysis/analyze-score-adapter';
-	import { placeholderLine, placeholderVowels } from '$lib/analysis/placeholder-line';
+	import { borrowingLine, placeholderLine, placeholderVowels } from '$lib/analysis/placeholder-line';
 	import { profileSubtitle } from './subtitle';
 	import { loadNotationFont, type LoadedNotationFont } from '$lib/score/notation-fonts';
 	import { drawCrossingRings, selectionAnchor } from '$lib/score/crossing-ring';
@@ -993,7 +993,7 @@
 						translator=""
 						opus=""
 						{language}
-						note={[keyRuler?.header(language), placeholderNote]}
+						note={[keyRuler?.header(language), borrowingLine(voiceType, formants, language), placeholderNote]}
 						legendItems={markupLegend}
 						{notationFont}
 						onheightchange={handleHeaderHeight}

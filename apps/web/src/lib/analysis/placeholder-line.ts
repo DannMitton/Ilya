@@ -18,6 +18,7 @@ import type { AnalyzedScore } from '@ilya/score-parser';
 import { t, type Language } from '$lib/i18n';
 import type { CalibratedFormant, Vowel } from '$lib/voice/engine/types';
 import { PERSONAL_CORE_MIN, isPersonal, isSung, stableCore } from '$lib/voice/engine/sung';
+import { borrowedStaffLabel, fillVoiceType, isBorrowingType, voiceTypePrint } from '$lib/voice/voiceTypes';
 
 /** Grayson's ten, in the roster's order (as `MarkupPane.svelte` lists them). */
 const ROSTER_ORDER = ['i', 'e', 'ɛ', 'a', 'ɑ', 'o', 'u', 'ɨ', 'ɪ', 'ʌ'];
@@ -86,4 +87,32 @@ export function placeholderCommentSentence(vowel: string, language: Language, ge
 export function placeholderTurnsSentence(vowels: readonly string[], language: Language): string | null {
 	if (vowels.length === 0) return null;
 	return t(vowels.length === 1 ? 'placeholder.turns.one' : 'placeholder.turns.many', language).replace('{vowels}', vowelList(vowels, language));
+}
+
+/**
+ * THE BORROWING LINE (QUEUE row 167; Dann's ruling of 2026-11-19, `docs/sessions/ratified-voice-type-stand-ins_2026-11-19.md`, sections 1, 3, and 5; brief r4 section 4.7).
+ *
+ * A contralto, a countertenor, or a bass-baritone has no published resonance values, so Ilya works from a neighbour's staff and says so ON THE PAGE, in a line of its own,
+ * never only behind a link ("transparency is paramount", Dann 09:41). Its words are RATIFIED (`placeholder.borrowing`). It is its own pure function, not a branch of
+ * `placeholderLine`, because that function returns nothing when the page has no analysis (`placeholder-line.ts:27`, `:76`), and INSIGHTS with no score must still name the borrowing.
+ * It takes the declared Tier 1 id and the sampled formants and does not look at the vowel list.
+ *
+ * THE DRAW RULE, stated once for MELODY, INSIGHTS, and a page with no score: the declared Tier 1 id is contralto, countertenor, or bass-baritone, AND the voice is not personal
+ * (`isPersonal`, `voice/engine/sung.ts`: five stable core vowels). The second half matters: from five stable core vowels the fill is the middle shape times the singer's
+ * tract scale (`stand-ins.ts`), so no borrowed value is in use. "The staff differs from the singer's own type" is NOT the test: `standInBucket` sends a tenor and a mezzo-soprano
+ * to the same staff too. It does not hang on `AdaptedProfile.generic` either, since a borrowing voice with one to four core vowels sampled is not generic and still needs the line.
+ *
+ * `{type}` is the Tier 1 name (`voiceTypePrint` on the id alone), never a Tier 2 label or Other's text, so the French stays masculine (un contralto, un contre-ténor, un baryton-basse).
+ * `{borrowed}` is `borrowedStaffLabel`. The line carries no remedy beyond its own closing clause, "until you sample your own vowels in VOICE".
+ */
+export function borrowingLine(
+	voiceType: string | undefined,
+	formants: Partial<Record<Vowel, CalibratedFormant>>,
+	language: Language,
+): string | null {
+	if (!isBorrowingType(voiceType) || isPersonal(formants)) return null;
+	const type = voiceTypePrint({ voiceType }, language);
+	const borrowed = borrowedStaffLabel(voiceType, language);
+	if (!type || !borrowed) return null;
+	return fillVoiceType(fillVoiceType(t('placeholder.borrowing', language), type, language, 'type'), borrowed, language, 'borrowed');
 }

@@ -16,7 +16,7 @@
    tree on 2026-11-02 (consistency batch 2). Paths are under `apps/web/src/`;
    a prefix is listed with the files that use it most and its key count.
 
-   This file holds 1,345 keys.
+   This file holds 1,346 keys.
 
    A key built at run time (`watch.key.letter.${letter}`, `comment.<register>.<part>`)
    has no literal reference, so a search for the whole key can come back empty
@@ -58,7 +58,7 @@
    octave.         5  lib/score/clef-ui.svelte.ts, lib/components/OctaveLine.svelte, lib/score/ClefReceipt.svelte, lib/score/ClefControls.svelte
    pacifier.      17  lib/voice/capture-ritual.svelte.ts
    paper.          4  lib/components/Paper/TitlePage.svelte, lib/components/Paper/SubsequentPage.svelte, lib/text/text-header.ts, lib/one-action.ts
-   placeholder.   12  lib/analysis/placeholder-line.ts
+   placeholder.   13  lib/analysis/placeholder-line.ts
    portrait.       2  lib/components/ReadingAid.svelte, routes/+page.svelte
    profile.       35  lib/markup/MarkupPane.svelte, lib/markup/profile-status.ts, lib/analysis/placeholder-line.ts
    provenance.     5  no literal consumer found
@@ -2047,6 +2047,9 @@ const strings: Record<string, Record<Language, string>> = {
 	'insights.r2.vowels.somePast': { en: '{s}, {p} past',                 fr: '{s}, dont {p} après le changement' },
 	'insights.r2.vowels.turns':    { en: 'turns about {pitch}',           fr: 'change de timbre autour de {pitch}' },
 	'insights.r2.vowels.noTurn':   { en: '{s}, no first resonance in your calibration', fr: '{s}, aucune première résonance mesurée lors de votre calibration' },
+
+	// QUEUE row 167, RATIFIED by Dann 2026-11-19 09:43 (English) and 09:52 (French) (`docs/sessions/ratified-voice-type-stand-ins_2026-11-19.md`, sections 3 and 5): the line on the page that names a borrowing. {type} is the Tier 1 name of the singer's declared type, so the French is masculine for all three; {borrowed} is the staff (`voiceType.staff.*`).
+	'placeholder.borrowing': { en: 'The field has not yet published resonance values for a {type}, so Ilya is using its {borrowed} values until you sample your own vowels in VOICE.', fr: 'La recherche n\u2019a pas encore publié de valeurs de résonance pour un {type}. Ilya utilise donc ses valeurs de {borrowed} jusqu\u2019à ce que vous échantillonniez vos propres voyelles dans VOIX.' },
 
 	// ── Placeholder vowels (QUEUE row 69; Dann 2026-10-11, `OPEN.md` "STAND-INS ARE LABELLED") ──
 	//    A vowel the singer has not sampled carries a stand-in fR1 (row 17). The

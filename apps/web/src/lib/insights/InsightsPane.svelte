@@ -57,7 +57,7 @@
 	import { resolveAdvice } from '$lib/analysis/advice-resolver';
 	import { buildVoiceProfileSnapshot } from '$lib/analysis/analyze-score-adapter';
 	import { buildWatchList } from '$lib/analysis/watchlist';
-	import { placeholderLine, placeholderVowels } from '$lib/analysis/placeholder-line';
+	import { borrowingLine, placeholderLine, placeholderVowels } from '$lib/analysis/placeholder-line';
 	import { pitchName } from '$lib/voice/note-picker';
 	import {
 		buildInsights,
@@ -500,7 +500,7 @@
 		translator=""
 		opus=""
 		{language}
-		note={[keyRuler?.header(language), genericLede(adapted.generic && !!model, voiceType, language), placeholderLine(placeholders, language, 'insights', { formants, analysed: !!analyzed })]}
+		note={[keyRuler?.header(language), genericLede(adapted.generic && !!model, voiceType, language), borrowingLine(voiceType?.voiceType, formants, language), placeholderLine(placeholders, language, 'insights', { formants, analysed: !!analyzed })]}
 		onheightchange={(h) => (headerHeight = h)}
 		markAccent="var(--rose-ink)"
 		ruleAccent="var(--rose)"
