@@ -4042,3 +4042,13 @@ Decision rights: his, as a name a singer reads. He has granted the change in pri
 **What a rename costs, NOT YET MEASURED.** The name is one of the five names in capitals settled under `CONTRACT.md` section 1 item 6a, it appears in English and French strings, in the Guide and Learn, in component and file names (`components/Drawer/`), in tests, in pictures already filed, and in these memory files. The desk measures that before proposing anything.
 
 Related and prior: "THE DRAWER ADVICE IS DEVICE-DEPENDENT" (22:28, above). If the eleven lines there stop naming a position and name the section instead (VOICE, INPUT), several of them may stop naming the surface at all, which changes what a rename has to touch. Do the measure before either lane.
+
+## N.204: FABLE READS ALL THE CODE. Ruled by Dann, said again 2026-11-18 22:47. NEVER ASK AGAIN
+
+Dann, transcribed as written: *"I already answered that I want Fable to do the audit. This is our last look at the code before we finalize the LEARN and GUIDE sections, so it has to be done thoroughly and properly. I know I said this before, so please record this somewhere persistent."*
+
+The ruling: the audit's judgement read is Fable's, over all the source, as `../sessions/plan-code-audit-maintainability_r2_2026-11-16.md` section 7 describes it. The tiered read, where Sonnet reads everything and Fable reads only the hotspots and the flagged, is refused. The reason is his and it sets the bar: this is the last look at the code before GUIDE and LEARN are finalized, so the read is judged by thoroughness, never by what it costs. No desk proposes trimming it, splitting it to Sonnet, or deferring it to save a week's limit; the desk places the units across the days instead.
+
+Earlier forms of the same answer, which no desk marked as an answer, so three desks re-raised the question: 2026-11-16 13:25 and 2026-11-17 21:07 (`INBOX.md`). Recorded 2026-11-18 22:5x in three places: here, `CONTRACT.md` section 1 item 6a's settled list, and the plan's own section 7.
+
+Still the desk's, and not his to carry (his ruling of 2026-11-17 21:13): the division into reading units, their order, and which runs when.

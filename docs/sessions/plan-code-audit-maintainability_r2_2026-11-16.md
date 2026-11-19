@@ -1,6 +1,6 @@
 # Plan: the maintainability audit and one refactoring pass (r2)
 
-Written by the desk (Opus 5.5), 2026-11-16 14:1x. r2 applies Fable's review of r1 (`review-fable-plan-code-audit_r1_2026-11-16.md`, ADOPT WITH AMENDMENTS: three blockers, thirteen amendments, all applied; marked **[r2]**). r1 is superseded and kept. Tree read: `Shane` `a16c011c`. Status: reviewed; one question to Dann (section 7). Nothing has run. `docs/memory/SCHEDULE.md` r6 item 4. DESK DEFAULT number: N.204.
+Written by the desk (Opus 5.5), 2026-11-16 14:1x. r2 applies Fable's review of r1 (`review-fable-plan-code-audit_r1_2026-11-16.md`, ADOPT WITH AMENDMENTS: three blockers, thirteen amendments, all applied; marked **[r2]**). r1 is superseded and kept. Tree read: `Shane` `a16c011c`. Status: reviewed; RULED by Dann 2026-11-18 22:47, section 7, Fable reads all of it. Nothing has run. `docs/memory/SCHEDULE.md` r6 item 4. DESK DEFAULT number: N.204.
 
 ## 1. What Dann asked for, in his words
 
@@ -41,7 +41,7 @@ What does not change: anything a singer sees, hears, prints, or stores. Section 
 
 **Work already ruled that meets this pass [r2]:** consistency batch 3 (the `markup` code renamed to melody, `CONTRACT.md` section 1 item 6a; the stored key `shane.profiles.v2` renamed, `code-conventions.md:41`), batch 4 (the dead-code batch named in `ARCHITECTURE.md`), and QUEUE row 174 (split `+page.svelte`, ruled a Mac lane after the consistency batches). Their status today is NOT ESTABLISHED. DESK DEFAULT: phase 0 establishes it; batch 3 runs before any read of `markup/` and before phase 4, as its own lane, with the stored-key rename the one stored change this work makes, on Dann's standing word; batch 4 and row 174 fold into this pass as tier 1 and tier 3.
 
-**A claim made in Dann's name, CONFIRMED false by the review [r2]:** `README.md:17` (the public first page), `ARCHITECTURE.md:26-29`, and `AGENTS.md:9` say Ilya uses no machine learning and no neural model. The scan path uses three trained models beyond tesseract: homr's `.onnx` models (`apps/web/scripts/fetch-omr-models.mjs:13-20`), the metre network (`omr/metre-model.ts:1-7`), and the fine-tuned underlay model (`omr/underlay-recognize.ts:2-6`). The transcription engine's claim, rule-based and deterministic, stands. The desk drafts true wording; it goes to Dann first, before the audit, because it speaks for him. Whether the GUIDE or LEARN repeat the claim is checked in the same draft.
+**A claim made in Dann's name, CONFIRMED false by the review [r2], AND REPAIRED SINCE: `README.md:17`, `ARCHITECTURE.md:26-29`, and `AGENTS.md:9` were all corrected in `3fd9a13f` (2026-11-16), the same commit that filed this plan; each now states the scan-path exception in its own words, read by the desk at `cb296eeb` on 2026-11-18 22:4x. Nothing is owed here. The original finding follows, for the record:** `README.md:17` (the public first page), `ARCHITECTURE.md:26-29`, and `AGENTS.md:9` say Ilya uses no machine learning and no neural model. The scan path uses three trained models beyond tesseract: homr's `.onnx` models (`apps/web/scripts/fetch-omr-models.mjs:13-20`), the metre network (`omr/metre-model.ts:1-7`), and the fine-tuned underlay model (`omr/underlay-recognize.ts:2-6`). The transcription engine's claim, rule-based and deterministic, stands. The desk drafts true wording; it goes to Dann first, before the audit, because it speaks for him. Whether the GUIDE or LEARN repeat the claim is checked in the same draft.
 
 ## 5. The phases
 
@@ -95,7 +95,13 @@ All refactoring lanes merge before Dann's walks and before the GUIDE's pictures.
 - Phase 2: 0.3M to 0.4M. Phase 3: 0.3M to 0.4M a lane for the Fable as-built review, five to eight lanes.
 - Never more than two helpers at once.
 
-**The question:** Fable reads all of it, as asked, or the tiered read. The desk's recommendation: all of it, spread across the days, the desk reading his usage screenshots to place each unit (`CONTRACT.md` section 4: usage does not determine the work). What the token figure is as a share of his weekly Fable limit is NOT ESTABLISHED.
+**RULED by Dann 2026-11-18 22:47. Fable reads all of it. Do not ask again** (transcribed as written: *"I already answered that I want Fable to do the audit. This is our last look at the code before we finalize the LEARN and GUIDE sections, so it has to be done thoroughly and properly. I know I said this before, so please record this somewhere persistent."*). His reason is the bar: this is the last read of the code before GUIDE and LEARN are finalized, so thoroughness decides, not cost. The tiered read is NOT an option and is kept here only as the record of what was weighed. Earlier forms of the same answer: 2026-11-16 13:25 (*"yes to one planned pass for refactoring; I defer to your research"*) and 2026-11-17 21:07 (*"We want a quality audit with actionable items and valuable insights"*, `docs/memory/INBOX.md`).
+
+The desk places each unit across the days by his usage screenshots (`CONTRACT.md` section 4: usage does not determine the work), and never trims the read to fit a week. What the token figure is as a share of his weekly Fable limit is NOT ESTABLISHED.
+
+**Not asked, and not his to carry:** which unit runs when, and how the reading is cut up. Plan r2 section 6 already does that, and he ruled on 2026-11-17 21:13 that the division into units is the desk's.
+
+*The question this replaces, for the record:* Fable reads all of it, as asked, or the tiered read (Sonnet reads everything against the checklist; Fable reads every hotspot, every cross-module edge, and everything flagged). Asked 2026-11-16, never marked answered until 2026-11-18 22:47, so three desks re-raised it.
 
 ## 8. Done when
 

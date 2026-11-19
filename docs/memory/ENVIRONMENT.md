@@ -21,6 +21,9 @@ next session the same hour it cost the last one.
 ### Learned 2026-11-17 (Fable desk: lane 65 as built)
 - `LEARNED BY THE FABLE DESK, 2026-11-17` (last section of this file): a Fable desk's own as-built read and gate run with no helper; Playwright on a merge in the workspace and what it costs in minutes; 26 pictures seen as nine sheets; a review file with no memo under its header; appending to a memory file; the ship script's gate lines by grep.
 
+### Learned 2026-11-18 (evening Opus desk: lane 69)
+- `LEARNED BY THE EVENING OPUS DESK, 2026-11-18` (last section of this file): a Fable subagent can read Dann's tree itself through the bridge, so no citation packet is needed; the bridge cannot `fetch`, so Dann fetches before the desk reads a lane; the ship script's gate 4 baseline must move in the merge script or the first merge run refuses; the tree holds no formatter, so a prescribed line is never rewrapped; `apps/web/e2e/` is desktop and `apps/web/e2e-phone/` is the phone; a file under its ceiling only prints a notice.
+
 ### Learned 2026-11-16 (late Opus desk: lanes 61 and 62, N.200 plan and papers)
 - `LEARNED BY THE 2026-11-16 LATE OPUS DESK` (last section of this file): the Mac shell reaches the open web with curl; the Library folder request; Chrome's Send worked tonight; JavaScript refused on claude.ai; parselmouth and scipy absent on the Mac VM; the desk's question that was a default; estimates.
 
@@ -5199,6 +5202,9 @@ Quote the range; cap at its top; add each actual when it lands. Actuals from `ST
 | Fable review of two built lanes (as built, merge-tree, one probe) | 367k (2026-11-09, 46 min, cap 320k) | 300k to 400k |
 | Fable review of three Code briefs (B0, row 166, row 182 with its data file) | 378k (cap 400k), 71 min, 141 tool uses, 2026-11-09; 303k harness count (cap 420k), 13 min, 64 tool uses, 2026-11-12 (polish lane r2, rhyme r2, L17 r2, with a scout packet) | 300k to 420k |
 | Opus review standing in for Fable | 130k, 170k, 171k, 183k, 215k | 130k to 220k |
+| Fable review of one Code brief, read from the tree through the bridge | 176,112 (lane 69 r2, cap 370k, 13 tool uses, 4.7 min, 2026-11-18); the helper's own estimate of its cost was about 75k on the delta below, less than half the harness count, so take a helper's self-report as NOT ESTABLISHED | 150k to 260k |
+| Fable DELTA review of a brief revision (only what changed, plus whether its own earlier amendments survived) | 62,220 (lane 66 r2, 2026-11-17); 163,310 (lane 69 r4, cap 200k, 9 tool uses, 2.9 min, 2026-11-18) | 60k to 200k |
+| Fable as-built review of one small lane (5 code files, +270 -34, read from the tree, no gate run) | 167,541 (lane 69, cap 300k, 12 tool uses, 3.3 min, 2026-11-18) | 150k to 300k |
 | Sonnet reading a dissertation, with a digest | Grayson 2012: 211k (two thirds), then 231k (the remainder, clipped; the reader estimated 185k) | a Sonnet reader stops near 200k to 230k whatever the cap: split a dissertation into pieces of about 250 pages or 60,000 words, one helper each, 180k to 240k per piece |
 
 | Opus voice profile from three sources | 137k (2026-11-08) | 120k to 180k |
@@ -5423,3 +5429,22 @@ The page is https://dannmitton.com/ilya, built in GoDaddy Website Builder (Urban
 - **The bridge shell (`device_bash`) can drop mid-session and come back** (2026-11-17 22:11): stage and list still work while it is gone; ToolSearch finds nothing for it; it reappears unannounced.
 - **A lane in Dann's Chrome starts by typing into the New session box and pressing Send by its ref** (`find` "Send button"); Chrome let the desk's Send through on 2026-11-18 for lanes 67 and 68.
 
+## LEARNED BY THE EVENING OPUS DESK, 2026-11-18
+
+**A Fable subagent can read Dann's tree itself, through the bridge.** Give it `ToolSearch` with `select:mcp__remote-devices__device_bash` and the path `$HOME/mnt/ilya-rewrite`; it reads the working tree, `git show origin/<lane>:<path>`, and `git diff`, read-only. Lane 69's three reviews all did. This removes the citation packet the desk used to paste: the first review got a packet and said it read the tree anyway, the second and third were pointed at the files on disk and the prompts were a fraction of the size. Tell the helper to run no git write, and that `fetch`, `add`, `checkout`, and `merge` are forbidden to it as to the desk.
+
+**The bridge cannot `fetch`, so Dann fetches before the desk can read a lane.** `CONTRACT.md` section 4's allowed list is `status`, `log`, `diff`, `show`, `ls-files`, and `check-ignore`; `fetch` is in neither list, and the desk does not take the silence as permission. `git ls-remote origin refs/heads/<branch>` is read-only and tells you a lane's tip without fetching, which is enough to know whether a lane has pushed. To read a lane's reports and diff, ask Dann for one line, `cd ~/Desktop/ilya-rewrite && git fetch origin`, before the merge paste.
+
+**A merge script must move the ship script's gate 4 baseline, or the first run refuses.** Lane 69's merge fast-forwarded and then the ship aborted on gate 4 reading 6691 against a recorded 6686, which was the five new tests. Nothing was staged, so nothing was lost, but it cost Dann a cycle. The fix belongs in the merge script beside the `git add` of the as-built review. Both figures in `G4` are moved together: the with-Python one and the `|| G4=` without-Python one. Keep a backup named `ilya-ship.sh.bak-<old count>-<date>` and write the dated reason above the line, as the script's other moves do.
+
+**Neither the with-Python nor the without-Python figure has to be derived.** Lane 69 measured both: the lane's own end run gives the without-Python figure, and Dann's refused ship run gives the with-Python one. Lane 68's with-Python figure was derived and marked so; this one is not.
+
+**The tree holds no formatter.** No prettier, eslint, biome, or editorconfig file at the root or in `apps/web`, and neither `package.json` names one. A line prescribed in a brief is never rewrapped, so a test may assert on a component's source text character for character. The pane already carries lines of 295 and 249 characters.
+
+**Playwright lives in two folders.** `apps/web/e2e/` is the desktop project and `apps/web/e2e-phone/` is the phone project. A brief that names a spec names its folder, or the lane runs the wrong one.
+
+**A file under its ceiling does not fail the ratchets gate.** `scripts/ratchets.mjs:66-67` prints the lower number as a suggestion and passes. `scripts/ratchets.json:2` asks that the number be lowered in the same commit, so a lane that shrinks a file lowers its ceiling itself.
+
+**`markup/` may import `analysis/` and `voice/`.** The module table is `scripts/ratchets.mjs:78-85`, and a path outside the six named modules is unconstrained. `components/` is not in the table.
+
+**The Claude Code web session backgrounds its long runs and the transcript goes quiet.** Lane 69's end run (gate 4 whole, the desktop Playwright suites, then two phone files three times each) sat behind an `until grep -q FINALDONE` watcher for about forty minutes with nothing printed. A hook re-prompts the session when the watcher finishes. Do not read the silence as a stall before about forty-five minutes, and say so to Dann rather than going quiet yourself.
