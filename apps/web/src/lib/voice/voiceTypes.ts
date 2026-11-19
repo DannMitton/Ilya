@@ -126,6 +126,20 @@ export function borrowedStaffLabel(voiceType: string | undefined, language: Lang
 	return voiceTypePrint({ voiceType }, language);
 }
 
+/**
+ * The label that fills `{voiceType}` in the sentences that say whose placeholder values a page is working from (MELODY's subtitle, INSIGHTS' lede, and the vowel chart's caption).
+ * The ruling's principle (2026-11-19 10:08, section 6): a sentence never tells a singer the values are their own type's when they are a neighbour's. So the three borrowing types
+ * print the staff the values came from (`borrowedStaffLabel`), and every other type prints `voiceTypePrint` on the whole choice as before, Tier 2 label or Other's text included:
+ * for the five published types the values are their own, and the lane keeps that behaviour (brief r4 section 9 item 6, `report-code-lane71-step2`, section 3).
+ * "Not sure", no type, and an id this build does not know get `undefined`, whatever Other's text holds.
+ */
+export function placeholderFillLabel(choice: VoiceTypeChoice | undefined, language: Language): string | undefined {
+	const id = choice?.voiceType;
+	if (isBorrowingType(id)) return borrowedStaffLabel(id, language);
+	if (id === 'not-sure') return undefined;
+	return voiceTypePrint(choice, language);
+}
+
 /** A French label that begins with a vowel letter (a, e, i, o, u, y and their accented forms), never h: « d’octaviste », not « de octaviste ». */
 const VOWEL_LETTER = /^[aeiouy]/;
 const startsWithVowelLetter = (label: string) => VOWEL_LETTER.test(label.normalize('NFD').toLowerCase());

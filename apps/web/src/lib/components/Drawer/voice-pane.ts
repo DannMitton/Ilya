@@ -14,7 +14,7 @@ import { PERSONAL_CORE_MIN } from '$lib/voice/engine/sung';
 import type { Vowel } from '$lib/voice/engine/types';
 import { belowCoreText } from '$lib/analysis/placeholder-line';
 import { hasPlaceholderProfile } from '$lib/voice/engine/stand-ins';
-import { fillVoiceType, isTier1, voiceTypePrint } from '$lib/voice/voiceTypes';
+import { borrowedStaffLabel, fillVoiceType, isTier1, voiceTypePrint } from '$lib/voice/voiceTypes';
 
 export interface PaneSentenceInput {
 	/** `usableReadingCount(voiceFormants)`, 0 to 10. */
@@ -30,7 +30,7 @@ export interface PaneSentenceInput {
 	restWorkedOut: boolean;
 }
 
-export type PaneState = 'none' | 'typed-generic' | 'typed-none' | 'not-sure' | 'below-core' | 'some-fills' | 'some-works-out' | 'all';
+export type PaneState = 'none' | 'typed-generic' | 'not-sure' | 'below-core' | 'some-fills' | 'some-works-out' | 'all';
 
 export function paneState(i: PaneSentenceInput): PaneState {
 	// Anything sung and fewer than five stable core vowels (a voice with only a hard vowel sung has `usable >= 1` and no stable core vowel; so has ten readings with four stable): what is recorded
@@ -40,13 +40,13 @@ export function paneState(i: PaneSentenceInput): PaneState {
 	if (i.usable >= 1) return i.restWorkedOut ? 'some-works-out' : 'some-fills';
 	if (!isTier1(i.voiceType)) return 'none';
 	if (i.voiceType === 'not-sure') return 'not-sure';
-	return hasPlaceholderProfile(i.voiceType) ? 'typed-generic' : 'typed-none';
+	// Every other Tier 1 id has a placeholder profile (eight types, QUEUE row 167), so there is no "typed, none" state any more.
+	return 'typed-generic';
 }
 
 const KEY: Record<Exclude<PaneState, 'below-core' | 'some-fills' | 'some-works-out'>, string> = {
 	none: 'calib.pane.none',
 	'typed-generic': 'calib.pane.typedGeneric',
-	'typed-none': 'calib.pane.typedNone',
 	'not-sure': 'calib.pane.notSure',
 	all: 'calib.pane.all'
 };
@@ -61,9 +61,10 @@ export function paneSentence(i: PaneSentenceInput, language: Language): string {
 		return t(m === 1 ? `${base}One` : base, language).replace('{n}', String(i.usable)).replace('{m}', String(m));
 	}
 	const text = t(KEY[state], language);
-	if (state === 'typed-generic' || state === 'typed-none') {
-		// The type's own name, not a finer label: "a {type} voice" must read with "a" for every type Ilya has generic values for.
-		return fillVoiceType(text, voiceTypePrint({ voiceType: i.voiceType }, language) ?? '', language);
+	if (state === 'typed-generic') {
+		// The Tier 1 id, never a finer label: "a {voiceType} voice" must read with "a" for every type, and a bass who chose octavist reads "a bass voice". A contralto, countertenor, or bass-baritone
+		// reads the staff the values came from (`borrowedStaffLabel`; ruling of 2026-11-19, section 6).
+		return fillVoiceType(text, borrowedStaffLabel(i.voiceType, language) ?? '', language);
 	}
 	return text;
 }
