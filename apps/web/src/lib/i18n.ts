@@ -16,7 +16,7 @@
    tree on 2026-11-02 (consistency batch 2). Paths are under `apps/web/src/`;
    a prefix is listed with the files that use it most and its key count.
 
-   This file holds 1,342 keys.
+   This file holds 1,345 keys.
 
    A key built at run time (`watch.key.letter.${letter}`, `comment.<register>.<part>`)
    has no literal reference, so a search for the whole key can come back empty
@@ -85,7 +85,7 @@
    verify.         1  lib/components/Paper/WordStack.svelte
    voice.          2  lib/components/Drawer/bandState.ts, lib/components/Drawer/Drawer.svelte
    voiceIntake.   60  lib/voice/DescribeVoice.svelte, lib/voice/InsightsShares.svelte, lib/voice/IntakeScale.svelte, lib/voice/VoiceTypeIntake.svelte
-   voiceType.     42  lib/voice/VoiceTypeIntake.svelte, lib/voice/voiceTypes.ts, lib/voice/VoiceTypeFirst.svelte, lib/voice/OutsideNote.svelte
+   voiceType.     45  lib/voice/VoiceTypeIntake.svelte, lib/voice/voiceTypes.ts, lib/voice/VoiceTypeFirst.svelte, lib/voice/OutsideNote.svelte
    vowel.         11  lib/voice/vowel-names.ts, lib/markup/legend.ts
    wait.           2  lib/components/ReadingWait.svelte, lib/omr/wait.ts, lib/score/ScoreUploader.svelte
    watch.         46  the watch list: lib/analysis/watchlist.ts, lib/analysis/gates.ts, lib/markup/transposition-ruler.ts
@@ -2265,6 +2265,11 @@ const strings: Record<string, Record<Language, string>> = {
 	'voiceType.type.bass-baritone': { en: 'Bass-baritone', fr: 'Baryton-basse' },
 	'voiceType.type.bass': { en: 'Bass', fr: 'Basse' },
 	'voiceType.type.not-sure': { en: 'Not sure', fr: 'Je ne sais pas' },
+	// QUEUE row 167, RATIFIED by Dann 2026-11-19 09:43 and 09:52 (`docs/sessions/ratified-voice-type-stand-ins_2026-11-19.md`, sections 3 and 5): the staff a borrowing type's placeholder values came from.
+	// A staff name, not a voice type, so it cannot reuse a `voiceType.type.*` key ("mezzo and tenor" is Bozeman's shared staff). `borrowedStaffLabel` (`voiceTypes.ts`) reads them.
+	'voiceType.staff.mezzo-soprano': { en: 'mezzo-soprano', fr: 'mezzo-soprano' },
+	'voiceType.staff.bass': { en: 'bass', fr: 'basse' },
+	'voiceType.staff.mezzo-tenor': { en: 'mezzo and tenor', fr: 'mezzo et ténor' },
 	'voiceType.specific.coloratura-soprano': { en: 'Coloratura soprano', fr: 'Soprano colorature' },
 	'voiceType.specific.soubrette': { en: 'Soubrette', fr: 'Soubrette' },
 	'voiceType.specific.lyric-soprano': { en: 'Lyric soprano', fr: 'Soprano lyrique' },

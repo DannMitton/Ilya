@@ -96,16 +96,48 @@ export function voiceTypePrint(choice: VoiceTypeChoice | undefined, language: La
 	return KEEPS_CAPITAL[language].has(id) ? label : label.charAt(0).toLocaleLowerCase(language) + label.slice(1);
 }
 
+/**
+ * The three declared types whose placeholder values come from a neighbour's staff (QUEUE row 167, ruling of 2026-11-19, `docs/sessions/ratified-voice-type-stand-ins_2026-11-19.md`),
+ * and the key of the staff each one borrows. It mirrors `standInBucket` (`voice/engine/stand-ins.ts`): contralto to the mezzo-soprano staff, bass-baritone to bass, countertenor to
+ * Bozeman's shared mezzo and tenor staff.
+ */
+const BORROWED_STAFF = {
+	contralto: 'voiceType.staff.mezzo-soprano',
+	'bass-baritone': 'voiceType.staff.bass',
+	countertenor: 'voiceType.staff.mezzo-tenor'
+} as const satisfies Partial<Record<Tier1Id, string>>;
+
+/** Whether a declared Tier 1 id is one of the three that borrow a neighbour's staff. */
+export function isBorrowingType(voiceType: string | undefined): voiceType is keyof typeof BORROWED_STAFF {
+	return !!voiceType && Object.prototype.hasOwnProperty.call(BORROWED_STAFF, voiceType);
+}
+
+/**
+ * The staff a voice's placeholder values came from, as a label, or `undefined` for a voice that has none. Takes the Tier 1 id alone; Tier 2 and Other's text never reach it.
+ * One contract, four clauses (brief r4 section 3):
+ * 1. Contralto, countertenor, and bass-baritone get the fixed staff label, whatever `voiceTypeSpecific` or `voiceTypeOther` hold: the values came from the staff.
+ * 2. The five published types get `voiceTypePrint`'s label on the Tier 1 id, so a bass who chose octavist reads "bass", a staff Ilya has, never "octavist".
+ * 3. "Not sure" gets `undefined`, whatever Other's text holds (`voiceTypePrint` would return Other's text before its "Not sure" test).
+ * 4. No type, and any id that is not Tier 1, get `undefined`. "Undeclared" means exactly that `undefined`, and every site branches on it, never on `hasDeclaredType`.
+ */
+export function borrowedStaffLabel(voiceType: string | undefined, language: Language): string | undefined {
+	if (!isTier1(voiceType) || voiceType === 'not-sure') return undefined;
+	if (isBorrowingType(voiceType)) return t(BORROWED_STAFF[voiceType], language);
+	return voiceTypePrint({ voiceType }, language);
+}
+
 /** A French label that begins with a vowel letter (a, e, i, o, u, y and their accented forms), never h: « d’octaviste », not « de octaviste ». */
 const VOWEL_LETTER = /^[aeiouy]/;
 const startsWithVowelLetter = (label: string) => VOWEL_LETTER.test(label.normalize('NFD').toLowerCase());
 
 /**
- * Fills `{voiceType}` with the label `voiceTypePrint` gives. In French the « de » before it elides to « d’ » when the label begins with a vowel
- * letter (« d’octaviste », « de basse », « de heldentenor »). One helper for the three fills (MELODY's subtitle, INSIGHTS' lede, and the
- * vowel chart's caption), so they cannot disagree. Closing polish lane, step 2, desk default 2026-11-11.
+ * Fills one token of a string with a voice type's label. `token` names it without braces and defaults to `voiceType`; the borrowing strings (QUEUE row 167) carry `{type}` and
+ * `{borrowed}`. In French the « de » before the token elides to « d’ » when the label begins with a vowel letter (« d’octaviste », « de basse », « de heldentenor »).
+ * One helper for every fill (MELODY's subtitle, INSIGHTS' lede, the vowel chart's caption, the VOICE pane, the sheet's sources note, and the capture hint), so they cannot
+ * disagree. Closing polish lane, step 2, desk default 2026-11-11; the token name is lane 71, step 2. The label goes in by function, so a `$` in Other's text is not a pattern.
  */
-export function fillVoiceType(template: string, label: string, language: Language): string {
-	if (language === 'fr' && startsWithVowelLetter(label)) template = template.replace('de {voiceType}', 'd\u2019{voiceType}');
-	return template.replace('{voiceType}', label);
+export function fillVoiceType(template: string, label: string, language: Language, token = 'voiceType'): string {
+	const slot = `{${token}}`;
+	if (language === 'fr' && startsWithVowelLetter(label)) template = template.replace(`de ${slot}`, `d\u2019${slot}`);
+	return template.replace(slot, () => label);
 }
