@@ -13,7 +13,7 @@ const f = (f1: number, f2: number): CalibratedFormant => ({ f1, f2, f2Quality: '
 describe('the placeholder flag', () => {
 	// QUEUE row 167 (ruling of 2026-11-19, sections 1 and 8): eight declared types have a starting profile; "Not sure" and no type take none.
 	const WITHHELD = ['not-sure', undefined, ''];
-	const FIVE = ['soprano', 'mezzo-soprano', 'contralto', 'countertenor', 'tenor', 'baritone', 'bass-baritone', 'bass'];
+	const EIGHT = ['soprano', 'mezzo-soprano', 'contralto', 'countertenor', 'tenor', 'baritone', 'bass-baritone', 'bass'];
 
 	it('declared-types (the adapter, and the default) withholds stand-ins from a voice that has sung nothing and is not one of the eight', () => {
 		for (const type of WITHHELD) {
@@ -26,7 +26,7 @@ describe('the placeholder flag', () => {
 	});
 
 	it('declared-types fills a voice of the eight whole, every vowel a surrogate, and calls it generic', () => {
-		for (const type of FIVE) {
+		for (const type of EIGHT) {
 			const r = resolveVowelValues({}, type);
 			expect(r.generic, type).toBe(true);
 			for (const v of VOWELS) {
@@ -38,19 +38,19 @@ describe('the placeholder flag', () => {
 	});
 
 	it('always gives every voice, including the withheld ones, all ten values, and still says generic only for the eight', () => {
-		for (const type of [...WITHHELD, ...FIVE]) {
+		for (const type of [...WITHHELD, ...EIGHT]) {
 			const r = resolveVowelValues({}, type, { placeholders: 'always' });
 			expect(r.standIns, String(type)).toBeDefined();
 			for (const v of VOWELS) {
 				expect(r.fR1[v], `${type} ${v}`).toBeGreaterThan(0);
 				expect(r.fR2[v]).toBeGreaterThan(0);
 			}
-			expect(r.generic).toBe(FIVE.includes(type as string));
+			expect(r.generic).toBe(EIGHT.includes(type as string));
 		}
 	});
 
 	it('for the eight, always and declared-types give the same answer', () => {
-		for (const type of FIVE) expect(resolveVowelValues({}, type, { placeholders: 'always' })).toEqual(resolveVowelValues({}, type));
+		for (const type of EIGHT) expect(resolveVowelValues({}, type, { placeholders: 'always' })).toEqual(resolveVowelValues({}, type));
 	});
 
 	const FIVE_CORE: Partial<Record<Vowel, CalibratedFormant>> = { i: f(296, 1705), e: f(381, 1532), ɛ: f(577, 1311), o: f(489, 826), u: f(346, 804) };
@@ -63,7 +63,7 @@ describe('the placeholder flag', () => {
 
 	it('below five stable core vowels every sampled vowel is used as sampled, for every type and both modes (lane 68)', () => {
 		for (const [name, sung] of BELOW) {
-			for (const type of [...WITHHELD, ...FIVE]) {
+			for (const type of [...WITHHELD, ...EIGHT]) {
 				for (const placeholders of ['always', 'declared-types'] as const) {
 					const r = resolveVowelValues(sung, type, { placeholders });
 					for (const [v, fm] of Object.entries(sung) as [Vowel, CalibratedFormant][]) {
@@ -114,7 +114,7 @@ describe('the placeholder flag', () => {
 
 	it('once five core vowels are sung the flag changes nothing', () => {
 		const sung = FIVE_CORE;
-		for (const type of [...WITHHELD, ...FIVE]) {
+		for (const type of [...WITHHELD, ...EIGHT]) {
 			expect(resolveVowelValues(sung, type, { placeholders: 'always' })).toEqual(resolveVowelValues(sung, type));
 		}
 	});

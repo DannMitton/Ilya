@@ -211,7 +211,7 @@ describe('11. an undeclared voice draws the undeclared forms', () => {
 	for (const language of LANGS) {
 		it(`${language}: "Not sure", no type, and an unknown id each draw sheet.provenance.undeclared and capture.hint.placed.untyped`, () => {
 			for (const id of ['not-sure', undefined, '', 'castrato']) {
-				expect(sheetProvenance(id, language), String(id)).toBe(t('sheet.provenance.undeclared', language).replace(/\{v\}/g, '[ɑ]'));
+				expect(sheetProvenance(id, language), String(id)).toBe(t('sheet.provenance.undeclared', language));
 				expect(hintsFor({ active: false, confirmingClear: false, selected: 'ɑ', sung: new Set<Vowel>(['i']), voiceType: id })[0].key, String(id)).toBe('capture.hint.placed.untyped');
 			}
 			for (const id of [...THREE, ...FIVE_PUBLISHED]) {
@@ -271,7 +271,7 @@ describe('14. every string the lane writes or edits: U+2019 apostrophes, U+00A0 
 		for (const key of KEYS) {
 			for (const language of LANGS) expect(t(key, language), `${key} ${language}`).not.toContain("'");
 			const fr = t(key, 'fr');
-			for (const m of fr.matchAll(/:/g)) expect(fr[m.index! - 1], `${key}: colon at ${m.index}`).toBe(' ');
+			for (const m of fr.matchAll(/:/g)) expect(fr[m.index! - 1], `${key}: colon at ${m.index}`).toBe('\u00a0');
 		}
 	});
 });

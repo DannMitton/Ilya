@@ -43,7 +43,6 @@ describe('the pane’s sentence states, English and French, as ratified', () => 
 	it('"typed, none" is gone: every Tier 1 id but "Not sure" is typed-generic with nothing recorded, and "Not sure" and an unknown id are not', () => {
 		for (const id of ['soprano', 'mezzo-soprano', 'contralto', 'countertenor', 'tenor', 'baritone', 'bass-baritone', 'bass']) expect(paneState(S(0, id)), id).toBe('typed-generic');
 		expect(paneState(S(0, 'not-sure'))).toBe('not-sure');
-		expect(paneState(S(0, 'castrato'))).toBe('none');
 	});
 	it('an id this build does not know reads as no type', () => {
 		expect(paneState(S(0, 'castrato'))).toBe('none');

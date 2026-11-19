@@ -1,6 +1,6 @@
 /**
  * THE VOICE PANE AT REST, as data (N.203 lane 60, Step 2; plan r4 sections 4.1 and 4.2). The pane's sentence, the name of its door to
- * recording, and whether "Your vowel space" shows. Pure, so the seven sentence states are tested without a browser. The eighth state of the
+ * recording, and whether "Your vowel space" shows. Pure, so the sentence states are tested without a browser. A further state of the
  * pane, with no voice saved, is the first-launch form (`ProfileSwitcher.svelte`), not a sentence.
  *
  * BELOW FIVE STABLE CORE VOWELS (lanes 67 and 68; Dann 2026-11-18 13:57 and 14:00) one sentence, for every type, says how many of the six core vowels are sampled and stable, which, and how many

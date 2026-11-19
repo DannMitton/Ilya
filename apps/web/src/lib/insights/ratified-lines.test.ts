@@ -461,7 +461,7 @@ describe('row 167: the borrowing strings (Dann 2026-11-19)', () => {
 		expect(t('calib.pane.typedNone', 'en')).toBe('Ilya has no generic values for a {voiceType} voice yet, so it works from your own vowels. Record them to begin.');
 		expect(t('calib.pane.typedNone', 'fr')).toBe('Ilya n\u2019a pas encore de valeurs par défaut pour une voix de {voiceType}; il travaille donc à partir de vos propres voyelles. Captez-les pour commencer.');
 	});
-	it('the six sentences ratified 2026-11-19 10:08 keep their words, and fill with the staff (the subtitle and the lede)', () => {
+	it('the English words of the MELODY subtitle and the INSIGHTS lede (ratified 2026-11-10) are unchanged; 2026-11-19 10:08 ruled only their fill', () => {
 		expect(t('profile.subtitlePlaceholder', 'en')).toBe('Resonance profile: placeholder values for a generic {voiceType}, not yet your own resonances.');
 		expect(t('insights.generic.lede', 'en')).toBe('These findings use placeholder values for a generic {voiceType}, not your specific voice.');
 	});

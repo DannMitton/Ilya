@@ -3,7 +3,7 @@ import type { Vowel } from '../engine/types';
 import { VOWELS } from '../engine/types';
 import { stringKeys, t } from '$lib/i18n';
 import {
-	GLYPH_NUDGE, bracket, buttonLabel, buttonStates, cueText, firstTimeExplanation, hasDeclaredType, hintText, hintsFor, idleCue, mainButton, staysAfterTake, stopLabel
+	GLYPH_NUDGE, bracket, buttonLabel, buttonStates, cueText, firstTimeExplanation, hintText, hintsFor, idleCue, mainButton, staysAfterTake, stopLabel
 } from './screen-logic';
 
 const S = (...vs: Vowel[]) => new Set<Vowel>(vs);
@@ -46,8 +46,6 @@ describe('the hint', () => {
 		for (const type of [undefined, '', 'not-sure']) {
 			expect(hintText(hintsFor({ ...base, sung: S('i'), selected: 'ɑ', voiceType: type }), 'en')).toContain('from typical voices');
 		}
-		expect(hasDeclaredType('countertenor')).toBe(true);
-		expect(hasDeclaredType('not-sure')).toBe(false);
 	});
 	it('invites any vowel again once all ten are sung', () => {
 		expect(hintText(hintsFor({ ...base, sung: ALL }), 'en')).toBe('Tap any vowel to focus on it. Re-take records it again.');

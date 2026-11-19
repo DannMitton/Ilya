@@ -27,9 +27,6 @@ export function buttonLabel(v: Vowel, state: ButtonState, selected: boolean, lan
 	return parts.join(', ');
 }
 
-/** Whether a declared voice type is a real one; "Not sure" and none are not. It no longer chooses the capture hint (QUEUE row 167: `borrowedStaffLabel` does, brief r4 section 4.10), and it is not the test for "undeclared". */
-export const hasDeclaredType = (voiceType?: string): boolean => !!voiceType && voiceType !== 'not-sure';
-
 export interface HintInput {
 	/** The ritual is mid-take (any phase but idle and landing). */
 	active: boolean;
