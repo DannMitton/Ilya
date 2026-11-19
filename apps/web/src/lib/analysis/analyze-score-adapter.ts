@@ -67,8 +67,10 @@ export interface AdaptedProfile {
 	 * from the declared type's template (`hasPlaceholderProfile`). A view of
 	 * `standIns`, computed per snapshot and never stored (`CONTRACT.md` §8, as
 	 * `standIns` itself): it is false for a voice with any sung vowel, and for a
-	 * voice whose type has no placeholder profile. The pages read it to say "not
-	 * calibrated"; `completeness.formants` is true for it, because numbers exist.
+	 * voice whose type has no placeholder profile ("Not sure" and no type; the
+	 * eight declared types have one, QUEUE row 167, ruling of 2026-11-19 sections 1
+	 * and 8). The pages read it to say "not calibrated"; `completeness.formants`
+	 * is true for it, because numbers exist.
 	 */
 	generic: boolean;
 }

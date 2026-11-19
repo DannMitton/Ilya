@@ -113,7 +113,7 @@ export interface BlockInputs {
 	placeholders?: readonly string[];
 	/** Step 8: the voice has only placeholder values (`AdaptedProfile.generic`); a finding's placeholder sentence then leaves out its remedy. */
 	generic?: boolean;
-	/** The voice type's label for a placeholder page (`placeholderLabel`, `identity.ts`); undefined where there is none, and the chart's caption then keeps `insights.r2.vowels.against`. */
+	/** The voice type's label for a placeholder page (`placeholderLabel`, `identity.ts`); undefined where there is none (any voice not on placeholders, and "Not sure" and no type, which take no placeholder profile), and the chart's caption then keeps `insights.r2.vowels.against`. */
 	voiceTypeLabel?: string;
 	/** QUEUE row 79: the method line, and the tessitura footnote where the page prints its marker. */
 	method?: string;

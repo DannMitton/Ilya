@@ -52,7 +52,7 @@ export function genericLede(generic: boolean, voiceType: VoiceTypeChoice | undef
 	return label ? fillVoiceType(t('insights.generic.lede', language), label, language) : null;
 }
 
-/** The voice type's label for a placeholder voice, or undefined for any other voice and for "Not sure" with no typed text (`voiceTypePrint`). */
+/** The voice type's label for a placeholder voice (`voiceTypePrint`), or undefined for any other voice. "Not sure" and no type take no placeholder profile (ruling of 2026-11-19, section 8), so `generic` is false for them and they never reach it. */
 export function placeholderLabel(generic: boolean, voiceType: VoiceTypeChoice | undefined, language: Language): string | undefined {
 	return generic ? voiceTypePrint(voiceType, language) : undefined;
 }
@@ -60,8 +60,8 @@ export function placeholderLabel(generic: boolean, voiceType: VoiceTypeChoice | 
 /**
  * The Method endnote's string key. With a score: a placeholder voice names no calibration and no date (RATIFIED by Dann 2026-11-10; the strings are pinned in
  * `ratified-lines.test.ts`). With no score (`noScore`, N.203 lane 59 Step 8; sheet lines 28 and 29, RATIFIED 2026-11-16): the line reads what the voice rests on,
- * not the model, which a page with no score never has: `samples` (the voice rests on the singer's own samples, `restsOnSamples`), else `generic` (the five
- * voice types' generic values, nothing usable recorded), else neither (contralto, countertenor, bass-baritone, "Not sure", or no type).
+ * not the model, which a page with no score never has: `samples` (the voice rests on the singer's own samples, `restsOnSamples`), else `generic` (the eight
+ * declared types' placeholder values, nothing usable recorded; QUEUE row 167, ruling of 2026-11-19), else neither ("Not sure", no type, or an id this build does not know).
  */
 export function methodLineKey(o: { generic: boolean; typed: boolean; noScore?: boolean; samples?: boolean }): string {
 	if (o.noScore) return o.samples ? 'insights.method.noScore.samples' : o.generic ? 'insights.method.noScore.generic' : 'insights.method.noScore.none';

@@ -62,15 +62,31 @@ export function standInBucket(voiceType?: string): StandInBucket {
 }
 
 /**
- * QUEUE row 166: the five declared types (Tier 1 ids, `voiceTypes.ts`) whose
- * stand-ins alone make a working profile, so INSIGHTS and MELODY can compute
- * from the template when nothing is sung. Contralto, countertenor,
- * bass-baritone, "Not sure", and no type are left out on purpose: they keep
- * the page that says nothing was measured until row 167 rules their staves
- * (DESK DEFAULT, Dann ratified the four profiles 2026-10-31 13:19 to 13:21).
+ * QUEUE rows 166 and 167: the eight declared types (Tier 1 ids, `voiceTypes.ts`)
+ * whose stand-ins alone make a working profile, so INSIGHTS and MELODY can
+ * compute from the template when nothing is sung. Five have published values
+ * (row 166). Contralto, countertenor, and bass-baritone borrow the staff
+ * `standInBucket` names for them, and every page that uses the borrowing says
+ * so (`borrowedStaffLabel`, `voiceTypes.ts`); Dann ruled it 2026-11-19, section 1
+ * of `docs/sessions/ratified-voice-type-stand-ins_2026-11-19.md` (transparency
+ * is paramount; the concession is stated on the page). "Not sure" and no type
+ * are left out on purpose and take no starting profile: section 8 of that
+ * ruling (Dann, 2026-11-19 11:55 to 11:57), "No average", because an average
+ * of five staves corresponds to no vocal tract. The five-staff average stays in
+ * `template('middle')` as the chart's drawing ground and the fill for a partly
+ * sampled voice (`fillStandIns`), and is no one's starting profile.
  * The singer's word for these values is "placeholder"; "generic" is internal.
  */
-export const PLACEHOLDER_PROFILE_TYPES = ['soprano', 'mezzo-soprano', 'tenor', 'baritone', 'bass'] as const;
+export const PLACEHOLDER_PROFILE_TYPES = [
+	'soprano',
+	'mezzo-soprano',
+	'contralto',
+	'countertenor',
+	'tenor',
+	'baritone',
+	'bass-baritone',
+	'bass'
+] as const;
 
 /** Whether a declared type alone may stand in for a voice that has sung nothing usable. */
 export function hasPlaceholderProfile(voiceType?: string): boolean {

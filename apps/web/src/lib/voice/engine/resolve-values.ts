@@ -12,8 +12,8 @@
  * (`stand-ins.ts`, `fillStandIns`).
  *
  * THE FLAG. The adapter withholds stand-ins from a voice that has sung nothing unless its declared type is one of
- * the five that have a placeholder profile (QUEUE row 166, `hasPlaceholderProfile`): contralto, countertenor,
- * bass-baritone, "Not sure", and no type keep the page that says nothing was measured. The calibration chart has no
+ * the eight that have a placeholder profile (QUEUE rows 166 and 167, `hasPlaceholderProfile`; ruling of 2026-11-19,
+ * sections 1 and 8): "Not sure" and no type keep the page that says nothing was measured. The calibration chart has no
  * such page to keep and shows a placeholder for every unsung vowel for every voice, so it asks for `'always'`. The
  * adapter asks for `'declared-types'`, today's rule, and its output is unchanged (`adapter-golden.test.ts`).
  */
@@ -145,11 +145,12 @@ export function resolveVowelValues(
 	// Every gap the loops above left takes a stand-in from Bozeman's staff, flagged 'surrogate' (`stand-ins.ts`): scaled to the singer (the tract scale)
 	// when the voice is personal, else the declared type's own, unscaled.
 	//
-	// QUEUE row 166 (Dann ratified 2026-10-31 13:19 to 13:21): with NO vowel sung, a declared
-	// soprano, mezzo-soprano, tenor, baritone, or bass takes the template whole, every vowel
-	// flagged 'surrogate' and `generic` true. Contralto, countertenor, bass-baritone,
-	// "Not sure", and no type keep the page that says nothing was measured: DESK DEFAULT,
-	// which row 167 lifts. Range, tessitura, and passaggio stay as typed, in the adapter.
+	// QUEUE rows 166 and 167 (Dann, 2026-10-31 13:19 to 13:21, and 2026-11-19, ruling sections 1 and 8): with
+	// NO vowel sung, a declared soprano, mezzo-soprano, contralto, countertenor, tenor, baritone, bass-baritone,
+	// or bass takes the template whole, every vowel flagged 'surrogate' and `generic` true. Contralto,
+	// countertenor, and bass-baritone borrow a neighbour's staff, and the pages say so. "Not sure" and no type
+	// keep the page that says nothing was measured (section 8, "No average"). Range, tessitura, and passaggio
+	// stay as typed, in the adapter.
 	const anySung = Object.values(fR1Source).includes('sung');
 	const generic = !anySung && hasPlaceholderProfile(voiceType);
 	const standIns: StandInReport | undefined =

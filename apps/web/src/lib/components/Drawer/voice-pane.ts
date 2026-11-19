@@ -74,9 +74,9 @@ export function recordDoorKey(usable: number): string {
 }
 
 /**
- * "Your vowel space" shows when the voice has a stored reading, or a declared type with generic values. It does not show for a contralto,
- * countertenor, bass-baritone, "Not sure", or no type with nothing stored: the chart would draw ten placeholders for them on the screen
- * after a sentence that says Ilya has none (review amendment 9, DESK DEFAULT; it narrows plan r4 section 4.1 item 3).
+ * "Your vowel space" shows when the voice has a stored reading, or a declared type with placeholder values: the eight types of
+ * `PLACEHOLDER_PROFILE_TYPES`, contralto, countertenor, and bass-baritone among them (QUEUE row 167; DESK DEFAULT, brief r4 section 4.6). It does
+ * not show for "Not sure" or no type with nothing stored: they take no placeholder profile (ruling of 2026-11-19, section 8).
  */
 export function showVowelSpaceDoor(hasStoredReading: boolean, voiceType?: string): boolean {
 	return hasStoredReading || hasPlaceholderProfile(voiceType);

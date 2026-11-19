@@ -19,8 +19,8 @@
  * `placeholders: 'always'`, the function the forecast reads. Every zone's fR2 centre is the type's template with
  * nothing sung, so no zone slides under the dot; a placeholder dot is the value the tract scale (`stand-ins.ts`) gives for that
  * vowel now, so it moves as Ilya learns the voice. THE ONE COMPUTATION THIS CHANGES: the chart shows a placeholder for
- * every voice, including the types the adapter withholds them from (contralto, countertenor, bass-baritone, "Not
- * sure", and no type); the forecast's own behaviour is unchanged (`resolve-values.ts`, the flag).
+ * every voice, including the two cases the adapter withholds them from ("Not sure" and no type; the eight declared
+ * types have a placeholder profile since QUEUE row 167); the forecast's own behaviour is unchanged (`resolve-values.ts`, the flag).
  */
 import type { CalibratedFormant, Vowel } from '../engine/types';
 import { VOWELS } from '../engine/types';

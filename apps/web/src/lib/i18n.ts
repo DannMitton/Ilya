@@ -1891,7 +1891,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'insights.method.untyped':     { en: 'Method: computed from your calibration of {date} and the score as sung, including repeats.', fr: 'Méthode\u00a0: calculé à partir de votre calibration du {date} et de la partition telle que chantée, reprises comprises.' },
 	'insights.method.silent':      { en: 'Method: no voice has been measured, so nothing on this page is computed from one.', fr: 'Méthode\u00a0: aucune voix n\u2019a été mesurée, donc rien sur cette page n\u2019en est calculé.' },
 	// QUEUE row 166. RATIFIED: the lede, Dann 2026-11-09 16:13, cut to its first sentence by Dann 2026-11-10 12:56 (pinned in `ratified-lines.test.ts`). It is shown only for a
-	// voice declared as one of five types and not calibrated (`analyze-score-adapter.ts`, `generic`); {voiceType} is the label the identity line prints.
+	// voice declared as one of eight types and not calibrated (`analyze-score-adapter.ts`, `generic`); {voiceType} is the label the identity line prints.
 	'insights.generic.lede':       { en: 'These findings use placeholder values for a generic {voiceType}, not your specific voice.', fr: 'Ces constats reposent sur des valeurs par défaut pour une voix type de {voiceType}, et non sur votre voix en particulier.' },
 	// RATIFIED by Dann 2026-11-10 (row 166): the method line for those findings, which names no calibration and no date.
 	'insights.method.generic.typed':   { en: 'Method: computed from placeholder values for your voice type, the voice characteristics you typed, and the score as sung, including repeats.', fr: 'Méthode\u00a0: calculé à partir de valeurs par défaut pour votre type de voix, des caractéristiques vocales que vous avez indiquées et de la partition telle que chantée, reprises comprises.' },
@@ -1900,7 +1900,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'insights.silence.findings':   { en: 'Any finding about where this piece may challenge your voice.', fr: 'Toute observation sur les endroits où cette pièce pourrait solliciter votre voix.' },
 	// N.203 sheet-english r2 / sheet-french r1, RATIFIED by Dann 2026-11-16 (01:13 English, 01:20 French), line 27.
 	'insights.silence.noScore':    { en: 'INSIGHTS measures a piece from its score, and connects it to your voice. Add a score in the INPUT pane to begin.', fr: 'Les APERÇUS mesurent une pièce à partir de sa partition, et la relient à votre voix. Ajoutez une partition dans le volet ENTRÉE pour commencer.' },
-	// The method line of the page with no score (sheet lines 28 and 29, and the new line for a voice with nothing usable and no generic values, RATIFIED by Dann 2026-11-16 01:28).
+	// The method line of the page with no score (sheet lines 28 and 29, and the new line for a voice with nothing usable and no placeholder profile ("Not sure" or no type), RATIFIED by Dann 2026-11-16 01:28).
 	'insights.method.noScore.samples': { en: 'Method: from your resonance profile, measured in VOICE.', fr: 'Méthode\u00a0: à partir de votre profil de résonances, mesuré dans VOIX.' },
 	'insights.method.noScore.generic': { en: 'Method: from generic values for your voice type, until you record your own vowels.', fr: 'Méthode\u00a0: à partir de valeurs par défaut pour votre type de voix, jusqu\u2019à ce que vous captiez vos propres voyelles.' },
 	'insights.method.noScore.none':    { en: 'Method: record your vowels in VOICE, and this page computes from your voice.', fr: 'Méthode\u00a0: captez vos voyelles dans VOIX, et cette page calcule à partir de votre voix.' },
