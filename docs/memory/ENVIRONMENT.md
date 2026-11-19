@@ -393,6 +393,7 @@ next session the same hour it cost the last one.
 | a date, before you stamp one on anything | `THE MOUNT'S FILE TIMESTAMPS ARE NOT THE DATE` |
 | prune `STATE.md`, or script an edit inside a blockquote | `PRUNING A MEMORY FILE` |
 | quote Ilya's size, or a byte count of anything | `ILYA'S SIZE` |
+| `git worktree list` from the bridge says a Mac worktree is prunable | `WORKTREE PRUNABLE IS A BRIDGE ARTEFACT` |
 | about to read a long source (a dissertation, a book, a 1,500-line file) | `A LONG READ DIES AT THE COMPACTION` |
 | a file Dann names is not under Desktop or Downloads | `THE BRIDGE CARRIES A THIRD FOLDER` |
 | a research session needs his sources, or a subagent needs his files | `A FOURTH FOLDER, AND SUBAGENTS ON THE BRIDGE` |
@@ -5610,3 +5611,14 @@ Both unit reads copied source to `/tmp` inside the bridge's VM, ran it with `nod
 **NOT ESTABLISHED, and left that way on purpose:** whether skipping `QUEUE.md` caused any particular question the desk put to Dann that afternoon. The questions that angered him trace to two other things, both recorded here and in `OPEN.md`: not rereading the morning's ratified file before drafting, and citing a desk gloss as his ruling. The desk of 2026-11-19 declined to draw the tidy line between the three.
 
 **The rule, for the next desk:** read every file section 2 names, whole. If that is genuinely too large for one session, say at the open that the opening is incomplete and what you are doing about it, before any work begins. Never proceed on a partial opening read with the gap merely declared.
+
+
+### WORKTREE PRUNABLE IS A BRIDGE ARTEFACT
+
+**2026-11-19 15:0x.** `git --no-optional-locks worktree list` run from the bridge reported three worktrees as `prunable`, and `--porcelain` gave the reason as `gitdir file points to non-existent location`. The desk read that as three stale worktrees and gave Dann `git worktree prune`. It ran and changed nothing, correctly, because the directories exist on his Mac.
+
+**The cause: the bridge's VM has no `/Users` at all** (`ls /Users` returns "No such file or directory"). Every worktree recorded under `/Users/dannmitton/...` therefore looks missing from here, so git marks it prunable. The flag describes the bridge, not the Mac.
+
+**The rule:** a worktree's state, like any other fact keyed to a Mac path, is NOT ESTABLISHED from the bridge. Read it on the Mac, or do not report it. This is tether 11 with a new instrument: the desk reported a reading without asking what could make the instrument lie.
+
+**What is true from here, because it is inside the mounted repository:** `.claude/worktrees/objective-wright-7aea5b` exists, holds 22 entries, is dated 2026-09-07, and carries a detached HEAD at `acf7db48`. A worktree inside the repository is the grep-doubling trap recorded as `THE WORKTREE DOUBLES EVERY GREP`; a `find` or `grep` scoped to `apps/`, `packages/`, and `tools/` does not meet it.
