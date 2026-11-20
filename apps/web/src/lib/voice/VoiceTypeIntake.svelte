@@ -170,6 +170,10 @@
 		line-height: 1.4;
 	}
 
+	/* The live region stays in the page so the announcement pattern holds, but while it is empty it must not cost a flex gap. */
+	.vt-note:empty {
+		margin-top: -0.3rem;
+	}
 	.vt-option {
 		display: flex;
 		align-items: flex-start;

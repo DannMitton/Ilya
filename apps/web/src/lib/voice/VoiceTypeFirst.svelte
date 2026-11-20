@@ -72,6 +72,10 @@
 		color: var(--ink-tertiary);
 		line-height: 1.4;
 	}
+	/* The live region stays in the page so the announcement pattern holds, but while it is empty it must not cost a flex gap. */
+	.vt-note:empty {
+		margin-top: -0.3rem;
+	}
 	.vt-choices {
 		display: grid;
 		grid-template-columns: repeat(2, minmax(0, 1fr));
