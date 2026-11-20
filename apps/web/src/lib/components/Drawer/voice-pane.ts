@@ -8,18 +8,13 @@
  * every sung vowel. "Recorded" means sung: the count the closed pane's line prints (`usableReadingCount`, `profileStore.ts`; `isSung`, `voice/engine/sung.ts`), so a
  * reading beyond Ilya's reference values counts as a kept one does (lane 66, Step 5), and a stored estimate or a take with no first resonance does not,
  * where the summary's table, which draws every stored reading, draws them.
- *
- * A CONTRALTO, COUNTERTENOR, OR BASS-BARITONE WITH FEWER THAN FIVE STABLE CORE VOWELS (lane 74, item 1; Dann 2026-11-19, `docs/memory/OPEN.md`, "ROW 167: THE CONCESSION IS MADE AT THE MOMENT OF CHOICE"): the pane says
- * why the values are a neighbour's, in the ratified `placeholder.borrowing`, built here from the string directly (`borrowingLine` takes formants, which this input does not carry). With nothing sampled it takes the
- * place of `calib.pane.typedGeneric`. In the below-core state it comes first, then `calib.pane.belowCore`, joined by one space in one paragraph, the order MELODY and INSIGHTS draw them in
- * (`markup/MarkupPane.svelte`, `insights/InsightsPane.svelte`). The test is `core.length < PERSONAL_CORE_MIN`, which is `isPersonal` negated: `VoicePane.svelte` is handed `stableCore(voiceFormants)` (`routes/+page.svelte`).
  */
 import { t, type Language } from '$lib/i18n';
 import { PERSONAL_CORE_MIN } from '$lib/voice/engine/sung';
 import type { Vowel } from '$lib/voice/engine/types';
 import { belowCoreText } from '$lib/analysis/placeholder-line';
 import { hasPlaceholderProfile } from '$lib/voice/engine/stand-ins';
-import { borrowedStaffLabel, fillVoiceType, isBorrowingType, isTier1, voiceTypePrint } from '$lib/voice/voiceTypes';
+import { borrowedStaffLabel, fillVoiceType, isTier1, voiceTypePrint } from '$lib/voice/voiceTypes';
 
 export interface PaneSentenceInput {
 	/** `usableReadingCount(voiceFormants)`, 0 to 10. */
@@ -34,19 +29,6 @@ export interface PaneSentenceInput {
 	 */
 	restWorkedOut: boolean;
 }
-
-/** The ratified borrowing line for a Tier 1 id that borrows a neighbour's staff, built from `placeholder.borrowing` as `borrowingLine` builds it; `null` for any other id. */
-function borrowingSentence(voiceType: string | undefined, language: Language): string | null {
-	if (!isBorrowingType(voiceType)) return null;
-	const type = voiceTypePrint({ voiceType }, language);
-	const borrowed = borrowedStaffLabel(voiceType, language);
-	if (!type || !borrowed) return null;
-	return fillVoiceType(fillVoiceType(t('placeholder.borrowing', language), type, language, 'type'), borrowed, language, 'borrowed');
-}
-
-/** The borrowing line for this input, or `null` when the voice is personal (five stable core vowels) or its type borrows nothing. */
-const borrowingFor = (i: PaneSentenceInput, language: Language): string | null =>
-	i.core.length >= PERSONAL_CORE_MIN ? null : borrowingSentence(i.voiceType, language);
 
 export type PaneState = 'none' | 'typed-generic' | 'not-sure' | 'below-core' | 'some-fills' | 'some-works-out' | 'all';
 
@@ -73,9 +55,7 @@ const KEY: Record<Exclude<PaneState, 'below-core' | 'some-fills' | 'some-works-o
 export function paneSentence(i: PaneSentenceInput, language: Language): string {
 	const state = paneState(i);
 	if (state === 'below-core') {
-		const below = belowCoreText('calib.pane.belowCore', i.core, language);
-		const borrowing = borrowingFor(i, language);
-		return borrowing ? `${borrowing} ${below}` : below;
+		return belowCoreText('calib.pane.belowCore', i.core, language);
 	}
 	if (state === 'some-fills' || state === 'some-works-out') {
 		const m = 10 - i.usable;
@@ -84,10 +64,7 @@ export function paneSentence(i: PaneSentenceInput, language: Language): string {
 	}
 	const text = t(KEY[state], language);
 	if (state === 'typed-generic') {
-		// A contralto, countertenor, or bass-baritone is told why the values are a neighbour's: the borrowing line, in place of this sentence. The five published types keep it (the field HAS published values for them).
-		const borrowing = borrowingFor(i, language);
-		if (borrowing) return borrowing;
-		// The five published types: the Tier 1 id, never a finer label, since "a {voiceType} voice" must read with "a" for every type and a bass who chose octavist reads "a bass voice".
+		// Every Tier 1 type with a placeholder profile: the Tier 1 id, never a finer label, since "a {voiceType} voice" must read with "a" for every type and a bass who chose octavist reads "a bass voice".
 		return fillVoiceType(text, borrowedStaffLabel(i.voiceType, language) ?? '', language);
 	}
 	return text;

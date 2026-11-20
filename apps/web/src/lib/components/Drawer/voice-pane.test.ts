@@ -8,7 +8,7 @@ import { CORE_VOWELS } from '$lib/voice/engine/sung';
 /** `core` is the number of stable core vowels (the first `core` of the roster's six; the pane takes the list), and defaults to 6: the first seven states are those of a voice with five or more core vowels (or none sung, where `core` is 0 and `usable` is 0). */
 const S = (usable: number, voiceType?: string, restWorkedOut = false, core = usable === 0 ? 0 : 6) => ({ usable, core: CORE_VOWELS.slice(0, core), voiceType, restWorkedOut });
 
-/** `placeholder.borrowing`, ratified (`i18n.ts`), filled for each of the three types: `{type}` the Tier 1 name, `{borrowed}` the staff. Written out, so the pin does not share code with the function it pins. */
+/** `placeholder.borrowing`, ratified (`i18n.ts`), filled for each of the three types: `{type}` the Tier 1 name, `{borrowed}` the staff. The line MELODY and INSIGHTS draw; the pane must never print it (lane 75, item 1; Dann 2026-11-19 22:42). Written out, so the pin does not share code with the function it pins. */
 const BORROW_EN: Record<string, string> = {
 	contralto: 'The field has not yet published resonance values for a contralto, so Ilya is using its mezzo-soprano values until you sample your own vowels in VOICE.',
 	countertenor: 'The field has not yet published resonance values for a countertenor, so Ilya is using its mezzo and tenor values until you sample your own vowels in VOICE.',
@@ -24,10 +24,10 @@ describe('the pane’s sentence states, English and French, as ratified', () => 
 	const cases: [string, ReturnType<typeof S>, PaneState, string, string][] = [
 		['nothing recorded, no type', S(0), 'none', 'Record your ten vowels, and Ilya builds your resonance profile. Or choose a voice type, and Ilya starts from generic values for now.', 'Captez vos dix voyelles, et Ilya établit votre profil de résonances. Ou choisissez un type de voix, et Ilya part de valeurs par défaut pour l’instant.'],
 		['a type with generic values', S(0, 'bass'), 'typed-generic', 'Ilya is using generic values for a bass voice until you record your own.', 'Ilya utilise des valeurs par défaut pour une voix type de basse jusqu’à ce que vous captiez les vôtres.'],
-		// QUEUE row 167 (ruling of 2026-11-19) and lane 74, item 1: a contralto, a countertenor, and a bass-baritone have generic values, and the pane says why they are a neighbour's: the ratified `placeholder.borrowing`, in place of `calib.pane.typedGeneric`. The "typed, none" state is gone.
-		['a contralto', S(0, 'contralto'), 'typed-generic', 'The field has not yet published resonance values for a contralto, so Ilya is using its mezzo-soprano values until you sample your own vowels in VOICE.', 'La recherche n’a pas encore publié de valeurs de résonance pour un contralto. Ilya utilise donc ses valeurs de mezzo-soprano jusqu’à ce que vous échantillonniez vos propres voyelles dans VOIX.'],
-		['a countertenor', S(0, 'countertenor'), 'typed-generic', 'The field has not yet published resonance values for a countertenor, so Ilya is using its mezzo and tenor values until you sample your own vowels in VOICE.', 'La recherche n’a pas encore publié de valeurs de résonance pour un contre-ténor. Ilya utilise donc ses valeurs de mezzo et ténor jusqu’à ce que vous échantillonniez vos propres voyelles dans VOIX.'],
-		['a bass-baritone', S(0, 'bass-baritone'), 'typed-generic', 'The field has not yet published resonance values for a bass-baritone, so Ilya is using its bass values until you sample your own vowels in VOICE.', 'La recherche n’a pas encore publié de valeurs de résonance pour un baryton-basse. Ilya utilise donc ses valeurs de basse jusqu’à ce que vous échantillonniez vos propres voyelles dans VOIX.'],
+		// QUEUE row 167 (ruling of 2026-11-19) and lane 75, item 1: a contralto, a countertenor, and a bass-baritone have generic values, and the pane names the staff in `calib.pane.typedGeneric` as it does for the five published types; the reason is the picker's note, not the pane's. The "typed, none" state is gone.
+		['a contralto', S(0, 'contralto'), 'typed-generic', 'Ilya is using generic values for a mezzo-soprano voice until you record your own.', 'Ilya utilise des valeurs par défaut pour une voix type de mezzo-soprano jusqu’à ce que vous captiez les vôtres.'],
+		['a countertenor', S(0, 'countertenor'), 'typed-generic', 'Ilya is using generic values for a mezzo and tenor voice until you record your own.', 'Ilya utilise des valeurs par défaut pour une voix type de mezzo et ténor jusqu’à ce que vous captiez les vôtres.'],
+		['a bass-baritone', S(0, 'bass-baritone'), 'typed-generic', 'Ilya is using generic values for a bass voice until you record your own.', 'Ilya utilise des valeurs par défaut pour une voix type de basse jusqu’à ce que vous captiez les vôtres.'],
 		// RATIFIED by Dann 2026-11-19 11:59 (ruling section 8), replacing the earlier text whole.
 		['Not sure', S(0, 'not-sure'), 'not-sure', 'Not knowing is a fine answer. Record your vowels in vocal fry and Ilya works from your own voice, which also gives you evidence in your own search. Or choose a voice type, and Ilya starts from published values for it.', 'Ne pas savoir est une réponse valable. Captez vos voyelles en friture vocale et Ilya travaille à partir de votre propre voix, ce qui vous donne aussi des indices dans votre propre recherche. Ou choisissez un type de voix, et Ilya part de valeurs publiées pour celui-ci.'],
 		['one to nine, the rest filled', S(3, 'bass'), 'some-fills', 'You have recorded 3 of the 10 vowels. Ilya fills the other 7 from what you have recorded so far.', 'Vous avez capté 3 des 10 voyelles. Ilya complète les 7 autres à partir de ce que vous avez capté jusqu’ici.'],
@@ -90,19 +90,12 @@ describe('below five stable core vowels (lane 68): how many, which, and how many
 	const LISTS_EN = [' ([i])', ' ([i] and [e])', ' ([i], [e], and [ɛ])', ' ([i], [e], [ɛ], and [ɑ])'];
 	const LISTS_FR = [' ([i])', ' ([i] et [e])', ' ([i], [e] et [ɛ])', ' ([i], [e], [ɛ] et [ɑ])'];
 	it('prints the ratified sentence with the count, the list, and what is left, for 1 to 4 stable core vowels, for every type', () => {
-		// Lane 74, item 1: for the three borrowing types the borrowing line comes first, one space, then the below-core sentence, in one paragraph (the order MELODY and INSIGHTS draw them in).
-		const BORROWING: Record<string, { en: string; fr: string }> = {
-			contralto: { en: BORROW_EN.contralto, fr: BORROW_FR.contralto },
-			countertenor: { en: BORROW_EN.countertenor, fr: BORROW_FR.countertenor },
-			'bass-baritone': { en: BORROW_EN['bass-baritone'], fr: BORROW_FR['bass-baritone'] }
-		};
 		for (const type of ['bass', 'soprano', 'contralto', 'countertenor', 'bass-baritone', 'not-sure', undefined]) {
 			for (const n of [1, 2, 3, 4]) {
 				const input = S(n, type, false, n);
-				const lead = (lang: 'en' | 'fr') => (type && BORROWING[type] ? `${BORROWING[type][lang]} ` : '');
 				expect(paneState(input), `${type} ${n}`).toBe('below-core');
-				expect(paneSentence(input, 'en'), `${type} ${n}`).toBe(lead('en') + EN(n, LISTS_EN[n - 1]));
-				expect(paneSentence(input, 'fr'), `${type} ${n}`).toBe(lead('fr') + FR(n, LISTS_FR[n - 1]));
+				expect(paneSentence(input, 'en'), `${type} ${n}`).toBe(EN(n, LISTS_EN[n - 1]));
+				expect(paneSentence(input, 'fr'), `${type} ${n}`).toBe(FR(n, LISTS_FR[n - 1]));
 			}
 		}
 	});
@@ -174,51 +167,42 @@ describe('the voice type control’s label', () => {
 	});
 });
 
-describe('lane 74, item 1: the pane gives its reason, for all eight declared types, nothing sampled and three stable core vowels', () => {
+describe('lane 75, item 1: the pane names the staff and gives no reason, for all eight declared types, nothing sampled and three stable core vowels', () => {
 	const GENERIC_EN: Record<string, string> = { soprano: 'soprano', 'mezzo-soprano': 'mezzo-soprano', tenor: 'tenor', baritone: 'baritone', bass: 'bass' };
 	const GENERIC_FR: Record<string, string> = { soprano: 'soprano', 'mezzo-soprano': 'mezzo-soprano', tenor: 'ténor', baritone: 'baryton', bass: 'basse' };
 	const BELOW3_EN = 'You have sampled 3 of the 6 core vowels so far ([i], [e], and [ɛ]). To complete your personal vowel space, Ilya needs at least 5 stable fry samples. Until you provide 2 more, unsampled vowels are assigned placeholder values.';
 	const BELOW3_FR = 'Vous avez échantillonné 3 des 6 voyelles de base jusqu’ici ([i], [e] et [ɛ]). Pour compléter votre espace vocalique personnel, Ilya a besoin d’au moins 5 échantillons stables en friture vocale. D’ici à ce que vous en fournissiez 2 de plus, les voyelles non échantillonnées reçoivent des valeurs par défaut.';
 	const EIGHT = ['soprano', 'mezzo-soprano', 'contralto', 'countertenor', 'tenor', 'baritone', 'bass-baritone', 'bass'];
 
-	it('nothing sampled: the three read the borrowing line, the five keep "generic values", exactly', () => {
+	it('nothing sampled: all eight read "generic values" for the Tier 1 staff, exactly, and none reads the borrowing line', () => {
+		const STAFF_EN: Record<string, string> = { ...GENERIC_EN, contralto: 'mezzo-soprano', countertenor: 'mezzo and tenor', 'bass-baritone': 'bass' };
+		const STAFF_FR: Record<string, string> = { ...GENERIC_FR, contralto: 'mezzo-soprano', countertenor: 'mezzo et ténor', 'bass-baritone': 'basse' };
 		for (const id of EIGHT) {
 			const en = paneSentence(S(0, id), 'en');
 			const fr = paneSentence(S(0, id), 'fr');
 			expect(paneState(S(0, id)), id).toBe('typed-generic');
-			if (id in BORROW_EN) {
-				expect(en, id).toBe(BORROW_EN[id]);
-				expect(fr, id).toBe(BORROW_FR[id]);
-			} else {
-				expect(en, id).toBe(`Ilya is using generic values for a ${GENERIC_EN[id]} voice until you record your own.`);
-				expect(fr, id).toBe(`Ilya utilise des valeurs par défaut pour une voix type de ${GENERIC_FR[id]} jusqu’à ce que vous captiez les vôtres.`);
-				expect(en, id).not.toContain('The field has not yet published');
-			}
+			expect(en, id).toBe(`Ilya is using generic values for a ${STAFF_EN[id]} voice until you record your own.`);
+			expect(fr, id).toBe(`Ilya utilise des valeurs par défaut pour une voix type de ${STAFF_FR[id]} jusqu’à ce que vous captiez les vôtres.`);
+			expect(en, id).not.toContain('The field has not yet published');
+			expect(fr, id).not.toContain('La recherche n’a pas encore publié');
 		}
 	});
 
-	it('three stable core vowels: the three read the borrowing line, one space, then the below-core sentence; the five read the below-core sentence alone', () => {
+	it('three stable core vowels: all eight read the below-core sentence alone, in one paragraph', () => {
 		for (const id of EIGHT) {
 			const input = S(3, id, false, 3);
 			expect(paneState(input), id).toBe('below-core');
 			const en = paneSentence(input, 'en');
 			const fr = paneSentence(input, 'fr');
-			if (id in BORROW_EN) {
-				expect(en, id).toBe(`${BORROW_EN[id]} ${BELOW3_EN}`);
-				expect(fr, id).toBe(`${BORROW_FR[id]} ${BELOW3_FR}`);
-				// One paragraph: a single space, no line break, no second space.
-				expect(en, id).not.toMatch(/\n|  /);
-				expect(fr, id).not.toMatch(/\n|  /);
-				expect(en.indexOf(BORROW_EN[id]), id).toBe(0);
-			} else {
-				expect(en, id).toBe(BELOW3_EN);
-				expect(fr, id).toBe(BELOW3_FR);
-			}
+			expect(en, id).toBe(BELOW3_EN);
+			expect(fr, id).toBe(BELOW3_FR);
+			expect(en, id).not.toMatch(/\n|  /);
+			expect(fr, id).not.toMatch(/\n|  /);
 		}
 	});
 
-	it('"Not sure", no type, and an id this build does not know carry no borrowing line in either state', () => {
-		for (const id of ['not-sure', undefined, 'castrato']) {
+	it('the eight Tier 1 ids, "Not sure", no type, and an id this build does not know carry no borrowing line in any state', () => {
+		for (const id of [...EIGHT, 'not-sure', undefined, 'castrato']) {
 			for (const input of [S(0, id), S(3, id, false, 3)]) {
 				for (const language of ['en', 'fr'] as const) expect(paneSentence(input, language), String(id)).not.toMatch(/The field has not yet published|La recherche n’a pas encore publié/);
 			}
@@ -226,27 +210,27 @@ describe('lane 74, item 1: the pane gives its reason, for all eight declared typ
 	});
 
 	it('five stable core vowels or ten recorded: no borrowing line for any type (the voice is its own)', () => {
-		for (const id of ['contralto', 'countertenor', 'bass-baritone']) {
+		for (const id of [...EIGHT, 'not-sure', undefined, 'castrato']) {
 			for (const input of [S(5, id, false, 5), S(9, id), S(10, id)]) {
-				for (const language of ['en', 'fr'] as const) expect(paneSentence(input, language), `${id} ${input.usable}`).not.toMatch(/The field has not yet published|La recherche n’a pas encore publié/);
+				for (const language of ['en', 'fr'] as const) expect(paneSentence(input, language), `${String(id)} ${input.usable}`).not.toMatch(/The field has not yet published|La recherche n’a pas encore publié/);
 			}
 		}
 	});
 
-	it('the pane takes the same words as the ratified line on the pages (`placeholder.borrowing`), not a second copy', () => {
+	it('the pane carries none of the words of `placeholder.borrowing`, for the three borrowing types, with nothing sampled and with three stable core vowels', () => {
 		for (const id of ['contralto', 'countertenor', 'bass-baritone'] as const) {
 			for (const language of ['en', 'fr'] as const) {
-				const staff = { contralto: ['mezzo-soprano', 'mezzo-soprano'], countertenor: ['mezzo and tenor', 'mezzo et ténor'], 'bass-baritone': ['bass', 'basse'] }[id][language === 'en' ? 0 : 1];
-				const template = t('placeholder.borrowing', language);
-				// Everything of the template that is not a token appears, in order, in the pane's sentence.
-				const pieces = template.split(/\{type\}|\{borrowed\}/);
-				let at = 0;
-				for (const piece of pieces) {
-					const found = paneSentence(S(0, id), language).indexOf(piece, at);
-					expect(found, `${id} ${language} ${piece}`).toBeGreaterThanOrEqual(0);
-					at = found + piece.length;
+				// The words of the template: it split on `{type}` and `{borrowed}`, each piece trimmed, each piece of three characters or more.
+				const pieces = t('placeholder.borrowing', language)
+					.split(/\{type\}|\{borrowed\}/)
+					.map((piece) => piece.trim())
+					.filter((piece) => piece.length >= 3);
+				expect(pieces.length, `${id} ${language}`).toBeGreaterThan(0);
+				for (const input of [S(0, id), S(3, id, false, 3)]) {
+					const sentence = paneSentence(input, language);
+					for (const piece of pieces) expect(sentence, `${id} ${language} ${input.usable} ${piece}`).not.toContain(piece);
+					expect(sentence, `${id} ${language}`).not.toContain((language === 'en' ? BORROW_EN : BORROW_FR)[id]);
 				}
-				expect(paneSentence(S(0, id), language)).toContain(staff);
 			}
 		}
 	});

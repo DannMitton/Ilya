@@ -23,6 +23,9 @@
 	const T = (key: string) => t(key, language);
 	/* The concession at the moment of choice (lane 74, item 4): for contralto, countertenor, and bass-baritone only, shown while that type is selected. */
 	const borrowingNote = $derived(voiceTypeBorrowingNote(value, language));
+	/* The note is brought into view when it arrives: on a short phone it lands past the fold, and the concession belongs at the moment of choice (`OPEN.md`, ROW 167). */
+	let noteEl: HTMLDivElement | undefined = $state();
+	$effect(() => { if (borrowingNote) noteEl?.scrollIntoView({ block: 'nearest' }); });
 </script>
 
 <fieldset class="vt-first">
@@ -37,7 +40,7 @@
 		{/each}
 	</div>
 	<!-- Below the grid, not inside it: the grid flows in two columns and would place the note by the flow. A polite live region, present before the note arrives; focus stays on the radio. -->
-	<div class="vt-note" aria-live="polite">
+	<div class="vt-note" aria-live="polite" bind:this={noteEl}>
 		{#if borrowingNote}<p class="vt-hint">{borrowingNote}</p>{/if}
 	</div>
 </fieldset>
@@ -71,6 +74,19 @@
 		font-size: 0.8125rem;
 		color: var(--ink-tertiary);
 		line-height: 1.4;
+	}
+	/* The live region stays in the page so the announcement pattern holds, but while it is empty it must not cost a flex gap. */
+	.vt-note:empty {
+		margin-top: -0.3rem;
+	}
+	/* BEGIN STAYS IN REACH ON A SHORT PHONE (lane 75, item 3; QUEUE row 167). The welcome screen's Begin follows this picker in the page, and with a note shown it sits 97 to 228 px
+	   past the fold at 390 by 667, 375 by 667, and 360 by 640 (English and French). On a short touch screen the picker is laid after Begin instead: `order` on this fieldset, a
+	   flex item of the wizard's `.wizard-phase`, so nothing is covered. The source order is not moved, so a keyboard still reaches the picker first; the rule is touch only for that reason.
+	   880 is measured: the tallest case (French, 360 wide, note shown) puts Begin's bottom at 812, and the drawer's bottom bar takes the last 56 px of the window, so it needs 868. From 600 px wide upward the French screen with the note ends at 685.6 px and needs a window of 742; under 600 px wide it needs up to 868 (360 wide, French). */
+	@media (pointer: coarse) and (max-height: 741px), (pointer: coarse) and (max-height: 880px) and (max-width: 599px) {
+		.vt-first {
+			order: 1;
+		}
 	}
 	.vt-choices {
 		display: grid;
