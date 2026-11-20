@@ -16,7 +16,7 @@
    tree on 2026-11-02 (consistency batch 2). Paths are under `apps/web/src/`;
    a prefix is listed with the files that use it most and its key count.
 
-   This file holds 1,347 keys.
+   This file holds 1,348 keys.
 
    A key built at run time (`watch.key.letter.${letter}`, `comment.<register>.<part>`)
    has no literal reference, so a search for the whole key can come back empty
@@ -85,7 +85,7 @@
    verify.         1  lib/components/Paper/WordStack.svelte
    voice.          2  lib/components/Drawer/bandState.ts, lib/components/Drawer/Drawer.svelte
    voiceIntake.   60  lib/voice/DescribeVoice.svelte, lib/voice/InsightsShares.svelte, lib/voice/IntakeScale.svelte, lib/voice/VoiceTypeIntake.svelte
-   voiceType.     45  lib/voice/VoiceTypeIntake.svelte, lib/voice/voiceTypes.ts, lib/voice/VoiceTypeFirst.svelte, lib/voice/OutsideNote.svelte
+   voiceType.     46  lib/voice/VoiceTypeIntake.svelte, lib/voice/voiceTypes.ts, lib/voice/VoiceTypeFirst.svelte, lib/voice/OutsideNote.svelte
    vowel.         11  lib/voice/vowel-names.ts, lib/markup/legend.ts
    wait.           2  lib/components/ReadingWait.svelte, lib/omr/wait.ts, lib/score/ScoreUploader.svelte
    watch.         46  the watch list: lib/analysis/watchlist.ts, lib/analysis/gates.ts, lib/markup/transposition-ruler.ts
@@ -1893,7 +1893,7 @@ const strings: Record<string, Record<Language, string>> = {
 	'insights.method.untyped':     { en: 'Method: computed from your calibration of {date} and the score as sung, including repeats.', fr: 'Méthode\u00a0: calculé à partir de votre calibration du {date} et de la partition telle que chantée, reprises comprises.' },
 	'insights.method.silent':      { en: 'Method: no voice has been measured, so nothing on this page is computed from one.', fr: 'Méthode\u00a0: aucune voix n\u2019a été mesurée, donc rien sur cette page n\u2019en est calculé.' },
 	// QUEUE row 166. RATIFIED: the lede, Dann 2026-11-09 16:13, cut to its first sentence by Dann 2026-11-10 12:56 (pinned in `ratified-lines.test.ts`). It is shown only for a
-	// voice declared as one of eight types and not calibrated (`analyze-score-adapter.ts`, `generic`); {voiceType} is the label `placeholderFillLabel` gives: the staff the values came from for a contralto, countertenor, or bass-baritone (`voiceTypes.ts`), otherwise the label the identity line prints.
+	// voice declared as one of eight types and not calibrated (`analyze-score-adapter.ts`, `generic`); {voiceType} is the staff the values came from (`borrowedStaffLabel`, `voiceTypes.ts`, on the Tier 1 id alone), so a bass who typed octavist reads "bass" (lane 74, item 3).
 	'insights.generic.lede':       { en: 'These findings use placeholder values for a generic {voiceType}, not your specific voice.', fr: 'Ces constats reposent sur des valeurs par défaut pour une voix type de {voiceType}, et non sur votre voix en particulier.' },
 	// RATIFIED by Dann 2026-11-10 (row 166): the method line for those findings, which names no calibration and no date.
 	'insights.method.generic.typed':   { en: 'Method: computed from placeholder values, the voice characteristics you typed, and the score as sung, including repeats.', fr: 'Méthode\u00a0: calculé à partir de valeurs par défaut, des caractéristiques vocales que vous avez indiquées et de la partition telle que chantée, reprises comprises.' },
@@ -2258,6 +2258,11 @@ const strings: Record<string, Record<Language, string>> = {
 	// and the identity lines 00:27; the 29 Tier 2 labels 00:32 (`draft-voice-labels_r2_2026-09-30.md`).
 	// Menu in sentence case; `voiceTypes.ts` lowers the first letter mid-line, keeping a name's capital.
 	'voiceType.heading': { en: 'Voice type', fr: 'Type de voix' },
+	// QUEUE row 167, lane 74 item 4. RATIFIED by Dann 2026-11-19 18:36, English and French in one message: the concession made at the moment of choice,
+	// shown under the Tier 1 group when the singer picks contralto, countertenor, or bass-baritone (`voiceTypeBorrowingNote`, `voiceTypes.ts`; both pickers). Assembled by the desk from
+	// `placeholder.borrowing` (ratified 09:43 and 09:52) and `calib.pane.notSure` (ratified 11:59); the only new clause is the join, built on `sheet.provenance`. The key name is a DESK DEFAULT.
+	// {type} is the Tier 1 name and {borrowed} the staff (`placeholder.borrowing`'s two tokens). The apostrophe in « n’a » is U+2019, as in every French string here (OQLF).
+	'voiceType.borrowing': { en: 'The field has not yet published resonance values for a {type}. Ilya can start from the {borrowed} staff, or you can record your vowels in vocal fry and Ilya works from your own voice.', fr: 'La recherche n\u2019a pas encore publié de valeurs de résonance pour un {type}. Ilya peut partir de la portée de {borrowed}, ou vous pouvez capter vos voyelles en friture vocale et Ilya travaille à partir de votre propre voix.' },
 	'voiceType.hint': { en: 'Choose the category you use for yourself. You can add a more specific one.', fr: 'Choisissez la catégorie que vous utilisez pour vous-même. Vous pouvez en préciser une plus fine.' },
 	'voiceType.more': { en: 'More specific (optional)', fr: 'Plus précis (facultatif)' },
 	'voiceType.other': { en: 'Other (type your own)', fr: 'Autre (saisissez le vôtre)' },

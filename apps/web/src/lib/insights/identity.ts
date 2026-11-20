@@ -9,7 +9,7 @@
  */
 import { t, type Language } from '$lib/i18n';
 import type { VoiceTypeChoice } from '$lib/voice/profileStore';
-import { fillVoiceType, placeholderFillLabel, voiceTypePrint } from '$lib/voice/voiceTypes';
+import { borrowedStaffLabel, fillVoiceType, voiceTypePrint } from '$lib/voice/voiceTypes';
 import type { AdaptedProfile } from '$lib/analysis/analyze-score-adapter';
 
 export interface IdentityInput {
@@ -45,16 +45,16 @@ export function restsOnSamples(adapted: Pick<AdaptedProfile, 'completeness' | 'g
 /**
  * The line above the findings for a voice that has only placeholders (RATIFIED,
  * Dann 2026-11-09 16:13), or null for any other voice. `{voiceType}` is the label
- * `placeholderLabel` gives (the borrowed staff for the three borrowing types, otherwise the label the identity line prints, lower-cased as it prints it).
+ * `placeholderLabel` gives: the staff the values came from (`borrowedStaffLabel`), so a bass who typed octavist reads "bass" (lane 74, item 3).
  */
 export function genericLede(generic: boolean, voiceType: VoiceTypeChoice | undefined, language: Language): string | null {
 	const label = placeholderLabel(generic, voiceType, language);
 	return label ? fillVoiceType(t('insights.generic.lede', language), label, language) : null;
 }
 
-/** The label for the sentences that say whose placeholder values a page uses (`placeholderFillLabel`: the borrowed staff for contralto, countertenor, and bass-baritone, otherwise `voiceTypePrint`), or undefined for any other voice. "Not sure" and no type take no placeholder profile (ruling of 2026-11-19, section 8), so `generic` is false for them and they never reach it. */
+/** The label for the sentences that say whose placeholder values a page uses (`borrowedStaffLabel`: the staff the values came from, on the Tier 1 id alone), or undefined for any other voice. "Not sure" and no type take no placeholder profile (ruling of 2026-11-19, section 8), so `generic` is false for them and they never reach it. */
 export function placeholderLabel(generic: boolean, voiceType: VoiceTypeChoice | undefined, language: Language): string | undefined {
-	return generic ? placeholderFillLabel(voiceType, language) : undefined;
+	return generic ? borrowedStaffLabel(voiceType?.voiceType, language) : undefined;
 }
 
 /**

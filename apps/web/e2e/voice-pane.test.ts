@@ -90,9 +90,9 @@ test.describe('the VOICE pane at rest', () => {
 		expect((await stored(page)).voices[0].voiceType).toBe('bass');
 		await expect(sentence(page)).toHaveText('Ilya is using generic values for a bass voice until you record your own.');
 		await expect(door(page, /^your vowel space$/i)).toBeVisible();
-		// QUEUE row 167 (ruling of 2026-11-19): a contralto has generic values now, named by the staff they borrow, and the door opens.
+		// QUEUE row 167 (ruling of 2026-11-19) and lane 74, item 1: a contralto has generic values now, borrowed from the mezzo-soprano staff, the pane says why, and the door opens.
 		await page.getByRole('radio', { name: 'Contralto', exact: true }).check();
-		await expect(sentence(page)).toHaveText('Ilya is using generic values for a mezzo-soprano voice until you record your own.');
+		await expect(sentence(page)).toHaveText('The field has not yet published resonance values for a contralto, so Ilya is using its mezzo-soprano values until you sample your own vowels in VOICE.');
 		await expect(door(page, /^your vowel space$/i)).toBeVisible();
 		// "Not sure" takes no starting profile: the ratified invitation, and the door stays shut.
 		await page.getByRole('radio', { name: 'Not sure', exact: true }).check();

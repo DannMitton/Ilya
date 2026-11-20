@@ -74,7 +74,7 @@ export const hintText = (hints: Hint[], language: Language): string =>
 /**
  * The vowel-space sheet's sources note (QUEUE row 167; brief r4 section 4.10). Its last clause names the staff the placeholder values were scaled to: `{borrowed}`, through
  * `fillVoiceType`. A voice with no staff to name takes the undeclared form, which says "the middle of Ilya's five staves". The branch is on `borrowedStaffLabel` being
- * `undefined`, never on `hasDeclaredType`: "Not sure", no type, and an id this build does not know all draw the undeclared form, and a declared type never draws a raw token.
+ * `undefined`: "Not sure", no type, and an id this build does not know all draw the undeclared form, and a declared type never draws a raw token.
  */
 export function sheetProvenance(voiceType: string | undefined, language: Language): string {
 	const staff = borrowedStaffLabel(voiceType, language);

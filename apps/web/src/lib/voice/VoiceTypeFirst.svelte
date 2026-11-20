@@ -10,7 +10,7 @@
 	 * characteristics.
 	 */
 	import { t, type Language } from '$lib/i18n';
-	import { TIER1, type Tier1Id } from './voiceTypes';
+	import { TIER1, voiceTypeBorrowingNote, type Tier1Id } from './voiceTypes';
 
 	interface Props {
 		value: string | undefined;
@@ -21,6 +21,8 @@
 	let { value, language, onchange }: Props = $props();
 
 	const T = (key: string) => t(key, language);
+	/* The concession at the moment of choice (lane 74, item 4): for contralto, countertenor, and bass-baritone only, shown while that type is selected. */
+	const borrowingNote = $derived(voiceTypeBorrowingNote(value, language));
 </script>
 
 <fieldset class="vt-first">
@@ -33,6 +35,10 @@
 				<span>{T(`voiceType.type.${id}`)}</span>
 			</label>
 		{/each}
+	</div>
+	<!-- Below the grid, not inside it: the grid flows in two columns and would place the note by the flow. A polite live region, present before the note arrives; focus stays on the radio. -->
+	<div class="vt-note" aria-live="polite">
+		{#if borrowingNote}<p class="vt-hint">{borrowingNote}</p>{/if}
 	</div>
 </fieldset>
 

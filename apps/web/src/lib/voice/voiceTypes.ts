@@ -114,11 +114,14 @@ export function isBorrowingType(voiceType: string | undefined): voiceType is key
 
 /**
  * The staff a voice's placeholder values came from, as a label, or `undefined` for a voice that has none. Takes the Tier 1 id alone; Tier 2 and Other's text never reach it.
+ * It fills `{voiceType}` in every sentence that says whose placeholder values a page works from (MELODY's subtitle, INSIGHTS' lede, the vowel chart's caption, the VOICE pane, and the sheet's sources note).
+ * The ruling's principle (2026-11-19 10:08, section 6): a sentence never tells a singer the values are their own type's when they are a neighbour's, and a Tier 2 label or Other's text never names a staff Ilya
+ * holds no values for. A bass who typed octavist reads "bass" on every one of those pages (lane 74, item 3; DESK DEFAULT, Dann's to overrule).
  * One contract, four clauses (brief r4 section 3):
  * 1. Contralto, countertenor, and bass-baritone get the fixed staff label, whatever `voiceTypeSpecific` or `voiceTypeOther` hold: the values came from the staff.
  * 2. The five published types get `voiceTypePrint`'s label on the Tier 1 id, so a bass who chose octavist reads "bass", a staff Ilya has, never "octavist".
  * 3. "Not sure" gets `undefined`, whatever Other's text holds (`voiceTypePrint` would return Other's text before its "Not sure" test).
- * 4. No type, and any id that is not Tier 1, get `undefined`. "Undeclared" means exactly that `undefined`, and every site branches on it, never on `hasDeclaredType`.
+ * 4. No type, and any id that is not Tier 1, get `undefined`. "Undeclared" means exactly that `undefined`, and every site branches on that value.
  */
 export function borrowedStaffLabel(voiceType: string | undefined, language: Language): string | undefined {
 	if (!isTier1(voiceType) || voiceType === 'not-sure') return undefined;
@@ -127,17 +130,18 @@ export function borrowedStaffLabel(voiceType: string | undefined, language: Lang
 }
 
 /**
- * The label that fills `{voiceType}` in the sentences that say whose placeholder values a page is working from (MELODY's subtitle, INSIGHTS' lede, and the vowel chart's caption).
- * The ruling's principle (2026-11-19 10:08, section 6): a sentence never tells a singer the values are their own type's when they are a neighbour's. So the three borrowing types
- * print the staff the values came from (`borrowedStaffLabel`), and every other type prints `voiceTypePrint` on the whole choice as before, Tier 2 label or Other's text included:
- * for the five published types the values are their own, and the lane keeps that behaviour (brief r4 section 9 item 6, `report-code-lane71-step2`, section 3).
- * "Not sure", no type, and an id this build does not know get `undefined`, whatever Other's text holds.
+ * The note the picker shows under the Tier 1 group at the moment the singer chooses contralto, countertenor, or bass-baritone (lane 74, item 4; `voiceType.borrowing`, RATIFIED by Dann 2026-11-19 18:36):
+ * the field has published no resonance values for that type, so Ilya starts from a neighbour's staff until the singer records their own vowels. `null` for the five published types, "Not sure", and no selection.
+ * Pure, and it takes the Tier 1 id and the language only: the note does not depend on what the singer has sampled (that is `borrowingLine`'s test, which needs formants; this one runs under `voice/`, and
+ * `voice/` may not import from `analysis/`, `scripts/ratchets.mjs`). `{type}` is the Tier 1 name (`voiceTypePrint` on the id alone, so the French stays masculine); `{borrowed}` is `borrowedStaffLabel`.
+ * Both pickers (`VoiceTypeIntake.svelte`, `VoiceTypeFirst.svelte`) call this one function.
  */
-export function placeholderFillLabel(choice: VoiceTypeChoice | undefined, language: Language): string | undefined {
-	const id = choice?.voiceType;
-	if (isBorrowingType(id)) return borrowedStaffLabel(id, language);
-	if (id === 'not-sure') return undefined;
-	return voiceTypePrint(choice, language);
+export function voiceTypeBorrowingNote(voiceType: string | undefined, language: Language): string | null {
+	if (!isBorrowingType(voiceType)) return null;
+	const type = voiceTypePrint({ voiceType }, language);
+	const borrowed = borrowedStaffLabel(voiceType, language);
+	if (!type || !borrowed) return null;
+	return fillVoiceType(fillVoiceType(t('voiceType.borrowing', language), type, language, 'type'), borrowed, language, 'borrowed');
 }
 
 /** A French label that begins with a vowel letter (a, e, i, o, u, y and their accented forms), never h: « d’octaviste », not « de octaviste ». */

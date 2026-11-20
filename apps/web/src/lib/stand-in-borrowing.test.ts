@@ -11,7 +11,7 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { t, type Language } from '$lib/i18n';
 import { hasPlaceholderProfile, PLACEHOLDER_PROFILE_TYPES } from '$lib/voice/engine/stand-ins';
-import { TIER1, OTHER, borrowedStaffLabel, fillVoiceType, isBorrowingType, placeholderFillLabel, voiceTypePrint } from '$lib/voice/voiceTypes';
+import { TIER1, TIER2, OTHER, borrowedStaffLabel, fillVoiceType, isBorrowingType, voiceTypeBorrowingNote, voiceTypePrint } from '$lib/voice/voiceTypes';
 import { profileSubtitle } from '$lib/markup/subtitle';
 import { genericLede, methodLineKey, placeholderLabel } from '$lib/insights/identity';
 import { composeBroadNote } from '$lib/analysis/analyze-score-adapter';
@@ -82,8 +82,12 @@ describe('2. the declared type’s own name appears in no {voiceType} fill for a
 					expect(s[key].toLowerCase(), `${id} ${key}`).toContain(staff);
 				// The declared type's name is absent wherever it is not the staff itself. A contralto's staff is "mezzo-soprano", which does not contain "contralto"; a bass-baritone's is "bass".
 				const own = TYPE_NAME[id][language];
-				for (const key of ['MELODY subtitle (4.1)', 'INSIGHTS lede (4.2)', 'vowel chart caption (4.3)', 'VOICE pane (4.6)', 'sheet sources note (4.10)', 'capture hint (4.10)'])
+				for (const key of ['MELODY subtitle (4.1)', 'INSIGHTS lede (4.2)', 'vowel chart caption (4.3)', 'sheet sources note (4.10)', 'capture hint (4.10)'])
 					expect(s[key].toLowerCase(), `${id} ${key}`).not.toContain(own);
+				// The VOICE pane now carries the borrowing line (lane 74, item 1), which names the declared type and the staff by design, so it takes the line's own treatment (`:87`) and not the fills'.
+				expect(s['VOICE pane (4.6)']).toContain(own);
+				expect(s['VOICE pane (4.6)']).toContain(staff);
+				expect(s['VOICE pane (4.6)']).toBe(s['borrowing line (4.7)']);
 				expect(s['borrowing line (4.7)']).toContain(own);
 				expect(s['borrowing line (4.7)']).toContain(staff);
 			}
@@ -104,7 +108,7 @@ describe('3. Other’s text and a Tier 2 label do not reach a borrowing type’s
 			for (const id of THREE) for (const v of variants) {
 				const choice = { voiceType: id, ...v };
 				const staff = STAFF[id][language];
-				expect(placeholderFillLabel(choice, language), `${id} ${JSON.stringify(v)}`).toBe(staff);
+				expect(placeholderLabel(true, choice, language), `${id} ${JSON.stringify(v)}`).toBe(staff);
 				expect(borrowedStaffLabel(id, language)).toBe(staff);
 				expect(genericLede(true, choice, language)).toContain(staff);
 				expect(profileSubtitle({ generic: true, voiceType: choice, language })).toContain(staff);
@@ -120,7 +124,7 @@ describe('4. "Not sure" reaches no {voiceType} fill, whatever Other holds', () =
 			const notSureOther = { voiceType: 'not-sure', voiceTypeSpecific: OTHER, voiceTypeOther: 'Russian Bass' };
 			for (const id of ['not-sure', undefined, '', 'castrato', 'Contralto', ' contralto']) expect(borrowedStaffLabel(id, language), String(id)).toBeUndefined();
 			for (const choice of [notSureOther, { voiceType: 'not-sure' }, {}, { voiceType: 'castrato', voiceTypeSpecific: OTHER, voiceTypeOther: 'X' }, undefined]) {
-				expect(placeholderFillLabel(choice, language), JSON.stringify(choice)).toBeUndefined();
+				expect(borrowedStaffLabel(choice?.voiceType, language), JSON.stringify(choice)).toBeUndefined();
 				expect(placeholderLabel(true, choice, language), JSON.stringify(choice)).toBeUndefined();
 				expect(genericLede(true, choice, language), JSON.stringify(choice)).toBeNull();
 				expect(borrowingLine(choice?.voiceType, {}, language)).toBeNull();
@@ -247,7 +251,7 @@ describe('13. one page read whole for a contralto, a countertenor, and a bass-ba
 					// Strip the staff's own words, then no other staff or voice type may appear beside it, except the declared type inside the borrowing line.
 					// The borrowing line is stripped of the declared type first, since "bass-baritone" contains "bass".
 					let rest = text;
-					if (key === 'borrowing line (4.7)') rest = rest.split(TYPE_NAME[id][language]).join('');
+					if (key === 'borrowing line (4.7)' || key === 'VOICE pane (4.6)') rest = rest.split(TYPE_NAME[id][language]).join('');
 					rest = rest.split(staff).join('');
 					for (const other of ['soprano', 'tenor', 'ténor', 'baritone', 'baryton', 'bass', 'basse', 'contralto', 'contre-ténor', 'countertenor', 'mezzo']) {
 						// "voice" and "voix" are not types; "ténor" inside "mezzo et ténor" was stripped above.
@@ -263,7 +267,7 @@ describe('13. one page read whole for a contralto, a countertenor, and a bass-ba
 
 describe('14. every string the lane writes or edits: U+2019 apostrophes, U+00A0 before each French colon', () => {
 	const KEYS = [
-		'voiceType.staff.mezzo-soprano', 'voiceType.staff.bass', 'voiceType.staff.mezzo-tenor', 'placeholder.borrowing',
+		'voiceType.staff.mezzo-soprano', 'voiceType.staff.bass', 'voiceType.staff.mezzo-tenor', 'placeholder.borrowing', 'voiceType.borrowing',
 		'insights.method.generic.typed', 'insights.method.generic.untyped', 'insights.method.noScore.generic', 'analysis.broad.body.generic',
 		'calib.pane.notSure', 'calib.pane.typedNone', 'sheet.provenance', 'sheet.provenance.undeclared', 'capture.hint.placed.typed',
 	];
@@ -272,6 +276,119 @@ describe('14. every string the lane writes or edits: U+2019 apostrophes, U+00A0 
 			for (const language of LANGS) expect(t(key, language), `${key} ${language}`).not.toContain("'");
 			const fr = t(key, 'fr');
 			for (const m of fr.matchAll(/:/g)) expect(fr[m.index! - 1], `${key}: colon at ${m.index}`).toBe('\u00a0');
+		}
+	});
+});
+
+describe('lane 74, item 4: the concession at the moment of choice (`voiceType.borrowing`, RATIFIED by Dann 2026-11-19 18:36)', () => {
+	const NOTE: Record<(typeof THREE)[number], Record<Language, string>> = {
+		contralto: { en: 'The field has not yet published resonance values for a contralto. Ilya can start from the mezzo-soprano staff, or you can record your vowels in vocal fry and Ilya works from your own voice.', fr: 'La recherche n’a pas encore publié de valeurs de résonance pour un contralto. Ilya peut partir de la portée de mezzo-soprano, ou vous pouvez capter vos voyelles en friture vocale et Ilya travaille à partir de votre propre voix.' },
+		countertenor: { en: 'The field has not yet published resonance values for a countertenor. Ilya can start from the mezzo and tenor staff, or you can record your vowels in vocal fry and Ilya works from your own voice.', fr: 'La recherche n’a pas encore publié de valeurs de résonance pour un contre-ténor. Ilya peut partir de la portée de mezzo et ténor, ou vous pouvez capter vos voyelles en friture vocale et Ilya travaille à partir de votre propre voix.' },
+		'bass-baritone': { en: 'The field has not yet published resonance values for a bass-baritone. Ilya can start from the bass staff, or you can record your vowels in vocal fry and Ilya works from your own voice.', fr: 'La recherche n’a pas encore publié de valeurs de résonance pour un baryton-basse. Ilya peut partir de la portée de basse, ou vous pouvez capter vos voyelles en friture vocale et Ilya travaille à partir de votre propre voix.' },
+	};
+
+	it('the key holds the ratified English and French, character for character, with its two tokens', () => {
+		expect(t('voiceType.borrowing', 'en')).toBe('The field has not yet published resonance values for a {type}. Ilya can start from the {borrowed} staff, or you can record your vowels in vocal fry and Ilya works from your own voice.');
+		expect(t('voiceType.borrowing', 'fr')).toBe('La recherche n\u2019a pas encore publié de valeurs de résonance pour un {type}. Ilya peut partir de la portée de {borrowed}, ou vous pouvez capter vos voyelles en friture vocale et Ilya travaille à partir de votre propre voix.');
+	});
+
+	it('the apostrophe in « n’a » is U+2019, and no straight apostrophe is in either string', () => {
+		const fr = t('voiceType.borrowing', 'fr');
+		expect(fr.codePointAt(fr.indexOf('n\u2019a') + 1)).toBe(0x2019);
+		expect(fr.indexOf('n\u2019a')).toBeGreaterThan(-1);
+		expect(fr).not.toContain("'");
+		expect(t('voiceType.borrowing', 'en')).not.toContain("'");
+		// No colon in either language, so no no-break space is owed.
+		expect(fr).not.toContain(':');
+		expect(t('voiceType.borrowing', 'en')).not.toContain(':');
+	});
+
+	for (const language of LANGS) {
+		it(`${language}: the note for all nine Tier 1 ids and for no selection: the three read it, the other six and "no selection" read nothing`, () => {
+			for (const id of TIER1) {
+				const note = voiceTypeBorrowingNote(id, language);
+				if ((THREE as readonly string[]).includes(id)) expect(note, id).toBe(NOTE[id as (typeof THREE)[number]][language]);
+				else expect(note, id).toBeNull();
+			}
+			for (const none of [undefined, '', 'castrato', 'Contralto', ' contralto']) expect(voiceTypeBorrowingNote(none, language), String(none)).toBeNull();
+			for (const id of THREE) expect(voiceTypeBorrowingNote(id, language)).not.toMatch(/[{}]/);
+		});
+	}
+
+	it('it names the declared type and the staff, and takes no Tier 2 label or Other text: the French stays masculine', () => {
+		expect(voiceTypeBorrowingNote('countertenor', 'fr')).toContain('pour un contre-ténor');
+		expect(voiceTypeBorrowingNote('bass-baritone', 'fr')).toContain('pour un baryton-basse');
+		expect(voiceTypeBorrowingNote('contralto', 'fr')).toContain('pour un contralto');
+		expect(isBorrowingType('contralto') && voiceTypeBorrowingNote('contralto', 'en')).toContain('a contralto');
+	});
+
+	it('both pickers call the one function, put the note below their radio group and inside their fieldset, and make it a polite live region without moving focus', () => {
+		const intake = readFileSync(new URL('./voice/VoiceTypeIntake.svelte', import.meta.url), 'utf8');
+		const first = readFileSync(new URL('./voice/VoiceTypeFirst.svelte', import.meta.url), 'utf8');
+		for (const src of [intake, first]) {
+			expect(src).toContain('voiceTypeBorrowingNote(');
+			expect(src).toContain('aria-live="polite"');
+			expect(src).not.toMatch(/\.focus\(|autofocus/);
+		}
+		// VoiceTypeIntake: after the {#each}, before the clear button, in the same fieldset (`vt-question`).
+		expect(intake.indexOf('{/each}')).toBeLessThan(intake.indexOf('class="vt-note"'));
+		expect(intake.indexOf('class="vt-note"')).toBeLessThan(intake.indexOf('class="vt-clear"'));
+		// VoiceTypeFirst: after the grid's closing tag, not inside it, before the fieldset closes.
+		const grid = first.indexOf('<div class="vt-choices">');
+		const gridEnd = first.indexOf('</div>', first.indexOf('{/each}', grid));
+		const note = first.indexOf('class="vt-note"');
+		expect(grid).toBeGreaterThan(-1);
+		expect(note).toBeGreaterThan(gridEnd);
+		expect(note).toBeLessThan(first.indexOf('</fieldset>'));
+	});
+});
+
+describe('lane 74, item 3: a bass reads "bass" on every page, whatever finer label or own words they chose', () => {
+	const BASS_LABELS: Array<{ name: string; choice: { voiceType: string; voiceTypeSpecific?: string; voiceTypeOther?: string } }> = [
+		{ name: 'no finer label', choice: { voiceType: 'bass' } },
+		...TIER2.bass.map((id) => ({ name: id, choice: { voiceType: 'bass', voiceTypeSpecific: id } })),
+		{ name: 'Other: octaviste', choice: { voiceType: 'bass', voiceTypeSpecific: OTHER, voiceTypeOther: 'octaviste' } },
+		{ name: 'Other: my own words', choice: { voiceType: 'bass', voiceTypeSpecific: OTHER, voiceTypeOther: 'my own words' } },
+	];
+	const WANT: Record<Language, { subtitle: string; lede: string; caption: string }> = {
+		en: {
+			subtitle: 'Resonance profile: placeholder values for a generic bass, not yet your own resonances.',
+			lede: 'These findings use placeholder values for a generic bass, not your specific voice.',
+			caption: 'against where each vowel turns in a generic bass',
+		},
+		fr: {
+			subtitle: 'Profil de résonances\u00a0: valeurs par défaut pour une voix type de basse, pas encore vos propres résonances.',
+			lede: 'Ces constats reposent sur des valeurs par défaut pour une voix type de basse, et non sur votre voix en particulier.',
+			caption: 'selon la hauteur où chaque voyelle change de timbre pour une voix type de basse',
+		},
+	};
+	it('the TIER2 list holds the four bass labels the brief counts, and the five published types hold 23', () => {
+		expect(TIER2.bass).toEqual(['basso-cantante', 'basso-buffo', 'basso-profondo', 'octavist']);
+		expect(['soprano', 'mezzo-soprano', 'tenor', 'baritone', 'bass'].reduce((n, id) => n + TIER2[id as keyof typeof TIER2].length, 0)).toBe(23);
+	});
+	for (const language of LANGS) {
+		it(`${language}: MELODY's subtitle, INSIGHTS' lede, and the vowel chart's caption`, () => {
+			for (const { name, choice } of BASS_LABELS) {
+				expect(profileSubtitle({ generic: true, voiceType: choice, language }), name).toBe(WANT[language].subtitle);
+				expect(genericLede(true, choice, language), name).toBe(WANT[language].lede);
+				// The chart caption is the two calls the page makes (`placeholderLabel`, then `fillVoiceType`): `singerBlocks` needs a whole model.
+				const label = placeholderLabel(true, choice, language);
+				expect(label, name).toBe(language === 'en' ? 'bass' : 'basse');
+				expect(fillVoiceType(t('insights.r2.vowels.against.generic', language), label ?? '', language), name).toBe(WANT[language].caption);
+				// The pane and the sheet already said "bass" (`borrowedStaffLabel` on the Tier 1 id); they must agree with the three pages above.
+				expect(paneSentence({ usable: 0, core: [], voiceType: choice.voiceType, restWorkedOut: false }, language), name).toContain(language === 'en' ? 'a bass voice' : 'de basse');
+				expect(sheetProvenance(choice.voiceType, language), name).toContain(language === 'en' ? 'bass staff' : 'portée de basse');
+			}
+		});
+	}
+	it('Other\u2019s own words never reach a published type\u2019s fill, and "Not sure" still reads nothing', () => {
+		for (const language of LANGS) {
+			for (const id of ['soprano', 'mezzo-soprano', 'tenor', 'baritone', 'bass']) {
+				const choice = { voiceType: id, voiceTypeSpecific: OTHER, voiceTypeOther: 'octaviste' };
+				expect(placeholderLabel(true, choice, language), `${id} ${language}`).toBe(borrowedStaffLabel(id, language));
+				expect(profileSubtitle({ generic: true, voiceType: choice, language })).not.toContain('octaviste');
+			}
+			expect(placeholderLabel(true, { voiceType: 'not-sure', voiceTypeSpecific: OTHER, voiceTypeOther: 'octaviste' }, language)).toBeUndefined();
 		}
 	});
 });

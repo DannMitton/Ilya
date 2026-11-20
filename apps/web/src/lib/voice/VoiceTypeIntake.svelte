@@ -24,7 +24,7 @@
 	import { savedFlag, settle } from '$lib/components/Field/settle-field';
 	import SavedNote from '$lib/components/Field/SavedNote.svelte';
 	import type { VoiceTypeChoice } from './profileStore';
-	import { OTHER, TIER1, TIER2, isTier1, withTier1 } from './voiceTypes';
+	import { OTHER, TIER1, TIER2, isTier1, voiceTypeBorrowingNote, withTier1 } from './voiceTypes';
 
 	interface Props {
 		value: VoiceTypeChoice;
@@ -48,6 +48,8 @@
 	const tier1 = $derived(isTier1(value.voiceType) ? value.voiceType : undefined);
 	const specifics = $derived(tier1 ? TIER2[tier1] : []);
 	const notSure = $derived(tier1 === 'not-sure');
+	/* The concession at the moment of choice (lane 74, item 4): for contralto, countertenor, and bass-baritone only, shown while that type is selected. */
+	const borrowingNote = $derived(voiceTypeBorrowingNote(tier1, language));
 
 	function setSpecific(voiceTypeSpecific: string | undefined) {
 		onchange({ ...choice(), voiceTypeSpecific });
@@ -76,6 +78,10 @@
 				<span>{T(`voiceType.type.${id}`)}</span>
 			</label>
 		{/each}
+		<!-- A polite live region, present before the note arrives so a screen reader announces it when the singer chooses. Focus stays on the radio. -->
+		<div class="vt-note" aria-live="polite">
+			{#if borrowingNote}<p class="vt-hint">{borrowingNote}</p>{/if}
+		</div>
 		{#if tier1}
 			<button type="button" class="vt-clear" onclick={() => onchange(withTier1(choice(), undefined))}>
 				{T('voiceIntake.clear')}
