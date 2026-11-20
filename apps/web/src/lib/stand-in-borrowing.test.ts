@@ -247,7 +247,7 @@ describe('13. one page read whole for a contralto, a countertenor, and a bass-ba
 					// Strip the staff's own words, then no other staff or voice type may appear beside it, except the declared type inside the borrowing line.
 					// The borrowing line is stripped of the declared type first, since "bass-baritone" contains "bass".
 					let rest = text;
-					if (key === 'borrowing line (4.7)' || key === 'VOICE pane (4.6)') rest = rest.split(TYPE_NAME[id][language]).join('');
+					if (key === 'borrowing line (4.7)') rest = rest.split(TYPE_NAME[id][language]).join('');
 					rest = rest.split(staff).join('');
 					for (const other of ['soprano', 'tenor', 'ténor', 'baritone', 'baryton', 'bass', 'basse', 'contralto', 'contre-ténor', 'countertenor', 'mezzo']) {
 						// "voice" and "voix" are not types; "ténor" inside "mezzo et ténor" was stripped above.

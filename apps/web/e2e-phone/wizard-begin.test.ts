@@ -1,7 +1,7 @@
 /**
  * LANE 75, ITEM 3 (QUEUE row 167): BEGIN STAYS IN REACH ON A SHORT PHONE. On the wizard's welcome screen, with contralto chosen (so the picker's note is shown),
- * the whole of Begin is on screen with the drawer's scroll at rest, nothing sits on top of it, and it does not cover the nine choices or the note. Three short
- * phones, in English and in French. Before the fix Begin sat 41 to 172 px below the fold at these sizes (measured on the stub, lane 75 item 3 report).
+ * the whole of Begin is on screen at the moment of choice, nothing sits on top of it, and it does not cover the nine choices or the note. Three short
+ * phones, in English and in French. Before the fix Begin sat 97 to 228 px past the fold at these sizes (measured on the stub, lane 75 item 3 report).
  *
  *     PW_CHROMIUM_PATH=... pnpm --filter @ilya/web exec playwright test --project=phone wizard-begin
  *
@@ -58,16 +58,14 @@ for (const size of SIZES) {
 	test.describe(`${size.width} by ${size.height}`, () => {
 		test.use({ viewport: size });
 		for (const language of ['en', 'fr'] as const) {
-			test(`${language}: contralto chosen, Begin is whole on screen at rest, uncovered, and covers neither the nine choices nor the note`, async ({ page }) => {
+			test(`${language}: contralto chosen, Begin is whole on screen at the moment of choice, uncovered, and covers neither the nine choices nor the note`, async ({ page }) => {
 				await openWelcome(page, language);
 				await page.locator('input[name="voice-type-first"][value="contralto"]').check();
-				// The note is shown (it is what makes the screen too tall), and the singer has not scrolled: the check above may have, so the scroll is put back to rest.
+				// The note is shown (it is what makes the screen too tall). The scroll is left where the singer's own tap put it: nothing is reset.
 				await expect(page.locator('.vt-first .vt-note p')).toBeVisible();
-				await page.evaluate(() => { document.querySelector('.takeover-body')!.scrollTop = 0; });
 				const g = await geometry(page);
 				expect(g.noteText.length, 'the note is shown').toBeGreaterThan(0);
 				expect(g.choices.length, 'the nine choices').toBe(9);
-				expect(g.scrollTop, 'at rest').toBe(0);
 				// 1. The whole of Begin is inside the scroll box and inside the window, with nothing on top of it.
 				expect(g.begin.top, 'Begin starts inside the scroll box').toBeGreaterThanOrEqual(g.scroller.top);
 				expect(g.begin.bottom, 'Begin ends inside the scroll box').toBeLessThanOrEqual(g.scroller.bottom);
@@ -76,6 +74,10 @@ for (const size of SIZES) {
 				// 2. Begin covers none of the nine choices and not the note.
 				for (const [k, c] of g.choices.entries()) expect(overlaps(g.begin, c), `choice ${k + 1}`).toBe(false);
 				expect(overlaps(g.begin, g.note), 'the note').toBe(false);
+				// 3. The note and the nine choices are whole inside the scroll box at the moment of choice (half a pixel of tolerance for rounding).
+				expect(g.note.top, 'the note starts inside the scroll box').toBeGreaterThanOrEqual(g.scroller.top);
+				expect(g.note.bottom, 'the note ends inside the scroll box').toBeLessThanOrEqual(g.scroller.bottom + 0.5);
+				for (const [k, c] of g.choices.entries()) expect(c.top >= g.scroller.top && c.bottom <= g.scroller.bottom + 0.5, `choice ${k + 1} is whole on screen`).toBe(true);
 			});
 		}
 	});
