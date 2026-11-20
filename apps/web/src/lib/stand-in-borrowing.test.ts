@@ -82,12 +82,8 @@ describe('2. the declared type’s own name appears in no {voiceType} fill for a
 					expect(s[key].toLowerCase(), `${id} ${key}`).toContain(staff);
 				// The declared type's name is absent wherever it is not the staff itself. A contralto's staff is "mezzo-soprano", which does not contain "contralto"; a bass-baritone's is "bass".
 				const own = TYPE_NAME[id][language];
-				for (const key of ['MELODY subtitle (4.1)', 'INSIGHTS lede (4.2)', 'vowel chart caption (4.3)', 'sheet sources note (4.10)', 'capture hint (4.10)'])
+				for (const key of ['MELODY subtitle (4.1)', 'INSIGHTS lede (4.2)', 'vowel chart caption (4.3)', 'VOICE pane (4.6)', 'sheet sources note (4.10)', 'capture hint (4.10)'])
 					expect(s[key].toLowerCase(), `${id} ${key}`).not.toContain(own);
-				// The VOICE pane now carries the borrowing line (lane 74, item 1), which names the declared type and the staff by design, so it takes the line's own treatment (`:87`) and not the fills'.
-				expect(s['VOICE pane (4.6)']).toContain(own);
-				expect(s['VOICE pane (4.6)']).toContain(staff);
-				expect(s['VOICE pane (4.6)']).toBe(s['borrowing line (4.7)']);
 				expect(s['borrowing line (4.7)']).toContain(own);
 				expect(s['borrowing line (4.7)']).toContain(staff);
 			}
