@@ -76,6 +76,15 @@
 	.vt-note:empty {
 		margin-top: -0.3rem;
 	}
+	/* BEGIN STAYS IN REACH ON A SHORT PHONE (lane 75, item 3; QUEUE row 167). The welcome screen's Begin follows this picker in the page, and with a note shown it sits 41 to 172 px
+	   below the fold at 390 by 667, 375 by 667, and 360 by 640 (English and French). On a short touch screen the picker is laid after Begin instead: `order` on this fieldset, a
+	   flex item of the wizard's `.wizard-phase`, so nothing is covered. The source order is not moved, so a keyboard still reaches the picker first; the rule is touch only for that reason.
+	   880 is measured: the tallest case (French, 360 wide, note shown) puts Begin's bottom at 812, and the drawer's bottom bar takes the last 56 px of the window, so it needs 868. */
+	@media (max-height: 880px) and (pointer: coarse) {
+		.vt-first {
+			order: 1;
+		}
+	}
 	.vt-choices {
 		display: grid;
 		grid-template-columns: repeat(2, minmax(0, 1fr));
