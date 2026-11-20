@@ -60,6 +60,8 @@ next session the same hour it cost the last one.
 | you are about to quote a cost for a Fable read of one audit unit | `ESTIMATES BY KIND OF JOB` |
 | a desk is about to cite "no vowel is ever blank" as Dann's ruling | `NO VOWEL IS EVER BLANK IS A GLOSS` |
 | you are about to cite one of Dann's rules as authority for your own convenience | `THE OPENING READ IS NOT A MENU` |
+| you are about to cut a cloud lane and the composer says it will push to `Shane` | `THE CODE BRANCH PICKER DOES NOT CREATE BRANCHES` |
+| a lane reports gate failures it did not predict, on a Playwright run | `A STORED BROWSER STATE PINNED TO ONE PORT` |
 | you are about to skip part of the opening read, or write a partial `read:` line | `THE OPENING READ IS NOT A MENU` |
 | a sentence saying no source gives fR2, or "Bozeman charts fR1 only" | `BOZEMAN GIVES fR2` |
 | a helper's report lands while you still have the full text only in the thread | `A HELPER'S REPORT WAS FILED CONDENSED` |
@@ -5654,3 +5656,24 @@ A shallow clone cannot answer an ancestry question (`git merge-base --is-ancesto
 
 - **Fable review of one Code brief, read from the tree through the bridge:** 245,984 tokens (cap 260k, 29 tool uses, 7.7 min). Lane 74 r1, a 13.1 kB brief of three items, 35 citations checked against the tree. Quoted range was 150k to 260k; the actual sits near its top, so the range holds and the cap was right. Add it to the table at `ESTIMATES BY KIND OF JOB`, which now has two actuals for this kind (176,112 and 245,984).
 - **A brief written while Dann is still ruling goes stale under the reviewer.** The lane 74 r1 review opened at 18:27 and handed back at 18:35; between those, Dann asked his 18:27 question and ruled at 18:33, and the reviewer read the uncommitted `INBOX.md` appends mid-run and raised the gap itself as its first blocker. Nothing was lost, and the review spent tokens checking an item the ruling had moved. For next time: when a ruling is in flight on the same subject as a running review, say so in the review's own prompt, or wait for the ruling. Desk note, 2026-11-19 18:4x.
+
+## THE CODE BRANCH PICKER DOES NOT CREATE BRANCHES (desk, 2026-11-19 19:0x)
+
+Cutting lane 74 through Claude in Chrome. On `claude.ai/code`, the new-session composer carries a banner reading **"Claude will push directly to `<branch>`"**, and left alone that branch is `Shane`, which `CONTRACT.md` section 4 forbids an agent lane to touch. The branch chip beside the repository name opens a picker with a search field. **It lists only branches that already exist and offers no way to create one:** typing `cloud-lane-74` returned "No matching branches" and nothing else. So the branch must exist on GitHub before the session can be pointed at it, and creating it is a push, which is Dann's. One command does it without touching his working tree or moving him off `Shane`:
+
+```
+cd ~/Desktop/ilya-rewrite && git push origin Shane:cloud-lane-74
+```
+
+**And the picker's list is fetched when the page loads.** After Dann created the branch, the open picker still said "No matching branches"; the page had to be reloaded before the new branch appeared. Reload, then open the picker, then select it, then read the banner back to confirm it names the lane and not `Shane`.
+
+## A STORED BROWSER STATE PINNED TO ONE PORT (lane 74, 2026-11-19 19:5x)
+
+Lane 74 reported two gate 4 failures it had not predicted and stopped to find them, which was the right order. The cause was the instrument, not the change: **its Playwright harness's stored browser state was tied to port 5173 and blocked every test served on 5174**, so the post-change run was invalid. It fixed the harness config and reran. Tether 11 in plain terms: a gate result from a run whose server moved ports is not a reading. When a lane reports unpredicted failures on a Playwright run, ask what port the run used before asking what the change broke.
+
+## ESTIMATES BY KIND OF JOB, actuals from the 2026-11-19 night desk
+
+- **Fable review of one Code brief, read from the tree through the bridge:** 245,984 tokens (cap 260k, 29 tool uses, 7.7 min). Lane 74 r1, a 13.1 kB brief of three items, 35 citations checked. The quoted range 150k to 260k held, at its top.
+- **Fable DELTA review of a brief revision:** 189,550 tokens (cap 200k, 16 tool uses, 5.5 min). Lane 74 r2, which was 60 percent longer than r1 and carried a new fourth item. Inside the 60k to 200k range, near its top because the new item had had no review.
+- **Fable as-built review of one lane, read from its own clone of the branch, with browser probes and a control worktree:** 230,788 tokens (cap 350k, 36 tool uses, **30.5 min**). Lane 74: 37 files, +818 -45; it rendered both pickers and the pane at eleven window sizes, ran three gates on the branch, and ran a control suite on untouched `Shane`. Cheaper than lane 71's 291,665 for a bigger diff, because the brief named what to check.
+- **A cloud Code lane's wall clock, first recorded actual:** lane 74 ran about **2h 35m** on Sonnet 5.5 for nine steps, 37 files, and sixteen rendered pictures. Almost all of it was test runs, not deliberation: eight gates twice, two Playwright projects, a harness repair, and a rerun. There was no recorded wall clock for a lane before this, and Dann asked at 20:31 whether ninety minutes was normal and the desk could not answer from the record. Quote this one, and say it is one actual.
