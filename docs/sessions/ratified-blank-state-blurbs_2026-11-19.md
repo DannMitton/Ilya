@@ -127,3 +127,27 @@ change with it.
 - The directional tails of `profile.provisional.noneMessage` (`:1499`),
   `profile.provisional.sentenceSingular` (`:1503`), and `sentencePlural` (`:1504`).
 - `insights.silence.noScore` (`:1902`) is reworded, not retired.
+
+---
+
+## Corrections of 2026-11-20, by the Opus desk
+
+This file is the verbatim record of what Dann ratified on 2026-11-19, so nothing above is rewritten. These corrections sit beside it and win where they differ.
+
+### 1. Section 2's rule was reworded by Dann on 2026-11-19 at 09:35, and this file never caught up
+
+Section 2 above opens "The ask names only what stops the page drawing at all", with its table built on that. **Dann reworded it the same morning, after Fable's review of the lane 71 brief r1 exposed the hole:** *the ask names what is missing for the page to do what its own first sentence promises; NOTES says how complete what is already there is.* The earlier wording was the desk's and is struck. Why it matters: MELODY draws a score with no voice at all, so the struck wording would have left a voiceless MELODY asking for nothing, and Dann 09:35: *"that is no MELODY's target function"*. Marking is what MELODY is for, so a voiceless MELODY asks for the voice even though pixels would appear. The reworded rule reaches this file only now; it had lived in `brief-code-lane71-blank-states_r2_2026-11-19.md` and in `docs/memory/STATE-archive.md`. Found by Fable's review of the lane 78 brief, 2026-11-20 (`review-fable-two-briefs_r1_2026-11-20.md`, blocker 78-B1), which also found that the delta review's edit 12 had asked for this correction on 2026-11-19 and it was never made.
+
+### 2. RATIFIED 2026-11-20 17:17: the one-provisional-vowel sentence
+
+Section 3 above gives NOTES on MELODY for several provisional vowels and nothing for exactly one. Dann ratified the singular, English and French together, 2026-11-20 17:17 (*"Yes I ratify both"*, transcribed as written):
+
+- **English:** "Your {vowels} is provisional; set it in VOICE."
+- **French:** « Votre voyelle {vowels} est provisoire; réglez-la dans VOIX. »
+
+Nothing coined. Both are the singular inflection of his plural of 2026-11-19 09:25, whose « réglez-les » was the desk's coinage and his ratification. Agreement checked against its referent: « réglez-la » agrees with « voyelle », feminine singular, the noun the French sentence names. No space before the semicolon, matching the plural and OQLF.
+
+### 3. This file's line numbers into `i18n.ts` are stale
+
+The tree has moved since 2026-11-19. Read by the desk on `47bd5c5c`, 2026-11-20, and confirmed by Fable: this file's `:1499` is now `:1501`, `:1502` is `:1504`, `:1503` is `:1505`, `:1504` is `:1506`, `:1514` is `:1516`, `:1902` is `:1904`, `:1904` is `:1906`, and `:2081` is `:2086`. **Cite the keys, not the numbers**: `profile.provisional.noneMessage`, `profile.statusSetMeasuredPlural`, `profile.provisional.sentenceSingular`, `profile.provisional.sentencePlural`, `profile.emptyState`, `insights.silence.noScore`, `insights.method.noScore.samples`, `insights.r2.notes`. Where this file and the tree differ on a live string's wording, the tree wins.
+
