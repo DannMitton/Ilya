@@ -15,6 +15,13 @@ The index was added 2026-09-01. Nothing below it was moved, reworded, or removed
 **When you add a section, add its row here.** A trap nobody can find costs the
 next session the same hour it cost the last one.
 
+### Learned 2026-11-22 (Opus desk: lanes 80, 81, 82 and N.204's start)
+- `A FABLE REVIEW NEVER REACHES THE TREE BY ITSELF` (last sections of this file): a review that arrives as a subagent memo exists only in the thread; `STATE.md` has recorded reviews as filed that are not on disk.
+- `A LANE'S "COMMIT X IS IN" CAN MEAN ITS WORKING TREE`: read `git log` on the branch, not the lane's prose.
+- `THE CODE CHANGES PANEL COUNTS BINARIES BY THEIR BYTES`: a 5 MB picture folder reads as +1,227,073 lines.
+- `A COLLISION TEST CAN PASS ON THE COLLISION`: `e2e/insights-page.test.ts` asserts no label touches a bar or a line and missed the fault, because its fixture's secondo is E♭4 and Dann's is D♯4.
+- `ESTIMATES, 2026-11-22`: three Fable actuals.
+
 ### Learned 2026-11-21 (Code, lane 79)
 - `A LOCKFILE DEPENDENCY MISSING FROM node_modules STOPS pnpm dev` (last section of this file):
   `@tesseract.js-data/rus` is in the lockfile and absent from `node_modules` on Dann's Mac, so
@@ -5805,3 +5812,29 @@ tracked file moved, and the lockfile was not rewritten.
 
 **Why it matters:** a lane that needs pictures or a browser measurement dies at its first step, and
 the error names a model-copying script rather than a missing package, so the cause is not obvious.
+
+## A FABLE REVIEW NEVER REACHES THE TREE BY ITSELF
+
+**Learned 2026-11-22.** A Fable review spawned with the Agent tool returns its memo into the desk's thread. Nothing writes it to `docs/sessions/`. Asked to review a brief against its own earlier review of the same lane, Fable reported it could not: `ls docs/sessions` showed no review of the lane 80 brief, although `STATE.md` recorded it as filed with four blockers and eighteen amendments. Three further reviews the same night reached the tree no better.
+
+**The repair:** the desk writes every review to `docs/sessions/review-fable-<subject>_r<n>_<date>.md` in the turn the memo lands, not at the close, because a thread that compacts loses the text. A review named in `STATE.md` or `QUEUE.md` and absent from the tree is a record error, not a missing review.
+
+## A LANE'S "COMMIT X IS IN" CAN MEAN ITS WORKING TREE
+
+**Learned 2026-11-22 (lane 80).** The lane reported "Commit B is in: MELODY and INSIGHTS follow the shared frame" while the branch still carried two commits and nine modified plus five untracked files. Forty minutes of work existed only in Dann's working tree. Read `git --no-optional-locks log --oneline` on the branch before believing a lane's account of what is committed, and tell Dann when work is uncommitted, because the tree is his.
+
+## THE CODE CHANGES PANEL COUNTS BINARIES BY THEIR BYTES
+
+**Learned 2026-11-22.** The Claude desktop app's Changes panel showed `+1227073 -18824` for lane 80. The committed diff was 16 files and 11,146 insertions, of which 10,816 were two measurement JSON files; the rest was 26 untracked PNG screenshots counted by their bytes. A figure in the millions there is pictures, not code. Read `git diff --numstat` before reacting to it.
+
+## A COLLISION TEST CAN PASS ON THE COLLISION
+
+**Learned 2026-11-22 (Fable's review of the lane 82 brief).** `apps/web/e2e/insights-page.test.ts:124-153` already asserts, rendered, in both languages, that no label touches a label, a bar, or a line, with the bracket in its set at `:137`. Dann found the secondo passaggio name sitting on the bracket's stroke anyway. Its fixture's secondo is E♭4 (`:39`); his is D♯4, wider by the accidental, and the room is a constant 80 px. **A rendered invariant test is only as wide as its fixture's widest case.** Where a string's width is what the test guards, the fixture carries the widest value the string can take, enumerated, not a representative one.
+
+## ESTIMATES, 2026-11-22 (Opus desk)
+
+- **Fable as-built review of a four-commit frame lane**, read through the bridge with its JSON re-compared and its PNGs analysed pixel by pixel: **250,426 tokens, 41 tool uses, 7.9 min**, cap 280k.
+- **Fable brief review of a five-item follow-up lane: 188,591, 30 tool uses, 5.9 min**, cap 260k.
+- **Fable brief review of a single-component lane: 127,211, 14 tool uses, 3.5 min**, cap 200k.
+- So a brief review scales with the brief's item count rather than with the tree. Quote 120k to 200k for one component, 190k to 260k for a multi-item lane, 190k to 280k for an as-built read.
+
