@@ -1,0 +1,5408 @@
+{
+ "label": "before-1440",
+ "width": 1440,
+ "results": {
+  "sunless/text/en": {
+   "htmlFontSize": "16px",
+   "pages": [
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": {
+      "cls": "title-header s-ZOotb-R76k-b",
+      "offsetHeight": 105,
+      "ruleBottom": 152.984375
+     },
+     "runningHeaderOffsetHeight": null,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 55.96875,
+      "pageLabel": "Page 1 of 1",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 191.390625,
+      "text": "К"
+     },
+     "firstCyrillicRowBox": {
+      "t": 193.390625,
+      "b": 211.78125,
+      "l": 96,
+      "r": 174.5
+     },
+     "window": {
+      "cls": "page-content s-OTIigJQj0hM-",
+      "t": 169,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 0,
+      "last": 9,
+      "distinct": 10
+     },
+     "rowsEndingBelowWindow": 0
+    }
+   ]
+  },
+  "sunless/text/fr": {
+   "htmlFontSize": "16px",
+   "pages": [
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": {
+      "cls": "title-header s-ZOotb-R76k-b",
+      "offsetHeight": 105,
+      "ruleBottom": 152.984375
+     },
+     "runningHeaderOffsetHeight": null,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 62.28125,
+      "pageLabel": "Page 1 sur 1",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 191.390625,
+      "text": "К"
+     },
+     "firstCyrillicRowBox": {
+      "t": 193.390625,
+      "b": 211.78125,
+      "l": 96,
+      "r": 174.5
+     },
+     "window": {
+      "cls": "page-content s-OTIigJQj0hM-",
+      "t": 169,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 0,
+      "last": 9,
+      "distinct": 10
+     },
+     "rowsEndingBelowWindow": 0
+    }
+   ]
+  },
+  "sunless/markup/en": {
+   "htmlFontSize": "16px",
+   "pages": [
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": {
+      "cls": "title-header s-ZOotb-R76k-b",
+      "offsetHeight": 154,
+      "ruleBottom": 201.765625
+     },
+     "runningHeaderOffsetHeight": null,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 55.96875,
+      "pageLabel": "Page 1 of 2",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "window": {
+      "cls": "score-window s-ZzCGuFmJFF6a",
+      "t": 220,
+      "b": 920,
+      "l": 96,
+      "r": 720
+     },
+     "systems": {
+      "first": "0-2",
+      "last": "10-11",
+      "n": 5
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 55.96875,
+      "pageLabel": "Page 2 of 2",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "window": {
+      "cls": "score-window s-ZzCGuFmJFF6a",
+      "t": 93,
+      "b": 920,
+      "l": 96,
+      "r": 720
+     },
+     "systems": {
+      "first": "12-13",
+      "last": "17-17",
+      "n": 3
+     },
+     "rowsEndingBelowWindow": 0
+    }
+   ]
+  },
+  "sunless/markup/fr": {
+   "htmlFontSize": "16px",
+   "pages": [
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": {
+      "cls": "title-header s-ZOotb-R76k-b",
+      "offsetHeight": 154,
+      "ruleBottom": 201.765625
+     },
+     "runningHeaderOffsetHeight": null,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 62.28125,
+      "pageLabel": "Page 1 sur 2",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "window": {
+      "cls": "score-window s-ZzCGuFmJFF6a",
+      "t": 220,
+      "b": 920,
+      "l": 96,
+      "r": 720
+     },
+     "systems": {
+      "first": "0-2",
+      "last": "10-11",
+      "n": 5
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 62.28125,
+      "pageLabel": "Page 2 sur 2",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "window": {
+      "cls": "score-window s-ZzCGuFmJFF6a",
+      "t": 93,
+      "b": 920,
+      "l": 96,
+      "r": 720
+     },
+     "systems": {
+      "first": "12-13",
+      "last": "17-17",
+      "n": 3
+     },
+     "rowsEndingBelowWindow": 0
+    }
+   ]
+  },
+  "sunless/insights/en": {
+   "htmlFontSize": "16px",
+   "pages": [
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": {
+      "cls": "title-header s-ZOotb-R76k-b has-aside",
+      "offsetHeight": 127,
+      "ruleBottom": 175.375
+     },
+     "runningHeaderOffsetHeight": null,
+     "headerAsideClientWidth": 80,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 55.96875,
+      "pageLabel": "Page 1 of 3",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "window": {
+      "cls": "column s-LUu4LoNJAlUL",
+      "t": 191,
+      "b": 811.3125,
+      "l": 96,
+      "r": 720
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 55.96875,
+      "pageLabel": "Page 2 of 3",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "window": {
+      "cls": "column s-LUu4LoNJAlUL",
+      "t": 89,
+      "b": 839.296875,
+      "l": 96,
+      "r": 720
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 55.96875,
+      "pageLabel": "Page 3 of 3",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "window": {
+      "cls": "column s-LUu4LoNJAlUL",
+      "t": 89,
+      "b": 814.8125,
+      "l": 96,
+      "r": 720
+     },
+     "rowsEndingBelowWindow": 0
+    }
+   ]
+  },
+  "sunless/insights/fr": {
+   "htmlFontSize": "16px",
+   "pages": [
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": {
+      "cls": "title-header s-ZOotb-R76k-b has-aside",
+      "offsetHeight": 127,
+      "ruleBottom": 175.375
+     },
+     "runningHeaderOffsetHeight": null,
+     "headerAsideClientWidth": 79,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 62.28125,
+      "pageLabel": "Page 1 sur 4",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "window": {
+      "cls": "column s-LUu4LoNJAlUL",
+      "t": 191,
+      "b": 872.671875,
+      "l": 96,
+      "r": 720
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 62.28125,
+      "pageLabel": "Page 2 sur 4",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "window": {
+      "cls": "column s-LUu4LoNJAlUL",
+      "t": 89,
+      "b": 629.5,
+      "l": 96,
+      "r": 720
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 62.28125,
+      "pageLabel": "Page 3 sur 4",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "window": {
+      "cls": "column s-LUu4LoNJAlUL",
+      "t": 89,
+      "b": 863.40625,
+      "l": 96,
+      "r": 720
+     },
+     "parts": {
+      "first": "Lectures complémentaires Passez ces sour",
+      "last": "Lectures complémentaires Passez ces sour",
+      "n": 1
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 62.28125,
+      "pageLabel": "Page 4 sur 4",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "window": {
+      "cls": "column s-LUu4LoNJAlUL",
+      "t": 89,
+      "b": 405.125,
+      "l": 96,
+      "r": 720
+     },
+     "parts": {
+      "first": "Lectures complémentaires Passez ces sour",
+      "last": "Lectures complémentaires Passez ces sour",
+      "n": 1
+     },
+     "rowsEndingBelowWindow": 0
+    }
+   ]
+  },
+  "tchaikovsky/text/en": {
+   "htmlFontSize": "16px",
+   "pages": [
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": {
+      "cls": "title-header s-ZOotb-R76k-b",
+      "offsetHeight": 127,
+      "ruleBottom": 175.375
+     },
+     "runningHeaderOffsetHeight": null,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 90,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 55.96875,
+      "pageLabel": "Page 1 of 3",
+      "bandHeight": 32,
+      "hasLegend": true,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 213.390625,
+      "text": "С"
+     },
+     "firstCyrillicRowBox": {
+      "t": 215.390625,
+      "b": 233.78125,
+      "l": 96,
+      "r": 142.90625
+     },
+     "window": {
+      "cls": "page-content s-OTIigJQj0hM-",
+      "t": 191,
+      "b": 910,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 0,
+      "last": 8,
+      "distinct": 9
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 90,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 55.96875,
+      "pageLabel": "Page 2 of 3",
+      "bandHeight": 32,
+      "hasLegend": true,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "и"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 106.75
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 910,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 9,
+      "last": 18,
+      "distinct": 10
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 55.96875,
+      "pageLabel": "Page 3 of 3",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "н"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 115.765625
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 910,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 19,
+      "last": 19,
+      "distinct": 1
+     },
+     "rowsEndingBelowWindow": 0
+    }
+   ]
+  },
+  "tchaikovsky/text/fr": {
+   "htmlFontSize": "16px",
+   "pages": [
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": {
+      "cls": "title-header s-ZOotb-R76k-b",
+      "offsetHeight": 127,
+      "ruleBottom": 175.375
+     },
+     "runningHeaderOffsetHeight": null,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 90,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 62.28125,
+      "pageLabel": "Page 1 sur 3",
+      "bandHeight": 32,
+      "hasLegend": true,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 213.390625,
+      "text": "С"
+     },
+     "firstCyrillicRowBox": {
+      "t": 215.390625,
+      "b": 233.78125,
+      "l": 96,
+      "r": 142.90625
+     },
+     "window": {
+      "cls": "page-content s-OTIigJQj0hM-",
+      "t": 191,
+      "b": 910,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 0,
+      "last": 8,
+      "distinct": 9
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 90,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 62.28125,
+      "pageLabel": "Page 2 sur 3",
+      "bandHeight": 32,
+      "hasLegend": true,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "и"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 106.75
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 910,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 9,
+      "last": 18,
+      "distinct": 10
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 62.28125,
+      "pageLabel": "Page 3 sur 3",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "н"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 115.765625
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 910,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 19,
+      "last": 19,
+      "distinct": 1
+     },
+     "rowsEndingBelowWindow": 0
+    }
+   ]
+  },
+  "tchaikovsky/markup/en": {
+   "htmlFontSize": "16px",
+   "pages": [
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": {
+      "cls": "title-header s-ZOotb-R76k-b",
+      "offsetHeight": 154,
+      "ruleBottom": 201.765625
+     },
+     "runningHeaderOffsetHeight": null,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 55.96875,
+      "pageLabel": "Page 1 of 3",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "window": {
+      "cls": "score-window s-ZzCGuFmJFF6a",
+      "t": 220,
+      "b": 920,
+      "l": 96,
+      "r": 720
+     },
+     "systems": {
+      "first": "0-8",
+      "last": "32-39",
+      "n": 5
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 55.96875,
+      "pageLabel": "Page 2 of 3",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "window": {
+      "cls": "score-window s-ZzCGuFmJFF6a",
+      "t": 93,
+      "b": 920,
+      "l": 96,
+      "r": 720
+     },
+     "systems": {
+      "first": "40-46",
+      "last": "74-80",
+      "n": 6
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 55.96875,
+      "pageLabel": "Page 3 of 3",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "window": {
+      "cls": "score-window s-ZzCGuFmJFF6a",
+      "t": 93,
+      "b": 920,
+      "l": 96,
+      "r": 720
+     },
+     "systems": {
+      "first": "81-87",
+      "last": "96-98",
+      "n": 3
+     },
+     "rowsEndingBelowWindow": 0
+    }
+   ]
+  },
+  "tchaikovsky/markup/fr": {
+   "htmlFontSize": "16px",
+   "pages": [
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": {
+      "cls": "title-header s-ZOotb-R76k-b",
+      "offsetHeight": 154,
+      "ruleBottom": 201.765625
+     },
+     "runningHeaderOffsetHeight": null,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 62.28125,
+      "pageLabel": "Page 1 sur 3",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "window": {
+      "cls": "score-window s-ZzCGuFmJFF6a",
+      "t": 220,
+      "b": 920,
+      "l": 96,
+      "r": 720
+     },
+     "systems": {
+      "first": "0-8",
+      "last": "32-39",
+      "n": 5
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 62.28125,
+      "pageLabel": "Page 2 sur 3",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "window": {
+      "cls": "score-window s-ZzCGuFmJFF6a",
+      "t": 93,
+      "b": 920,
+      "l": 96,
+      "r": 720
+     },
+     "systems": {
+      "first": "40-46",
+      "last": "74-80",
+      "n": 6
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 62.28125,
+      "pageLabel": "Page 3 sur 3",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "window": {
+      "cls": "score-window s-ZzCGuFmJFF6a",
+      "t": 93,
+      "b": 920,
+      "l": 96,
+      "r": 720
+     },
+     "systems": {
+      "first": "81-87",
+      "last": "96-98",
+      "n": 3
+     },
+     "rowsEndingBelowWindow": 0
+    }
+   ]
+  },
+  "tchaikovsky/insights/en": {
+   "htmlFontSize": "16px",
+   "pages": [
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": {
+      "cls": "title-header s-ZOotb-R76k-b has-aside",
+      "offsetHeight": 127,
+      "ruleBottom": 175.375
+     },
+     "runningHeaderOffsetHeight": null,
+     "headerAsideClientWidth": 74,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 55.96875,
+      "pageLabel": "Page 1 of 6",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "window": {
+      "cls": "column s-LUu4LoNJAlUL",
+      "t": 191,
+      "b": 914,
+      "l": 96,
+      "r": 720
+     },
+     "summaries": [
+      {
+       "b": 553.984375,
+       "text": "Show keys that reach higher"
+      }
+     ],
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 55.96875,
+      "pageLabel": "Page 2 of 6",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "window": {
+      "cls": "column s-LUu4LoNJAlUL",
+      "t": 89,
+      "b": 853.859375,
+      "l": 96,
+      "r": 720
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 55.96875,
+      "pageLabel": "Page 3 of 6",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "window": {
+      "cls": "column s-LUu4LoNJAlUL",
+      "t": 89,
+      "b": 855.96875,
+      "l": 96,
+      "r": 720
+     },
+     "summaries": [
+      {
+       "b": 375.96875,
+       "text": "3 more observations"
+      }
+     ],
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 55.96875,
+      "pageLabel": "Page 4 of 6",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "window": {
+      "cls": "column s-LUu4LoNJAlUL",
+      "t": 89,
+      "b": 878.59375,
+      "l": 96,
+      "r": 720
+     },
+     "parts": {
+      "first": "Further reading Review these sources wit",
+      "last": "Further reading Review these sources wit",
+      "n": 1
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 55.96875,
+      "pageLabel": "Page 5 of 6",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "window": {
+      "cls": "column s-LUu4LoNJAlUL",
+      "t": 89,
+      "b": 888.1875,
+      "l": 96,
+      "r": 720
+     },
+     "parts": {
+      "first": "Further reading Review these sources wit",
+      "last": "Reid, Cornelius L. Voice: Psyche and Som",
+      "n": 2
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 55.96875,
+      "pageLabel": "Page 6 of 6",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "window": {
+      "cls": "column s-LUu4LoNJAlUL",
+      "t": 89,
+      "b": 219,
+      "l": 96,
+      "r": 720
+     },
+     "parts": {
+      "first": "Reid, Cornelius L. Voice: Psyche and Som",
+      "last": "Reid, Cornelius L. Voice: Psyche and Som",
+      "n": 1
+     },
+     "rowsEndingBelowWindow": 0
+    }
+   ]
+  },
+  "tchaikovsky/insights/fr": {
+   "htmlFontSize": "16px",
+   "pages": [
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": {
+      "cls": "title-header s-ZOotb-R76k-b has-aside",
+      "offsetHeight": 127,
+      "ruleBottom": 175.375
+     },
+     "runningHeaderOffsetHeight": null,
+     "headerAsideClientWidth": 70,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 62.28125,
+      "pageLabel": "Page 1 sur 6",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "window": {
+      "cls": "column s-LUu4LoNJAlUL",
+      "t": 191,
+      "b": 908.546875,
+      "l": 96,
+      "r": 720
+     },
+     "parts": {
+      "first": "Là où cette pièce rencontre votre voix m",
+      "last": "Là où cette pièce rencontre votre voix m",
+      "n": 1
+     },
+     "summaries": [
+      {
+       "b": 573.546875,
+       "text": "Afficher les tonalités plus ai"
+      }
+     ],
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 62.28125,
+      "pageLabel": "Page 2 sur 6",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "window": {
+      "cls": "column s-LUu4LoNJAlUL",
+      "t": 89,
+      "b": 883.328125,
+      "l": 96,
+      "r": 720
+     },
+     "parts": {
+      "first": "Là où cette pièce rencontre votre voix m",
+      "last": "mes. 51 · D4 · [ɛ] Ce [ɛ] sur D4 se situ",
+      "n": 2
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 62.28125,
+      "pageLabel": "Page 3 sur 6",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "window": {
+      "cls": "column s-LUu4LoNJAlUL",
+      "t": 89,
+      "b": 916.3125,
+      "l": 96,
+      "r": 720
+     },
+     "parts": {
+      "first": "mes. 51 · D4 · [ɛ] Ce [ɛ] sur D4 se situ",
+      "last": "mes. 51 · D4 · [ɛ] Ce [ɛ] sur D4 se situ",
+      "n": 1
+     },
+     "summaries": [
+      {
+       "b": 492.96875,
+       "text": "3 observations de plus"
+      }
+     ],
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 62.28125,
+      "pageLabel": "Page 4 sur 6",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "window": {
+      "cls": "column s-LUu4LoNJAlUL",
+      "t": 89,
+      "b": 878.578125,
+      "l": 96,
+      "r": 720
+     },
+     "parts": {
+      "first": "Notes 1 Tessiture selon la méthode de Pa",
+      "last": "Notes 1 Tessiture selon la méthode de Pa",
+      "n": 1
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 62.28125,
+      "pageLabel": "Page 5 sur 6",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "window": {
+      "cls": "column s-LUu4LoNJAlUL",
+      "t": 89,
+      "b": 874.40625,
+      "l": 96,
+      "r": 720
+     },
+     "parts": {
+      "first": "Notes 1 Tessiture selon la méthode de Pa",
+      "last": "MILLER, Richard. Solutions for Singers: ",
+      "n": 2
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 62.28125,
+      "pageLabel": "Page 6 sur 6",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "window": {
+      "cls": "column s-LUu4LoNJAlUL",
+      "t": 89,
+      "b": 448.75,
+      "l": 96,
+      "r": 720
+     },
+     "parts": {
+      "first": "MILLER, Richard. Solutions for Singers: ",
+      "last": "MILLER, Richard. Solutions for Singers: ",
+      "n": 1
+     },
+     "rowsEndingBelowWindow": 0
+    }
+   ]
+  },
+  "typed-richter/text/en": {
+   "htmlFontSize": "16px",
+   "pages": [
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": {
+      "cls": "title-header s-ZOotb-R76k-b",
+      "offsetHeight": 105,
+      "ruleBottom": 152.984375
+     },
+     "runningHeaderOffsetHeight": null,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 109,
+      "hairlineTopFromSheetBottom": 133,
+      "footerContentHeight": 76,
+      "creditLines": 4,
+      "creditHasRichter": true,
+      "paginationCellWidth": 55.96875,
+      "pageLabel": "Page 1 of 1",
+      "bandHeight": 32,
+      "hasLegend": true,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 191.390625,
+      "text": "s"
+     },
+     "firstCyrillicRowBox": {
+      "t": 193.390625,
+      "b": 211.78125,
+      "l": 96,
+      "r": 151.109375
+     },
+     "window": {
+      "cls": "page-content s-OTIigJQj0hM-",
+      "t": 169,
+      "b": 891,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 0,
+      "last": 2,
+      "distinct": 3
+     },
+     "rowsEndingBelowWindow": 0
+    }
+   ]
+  },
+  "typed-richter/text/fr": {
+   "htmlFontSize": "16px",
+   "pages": [
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": {
+      "cls": "title-header s-ZOotb-R76k-b",
+      "offsetHeight": 105,
+      "ruleBottom": 152.984375
+     },
+     "runningHeaderOffsetHeight": null,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 109,
+      "hairlineTopFromSheetBottom": 133,
+      "footerContentHeight": 76,
+      "creditLines": 4,
+      "creditHasRichter": true,
+      "paginationCellWidth": 62.28125,
+      "pageLabel": "Page 1 sur 1",
+      "bandHeight": 32,
+      "hasLegend": true,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 191.390625,
+      "text": "s"
+     },
+     "firstCyrillicRowBox": {
+      "t": 193.390625,
+      "b": 211.78125,
+      "l": 96,
+      "r": 151.109375
+     },
+     "window": {
+      "cls": "page-content s-OTIigJQj0hM-",
+      "t": 169,
+      "b": 891,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 0,
+      "last": 2,
+      "distinct": 3
+     },
+     "rowsEndingBelowWindow": 0
+    }
+   ]
+  },
+  "typed-many/text/en": {
+   "htmlFontSize": "16px",
+   "pages": [
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": {
+      "cls": "title-header s-ZOotb-R76k-b",
+      "offsetHeight": 105,
+      "ruleBottom": 152.984375
+     },
+     "runningHeaderOffsetHeight": null,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 61.4375,
+      "pageLabel": "Page 1 of 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 191.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 193.390625,
+      "b": 211.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-OTIigJQj0hM-",
+      "t": 169,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 0,
+      "last": 3,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 61.4375,
+      "pageLabel": "Page 2 of 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 4,
+      "last": 7,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 61.4375,
+      "pageLabel": "Page 3 of 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 8,
+      "last": 11,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 61.4375,
+      "pageLabel": "Page 4 of 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 12,
+      "last": 15,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 61.4375,
+      "pageLabel": "Page 5 of 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 16,
+      "last": 19,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 61.4375,
+      "pageLabel": "Page 6 of 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 20,
+      "last": 23,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 61.4375,
+      "pageLabel": "Page 7 of 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 24,
+      "last": 27,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 61.4375,
+      "pageLabel": "Page 8 of 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 28,
+      "last": 31,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 61.4375,
+      "pageLabel": "Page 9 of 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 32,
+      "last": 35,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 66.921875,
+      "pageLabel": "Page 10 of 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 36,
+      "last": 39,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 66.921875,
+      "pageLabel": "Page 11 of 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 40,
+      "last": 43,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 66.921875,
+      "pageLabel": "Page 12 of 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 44,
+      "last": 47,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 66.921875,
+      "pageLabel": "Page 13 of 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 48,
+      "last": 51,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 66.921875,
+      "pageLabel": "Page 14 of 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 52,
+      "last": 55,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 66.921875,
+      "pageLabel": "Page 15 of 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 56,
+      "last": 59,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 66.921875,
+      "pageLabel": "Page 16 of 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 60,
+      "last": 63,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 66.921875,
+      "pageLabel": "Page 17 of 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 64,
+      "last": 67,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 66.921875,
+      "pageLabel": "Page 18 of 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 68,
+      "last": 71,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 66.921875,
+      "pageLabel": "Page 19 of 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 72,
+      "last": 75,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 66.921875,
+      "pageLabel": "Page 20 of 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 76,
+      "last": 79,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 66.921875,
+      "pageLabel": "Page 21 of 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 80,
+      "last": 83,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 66.921875,
+      "pageLabel": "Page 22 of 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 84,
+      "last": 87,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 66.921875,
+      "pageLabel": "Page 23 of 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 88,
+      "last": 91,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 66.921875,
+      "pageLabel": "Page 24 of 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 92,
+      "last": 95,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 66.921875,
+      "pageLabel": "Page 25 of 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 96,
+      "last": 99,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 66.921875,
+      "pageLabel": "Page 26 of 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 100,
+      "last": 103,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 66.921875,
+      "pageLabel": "Page 27 of 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 104,
+      "last": 107,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 66.921875,
+      "pageLabel": "Page 28 of 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 108,
+      "last": 111,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 66.921875,
+      "pageLabel": "Page 29 of 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 112,
+      "last": 115,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 66.921875,
+      "pageLabel": "Page 30 of 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 116,
+      "last": 119,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 66.921875,
+      "pageLabel": "Page 31 of 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 120,
+      "last": 123,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 66.921875,
+      "pageLabel": "Page 32 of 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 124,
+      "last": 127,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 66.921875,
+      "pageLabel": "Page 33 of 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 128,
+      "last": 131,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 66.921875,
+      "pageLabel": "Page 34 of 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 132,
+      "last": 135,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 66.921875,
+      "pageLabel": "Page 35 of 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 136,
+      "last": 139,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 66.921875,
+      "pageLabel": "Page 36 of 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 140,
+      "last": 143,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 66.921875,
+      "pageLabel": "Page 37 of 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 144,
+      "last": 147,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 66.921875,
+      "pageLabel": "Page 38 of 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 148,
+      "last": 151,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 66.921875,
+      "pageLabel": "Page 39 of 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 152,
+      "last": 155,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 66.921875,
+      "pageLabel": "Page 40 of 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 156,
+      "last": 159,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    }
+   ]
+  },
+  "typed-many/text/fr": {
+   "htmlFontSize": "16px",
+   "pages": [
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": {
+      "cls": "title-header s-ZOotb-R76k-b",
+      "offsetHeight": 105,
+      "ruleBottom": 152.984375
+     },
+     "runningHeaderOffsetHeight": null,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 67.75,
+      "pageLabel": "Page 1 sur 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 191.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 193.390625,
+      "b": 211.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-OTIigJQj0hM-",
+      "t": 169,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 0,
+      "last": 3,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 67.75,
+      "pageLabel": "Page 2 sur 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 4,
+      "last": 7,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 67.75,
+      "pageLabel": "Page 3 sur 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 8,
+      "last": 11,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 67.75,
+      "pageLabel": "Page 4 sur 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 12,
+      "last": 15,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 67.75,
+      "pageLabel": "Page 5 sur 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 16,
+      "last": 19,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 67.75,
+      "pageLabel": "Page 6 sur 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 20,
+      "last": 23,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 67.75,
+      "pageLabel": "Page 7 sur 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 24,
+      "last": 27,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 67.75,
+      "pageLabel": "Page 8 sur 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 28,
+      "last": 31,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 67.75,
+      "pageLabel": "Page 9 sur 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 32,
+      "last": 35,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 73.21875,
+      "pageLabel": "Page 10 sur 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 36,
+      "last": 39,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 73.21875,
+      "pageLabel": "Page 11 sur 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 40,
+      "last": 43,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 73.21875,
+      "pageLabel": "Page 12 sur 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 44,
+      "last": 47,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 73.21875,
+      "pageLabel": "Page 13 sur 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 48,
+      "last": 51,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 73.21875,
+      "pageLabel": "Page 14 sur 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 52,
+      "last": 55,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 73.21875,
+      "pageLabel": "Page 15 sur 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 56,
+      "last": 59,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 73.21875,
+      "pageLabel": "Page 16 sur 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 60,
+      "last": 63,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 73.21875,
+      "pageLabel": "Page 17 sur 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 64,
+      "last": 67,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 73.21875,
+      "pageLabel": "Page 18 sur 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 68,
+      "last": 71,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 73.21875,
+      "pageLabel": "Page 19 sur 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 72,
+      "last": 75,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 73.21875,
+      "pageLabel": "Page 20 sur 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 76,
+      "last": 79,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 73.21875,
+      "pageLabel": "Page 21 sur 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 80,
+      "last": 83,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 73.21875,
+      "pageLabel": "Page 22 sur 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 84,
+      "last": 87,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 73.21875,
+      "pageLabel": "Page 23 sur 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 88,
+      "last": 91,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 73.21875,
+      "pageLabel": "Page 24 sur 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 92,
+      "last": 95,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 73.21875,
+      "pageLabel": "Page 25 sur 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 96,
+      "last": 99,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 73.21875,
+      "pageLabel": "Page 26 sur 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 100,
+      "last": 103,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 73.21875,
+      "pageLabel": "Page 27 sur 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 104,
+      "last": 107,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 73.21875,
+      "pageLabel": "Page 28 sur 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 108,
+      "last": 111,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 73.21875,
+      "pageLabel": "Page 29 sur 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 112,
+      "last": 115,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 73.21875,
+      "pageLabel": "Page 30 sur 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 116,
+      "last": 119,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 73.21875,
+      "pageLabel": "Page 31 sur 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 120,
+      "last": 123,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 73.21875,
+      "pageLabel": "Page 32 sur 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 124,
+      "last": 127,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 73.21875,
+      "pageLabel": "Page 33 sur 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 128,
+      "last": 131,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 73.21875,
+      "pageLabel": "Page 34 sur 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 132,
+      "last": 135,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 73.21875,
+      "pageLabel": "Page 35 sur 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 136,
+      "last": 139,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 73.21875,
+      "pageLabel": "Page 36 sur 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 140,
+      "last": 143,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 73.21875,
+      "pageLabel": "Page 37 sur 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 144,
+      "last": 147,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 73.21875,
+      "pageLabel": "Page 38 sur 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 148,
+      "last": 151,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 73.21875,
+      "pageLabel": "Page 39 sur 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 152,
+      "last": 155,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    },
+    {
+     "sheetW": 816,
+     "sheetH": 1056,
+     "scale": 1,
+     "header": null,
+     "runningHeaderOffsetHeight": 25,
+     "headerAsideClientWidth": null,
+     "footer": {
+      "offsetHeight": 66,
+      "hairlineTopFromSheetBottom": 114,
+      "footerContentHeight": 57,
+      "creditLines": 3,
+      "creditHasRichter": false,
+      "paginationCellWidth": 73.21875,
+      "pageLabel": "Page 40 sur 40",
+      "bandHeight": 8,
+      "hasLegend": false,
+      "hasBroad": false,
+      "hasApparatus": false,
+      "left": 96,
+      "right": 720
+     },
+     "firstGlyph": {
+      "left": 96,
+      "top": 111.390625,
+      "text": "д"
+     },
+     "firstCyrillicRowBox": {
+      "t": 113.390625,
+      "b": 131.78125,
+      "l": 96,
+      "r": 316.171875
+     },
+     "window": {
+      "cls": "page-content s-U69qJGMTyKkC",
+      "t": 89,
+      "b": 920,
+      "l": 88,
+      "r": 720
+     },
+     "lines": {
+      "first": 156,
+      "last": 159,
+      "distinct": 4
+     },
+     "rowsEndingBelowWindow": 0
+    }
+   ]
+  }
+ }
+}
