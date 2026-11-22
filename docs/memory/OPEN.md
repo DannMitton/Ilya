@@ -4143,6 +4143,10 @@ His words are in `INBOX.md` under those times, transcribed as written. This sect
 
 ## ROW 167: THE CONCESSION IS MADE AT THE MOMENT OF CHOICE. Ruled by Dann 2026-11-19 18:33, on the desk's alternative to his own 18:27 proposal
 
+**WHY THE THREE TYPES ARE IN ILYA AT ALL. Dann 2026-11-21 19:52, transcribed as written:** *"I included them because my reserach beings with a statemnt about LMVs being outliers. And i felt like it is hypocritical of me not to invlude other outlliers"* His research opens by naming low male voices as outliers; including only the outliers he belongs to would be the hypocrisy. **This is the basis of the decision and it outranks every engineering reading below.** The desk's recommendation of 18:2x answered that commitment with guard bands and staff routing because the reason was in no file. **SETTLED: the three types stay, and no desk puts their existence to him again as a cost question** (`CONTRACT.md` section 1 item 6a).
+
+**A DESK RULE PROPOSED AND WITHDRAWN THE SAME MINUTE, 2026-11-21 19:5x. Recorded so no desk reaches for it again.** The desk proposed "no string a singer reads says whose the published values are; it names the staff", and collapsed his two ruled sentences into one. **Dann asked what decision chain motivated it and whether it served the singer or pandered to what he had flagged. It pandered.** The chain was his report of weariness at 19:51 about his own decision load, and the desk paid for it out of the singer's transparency two minutes later. **Judged on the singer, his 19:49 two-sentence ruling is better:** a contralto reading only "the published values for the mezzo-soprano staff" is never told the field has published nothing for her, which leans on her having read the picker's note earlier and breaks his rule that the fact is never only one hop away (`analysis/placeholder-line.ts:96`, "transparency is paramount", his words 2026-11-19 09:41); and "staff" is Ilya's grouping, not her voice. **HIS TWO SENTENCES STAND.** The withdrawn rule's one true observation, kept: `borrowedStaffLabel` (`voice/voiceTypes.ts:126-130`) returns the type's own name for the five published types and the neighbour's for the three, so so the desk can derive a per-type form itself without asking him. **That is where his friction is answered: on the desk's side of the line, never the singer's.** The desk builds the two-case string from his already-ratified `voiceType.borrowing` (`i18n.ts:2265`) and does not bring him per-type string decisions. Occasion: lane 77's item 7 was drafted as "the published values for a {type} voice", which contradicts that ratified note for a contralto; Fable caught the contradiction (77-B6) and Dann caught the desk's over-correction.
+
 **His 18:27 proposal, considered and withdrawn by him:** remove contralto, countertenor, and bass-baritone from Ilya entirely, so that cohort self-selects from the types the field does publish and is complicit in the inexact choice. His words are in `INBOX.md` under 18:27.
 
 **Why the desk recommended against it, three readings taken at 18:2x.** A contralto already routes exactly where a mezzo-soprano routes, and a bass-baritone exactly where a bass routes, in all three places Ilya sorts a voice: the formant guard (`voice/engine/plausibility.ts:138`, `:141`), the stand-in staff (`voice/engine/stand-ins.ts:58`, `:60`), and the range picker's clef (`voice/note-picker.ts:46-48`). So removal would change no number for either of them and would delete only the sentence that names the borrowing, which costs the transparency he ruled at 09:41 and 10:08 and gains nothing. A countertenor is the opposite case: he is deliberately left in the widest `union` guard band (`plausibility.ts:134`, `:142`), and every type he could pick instead lands him in `tenor-mezzo` (`:138`), narrower than the literature carries, against Dann's own reading of Chenez 2011 recorded at `PRODUCT.md:1220`.
@@ -4195,6 +4199,82 @@ Built by lane 74, item 4 (`../sessions/brief-code-lane74-voice-type-followup_r2_
 **Still open and not ruled:** what MELODY and INSIGHTS show with a score present and no voice. It is outside the lane 78 scope and waits on him.
 
 **Built by:** QUEUE row 198, lane 78 (`../sessions/brief-code-lane78-blank-states_r2_2026-11-20.md`).
+
+## N.28 AND N.29: THE VOICE HALF, AND IMPORTING A STUDENT'S PROFILE. Rehomed 2026-11-21 20:0x from `STATE.md`'s keep-or-drop block
+
+**KEPT by Dann 2026-10-15 00:43**, after N.27. Until tonight this disposition and his reason lived only inside `STATE.md`'s 2026-10-14/15 keep-or-drop walk, which moved to `STATE-archive.md` in this pass; `OPEN.md` held no N.28 or N.29 section at all.
+
+**His reason, transcribed as written:** *"This functionality will help teachers with large studios; they can import students' formant profiles done remotely and use them to research suitable repertoire"*
+
+**Order and conditions.** N.28 and N.29 come after N.27. **The copyright question (`OWED.md:702`) goes to Dann before Code starts.** N.28 also ships on N.67's step 5 binder (`STATE.md`, Older open residue).
+
+## A SKIN PRINTS, AND A DARK SKIN PRINTS AS DAYLIGHT. Ruled by Dann 2026-11-21 21:18
+
+**His words, transcribed as written:** *"A skin prints, bt a skin likke Night View follows MSWord's convention for slide decks: the black bakground would never print and the text anbd trimmings would print appropriately for a whoite backgroud while preserving the typefaces and graphics but reinterpreting them in an attractive daytime pallette that ovbviously relates to the onscreen version"*
+
+**WHAT IT MEANS FOR THE BUILD: a skin is TWO tables, not one.** A screen table and a print table, visibly related. The print table **keeps** the typefaces, the ornament, and the structure, and **changes** the ground to paper and the inks to suit it. A dark skin never prints its ground.
+
+**Ilya already has the hook.** `apps/web/src/app.css:236` overrides `--paper-cream` to `#ffffff` inside its print block, so the mechanism for a per-medium token table exists; what is missing is a per-skin one.
+
+**THE EIGHT TO SHIP, RULED 21:16** (*"Eight with Constructivism."*): Manuscript, Night View, Clarion, Atelier, Lectern, Mir iskusstva, Russian Ballet, Constructivism. Urtext and Phosphor are cut.
+
+## THE DRAWER IS THE HARDEST TEST A SKIN FACES. Desk finding, 2026-11-21 21:1x, read from the tree on `ac4bc6d8`
+
+Dann asked the desk to read the Drawer before specifying skins. What it found, from `components/Drawer/Drawer.svelte`:
+
+- **`.drawer` is transparent** (`:913-935`) and the three groups float on the desk. The drop shadow was deliberately removed at N.108 increment 1a, and the comment says why: "The groups float; they do not hover." **A skin must not restore a shadow there**, which is a live risk, since Night View needed a border where the Paper's shadow had been.
+- **`.group`** (`:1037`): `background: var(--drawer-bg)`, `border-radius: 20px`, `overflow: hidden`.
+- **`.group-band`** (`:1054-1093`): 40 px tall, `var(--font-sans)`, 0.7rem, 600, 0.12em, uppercase; radius `20px 20px 0 0`, and `8px 16px` elliptical on the bottom pair when it is the group's last child, a curve derived from the group's own corner rather than chosen.
+- **THE RECIPE THAT MATTERS, re-ruled 2026-10-30 (row 165):** the band takes **the family's HEAD tint, one step deeper than its desk, with the label in the family's INK**, holding **4.8 to 5.7:1 on the head**, and explicitly **not white on a solid bar**.
+
+**Why this is the stiffest constraint in the whole skin project.** The Paper shows one hue at a time. The Drawer shows five at once, each twice over as fill and as label, each pair bound to a contrast range. **Any skin that cannot produce five distinguishable head-and-ink pairs inside 4.8 to 5.7:1 fails here even if its Paper is beautiful.** Every skin's table must be checked against the Drawer before it is checked against anything else.
+
+## WHICH SKINS SHIP, AND WHY LECTERN IS ONE OF THEM. Dann 2026-11-21 21:11 to 21:14
+
+**He asked which of the ten could be jettisoned.** The desk recommended cutting three. **He overruled one of them, and he was right.**
+
+**CUT, not contested:** **Urtext**, because its one real argument (hues must differ in lightness, not only hue) became a rule that governs every skin, leaving a quieter Atelier behind; and **Phosphor**, which has no constituency among singers and teachers and was the desk's idea, not his. Phosphor earned its keep as a test that dress can sit on the desk and the chrome without touching the reading surface; that lesson is written and the plate stays on the canvas as evidence without shipping.
+
+**KEPT AND NOT IN QUESTION:** Manuscript (not a skin, it is Ilya), Night View (his use: reading in the dark on a plane), Clarion (an accessibility obligation, not a taste), Atelier (his, and the one that answers "this looks current"), Mir iskusstva and Russian Ballet (the two that make Ilya look like it belongs to its own repertoire).
+
+**LECTERN: THE DESK WAS WRONG AND HE OVERRULED IT.** The desk proposed demoting Lectern from a skin to three controls (size, spacing, paper), on the ground that controls compose with every skin and a skin can only be taken whole. **Dann 2026-11-21 21:14, transcribed as written:** *"I'm fine with Lectern being deliberately larger print, as an older musician I can appreciate that very much. I must protest, I think these settings will make an attractive skin and our preformatting them will be a welcome reflief to the older users who can benefit from these settings"*
+
+**What the desk got wrong:** it treated a preset as redundant with the controls that compose it, when the preset IS the product. Making a singer assemble readability out of three sliders is itself a burden, and the people who most need it are the least likely to go looking. **His field already settled this: large-print editions exist as editions, not as instructions to the reader.**
+
+**THE RESOLUTION, desk default on his ruling, which makes both true: the skin sets the values and the controls adjust from there.** Choosing Lectern delivers size, spacing, measure, and the low-glare paper already set; a singer who wants one step larger uses the control and does not lose the skin. **Lectern is therefore the one skin where the reading surface deliberately changes, and the ornament rule still holds unbroken: size and spacing are not ornament.**
+
+**THE LIST: seven, or eight with Constructivism**, which the desk would cut on the merits (furthest from the repertoire; square corners cost half the signal that says a squircle continues overleaf) but which is Dann's, since he reacted to it more strongly than to anything else. NOT RULED.
+
+## HOW A SKIN IS NAMED. Ruled by Dann 2026-11-21 21:10
+
+**His words, transcribed as written:** *"I think it's wise to stick to public domain temrs/ Art Deco or Art Nouveau are fair game as movements, but mayb not Les Ballets Russes? Why not Russian Ballet instead?"*
+
+**THE RULE: a skin is named for a movement, a period, or a kind of object. Never for a house, a company, or a living brand.** It is the same instinct as the desk's earlier line on ornament, now generalised by Dann and better than the desk's version: the earlier rule only said not to copy another party's designs, and this one says not to take their name either.
+
+**Applied.** The playbill skin was drafted as *Afisha* and then considered as *Les Ballets Russes*; it is **Russian Ballet**, after the kind of object, which is why Diaghilev's company name is not on it. Its file keeps the path `Afisha.dc.html` on the canvas; only the name a person reads changed.
+
+**ONE EXISTING SKIN THIS RULE TOUCHES, raised by the desk rather than left to slide: Mir iskusstva.** It is the name of a specific magazine and association as well as the movement art history labels with it, the way "the Pre-Raphaelites" works. The desk reads it as passing. The strictly movement-safe alternatives are **Style Moderne** or **Russian Art Nouveau**. **NOT RULED; Dann's to keep or change.**
+
+**The other eight are clear:** Manuscript, Night View, Atelier, Clarion, Urtext, Lectern, Phosphor, Constructivism. Constructivism is a movement; the rest name a kind of thing or a condition.
+
+## THE TOKENS ILYA WAS MISSING. Ruled by Dann 2026-11-21 20:59 and 21:01
+
+Found by the token census of `../sessions/plan-code-audit-maintainability_r4_2026-11-21.md` section 4a. Every value below was read from the tree on `ac4bc6d8`; every contrast figure was computed, not estimated.
+
+**WHITE, ruled 20:59** (*"Yes Ilya needs a white token and I leave it to you to decide on the crrect value for it."*). 29 uses of plain white outside print, in two different jobs plus artwork. **DESK DEFAULT on the names and the value, his to strike: two tokens, both `#ffffff`, each named for its job and not its colour**, because `--white` is useless to a skin that needs it not to be white.
+- **`--ink-on-jewel`**: text on a jewel-step button. The pairing is already documented at `apps/web/src/app.css:36-37` ("jewel: buttons, pills, active states, with white text") and only half of it had a name. `score/KeySignatureCard.svelte:104` is the clearest site.
+- **`--control-surface`**: a white control ground, as in the transposition dock and ruler, the tempo field, the key line, and the Loupe's print strip.
+- **LOCAL BY RIGHT:** `components/Welcome/WelcomeSheet.svelte:204` (an SVG `fill` inside artwork) and the white inside the `i18n.ts:1049-1050` strings. Artwork, not interface.
+
+**CAUTION, ruled 21:01** (*"I agree"*, to the desk's reading that the five were not one idea). **They were three ideas and one miscategorisation.**
+- **`--caution-ink`** and **`--caution-fill`**, both `#8a5a00` today: a problem with what the singer gave Ilya, and work not yet saved, share one colour because both mean "look here before you carry on". **Two names for one value on purpose:** a skin will need them to diverge, since a fill and an ink cannot be the same colour on a dark ground.
+- **`--caution-mark`**, `#9a6a16`, **ruled by Dann 2026-11-21 21:06** (*"the caution fill on a dot or a tab can be brighter, since nothing is written on the dot. Where the fill does carry a label, as on the unsaved tab, it goes back to `#8a5a00`"*). A fill with NO text on it is a graphical mark, so its floor is WCAG 3.0, not 4.5. `#9a6a16` clears 3.97 on `--paper-cream` and 4.45 on `--drawer-bg`, a full point of margin; the ceiling is about `#b27e15` at exactly 3.00, which the desk declined for sitting on the line. **The error dot (`IntakePanel.svelte:539`) takes this; the unsaved recorder tab (`capture-file.ts:247`) keeps `--caution-fill` because it carries a label.**
+- **`--destructive-ink`**, `#7f1d1d`: the Replace action. It keeps its own colour because `routes/+page.svelte:4697-4699` already carries the intent in a comment ("The destructive one is not the pretty one, and it is not the loud one either... It has to be findable, not inviting"), and flattening it into the caution amber would undo that.
+- **`#b23b3b` LEAVES THIS GROUP.** It is the crossing ring, an analysis mark drawn under the music that prints as it shows (`score/crossing-ring.ts:25-40`). It is a finding about a voice and belongs beside the vowel-zone colours. The desk put it here in error. **RULED SEPARATELY by Dann 2026-11-21 21:06: the crossing ring becomes `#d4392c`**, brighter than the `#b23b3b` it replaces. As a graphical mark its floor is 3.0 and it clears 4.00 on `--paper-cream`, 4.48 on `--drawer-bg`, and 4.21 on `--paper-light`. The desk argued against the ceiling value `#f54842`, which sits at exactly 3.00 and prints heavier than it looks; Dann took the recommendation. **Token name, DESK DEFAULT: `--crossing-ink`**, filed with the analysis colours, not with caution. `score/crossing-ring.ts:32` records that this colour "carries 'crossing'", and the ring prints as it shows.
+
+**AN ACCESSIBILITY DEFECT FOUND ON THE WAY, independent of skins and worth its own fix.** `#d97706`, Ilya's current error and warning text, **fails WCAG AA on every ground it sits on**: 2.68 on `--paper-cream`, 3.01 on `--drawer-bg`, 2.83 on `--paper-light`, against 4.5 for body text. Sites: `components/Drawer/IntakePanel.svelte:539` (the dot), `:743` (`.char-warning`), `:749` (`.error-text`). `#b45309` at `score/ScoreUploader.svelte:826` fails too, at 4.22 and 4.45. **`#8a5a00` passes everywhere** (4.99, 5.59, 5.26) **and carries white text at 5.93 as a fill**, which is why it becomes both caution tokens. So the migration also repairs the readability of the messages a singer most needs to read.
+
+**A SECOND DEFECT, to fix whatever else happens.** The same "I could not read that" is two different ambers in two places: `ScoreUploader.svelte:820-822` sets its error background to `rgba(217, 119, 6, 0.06)`, which is `#d97706` at six percent, while its error text is `#b45309`; the Drawer uses `#d97706` for both.
 
 ## A SAMPLE ILYA CANNOT READ STEADILY. Ruled by Dann 2026-11-20 02:15, RECORDED AND NOT YET BUILT
 
