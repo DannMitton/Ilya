@@ -1041,3 +1041,11 @@ Each stood in a close block of 2026-10-01 under "Waiting on Dann, never to be pu
 - **The earlier session that lost a poem block on a staved page** (Dann 2026-10-16 00:49, "earlier we had trouble"): NOT ESTABLISHED which; to be searched in `docs/sessions/` before the region rule is briefed.
 - **Dann's look at rows 47 and 48** on «Средь шумного бала» (the circled 8; the tempo line and control), their DONE.
 
+## Owed from the close of 2026-11-21 (Opus desk)
+
+- **Lane 77's eight string items**, English for Dann's ratification and French as marked drafts, listed in `../sessions/brief-code-lane77-seven-and-three_r1_2026-11-21.md` section 6. Item 1 is already his (ratified 2026-11-20 01:21) and needs only its French. **Lane 77 does not run until this is done**, and lane 76 cannot merge without lane 77.
+- **The Claude doc copy of `SCHEDULE.md`**, https://claude.ai/artifact/MSLx3mN7Fmv5scnAexsRcC, last updated 2026-11-16 13:2x. `SCHEDULE.md`'s own header says the desk keeps the two in step and makes a change in both in the same turn; this desk changed `SCHEDULE.md` on 2026-11-21 and did not sync the doc, so the debt is five days of drift plus today's two lines. It is one careful pass, not a line.
+- **What MELODY and INSIGHTS show with a score present and no voice.** Outside lane 78's scope by its brief, and Dann's to rule. Raised by Fable as blocker 78-B2 and homed in `OPEN.md`, "THE BLANK STATES OF TEXT, MELODY, AND INSIGHTS".
+- **The reach of his 02:15 ruling** that a sample Ilya cannot read steadily does not supersede the synthesis: whether it covers [ɨ] alone or all three. Recorded in `OPEN.md`, "A SAMPLE ILYA CANNOT READ STEADILY", as ruled and not yet built. **Not to be raised with him until the VOICE lanes land.**
+- **Dann's verbatim words of 2026-11-19 08:40 to 09:35 are in no `INBOX.md` entry.** Fable has now flagged this twice. They survive in `../sessions/ratified-blank-state-blurbs_2026-11-19.md`, in the superseded lane 71 brief, and in `STATE-archive.md`. Transcribing them into `INBOX.md` from the companion is one short pass.
+

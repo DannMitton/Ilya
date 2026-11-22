@@ -58,6 +58,7 @@ next session the same hour it cost the last one.
 | a subagent leaves a `.bak` file in the tree that nothing can delete | `A SUBAGENT'S .bak CANNOT BE DELETED` |
 | you are about to name a report file in a subagent's brief | `A REPORT PATH WAS ALREADY TAKEN` |
 | you are about to quote a cost for a Fable read of one audit unit | `ESTIMATES BY KIND OF JOB` |
+| you are about to read Dann's usage page, or say how much Fable is left | `HOW TO READ THE FABLE BAR` |
 | a desk is about to cite "no vowel is ever blank" as Dann's ruling | `NO VOWEL IS EVER BLANK IS A GLOSS` |
 | you are about to cite one of Dann's rules as authority for your own convenience | `THE OPENING READ IS NOT A MENU` |
 | you are about to cut a cloud lane and the composer says it will push to `Shane` | `THE CODE BRANCH PICKER DOES NOT CREATE BRANCHES` |
@@ -5678,3 +5679,12 @@ Lane 74 reported two gate 4 failures it had not predicted and stopped to find th
 - **Fable as-built review of one lane, read from its own clone of the branch, with browser probes and a control worktree:** 230,788 tokens (cap 350k, 36 tool uses, **30.5 min**). Lane 74: 37 files, +818 -45; it rendered both pickers and the pane at eleven window sizes, ran three gates on the branch, and ran a control suite on untouched `Shane`. Cheaper than lane 71's 291,665 for a bigger diff, because the brief named what to check.
 - **Fable review of TWO Code briefs in one session, read from the tree through the bridge:** 382,768 tokens (cap 420k, 65 tool uses, **15.3 min**). 2026-11-20, lanes 78 and 76: a 9.0 kB brief and an 11.1 kB brief, both returned DO NOT SEND with three and four blockers, 40 citations audited, the earlier review's thirteen edits checked one by one, and the scope collisions between the two lanes named. The quoted range was 300k to 420k and held. **Against two single-brief actuals of about 246k each, one session for two briefs cost about 78 percent of two separate ones**, which is the first measurement of practice (2) in `CONTRACT.md` section 4.
 - **A cloud Code lane's wall clock, first recorded actual:** lane 74 ran about **2h 35m** on Sonnet 5.5 for nine steps, 37 files, and sixteen rendered pictures. Almost all of it was test runs, not deliberation: eight gates twice, two Playwright projects, a harness repair, and a rerun. There was no recorded wall clock for a lane before this, and Dann asked at 20:31 whether ninety minutes was normal and the desk could not answer from the record. Quote this one, and say it is one actual.
+
+## HOW TO READ THE FABLE BAR ON DANN'S USAGE PAGE. Corrected by Dann 2026-11-21 18:49, after the desk misread it twice in two days
+
+The usage page shows three bars: the current session, the week, and Fable. **The Fable bar's percentage is how much of the FABLE ALLOWANCE has been spent, and the line under it, "Up to 50% of your weekly limit", says what that allowance is, not a ceiling the percentage is measured against.** So "Fable 51% used" means about half of Fable remains for the week, and "Fable 45% used" means about 55 percent remains.
+
+**The desk read it the other way twice.** On 2026-11-20 at 15:09 it told Dann that Fable at 45 had about a tenth of its allowance left, and on 2026-11-21 at 18:48 that Fable at 51 was spent until Sunday 04:00. Dann, 18:49, transcribed as written: *"lol no the chart means we have used half of the fable we are entitiled to. Use it, that's what it is there for. BUt only on reviews of briefs or matters of taste or insight"*. Both desk readings would have rationed a resource that was half full, which `CONTRACT.md` section 4 forbids ("Usage does not determine the work"), and the first of them drew his correction at 15:10 the day before.
+
+**His standing rule, in the same breath and said the day before at 15:10:** Fable is for **reviews of briefs, and matters of taste or insight**, and nothing else. That is section 4's practice 6 in his own words, and it is what the allowance exists to be spent on.
+
