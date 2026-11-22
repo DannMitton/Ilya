@@ -44,9 +44,11 @@ test.describe('Ilya core loop', () => {
 		// phone twin, which named the DRAWER by a direction. INPUT is a link inside it.
 		const squircle = page.locator('[data-blank-state]');
 		await expect(squircle).toBeVisible();
-		await expect(squircle).toHaveText(
-			'TEXT transcribes the words you give it, syllable by syllable, into IPA. Add your score\u2019s words as LYRICS, or its source poem as POEM, in INPUT to begin.',
-		);
+		// Two paragraphs, the blurb then the ask (`paper.blank`, `paper.blank.ask`), as MELODY and INSIGHTS draw theirs.
+		await expect(squircle.locator('p')).toHaveText([
+			'TEXT transcribes the words you give it, syllable by syllable, into IPA.',
+			'Add your score\u2019s words as LYRICS, or its source poem as POEM, in INPUT to begin.',
+		]);
 	});
 
 	test('transcribes Russian text and shows IPA on Paper', async ({ page }) => {
@@ -237,8 +239,11 @@ test.describe('bilingual interface', () => {
 		await frOption.click();
 
 		const squircle = page.locator('[data-blank-state]');
-		await expect(squircle).toHaveText(
-			'Le TEXTE transcrit en API, syllabe par syllabe, les mots que vous lui donnez. Ajoutez le texte chanté de votre partition comme PAROLES, ou son poème source comme POÈME, dans ENTRÉE pour commencer.',
+		await expect(squircle.locator('p')).toHaveText(
+			[
+				'Le TEXTE transcrit en API, syllabe par syllabe, les mots que vous lui donnez.',
+				'Ajoutez le texte chanté de votre partition comme PAROLES, ou son poème source comme POÈME, dans ENTRÉE pour commencer.',
+			],
 			{ timeout: 5_000 },
 		);
 	});

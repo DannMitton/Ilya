@@ -9,7 +9,7 @@ const VOICES = { none: [], 'type only': [{ id: 'v', name: 'Dann', createdAt: NOW
 const WIDTHS = { phone: { width: 390, height: 844, deviceScaleFactor: 3, hasTouch: true, isMobile: true }, tablet: { width: 1024, height: 1366, deviceScaleFactor: 2 } };
 const browser = await chromium.launch();
 const rows = [];
-for (const [wname, w] of Object.entries(WIDTHS)) for (const lang of ['en', 'fr']) for (const [vname, voices] of Object.entries(VOICES)) {
+for (const [wname, w] of Object.entries(WIDTHS).filter(([n]) => !process.env.ONLY || n === process.env.ONLY)) for (const lang of ['en', 'fr']) for (const [vname, voices] of Object.entries(VOICES)) {
 	const ctx = await browser.newContext({ viewport: { width: w.width, height: w.height }, deviceScaleFactor: w.deviceScaleFactor, hasTouch: !!w.hasTouch, isMobile: !!w.isMobile, storageState: { cookies: [], origins: [{ origin: 'http://localhost:5173', localStorage: [{ name: 'ilya:welcomeSeen', value: '1' }] }] } });
 	await ctx.addInitScript(([l, s]) => { localStorage.setItem('ilya:language', l); localStorage.setItem('shane.profiles.v2', s); }, [lang, JSON.stringify({ version: 2, activeId: voices.length ? 'v' : null, voices })]);
 	const page = await ctx.newPage();
@@ -37,5 +37,5 @@ for (const [wname, w] of Object.entries(WIDTHS)) for (const lang of ['en', 'fr']
 	await ctx.close();
 }
 await browser.close();
-writeFileSync(`${out}/measurements.json`, JSON.stringify(rows, null, 1));
+writeFileSync(`${out}/measurements${process.env.ONLY ? '-' + process.env.ONLY : ''}.json`, JSON.stringify(rows, null, 1));
 console.log(rows.length, 'rows');

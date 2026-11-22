@@ -35,15 +35,17 @@ describe('linkParts', () => {
 		expect(links('Les ENTRÉES et le VOIXÉ.', 'fr')).toEqual([]);
 	});
 	it('reads, with the links taken away, as the one string, whatever links are available', () => {
-		for (const lang of ['en', 'fr'] as const) for (const key of ['paper.blank', 'insights.silence.noScore', 'insights.silence.noVoice', 'insights.silence.noBoth']) {
+		for (const lang of ['en', 'fr'] as const) for (const key of ['paper.blank', 'paper.blank.ask', 'insights.silence.noScore', 'insights.silence.noVoice', 'insights.silence.noBoth']) {
 			for (const available of [[], ['input'], ['voice'], ['input', 'voice']] as const) {
 				expect(linkParts(t(key, lang), lang, available).map((p) => p.text).join(''), lang + key).toBe(t(key, lang));
 			}
 		}
 	});
 	it('does not link POEM or LYRICS, which are views inside INPUT and not sections (DESK DEFAULT)', () => {
-		expect(links(t('paper.blank', 'en'), 'en')).toEqual(['input:INPUT']);
-		expect(links(t('paper.blank', 'fr'), 'fr')).toEqual(['input:ENTRÉE']);
+		expect(links(t('paper.blank.ask', 'en'), 'en')).toEqual(['input:INPUT']);
+		expect(links(t('paper.blank.ask', 'fr'), 'fr')).toEqual(['input:ENTRÉE']);
+		expect(links(t('paper.blank', 'en'), 'en')).toEqual([]);
+		expect(links(t('paper.blank', 'fr'), 'fr')).toEqual([]);
 	});
 });
 

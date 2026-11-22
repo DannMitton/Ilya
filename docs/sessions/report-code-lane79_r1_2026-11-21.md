@@ -1,6 +1,6 @@
 # Report, lane 79 (QUEUE row 201): one window for the blank page of TEXT, MELODY, and INSIGHTS
 
-r1, 2026-11-21, by the Code lane. Brief: `brief-code-lane79-one-page-frame_r2_2026-11-21.md`. Branch `cloud-lane-79`, cut from `origin/Shane` at `e0ca61bf` after `git fetch origin`. Not a commit to `Shane`, no pull request, nothing written under `docs/memory/`, no string changed in either language.
+r1, 2026-11-21, by the Code lane. Brief: `brief-code-lane79-one-page-frame_r2_2026-11-21.md`. Branch `cloud-lane-79`, cut from `origin/Shane` at `e0ca61bf` after `git fetch origin`. Not a commit to `Shane`, no pull request, nothing written under `docs/memory/`, no string changed in either language **in the first commit (995f1647); section 10 records the one change made afterwards, on Dann's instruction**.
 
 Read from: this checkout, Mac, branch `cloud-lane-79`. The working tree was dirty on arrival with one file, the brief itself (its section 5 first bullet already reads "Mac lane ... `mac-row201`"); I left that edit uncommitted and did not touch it. The branch name is the one your message gave (`cloud-lane-79`), not the one that bullet names. **`docs/memory/INBOX.md` and `docs/memory/OPEN.md` also changed in the tree while I worked (13 added lines), and I did not write them.** I left them out of the commit.
 
@@ -98,3 +98,24 @@ The `<BlankState` tag is found by a scanner that counts braces, because INSIGHTS
 6. **The wrap of MELODY's French subtitle** (section 4): inferred, not instrumented.
 7. **`paginateMelody` and page 1's gaps** (brief section 6, item 3): not examined, as the brief allows.
 8. **The e2e run is not the full suite.** Section 7 names the files run. The full 372-test suite was not run.
+
+## 10. Addendum, on Dann's instruction after the lane: TEXT's blank state in two paragraphs
+
+**This is the one string change in the lane and it was asked for in so many words.** `i18n.ts` `paper.blank` is split at the sentence boundary so that TEXT reads like MELODY and INSIGHTS: a blurb, then an ask.
+
+- `paper.blank` keeps the first sentence: "TEXT transcribes the words you give it, syllable by syllable, into IPA." and « Le TEXTE transcrit en API, syllabe par syllabe, les mots que vous lui donnez. »
+- New `paper.blank.ask` takes the second: "Add your score\u2019s words as LYRICS, or its source poem as POEM, in INPUT to begin." and « Ajoutez le texte chanté de votre partition comme PAROLES, ou son poème source comme POÈME, dans ENTRÉE pour commencer. » Both sentences are byte for byte as before; only the single space between them is no longer in either string. INPUT / ENTRÉE, the link, is now in the ask.
+- `TitlePage.svelte:141`: `paragraphs={emptyNotice === 'loading' ? [t('dict.loading', language)] : [t('paper.blank', language), t('paper.blank.ask', language)]}`. The `loading` case keeps its one paragraph; `quiet` still draws nothing.
+- The key index at the head of `i18n.ts` (`1,347` to `1,348` keys; `paper.` 3 to 4) is updated, because `i18n-index.test.ts` pins it. You did not list that file; it failed without it.
+
+**Pins updated:** `blank-state.test.ts` (`:38` the key list gains `paper.blank.ask`; `:45-46` the INPUT / ENTRÉE link is now asserted on the ask, and the blurb is asserted to carry no link); `blank-states.test.ts` (`:34` the words table is two entries, the first sentence and the ask; `:87` the no-directional-word list gains the new key; `:185` the `paragraphs=` line). **Also changed, not on your list:** `e2e/core-loop.test.ts:41` and `:234` read the squircle's whole text as one string and failed on the split (`toHaveText` reads `textContent`, which joins the two paragraphs with no space); they now assert the two paragraphs as an array.
+
+**New counts.**
+- Gate 4: **6791 passed | 1 skipped (6792)**, with numpy and scipy present (was 6790 | 1 (6791) after the lane, 6785 | 1 (6786) at baseline). The one added test is the new key's row in the words table.
+- Gate 3: 0 errors and 12 warnings in 5 files. Gate 8: `ratchets: OK.` Gates 1, 2, 5, 6, 7 not re-run: nothing they cover changed.
+- `one-page-frame`, both projects: 6 of 6 chromium and 6 of 6 phone. The three midpoints agree: 547.5, 547.5, 547.5 in English; 547.49, 547.49, 547.5 in French; widths 624 on all three. In French with a voice type chosen and nothing sampled, MELODY is still 558.5 (the header difference in section 4 stands; its own midpoint, and the other two still 547.49).
+- `e2e/core-loop.test.ts`: 21 of 21. `singer-paths`, `insights-no-score`, `melody-no-score-count`: passed in the same run (36 with core-loop's earlier two failures, which are the two now fixed).
+- Captures: the three phone captures were retaken (`blank-{text,markup,insights}-phone-{en,fr}.png`; `capture.mjs` now takes `ONLY=phone`, and writes `measurements-phone.json`, 18 rows, beside the original `measurements.json`, which is not rewritten). Only the two TEXT files differ in bytes. I looked at `blank-text-phone-en.png`: two paragraphs, INPUT underlined as the link, the squircle centred. I did not look at the French or the other four.
+- The two tablet captures and `measurements.json` predate the split, so the TEXT tablet pictures still show the one-paragraph state. **Not retaken: you asked for the phone ones.**
+
+**Not established:** the 9 px first-paint jump (section 5) was not re-probed after the split; the squircle is now taller on TEXT, which does not move its midpoint, but I did not run `jump.mjs` again.

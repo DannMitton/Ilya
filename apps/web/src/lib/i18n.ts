@@ -16,7 +16,7 @@
    tree on 2026-11-02 (consistency batch 2). Paths are under `apps/web/src/`;
    a prefix is listed with the files that use it most and its key count.
 
-   This file holds 1,347 keys.
+   This file holds 1,348 keys.
 
    A key built at run time (`watch.key.letter.${letter}`, `comment.<register>.<part>`)
    has no literal reference, so a search for the whole key can come back empty
@@ -57,7 +57,7 @@
    notePicker.    10  lib/voice/NotePicker.svelte, lib/analysis/watchlist.ts
    octave.         5  lib/score/clef-ui.svelte.ts, lib/components/OctaveLine.svelte, lib/score/ClefReceipt.svelte, lib/score/ClefControls.svelte
    pacifier.      17  lib/voice/capture-ritual.svelte.ts
-   paper.          3  lib/components/Paper/TitlePage.svelte, lib/components/Paper/SubsequentPage.svelte, lib/text/text-header.ts, lib/one-action.ts
+   paper.          4  lib/components/Paper/TitlePage.svelte, lib/components/Paper/SubsequentPage.svelte, lib/text/text-header.ts, lib/one-action.ts
    placeholder.   13  lib/analysis/placeholder-line.ts
    portrait.       2  lib/components/ReadingAid.svelte, routes/+page.svelte
    profile.       33  lib/markup/MarkupPane.svelte, lib/markup/profile-status.ts, lib/analysis/placeholder-line.ts
@@ -1011,7 +1011,9 @@ const strings: Record<string, Record<Language, string>> = {
 	'console.placeholder':         { en: 'ANALYSIS',                     fr: 'ANALYSE' },
 
 	// ── The TEXT page's blank state, RATIFIED by Dann 2026-11-19 09:17 and 09:25 (`docs/sessions/ratified-blank-state-blurbs_2026-11-19.md`, section 3 and 4). One sentence pair, drawn in a squircle by `components/Paper/BlankState.svelte`. It replaces `paper.empty` and `paper.empty.mobile`, the device split that sent the singer to a DRAWER by a direction. INPUT is a link, drawn from the section's own name (`group.input`); POEM and LYRICS are views inside INPUT and are not.
-	'paper.blank': { en: 'TEXT transcribes the words you give it, syllable by syllable, into IPA. Add your score\u2019s words as LYRICS, or its source poem as POEM, in INPUT to begin.', fr: 'Le TEXTE transcrit en API, syllabe par syllabe, les mots que vous lui donnez. Ajoutez le texte chanté de votre partition comme PAROLES, ou son poème source comme POÈME, dans ENTRÉE pour commencer.' },
+	'paper.blank': { en: 'TEXT transcribes the words you give it, syllable by syllable, into IPA.', fr: 'Le TEXTE transcrit en API, syllabe par syllabe, les mots que vous lui donnez.' },
+	// The ask, split from the blurb at the sentence boundary (2026-11-21), so TEXT draws two paragraphs as MELODY and INSIGHTS do. INPUT is the link.
+	'paper.blank.ask': { en: 'Add your score\u2019s words as LYRICS, or its source poem as POEM, in INPUT to begin.', fr: 'Ajoutez le texte chanté de votre partition comme PAROLES, ou son poème source comme POÈME, dans ENTRÉE pour commencer.' },
 
 	// ── Provenance: VERIFY label ─────────────────────────────
 	'verify.label':                { en: 'verify',                       fr: 'à vérifier' },

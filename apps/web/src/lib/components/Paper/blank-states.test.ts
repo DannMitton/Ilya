@@ -31,9 +31,10 @@ const tagOf = (src: string): string => {
 describe('the ratified words, verbatim, in both languages', () => {
 	// The apostrophes are the file's typographic ones (\u2019), as every other string in `i18n.ts` writes them.
 	const WORDS: Record<string, [string, string]> = {
-		'paper.blank': [
-			'TEXT transcribes the words you give it, syllable by syllable, into IPA. Add your score\u2019s words as LYRICS, or its source poem as POEM, in INPUT to begin.',
-			'Le TEXTE transcrit en API, syllabe par syllabe, les mots que vous lui donnez. Ajoutez le texte chanté de votre partition comme PAROLES, ou son poème source comme POÈME, dans ENTRÉE pour commencer.',
+		'paper.blank': ['TEXT transcribes the words you give it, syllable by syllable, into IPA.', 'Le TEXTE transcrit en API, syllabe par syllabe, les mots que vous lui donnez.'],
+		'paper.blank.ask': [
+			'Add your score\u2019s words as LYRICS, or its source poem as POEM, in INPUT to begin.',
+			'Ajoutez le texte chanté de votre partition comme PAROLES, ou son poème source comme POÈME, dans ENTRÉE pour commencer.',
 		],
 		'profile.blank': ['MELODY marks your own resonances as it draws your score.', 'Le CHANT trace votre partition en y marquant vos propres résonances.'],
 		'insights.blank': [
@@ -84,7 +85,7 @@ describe('what the lane retires is gone, and nothing reads it', () => {
 
 describe('no directional word in any string the three blank pages draw', () => {
 	const KEYS = [
-		'paper.blank', 'profile.blank', 'insights.blank', 'insights.silence.noScore', 'insights.silence.noVoice', 'insights.silence.noBoth',
+		'paper.blank', 'paper.blank.ask', 'profile.blank', 'insights.blank', 'insights.silence.noScore', 'insights.silence.noVoice', 'insights.silence.noBoth',
 		'profile.provisional.sentenceSingular', 'profile.provisional.sentencePlural', 'profile.statusSetPlain', 'profile.statusSetMeasuredSingular', 'profile.statusSetMeasuredPlural',
 		'calib.pane.belowCore', 'insights.method.noScore.samples', 'insights.method.noScore.generic', 'insights.r2.notes', 'dict.loading',
 	];
@@ -182,7 +183,7 @@ describe('TEXT: loading is the dictionary\u2019s word alone, and quiet draws not
 	it('TitlePage draws the blank state for `enter` and `loading`, never for `quiet`, and links INPUT only for `enter`', () => {
 		const s = read('src/lib/components/Paper/TitlePage.svelte');
 		expect(s).toContain("{#if !hasContent && emptyNotice !== 'quiet' && frame}"); // lane 79: and only once the frame exists (both heights measured)
-		expect(s).toContain("paragraphs={[emptyNotice === 'loading' ? t('dict.loading', language) : t('paper.blank', language)]}");
+		expect(s).toContain("paragraphs={emptyNotice === 'loading' ? [t('dict.loading', language)] : [t('paper.blank', language), t('paper.blank.ask', language)]}");
 		expect(s).toContain("links={emptyNotice === 'enter' ? { input: onopeninput } : {}}");
 	});
 });

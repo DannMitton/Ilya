@@ -138,7 +138,7 @@
 			accent="var(--sage)"
 			ink="var(--sage-ink)"
 			{frame}
-			paragraphs={[emptyNotice === 'loading' ? t('dict.loading', language) : t('paper.blank', language)]}
+			paragraphs={emptyNotice === 'loading' ? [t('dict.loading', language)] : [t('paper.blank', language), t('paper.blank.ask', language)]}
 			links={emptyNotice === 'enter' ? { input: onopeninput } : {}}
 		/>
 	{/if}
