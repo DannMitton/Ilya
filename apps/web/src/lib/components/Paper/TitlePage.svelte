@@ -15,6 +15,7 @@
 	import RunningHeader from './RunningHeader.svelte';
 	import { showsRichterIpa } from '$lib/latin';
 	import type { EmptyTextNotice } from '$lib/one-action';
+	import BlankState from './BlankState.svelte';
 
 	interface Props {
 		lines: LineData[];
@@ -24,7 +25,6 @@
 		pageSize: PageSize;
 		totalPages: number;
 		legendItems: LegendItem[];
-		isMobile?: boolean;
 		showStressDiacritics?: boolean;
 		spotReconstitution?: Map<string, boolean>;
 		glossOverrides?: Map<string, ResolvedGloss>;
@@ -45,6 +45,8 @@
 		onheaderheight?: (height: number) => void;
 		/** Row 2j: what to say with no lines (`emptyTextNotice`); `enter` when absent. */
 		emptyNotice?: EmptyTextNotice;
+		/** Lane 78: the blank state's link to INPUT (the section's own name in the sentence). */
+		onopeninput?: () => void;
 	}
 
 	let {
@@ -55,7 +57,6 @@
 		pageSize,
 		totalPages,
 		legendItems,
-		isMobile = false,
 		showStressDiacritics = false,
 		spotReconstitution,
 		glossOverrides,
@@ -69,6 +70,7 @@
 		rowGap,
 		onheaderheight,
 		emptyNotice = 'enter',
+		onopeninput,
 	}: Props = $props();
 
 	const dims = $derived(PAGE_SIZES[pageSize]);
@@ -123,16 +125,23 @@
 					<VerseLine words={line.words} {notationPrefs} {showStressDiacritics} {language} {spotReconstitution} {glossOverrides} {mutedWords} {onwordclick} {selectedKey} />
 				</div>
 			{/each}
-		{:else}
-			<div class="empty-directive">
-				{#if emptyNotice === 'enter'}
-					<p>{isMobile ? t('paper.empty.mobile', language) : t('paper.empty', language)}</p>
-				{:else if emptyNotice === 'loading'}
-					<p>{t('dict.loading', language)}</p>
-				{/if}
-			</div>
 		{/if}
 	</div>
+
+	<!-- The blank state (lane 78): one squircle, centred in this window, drawn by the component all three documents share. `loading` says the dictionary's own word and no ask; `quiet` draws nothing (`one-action.ts`). -->
+	{#if !hasContent && emptyNotice !== 'quiet'}
+		<BlankState
+			{language}
+			accent="var(--sage)"
+			ink="var(--sage-ink)"
+			top={contentTop}
+			bottom={contentBottom}
+			left={TEXT_CONTENT.left + TEXT_CONTENT.padLeft}
+			right={TEXT_CONTENT.right}
+			paragraphs={[emptyNotice === 'loading' ? t('dict.loading', language) : t('paper.blank', language)]}
+			links={emptyNotice === 'enter' ? { input: onopeninput } : {}}
+		/>
+	{/if}
 
 	<!-- Footer layer: absolute, pinned to bottom margin -->
 	<PageFooter
@@ -170,23 +179,6 @@
 		overflow: visible;
 	}
 
-	/* ── Empty state ───────────────────────────────────────── */
-
-	.empty-directive {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		text-align: center;
-		color: var(--ink-tertiary);
-		font-style: italic;
-		font-family: var(--font-serif);
-		font-size: 1rem;
-		line-height: 1.6;
-		max-width: 480px;
-		margin: 0 auto;
-		flex: 1;
-	}
-
 	/* ── Print rules ───────────────────────────────────────── */
 
 	/* N.73 portrait C, ruled by Dann 2026-08-18, retires the N.45 spike that
@@ -205,10 +197,6 @@
 		.paper-page {
 			box-shadow: none;
 			background: white;
-		}
-
-		.empty-directive {
-			display: none;
 		}
 	}
 </style>

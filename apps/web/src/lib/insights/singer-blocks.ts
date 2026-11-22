@@ -378,12 +378,13 @@ export function notesBlock(method: string, footnote: string | null, language: La
 	return { kind: 'notes', heading: t('insights.r2.notes', language), footnote, method };
 }
 
-/** The page with no score: the sentence that says what INSIGHTS needs, then the notes (moved from `InsightsPane.svelte`, N.203 lane 61, to free its lines). */
+/**
+ * The page with no score: its NOTES block, or nothing. The blank state's squircle (the page's blurb and its ask) is `BlankState`'s, drawn by
+ * `InsightsPane` (lane 78; `ratified-blank-state-blurbs_2026-11-19.md`), so this returns only what sits under it. An empty `method` is the voice
+ * that has nothing at all: both asks, and NOTES none (the companion's table, section 2 and its correction 1).
+ */
 export function noScoreBlocks(method: string, language: Language): PlacedBlock[] {
-	return [
-		{ group: 'free', block: { kind: 'silence', lines: [t('insights.silence.noScore', language)] } },
-		{ group: 'free', block: notesBlock(method, null, language) },
-	];
+	return method ? [{ group: 'free', block: notesBlock(method, null, language) }] : [];
 }
 
 /** A squircle's heading rides on its first block, so a page never ends on a heading alone. */

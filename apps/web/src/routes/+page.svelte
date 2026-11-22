@@ -1679,15 +1679,16 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		afterLeave = action;
 		calibrationRequest = { phase: 'leave', n: (calibrationRequest?.n ?? 0) + 1, fromRest: false };
 	}
-	/** L6: the word INPUT in INSIGHTS' sentence for a piece with no score. Same path as `openStation`: dropped over the capture screen, else the takeover is left. */
-	function openInput() {
+	/** L6, and lane 78's VOICE link: a band's head, from a link in a page's sentence. Same path as `openStation`: dropped over the capture screen, else the takeover is left. `openVoice` is not this: for a saved voice it enters the takeover, and the blank pages ask for a voice the singer has not set. */
+	function openBand(id: string) {
 		leaveThen(() => {
 			if (isMobile) drawerRaised = true;
-			sections.reveal(BAND_IDS.input);
-			revealTarget = '[data-band-head="input"]';
+			sections.reveal(id);
+			revealTarget = `[data-band-head="${id}"]`;
 			revealRequest += 1;
 		});
 	}
+	const openInput = () => openBand(BAND_IDS.input), openVoiceBand = () => openBand(BAND_IDS.scoreMarkup);
 	function openStation(which: 'describe' | 'insights', at?: 'range') {
 		leaveThen(() => {
 			if (isMobile) drawerRaised = true;
@@ -4299,7 +4300,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 			     document. -->
 			{#snippet transcriptionPaper()}
 				{#if witnessDiffer}<TextSourceLine {language} witness={shown} />{/if}
-				<Paper lines={effectiveLines} witness={shown} {notationPrefs} {language} metadata={doc.metadata} pageSize="letter" {isMobile} {showStressDiacritics} spotReconstitution={spotInverts} glossOverrides={shownGlosses} {mutedWords} onwordclick={handleWordClick} selectedKey={selectedWord ? `${selectedWord.lineIndex}-${selectedWord.wordIndex}` : null} emptyNotice={emptyTextNotice(shownText, loaderState)} />
+				<Paper lines={effectiveLines} witness={shown} {notationPrefs} {language} metadata={doc.metadata} pageSize="letter" {isMobile} {showStressDiacritics} spotReconstitution={spotInverts} glossOverrides={shownGlosses} {mutedWords} onwordclick={handleWordClick} selectedKey={selectedWord ? `${selectedWord.lineIndex}-${selectedWord.wordIndex}` : null} emptyNotice={emptyTextNotice(shownText, loaderState)} onopeninput={openInput} />
 			{/snippet}
 			{#if isMobile}
 				<!-- N.73 portrait C. The stage holds both views. The one that is
@@ -4364,7 +4365,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 				{drawnUnderlay}
 				openSyllabification={doc.openSyllabification}
 				onaddrange={() => openStation('describe', 'range')}
-				links={{ shares: voiceSeam?.voices.length ? () => openStation('insights') : undefined, record: () => openVoice('record'), recordKey: recordDoorKey(usableReadingCount(voiceFormants)), input: openInput }}
+				links={{ shares: voiceSeam?.voices.length ? () => openStation('insights') : undefined, record: () => openVoice('record'), recordKey: recordDoorKey(usableReadingCount(voiceFormants)), input: openInput, voice: openVoiceBand }}
 				{keyRuler}
 				octaveReading={doc.octaveReading}
 				ontoggleoctave={clefUi.toggle}
@@ -4403,7 +4404,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 				{keyRuler}
 				octaveReading={doc.octaveReading}
 				ontoggleoctave={clefUi.toggle}
-				tempoChoice={doc.tempo}
+				tempoChoice={doc.tempo} links={{ input: openInput, voice: openVoiceBand }}
 			/>
 		{:else}
 			<ReadingPaper {language}>

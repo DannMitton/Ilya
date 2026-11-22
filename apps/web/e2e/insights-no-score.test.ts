@@ -27,9 +27,13 @@ const SAMPLES = { i: READING(300, 2200), e: READING(450, 2000), u: READING(350, 
 
 test.describe('INSIGHTS with no score', () => {
 	for (const language of ['en', 'fr'] as const) {
-		const sentence = language === 'en'
-			? 'INSIGHTS measures a piece from its score, and connects it to your voice. Add a score in the INPUT pane to begin.'
-			: 'Les APERÇUS mesurent une pièce à partir de sa partition, et la relient à votre voix. Ajoutez une partition dans le volet ENTRÉE pour commencer.';
+		// Lane 78: the blank state is the page's blurb and its ask (`ratified-blank-state-blurbs_2026-11-19.md`). A voice that has anything asks for the score; one that has
+		// nothing asks for both, and carries no NOTES (`insights.method.noScore.none` is retired).
+		const blurb = language === 'en'
+			? 'INSIGHTS looks at how your voice meets your score, and comments on what it finds.'
+			: 'Les APERÇUS observent la rencontre de votre voix et de votre partition, et commentent ce qu’ils y trouvent.';
+		const sentence = blurb + ' ' + (language === 'en' ? 'Add a score in INPUT to begin.' : 'Ajoutez une partition dans ENTRÉE pour commencer.');
+		const both = blurb + ' ' + (language === 'en' ? 'Set up your voice in VOICE, and add a score in INPUT, to begin.' : 'Établissez votre voix dans VOIX et ajoutez une partition dans ENTRÉE pour commencer.');
 		const methods = language === 'en'
 			? ['Method: from your resonance profile, measured in VOICE.', 'Method: from placeholder values, until you record your own vowels.', 'Method: record your vowels in VOICE, and this page computes from your voice.']
 			: ['Méthode : à partir de votre profil de résonances, mesuré dans VOIX.', 'Méthode : à partir de valeurs par défaut, jusqu’à ce que vous captiez vos propres voyelles.', 'Méthode : captez vos voyelles dans VOIX, et cette page calcule à partir de votre voix.'];
@@ -52,13 +56,14 @@ test.describe('INSIGHTS with no score', () => {
 			expect(t).not.toContain(methods[2]);
 		});
 
-		test(`${language}: a voice with nothing usable and no generic values ("Not sure")`, async ({ page }) => {
+		test(`${language}: a voice with nothing usable and no generic values ("Not sure") asks for both, and says no NOTES`, async ({ page }) => {
 			await openInsightsWithNoScore(page, { language, voiceType: 'not-sure' });
 			const t = await text(page);
-			expect(t).toContain(sentence);
-			expect(t).toContain(methods[2]);
+			expect(t).toContain(both);
 			expect(t).not.toContain(methods[0]);
 			expect(t).not.toContain(methods[1]);
+			expect(t).not.toContain(methods[2]); // retired: no voice and no score is both asks and NOTES none
+			await expect(page.locator('.insights-container [data-blank-notes]')).toHaveCount(0);
 		});
 
 		// QUEUE row 167 (ruling of 2026-11-19): a contralto has generic values, borrowed from the mezzo-soprano staff, and the page says so with no score loaded.

@@ -145,9 +145,9 @@ describe('6. the "Not sure" sentence, and the Method line for a singer with no t
 		expect(t('calib.pane.notSure', 'en')).toBe('Not knowing is a fine answer. Record your vowels in vocal fry and Ilya works from your own voice, which also gives you evidence in your own search. Or choose a voice type, and Ilya starts from published values for it.');
 		expect(t('calib.pane.notSure', 'fr')).toBe('Ne pas savoir est une réponse valable. Captez vos voyelles en friture vocale et Ilya travaille à partir de votre propre voix, ce qui vous donne aussi des indices dans votre propre recherche. Ou choisissez un type de voix, et Ilya part de valeurs publiées pour celui-ci.');
 	});
-	it('insights.method.noScore.none is still reachable for no type, "Not sure", and an unknown id (no generic, nothing sampled)', () => {
-		expect(methodLineKey({ generic: false, typed: false, noScore: true, samples: false })).toBe('insights.method.noScore.none');
-		expect(t('insights.method.noScore.none', 'en')).toBe('Method: record your vowels in VOICE, and this page computes from your voice.');
+	it('the no-score page for no type, "Not sure", and an unknown id (no generic, nothing sampled) has no Method line: `insights.method.noScore.none` is retired (lane 78)', () => {
+		expect(methodLineKey({ generic: false, typed: false, noScore: true, samples: false })).toBeNull();
+		expect(t('insights.method.noScore.none', 'en')).toBe('[MISSING: insights.method.noScore.none]');
 	});
 });
 

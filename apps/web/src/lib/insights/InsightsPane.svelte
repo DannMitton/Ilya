@@ -33,6 +33,8 @@
 	import CompassStave from '$lib/insights/CompassStave.svelte';
 	import SingerBlock from '$lib/insights/SingerBlock.svelte';
 	import PageFit from '$lib/components/Paper/PageFit.svelte';
+	import BlankState from '$lib/components/Paper/BlankState.svelte';
+	import { askKey } from '$lib/components/Paper/blank-state';
 	import { PAGE_SIZES, MARGINS, HEADER_GAP, HEADER_HEIGHTS_AT_LETTER, formatRunningHeader } from '$lib/page-config';
 	import type { LineData } from '$lib/types';
 	import { t, type Language } from '$lib/i18n';
@@ -290,7 +292,7 @@
 	);
 	/* A French page names its octave index once, here: « (A4 = 440 Hz) » (QUEUE row 68; DESK DEFAULT). */
 	const methodKey = $derived(methodLineKey({ generic: adapted.generic, typed: hasTypedCharacteristics, noScore: !analysisScore, samples: restsOnSamples(adapted) }));
-	const methodLine = $derived((!model && analysisScore ? T('insights.method.silent') : fill(T(methodKey), { date: calibratedOn ?? '' })) + (model && language === 'fr' ? ` ${T('insights.r2.pitchKey')}` : ''));
+	const methodLine = $derived(methodKey === null ? '' : (!model && analysisScore ? T('insights.method.silent') : fill(T(methodKey), { date: calibratedOn ?? '' })) + (model && language === 'fr' ? ` ${T('insights.r2.pitchKey')}` : '')); // '' only for the blank page with no voice: no NOTES (lane 78)
 	const methodGeneric = $derived((!!model || !analysisScore) && isGenericMethodKey(methodKey)); // L4 follows the three generic Method lines
 
 	// ── Words for the model ────────────────────────────────────────────
@@ -325,20 +327,7 @@
 	});
 	const blocks = $derived.by((): PlacedBlock[] => {
 		if (!analysisScore) return noScoreBlocks(methodLine, language);
-		if (!model) {
-			return [
-				{
-					group: 'totals',
-					block: {
-						kind: 'silence',
-						heading: T('profile.withheld.heading'),
-						lines: [T('insights.silence.unmeasured')],
-						withheld: [T('profile.withheld.item3'), T('insights.silence.findings')],
-					},
-				},
-				{ group: 'free', block: notesBlock(methodLine, null, language) },
-			];
-		}
+		if (!model) return [{ group: 'totals', block: { kind: 'silence', heading: T('profile.withheld.heading'), lines: [T('insights.silence.unmeasured')], withheld: [T('profile.withheld.item3'), T('insights.silence.findings')] } }, { group: 'free', block: notesBlock(methodLine, null, language) }];
 		const pricing = secondsPerQuaver(analysisScore);
 		const typed = adapted.snapshot.tessitura;
 		const untrusted = model.phonation.untrustedMeasures;
@@ -457,6 +446,7 @@
 	});
 	const printed = $derived(blocks.map((b, k) => ({ b, k })).filter(({ b, k }) => !b.screenOnly || openOf(k)));
 	const pages = $derived.by((): Segment[][] => {
+		if (!analysisScore) return [[]]; // the blank page is one sheet, drawn by `BlankState` (lane 78), not paginated
 		const room = (top: number) => dims.height - MARGINS.vertical - footHeight - CLEAR - top;
 		const segs = paginate(
 			printed.map(({ b }) => b.group),
@@ -577,9 +567,16 @@
 					{:else}
 						<RunningHeader headerText={runningHeader} tabName={T('tab.insights')} accent="var(--rose)" onheightchange={(h) => (runningHeight = h)} />
 					{/if}
-					<div class="column" style="top: {n === 0 ? contentTop : subsequentTop}px;">
-						{#each page as s, j (j)}{@render segment(s, COLUMN, INSIDE)}{/each}
-					</div>
+					{#if analysisScore}
+						<div class="column" style="top: {n === 0 ? contentTop : subsequentTop}px;">
+							{#each page as s, j (j)}{@render segment(s, COLUMN, INSIDE)}{/each}
+						</div>
+					{:else}
+						<!-- Lane 78: the blank state, one squircle centred between the title rule and the footer. Its NOTES are this page's own notes block, whose two links stay as built. -->
+						<BlankState {language} accent="var(--rose)" ink="var(--rose-ink)" top={contentTop} bottom={MARGINS.vertical + footHeight + HEADER_GAP} paragraphs={[T('insights.blank'), T(askKey(adapted.completeness.formants ? 'score' : 'both'))]} links={{ input: links?.input, voice: links?.voice }} underneath={blocks.length > 0}>
+							{#if blocks.length}{@render blockAt(0, COLUMN)}{/if}
+						</BlankState>
+					{/if}
 					<!-- QUEUE row 79: the footnote and the method line are endnotes now, in Notes; every page's footer is the same. -->
 					<PageFooter pageNumber={n + 1} {totalPages} {language} hairlineAccent="var(--rose)" />
 				</article>

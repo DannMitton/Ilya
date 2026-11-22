@@ -50,12 +50,14 @@ describe('the Markup profile status lines', () => {
 	it('counts the vowels the singer sampled, never the values the forecast holds', () => {
 		const pane = readFileSync('src/lib/markup/MarkupPane.svelte', 'utf8');
 		expect(pane).toMatch(/const sampledVowels = \$derived\(ROSTER_ORDER\.filter\(\(g\) => isSung\(formants\[g\]\)\)\);/);
-		expect(pane).toMatch(/statusLineFor\(\{ sampledCount: sampledVowels\.length, personal: isPersonal\(formants\), core: stableCore\(formants\) \}, language\)/);
+		// Lane 78: the pane hands the count to `melodyNotes`, which calls `statusLineFor` (`markup/blank-notes.ts`).
+		expect(pane).toMatch(/melodyNotes\(\{ generic: adapted\.generic, sampledCount: sampledVowels\.length, personal: isPersonal\(formants\), core: stableCore\(formants\)/);
+		expect(readFileSync('src/lib/markup/blank-notes.ts', 'utf8')).toMatch(/statusLineFor\(\{ sampledCount: o\.sampledCount, personal: o\.personal, core: o\.core \}, o\.language\)/);
 		expect(pane).not.toMatch(/snapshot\.fR1\[/);
 	});
 
 	it('splits the provisional sentence around the vowels', () => {
-		expect(provisionalPartsFor(1, 'en')).toEqual(['Your ', ' is provisional, and you can update this value anytime through the DRAWER on the left.']);
+		expect(provisionalPartsFor(1, 'en')).toEqual(['Your ', ' is provisional; set it in VOICE.']);
 		expect(provisionalPartsFor(2, 'fr')[0]).toBe('Vos voyelles ');
 	});
 

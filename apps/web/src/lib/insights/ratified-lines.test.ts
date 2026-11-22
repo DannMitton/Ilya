@@ -414,16 +414,16 @@ describe('row 166: the six ratified placeholder strings', () => {
 		expect(t('insights.r2.vowels.against.generic', 'en')).toBe('against where each vowel turns in a generic {voiceType}');
 		expect(t('insights.r2.vowels.against.generic', 'fr')).toBe('selon la hauteur où chaque voyelle change de timbre pour une voix type de {voiceType}');
 	});
-	it('the no-score page: the ratified sentence, and the three method lines (N.203 sheet lines 27 to 29 and the new line, RATIFIED 2026-11-16)', () => {
-		expect(t('insights.silence.noScore', 'en')).toBe('INSIGHTS measures a piece from its score, and connects it to your voice. Add a score in the INPUT pane to begin.');
-		expect(t('insights.silence.noScore', 'fr')).toBe('Les APERÇUS mesurent une pièce à partir de sa partition, et la relient à votre voix. Ajoutez une partition dans le volet ENTRÉE pour commencer.');
+	it('the no-score page: the ratified ask, and the two method lines (N.203 sheet lines 27 to 29, RATIFIED 2026-11-16; the ask reworded by Dann 2026-11-19 09:17, lane 78)', () => {
+		expect(t('insights.silence.noScore', 'en')).toBe('Add a score in INPUT to begin.');
+		expect(t('insights.silence.noScore', 'fr')).toBe('Ajoutez une partition dans ENTRÉE pour commencer.');
 		expect(t('insights.method.noScore.samples', 'en')).toBe('Method: from your resonance profile, measured in VOICE.');
 		expect(t('insights.method.noScore.samples', 'fr')).toBe('Méthode\u00a0: à partir de votre profil de résonances, mesuré dans VOIX.');
 		// RATIFIED by Dann 2026-11-19 12:01 (QUEUE row 167): it no longer says "your voice type", since a contralto's placeholders are a mezzo-soprano's.
 		expect(t('insights.method.noScore.generic', 'en')).toBe('Method: from placeholder values, until you record your own vowels.');
 		expect(t('insights.method.noScore.generic', 'fr')).toBe('Méthode\u00a0: à partir de valeurs par défaut, jusqu’à ce que vous captiez vos propres voyelles.');
-		expect(t('insights.method.noScore.none', 'en')).toBe('Method: record your vowels in VOICE, and this page computes from your voice.');
-		expect(t('insights.method.noScore.none', 'fr')).toBe('Méthode\u00a0: captez vos voyelles dans VOIX, et cette page calcule à partir de votre voix.');
+		// RETIRED by lane 78: `insights.method.noScore.none` (Dann 2026-11-16 01:28). The companion's table gives the page with no voice and no score both asks and NOTES none.
+		expect(t('insights.method.noScore.none', 'en')).toBe('[MISSING: insights.method.noScore.none]');
 	});
 	it('the method lines: the two placeholder forms, and "including repeats" in the two calibrated forms (French unchanged)', () => {
 		// RATIFIED by Dann 2026-11-19 12:01 (QUEUE row 167): "for your voice type" is out of all four.

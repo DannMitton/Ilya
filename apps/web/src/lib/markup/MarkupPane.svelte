@@ -16,19 +16,13 @@
 	 * pages inherit this exact page geometry and furniture with no
 	 * reframing.
 	 *
-	 * The two interim states (copy Dann's, 2026-07-12, superseding the
-	 * 2026-07-11 trio and folding the Workshop cue and forward pointer
-	 * into two body paragraphs):
-	 * - Pre-calibration: the single line that points to VOICE (`profile.emptyState`, sheet line 30)
-	 * - Post-calibration: (1) "Your repertoire-fit results will appear
-	 *   here once you upload your score." — the upload clause names an
-	 *   unwired action; Claude raised the never-advertise rule once, Dann
-	 *   ruled it acceptable because ingestion is the next build (2026-07-12,
-	 *   closed). (2) The profile line with the captured count and the
-	 *   provisional vowels in the wizard's vowelTag convention, closing
-	 *   with the drawer wayfinding. Counts, lists, and grammar degrade
-	 *   mechanically (singular vowel, none captured, none provisional).
-	 *   Still no score-input CONTROL is wired anywhere here.
+	 * The interim state with no score is the blank state (lane 78; Dann's
+	 * ruling of 2026-11-19, `docs/sessions/ratified-blank-state-blurbs_2026-11-19.md`):
+	 * one squircle centred in this window, saying what MELODY is for and what it
+	 * still needs, with the section names as links, drawn by `BlankState`.
+	 * `markup/blank-notes.ts` holds what each voice state asks and what NOTES
+	 * says under it. It supersedes the two-paragraph copy of 2026-07-12 and the
+	 * single line of sheet line 30. Still no score-input CONTROL is wired here.
 	 *
 	 * Header content: the title line carries the active voice's name (the
 	 * page's subject, as the song title is the transcription page's), and
@@ -60,7 +54,6 @@
 	import type { OctaveReading, TempoChoice } from '$lib/library/types';
 	import { readingClef } from '$lib/score/clef-choice';
 	import { t, type Language } from '$lib/i18n';
-	import { spokenName } from '$lib/voice/vowel-names';
 	import { isPersonal, isSung, stableCore } from '$lib/voice/engine/sung';
 	import type { Vowel, CalibratedFormant, VoiceCharacteristics } from '$lib/voice/engine/types';
 	import { buildMarkupLegend } from '$lib/markup/legend';
@@ -74,7 +67,9 @@
 	import TranspositionRuler from './TranspositionRuler.svelte';
 	import { rulerOpening } from './transposition-ruler';
 	import type { TranspositionRulerState } from './transposition-ruler-state.svelte';
-	import { listSep, provisionalPartsFor, statusLineFor } from './profile-status';
+	import BlankState from '$lib/components/Paper/BlankState.svelte';
+	import { askKey } from '$lib/components/Paper/blank-state';
+	import { melodyAsk, melodyNotes } from './blank-notes';
 	import type { LoupeRenderBundle } from '$lib/score/loupe-render-bundle';
 	import type { IngestedScore } from '$lib/score/ingestion/ingest';
 	import { buildUnderlayResolvers } from '$lib/score/vowel-resolver';
@@ -271,6 +266,8 @@
 		octaveReading?: OctaveReading | null;
 		/** Row 48: the singer's tempo for this song (`SongRecord.tempo`). */
 		tempoChoice?: TempoChoice | null;
+		/** Lane 78: the blank state's links to INPUT and VOICE, which open those bands in the Drawer. */
+		links?: Partial<Record<'input' | 'voice', () => void>>;
 		/** Row 47: the octave line's tap, which flips that choice. */
 		ontoggleoctave?: () => void;
 	}
@@ -302,6 +299,7 @@
 		keyRuler = undefined,
 		octaveReading = null,
 		tempoChoice = null,
+		links = {},
 		ontoggleoctave = undefined,
 	}: Props = $props();
 
@@ -447,7 +445,6 @@
 	let provisionalVowels = $derived(
 		ROSTER_ORDER.filter((g) => isSung(formants[g]) && formants[g]?.reading === 'provisional')
 	);
-	let hasReadings = $derived(Object.values(formants).some(isSung)); // lane 68: any sampled vowel, at any count
 
 	/**
 	 * The Markup legend: one entry, the withheld-syllable sigla (N.10b). The
@@ -940,21 +937,7 @@
 	// title it falls back to the profile subtitle, as it did before.
 	const runningHeader = $derived(formatRunningHeader(composer, scoreTitle ?? '', poet) || subtitle);
 	const tabName = $derived(T('tab.markedScore'));
-
-	// The status lines' words (`profile-status.ts`).
-	let statusLine = $derived(statusLineFor({ sampledCount: sampledVowels.length, personal: isPersonal(formants), core: stableCore(formants) }, language));
-	let provisionalParts = $derived(provisionalPartsFor(provisionalVowels.length, language));
 </script>
-
-<!--
-	Vowel tag in the wizard's convention (Dann's copy, 2026-07-12): the
-	bracketed glyph followed by its visible informal name ("[i] cardinal-i").
-	The §4.6 speakable-name discipline holds — the glyph is aria-hidden, so
-	screen readers announce only the informal name and [ɪ]/[ɨ] never
-	collapse onto "ee".
--->
-{#snippet vowelGlyph(g: Vowel)}<span class="profile-ipa" aria-hidden="true">[{g}]</span
-	>{spokenName(g, language)}{/snippet}
 
 <PageFit fit={isMobile} pageWidth={dims.width}>
 	{#snippet content()}
@@ -1086,33 +1069,17 @@
 		labelInk="var(--lavender-ink)"
 	/>
 
-	<!-- Content layer: the envelope's interim states, centred in the
-	     window between header and footer. The eventual score state mounts
-	     in this same window (§B build order). -->
-	<div class="profile-content" style="top: {contentTop}px; bottom: {contentBottom}px;">
-		{#if hasReadings}
-			<div class="profile-copy">
-				<p class="profile-line profile-lede">
-					{T('profile.lede')}
-				</p>
-				<p class="profile-line profile-status">
-					{statusLine}
-				</p>
-				<p class="profile-line profile-status">
-					{#if provisionalVowels.length > 0}{provisionalParts[0]}{#each provisionalVowels as g, i (g)}{listSep(
-								i,
-								provisionalVowels.length,
-								language
-							)}{@render vowelGlyph(g)}{/each}{provisionalParts[1] ?? ''}{:else}{T(
-							'profile.provisional.noneMessage'
-						)}{/if}
-				</p>
-			</div>
-		{:else}
-			<!-- Pre-calibration empty state: a single line by ruling. -->
-			<p class="profile-empty">{T('profile.emptyState')}</p>
-		{/if}
-	</div>
+	<!-- Content layer: the blank state, one squircle centred in the window between header and footer (lane 78, `components/Paper/BlankState.svelte`; the words are `docs/sessions/ratified-blank-state-blurbs_2026-11-19.md`). It is drawn when there is no score, whatever the voice's state; `markup/blank-notes.ts` holds the table of what each state asks and says. The score branch above mounts its pages in this same window. -->
+	<BlankState
+		{language}
+		accent="var(--lavender)"
+		ink="var(--lavender-ink)"
+		top={contentTop}
+		bottom={contentBottom}
+		paragraphs={[T('profile.blank'), T(askKey(melodyAsk(!adapted.completeness.formants)))]}
+		{links}
+		notes={melodyNotes({ generic: adapted.generic, sampledCount: sampledVowels.length, personal: isPersonal(formants), core: stableCore(formants), provisional: provisionalVowels, language })}
+	/>
 
 	<!-- Footer layer: the full PageFooter, pinned to the bottom margin. The
 	     Markup legend is drawn by the header, on the subtitle's line (walk
@@ -1179,88 +1146,6 @@
 		flex-shrink: 0;
 	}
 
-	/* ── Content window ────────────────────────────────────── */
-
-	/* The typography ruling (Dann, 2026-07-12): one reading size,
-	   left-justified, a document rather than an eye chart. The body sets
-	   in the Transcription empty-state's measure (serif italic, 1rem),
-	   aligned to the page's text column; the quiet furniture below keeps
-	   its own smaller sans register but shares the left edge. Vertical
-	   centring within the content window stays. */
-	.profile-content {
-		position: absolute;
-		left: 96px;
-		right: 96px;
-		display: flex;
-		flex-direction: column;
-		align-items: flex-start;
-		justify-content: center;
-		text-align: left;
-	}
-
-	.profile-copy {
-		display: flex;
-		flex-direction: column;
-		align-items: flex-start;
-		gap: 1rem;
-		max-width: 34rem;
-	}
-
-	.profile-line {
-		margin: 0;
-		/* Match the Transcription empty-state ("Enter your Cyrillic text…"):
-		   serif italic, 1rem, 1.6 leading. Left-justified via .profile-content,
-		   and each sentence sits on its own line (Dann, 2026-07-13). */
-		font-family: var(--font-serif, 'Source Serif 4', serif);
-		font-style: italic;
-		font-size: 1rem;
-		line-height: 1.6;
-	}
-
-	.profile-lede {
-		color: var(--ink-primary, #1a1612);
-	}
-
-	.profile-status {
-		color: var(--ink-secondary, #4a4540);
-	}
-
-	/* The IPA glyphs keep the calibration surfaces' IPA face, with the
-	   wizard's 0.3em breath between glyph and informal name. */
-	.profile-ipa {
-		font-family: 'Lato IPA', sans-serif;
-		margin-right: 0.3em;
-	}
-
-	/* Both documents' empty states are centred and italic. Ruled by Dann
-	   2026-08-19 on the walk.
-
-	   Every type value below is copied from the transcription's
-	   `.empty-directive` (`Paper/TitlePage.svelte`), which is the declaration
-	   this is matching: serif, italic, 1rem, 1.6 leading, --ink-tertiary,
-	   centred, capped at 480px and centred by auto margins. No third set of
-	   values was invented.
-
-	   What is NOT copied is that rule's `display: flex` with `flex: 1`, which
-	   is how the transcription centres its line vertically inside
-	   `.page-content`. This parent, `.profile-content`, already carries
-	   `justify-content: center`, so the vertical centring is done; `align-self`
-	   overrides the parent's `align-items: flex-start` for this one element,
-	   because that parent's left justification is the calibration plea's and
-	   Dann's ruling of 2026-07-13 keeps it. Nothing here reaches
-	   `.profile-line`. */
-	.profile-empty {
-		align-self: center;
-		margin: 0 auto;
-		max-width: 480px;
-		text-align: center;
-		font-family: var(--font-serif, 'Source Serif 4', serif);
-		font-style: italic;
-		font-size: 1rem;
-		line-height: 1.6;
-		color: var(--ink-tertiary, #6A655F);
-	}
-
 	/* ── Score state (live wiring slice 1) ─────────────────── */
 
 	/* Mirrors Paper.svelte's .paper-container so a multi-page score
@@ -1275,7 +1160,7 @@
 
 
 	/* The content window a score page renders into: the same left/right
-	   text column as .profile-content, top set inline per page type. The
+	   text column as the blank state's window, top set inline per page type. The
 	   SVG keeps its 1:1 scale (viewBox width equals the window width) and
 	   anchors to the top of the window. */
 	.score-window {

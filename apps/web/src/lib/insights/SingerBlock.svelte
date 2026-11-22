@@ -60,8 +60,6 @@
 
 {#snippet rich(text: string)}{#each richParts(text) as p, j (j)}{#if p.sub}<sub>{p.text}</sub>{:else if p.ipa}<span class="ipa">{p.text}</span>{:else if p.acc}<span class="acc">{p.text}</span>{:else if p.mus}<span class="mus">{p.text}</span>{:else if p.em}<em>{p.text}</em>{:else}{p.text}{/if}{/each}{/snippet}
 
-{#snippet withInput(text: string)}{@const word = t('group.input', language)}{@const at = text.indexOf(word)}{#if at < 0}{@render rich(text)}{:else}{@render rich(text.slice(0, at))}<button type="button" class="offer-link input-link" onclick={() => links?.input?.()}>{word}</button>{@render rich(text.slice(at + word.length))}{/if}{/snippet}
-
 {#snippet prose(text: string)}{#each textParts(text) as part, j (j)}{#if part.ipa}<span class="ipa">{part.text}</span>{:else if part.acc}<span class="acc">{part.text}</span>{:else}{part.text}{/if}{/each}{/snippet}
 
 {#snippet runs(list: Run[])}{#each list as r, j (j)}{#if r.title}<em>{r.text}</em>{:else if r.sub}<sub>{r.text}</sub>{:else}{@render prose(r.text)}{/if}{/each}{/snippet}
@@ -87,7 +85,7 @@
 		<p class="frame">{block.text}</p>
 	{:else if block.kind === 'silence'}
 		{@render heading(block.heading)}
-		{#each block.lines as line, j (j)}<p class="prose">{#if links?.input && line === T('insights.silence.noScore')}{@render withInput(line)}{:else}{@render rich(line)}{/if}</p>{/each}
+		{#each block.lines as line, j (j)}<p class="prose">{@render rich(line)}</p>{/each}
 		{#if block.withheld}<ul class="withheld">{#each block.withheld as w, j (j)}<li>{@render rich(w)}</li>{/each}</ul>{/if}
 	{:else if block.kind === 'conclusion'}
 		{@render heading(block.heading)}
@@ -577,8 +575,7 @@
 		flex-wrap: wrap;
 		gap: 0.25rem 1rem;
 	}
-	.notes-links .offer-link,
-	.input-link {
+	.notes-links .offer-link {
 		font: inherit;
 		cursor: pointer;
 	}

@@ -7,11 +7,14 @@
  * `record` and `recordKey`: L4, a link to record vowels, drawn where the Method line says the findings rest on placeholder values. Its words are
  * the VOICE pane's own door for the voice's state (`recordDoorKey`: "Record your vowels", "Carry on recording", "Record a vowel again"), so the
  * page and the pane name the same door alike; the page passes the key because it holds the usable count.
- * `input`: L6, the word INPUT in the sentence for a piece with no score, which opens the INPUT pane.
+ * `input` and `voice`: L6, and lane 78's VOICE link: the words INPUT and VOICE in the blank page's squircle (`components/Paper/BlankState.svelte`), which open
+ * those two bands in the Drawer. They were the sentence's INPUT alone, found by an exact-string test in `SingerBlock.svelte`; `BlankState` finds every section
+ * name in a sentence by position instead (`components/Paper/blank-state.ts`), so a sentence may carry both.
  */
 export interface InsightsLinks {
 	shares?: () => void;
 	record?: () => void;
 	recordKey?: string;
 	input?: () => void;
+	voice?: () => void;
 }

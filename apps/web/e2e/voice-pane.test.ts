@@ -105,7 +105,7 @@ test.describe('the VOICE pane at rest', () => {
 		await page.getByRole('button', { name: 'Dann, options' }).click();
 		await page.locator('.ps-voice', { hasText: 'Studio' }).click();
 		expect((await stored(page)).activeId).toBe('b');
-		await page.getByRole('button', { name: /^voice$/i }).click(); // close the band: its line names the active voice
+		await page.getByRole('button', { name: /^voice$/i }).and(page.locator(':not([data-link])')).click(); // close the band: its line names the active voice
 		await expect(page.getByText('Voice: Studio')).toBeVisible();
 	});
 

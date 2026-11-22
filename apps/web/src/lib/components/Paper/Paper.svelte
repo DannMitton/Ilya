@@ -33,6 +33,8 @@
 		selectedKey?: string | null;
 		/** Row 2j: what page 1 says with no lines (`emptyTextNotice`). */
 		emptyNotice?: EmptyTextNotice;
+		/** Lane 78: the blank state's link to INPUT. */
+		onopeninput?: () => void;
 		/** Which text `lines` is: `shown` in `+page.svelte`, the value `textLines` branches on. The running head names it (`text/text-header.ts`). */
 		witness?: InputView;
 	}
@@ -51,6 +53,7 @@
 		onwordclick,
 		selectedKey = null,
 		emptyNotice = 'enter',
+		onopeninput,
 		witness = 'lyrics',
 	}: Props = $props();
 
@@ -176,7 +179,6 @@
 				{pageSize}
 				{totalPages}
 				{legendItems}
-				{isMobile}
 				{showStressDiacritics}
 				{spotReconstitution}
 				{glossOverrides}
@@ -190,6 +192,7 @@
 				rowGap={page.gap}
 				onheaderheight={(h) => (titleHeader = h)}
 				{emptyNotice}
+				{onopeninput}
 			/>
 		{:else}
 			<SubsequentPage

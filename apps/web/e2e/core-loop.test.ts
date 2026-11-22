@@ -39,13 +39,14 @@ test.describe('Ilya core loop', () => {
 	});
 
 	test('shows empty state before transcription', async ({ page }) => {
-		// DELETED AND REPLACED: the old copy, "To begin, open the drawer on the
-		// left and enter your text.", does not exist anywhere in src/ any more
-		// (verified: `grep -rn "To begin, open the drawer" src` finds nothing).
-		// The current empty-state string is `paper.empty` in i18n.ts:699,
-		// drawn by `.empty-directive` in TitlePage.svelte:167-168.
-		const placeholder = page.getByText('Enter your Cyrillic text in the drawer on the left.');
-		await expect(placeholder).toBeVisible();
+		// The blank state is `paper.blank` in i18n.ts, ratified by Dann 2026-11-19 and drawn in a squircle by
+		// `components/Paper/BlankState.svelte`. It replaced "Enter your Cyrillic text in the DRAWER on the left." and its
+		// phone twin, which named the DRAWER by a direction. INPUT is a link inside it.
+		const squircle = page.locator('[data-blank-state]');
+		await expect(squircle).toBeVisible();
+		await expect(squircle).toHaveText(
+			'TEXT transcribes the words you give it, syllable by syllable, into IPA. Add your score\u2019s words as LYRICS, or its source poem as POEM, in INPUT to begin.',
+		);
 	});
 
 	test('transcribes Russian text and shows IPA on Paper', async ({ page }) => {
@@ -231,13 +232,15 @@ test.describe('bilingual interface', () => {
 	});
 
 	test('French empty state shows French placeholder', async ({ page }) => {
-		// REPAIRED COPY: see the note on 'shows empty state before
-		// transcription' above. French text is `paper.empty.fr`, i18n.ts:699.
+		// The French blank state is `paper.blank`, `fr` slot (see the test above).
 		const frOption = page.locator('.lang-pill');
 		await frOption.click();
 
-		const placeholder = page.getByText('Saisissez votre texte cyrillique dans le tiroir à gauche.');
-		await expect(placeholder).toBeVisible({ timeout: 5_000 });
+		const squircle = page.locator('[data-blank-state]');
+		await expect(squircle).toHaveText(
+			'Le TEXTE transcrit en API, syllabe par syllabe, les mots que vous lui donnez. Ajoutez le texte chanté de votre partition comme PAROLES, ou son poème source comme POÈME, dans ENTRÉE pour commencer.',
+			{ timeout: 5_000 },
+		);
 	});
 
 	test('language toggle updates gloss language after transcription', async ({ page }) => {

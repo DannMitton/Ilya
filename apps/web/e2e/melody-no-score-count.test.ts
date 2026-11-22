@@ -1,7 +1,7 @@
 import { test, expect, type Page } from '@playwright/test';
 
 /*
- * Lane 69 Step 3: MELODY with no score attached. Its page draws three lines; the second says where the voice stands. Below five stable core vowels it is the
+ * Lane 69 Step 3: MELODY with no score attached. Its page draws a squircle, and under it NOTES, whose first line says where the voice stands. Below five stable core vowels it is the
  * sentence the VOICE pane prints, counted from what the singer sampled. At five it is "Your profile is now set with five vowels measured."
  * No test before this one read the sentence, and the wiring guard in `markup/profile-status.test.ts` cannot see the page.
  *
@@ -21,10 +21,10 @@ async function openMelodyWithNoScore(page: Page, formants: Record<string, unknow
 	await page.goto('/');
 	await expect(page.locator('textarea.text-input')).toBeEnabled({ timeout: 45_000 });
 	await page.locator('#tab-markup').click();
-	await expect(page.locator('.profile-status').first()).toBeVisible({ timeout: 20_000 });
+	await expect(page.locator('[data-blank-notes] .notes-line').first()).toBeVisible({ timeout: 20_000 });
 }
-// Two paragraphs carry the class (`markup/MarkupPane.svelte`, the status line and the provisional sentence), so the first is the status line.
-const statusLine = async (page: Page) => (await page.locator('.profile-status').first().innerText()).replace(/\s+/g, ' ').trim();
+// NOTES under the blank state's squircle (`components/Paper/BlankState.svelte`) holds the status line, then the provisional sentence if any, so the first is the status line.
+const statusLine = async (page: Page) => (await page.locator('[data-blank-notes] .notes-line').first().innerText()).replace(/\s+/g, ' ').trim();
 
 test.describe('MELODY with no score: the line that says where the voice stands', () => {
 	test('one core vowel sampled: how many of the six, and how many more Ilya needs', async ({ page }) => {

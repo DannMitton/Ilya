@@ -1,0 +1,498 @@
+[
+ {
+  "file": "blank-text-phone-en.png",
+  "tag": "blank",
+  "doc": "text",
+  "width": "phone",
+  "lang": "en",
+  "m": {
+   "scale": 0.4191,
+   "ruleBottom": 154,
+   "footerRuleTop": 942,
+   "windowMid": 548,
+   "squircleTop": 507.7,
+   "squircleBottom": 582.3,
+   "squircleMid": 545,
+   "offsetFromWindowMid": -3,
+   "squircleLeft": 92,
+   "squircleWidth": 628,
+   "notesTop": null,
+   "count": 1,
+   "text": [
+    "TEXT transcribes the words you give it, syllable by syllable, into IPA. Add your score’s words as LYRICS, or its source poem as POEM, in INPUT to begin."
+   ]
+  }
+ },
+ {
+  "file": "blank-melody-phone-en.png",
+  "tag": "blank",
+  "doc": "melody",
+  "width": "phone",
+  "lang": "en",
+  "m": {
+   "scale": 0.4191,
+   "ruleBottom": 154,
+   "footerRuleTop": 942,
+   "windowMid": 548,
+   "squircleTop": 502.7,
+   "squircleBottom": 589.3,
+   "squircleMid": 546,
+   "offsetFromWindowMid": -2,
+   "squircleLeft": 96,
+   "squircleWidth": 624,
+   "notesTop": 589.3,
+   "count": 1,
+   "text": [
+    "MELODY marks your own resonances as it draws your score.",
+    "Set up your voice in VOICE, and add a score in INPUT, to begin."
+   ]
+  }
+ },
+ {
+  "file": "blank-insights-phone-en.png",
+  "tag": "blank",
+  "doc": "insights",
+  "width": "phone",
+  "lang": "en",
+  "m": {
+   "scale": 0.4191,
+   "ruleBottom": 154,
+   "footerRuleTop": 942,
+   "windowMid": 548,
+   "squircleTop": 504.7,
+   "squircleBottom": 591.3,
+   "squircleMid": 548,
+   "offsetFromWindowMid": 0,
+   "squircleLeft": 96,
+   "squircleWidth": 624,
+   "notesTop": 591.3,
+   "count": 1,
+   "text": [
+    "INSIGHTS looks at how your voice meets your score, and comments on what it finds.",
+    "Set up your voice in VOICE, and add a score in INPUT, to begin."
+   ]
+  }
+ },
+ {
+  "file": "blank-text-phone-fr.png",
+  "tag": "blank",
+  "doc": "text",
+  "width": "phone",
+  "lang": "fr",
+  "m": {
+   "scale": 0.4191,
+   "ruleBottom": 154,
+   "footerRuleTop": 942,
+   "windowMid": 548,
+   "squircleTop": 497.5,
+   "squircleBottom": 592.4,
+   "squircleMid": 545,
+   "offsetFromWindowMid": -3,
+   "squircleLeft": 92,
+   "squircleWidth": 628,
+   "notesTop": null,
+   "count": 1,
+   "text": [
+    "Le TEXTE transcrit en API, syllabe par syllabe, les mots que vous lui donnez. Ajoutez le texte chanté de votre partition comme PAROLES, ou son poème source comme POÈME, dans ENTRÉE pour commencer."
+   ]
+  }
+ },
+ {
+  "file": "blank-melody-phone-fr.png",
+  "tag": "blank",
+  "doc": "melody",
+  "width": "phone",
+  "lang": "fr",
+  "m": {
+   "scale": 0.4191,
+   "ruleBottom": 154,
+   "footerRuleTop": 942,
+   "windowMid": 548,
+   "squircleTop": 492.5,
+   "squircleBottom": 599.4,
+   "squircleMid": 546,
+   "offsetFromWindowMid": -2,
+   "squircleLeft": 96,
+   "squircleWidth": 624,
+   "notesTop": 599.4,
+   "count": 1,
+   "text": [
+    "Le CHANT trace votre partition en y marquant vos propres résonances.",
+    "Établissez votre voix dans VOIX et ajoutez une partition dans ENTRÉE pour commencer."
+   ]
+  }
+ },
+ {
+  "file": "blank-insights-phone-fr.png",
+  "tag": "blank",
+  "doc": "insights",
+  "width": "phone",
+  "lang": "fr",
+  "m": {
+   "scale": 0.4191,
+   "ruleBottom": 154,
+   "footerRuleTop": 942,
+   "windowMid": 548,
+   "squircleTop": 484.4,
+   "squircleBottom": 611.6,
+   "squircleMid": 548,
+   "offsetFromWindowMid": 0,
+   "squircleLeft": 96,
+   "squircleWidth": 624,
+   "notesTop": 611.6,
+   "count": 1,
+   "text": [
+    "Les APERÇUS observent la rencontre de votre voix et de votre partition, et commentent ce qu’ils y trouvent.",
+    "Établissez votre voix dans VOIX et ajoutez une partition dans ENTRÉE pour commencer."
+   ]
+  }
+ },
+ {
+  "file": "blank-text-tablet-en.png",
+  "tag": "blank",
+  "doc": "text",
+  "width": "tablet",
+  "lang": "en",
+  "m": {
+   "scale": 1,
+   "ruleBottom": 154,
+   "footerRuleTop": 942,
+   "windowMid": 548,
+   "squircleTop": 507.7,
+   "squircleBottom": 582.3,
+   "squircleMid": 545,
+   "offsetFromWindowMid": -3,
+   "squircleLeft": 92,
+   "squircleWidth": 628,
+   "notesTop": null,
+   "count": 1,
+   "text": [
+    "TEXT transcribes the words you give it, syllable by syllable, into IPA. Add your score’s words as LYRICS, or its source poem as POEM, in INPUT to begin."
+   ]
+  }
+ },
+ {
+  "file": "blank-melody-tablet-en.png",
+  "tag": "blank",
+  "doc": "melody",
+  "width": "tablet",
+  "lang": "en",
+  "m": {
+   "scale": 1,
+   "ruleBottom": 154,
+   "footerRuleTop": 942,
+   "windowMid": 548,
+   "squircleTop": 502.7,
+   "squircleBottom": 589.3,
+   "squircleMid": 546,
+   "offsetFromWindowMid": -2,
+   "squircleLeft": 96,
+   "squircleWidth": 624,
+   "notesTop": 589.3,
+   "count": 1,
+   "text": [
+    "MELODY marks your own resonances as it draws your score.",
+    "Set up your voice in VOICE, and add a score in INPUT, to begin."
+   ]
+  }
+ },
+ {
+  "file": "blank-insights-tablet-en.png",
+  "tag": "blank",
+  "doc": "insights",
+  "width": "tablet",
+  "lang": "en",
+  "m": {
+   "scale": 1,
+   "ruleBottom": 154,
+   "footerRuleTop": 942,
+   "windowMid": 548,
+   "squircleTop": 504.7,
+   "squircleBottom": 591.3,
+   "squircleMid": 548,
+   "offsetFromWindowMid": 0,
+   "squircleLeft": 96,
+   "squircleWidth": 624,
+   "notesTop": 591.3,
+   "count": 1,
+   "text": [
+    "INSIGHTS looks at how your voice meets your score, and comments on what it finds.",
+    "Set up your voice in VOICE, and add a score in INPUT, to begin."
+   ]
+  }
+ },
+ {
+  "file": "blank-text-tablet-fr.png",
+  "tag": "blank",
+  "doc": "text",
+  "width": "tablet",
+  "lang": "fr",
+  "m": {
+   "scale": 1,
+   "ruleBottom": 154,
+   "footerRuleTop": 942,
+   "windowMid": 548,
+   "squircleTop": 497.5,
+   "squircleBottom": 592.4,
+   "squircleMid": 545,
+   "offsetFromWindowMid": -3,
+   "squircleLeft": 92,
+   "squircleWidth": 628,
+   "notesTop": null,
+   "count": 1,
+   "text": [
+    "Le TEXTE transcrit en API, syllabe par syllabe, les mots que vous lui donnez. Ajoutez le texte chanté de votre partition comme PAROLES, ou son poème source comme POÈME, dans ENTRÉE pour commencer."
+   ]
+  }
+ },
+ {
+  "file": "blank-melody-tablet-fr.png",
+  "tag": "blank",
+  "doc": "melody",
+  "width": "tablet",
+  "lang": "fr",
+  "m": {
+   "scale": 1,
+   "ruleBottom": 154,
+   "footerRuleTop": 942,
+   "windowMid": 548,
+   "squircleTop": 492.5,
+   "squircleBottom": 599.4,
+   "squircleMid": 546,
+   "offsetFromWindowMid": -2,
+   "squircleLeft": 96,
+   "squircleWidth": 624,
+   "notesTop": 599.4,
+   "count": 1,
+   "text": [
+    "Le CHANT trace votre partition en y marquant vos propres résonances.",
+    "Établissez votre voix dans VOIX et ajoutez une partition dans ENTRÉE pour commencer."
+   ]
+  }
+ },
+ {
+  "file": "blank-insights-tablet-fr.png",
+  "tag": "blank",
+  "doc": "insights",
+  "width": "tablet",
+  "lang": "fr",
+  "m": {
+   "scale": 1,
+   "ruleBottom": 154,
+   "footerRuleTop": 942,
+   "windowMid": 548,
+   "squircleTop": 484.4,
+   "squircleBottom": 611.6,
+   "squircleMid": 548,
+   "offsetFromWindowMid": 0,
+   "squircleLeft": 96,
+   "squircleWidth": 624,
+   "notesTop": 611.6,
+   "count": 1,
+   "text": [
+    "Les APERÇUS observent la rencontre de votre voix et de votre partition, et commentent ce qu’ils y trouvent.",
+    "Établissez votre voix dans VOIX et ajoutez une partition dans ENTRÉE pour commencer."
+   ]
+  }
+ },
+ {
+  "file": "notes-melody-phone-en.png",
+  "tag": "notes",
+  "doc": "melody",
+  "width": "phone",
+  "lang": "en",
+  "m": {
+   "scale": 0.4191,
+   "ruleBottom": 154,
+   "footerRuleTop": 942,
+   "windowMid": 548,
+   "squircleTop": 502.7,
+   "squircleBottom": 589.3,
+   "squircleMid": 546,
+   "offsetFromWindowMid": -2,
+   "squircleLeft": 96,
+   "squircleWidth": 624,
+   "notesTop": 589.3,
+   "count": 1,
+   "text": [
+    "MELODY marks your own resonances as it draws your score.",
+    "Add a score in INPUT to begin."
+   ]
+  }
+ },
+ {
+  "file": "notes-insights-phone-en.png",
+  "tag": "notes",
+  "doc": "insights",
+  "width": "phone",
+  "lang": "en",
+  "m": {
+   "scale": 0.4191,
+   "ruleBottom": 154,
+   "footerRuleTop": 942,
+   "windowMid": 548,
+   "squircleTop": 504.7,
+   "squircleBottom": 591.3,
+   "squircleMid": 548,
+   "offsetFromWindowMid": 0,
+   "squircleLeft": 96,
+   "squircleWidth": 624,
+   "notesTop": 591.3,
+   "count": 1,
+   "text": [
+    "INSIGHTS looks at how your voice meets your score, and comments on what it finds.",
+    "Add a score in INPUT to begin."
+   ]
+  }
+ },
+ {
+  "file": "notes-melody-phone-fr.png",
+  "tag": "notes",
+  "doc": "melody",
+  "width": "phone",
+  "lang": "fr",
+  "m": {
+   "scale": 0.4191,
+   "ruleBottom": 154,
+   "footerRuleTop": 942,
+   "windowMid": 548,
+   "squircleTop": 502.7,
+   "squircleBottom": 589.3,
+   "squircleMid": 546,
+   "offsetFromWindowMid": -2,
+   "squircleLeft": 96,
+   "squircleWidth": 624,
+   "notesTop": 589.3,
+   "count": 1,
+   "text": [
+    "Le CHANT trace votre partition en y marquant vos propres résonances.",
+    "Ajoutez une partition dans ENTRÉE pour commencer."
+   ]
+  }
+ },
+ {
+  "file": "notes-insights-phone-fr.png",
+  "tag": "notes",
+  "doc": "insights",
+  "width": "phone",
+  "lang": "fr",
+  "m": {
+   "scale": 0.4191,
+   "ruleBottom": 154,
+   "footerRuleTop": 942,
+   "windowMid": 548,
+   "squircleTop": 494.5,
+   "squircleBottom": 601.4,
+   "squircleMid": 548,
+   "offsetFromWindowMid": 0,
+   "squircleLeft": 96,
+   "squircleWidth": 624,
+   "notesTop": 601.4,
+   "count": 1,
+   "text": [
+    "Les APERÇUS observent la rencontre de votre voix et de votre partition, et commentent ce qu’ils y trouvent.",
+    "Ajoutez une partition dans ENTRÉE pour commencer."
+   ]
+  }
+ },
+ {
+  "file": "notes-melody-tablet-en.png",
+  "tag": "notes",
+  "doc": "melody",
+  "width": "tablet",
+  "lang": "en",
+  "m": {
+   "scale": 1,
+   "ruleBottom": 154,
+   "footerRuleTop": 942,
+   "windowMid": 548,
+   "squircleTop": 502.7,
+   "squircleBottom": 589.3,
+   "squircleMid": 546,
+   "offsetFromWindowMid": -2,
+   "squircleLeft": 96,
+   "squircleWidth": 624,
+   "notesTop": 589.3,
+   "count": 1,
+   "text": [
+    "MELODY marks your own resonances as it draws your score.",
+    "Add a score in INPUT to begin."
+   ]
+  }
+ },
+ {
+  "file": "notes-insights-tablet-en.png",
+  "tag": "notes",
+  "doc": "insights",
+  "width": "tablet",
+  "lang": "en",
+  "m": {
+   "scale": 1,
+   "ruleBottom": 154,
+   "footerRuleTop": 942,
+   "windowMid": 548,
+   "squircleTop": 504.7,
+   "squircleBottom": 591.3,
+   "squircleMid": 548,
+   "offsetFromWindowMid": 0,
+   "squircleLeft": 96,
+   "squircleWidth": 624,
+   "notesTop": 591.3,
+   "count": 1,
+   "text": [
+    "INSIGHTS looks at how your voice meets your score, and comments on what it finds.",
+    "Add a score in INPUT to begin."
+   ]
+  }
+ },
+ {
+  "file": "notes-melody-tablet-fr.png",
+  "tag": "notes",
+  "doc": "melody",
+  "width": "tablet",
+  "lang": "fr",
+  "m": {
+   "scale": 1,
+   "ruleBottom": 154,
+   "footerRuleTop": 942,
+   "windowMid": 548,
+   "squircleTop": 502.7,
+   "squircleBottom": 589.3,
+   "squircleMid": 546,
+   "offsetFromWindowMid": -2,
+   "squircleLeft": 96,
+   "squircleWidth": 624,
+   "notesTop": 589.3,
+   "count": 1,
+   "text": [
+    "Le CHANT trace votre partition en y marquant vos propres résonances.",
+    "Ajoutez une partition dans ENTRÉE pour commencer."
+   ]
+  }
+ },
+ {
+  "file": "notes-insights-tablet-fr.png",
+  "tag": "notes",
+  "doc": "insights",
+  "width": "tablet",
+  "lang": "fr",
+  "m": {
+   "scale": 1,
+   "ruleBottom": 154,
+   "footerRuleTop": 942,
+   "windowMid": 548,
+   "squircleTop": 494.5,
+   "squircleBottom": 601.4,
+   "squircleMid": 548,
+   "offsetFromWindowMid": 0,
+   "squircleLeft": 96,
+   "squircleWidth": 624,
+   "notesTop": 601.4,
+   "count": 1,
+   "text": [
+    "Les APERÇUS observent la rencontre de votre voix et de votre partition, et commentent ce qu’ils y trouvent.",
+    "Ajoutez une partition dans ENTRÉE pour commencer."
+   ]
+  }
+ }
+]

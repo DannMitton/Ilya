@@ -40,7 +40,7 @@ test.describe('"Add your range" lands on the Range pickers', () => {
 		test.setTimeout(90_000);
 		await open(page);
 		await toInsights(page);
-		await expect(page.getByRole('button', { name: /^voice$/i })).toHaveAttribute('aria-expanded', 'false');
+		await expect(page.getByRole('button', { name: /^voice$/i }).and(page.locator(':not([data-link])'))).toHaveAttribute('aria-expanded', 'false');
 		await offer(page).click();
 		await landed(page);
 	});

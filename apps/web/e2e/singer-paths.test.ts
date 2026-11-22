@@ -95,11 +95,11 @@ test.describe('bilingual Markup and Insights', () => {
 		// what actually renders.
 		await page.getByRole('tab', { name: 'MELODY' }).click();
 
-		const empty = page.locator('.profile-empty');
-		await expect(empty).toHaveText('Open VOICE and record your vowels, or choose a voice type to start from generic values.');
+		const empty = page.locator('[data-blank-state] p');
+		await expect(empty).toHaveText(['MELODY marks your own resonances as it draws your score.', 'Set up your voice in VOICE, and add a score in INPUT, to begin.']);
 
 		await page.locator('.lang-pill').click();
-		await expect(empty).toHaveText('Ouvrez VOIX et captez vos voyelles, ou choisissez un type de voix pour partir de valeurs par défaut.');
+		await expect(empty).toHaveText(['Le CHANT trace votre partition en y marquant vos propres résonances.', 'Établissez votre voix dans VOIX et ajoutez une partition dans ENTRÉE pour commencer.']);
 	});
 
 	test('switching EN/FR updates the Insights pane\'s uncalibrated message', async ({ page }) => {
@@ -186,15 +186,14 @@ test.describe('Markup with no calibration', () => {
 	});
 
 	test('Markup shows its honest empty state with no calibration', async ({ page }) => {
-		// `profile.emptyState`, i18n.ts:1190. Drawn by MarkupPane.svelte:1148-1149
-		// only in the pre-calibration branch, so its presence is itself the
-		// singer-visible signal that nothing has been measured yet. No
-		// microphone is touched.
+		// The blank state of MELODY with no voice and no score (`profile.blank` and the both-missing ask `insights.silence.noBoth`, i18n.ts,
+		// ratified by Dann 2026-11-19), drawn in a squircle by `components/Paper/BlankState.svelte`. Its presence is itself the
+		// singer-visible signal that nothing has been measured yet. No microphone is touched.
 		await page.getByRole('tab', { name: 'MELODY' }).click();
 
-		const empty = page.locator('.profile-empty');
+		const empty = page.locator('[data-blank-state]');
 		await expect(empty).toBeVisible();
-		await expect(empty).toHaveText('Open VOICE and record your vowels, or choose a voice type to start from generic values.');
+		await expect(empty.locator('p')).toHaveText(['MELODY marks your own resonances as it draws your score.', 'Set up your voice in VOICE, and add a score in INPUT, to begin.']);
 
 		// N.203 lane 60: with no voice saved, the VOICE pane is the first-launch form (the name field and
 		// Start), in the Drawer and never the microphone. The old Calibrate button (VoiceAnchor) is gone; the

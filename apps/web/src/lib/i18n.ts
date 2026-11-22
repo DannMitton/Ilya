@@ -16,7 +16,7 @@
    tree on 2026-11-02 (consistency batch 2). Paths are under `apps/web/src/`;
    a prefix is listed with the files that use it most and its key count.
 
-   This file holds 1,348 keys.
+   This file holds 1,347 keys.
 
    A key built at run time (`watch.key.letter.${letter}`, `comment.<register>.<part>`)
    has no literal reference, so a search for the whole key can come back empty
@@ -44,7 +44,7 @@
    group.          3  the drawer's band names: lib/components/Drawer/Drawer.svelte (LEGACY KEY: `group.scoreMarkup`)
    guide.          5  lib/components/Reading/GuideSources.svelte, lib/components/Drawer/Drawer.svelte
    input.          8  lib/components/Drawer/IntakePanel.svelte
-   insights.     193  the INSIGHTS document: lib/insights/singer-blocks.ts, lib/insights/InsightsPane.svelte, lib/insights/tessituragram-layout.ts (LEGACY KEYS: `insights.fit.*`)
+   insights.     195  the INSIGHTS document: lib/insights/singer-blocks.ts, lib/insights/InsightsPane.svelte, lib/insights/tessituragram-layout.ts (LEGACY KEYS: `insights.fit.*`)
    inspector.     43  lib/components/Drawer/InspectorPanel.svelte, lib/components/Drawer/Drawer.svelte, lib/components/Drawer/GlossOffer.svelte
    intake.        54  lib/components/Drawer/IntakePanel.svelte, lib/components/Drawer/IntakeViews.svelte, lib/components/Drawer/PoemLibraryCard.svelte, lib/text/input-line.ts, lib/components/Drawer/bandState.ts
    key.           23  the key ruler: lib/markup/transposition-ruler.ts, lib/markup/TranspositionDock.svelte, lib/markup/TranspositionRuler.svelte
@@ -57,10 +57,10 @@
    notePicker.    10  lib/voice/NotePicker.svelte, lib/analysis/watchlist.ts
    octave.         5  lib/score/clef-ui.svelte.ts, lib/components/OctaveLine.svelte, lib/score/ClefReceipt.svelte, lib/score/ClefControls.svelte
    pacifier.      17  lib/voice/capture-ritual.svelte.ts
-   paper.          4  lib/components/Paper/TitlePage.svelte, lib/components/Paper/SubsequentPage.svelte, lib/text/text-header.ts, lib/one-action.ts
+   paper.          3  lib/components/Paper/TitlePage.svelte, lib/components/Paper/SubsequentPage.svelte, lib/text/text-header.ts, lib/one-action.ts
    placeholder.   13  lib/analysis/placeholder-line.ts
    portrait.       2  lib/components/ReadingAid.svelte, routes/+page.svelte
-   profile.       35  lib/markup/MarkupPane.svelte, lib/markup/profile-status.ts, lib/analysis/placeholder-line.ts
+   profile.       33  lib/markup/MarkupPane.svelte, lib/markup/profile-status.ts, lib/analysis/placeholder-line.ts
    provenance.     5  no literal consumer found
    recognize.      4  routes/+page.svelte
    replace.        4  routes/+page.svelte
@@ -1010,26 +1010,8 @@ const strings: Record<string, Record<Language, string>> = {
 	// ── Word Console placeholder ─────────────────────────────
 	'console.placeholder':         { en: 'ANALYSIS',                     fr: 'ANALYSE' },
 
-	// ── Paper empty state ────────────────────────────────────
-	'paper.empty':                 { en: 'Enter your Cyrillic text in the DRAWER on the left.', fr: 'Saisissez votre texte cyrillique dans le TIROIR à gauche.' },
-	// N.73 portrait C. The pull moved to the side of the desk in S1 and this
-	// line still sent the singer to the bottom of the screen. Both languages
-	// RATIFIED by Dann 2026-08-19.
-	//
-	// N.108 increment 4. THE CHEVRON IS NOT ON THE LEFT AND HAS NOT BEEN SINCE
-	// INCREMENT 1a. The pull is a horizontal bar on the BOTTOM edge carrying
-	// the word DRAWER with the paper up (`drawer.pull`), ruled by Dann
-	// 2026-09-02 and amending the 2026-08-19 line above in both parts. This
-	// string named the old geometry on every phone-layout screen, which is
-	// every viewport under 1400 px. Found on the increment 3 walk
-	// (`memo-n108-takeover_r1_2026-09-03.md` §9).
-	//
-	// THE OLD ENGLISH: 'Tap the chevron on the left to open the drawer.'
-	// THE OLD FRENCH:  'Appuyez sur le chevron à gauche pour ouvrir le tiroir.'
-	// THE FRENCH IS OWED. The English stands in both slots, as the six N.108
-	// strings above do, because `t()` prints `[MISSING: key]` for an absent
-	// variant and that literal would land on the empty page.
-	'paper.empty.mobile':          { en: 'Tap DRAWER at the bottom of the screen to open the DRAWER.', fr: 'Touchez TIROIR au bas de l\u2019écran pour ouvrir le TIROIR.' },
+	// ── The TEXT page's blank state, RATIFIED by Dann 2026-11-19 09:17 and 09:25 (`docs/sessions/ratified-blank-state-blurbs_2026-11-19.md`, section 3 and 4). One sentence pair, drawn in a squircle by `components/Paper/BlankState.svelte`. It replaces `paper.empty` and `paper.empty.mobile`, the device split that sent the singer to a DRAWER by a direction. INPUT is a link, drawn from the section's own name (`group.input`); POEM and LYRICS are views inside INPUT and are not.
+	'paper.blank': { en: 'TEXT transcribes the words you give it, syllable by syllable, into IPA. Add your score\u2019s words as LYRICS, or its source poem as POEM, in INPUT to begin.', fr: 'Le TEXTE transcrit en API, syllabe par syllabe, les mots que vous lui donnez. Ajoutez le texte chanté de votre partition comme PAROLES, ou son poème source comme POÈME, dans ENTRÉE pour commencer.' },
 
 	// ── Provenance: VERIFY label ─────────────────────────────
 	'verify.label':                { en: 'verify',                       fr: 'à vérifier' },
@@ -1497,13 +1479,12 @@ const strings: Record<string, Record<Language, string>> = {
 	'profile.count.8': { en: 'Eight', fr: 'Huit' },
 	'profile.count.9': { en: 'Nine', fr: 'Neuf' },
 	'profile.count.10': { en: 'Ten', fr: 'Dix' },
-	'profile.lede': { en: 'MELODY will appear here after Ilya processes the score you upload.', fr: 'Le CHANT apparaîtra ici une fois qu\u2019Ilya aura traité la partition que vous téléversez.' },
-	'profile.provisional.noneMessage': { en: 'You can update these values anytime through the DRAWER on the left.', fr: 'Vous pouvez modifier ces valeurs à tout moment depuis le TIROIR de gauche.' },
 	'profile.statusSetPlain': { en: 'Your profile is now set.', fr: 'Votre profil est maintenant établi.' },
 	'profile.statusSetMeasuredSingular': { en: 'Your profile is now set with {count} vowel measured.', fr: 'Votre profil est maintenant établi, avec {count} voyelle mesurée.' },
 	'profile.statusSetMeasuredPlural': { en: 'Your profile is now set with {count} vowels measured.', fr: 'Votre profil est maintenant établi, avec {count} voyelles mesurées.' },
-	'profile.provisional.sentenceSingular': { en: 'Your {vowels} is provisional, and you can update this value anytime through the DRAWER on the left.', fr: 'Votre voyelle {vowels} est provisoire, et vous pouvez modifier cette valeur à tout moment depuis le TIROIR à gauche.' },
-	'profile.provisional.sentencePlural': { en: 'Your {vowels} are provisional, and you can update these values anytime through the DRAWER on the left.', fr: 'Vos voyelles {vowels} sont provisoires, et vous pouvez modifier ces valeurs à tout moment depuis le TIROIR à gauche.' },
+	// RATIFIED by Dann 2026-11-19 09:25 (plural) and 2026-11-20 17:17 (singular): the sentence names VOICE, which is a link on the blank page, and no direction.
+	'profile.provisional.sentenceSingular': { en: 'Your {vowels} is provisional; set it in VOICE.', fr: 'Votre voyelle {vowels} est provisoire; réglez-la dans VOIX.' },
+	'profile.provisional.sentencePlural': { en: 'Your {vowels} are provisional; set them in VOICE.', fr: 'Vos voyelles {vowels} sont provisoires; réglez-les dans VOIX.' },
 
 	// ── List separators (N.34) ───────────────────
 	//    listSep hardcoded English joins. French takes no serial comma,
@@ -1512,8 +1493,8 @@ const strings: Record<string, Record<Language, string>> = {
 	'profile.provisional.listSepPair': { en: ' and ', fr: ' et ' },
 	'profile.provisional.listSepFinal': { en: ', and ', fr: ' et ' },
 	'profile.provisional.listSepMedial': { en: ', ', fr: ', ' },
-	// Sheet line 30, RATIFIED by Dann 2026-11-16 (English sheet r2, French sheet r1): MELODY with no voice points to VOICE in the singer's words. Replaces "Calibrate your voice to begin."
-	'profile.emptyState': { en: 'Open VOICE and record your vowels, or choose a voice type to start from generic values.', fr: 'Ouvrez VOIX et captez vos voyelles, ou choisissez un type de voix pour partir de valeurs par défaut.' },
+	// The MELODY page's blank state, RATIFIED by Dann 2026-11-19 09:25. Its ask is one of the three `insights.silence.*` lines, chosen by what the page is missing. Replaces `profile.emptyState` (Sheet line 30, 2026-11-16) and `profile.lede`.
+	'profile.blank': { en: 'MELODY marks your own resonances as it draws your score.', fr: 'Le CHANT trace votre partition en y marquant vos propres résonances.' },
 	// RETIRED FROM MARKUP by row 47 (Dann's ruling of 2026-10-08, 01:11 to 01:20)
 	// and DRAWN BY NOTHING since: both tabs now say it in one quiet line, the five
 	// `octave.*` keys below. The copy was approved by Dann on 2026-07-18 and is
@@ -1900,12 +1881,15 @@ const strings: Record<string, Record<Language, string>> = {
 	'insights.method.generic.untyped': { en: 'Method: computed from placeholder values and the score as sung, including repeats.', fr: 'Méthode\u00a0: calculé à partir de valeurs par défaut et de la partition telle que chantée, reprises comprises.' },
 	'insights.silence.unmeasured': { en: 'No voice has been measured, so this page does not compare this piece with your voice. Withheld until one is:', fr: 'Aucune voix n\u2019a été mesurée, donc cette page ne compare pas cette pièce avec votre voix. Retenu jusqu\u2019à ce qu\u2019une voix le soit\u00a0:' },
 	'insights.silence.findings':   { en: 'Any finding about where this piece may challenge your voice.', fr: 'Toute observation sur les endroits où cette pièce pourrait solliciter votre voix.' },
-	// N.203 sheet-english r2 / sheet-french r1, RATIFIED by Dann 2026-11-16 (01:13 English, 01:20 French), line 27.
-	'insights.silence.noScore':    { en: 'INSIGHTS measures a piece from its score, and connects it to your voice. Add a score in the INPUT pane to begin.', fr: 'Les APERÇUS mesurent une pièce à partir de sa partition, et la relient à votre voix. Ajoutez une partition dans le volet ENTRÉE pour commencer.' },
-	// The method line of the page with no score (sheet lines 28 and 29, and the new line for a voice with nothing usable and no placeholder profile ("Not sure" or no type), RATIFIED by Dann 2026-11-16 01:28).
+	// The blank-state ask, three forms, RATIFIED by Dann 2026-11-19 09:13 to 09:25 (`ratified-blank-state-blurbs_2026-11-19.md`, sections 3 and 4): the voice comes before the score. `noScore` was N.203's line 27 (RATIFIED 2026-11-16) and is reworded: the blurb that stood in its first sentence is now the page's own (`insights.blank`, `profile.blank`), and "the INPUT pane" loses its direction word. `noVoice` is ratified and read by nothing yet: a page with a score and no voice is not blank (lane 78, brief section 4, step 2).
+	'insights.silence.noScore':    { en: 'Add a score in INPUT to begin.', fr: 'Ajoutez une partition dans ENTRÉE pour commencer.' },
+	'insights.silence.noVoice':    { en: 'Set up your voice in VOICE to begin.', fr: 'Établissez votre voix dans VOIX pour commencer.' },
+	'insights.silence.noBoth':     { en: 'Set up your voice in VOICE, and add a score in INPUT, to begin.', fr: 'Établissez votre voix dans VOIX et ajoutez une partition dans ENTRÉE pour commencer.' },
+	// The INSIGHTS page's blank state, RATIFIED by Dann 2026-11-19 09:25. The French plural article and verb are the file's own for « Les APERÇUS ».
+	'insights.blank': { en: 'INSIGHTS looks at how your voice meets your score, and comments on what it finds.', fr: 'Les APERÇUS observent la rencontre de votre voix et de votre partition, et commentent ce qu\u2019ils y trouvent.' },
+	// The method line of the page with no score (sheet lines 28 and 29, RATIFIED 2026-11-16). The third line, for a voice with nothing usable and no placeholder profile, `insights.method.noScore.none` (RATIFIED 2026-11-16 01:28), is RETIRED: the companion's table (`ratified-blank-state-blurbs_2026-11-19.md`, section 2 and its 2026-11-20 correction 1) gives that page both asks and no NOTES.
 	'insights.method.noScore.samples': { en: 'Method: from your resonance profile, measured in VOICE.', fr: 'Méthode\u00a0: à partir de votre profil de résonances, mesuré dans VOIX.' },
 	'insights.method.noScore.generic': { en: 'Method: from placeholder values, until you record your own vowels.', fr: 'Méthode\u00a0: à partir de valeurs par défaut, jusqu\u2019à ce que vous captiez vos propres voyelles.' },
-	'insights.method.noScore.none':    { en: 'Method: record your vowels in VOICE, and this page computes from your voice.', fr: 'Méthode\u00a0: captez vos voyelles dans VOIX, et cette page calcule à partir de votre voix.' },
 	// N.123, phonation time: all RATIFIED by Dann 2026-09-23 unless marked
 	// (`docs/sessions/insights-phonation-time_r1_2026-09-22.md`).
 	'insights.phonation.heading':  { en: 'Phonation time',               fr: 'Temps de phonation' },

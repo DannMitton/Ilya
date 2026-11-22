@@ -14,7 +14,7 @@ async function open(page: Page) {
 	await expect(page.locator('.drawer-pull')).toBeVisible({ timeout: 45_000 });
 	await page.locator('.drawer-pull').click();
 	await expect(page.locator('textarea.text-input')).toBeEnabled({ timeout: 45_000 });
-	await page.getByRole('button', { name: /^voice$/i }).click();
+	await page.getByRole('button', { name: /^voice$/i }).and(page.locator(':not([data-link])')).click(); // lane 78: not the blank page's VOICE link
 }
 const band = (page: Page, name: RegExp) => page.getByRole('button', { name });
 

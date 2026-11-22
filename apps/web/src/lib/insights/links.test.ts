@@ -3,6 +3,7 @@ import { readFileSync } from 'node:fs';
 import { render } from 'svelte/server';
 import { t } from '$lib/i18n';
 import SingerBlock from './SingerBlock.svelte';
+import BlankState from '$lib/components/Paper/BlankState.svelte';
 import { noScoreBlocks, notesBlock } from './singer-blocks';
 import { isGenericMethodKey, methodLineKey } from './identity';
 import type { InsightsLinks } from './links';
@@ -37,11 +38,9 @@ describe('L1, "What INSIGHTS shares, and how", on the notes block', () => {
 });
 
 describe('the page with no score', () => {
-	it('is the same two blocks as before: the sentence, then the notes with the method line', () => {
-		expect(noScoreBlocks('Method.', 'en')).toEqual([
-			{ group: 'free', block: { kind: 'silence', lines: [t('insights.silence.noScore', 'en')] } },
-			{ group: 'free', block: notesBlock('Method.', null, 'en') },
-		]);
+	it('is the notes block alone, with the method line, or nothing for a voice with no method line: the squircle is BlankState\u2019s (lane 78)', () => {
+		expect(noScoreBlocks('Method.', 'en')).toEqual([{ group: 'free', block: notesBlock('Method.', null, 'en') }]);
+		expect(noScoreBlocks('', 'en')).toEqual([]);
 	});
 });
 
@@ -67,24 +66,29 @@ describe('L4, the record link, follows the three generic Method lines (N.203 lan
 	});
 });
 
-describe('L6, INPUT in the sentence for a piece with no score', () => {
-	const blk = (language: 'en' | 'fr') => ({ kind: 'silence', lines: [t('insights.silence.noScore', language)] }) as never;
-	const html = (language: 'en' | 'fr', links?: InsightsLinks) => render(SingerBlock, { props: { block: blk(language), language, width: 600, links } as never }).body;
-	const text = (h: string) => text0(/<p class="[^"]*prose[^"]*">(.*?)<\/p>/s.exec(h)![1]);
-	const text0 = (h: string) => h.replace(/<!--.*?-->/gs, '').replace(/<[^>]*>/g, '');
-	it('reads, with the markup taken away, as the one string it always was, in both languages', () => {
-		for (const lang of ['en', 'fr'] as const) {
-			expect(text(html(lang, { input: () => {} })), lang).toBe(t('insights.silence.noScore', lang));
-			expect(text(html(lang)), lang).toBe(t('insights.silence.noScore', lang));
+describe('L6, INPUT and VOICE in the blank page\u2019s squircle (lane 78)', () => {
+	/* The equality test that stood here (`line === T('insights.silence.noScore')` in `SingerBlock.svelte`) found one link in one string. `BlankState` finds every
+	   section name in a sentence by position (`components/Paper/blank-state.ts`), so the sentence may carry INPUT and VOICE, and it is replaced, not added to. */
+	const html = (language: 'en' | 'fr', key: string, links?: InsightsLinks) =>
+		render(BlankState, { props: { language, accent: 'var(--rose)', ink: 'var(--rose-ink)', top: 0, bottom: 0, paragraphs: [t(key, language)], links } as never }).body;
+	const text = (h: string) => h.replace(/<!--.*?-->/gs, '').replace(/<[^>]*>/g, '').trim();
+	it('reads, with the markup taken away, as the one string, in both languages, with or without links', () => {
+		for (const lang of ['en', 'fr'] as const) for (const key of ['insights.silence.noScore', 'insights.silence.noBoth', 'insights.silence.noVoice']) {
+			expect(text(html(lang, key, { input: () => {}, voice: () => {} })), lang + key).toBe(t(key, lang));
+			expect(text(html(lang, key)), lang + key).toBe(t(key, lang));
 		}
 	});
-	it('makes only the word INPUT / ENTRÉE a button, and only when the page gives the link', () => {
-		expect(html('en', { input: () => {} })).toMatch(/<button[^>]*>INPUT<\/button>/);
-		expect(html('fr', { input: () => {} })).toMatch(/<button[^>]*>ENTRÉE<\/button>/);
-		expect(html('en')).not.toContain('<button');
+	it('makes INPUT / ENTRÉE and VOICE / VOIX buttons, and only when the page gives the link', () => {
+		expect(html('en', 'insights.silence.noScore', { input: () => {} })).toMatch(/<button[^>]*>INPUT<\/button>/);
+		expect(html('fr', 'insights.silence.noScore', { input: () => {} })).toMatch(/<button[^>]*>ENTRÉE<\/button>/);
+		expect(html('en', 'insights.silence.noBoth', { input: () => {}, voice: () => {} }).match(/<button/g)).toHaveLength(2);
+		expect(html('fr', 'insights.silence.noBoth', { input: () => {}, voice: () => {} })).toMatch(/<button[^>]*>VOIX<\/button>/);
+		expect(html('en', 'insights.silence.noBoth', { input: () => {} }).match(/<button/g)).toHaveLength(1);
+		expect(html('en', 'insights.silence.noScore')).not.toContain('<button');
 	});
-	it('leaves every other silence line alone', () => {
+	it('SingerBlock no longer reaches for the link: a silence line is plain text', () => {
 		const other = { kind: 'silence', lines: [t('insights.silence.unmeasured', 'en')] } as never;
 		expect(render(SingerBlock, { props: { block: other, language: 'en', width: 600, links: { input: () => {} } } as never }).body).not.toContain('<button');
+		expect(readFileSync('src/lib/insights/SingerBlock.svelte', 'utf8')).not.toContain('withInput');
 	});
 });

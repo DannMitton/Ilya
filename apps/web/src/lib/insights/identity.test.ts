@@ -75,7 +75,7 @@ describe('row 166: the identity head of a placeholder voice', () => {
 		expect(methodLineKey({ generic: false, typed: false })).toBe('insights.method.untyped');
 		for (const lang of ['en', 'fr'] as const) {
 			for (const typed of [true, false]) {
-				const line = t(methodLineKey({ generic: true, typed }), lang);
+				const line = t(methodLineKey({ generic: true, typed })!, lang);
 				expect(line).not.toMatch(/\{date\}|calibration/i);
 			}
 		}
@@ -84,7 +84,8 @@ describe('row 166: the identity head of a placeholder voice', () => {
 	it('the method line of a page with no score reads what the voice rests on: samples, generic values, or neither (N.203 Step 8)', () => {
 		expect(methodLineKey({ generic: false, typed: false, noScore: true, samples: true })).toBe('insights.method.noScore.samples');
 		expect(methodLineKey({ generic: true, typed: true, noScore: true, samples: false })).toBe('insights.method.noScore.generic');
-		expect(methodLineKey({ generic: false, typed: false, noScore: true, samples: false })).toBe('insights.method.noScore.none');
+		// Neither: `null`, so the page draws no NOTES (lane 78; the companion's table, `ratified-blank-state-blurbs_2026-11-19.md` section 2 and its correction 1, supersedes Dann's line of 2026-11-16 01:28).
+		expect(methodLineKey({ generic: false, typed: false, noScore: true, samples: false })).toBeNull();
 		// With a score nothing changes: `noScore` and `samples` are not read.
 		expect(methodLineKey({ generic: true, typed: false, samples: true })).toBe('insights.method.generic.untyped');
 	});
@@ -96,8 +97,8 @@ describe('row 166: the identity head of a placeholder voice', () => {
 		expect(key(un('baritone'))).toBe('insights.method.noScore.generic');
 		// QUEUE row 167 (ruling of 2026-11-19): a contralto, a countertenor, and a bass-baritone have generic values now; "Not sure" and no type take none.
 		for (const id of ['contralto', 'countertenor', 'bass-baritone']) expect(key(un(id)), id).toBe('insights.method.noScore.generic');
-		expect(key(un('not-sure'))).toBe('insights.method.noScore.none');
-		expect(key(un(undefined))).toBe('insights.method.noScore.none');
+		expect(key(un('not-sure'))).toBeNull();
+		expect(key(un(undefined))).toBeNull();
 	});
 
 	it('the lede: shown only for a placeholder voice, with the identity line\'s own label (EN lower-cased, FR as printed)', () => {

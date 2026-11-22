@@ -117,8 +117,8 @@ test.describe('L4: a link to record vowels, beside L1, where the findings rest o
 	});
 });
 
-test.describe('L6: INPUT, in the sentence for a piece with no score', () => {
-	const SENTENCE = 'INSIGHTS measures a piece from its score, and connects it to your voice. Add a score in the INPUT pane to begin.';
+test.describe('L6: INPUT and VOICE, in the blank page\u2019s squircle for a piece with no score (lane 78)', () => {
+	const SENTENCE = 'INSIGHTS looks at how your voice meets your score, and comments on what it finds. Add a score in INPUT to begin.';
 	const drawer = (page: Page) => page.locator('aside.drawer');
 	const inputBand = (page: Page, name = /^input$/i) => drawer(page).getByRole('button', { name });
 	/** INPUT is open on a first run; the link's job is to open it, so shut it first. */
@@ -128,7 +128,7 @@ test.describe('L6: INPUT, in the sentence for a piece with no score', () => {
 		await expandStation(page, 'Voice');
 		await shutInput(page);
 		await noScore(page);
-		expect((await page.locator('.insights-container p.prose').first().innerText()).replace(/\s+/g, ' ')).toContain(SENTENCE);
+		expect((await page.locator('.insights-container [data-blank-state]').innerText()).replace(/\s+/g, ' ')).toContain(SENTENCE);
 		await inputLink(page).click();
 		await expect(inputBand(page)).toHaveAttribute('aria-expanded', 'true');
 		await expect(page.locator('[data-band-head="input"]')).toBeInViewport();
@@ -167,12 +167,25 @@ test.describe('L6: INPUT, in the sentence for a piece with no score', () => {
 		await page.waitForTimeout(1200);
 		await expect(inputBand(page)).toHaveAttribute('aria-expanded', 'false');
 	});
-	test('prints as the same sentence, with no link styling', async ({ page }) => {
+	test('the blank state does not print: the sheet keeps its header and footer, and the squircle is screen only (DESK DEFAULT)', async ({ page }) => {
 		await open(page);
 		await noScore(page);
+		await expect(page.locator('.insights-container [data-blank-state]')).toBeVisible();
 		await page.emulateMedia({ media: 'print' });
-		const css = await inputLink(page).evaluate((el) => { const s = getComputedStyle(el); return { deco: s.textDecorationLine, color: s.color, parent: getComputedStyle(el.parentElement!).color }; });
-		expect(css.deco).toBe('none');
-		expect(css.color).toBe(css.parent);
+		expect(await page.locator('.insights-container .blank-window').evaluate((el) => getComputedStyle(el).display)).toBe('none');
+	});
+	/** The VOICE link reveals the band; it does not enter the recording screen, which `openVoice` does for a saved voice (brief of lane 78, step 3). */
+	test('with a saved voice that has no type and nothing sampled, VOICE opens the VOICE band, its head in view, and never the takeover', async ({ page }) => {
+		await open(page, { formants: {}, voiceType: undefined });
+		await expandStation(page, 'Input');
+		await noScore(page);
+		const voiceBand = page.locator('aside.drawer').getByRole('button', { name: /^voice$/i });
+		if ((await voiceBand.getAttribute('aria-expanded')) === 'true') await voiceBand.click();
+		await expect(voiceBand).toHaveAttribute('aria-expanded', 'false');
+		await page.locator('.insights-container').getByRole('button', { name: 'VOICE', exact: true }).click();
+		await expect(voiceBand).toHaveAttribute('aria-expanded', 'true');
+		await expect(page.locator('.takeover-back')).toBeHidden();
+		await page.waitForTimeout(800);
+		await expect(page.locator('[data-band-head="scoreMarkup"]')).toBeInViewport();
 	});
 });

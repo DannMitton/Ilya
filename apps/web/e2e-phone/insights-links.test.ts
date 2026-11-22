@@ -71,8 +71,8 @@ for (const drawerOpen of [false, true]) {
 			await band(page, /^voice$/i).click();
 			await page.locator('.drawer-pull').click();
 		}
-		await expect(page.locator('button.offer-link', { hasText: 'INPUT' }).first()).toBeAttached({ timeout: 20_000 });
-		const link = await onScreen(page, 'INPUT');
+		const link = page.locator('[data-blank-state] [data-link="input"]'); // lane 78: BlankState draws it once, not twice
+		await expect(link).toBeVisible({ timeout: 20_000 });
 		await link.scrollIntoViewIfNeeded();
 		await link.click();
 		await expect(page.locator('aside.drawer').getByRole('button', { name: /^input$/i })).toHaveAttribute('aria-expanded', 'true');

@@ -55,7 +55,8 @@ export async function expandStation(page: Page, label: string): Promise<void> {
 	// The station names are capitals by value since consistency batch 1 ("Voice"
 	// reads VOICE), and `exact: true` is case-sensitive, so match the whole name
 	// without regard to case.
-	const button = page.getByRole('button', { name: new RegExp(`^${label}$`, 'i') });
+	// Lane 78: the blank pages carry INPUT and VOICE links (`[data-link]`), which share these names; the band's toggle is the other.
+	const button = page.getByRole('button', { name: new RegExp(`^${label}$`, 'i') }).and(page.locator(':not([data-link])'));
 	const expanded = await button.getAttribute('aria-expanded');
 	if (expanded !== 'true') {
 		await button.click();

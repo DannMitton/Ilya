@@ -61,15 +61,15 @@ export function placeholderLabel(generic: boolean, voiceType: VoiceTypeChoice | 
  * The Method endnote's string key. With a score: a placeholder voice names no calibration and no date (RATIFIED by Dann 2026-11-10; the strings are pinned in
  * `ratified-lines.test.ts`). With no score (`noScore`, N.203 lane 59 Step 8; sheet lines 28 and 29, RATIFIED 2026-11-16): the line reads what the voice rests on,
  * not the model, which a page with no score never has: `samples` (the voice rests on the singer's own samples, `restsOnSamples`), else `generic` (the eight
- * declared types' placeholder values, nothing usable recorded; QUEUE row 167, ruling of 2026-11-19), else neither ("Not sure", no type, or an id this build does not know).
+ * declared types' placeholder values, nothing usable recorded; QUEUE row 167, ruling of 2026-11-19), else neither ("Not sure", no type, or an id this build does not know), which returns `null`: that page asks for both the voice and a score and carries no NOTES (lane 78; the companion's table, section 2 and its correction 1, supersedes Dann's line of 2026-11-16 01:28).
  */
-export function methodLineKey(o: { generic: boolean; typed: boolean; noScore?: boolean; samples?: boolean }): string {
-	if (o.noScore) return o.samples ? 'insights.method.noScore.samples' : o.generic ? 'insights.method.noScore.generic' : 'insights.method.noScore.none';
+export function methodLineKey(o: { generic: boolean; typed: boolean; noScore?: boolean; samples?: boolean }): string | null {
+	if (o.noScore) return o.samples ? 'insights.method.noScore.samples' : o.generic ? 'insights.method.noScore.generic' : null;
 	const kind = o.typed ? 'typed' : 'untyped';
 	return o.generic ? `insights.method.generic.${kind}` : `insights.method.${kind}`;
 }
 
 /** Whether a Method line key is one of the three generic ones (`insights.method.generic.typed`, `.untyped`, `insights.method.noScore.generic`): the lines that say the findings rest on placeholder values (N.203 lane 61, link L4). */
-export function isGenericMethodKey(key: string): boolean {
+export function isGenericMethodKey(key: string | null): boolean {
 	return key === 'insights.method.generic.typed' || key === 'insights.method.generic.untyped' || key === 'insights.method.noScore.generic';
 }
