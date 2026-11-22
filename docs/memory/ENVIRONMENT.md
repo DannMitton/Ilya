@@ -15,6 +15,13 @@ The index was added 2026-09-01. Nothing below it was moved, reworded, or removed
 **When you add a section, add its row here.** A trap nobody can find costs the
 next session the same hour it cost the last one.
 
+### Learned 2026-11-22, late (Opus desk: the shared-properties catalogue)
+- `THE MAC'S node_modules DO NOT RUN FROM device_bash`: the bridge VM is Linux and the installed binaries are the Mac's, so vitest dies in rollup's native loader. A gate runs on his Mac or not at all.
+- `A NEW TRACKED .musicxml BREAKS A CENSUS TEST IN ANOTHER PACKAGE`: `strophic-byte-baseline.test.ts` counts every tracked score in the repository, so a fixture added in `packages/` fails a gate in `apps/web`.
+- `A DETACHED CLICK LOOP MISLABELS A CAPTURE` (last sections of this file): a `javascript_tool` call that returns before its own async loop finishes keeps clicking, so a capture taken several calls later can be filed under the wrong document.
+- `A SECOND BLOB DOWNLOAD IN THE SAME TAB DOES NOT LAND`: the first saves, the second is silently refused.
+- `INSIGHTS CONTENT LIVES IN .column`: not `.page-content` and not `.score-window`, so a probe written for the other two measures nothing on INSIGHTS.
+
 ### Learned 2026-11-22 (Opus desk: lanes 80, 81, 82 and N.204's start)
 - `A FABLE REVIEW NEVER REACHES THE TREE BY ITSELF` (last sections of this file): a review that arrives as a subagent memo exists only in the thread; `STATE.md` has recorded reviews as filed that are not on disk.
 - `A LANE'S "COMMIT X IS IN" CAN MEAN ITS WORKING TREE`: read `git log` on the branch, not the lane's prose.
@@ -5838,3 +5845,66 @@ the error names a model-copying script rather than a missing package, so the cau
 - **Fable brief review of a single-component lane: 127,211, 14 tool uses, 3.5 min**, cap 200k.
 - So a brief review scales with the brief's item count rather than with the tree. Quote 120k to 200k for one component, 190k to 260k for a multi-item lane, 190k to 280k for an as-built read.
 
+
+## A DETACHED CLICK LOOP MISLABELS A CAPTURE. 2026-11-22
+
+`javascript_tool` returns before an `(async()=>{...})()` finishes, and the page keeps
+running it (`LONG CHROME SCRIPTS RUN DETACHED`). A loop that clicks tab after tab with
+sleeps therefore goes on clicking through the desk's NEXT few calls. On 2026-11-22 a
+failed three-document capture loop was still running; the desk read the active tab as
+MELODY in one call, ran its capture four calls later, and filed an INSIGHTS page under
+the key MELODY. The probe had said `DOC=INSIGHTS` on its own first line and the desk did
+not read it.
+
+**The rule: a capture names the thing it captured, on its first line, and that line is
+read before the capture is stored or used.** A tab reading taken in an earlier call is
+not evidence about this call. This is the control rule of `CONTRACT.md` section 4 applied
+to a browser: name what could make the instrument lie, and rule it out first.
+
+## A SECOND BLOB DOWNLOAD IN THE SAME TAB DOES NOT LAND. 2026-11-22
+
+The Blob-download method (`A CHROME TAB READS 1,000 CHARACTERS AT A TIME`) worked once:
+23,473 bytes reached `~/Downloads`. A second `a.click()` download from the same tab,
+three calls later, produced no file and no error, which is Chrome refusing a repeat
+automatic download unseen. **Get it right the first time, or read the string out of
+`window` in 850-character slices, which cost four calls for 3.3 kB.**
+
+## INSIGHTS CONTENT LIVES IN `.column`. 2026-11-22
+
+TEXT draws its content in `.page-content` (`TitlePage.svelte:122`,
+`SubsequentPage.svelte:87`), MELODY in `.score-window` (`MarkupPane.svelte:985`), and
+INSIGHTS in `.column` (`InsightsPane.svelte:572`). A probe written for the first two
+reports no window at all on INSIGHTS, which reads like "INSIGHTS has no frame" and is a
+failed lookup, not an absence (tether 14).
+
+**And INSIGHTS column sets no CSS `bottom`.** It sets `top`, `left`, and `right` only, so
+its height is its content's height; the frame's bottom reaches it through the capacity
+arithmetic at `InsightsPane.svelte:463`. TEXT and MELODY both set `bottom` from
+`pageFrame`. The three agree today because the arithmetic agrees, and nothing on the page
+holds them together. Recorded as defect 1 of
+`../sessions/catalogue-shared-properties_r1_2026-11-22.md`.
+
+
+## THE MAC'S node_modules DO NOT RUN FROM device_bash. 2026-11-22
+
+The desk tried to run one vitest file through the bridge shell to settle a gate failure without
+spending a paste on Dann. `node` is there (v22) and `apps/web/node_modules` is there, but the
+bridge VM is Linux and the tree's installed binaries are the Mac's, so the run dies in
+`node_modules/.pnpm/rollup@4.57.1/node_modules/rollup/dist/native.js` with a missing module.
+**A gate, or any vitest run, happens on Dann's Mac or it does not happen.** The desk reads the
+tree through the bridge and nothing more. Back up any file a run would rewrite before handing
+him the command, so a bad result is a `cp` away from undone.
+
+## A NEW TRACKED `.musicxml` BREAKS A CENSUS TEST IN ANOTHER PACKAGE. 2026-11-22
+
+`apps/web/src/lib/markup/strophic-byte-baseline.test.ts:44-50` lists every tracked `.musicxml`
+in the whole repository with `git ls-files`, and `:81` asserts the baseline names exactly that
+set less the strophic lane's own ten fixtures (`:32-43`). **So a fixture added anywhere, in any
+package, fails gate 4**, in a file whose name says nothing about the lane that added it. Lane 83
+added `packages/score-parser/src/fixtures/underlay-gap.musicxml` and N.209's first ship run
+stopped on it: 218 tracked, 207 in the baseline, 10 exempt.
+
+**Before shipping a lane that adds a tracked score, check that arithmetic.** The repair is to
+re-run the test with `UPDATE_STROPHIC_BASELINE=1` and confirm by `git diff` that exactly one
+entry was added, which also re-proves every other score hashes the same. Two other tests
+enumerate the same set, which is why the total moved to 6803 while the passes stayed at 6801.

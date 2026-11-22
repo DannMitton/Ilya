@@ -199,6 +199,7 @@
 	"packages/score-parser/src/fixtures/key-changes.musicxml": "354ec3c4e4f0dd249488c3afdee4616a61825d0f02a178dcaffc1f388e449cf4",
 	"packages/score-parser/src/fixtures/n188-markings.musicxml": "1a6105ee25ca453451004afdc7f56e20727f4afa70332773288d437384bd2ab1",
 	"packages/score-parser/src/fixtures/row126-song1-bars-9-10.musicxml": "f3edf48432323bbce9a5e8b9630c2fe4df46e854039db0f6c4113598ac4bb076",
+	"packages/score-parser/src/fixtures/underlay-gap.musicxml": "4f32fd221f12f2e87ba4cb827cf72d3c8532f865f66d9096ca47aac5d4841510",
 	"tools/e16-harness/b1-ledger-lines/b1-ledger-lines.musicxml": "c0ff62769fa55ad8c75b57209c009a37e32d7826ebbe0fb5b4ff670617b5d868",
 	"tools/e16-harness/b2-tuplets/b2-tuplets.musicxml": "6e4a853bafd3e4e2a8606dd1a54c9c6289c6f25718ccb5bcbdffa3204508a808",
 	"tools/e16-harness/b3-ledger-lines-scale/b3-ledger-lines-scale.musicxml": "c0ff62769fa55ad8c75b57209c009a37e32d7826ebbe0fb5b4ff670617b5d868",
