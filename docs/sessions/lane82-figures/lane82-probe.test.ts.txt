@@ -1,0 +1,50 @@
+import { test } from '@playwright/test';
+import path from 'path';
+import fs from 'fs';
+
+const P = (step: string, octave: number, alter = 0) => ({ step, octave, alter });
+const FORMANTS: Record<string, [number, number]> = { i: [280, 2250], e: [400, 2100], 'ɪ': [330, 1900], 'ɨ': [350, 1500], 'ɛ': [520, 1800], a: [700, 1300], 'ɑ': [650, 1000], 'ʌ': [600, 1200], o: [450, 900], u: [320, 800] };
+const OUT = process.env.OUT!;
+const TAG = process.env.TAG!;
+const fixtures: Record<string, string> = {
+	sunless: 'sunless-01-engraved.musicxml',
+	tchai: 'tchaikovsky-op38-3-voice.musicxml',
+};
+const zones: Record<string, { low: any; high: any }> = { default: { low: P('G', 2), high: P('D', 4) }, below: { low: P('C', 2), high: P('D', 4) } };
+
+for (const fx of ['sunless', 'tchai'])
+	for (const zone of ['default', 'below'])
+		for (const lang of ['en', 'fr'])
+			for (const w of [1440, 390])
+				test(`${fx} ${zone} ${lang} ${w}`, async ({ browser }) => {
+					const ctx = await browser.newContext({ viewport: { width: w, height: w === 390 ? 844 : 1300 }, deviceScaleFactor: 2 });
+					const page = await ctx.newPage();
+					const formants: any = {};
+					for (const [v, [f1, f2]] of Object.entries(FORMANTS)) formants[v] = { f1, f2, confidence: 'high', f2Quality: 'clear', reading: 'captured', plausibility: 'plausible' };
+					const now = new Date().toISOString();
+					const z = zones[zone];
+					const store = { version: 2, activeId: 'v-test', voices: [{ id: 'v-test', name: 'Voice 1', createdAt: now, updatedAt: now, calibratedAt: now, formants, voiceType: 'bass', characteristics: { rangeLow: P('D', 2), rangeHigh: P('F', 4), tessituraLow: z.low, tessituraHigh: z.high, passaggioPrimary: P('A', 3), passaggioSecondary: P('D', 4, 1), source: 'manual' } }] };
+					await page.addInitScript(([l, s]) => { try { localStorage.setItem('ilya:language', l); localStorage.setItem('shane.profiles.v2', s); } catch {} }, [lang, JSON.stringify(store)] as const);
+					await page.goto('/');
+					await page.locator('textarea.text-input').waitFor({ state: 'visible', timeout: 45000 });
+					await page.locator('input[type="file"].hidden-input').setInputFiles(path.resolve(process.cwd(), 'src/lib/score/ingestion/fixtures', fixtures[fx]));
+					await page.locator('.receipt-score').waitFor({ timeout: 30000 });
+					await page.locator('#tab-insights').click();
+					await page.locator('.insights-container .paper-page .pitch-seconds svg').first().waitFor({ timeout: 30000 });
+					await page.waitForTimeout(2500);
+					const info = await page.evaluate(() => {
+						const svg = document.querySelector('.insights-container .pitch-seconds svg') as SVGSVGElement;
+						const names = [...svg.querySelectorAll('text.name')].map((t) => (t.textContent ?? '').trim()).filter((s) => /^[A-G](♭♭|♭|♯|x)?\d$/.test(s));
+						const pages = [...document.querySelectorAll('.insights-container .paper-page')].map((p) => {
+							const r = p.getBoundingClientRect();
+							const blocks = [...p.querySelectorAll('.column .block, .column .squircle')].map((b) => Math.round(b.getBoundingClientRect().bottom - r.top));
+							return { h: Math.round(r.height), w: Math.round(r.width), blocks: blocks.length, lastBottom: Math.max(0, ...blocks), headings: [...p.querySelectorAll('h2,h3')].map((h) => (h.textContent ?? '').trim().slice(0, 30)) };
+						});
+						const sungMidis = [...svg.querySelectorAll('rect.bar')].length;
+						return { rows: names.length, names, bars: sungMidis, svgH: svg.getBoundingClientRect().height, svgW: svg.getBoundingClientRect().width, pages };
+					});
+					fs.writeFileSync(path.join(OUT, `${TAG}-${fx}-${zone}-${lang}-${w}.json`), JSON.stringify(info));
+					await page.locator('.insights-container .pitch-seconds').first().scrollIntoViewIfNeeded();
+					await page.locator('.insights-container .pitch-seconds').first().screenshot({ path: path.join(OUT, `${TAG}-${fx}-${zone}-${lang}-${w}.png`) });
+					await ctx.close();
+				});

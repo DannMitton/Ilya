@@ -14,9 +14,9 @@
 	 *
 	 * A document: nothing here is clickable or focusable.
 	 */
-	import { pitchToMidi, type Pitch } from '@ilya/score-parser';
+	import { pitchToMidi, spellPitch, type Pitch } from '@ilya/score-parser';
 	import { t, type Language } from '$lib/i18n';
-	import { italicRuns } from '$lib/italics';
+	import { italicRuns, withoutItalics } from '$lib/italics';
 	import { pitchName } from '$lib/voice/note-picker';
 	import type { TessituragramModel } from '$lib/insights/insights';
 
@@ -40,8 +40,37 @@
 	/* The bars take what the names, the bracket, and its label leave: 210 px on
 	   the letter page (the drawing's), down to 50 on a phone, so nothing passes
 	   the box's edge. */
-	const BAR_W = $derived(Math.max(50, Math.min(210, width - X0 - 98 - 120)));
-	const BRACKET_X = $derived(X0 + BAR_W + 98);
+	let nameProbe = $state<SVGTextElement | null>(null);
+	let nameW = $state<number | null>(null);
+	let fontsTick = $state(0);
+	$effect(() => {
+		document.fonts?.ready.then(() => (fontsTick += 1));
+	});
+
+	/* THE PASSAGGIO NAMES' RESERVATION (lane 82). A passaggio's name starts LINE_LABEL past the bars, and the bracket's tick starts NAMES past them, so
+	   NAMES is that start, the widest name either language can write ("secondo passaggio" and a letter, an accidental, an octave digit: every one is
+	   measured, in the page's real italic, after `document.fonts.ready`), the bracket's own 6 px clearance, and the tick's 4. One reservation for both
+	   languages, so the figure keeps its shape when the language changes. Until it is measured it is the old 98. */
+	const NAMES = $derived(nameW === null ? 98 : LINE_LABEL + nameW + 6 + 4);
+	const BAR_W = $derived(Math.max(50, Math.min(210, width - X0 - NAMES - 120)));
+	const BRACKET_X = $derived(X0 + BAR_W + NAMES);
+	$effect(() => {
+		void fontsTick;
+		if (nameProbe) nameW = widestLineName(nameProbe);
+	});
+	function widestLineName(el: SVGTextElement): number {
+		const phrases = (['secondo', 'primo'] as const).flatMap((k) => (['en', 'fr'] as const).map((lang) => withoutItalics(t(`insights.figure.${k}`, lang))));
+		let widest = 0;
+		for (const phrase of phrases)
+			for (const step of ['A', 'B', 'C', 'D', 'E', 'F', 'G'] as const)
+				for (const alter of [-2, -1, 0, 1, 2])
+					for (let octave = 0; octave <= 9; octave++) {
+						el.textContent = `${phrase} ${pitchName({ step, alter, octave } as Pitch, 'en')}`;
+						widest = Math.max(widest, el.getComputedTextLength());
+					}
+		el.textContent = '';
+		return widest;
+	}
 
 	/* THE BRACKET'S LABEL WRAPS (L17, closing polish lane). SVG text does not wrap, and the French « votre zone de travail confortable, telle que vous
 	   l'avez indiquée » runs past the figure on a phone, where the bars give way to 50 px. So the label is cut into lines at word spaces, each no wider
@@ -52,11 +81,7 @@
 	const label = $derived(T('insights.r2.yourTessitura'));
 	const room = $derived(width - BRACKET_X - 6);
 	let whole = $state<SVGTextElement | null>(null);
-	let fontsTick = $state(0);
 	let wrapped = $state<{ text: string; room: number; lines: string[] } | null>(null);
-	$effect(() => {
-		document.fonts?.ready.then(() => (fontsTick += 1));
-	});
 	$effect(() => {
 		void fontsTick;
 		if (!whole || !(room > 0)) return;
@@ -90,27 +115,33 @@
 		return out;
 	}
 
-	const rows = $derived([...figure.rows].sort((a, b) => b.midi - a.midi));
+	/* EVERY SEMITONE FROM THE LOWEST TO THE HIGHEST of the sung pitches, the typed zone's two ends, and both typed passaggi, one row each (lane 82), so the
+	   bracket and the lines are drawn against a scale that contains them. A row the piece does not sing draws its name and no bar; `figure.rows` itself stays the sung pitches. */
+	const rows = $derived.by(() => {
+		const typed = new Map<number, Pitch>();
+		const note = (p: Pitch) => typed.has(pitchToMidi(p)) || typed.set(pitchToMidi(p), p);
+		if (typedTessitura) (note(typedTessitura.high), note(typedTessitura.low));
+		if (figure.passaggio) (note(figure.passaggio.secondo), note(figure.passaggio.primo));
+		const sung = new Map(figure.rows.map((r) => [r.midi, r]));
+		const midis = [...sung.keys(), ...typed.keys()];
+		if (midis.length === 0) return [];
+		const hi = Math.max(...midis);
+		const lo = Math.min(...midis);
+		const out: { midi: number; quavers: number; name: Pitch }[] = [];
+		for (let m = hi; m >= lo; m--) {
+			const s = sung.get(m);
+			out.push({ midi: m, quavers: s ? s.quavers : 0, name: s?.spellings[0] ?? typed.get(m) ?? spellPitch(m, figure.key ? { key: figure.key } : {}) });
+		}
+		return out;
+	});
 	const maxQ = $derived(Math.max(1, ...rows.map((r) => r.quavers)));
 
-	/** The vertical centre of a MIDI number, before the top margin is added. */
+	/** The vertical centre of a MIDI number, before the top margin is added: every semitone of the scale is a row. */
 	function rawY(midi: number): number {
-		const list = rows;
-		if (list.length === 0) return 0;
-		const centre = (k: number) => k * ROW + ROW / 2;
-		const hi = list[0].midi;
-		const lo = list[list.length - 1].midi;
-		if (midi >= hi) return centre(0) - (midi - hi) * ROW;
-		if (midi <= lo) return centre(list.length - 1) + (lo - midi) * ROW;
-		for (let k = 0; k < list.length - 1; k++) {
-			const a = list[k].midi;
-			const b = list[k + 1].midi;
-			if (midi <= a && midi >= b) return centre(k) + ((a - midi) / (a - b)) * ROW;
-		}
-		return 0;
+		return rows.length === 0 ? 0 : (rows[0].midi - midi) * ROW + ROW / 2;
 	}
 
-	/* A passaggio's line runs half a semitone under its pitch, between that row's bar and the next one down: it marks the edge "at or above", and it never crosses a bar. */
+/* A passaggio's line runs half a semitone under its pitch, between that row's bar and the next one down: it marks the edge "at or above", and it never crosses a bar. */
 	const passaggi = $derived(
 		figure.passaggio
 			? [
@@ -160,8 +191,8 @@
 				<rect class="band" x={X0} y={band.top} width={BAR_W} height={band.height}></rect>
 			{/if}
 			{#each rows as r, k (r.midi)}
-				<text class="name" x={X0 - 7} y={k * ROW + ROW / 2 + 3.3} text-anchor="end">{N(r.spellings[0])}</text>
-				<rect class="bar" x={X0} y={k * ROW + (ROW - BAR) / 2} width={Math.max(1, (r.quavers / maxQ) * BAR_W)} height={BAR}></rect>
+				<text class="name" x={X0 - 7} y={k * ROW + ROW / 2 + 3.3} text-anchor="end">{N(r.name)}</text>
+				{#if r.quavers > 0}<rect class="bar" x={X0} y={k * ROW + (ROW - BAR) / 2} width={Math.max(1, (r.quavers / maxQ) * BAR_W)} height={BAR}></rect>{/if}
 			{/each}
 			{#each passaggioLabels as p (p.key)}
 				<line class="passaggio" x1={X0} x2={X0 + BAR_W + 8} y1={p.y} y2={p.y}></line>
@@ -174,6 +205,8 @@
 			{/if}
 		</g>
 	</svg>
+	<!-- The names' measurer: a text of the passaggio names' own face, hidden and out of the flow, set to each candidate name in turn. -->
+	<svg class="measurer" width="0" height="0" aria-hidden="true"><text class="line-name" x="0" y="0" bind:this={nameProbe}></text></svg>
 	{#if bracket && typedTessitura}
 		<!-- The measurer: the label whole, in an svg of its own (so no test or reader of the figure meets it), hidden and out of the flow. -->
 		<svg class="measurer" width="0" height="0" aria-hidden="true"><text class="bracket-name" x="0" y="0" bind:this={whole}>{label}</text></svg>
