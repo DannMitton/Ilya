@@ -125,7 +125,7 @@ What depended on these agreeing: page breaks in paginated scores. There are four
 
 ## 5. Constraints
 
-- **Runs on Dann's Mac**, in the desktop app, from 2026-11-21 22:03. The branch is `cloud-lane-79`, as the session's prompt names it, cut from `Shane` at `e0ca61bf`, which carries this brief; push it when the work is done. No commit to `Shane`, no pull request; Dann fast-forwards. (The name is the cloud era's; the cloud lane's own reason was a credit that expired 2026-11-05, and the gates belong on the machine their baselines were measured on.)
+- Cloud lane. `git fetch origin` first, then cut `cloud-lane-79` from the tip of `origin/Shane`, which carries this brief and whose code is `42df5011`'s. No commit to `Shane`, no pull request, Dann merges.
 - Nothing under `docs/memory/` is written by the lane.
 - **Strings: none.** This lane adds, removes, and rewords no sentence in either language. If you believe a string must change, stop and report it.
 - **The ratchets.** `apps/web/src/lib/markup/MarkupPane.svelte` is at 1234 against a ceiling of 1234, and `apps/web/src/lib/insights/InsightsPane.svelte` at 674 against 674 (`scripts/ratchets.json:16`, `:18`). Both edits are line-neutral or shrink the file. If either cannot be, stop and report the line count. Do not raise a ceiling.
