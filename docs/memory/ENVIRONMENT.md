@@ -15,6 +15,16 @@ The index was added 2026-09-01. Nothing below it was moved, reworded, or removed
 **When you add a section, add its row here.** A trap nobody can find costs the
 next session the same hour it cost the last one.
 
+### Learned 2026-11-21 (Code, lane 79)
+- `A LOCKFILE DEPENDENCY MISSING FROM node_modules STOPS pnpm dev` (last section of this file):
+  `@tesseract.js-data/rus` is in the lockfile and absent from `node_modules` on Dann's Mac, so
+  `pnpm dev` dies in `copy-underlay-model.mjs` before a page can be rendered or captured.
+
+### Learned 2026-11-21 (Opus desk: lane 79's captures)
+- `A CAPTURE FIXTURE NEVER CARRIES DANN'S NAME` (last section of this file): a screenshot
+  harness that seeds a test profile called "Dann" puts invented facts about him on a page he
+  then reads as his own.
+
 ### Learned 2026-11-19 (Opus desk: lane 70, and the blank states)
 - `LEARNED BY THE 2026-11-19 DESK` (last section of this file): Claude in Chrome will not run
   JavaScript on claude.ai in auto mode, so a Code prompt goes in as flattened typed text; the
@@ -5759,3 +5769,36 @@ it never clears itself.
 where it runs in his own shell. Do not ask for delete permission for this: it
 spends a prompt on a 0-byte file he can clear in the same block he was already
 going to run.
+
+
+## A CAPTURE FIXTURE NEVER CARRIES DANN'S NAME
+
+**Learned 2026-11-21 22:40.** Lane 79's capture harness seeded a throwaway profile to take its
+twelve screenshots: `{ id: 'v', name: 'Dann', createdAt: NOW, ..., voiceType: 'baritone' }`
+(`../sessions/report-code-lane79_r1_2026-11-21/capture.mjs:8`). INSIGHTS' identity line prints
+the profile's own name, type, and calibration date (`apps/web/src/lib/insights/identity.ts:25-33`),
+so the capture read **"INSIGHTS FOR DANN · BARITONE · CALIBRATED 2026-11-21"**. Dann read it as a
+statement about himself and asked where the value came from, since he is a bass and had never
+declared baritone. Nothing in Ilya defaults a singer to baritone; the fixture invented it, and his
+own saved voice was never touched.
+
+**The rule.** A fixture, a seed, a test profile, or a capture harness never carries Dann's name,
+and never carries a fact about him that he did not state. Use a neutral name. Where a low male
+voice is needed, the type is bass. This holds for every brief that asks for pictures.
+
+**Why it matters beyond the confusion:** a picture is the one artefact he reads as evidence, so an
+invented fact inside one is a false claim with his own name on it.
+
+
+## A LOCKFILE DEPENDENCY MISSING FROM node_modules STOPS pnpm dev
+
+**Learned 2026-11-21, by the lane 79 Code session on Dann's Mac.** `pnpm dev` failed in
+`copy-underlay-model.mjs` because `@tesseract.js-data/rus` was declared in the lockfile and absent
+from `node_modules`. No page could be served, so no capture and no Playwright run was possible
+until it was repaired.
+
+**The repair:** `pnpm install --frozen-lockfile --offline`. It changed `node_modules` only; no
+tracked file moved, and the lockfile was not rewritten.
+
+**Why it matters:** a lane that needs pictures or a browser measurement dies at its first step, and
+the error names a model-copying script rather than a missing package, so the cause is not obvious.

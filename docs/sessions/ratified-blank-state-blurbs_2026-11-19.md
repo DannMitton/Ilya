@@ -151,3 +151,15 @@ Nothing coined. Both are the singular inflection of his plural of 2026-11-19 09:
 
 The tree has moved since 2026-11-19. Read by the desk on `47bd5c5c`, 2026-11-20, and confirmed by Fable: this file's `:1499` is now `:1501`, `:1502` is `:1504`, `:1503` is `:1505`, `:1504` is `:1506`, `:1514` is `:1516`, `:1902` is `:1904`, `:1904` is `:1906`, and `:2081` is `:2086`. **Cite the keys, not the numbers**: `profile.provisional.noneMessage`, `profile.statusSetMeasuredPlural`, `profile.provisional.sentenceSingular`, `profile.provisional.sentencePlural`, `profile.emptyState`, `insights.silence.noScore`, `insights.method.noScore.samples`, `insights.r2.notes`. Where this file and the tree differ on a live string's wording, the tree wins.
 
+
+## Corrections of 2026-11-21, by the Opus desk
+
+### 4. RULED 2026-11-21 22:37: TEXT reads in two paragraphs, like its siblings
+
+Section 3 above gives TEXT as one run of two sentences, and lane 78 drew it as one paragraph while MELODY and INSIGHTS drew two. Dann, on the lane 79 captures (transcribed as written): *"Ok, I think the started TEXT for text shuld be one paragraph per sentence like its siblings."*
+
+So `paper.blank` keeps the blurb and a new `paper.blank.ask` takes the ask, in English and in French. **Both sentences are byte for byte as ratified on 2026-11-19; only the single space between them is gone**, verified against `e0ca61bf` by Fable's as-built review of lane 79 (157 bytes English, 200 French). No word was added, removed, or reordered, and no new French was written. The INPUT / ENTRÉE link now sits in the ask, where the section a singer must visit is named.
+
+### 5. AMENDED 2026-11-21 22:55: the first line is the anchor, not the box
+
+Section 1's "centred vertically" is superseded. His words and what they settle are in `../memory/OPEN.md`, THE BLANK STATES OF TEXT, MELODY, AND INSIGHTS, under the 2026-11-21 amendment. In short: centring a box whose height changes with its words moves the first line, so English and French start at different heights. The squircle's top edge now sits at one fixed distance under the title rule, the same on all three documents and in both languages, and the box grows downward.
