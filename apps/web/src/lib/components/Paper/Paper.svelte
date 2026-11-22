@@ -4,7 +4,7 @@
 	import type { NotationPreferences } from '@ilya/phonology';
 	import { t, type Language } from '$lib/i18n';
 	import { onMount, untrack } from 'svelte';
-	import { PAGE_SIZES, FOOTER_MAX_HEIGHT, GAP, HEADER_HEIGHTS_AT_LETTER, blankFrame, pageFrame, formatRunningHeader } from '$lib/page-config';
+	import { PAGE_SIZES, FOOTER_FALLBACK, HEADER_HEIGHTS_AT_LETTER, blankFrame, pageFrame, formatRunningHeader } from '$lib/page-config';
 	import { FALLBACK_FIT, slicePages, type FitMetrics, type PieceMetrics } from '$lib/page-fit';
 	import { buildProvenanceLegend } from '$lib/provenance';
 	import { showsRichterIpa } from '$lib/latin';
@@ -66,8 +66,8 @@
 	 *   - the FOOTER RESERVE: one hidden `PageFooter`, rendered with the legend and the Richter credit of the WHOLE
 	 *     document's lines, measured by its own `onheightchange`, reserved on every page. A page's footer is built from
 	 *     that page's lines, so measuring the real footers would feed back: a legend that grows the footer shrinks the
-	 *     window, which can move the line that put the legend there. `Math.max(FOOTER_MAX_HEIGHT, measured)` is the N.83
-	 *     precedent (`MarkupPane.svelte`), so a short footer reserves what it always reserved;
+	 *     window, which can move the line that put the legend there. Since lane 80 there is no floor: the measured height
+	 *     stands, and `FOOTER_FALLBACK` (the plain footer, measured) until the probe reports;
 	 *   - the lines' wrap counts and cut points, and the row's drawn height and overhang (`TextFitProbe`).
 	 * What the lines' measurement depends on is only the lines and how they are drawn, and it is thrown away when they
 	 * change. Until a line is measured it is sliced by an estimate, so a page is never blank; the slice then converges
@@ -85,8 +85,11 @@
 
 	const dims = $derived(PAGE_SIZES[pageSize]);
 	const fit = $derived<FitMetrics>({ ...FALLBACK_FIT, ...(constants.rowBox ? { rowBox: constants.rowBox } : {}), ...(constants.overhang !== undefined ? { overhang: constants.overhang } : {}) });
-	const footerReserve = $derived(Math.max(FOOTER_MAX_HEIGHT, footerMeasured));
-	const frameOf = (index: number) => pageFrame(index === 0 ? titleHeader || HEADER_HEIGHTS_AT_LETTER.title : subHeader || HEADER_HEIGHTS_AT_LETTER.subsequent, footerReserve, { bottom: GAP });
+	/* The footer is measured over the WHOLE document's legend and credit (below), not page by page: a page's own footer depends on which lines land on it, so measuring
+	   the real footers would be a measure, slice, measure loop (`page-fit.test.ts` pins that no real TEXT footer reports its height). That is why TEXT differs from
+	   MELODY, which measures page 1's drawn footer: it is not drift. `FOOTER_FALLBACK` stands until the probe reports. */
+	const footerReserve = $derived(footerMeasured || FOOTER_FALLBACK);
+	const frameOf = (index: number) => pageFrame(index === 0 ? titleHeader || HEADER_HEIGHTS_AT_LETTER.title : subHeader || HEADER_HEIGHTS_AT_LETTER.subsequent, footerReserve);
 	const contentBottom = $derived(frameOf(0).bottom);
 	const contentTopOf = (index: number) => frameOf(index).top;
 

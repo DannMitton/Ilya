@@ -35,7 +35,7 @@
 	import PageFit from '$lib/components/Paper/PageFit.svelte';
 	import BlankState from '$lib/components/Paper/BlankState.svelte';
 	import { askKey } from '$lib/components/Paper/blank-state';
-	import { PAGE_SIZES, FOOTER_FALLBACK, HEADER_GAP, HEADER_HEIGHTS_AT_LETTER, blankFrame, pageFrame, formatRunningHeader } from '$lib/page-config';
+	import { PAGE_SIZES, FOOTER_FALLBACK, HEADER_HEIGHTS_AT_LETTER, blankFrame, pageFrame, formatRunningHeader } from '$lib/page-config';
 	import type { LineData, PageSize } from '$lib/types';
 	import { t, type Language } from '$lib/i18n';
 	import { COMPOSERS, formatNameForPaper } from '$lib/composers-poets';
@@ -83,6 +83,7 @@
 	import { noScoreBlocks, notesBlock, singerBlocks, type PlacedBlock } from '$lib/insights/singer-blocks';
 	import type { InsightsLinks } from '$lib/insights/links';
 	import { breakOffsets, lineBoxes } from '$lib/insights/line-breaks';
+	import { chargeRiders, ridingSegment } from '$lib/insights/insights-geometry';
 	import { paginate, type Segment } from '$lib/insights/paginate';
 	import { browserStore, rangeOfferDeclined, recordRangeOfferDecline } from '$lib/insights/range-offer-decline';
 	import { composeIdentityLine, genericLede, isGenericMethodKey, methodLineKey, placeholderLabel, restsOnSamples } from '$lib/insights/identity';
@@ -287,14 +288,12 @@
 
 	let headerHeight = $state(0);
 	let runningHeight = $state(0);
-	/* Clear space between the last content and the footer's notes: Unlikely
-	   page 3's spacing, which Dann held up as the standard (03:42). DESK DEFAULT. */
-	const CLEAR = 40;
-	/* The footer the page reserves: the drawn footer of page 1, as MELODY measures it (lane 80). `CLEAR` stays until the second commit. */
+	/* The footer the page reserves: the drawn footer of page 1, as MELODY measures it (lane 80). The clear space above it is the frame's `HEADER_GAP`, the same as
+	   TEXT's and MELODY's; the closed disclosures that used to ride in INSIGHTS' own 40 px are charged to their pages (`insights-geometry.ts`). */
 	let footHeight = $state(0);
 	const footer = $derived(footHeight || FOOTER_FALLBACK);
-	const firstFrame = $derived(pageFrame(headerHeight, footer, { bottom: CLEAR }));
-	const laterFrame = $derived(pageFrame(runningHeight || HEADER_HEIGHTS_AT_LETTER.subsequent, footer, { bottom: CLEAR }));
+	const firstFrame = $derived(pageFrame(headerHeight, footer));
+	const laterFrame = $derived(pageFrame(runningHeight || HEADER_HEIGHTS_AT_LETTER.subsequent, footer));
 	const contentTop = $derived(firstFrame.top);
 	const subsequentTop = $derived(laterFrame.top);
 
@@ -388,6 +387,8 @@
 
 	let measureEls = $state<Array<HTMLElement | null>>([]);
 	let heights = $state<number[]>([]);
+	/* A screen-only block's height when its disclosure is closed: its summary line. */
+	let closedHeights = $state<number[]>([]);
 	/* QUEUE row 79, rule 2: where each prose block may break between lines. Figures, the conclusion with its
 	   controls, and the cycles bar never break. */
 	const BREAKS = new Set(['comment', 'prose', 'endnote', 'note', 'notes', 'more', 'keyreveal']);
@@ -408,6 +409,7 @@
 			if (!current) return;
 			untrack(() => {
 				heights = measureEls.slice(0, blocks.length).map((el) => el?.offsetHeight ?? 0);
+				closedHeights = measureEls.slice(0, blocks.length).map((el) => el?.querySelector('summary')?.offsetHeight ?? 0);
 				breakTops = measureEls.slice(0, blocks.length).map((el, k) => (el && BREAKS.has(blocks[k].block.kind) ? breakOffsets(lineBoxes(el)) : []));
 			});
 		});
@@ -417,8 +419,8 @@
 	});
 
 	/* NOTHING RUNS INTO THE FOOTER (QUEUE row 96; Dann 2026-10-14 03:10). "N more observations", the one screen-only
-	   block, was never counted, so opening it ran its observations over the footer. Closed, it still rides uncounted
-	   with the block before it: its summary line fits inside `CLEAR`, and print, which hides it, keeps the same pages.
+	   block, was never counted, so opening it ran its observations over the footer. Closed, it rides with the block before it
+	   and the page it lands on is charged its summary line and the gap before it (`insights-geometry.ts`); print hides it and keeps the same pages.
 	   Opened, it is paged like any block, at its opened height (the measurer draws it open), and the pages after it
 	   re-flow on screen. Print closes it first (`beforeprint`), so paper always holds the closed pages. */
 	let moreOpen = $state(false);
@@ -452,30 +454,27 @@
 	const printed = $derived(blocks.map((b, k) => ({ b, k })).filter(({ b, k }) => !b.screenOnly || openOf(k)));
 	const pages = $derived.by((): Segment[][] => {
 		if (!analysisScore) return [[]]; // the blank page is one sheet, drawn by `BlankState` (lane 78), not paginated
-		const room = (top: number) => dims.height - firstFrame.bottom - top;
-		const segs = paginate(
-			printed.map(({ b }) => b.group),
-			printed.map(({ k }) => heights[k] ?? 0),
-			{ ...GEOMETRY, capacity: (n) => room(n === 0 ? contentTop : subsequentTop) },
-			// QUEUE row 79, rule 3: the two charts float; the cycles block carries its squircle's heading and stays.
-			printed.map(({ b }) => b.block.kind === 'pitches' || b.block.kind === 'vowels'),
-			printed.map(({ k }) => breakTops[k] ?? []),
-		);
 		// Back from printed indices to block indices; a screen-only block rides with the block before it.
 		const back = printed.map(({ k }) => k);
-		const pagesOut = segs.map((page) =>
-			page.map((s) => ({
-				...s,
-				blocks: s.blocks.map((j) => back[j]),
-				...(s.cuts ? { cuts: Object.fromEntries(Object.entries(s.cuts).map(([j, c]) => [back[Number(j)], c])) } : {}),
-			})),
-		);
-		blocks.forEach((b, k) => {
-			if (!b.screenOnly || openOf(k)) return;
-			// It rides with the part of the block before it that ends that block.
-			for (const page of pagesOut)
-				for (const s of page) if (s.blocks.includes(k - 1) && !(s.cuts?.[k - 1] && s.cuts[k - 1][1] < (heights[k - 1] ?? 0))) s.blocks.push(k);
-		});
+		const run = (reserve: (page: number) => number) =>
+			paginate(
+				printed.map(({ b }) => b.group),
+				printed.map(({ k }) => heights[k] ?? 0),
+				{ ...GEOMETRY, capacity: (n) => dims.height - firstFrame.bottom - (n === 0 ? contentTop : subsequentTop) - reserve(n) },
+				// QUEUE row 79, rule 3: the two charges float; the cycles block carries its squircle's heading and stays.
+				printed.map(({ b }) => b.block.kind === 'pitches' || b.block.kind === 'vowels'),
+				printed.map(({ k }) => breakTops[k] ?? []),
+			).map((page) =>
+				page.map((s) => ({
+					...s,
+					blocks: s.blocks.map((j) => back[j]),
+					...(s.cuts ? { cuts: Object.fromEntries(Object.entries(s.cuts).map(([j, c]) => [back[Number(j)], c])) } : {}),
+				})),
+			);
+		// A closed disclosure rides with the part of the block before it that ends that block, and the page it lands on pays for it (`insights-geometry.ts`).
+		const riders = blocks.flatMap((b, k) => (b.screenOnly && !openOf(k) ? [{ block: k, charge: (closedHeights[k] ?? 0) + (b.group === 'free' ? GEOMETRY.gap : GEOMETRY.inner) }] : []));
+		const pagesOut = chargeRiders(run, riders, heights);
+		for (const r of riders) ridingSegment(pagesOut, r.block, heights)?.segment.blocks.push(r.block);
 		return pagesOut;
 	});
 	const totalPages = $derived(pages.length);

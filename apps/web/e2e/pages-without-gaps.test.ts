@@ -26,7 +26,7 @@ function storedVoice() {
 	const formants: Record<string, unknown> = {};
 	for (const [v, [f1, f2]] of Object.entries(FORMANTS)) formants[v] = { f1, f2, confidence: 'high', f2Quality: 'clear', reading: 'captured', plausibility: 'plausible' };
 	const now = '2026-09-27T12:00:00.000Z';
-	return { version: 2, activeId: 'v', voices: [{ id: 'v', name: 'Dann', createdAt: now, updatedAt: now, calibratedAt: now, formants, voiceType: 'bass', characteristics: { rangeLow: P('B', 1, -1), rangeHigh: P('F', 4, 1), tessituraLow: P('B', 2), tessituraHigh: P('B', 3, -1), passaggioPrimary: P('A', 3), passaggioSecondary: P('D', 4, 1), source: 'manual' } }] };
+	return { version: 2, activeId: 'v', voices: [{ id: 'v', name: 'Voice 1', createdAt: now, updatedAt: now, calibratedAt: now, formants, voiceType: 'bass', characteristics: { rangeLow: P('B', 1, -1), rangeHigh: P('F', 4, 1), tessituraLow: P('B', 2), tessituraHigh: P('B', 3, -1), passaggioPrimary: P('A', 3), passaggioSecondary: P('D', 4, 1), source: 'manual' } }] };
 }
 
 interface Measured {
@@ -78,8 +78,8 @@ async function measure(page: Page): Promise<Measured[]> {
 			const items = systems.length ? systems : block ? [rel(block.getBoundingClientRect())] : [...pg.querySelectorAll('.verse-line')].map((e) => rel(e.getBoundingClientRect()));
 			const first = items.length ? items[0].b - items[0].t + (block && block !== firstEl ? 34 : 0) : 0;
 			const floor = gaps.length ? Math.min(...gaps) : 0;
-			// Insights keeps 40 px clear above its footer (`CLEAR`, row 66's standard) and 16 px between segments: not room.
-			const reserved = pg.classList.contains('insights-page') ? 40 + 16 : 0;
+			// Insights keeps 16 px clear above its footer (the frame's `HEADER_GAP`, lane 80; it was its own 40) and 16 px between segments: not room.
+			const reserved = pg.classList.contains('insights-page') ? 16 + 16 : 0;
 			return { content: footer - contentTop, empty: footer - bottom, room: footer - bottom - reserved + gaps.reduce((t, g) => t + (g - floor), 0), first: first + floor };
 		}),
 	);

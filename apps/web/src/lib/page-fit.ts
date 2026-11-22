@@ -14,15 +14,16 @@
  *      gap was rounded up, so ten rows needed 735 px of a 729 px window (6 px over; the ink's 1.4 px made it 7.4);
  *   2. each `.verse-row` draws 56.3 px, not the 56 of `ROW_HEIGHT`;
  *   3. each row's lowest child box reaches 1.1 px below its row box (the "overhang");
- *   4. the footer is 90 px, not the 80 of `FOOTER_MAX_HEIGHT`, as soon as a provenance legend («ё stress») stands in it,
- *      so the legend's top (918 px) sat above the content window's bottom edge (920 px).
+ *   4. the footer was 90 px, not the 80 a constant then reserved, as soon as a provenance legend («ё stress») stood in it,
+ *      so the legend's top (918 px) sat above the content window's bottom edge (920 px). (That constant, `FOOTER_MAX_HEIGHT`, is gone, with lane 80's
+ *      one frame: every page reserves the footer's whole measured height.)
  * Taking those from the page, and passing them in as data, is the fix; restoring any of them as a constant brings the
- * overrun back. The same rule was applied to the marked score's footer by N.83 (`markup/MarkupPane.svelte`, the
- * `Math.max(FOOTER_MAX_HEIGHT, footerHeight)` reserve), so this is the second instance of a rule, not a special case.
+ * overrun back. The same rule was applied to the marked score's footer by N.83 (`markup/MarkupPane.svelte`), so this is the second instance of a rule, not a
+ * special case.
  *
- * THE 8 px `GAP` (`page-config.ts`) INSIDE THE WINDOW'S BOTTOM MARGIN IS WHAT KEEPS THE DASHED "VERIFY" BOX OFF THE
- * FOOTER. That box is a pseudo-element about 5 px below its word (`WordStack.svelte`), which no
- * `getBoundingClientRect` sees, so the overhang here does not count it. Do not spend the `GAP`.
+ * THE GAP ABOVE THE FOOTER IS WHAT KEEPS THE DASHED "VERIFY" BOX OFF IT. That box is a pseudo-element about 5 px below its word (`WordStack.svelte`), which no
+ * `getBoundingClientRect` sees, so the overhang here does not count it. It was an 8 px `GAP` until lane 80; `HEADER_GAP`'s 16 (`page-config.ts`) covers the 5 px
+ * with room, so this is a reason for the gap, not a prohibition on making it larger. Do not spend it.
  *
  * DANN'S LAYOUT STANDS (2026-02-20, `46829627`, "flex-column page layout resolves word stack collision"): a row grows
  * with its wrap under a hanging indent and pushes the next row down, so words never collide. His rule stands too: try

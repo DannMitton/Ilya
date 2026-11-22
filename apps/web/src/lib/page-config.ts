@@ -20,9 +20,6 @@ export const PAGE_SIZES = {
 
 export const MARGINS = { vertical: 48, horizontal: 96 } as const;
 
-/** Gap between header/content and content/footer layers (px). */
-export const GAP = 8;
-
 /**
  * Space between a header's horizontal rule and the first line of body text.
  *
@@ -34,13 +31,12 @@ export const GAP = 8;
  *     contentTop = MARGINS.vertical + measuredHeaderHeight + HEADER_GAP
  * so the space below the rule IS this number on every page.
  *
- * It replaces TitlePage's local TITLE_HEADER_GAP of 18 and the pairing of
- * HEADER_HEIGHTS.subsequent (a hardcoded 37 nobody measured) with GAP of 8,
- * which produced two different visible gaps and could not be made to agree.
+ * It is also the gap above the footer. Before lane 80 (2026-11-21) TEXT left 8 there, MELODY 8 under an 80 px floor and 18 under its header, INSIGHTS 40;
+ * `pageFrame` now gives every page of the three documents this one number on both sides.
  */
 export const HEADER_GAP = 16;
 
-/** The window of a blank page, in px from the sheet's own edges: the space the squircle is centred in. */
+/** The window of a blank page, in px from the sheet's own edges: the space the squircle's top edge is anchored in. */
 export interface BlankFrame {
 	top: number;
 	bottom: number;
@@ -85,8 +81,9 @@ export interface PageGaps {
  *     bottom = MARGINS.vertical + the footer's whole height + the gap above it
  *     left   = right = MARGINS.horizontal
  *
- * `bottom` is an inset from the sheet's lower edge, as a CSS `bottom` is. The panes pass their own `gaps` until the second commit of lane 80
- * brings them all to `HEADER_GAP`; every pane's own arithmetic is this function's with that pane's numbers.
+ * `bottom` is an inset from the sheet's lower edge, as a CSS `bottom` is. `gaps` exists for a page that must differ; none does today, and the three documents
+ * share `HEADER_GAP` on both sides. `header` is the header actually drawn (measured, or `HEADER_HEIGHTS_AT_LETTER` until it reports); `footer` is the footer's whole
+ * measured height (or `FOOTER_FALLBACK`), the band and the fixed block together, so no split is needed.
  */
 export function pageFrame(header: number, footer: number, gaps: PageGaps = {}): BlankFrame {
 	return {
@@ -98,47 +95,21 @@ export function pageFrame(header: number, footer: number, gaps: PageGaps = {}): 
 }
 
 /**
- * Header heights MEASURED AT LETTER WIDTH (816px), in headless Chromium with
- * Source Sans 3 and Source Serif 4 loaded, 2026-08-15.
+ * Header heights MEASURED AT LETTER WIDTH (816 px), in Chromium with Source Sans 3 and Source Serif 4 loaded, 2026-11-21 (lane 80, step 0): the running header
+ * 25 on every later page of the three documents (it was recorded as 29 on 2026-08-15, before `RunningHeader` was rewritten in `eec57e07`, 2026-10-11), and the
+ * title header 105 on TEXT (127 on INSIGHTS with a score, 154 on MELODY page 1, where its key line and legend add to it).
  *
- * These exist because a live bind:offsetHeight is taken at whatever width the
- * page happens to be on screen. On a phone .paper-page is 100% wide, the song
- * title wraps to a second line, and the header measures about 40px too tall.
- * Print is ALWAYS 816px. So below the mobile breakpoint the pages use these
- * numbers instead of the live measurement.
+ * These are the heights a page assumes until its own header reports. A live `bind:offsetHeight` is taken at whatever width the page is on screen; the sheet is
+ * always 816 px wide (`PageFit` scales it), so the live number and these agree, and a first pass with them is the measured pass.
  *
- * Both header components END at their rule (it is the last child, nothing
- * renders below it), verified in the same run: title rule bottom 127.38 of a
- * 127px box, running rule bottom 29.0 of a 29px box. That is what makes
- *     visible gap = contentTop - (MARGINS.vertical + headerHeight)
- * exactly HEADER_GAP on every page.
- *
- * Check against the spacing Dann approved on page two:
- *   old page two contentTop = 48 + 37 + 8 = 93; rule at 48 + 29 = 77; gap 16.
- *   new page two contentTop = 48 + 29 + 16 = 93. IDENTICAL, by arithmetic.
- *   new page one contentTop = 48 + 127 + 16 = 191; rule at 175; gap 16.
- *
- * NOT the same as HEADER_HEIGHTS above, which stays untouched because
- * MarkupPane depends on those values.
+ * Both header components END at their rule (it is the last child, nothing renders below it), so
+ *     visible gap = window top - (MARGINS.vertical + header height)
+ * is exactly `HEADER_GAP` on every page.
  */
 export const HEADER_HEIGHTS_AT_LETTER = {
-	title: 127,
-	subsequent: 29,
+	title: 105,
+	subsequent: 25,
 } as const;
-
-// ── Calibrated constants ─────────────────────────────────────────
-
-/** Header heights (px). Subsequent page uses fixed value. Title page measures dynamically via bind:offsetHeight. */
-export const HEADER_HEIGHTS = {
-	title: 135,
-	subsequent: 37,
-} as const;
-
-/**
- * The least a Text or Markup page reserves for its footer (px): the floor under the measured height (`Math.max`), never
- * the whole answer. A one-row provenance legend makes the footer 90 px (desk, 2026-11-03; `page-fit.ts`).
- */
-export const FOOTER_MAX_HEIGHT = 80;
 
 /**
  * The footer a page reserves before its own has reported (px): the plain footer, with no legend and no band, MEASURED at 816 px on 2026-11-21 (lane 80,

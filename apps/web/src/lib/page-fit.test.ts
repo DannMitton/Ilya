@@ -8,7 +8,7 @@
  */
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { FOOTER_MAX_HEIGHT, GAP, HEADER_GAP, HEADER_HEIGHTS_AT_LETTER, MARGINS, PAGE_SIZES } from './page-config';
+import { FOOTER_FALLBACK, HEADER_HEIGHTS_AT_LETTER, PAGE_SIZES, pageFrame } from './page-config';
 import {
 	contentHeight,
 	displayedWords,
@@ -33,14 +33,16 @@ const read = (rel: string) => readFileSync(new URL(rel, import.meta.url), 'utf8'
 /** What the browser measured on 2026-11-03 (the desk's probe, and Code's): a row draws 57.4 px, with nothing below it. */
 const FIT: FitMetrics = { rowBox: 57.40625, overhang: 0, padTop: 4 };
 
-/** The content window for a page: the sheet less its header and the footer's reserve, as `Paper.svelte` computes it. */
+/** The content window for a page: the sheet less its header and the footer's reserve, as `Paper.svelte` computes it with `pageFrame` (lane 80: no floor, `HEADER_GAP` on both sides). */
 function windowFor(size: 'letter' | 'a4', header: number, footer: number): number {
-	return PAGE_SIZES[size].height - (MARGINS.vertical + header + HEADER_GAP) - (MARGINS.vertical + Math.max(FOOTER_MAX_HEIGHT, footer) + GAP);
+	const frame = pageFrame(header, footer);
+	return PAGE_SIZES[size].height - frame.top - frame.bottom;
 }
-const TITLE = HEADER_HEIGHTS_AT_LETTER.title;
+/** The 127 px title header these cases were measured with (the desk, 2026-11-03); TEXT's own title header measures 105 (`HEADER_HEIGHTS_AT_LETTER`, 2026-11-21), and the cases do not depend on which. */
+const TITLE = 127;
 const SUB = HEADER_HEIGHTS_AT_LETTER.subsequent;
 /** A footer with no legend, with one legend row (the desk's 90 px), and with two (about 110 px, inference). */
-const FOOTERS = { none: 0, one: 90, two: 110 } as const;
+const FOOTERS = { none: FOOTER_FALLBACK, one: 90, two: 110 } as const;
 
 /** Metrics a line of `perRow` words a row would have, with each row `FIT.rowBox` high; the first row is as wide as the rest. */
 function uniform(perRow: number) {
@@ -90,11 +92,11 @@ describe('fitRows: ten rows, nine or eight when the gap falls below 18 (Dann), f
 		}
 	});
 
-	it('the Tchaikovsky page 1: nine rows at 24 px with a one-row legend (footer 90), nine rows at 26 px without', () => {
-		expect(fitRows(windowFor('letter', TITLE, FOOTERS.one), FIT)).toEqual({ rows: 9, gap: 24 });
+	it('the Tchaikovsky page 1 in the one frame (lane 80, 16 px above the footer, no 80 px floor): nine rows at 23 px with a one-row legend (footer 90), nine rows at 26 px without (the measured 66)', () => {
+		expect(fitRows(windowFor('letter', TITLE, FOOTERS.one), FIT)).toEqual({ rows: 9, gap: 23 });
 		expect(fitRows(windowFor('letter', TITLE, FOOTERS.none), FIT)).toEqual({ rows: 9, gap: 26 });
-		expect(windowFor('letter', TITLE, FOOTERS.one)).toBe(719);
-		expect(windowFor('letter', TITLE, FOOTERS.none)).toBe(729);
+		expect(windowFor('letter', TITLE, FOOTERS.one)).toBe(711);
+		expect(windowFor('letter', TITLE, FOOTERS.none)).toBe(735);
 	});
 
 	it('the old arithmetic, for the record: ten rows of 56 at a rounded gap of 19 into 729 px needed 735 px plus 1.4 px of ink', () => {
@@ -111,7 +113,7 @@ describe('fitRows: ten rows, nine or eight when the gap falls below 18 (Dann), f
 
 	it('the same rule on A4 (794 by 1123), where the window is taller', () => {
 		const w = windowFor('a4', TITLE, FOOTERS.one);
-		expect(w).toBe(1123 - (48 + 127 + 16) - (48 + 90 + 8));
+		expect(w).toBe(1123 - (48 + 127 + 16) - (48 + 90 + 16));
 		const { rows, gap } = fitRows(w, FIT);
 		expect(rows).toBe(10);
 		expect(gap).toBeGreaterThanOrEqual(MIN_GAP);
@@ -344,8 +346,9 @@ describe('the pages take the fit from the measurement, not from constants (a gua
 		}
 	});
 
-	it('Paper reserves the footer from one measurement over the whole document, floored at the old constant', () => {
-		expect(paper).toContain('Math.max(FOOTER_MAX_HEIGHT, footerMeasured)');
+	it('Paper reserves the footer from one measurement over the whole document, with no floor: the plain footer measured stands in until it reports (lane 80)', () => {
+		expect(paper).toContain('footerMeasured || FOOTER_FALLBACK');
+		expect(paper.replace(/\/\*[\s\S]*?\*\//g, '')).not.toContain('FOOTER_MAX_HEIGHT');
 		expect(paper).toContain('buildProvenanceLegend(lines, language, spotReconstitution)');
 		expect(paper).toContain('richterCredit={wholeCredit}');
 		expect(paper).toContain('MAX_MEASURE_CYCLES');

@@ -13,7 +13,7 @@ import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { stringKeys, t } from '$lib/i18n';
-import { BLANK_ANCHOR, GAP, HEADER_GAP, MARGINS, blankFrame } from '$lib/page-config';
+import { BLANK_ANCHOR, HEADER_GAP, MARGINS, blankFrame, pageFrame } from '$lib/page-config';
 
 const read = (p: string) => readFileSync(p, 'utf8');
 const SRC = 'src';
@@ -115,9 +115,10 @@ describe('one component, drawn once by each of the three pages', () => {
 		expect(b).not.toMatch(/grid-template-rows|grid-row/); // second addendum: no centring grid; the top edge is the anchor and the box grows downward
 		expect(b).toMatch(/\.blank-window\s*\{[^}]*flex-direction: column/);
 	});
-	it('does not move the score\u2019s first-page window: TITLE_HEADER_GAP is still 18 and is not read by the blank state', () => {
+	it('MELODY\u2019s first-page window is the shared frame\u2019s: its own 18 is gone (lane 80) and the blank state does not read the score\u2019s window edges', () => {
 		const m = read('src/lib/markup/MarkupPane.svelte');
-		expect(m).toContain('const TITLE_HEADER_GAP = 18;');
+		expect(m).not.toContain('TITLE_HEADER_GAP');
+		expect(m).toContain('const firstFrame = $derived(pageFrame(headerHeight, footerReserve));');
 		expect(m).toContain('const page1WindowHeight = $derived(dims.height - contentTop - contentBottom);');
 		expect(tagOf(m)).not.toMatch(/contentTop|contentBottom/); // lane 79: the blank state reads neither of the score's window edges
 	});
@@ -135,11 +136,20 @@ describe('one component, drawn once by each of the three pages', () => {
 		expect(paper).toContain('blankFrame(titleHeader, footerMeasured)');
 		expect(paper).not.toMatch(/blankFrame\([^)]*footerReserve/);
 	});
-	it('TEXT\u2019s paginated bottom is unchanged in lane 80\u2019s first commit: the 80 px floor and GAP are `pageFrame`\u2019s arguments in `Paper.svelte`', () => {
+	it('TEXT\u2019s window is the shared frame\u2019s, from the whole-document footer measure with no floor (lane 80)', () => {
 		const paper = read('src/lib/components/Paper/Paper.svelte');
-		expect(paper).toContain('const footerReserve = $derived(Math.max(FOOTER_MAX_HEIGHT, footerMeasured));');
-		expect(paper).toContain('footerReserve, { bottom: GAP })');
+		expect(paper).toContain('const footerReserve = $derived(footerMeasured || FOOTER_FALLBACK);');
+		expect(paper).toContain('footerReserve);');
 		expect(paper).toContain('const contentBottom = $derived(frameOf(0).bottom);');
+	});
+	it('none of the retired window constants appears in any page component (lane 80, gate 4 pins by name)', () => {
+		const strip = (s: string) => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/<!--[\s\S]*?-->/g, '').replace(/^\s*\/\/.*$/gm, '');
+		const files = ['Paper', 'TitlePage', 'SubsequentPage', 'TitleHeader', 'RunningHeader', 'PageFooter', 'BlankState'].map((n) => `src/lib/components/Paper/${n}.svelte`).concat(['src/lib/markup/MarkupPane.svelte', 'src/lib/markup/NotesColumn.svelte', 'src/lib/insights/InsightsPane.svelte']);
+		for (const file of files) {
+			const src = strip(read(file));
+			for (const gone of ['TITLE_HEADER_GAP', 'CLEAR', 'HEADER_HEIGHTS.', 'FOOTER_MAX_HEIGHT', 'left: 96px', 'right: 96px', 'top: 48px', 'bottom: 48px']) expect(src, `${file} ${gone}`).not.toContain(gone);
+			expect(src, `${file} GAP +`).not.toMatch(/(?<![A-Z_])GAP \+/); // the retired 8 px `GAP`, not `LEGEND_GAP`
+		}
 	});
 	it('every pane takes its window from `pageFrame` (lane 80), and none writes the margins as a number', () => {
 		for (const file of ['src/lib/components/Paper/Paper.svelte', pages.MELODY, pages.INSIGHTS]) expect(read(file).match(/pageFrame\(/g)?.length, file).toBeGreaterThanOrEqual(1);
@@ -210,7 +220,7 @@ describe('blankFrame, the window of a blank page (lane 79, and its second addend
 	});
 	it('has no floor: a footer smaller than the paginated footer\u2019s 80 is taken as measured', () => {
 		expect(blankFrame(70, 10).bottom).toBe(MARGINS.vertical + 10 + HEADER_GAP);
-		expect(GAP).toBe(8); // the paginated window keeps its own, different, gap
+		expect(pageFrame(70, 10).bottom).toBe(blankFrame(70, 10).bottom); // the paginated window and the blank one share the gap above the footer (lane 80)
 	});
 	it('one measured header gives one top, whichever page asks, and a taller header moves it by the difference', () => {
 		expect(blankFrame(56, 66)).toEqual(blankFrame(56, 66));

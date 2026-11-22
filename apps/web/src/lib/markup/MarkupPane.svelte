@@ -47,7 +47,7 @@
 	import TitleHeader from '$lib/components/Paper/TitleHeader.svelte';
 	import PageFooter from '$lib/components/Paper/PageFooter.svelte';
 	import RunningHeader from '$lib/components/Paper/RunningHeader.svelte';
-	import { PAGE_SIZES, MARGINS, FOOTER_MAX_HEIGHT, GAP, HEADER_HEIGHTS, blankFrame, pageFrame, formatRunningHeader } from '$lib/page-config';
+	import { PAGE_SIZES, MARGINS, FOOTER_FALLBACK, HEADER_HEIGHTS_AT_LETTER, blankFrame, pageFrame, formatRunningHeader } from '$lib/page-config';
 	import PageFit from '$lib/components/Paper/PageFit.svelte';
 	import type { LineData, PageSize } from '$lib/types';
 	import { withSingerTempo } from '$lib/tempo/singer-tempo';
@@ -461,15 +461,14 @@
 	 */
 
 
-	// ── Page geometry ── The header and footer are measured; the content layer lives between them. This 18 is MELODY's own and governs only
-	// pages that carry a score (changing it moves page 1 of every score); the blank state takes the shared `blankFrame` (lane 79).
-	const TITLE_HEADER_GAP = 18;
+	// ── Page geometry ── The header and footer are measured; the content layer lives between them, in the one frame (`pageFrame`, `page-config.ts`) that TEXT and
+	// INSIGHTS use: the gap under every rule and above every footer is `HEADER_GAP` (lane 80). The blank state takes the same frame (`blankFrame`, lane 79).
 	let headerHeight = $state(0);
 
 	/**
 	 * N.83: the footer is MEASURED, the same way the header is.
 	 *
-	 * `FOOTER_MAX_HEIGHT` is a constant 80, and a Markup footer is not 80. It
+	 * A constant 80 once stood for it, and a Markup footer is not 80. It
 	 * carries the provenance legend, which wraps with its entry count and its
 	 * language, and the broad-analysis sentence, which no other document has.
 	 * Reserving 80 for a footer that measured 140.6 is what let the legend and
@@ -484,8 +483,8 @@
 	 * every page here by the same rule the score pagination already follows.
 	 */
 	let footerHeight = $state(0);
-	const footerReserve = $derived(Math.max(FOOTER_MAX_HEIGHT, footerHeight));
-	const firstFrame = $derived(pageFrame(headerHeight, footerReserve, { top: TITLE_HEADER_GAP, bottom: GAP }));
+	const footerReserve = $derived(footerHeight || FOOTER_FALLBACK);
+	const firstFrame = $derived(pageFrame(headerHeight, footerReserve));
 	const contentTop = $derived(firstFrame.top);
 	const contentBottom = $derived(firstFrame.bottom);
 
@@ -498,14 +497,15 @@
 	}
 
 	// ── Score pages (live wiring slice 1: notation only) ─────────────────
-	// The parsed score paginates into the page-1 content window's geometry
-	// (the smaller window, since the measured TitleHeader outweighs the
-	// running header), so every page's systems fit every page type; pages
-	// after the first simply carry a little extra room at the bottom.
+	// The parsed score paginates page 1 into its own window (the measured TitleHeader is the taller head) and every later page into the later window
+	// (`laterPageHeight`, row 79), so each page's systems fit the page that draws them.
 	// Row 48: the singer's tempo rides on the score (`ParsedScore.singerTempo`), so every reading below follows it.
 	const parsed = $derived(withSingerTempo(ingested?.result.score ?? null, tempoChoice));
 	const contentWidth = $derived(dims.width - firstFrame.left - firstFrame.right);
-	const laterFrame = $derived(pageFrame(HEADER_HEIGHTS.subsequent, footerReserve, { top: GAP, bottom: GAP }));
+	// Later pages follow the header they draw (lane 80): a one-page score draws no running header and paginates before page 2 exists, so the measured height is
+	// `HEADER_HEIGHTS_AT_LETTER.subsequent` until one reports.
+	let runningHeight = $state(0);
+	const laterFrame = $derived(pageFrame(runningHeight || HEADER_HEIGHTS_AT_LETTER.subsequent, footerReserve));
 	const subsequentTop = $derived(laterFrame.top);
 
 	// `stripBackingRect` stood here and removed the white full-page rect
@@ -987,7 +987,7 @@
 						{@html page}
 					</div>
 				{:else}
-					<RunningHeader headerText={runningHeader} {tabName} accent="var(--lavender)" />
+					<RunningHeader headerText={runningHeader} {tabName} accent="var(--lavender)" onheightchange={(h) => (runningHeight = h)} />
 					<div class="score-window" style="top: {subsequentTop}px; bottom: {contentBottom}px; left: {laterFrame.left}px; right: {laterFrame.right}px;">
 						{@html page}
 					</div>
@@ -1008,7 +1008,7 @@
 				style="width: {dims.width}px; height: {dims.height}px;"
 				aria-label={T('profile.notesPageAria')}
 			>
-				<RunningHeader headerText={runningHeader} {tabName} accent="var(--lavender)" />
+				<RunningHeader headerText={runningHeader} {tabName} accent="var(--lavender)" onheightchange={(h) => (runningHeight = h)} />
 				<NotesColumn withheld={showWithheld ? withheld : null} octave={octaveLine} {language} {ontoggleoctave} bandHeader={T('watch.header')} lines={bandLines} {sheet} top={subsequentTop} bottom={contentBottom} />
 				<PageFooter pageNumber={totalPages - notesSheets.length + j + 1} totalPages={totalPages} {language} legendItems={[]} hairlineAccent="var(--lavender)" />
 			</article>

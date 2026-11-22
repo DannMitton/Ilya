@@ -90,12 +90,17 @@
 		<div class="apparatus">{@render apparatus()}</div>
 	{/if}
 
+	<!-- The Richter credit is the band's last line, above the hairline, in the broad note's type, so the credit row beneath the hairline is the same height on every page
+	     and the divider sits the same distance from the sheet's bottom edge (lane 80; Dann 2026-11-21 22:12, "Footers should be identical, and only the legends that
+	     appear above the footer's horizontal divider should change"). Its wording is `footer.richter`, unchanged. -->
+	{#if richterLine}<p class="broad-legend richter-credit">{@html richterLine}</p>{/if}
+
 	<div class="footer-hairline"></div>
 
 	<div class="footer-content">
 		<div class="attribution-cell">
 			<span class="attribution-text">
-				{#if richterLine}{@html richterLine}{' '}{/if}{@html attribution}&nbsp;&nbsp;&nbsp;<a href="https://dannmitton.com" target="_blank" rel="noopener">dannmitton.com</a>
+				{@html attribution}&nbsp;&nbsp;&nbsp;<a href="https://dannmitton.com" target="_blank" rel="noopener">dannmitton.com</a>
 			</span>
 		</div>
 		<div class="pagination-cell">
@@ -191,6 +196,9 @@
 
 	/* Column 2: Pagination - flush right, bottom-aligned */
 	.pagination-cell {
+		/* Wide enough for the longest two-digit label in either language (« Page 88 sur 88 », 73.2 px measured 2026-11-21): the credit column is `1fr` beside this
+		   cell, so a cell that grew with the label would move the credit's wrap and, with it, the divider. */
+		min-width: 74px;
 		display: flex;
 		align-items: flex-end;
 		justify-content: flex-end;
@@ -208,7 +216,8 @@
 	/* The broad-analysis legend (§B.5): shares the sigla legend's type
 	   language (sans, ~9.5px, stone) but upright roman sentence case for
 	   readability (Gould rule 12), left-aligned to the content margin. */
-	.broad-legend {
+	.broad-legend,
+	.richter-credit {
 		margin: 0 0 8px 0;
 		font-family: var(--font-sans);
 		font-size: 9.5px;
