@@ -2313,11 +2313,11 @@ export function renderAnalyzedStaff(
   // are collected during the draw and placed below the lowest ink of the
   // system, never at a fixed offset that a down-stem beam can crash into.
   const underlay: Array<{ x: number; cyr: string; ipa: string; brk: boolean; withheld: boolean; align: 'middle' | 'start'; sylType?: 'whole' | 'start' | 'middle' | 'end'; evId: string }> = [];
-  // Melisma detection: the data model encodes a melisma by ABSENCE of
-  // syllable on continuation notes, so a syllabled note followed by an
-  // unsyllabled note starts one. Its syllable left-aligns at the first
-  // notehead (the reading eye moves rightward); single-note syllables
-  // stay centred. (Gould extraction rules 4 to 6.)
+  // Melisma detection is ONE rule read from ONE place (Dann, 2026-11-22: what the page draws is what is managed): a run opens on a note that
+  // DRAWS a word and continues over notes that draw none. `drawnWord` is the single reading, the pairing's Cyrillic over the file's, as the
+  // underlay and the hyphen loop read it, so this loop and the singer's loop below cannot drift. A run's syllable left-aligns at its first
+  // notehead; single-note syllables stay centred. (Gould extraction rules 4 to 6.)
+  const drawnWord = (ev: VocalLineEvent): string => options.cyrPreview?.[ev.id] ?? ev.syllable?.text ?? '';
   const melismaStart = new Set<string>();
   const melismaEndX = new Map<string, number>(); // start id → last continuation notehead x
   interface MelismaSpan { startIdx: number; endIdx: number; id: string; slur: boolean }
@@ -2333,10 +2333,10 @@ export function renderAnalyzedStaff(
   {
     for (let i = 0; i < placed.length; i++) {
       const e = placed[i].ev;
-      if (e.type !== 'note' || !e.syllable) continue;
+      if (e.type !== 'note' || !drawnWord(e)) continue;
       let j = i + 1;
       let lastX: number | null = null;
-      while (j < placed.length && placed[j].ev.type === 'note' && !placed[j].ev.syllable) {
+      while (j < placed.length && placed[j].ev.type === 'note' && !drawnWord(placed[j].ev)) {
         lastX = placed[j].x;
         j++;
       }
@@ -2382,8 +2382,7 @@ export function renderAnalyzedStaff(
       for (let i = 0; i < placed.length; i++) {
         const e = placed[i].ev;
         if (e.type !== 'note' || marks.has(e.id)) continue;
-        const drawn = options.cyrPreview?.[e.id] ?? e.syllable?.text ?? '';
-        if (!drawn) continue;
+        if (!drawnWord(e)) continue;
         let j = i + 1;
         let lastX: number | null = null;
         while (j < placed.length && placed[j].ev.type === 'note' && marks.has(placed[j].ev.id)) {
