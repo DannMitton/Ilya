@@ -90,3 +90,35 @@ Rasterized in headless Chromium from the SVG the renderer returns, with the app'
 - `docs/sessions/report-code-lane83_r1_2026-11-22.md` (this file)
 
 STRINGS: none, in either language.
+
+---
+
+## Desk note, 2026-11-22 05:2x (Opus 5): the measure numbers are settled
+
+The lane marked NOT ESTABLISHED: "the brief says measures 58 and 93. The file
+numbers these bars 57 and 92 (0-based indices 56 and 91). I did not find why the
+brief is one higher."
+
+Settled by the desk, RAN against
+`docs/sessions/measure-phase1_r1_2026-10-02/tchaikovsky-op38-3-voice.musicxml`
+(a python pass over `<measure number="...">`, counting sounding notes with no
+`<lyric>`): the file declares 99 measures starting at number 1, and the two
+lyric-less sounding notes are in **declared measure 58** (0-based index 57) and
+**declared measure 93** (0-based index 92), each the first note of its bar.
+
+Both figures are right, and they name opposite ends of the same extender. The
+lane's ids `m56-0-1` and `m91-0-1` name the **syllable that opens** each run,
+which sits in the bar before the gap. The brief's 58 and 93 name the
+**continuation note** the extender runs to. No pickup offset is involved, and
+nothing in the renderer or the fixture is wrong.
+
+Neither the lane nor the brief needs correcting. Future briefs on extenders
+should say which end of the run a bar number names.
+
+## Desk note: the pictures, seen
+
+`before.png` and `after.png` read by the desk, 2026-11-22 05:2x. Before: "Ночь"
+carries an extender, and a second extender runs from "над" into "ту" with a slur
+arching over the two notes, although "ту" draws its own word. After: "Ночь"
+keeps its extender and its slur, and "над" and "ту" each stand alone with no line
+and no arch between them. The control passes in both directions on one picture.
