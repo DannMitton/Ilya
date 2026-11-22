@@ -5242,6 +5242,9 @@ Quote the range; cap at its top; add each actual when it lands. Actuals from `ST
 | Fable review of one Code brief with nine string groups and a sibling lane to cross-check | 193,929 (cap 260k, 22 tool uses, 7.9 min, 2026-11-21, lane 77 r3, a 15.2 kB brief; DO NOT SEND, nine blockers, thirteen amendments) | 150k to 260k, and the 2026-11-21 actual sat below its middle |
 | Fable DELTA review of a brief revision (only what changed, plus whether its own earlier amendments survived) | 62,220 (lane 66 r2, 2026-11-17); 163,310 (lane 69 r4, cap 200k, 9 tool uses, 2.9 min, 2026-11-18) | 60k to 200k |
 | Fable as-built review of one small lane (5 code files, +270 -34, read from the tree, no gate run) | 167,541 (lane 69, cap 300k, 12 tool uses, 3.3 min, 2026-11-18) | 150k to 300k |
+| Fable review of one Code brief, small geometry lane, every citation verified at one commit | 189,874 (lane 79 r1, cap 250k, 27 tool uses, 6.4 min, 2026-11-21; DO NOT SEND, three blockers, fifteen amendments); 198,376 (lane 80 r1, cap 250k, 23 tool uses, 7.3 min, same night; DO NOT SEND, four blockers, eighteen amendments) | 180k to 250k |
+| Sonnet source census of three panes against one commit, thirteen measured items, no recommendations | 155,794 (cap 250k, 20 tool uses, 2.7 min, 2026-11-21, the three documents' differences) | 150k to 250k |
+| Fable as-built review of a two-commit lane (9 code files, the whole diff, two reports, three ruling files, two captures opened) | 188,824 (lane 79, cap 250k, 20 tool uses, 4.0 min, 2026-11-21; MERGE WITH AMENDMENTS, six) | 170k to 260k |
 | Sonnet reading a dissertation, with a digest | Grayson 2012: 211k (two thirds), then 231k (the remainder, clipped; the reader estimated 185k) | a Sonnet reader stops near 200k to 230k whatever the cap: split a dissertation into pieces of about 250 pages or 60,000 words, one helper each, 180k to 240k per piece |
 
 | Opus voice profile from three sources | 137k (2026-11-08) | 120k to 180k |
