@@ -1,0 +1,20 @@
+NO AFTER pics/before-ph-insights-placeholder-en-p1-1024.png
+NO AFTER pics/before-ph-insights-placeholder-en-p1-390.png
+NO AFTER pics/before-ph-insights-placeholder-fr-p1-1024.png
+NO AFTER pics/before-ph-insights-placeholder-fr-p1-390.png
+NO AFTER pics/before-ph-markup-placeholder-en-p1-1024.png
+NO AFTER pics/before-ph-markup-placeholder-en-p1-390.png
+NO AFTER pics/before-ph-markup-placeholder-fr-p1-1024.png
+NO AFTER pics/before-ph-markup-placeholder-fr-p1-390.png
+pictures compared: 48 | changed: 2
+  ('insights-score-en-p1-1024.png', 251255)
+  ('insights-score-en-p1-390.png', 51436)
+placeholder pictures
+  insights-placeholder-en-p1-1024.png size (2114, 1632) (2114, 1632) diff px 282756
+  insights-placeholder-en-p1-390.png size (886, 684) (886, 684) diff px 58409
+  insights-placeholder-fr-p1-1024.png size (2114, 1632) (2114, 1632) diff px 271652
+  insights-placeholder-fr-p1-390.png size (886, 684) (886, 684) diff px 53498
+  markup-placeholder-en-p1-1024.png size (2114, 1632) (2114, 1632) diff px 0
+  markup-placeholder-en-p1-390.png size (886, 684) (886, 684) diff px 0
+  markup-placeholder-fr-p1-1024.png size (2114, 1632) (2114, 1632) diff px 0
+  markup-placeholder-fr-p1-390.png size (886, 684) (886, 684) diff px 0

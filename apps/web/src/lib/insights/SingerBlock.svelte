@@ -431,6 +431,8 @@
 	.comment.on-placeholder {
 		border-left: 1.5px dashed var(--rose-ink);
 		padding-left: 9px;
+		/* The marker hangs in the squircle's padding (measured: the 1.5px border draws as 1px, so 1 + 9 = 10 px) so the comment's text starts where every other block's does, at 123 (lane 81). */
+		margin-left: -10px;
 	}
 
 	.placeholder-note {

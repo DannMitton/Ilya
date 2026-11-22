@@ -51,7 +51,7 @@ Nothing in the pictures is unexplained by the table.
 
 By the rule ("where two of the three agree, the third takes their value; where all three differ, list it and stop"), no row of the table qualifies: the marked rows differ because the words differ, and the brief says content stays different. **No source file was changed.** There are no "after" captures that differ from "before"; the before set is the set. NOT ESTABLISHED: any claim that a future change would hold, because no change was made.
 
-Ratchets: no file touched, so `MarkupPane.svelte` stays at 1231 and `InsightsPane.svelte` at 668; no ceiling changed. Gate 4's count and the other gates: not run.
+Ratchets: no file touched, so `MarkupPane.svelte` stays at 1231 and `InsightsPane.svelte` at 668; no ceiling changed. Gates: see section 10.
 
 ## 5. The row I stopped on, and the decision it needs from Dann
 
@@ -81,4 +81,43 @@ Dann saw that INSIGHTS' right margin looked more generous than MELODY's. Both ca
 1. `apps/web/src/lib/components/Paper/TitleHeader.svelte`: the aside's reserved room (`--aside-room`, the compass stave's width) no longer applies to `.header-note`. The note sits below the stave (note top 174.4, stave ends near 115), so it now spans 96 to 720 like MELODY's (measured: el 96, er 720 on both, English, 1024, placeholder voice). The title and the metadata lines keep the margin. The note wraps in 4 lines; INSIGHTS still has 6 pages.
 2. `apps/web/src/lib/insights/SingerBlock.svelte`: the intro paragraph's `max-width: 600px` is removed (right edge 696 to 720; 3 lines instead of 4).
 
-Checked: `vitest run src/lib/insights src/lib/components/Paper`, 30 files, 595 tests pass. NOT RUN: the other gates, and a full after-capture of the three documents in all four conditions. Trial pictures: `pics/trial-*`, `pics/trial3-*`, crop `trial3-insights-note-crop.png`. Ratchets: neither pane file was touched.
+Checked then with `vitest run src/lib/insights src/lib/components/Paper`, 30 files, 595 tests pass. The full gates and the after-capture are in sections 10 and 11. Trial pictures: `pics/trial-*`, `pics/trial3-*`, crop `trial3-insights-note-crop.png`. Ratchets: neither pane file was touched.
+
+## 9. Item 1 of the follow-up: the placeholder note at 123 everywhere
+
+`SingerBlock.svelte`, `.comment.on-placeholder`: the dashed marker (a 1.5 px border and 9 px padding) pushed the comment's whole text in. It now hangs in the squircle's padding with `margin-left: -10px`, so the text starts where every other block's does. **Measured** (English, 1024, placeholder voice, `census-after.json`): `p.tag`, `p.body`, and `p.placeholder-note` are at left 123 and right 693 on pages 2, 3, and 4 (before: 133 on pages 2 and 3, 123 on page 4). The border measures as 1 px in the live render (1 + 9 = 10), so the offset is 10, not 10.5; a first try with 10.5 gave 122.5. The marker itself is at 113 to 114.5. Section 5's A and B were not touched.
+
+## 10. The eight gates
+
+Run on this tree (HEAD `e64ba4bb` plus the uncommitted edit of section 9) with a scratch copy of `~/Downloads/ilya-ship.sh` that drops the branch and untracked-file refusals and stops before any staging (`exit 0` replaces everything from the commit-message check; no `git add`, `commit`, or `push` outside comments). Each gate's expectation is the baseline the real script carries.
+
+| Gate | Result | Baseline |
+|---|---|---|
+| 1 phonology | 462 passed (462) | same |
+| 2 dictionary | 248 passed (248) | same |
+| 3 web-check | found 0 errors and 12 warnings in 5 files | same |
+| 4 web-test | **6801 passed, 1 skipped (6802)** | same |
+| 5 score-parser | 904 passed, 5 skipped (909) | same |
+| 6 blurb | 178 passed (178) | same |
+| 7 integration | 159 passed (159) | same |
+| 8 ratchets | ratchets: OK. | same |
+
+All eight at baseline. **Gate 4's count is 6801 and did not move: this lane added no test.** What a new test would have protected, and why none was added: the one thing the edits change is a rendered width and a left edge, which the unit suite cannot see (no layout in Vitest); the protection is the census, `census.mjs` and `diff.py`, which read the live page. I did not add a Playwright test to `e2e/` (not in the eight gates, and the brief did not ask for one). Ratchets: `MarkupPane.svelte` and `InsightsPane.svelte` untouched, no ceiling changed.
+
+## 11. The census as "after", and what changed against "before"
+
+`census-after.json`, `table-after.md`, pictures `pics/after-*` (score pages 1 to 3, blank page 1, placeholder page 1; English and French, 1024 and 390: 56 pictures). Before is the pre-edit tree. Full list: `diff-after-vs-before.txt`; pictures: `pic-diff-after-vs-before.txt`.
+
+- **The table (276 rows): no row changed.** The same 34 rows disagree, for the same content reasons. The edits are on roles only INSIGHTS has, so no cross-document row moves.
+- **TEXT and MELODY: nothing changed**, in any condition: zero changed items, zero changed pictures (the MELODY placeholder pictures are identical, 0 differing pixels).
+- **Blank pages: nothing changed.**
+- **Sheet counts: unchanged** in every condition (TEXT 3, MELODY 3, INSIGHTS 6).
+- **INSIGHTS, score, English (1024 and 390):** the intro paragraph goes from 4 lines to 3 (right edge 696 to 720), so everything below it on page 1 moves up 18.75 px (the first comment, the section heads, the Range table, the "Show keys" line); no horizontal edge below it moves. Picture `insights-score-en-p1` changes (251,255 px at 1024); pages 2 and 3 do not.
+- **INSIGHTS, score, French:** the intro paragraph's right edge goes 696 to 720; its line count does not change, so nothing else moves.
+- **INSIGHTS, placeholder voice, English:** the header note's right edge 632 to 720; it ends at 247.1 (was 265.3), so the title rule moves from 273.3 to 255.1 (18.2 px up). The intro paragraph 696 to 720 and 4 lines to 3 (a further 18.75 up). Pages 2 and 3: the placeholder comments' text 133 to 123, and heights change with the 10 px of extra width, so items move up by 42 px on the page. Page 4's note stays at 123.
+- **INSIGHTS, placeholder voice, French:** the header note 636 to 720, its bottom 283.5 to 265.3, the rule 291.5 to 273.3; the intro paragraph 696 to 720, 4 lines kept; pages 2 to 4 smaller shifts (`diff-after-vs-before.txt`).
+- The English and French captures at 390 give the same sheet-px numbers as at 1024, as the census always has.
+
+## 12. Not done, and not touched
+
+Section 5's A and B (the squircle inset) are Dann's and were not acted on. The "hollow or dashed" and "dashed" wording is untouched. Nothing is pushed; no pull request.
