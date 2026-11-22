@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { render } from 'svelte/server';
 import { t } from '$lib/i18n';
+import { blankFrame } from '$lib/page-config';
 import SingerBlock from './SingerBlock.svelte';
 import BlankState from '$lib/components/Paper/BlankState.svelte';
 import { noScoreBlocks, notesBlock } from './singer-blocks';
@@ -70,7 +71,7 @@ describe('L6, INPUT and VOICE in the blank page\u2019s squircle (lane 78)', () =
 	/* The equality test that stood here (`line === T('insights.silence.noScore')` in `SingerBlock.svelte`) found one link in one string. `BlankState` finds every
 	   section name in a sentence by position (`components/Paper/blank-state.ts`), so the sentence may carry INPUT and VOICE, and it is replaced, not added to. */
 	const html = (language: 'en' | 'fr', key: string, links?: InsightsLinks) =>
-		render(BlankState, { props: { language, accent: 'var(--rose)', ink: 'var(--rose-ink)', top: 0, bottom: 0, paragraphs: [t(key, language)], links } as never }).body;
+		render(BlankState, { props: { language, accent: 'var(--rose)', ink: 'var(--rose-ink)', frame: blankFrame(0, 0), paragraphs: [t(key, language)], links } as never }).body;
 	const text = (h: string) => h.replace(/<!--.*?-->/gs, '').replace(/<[^>]*>/g, '').trim();
 	it('reads, with the markup taken away, as the one string, in both languages, with or without links', () => {
 		for (const lang of ['en', 'fr'] as const) for (const key of ['insights.silence.noScore', 'insights.silence.noBoth', 'insights.silence.noVoice']) {

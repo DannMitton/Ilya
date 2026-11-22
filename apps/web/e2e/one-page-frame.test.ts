@@ -1,0 +1,1 @@
+import './one-page-frame';

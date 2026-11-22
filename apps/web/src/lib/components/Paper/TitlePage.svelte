@@ -7,7 +7,7 @@
 	import { textTabKey } from '$lib/text/text-header';
 	import type { InputView } from '$lib/text/input-views.svelte';
 	import type { LegendItem } from '$lib/provenance';
-	import { PAGE_SIZES, ROW_HEIGHT, TEXT_CONTENT } from '$lib/page-config';
+	import { PAGE_SIZES, ROW_HEIGHT, TEXT_CONTENT, type BlankFrame } from '$lib/page-config';
 	import { COMPOSERS, POETS, formatNameForPaper } from '$lib/composers-poets';
 	import TitleHeader from './TitleHeader.svelte';
 	import VerseLine from './VerseLine.svelte';
@@ -40,6 +40,8 @@
 		/** The content window's top and bottom (px from the sheet's edges) and the gap between rows, from the measured fit. */
 		contentTop: number;
 		contentBottom: number;
+		/** The blank state's window (`blankFrame`), `null` until the header and footer have both been measured. */
+		frame: BlankFrame | null;
 		rowGap: number;
 		/** The title header's measured height, which the window's top follows. */
 		onheaderheight?: (height: number) => void;
@@ -67,6 +69,7 @@
 		documentHasLines = true,
 		contentTop,
 		contentBottom,
+		frame,
 		rowGap,
 		onheaderheight,
 		emptyNotice = 'enter',
@@ -128,16 +131,13 @@
 		{/if}
 	</div>
 
-	<!-- The blank state (lane 78): one squircle, centred in this window, drawn by the component all three documents share. `loading` says the dictionary's own word and no ask; `quiet` draws nothing (`one-action.ts`). -->
-	{#if !hasContent && emptyNotice !== 'quiet'}
+	<!-- The blank state (lane 78, lane 79): one squircle, centred in the one frame all three documents share (`blankFrame`), not in the verse window above. It is drawn once both heights are measured. `loading` says the dictionary's own word and no ask; `quiet` draws nothing (`one-action.ts`). -->
+	{#if !hasContent && emptyNotice !== 'quiet' && frame}
 		<BlankState
 			{language}
 			accent="var(--sage)"
 			ink="var(--sage-ink)"
-			top={contentTop}
-			bottom={contentBottom}
-			left={TEXT_CONTENT.left + TEXT_CONTENT.padLeft}
-			right={TEXT_CONTENT.right}
+			{frame}
 			paragraphs={[emptyNotice === 'loading' ? t('dict.loading', language) : t('paper.blank', language)]}
 			links={emptyNotice === 'enter' ? { input: onopeninput } : {}}
 		/>

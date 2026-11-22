@@ -47,7 +47,7 @@
 	import TitleHeader from '$lib/components/Paper/TitleHeader.svelte';
 	import PageFooter from '$lib/components/Paper/PageFooter.svelte';
 	import RunningHeader from '$lib/components/Paper/RunningHeader.svelte';
-	import { PAGE_SIZES, MARGINS, FOOTER_MAX_HEIGHT, GAP, HEADER_HEIGHTS, formatRunningHeader } from '$lib/page-config';
+	import { PAGE_SIZES, MARGINS, FOOTER_MAX_HEIGHT, GAP, HEADER_HEIGHTS, blankFrame, formatRunningHeader } from '$lib/page-config';
 	import PageFit from '$lib/components/Paper/PageFit.svelte';
 	import type { LineData, PageSize } from '$lib/types';
 	import { withSingerTempo } from '$lib/tempo/singer-tempo';
@@ -461,11 +461,8 @@
 	 */
 
 
-	// ── Page geometry, mirrored from TitlePage.svelte ────────────────────
-	// The header is measured (its height varies with wrapping), the footer
-	// window is fixed; the content layer lives between them. The 18px
-	// header-to-content gap is TitlePage's TITLE_HEADER_GAP — one document,
-	// one rhythm.
+	// ── Page geometry ── The header and footer are measured; the content layer lives between them. This 18 is MELODY's own and governs only
+	// pages that carry a score (changing it moves page 1 of every score); the blank state takes the shared `blankFrame` (lane 79).
 	const TITLE_HEADER_GAP = 18;
 	let headerHeight = $state(0);
 	const contentTop = $derived(MARGINS.vertical + headerHeight + TITLE_HEADER_GAP);
@@ -1069,17 +1066,18 @@
 		labelInk="var(--lavender-ink)"
 	/>
 
-	<!-- Content layer: the blank state, one squircle centred in the window between header and footer (lane 78, `components/Paper/BlankState.svelte`; the words are `docs/sessions/ratified-blank-state-blurbs_2026-11-19.md`). It is drawn when there is no score, whatever the voice's state; `markup/blank-notes.ts` holds the table of what each state asks and says. The score branch above mounts its pages in this same window. -->
+	<!-- Content layer: the blank state, one squircle centred between the title rule and the footer in the one shared frame (`blankFrame`, lane 79), drawn once both are measured (lane 78, `components/Paper/BlankState.svelte`; the words are `docs/sessions/ratified-blank-state-blurbs_2026-11-19.md`). It is drawn when there is no score, whatever the voice's state; `markup/blank-notes.ts` holds the table of what each state asks and says. The score branch above mounts its pages in this same window. -->
+	{#if headerHeight > 0 && footerHeight > 0}
 	<BlankState
 		{language}
 		accent="var(--lavender)"
 		ink="var(--lavender-ink)"
-		top={contentTop}
-		bottom={contentBottom}
+		frame={blankFrame(headerHeight, footerHeight)}
 		paragraphs={[T('profile.blank'), T(askKey(melodyAsk(!adapted.completeness.formants)))]}
 		{links}
 		notes={melodyNotes({ generic: adapted.generic, sampledCount: sampledVowels.length, personal: isPersonal(formants), core: stableCore(formants), provisional: provisionalVowels, language })}
 	/>
+	{/if}
 
 	<!-- Footer layer: the full PageFooter, pinned to the bottom margin. The
 	     Markup legend is drawn by the header, on the subtitle's line (walk

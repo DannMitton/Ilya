@@ -4,14 +4,29 @@
  * The words are `docs/sessions/ratified-blank-state-blurbs_2026-11-19.md`, with its correction block of 2026-11-20. The pages themselves are drawn in the
  * browser (`e2e/core-loop.test.ts`, `e2e/singer-paths.test.ts`, `e2e/insights-no-score.test.ts`, `e2e/insights-links.test.ts`); what this file pins is what a
  * vitest can reach: the strings, the one component every page draws, what no longer exists, and the rules that live in source.
+ *
+ * LANE 79 (QUEUE row 201): the window the three squircles are centred in is ONE frame, `blankFrame` in `page-config.ts`, computed once in each pane and
+ * handed to the component whole. The pins below fail if any one of the three goes back to computing its own.
  */
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { stringKeys, t } from '$lib/i18n';
+import { GAP, HEADER_GAP, MARGINS, blankFrame } from '$lib/page-config';
 
 const read = (p: string) => readFileSync(p, 'utf8');
 const SRC = 'src';
+/** The `<BlankState ... >` opening tag of a source file: scanned to the first `>` outside braces, since INSIGHTS' tag carries `>` in an attribute. */
+const tagOf = (src: string): string => {
+	const start = src.indexOf('<BlankState');
+	let depth = 0;
+	for (let i = start; i < src.length; i++) {
+		if (src[i] === '{') depth++;
+		else if (src[i] === '}') depth--;
+		else if (src[i] === '>' && depth === 0) return src.slice(start, i + 1);
+	}
+	throw new Error('no BlankState tag');
+};
 
 describe('the ratified words, verbatim, in both languages', () => {
 	// The apostrophes are the file's typographic ones (\u2019), as every other string in `i18n.ts` writes them.
@@ -101,12 +116,24 @@ describe('one component, drawn once by each of the three pages', () => {
 		const m = read('src/lib/markup/MarkupPane.svelte');
 		expect(m).toContain('const TITLE_HEADER_GAP = 18;');
 		expect(m).toContain('const page1WindowHeight = $derived(dims.height - contentTop - contentBottom);');
+		expect(tagOf(m)).not.toMatch(/contentTop|contentBottom/); // lane 79: the blank state reads neither of the score's window edges
 	});
-	it('the squircle\u2019s window is each page\u2019s own, between its title rule and its footer', () => {
-		expect(read(pages.TEXT)).toContain('top={contentTop}');
-		expect(read(pages.MELODY)).toContain('top={contentTop}');
-		expect(read(pages.MELODY)).toContain('bottom={contentBottom}');
-		expect(read(pages.INSIGHTS)).toContain('top={contentTop} bottom={MARGINS.vertical + footHeight + HEADER_GAP}');
+	it('the squircle\u2019s window is one frame: each page passes it whole and computes no window of its own (lane 79)', () => {
+		for (const [name, file] of Object.entries(pages)) {
+			const tag = tagOf(read(file));
+			expect(tag, name).toMatch(/\{frame\}|frame=\{/);
+			for (const banned of ['top=', 'bottom=', 'left=', 'right=', 'MARGINS', 'HEADER_GAP', 'GAP', 'TEXT_CONTENT', 'contentTop', 'contentBottom']) expect(tag, name + ' ' + banned).not.toContain(banned);
+		}
+	});
+	it('the frame function is called once in each pane that builds a frame, and TEXT builds it from the measured footer, not the reserve', () => {
+		for (const file of ['src/lib/components/Paper/Paper.svelte', pages.MELODY, pages.INSIGHTS]) expect(read(file).match(/blankFrame\(/g), file).toHaveLength(1);
+		expect(read(pages.TEXT)).not.toMatch(/blankFrame\(/); // TitlePage is handed the frame by Paper
+		const paper = read('src/lib/components/Paper/Paper.svelte');
+		expect(paper).toContain('blankFrame(titleHeader, footerMeasured)');
+		expect(paper).not.toMatch(/blankFrame\([^)]*footerReserve/);
+	});
+	it('TEXT\u2019s paginated bottom is unchanged: the 80 px floor and GAP stay in `Paper.svelte` (lane 79 held it)', () => {
+		expect(read('src/lib/components/Paper/Paper.svelte')).toContain('const contentBottom = $derived(MARGINS.vertical + footerReserve + GAP);');
 	});
 });
 
@@ -154,8 +181,23 @@ describe('the VOICE link reveals the band; it does not enter the takeover', () =
 describe('TEXT: loading is the dictionary\u2019s word alone, and quiet draws nothing', () => {
 	it('TitlePage draws the blank state for `enter` and `loading`, never for `quiet`, and links INPUT only for `enter`', () => {
 		const s = read('src/lib/components/Paper/TitlePage.svelte');
-		expect(s).toContain("{#if !hasContent && emptyNotice !== 'quiet'}");
+		expect(s).toContain("{#if !hasContent && emptyNotice !== 'quiet' && frame}"); // lane 79: and only once the frame exists (both heights measured)
 		expect(s).toContain("paragraphs={[emptyNotice === 'loading' ? t('dict.loading', language) : t('paper.blank', language)]}");
 		expect(s).toContain("links={emptyNotice === 'enter' ? { input: onopeninput } : {}}");
+	});
+});
+
+describe('blankFrame, the window of a blank page (lane 79)', () => {
+	it('puts the same gap above and below, measured at both ends, and the page margin at both sides', () => {
+		expect(blankFrame(70, 66)).toEqual({ top: MARGINS.vertical + 70 + HEADER_GAP, bottom: MARGINS.vertical + 66 + HEADER_GAP, left: MARGINS.horizontal, right: MARGINS.horizontal });
+		expect(blankFrame(70, 66)).toEqual({ top: 134, bottom: 130, left: 96, right: 96 });
+	});
+	it('has no floor: a footer smaller than the paginated footer\u2019s 80 is taken as measured', () => {
+		expect(blankFrame(70, 10).bottom).toBe(MARGINS.vertical + 10 + HEADER_GAP);
+		expect(GAP).toBe(8); // the paginated window keeps its own, different, gap
+	});
+	it('one measured header and footer give one window, whichever page asks', () => {
+		expect(blankFrame(56, 66)).toEqual(blankFrame(56, 66));
+		expect(blankFrame(56, 66).top).not.toBe(blankFrame(60, 66).top);
 	});
 });

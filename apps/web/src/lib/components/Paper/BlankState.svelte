@@ -9,8 +9,8 @@
 	 * TEXT, MELODY, and INSIGHTS is dissimilar." One component draws all three so they cannot drift apart again.
 	 *
 	 * THE SQUIRCLE is `InsightsPane`'s (12 px radius, 1 px accent, padding 16 px 26 px, a 12 px gap), with the accent a prop per page: sage, lavender,
-	 * rose. THE WINDOW is the page's own: `top` and `bottom` are the page's measured content window, so the squircle is centred in each page's own
-	 * space and no shared midpoint is forced (brief, step 1). A grid of `1fr auto 1fr` centres the squircle itself, whatever sits under it.
+	 * rose. THE WINDOW is one frame (`blankFrame`, lane 79): each page's measured header and footer go in, so the squircle is centred between that
+	 * page's own title rule and footer hairline, and the three pages share a left edge and a width. A grid of `1fr auto 1fr` centres the squircle itself, whatever sits under it.
 	 *
 	 * NOTES sits under the squircle, unboxed (DESK DEFAULT, the companion's own wording). MELODY gives it as `notes` (paragraphs of runs; this component draws
 	 * the heading, `insights.r2.notes`); INSIGHTS gives its own notes block as `children`, whose two links stay as built and whose heading it draws itself.
@@ -20,6 +20,7 @@
 	 */
 	import type { Snippet } from 'svelte';
 	import { t, type Language } from '$lib/i18n';
+	import type { BlankFrame } from '$lib/page-config';
 	import { linkParts, type BlankPart, type SectionName } from './blank-state';
 
 	interface Props {
@@ -27,11 +28,8 @@
 		/** The squircle's outline, and the ink of the NOTES heading and of the links. */
 		accent: string;
 		ink: string;
-		/** The page's content window, in px from the sheet's own edges. */
-		top: number;
-		bottom: number;
-		left?: number;
-		right?: number;
+		/** The window of a blank page (`blankFrame`, `page-config.ts`): the one frame all three documents hand in. */
+		frame: BlankFrame;
 		/** The squircle's paragraphs, in order. A section name in one is a link where `links` has a handler for it. */
 		paragraphs: readonly string[];
 		links?: Partial<Record<SectionName, () => void>>;
@@ -43,7 +41,7 @@
 		underneath?: boolean;
 	}
 
-	let { language, accent, ink, top, bottom, left = 96, right = 96, paragraphs, links = {}, notes = [], children, underneath = false }: Props = $props();
+	let { language, accent, ink, frame, paragraphs, links = {}, notes = [], children, underneath = false }: Props = $props();
 
 	const available = $derived((['input', 'voice'] as const).filter((k) => !!links[k]));
 </script>
@@ -52,7 +50,7 @@
 
 <div
 	class="blank-window"
-	style="top: {top}px; bottom: {bottom}px; left: {left}px; right: {right}px; --accent: {accent}; --ink: {ink};"
+	style="top: {frame.top}px; bottom: {frame.bottom}px; left: {frame.left}px; right: {frame.right}px; --accent: {accent}; --ink: {ink};"
 >
 	<div class="blank-state" data-blank-state>
 		{#each paragraphs as text, i (i)}

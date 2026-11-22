@@ -40,6 +40,31 @@ export const GAP = 8;
  */
 export const HEADER_GAP = 16;
 
+/** The window of a blank page, in px from the sheet's own edges: the space the squircle is centred in. */
+export interface BlankFrame {
+	top: number;
+	bottom: number;
+	left: number;
+	right: number;
+}
+
+/**
+ * THE WINDOW OF A BLANK PAGE (lane 79, QUEUE row 201): one function, so TEXT, MELODY, and INSIGHTS cannot each compute their own.
+ *
+ * Dann asked three times for the three blank pages to sit alike (2026-11-19, 2026-11-20 15:41, 2026-11-21 21:42 to 21:48). Lane 78 built one squircle
+ * and left each page to hand it a window; the windows differed by 2 to 4 px at the top and 4 px at the left. The same `HEADER_GAP` at both ends puts the
+ * squircle on the centre the title rule and the footer hairline define, and both sides are MEASURED, with no floor: a blank footer is not 80.
+ * A page with content never reads this function; its windows are `contentTop` and `contentBottom`.
+ */
+export function blankFrame(header: number, footer: number): BlankFrame {
+	return {
+		top: MARGINS.vertical + header + HEADER_GAP,
+		bottom: MARGINS.vertical + footer + HEADER_GAP,
+		left: MARGINS.horizontal,
+		right: MARGINS.horizontal,
+	};
+}
+
 /**
  * Header heights MEASURED AT LETTER WIDTH (816px), in headless Chromium with
  * Source Sans 3 and Source Serif 4 loaded, 2026-08-15.

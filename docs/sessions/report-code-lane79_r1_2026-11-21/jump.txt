@@ -1,0 +1,6 @@
+text en [538.5,547.5]
+text fr [538.5,547.5]
+markup en [538.5,547.5]
+markup fr [538.5,547.5]
+insights en [538.5,547.5]
+insights fr [538.5,547.5]

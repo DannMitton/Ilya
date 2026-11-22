@@ -4,7 +4,7 @@
 	import type { NotationPreferences } from '@ilya/phonology';
 	import { t, type Language } from '$lib/i18n';
 	import { onMount, untrack } from 'svelte';
-	import { PAGE_SIZES, FOOTER_MAX_HEIGHT, GAP, HEADER_GAP, HEADER_HEIGHTS_AT_LETTER, MARGINS, formatRunningHeader } from '$lib/page-config';
+	import { PAGE_SIZES, FOOTER_MAX_HEIGHT, GAP, HEADER_GAP, HEADER_HEIGHTS_AT_LETTER, MARGINS, blankFrame, formatRunningHeader } from '$lib/page-config';
 	import { FALLBACK_FIT, slicePages, type FitMetrics, type PieceMetrics } from '$lib/page-fit';
 	import { buildProvenanceLegend } from '$lib/provenance';
 	import { showsRichterIpa } from '$lib/latin';
@@ -190,6 +190,7 @@
 				contentTop={contentTopOf(0)}
 				{contentBottom}
 				rowGap={page.gap}
+				frame={titleHeader > 0 && footerMeasured > 0 ? blankFrame(titleHeader, footerMeasured) : null}
 				onheaderheight={(h) => (titleHeader = h)}
 				{emptyNotice}
 				{onopeninput}
