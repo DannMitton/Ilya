@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SOURCE: synthetic fixture written for lane 83 (cloud-lane-83). Not a reading of any scan and not from any printed song; the words are plain Russian syllables chosen for their counts and carry no source.
+     Two bars of quarter notes whose file underlay has two gaps: the note after "Ночь" (a real sustain, and nothing ever supplies a word there) and the note after "над" (a gap that a test fills through `cyrPreview`, the way a singer's pasted lyrics fill a score the file left bare). -->
+<score-partwise version="3.1">
+  <part-list><score-part id="P1"><part-name>Voice</part-name></score-part></part-list>
+  <part id="P1">
+    <measure number="1">
+      <attributes><divisions>2</divisions><key><fifths>0</fifths></key><time><beats>4</beats><beat-type>4</beat-type></time><clef><sign>G</sign><line>2</line></clef></attributes>
+      <note><pitch><step>C</step><octave>4</octave></pitch><duration>2</duration><voice>1</voice><type>quarter</type><lyric number="1"><syllabic>single</syllabic><text>Ночь</text></lyric></note>
+      <note><pitch><step>D</step><octave>4</octave></pitch><duration>2</duration><voice>1</voice><type>quarter</type></note>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>2</duration><voice>1</voice><type>quarter</type><lyric number="1"><syllabic>single</syllabic><text>над</text></lyric></note>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>2</duration><voice>1</voice><type>quarter</type></note>
+    </measure>
+    <measure number="2">
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>2</duration><voice>1</voice><type>quarter</type><lyric number="1"><syllabic>single</syllabic><text>Спи</text></lyric></note>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>2</duration><voice>1</voice><type>quarter</type><lyric number="1"><syllabic>single</syllabic><text>мой</text></lyric></note>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>2</duration><voice>1</voice><type>quarter</type><lyric number="1"><syllabic>begin</syllabic><text>ми</text></lyric></note>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>2</duration><voice>1</voice><type>quarter</type><lyric number="1"><syllabic>end</syllabic><text>лый</text></lyric></note>
+    </measure>
+  </part>
+</score-partwise>
