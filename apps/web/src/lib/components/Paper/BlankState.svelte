@@ -9,8 +9,8 @@
 	 * TEXT, MELODY, and INSIGHTS is dissimilar." One component draws all three so they cannot drift apart again.
 	 *
 	 * THE SQUIRCLE is `InsightsPane`'s (12 px radius, 1 px accent, padding 16 px 26 px, a 12 px gap), with the accent a prop per page: sage, lavender,
-	 * rose. THE WINDOW is one frame (`blankFrame`, lane 79): each page's measured header and footer go in, so the squircle is centred between that
-	 * page's own title rule and footer hairline, and the three pages share a left edge and a width. A grid of `1fr auto 1fr` centres the squircle itself, whatever sits under it.
+	 * rose. THE WINDOW is one frame (`blankFrame`, lane 79): its top edge is the squircle's top edge, a fixed `BLANK_ANCHOR` below the page's own title rule, so the first
+	 * line sits at the same height in both languages and on all three pages; the box grows downward, and the three pages share a left edge and a width.
 	 *
 	 * NOTES sits under the squircle, unboxed (DESK DEFAULT, the companion's own wording). MELODY gives it as `notes` (paragraphs of runs; this component draws
 	 * the heading, `insights.r2.notes`); INSIGHTS gives its own notes block as `children`, whose two links stay as built and whose heading it draws itself.
@@ -73,13 +73,12 @@
 <style>
 	.blank-window {
 		position: absolute;
-		display: grid;
-		grid-template-rows: 1fr auto 1fr;
+		display: flex;
+		flex-direction: column;
 	}
 
 	/* The squircle: `InsightsPane`'s (the watch band's outline), its accent a prop. Roman and left-ranged. */
 	.blank-state {
-		grid-row: 2;
 		box-sizing: border-box;
 		border: 1px solid var(--accent);
 		border-radius: 12px;
@@ -100,10 +99,8 @@
 		margin: 0;
 	}
 
-	/* NOTES: unboxed, under the squircle, which keeps its own centre because the third row is the free half. */
+	/* NOTES: unboxed, under the squircle, which keeps its top edge wherever NOTES grows. */
 	.notes {
-		grid-row: 3;
-		align-self: start;
 		padding-top: 20px;
 		display: flex;
 		flex-direction: column;

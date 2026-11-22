@@ -131,7 +131,7 @@
 		{/if}
 	</div>
 
-	<!-- The blank state (lane 78, lane 79): one squircle, centred in the one frame all three documents share (`blankFrame`), not in the verse window above. It is drawn once both heights are measured. `loading` says the dictionary's own word and no ask; `quiet` draws nothing (`one-action.ts`). -->
+	<!-- The blank state (lane 78, lane 79): one squircle, its top edge anchored in the one frame all three documents share (`blankFrame`, `BLANK_ANCHOR`), not in the verse window above. It is drawn once both heights are measured. `loading` says the dictionary's own word and no ask; `quiet` draws nothing (`one-action.ts`). -->
 	{#if !hasContent && emptyNotice !== 'quiet' && frame}
 		<BlankState
 			{language}

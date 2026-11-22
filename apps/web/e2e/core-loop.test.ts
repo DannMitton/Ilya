@@ -39,7 +39,7 @@ test.describe('Ilya core loop', () => {
 	});
 
 	test('shows empty state before transcription', async ({ page }) => {
-		// The blank state is `paper.blank` in i18n.ts, ratified by Dann 2026-11-19 and drawn in a squircle by
+		// The blank state is `paper.blank` and `paper.blank.ask` in i18n.ts (two paragraphs), ratified by Dann 2026-11-19 and drawn in a squircle by
 		// `components/Paper/BlankState.svelte`. It replaced "Enter your Cyrillic text in the DRAWER on the left." and its
 		// phone twin, which named the DRAWER by a direction. INPUT is a link inside it.
 		const squircle = page.locator('[data-blank-state]');
@@ -234,7 +234,7 @@ test.describe('bilingual interface', () => {
 	});
 
 	test('French empty state shows French placeholder', async ({ page }) => {
-		// The French blank state is `paper.blank`, `fr` slot (see the test above).
+		// The French blank state is `paper.blank` and `paper.blank.ask`, `fr` slots (see the test above).
 		const frOption = page.locator('.lang-pill');
 		await frOption.click();
 

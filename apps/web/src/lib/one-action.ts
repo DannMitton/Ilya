@@ -152,9 +152,9 @@ export type EmptyTextNotice = 'enter' | 'loading' | 'quiet';
 /**
  * THE TEXT PAGE TELLS THE TRUTH WHILE IT WAITS. QUEUE row 2j, 2026-09-30; the words are Dann's of 2026-11-19 (lane 78).
  *
- * The blank state's sentence (`paper.blank`) was drawn whenever there were no lines, so a restored poem waiting on the dictionary was told
+ * The blank state's two paragraphs (`paper.blank`, the blurb, and `paper.blank.ask`) were drawn whenever there were no lines, so a restored poem waiting on the dictionary was told
  * to be entered: false, and against Dann's ruling of 2026-09-24 09:57 ("Text in the system must yield a transcription if that text populates
- * Markup"). The sentence is now said only when the box is empty (`enter`). A poem waiting on the dictionary gets the loader's own
+ * Markup"). They are now said only when the box is empty (`enter`). A poem waiting on the dictionary gets the loader's own
  * `dict.loading`, alone in the same squircle and with no ask (`loading`; brief of lane 78, step 4, DESK DEFAULT). Any other wait (a 600 ms typing
  * pause, or a failed load, which the drawer already reports) draws nothing (`quiet`): nothing on the page is better than a false instruction.
  * `BlankState` draws all three pages' blank state (`components/Paper/BlankState.svelte`), and TEXT's is not split by device any longer.

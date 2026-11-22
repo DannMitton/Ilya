@@ -5,14 +5,15 @@
  * browser (`e2e/core-loop.test.ts`, `e2e/singer-paths.test.ts`, `e2e/insights-no-score.test.ts`, `e2e/insights-links.test.ts`); what this file pins is what a
  * vitest can reach: the strings, the one component every page draws, what no longer exists, and the rules that live in source.
  *
- * LANE 79 (QUEUE row 201): the window the three squircles are centred in is ONE frame, `blankFrame` in `page-config.ts`, computed once in each pane and
- * handed to the component whole. The pins below fail if any one of the three goes back to computing its own.
+ * LANE 79 (QUEUE row 201): the window the three squircles sit in is ONE frame, `blankFrame` in `page-config.ts`, computed once in each pane and
+ * handed to the component whole. SECOND ADDENDUM (Dann 22:55): the squircle's top edge is `BLANK_ANCHOR` below the title rule, not its centre between the rules. The pins
+ * below fail if any one of the three goes back to computing its own window, or to centring.
  */
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { stringKeys, t } from '$lib/i18n';
-import { GAP, HEADER_GAP, MARGINS, blankFrame } from '$lib/page-config';
+import { BLANK_ANCHOR, GAP, HEADER_GAP, MARGINS, blankFrame } from '$lib/page-config';
 
 const read = (p: string) => readFileSync(p, 'utf8');
 const SRC = 'src';
@@ -111,7 +112,8 @@ describe('one component, drawn once by each of the three pages', () => {
 		expect(b).toMatch(/border: 1px solid var\(--accent\);\s*border-radius: 12px;\s*padding: 16px 26px;/);
 		expect(b).toMatch(/font-style: normal/); // roman, not italic
 		expect(b).toMatch(/text-align: left/);
-		expect(b).toMatch(/grid-template-rows: 1fr auto 1fr/); // the squircle is the middle row: centred whatever sits under it
+		expect(b).not.toMatch(/grid-template-rows|grid-row/); // second addendum: no centring grid; the top edge is the anchor and the box grows downward
+		expect(b).toMatch(/\.blank-window\s*\{[^}]*flex-direction: column/);
 	});
 	it('does not move the score\u2019s first-page window: TITLE_HEADER_GAP is still 18 and is not read by the blank state', () => {
 		const m = read('src/lib/markup/MarkupPane.svelte');
@@ -188,17 +190,43 @@ describe('TEXT: loading is the dictionary\u2019s word alone, and quiet draws not
 	});
 });
 
-describe('blankFrame, the window of a blank page (lane 79)', () => {
-	it('puts the same gap above and below, measured at both ends, and the page margin at both sides', () => {
-		expect(blankFrame(70, 66)).toEqual({ top: MARGINS.vertical + 70 + HEADER_GAP, bottom: MARGINS.vertical + 66 + HEADER_GAP, left: MARGINS.horizontal, right: MARGINS.horizontal });
-		expect(blankFrame(70, 66)).toEqual({ top: 134, bottom: 130, left: 96, right: 96 });
+describe('blankFrame, the window of a blank page (lane 79, and its second addendum)', () => {
+	it('anchors the squircle\u2019s top edge BLANK_ANCHOR below the rule\u2019s gap, and takes the page margin at both sides', () => {
+		expect(BLANK_ANCHOR).toBe(315.2); // (757 - 86.6) / 2 - 20, derived once on 2026-11-21
+		expect(blankFrame(105, 66)).toEqual({ top: MARGINS.vertical + 105 + HEADER_GAP + BLANK_ANCHOR, bottom: MARGINS.vertical + 66 + HEADER_GAP, left: MARGINS.horizontal, right: MARGINS.horizontal });
+		expect(blankFrame(105, 66).top).toBeCloseTo(484.2, 6);
+	});
+	it('does not read the footer for the top edge: a taller footer leaves the top where it was (no centring)', () => {
+		expect(blankFrame(105, 66).top).toBe(blankFrame(105, 200).top);
+		expect(blankFrame(105, 66).bottom).not.toBe(blankFrame(105, 200).bottom);
 	});
 	it('has no floor: a footer smaller than the paginated footer\u2019s 80 is taken as measured', () => {
 		expect(blankFrame(70, 10).bottom).toBe(MARGINS.vertical + 10 + HEADER_GAP);
 		expect(GAP).toBe(8); // the paginated window keeps its own, different, gap
 	});
-	it('one measured header and footer give one window, whichever page asks', () => {
+	it('one measured header gives one top, whichever page asks, and a taller header moves it by the difference', () => {
 		expect(blankFrame(56, 66)).toEqual(blankFrame(56, 66));
-		expect(blankFrame(56, 66).top).not.toBe(blankFrame(60, 66).top);
+		expect(blankFrame(127, 66).top - blankFrame(105, 66).top).toBe(22);
+	});
+});
+
+describe('the frame expressions, pinned whole (second addendum, amendment 4)', () => {
+	const paper = read('src/lib/components/Paper/Paper.svelte');
+	const melody = read('src/lib/markup/MarkupPane.svelte');
+	const insights = read('src/lib/insights/InsightsPane.svelte');
+	it('Paper.svelte passes the one exact expression, guard included', () => {
+		expect(paper).toContain('frame={titleHeader > 0 && footerMeasured > 0 ? blankFrame(titleHeader, footerMeasured) : null}');
+	});
+	it('the two-height guard stands in front of each blank state', () => {
+		expect(melody).toContain('{#if headerHeight > 0 && footerHeight > 0}\n\t<BlankState');
+		expect(insights).toContain('{:else if headerHeight > 0 && footHeight > 0}');
+		expect(read('src/lib/components/Paper/TitlePage.svelte')).toContain("{#if !hasContent && emptyNotice !== 'quiet' && frame}");
+	});
+	it('no frame expression spreads, and none writes a `top:`', () => {
+		const exprs = [paper.match(/frame=\{[^\n]*\}/)![0], melody.match(/frame=\{blankFrame\([^\n]*\}/)![0], insights.match(/frame=\{blankFrame\([^}]*\}/)![0]];
+		for (const e of exprs) {
+			expect(e).not.toContain('...');
+			expect(e).not.toContain('top:');
+		}
 	});
 });

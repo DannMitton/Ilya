@@ -15,7 +15,7 @@ for (const [wname, w] of Object.entries(WIDTHS).filter(([n]) => !process.env.ONL
 	const page = await ctx.newPage();
 	await page.goto('http://localhost:5173/');
 	await page.locator('textarea.text-input').waitFor({ state: 'attached', timeout: 60000 });
-	await page.waitForFunction(() => !document.querySelector('textarea.text-input').disabled, null, { timeout: 60000 });
+	await page.waitForFunction(() => document.querySelector('textarea.text-input')?.disabled === false, null, { timeout: 60000 });
 	for (const doc of ['text', 'markup', 'insights']) {
 		await page.locator('#tab-' + doc).click();
 		await page.locator('[data-blank-state]:visible').first().waitFor({ timeout: 30000 });

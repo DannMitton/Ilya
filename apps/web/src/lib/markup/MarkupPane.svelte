@@ -18,7 +18,7 @@
 	 *
 	 * The interim state with no score is the blank state (lane 78; Dann's
 	 * ruling of 2026-11-19, `docs/sessions/ratified-blank-state-blurbs_2026-11-19.md`):
-	 * one squircle centred in this window, saying what MELODY is for and what it
+	 * one squircle anchored in this window, saying what MELODY is for and what it
 	 * still needs, with the section names as links, drawn by `BlankState`.
 	 * `markup/blank-notes.ts` holds what each voice state asks and what NOTES
 	 * says under it. It supersedes the two-paragraph copy of 2026-07-12 and the
@@ -1066,7 +1066,7 @@
 		labelInk="var(--lavender-ink)"
 	/>
 
-	<!-- Content layer: the blank state, one squircle centred between the title rule and the footer in the one shared frame (`blankFrame`, lane 79), drawn once both are measured (lane 78, `components/Paper/BlankState.svelte`; the words are `docs/sessions/ratified-blank-state-blurbs_2026-11-19.md`). It is drawn when there is no score, whatever the voice's state; `markup/blank-notes.ts` holds the table of what each state asks and says. The score branch above mounts its pages in this same window. -->
+	<!-- Content layer: the blank state, one squircle anchored below the title rule in the one shared frame (`blankFrame`, `BLANK_ANCHOR`, lane 79), drawn once both are measured (lane 78, `components/Paper/BlankState.svelte`; the words are `docs/sessions/ratified-blank-state-blurbs_2026-11-19.md`). It is drawn when there is no score, whatever the voice's state; `markup/blank-notes.ts` holds the table of what each state asks and says. The score branch above mounts its pages in this same window. -->
 	{#if headerHeight > 0 && footerHeight > 0}
 	<BlankState
 		{language}

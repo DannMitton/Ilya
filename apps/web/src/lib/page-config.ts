@@ -49,16 +49,27 @@ export interface BlankFrame {
 }
 
 /**
+ * WHERE THE SQUIRCLE'S TOP EDGE SITS, in px below the top of a blank page's window (lane 79, second addendum, Dann's ruling of 2026-11-21 22:55).
+ *
+ * THE FIRST LINE IS THE ANCHOR, NOT THE BOX'S CENTRE. Centring a box whose height follows its words moves the first line, so English and French (and the three
+ * documents) began at different heights. The top edge is now one number, the same on all three documents in both languages, and the box grows downward.
+ *
+ * DERIVED ONCE, 2026-11-21: the three blank pages in English and French, in all three voice states, at 390 and at 1024 (36 states, after TEXT's blurb and ask
+ * were split). The smallest squircle is H = 86.6 px (INSIGHTS and MELODY in English). The window is 1056 - 169 - 130 = 757 px, so (757 - 86.6) / 2 - 20 = 315.2:
+ * where the shortest box's top sat when it was centred, one line of its own type (20 px) higher. Not re-derived at run time; change it only on a new ruling.
+ */
+export const BLANK_ANCHOR = 315.2;
+
+/**
  * THE WINDOW OF A BLANK PAGE (lane 79, QUEUE row 201): one function, so TEXT, MELODY, and INSIGHTS cannot each compute their own.
  *
  * Dann asked three times for the three blank pages to sit alike (2026-11-19, 2026-11-20 15:41, 2026-11-21 21:42 to 21:48). Lane 78 built one squircle
- * and left each page to hand it a window; the windows differed by 2 to 4 px at the top and 4 px at the left. The same `HEADER_GAP` at both ends puts the
- * squircle on the centre the title rule and the footer hairline define, and both sides are MEASURED, with no floor: a blank footer is not 80.
- * A page with content never reads this function; its windows are `contentTop` and `contentBottom`.
+ * and left each page to hand it a window. `top` is where the squircle's top edge sits: the title rule's `HEADER_GAP` below, then `BLANK_ANCHOR`. `bottom` is the
+ * window's lower edge, measured, with no floor (a blank footer is not 80); it bounds the window and positions nothing. A page with content never reads this function.
  */
 export function blankFrame(header: number, footer: number): BlankFrame {
 	return {
-		top: MARGINS.vertical + header + HEADER_GAP,
+		top: MARGINS.vertical + header + HEADER_GAP + BLANK_ANCHOR,
 		bottom: MARGINS.vertical + footer + HEADER_GAP,
 		left: MARGINS.horizontal,
 		right: MARGINS.horizontal,

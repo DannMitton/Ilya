@@ -1,7 +1,10 @@
 import { test, expect, type Page } from '@playwright/test';
+/** Written out, not imported: the page's own constant must not move this pin with it. Derived 2026-11-21: (757 - 86.6) / 2 - 20 (`page-config.ts`, `BLANK_ANCHOR`). */
+const RULED_ANCHOR = 315.2;
+const RULED_GAP = 16; // `HEADER_GAP`
 
 /*
- * LANE 79 (QUEUE row 201): ONE WINDOW FOR THE BLANK PAGE OF TEXT, MELODY, AND INSIGHTS. Not a test file itself (no `.test.ts`); `e2e/one-page-frame.test.ts` runs it in the
+ * LANE 79 (QUEUE row 201), WITH ITS SECOND ADDENDUM (Dann 2026-11-21 22:55): ONE WINDOW FOR THE BLANK PAGE OF TEXT, MELODY, AND INSIGHTS, THE SQUIRCLE'S TOP EDGE THE ANCHOR. Not a test file itself (no `.test.ts`); `e2e/one-page-frame.test.ts` runs it in the
  * chromium project and `e2e-phone/one-page-frame.test.ts` at 390.
  *
  * Opens the three blank pages in each language and in three voice states (none, a type chosen and nothing sampled, samples), and reads each squircle against its own
@@ -50,24 +53,29 @@ async function read(page: Page, doc: (typeof DOCS)[number]) {
 	return m!;
 }
 
-for (const language of ['en', 'fr'] as const) {
-	for (const voice of ['none', 'type only', 'samples'] as const) {
-		test(`${language}, voice ${voice}: the three blank pages share a left edge and a width, and each squircle is centred on its own rules`, async ({ page }) => {
-			test.setTimeout(120_000);
-			await open(page, language, voice);
+for (const voice of ['none', 'type only', 'samples'] as const) {
+	test(`voice ${voice}: the three blank pages share a left edge, a width, and a top edge, in English and in French`, async ({ page, context }) => {
+		test.setTimeout(180_000);
+		const below: Record<string, Record<string, number>> = {};
+		for (const language of ['en', 'fr'] as const) {
+			const p = language === 'en' ? page : await context.newPage();
+			await open(p, language, voice);
 			const got: Record<string, Awaited<ReturnType<typeof read>>> = {};
-			for (const d of DOCS) got[d] = await read(page, d);
-			const mid = (d: string) => (got[d].top + got[d].bottom) / 2;
-			const windowMid = (d: string) => (got[d].ruleBottom + got[d].hairTop) / 2;
+			for (const d of DOCS) got[d] = await read(p, d);
 			for (const d of DOCS) {
-				expect(Math.abs(got[d].left - got.text.left), `${d} left against TEXT`).toBeLessThan(0.05);
-				expect(Math.abs(got[d].width - got.text.width), `${d} width against TEXT`).toBeLessThan(0.05);
-				expect(Math.abs(mid(d) - windowMid(d)), `${d} midpoint against its own rules`).toBeLessThanOrEqual(0.5);
+				expect(Math.abs(got[d].left - got.text.left), `${language} ${d} left against TEXT`).toBeLessThan(0.05);
+				expect(Math.abs(got[d].width - got.text.width), `${language} ${d} width against TEXT`).toBeLessThan(0.05);
+				below[d] = { ...below[d], [language]: got[d].top - got[d].ruleBottom };
+				// The squircle's top edge is `HEADER_GAP + BLANK_ANCHOR` (16 + 315.2) below its own rule (absolute, so a change of the one shared number is seen, not only a difference between pages).
+				expect(Math.abs(got[d].top - got[d].ruleBottom - (RULED_GAP + RULED_ANCHOR)), `${language} ${d} top edge below its rule`).toBeLessThanOrEqual(0.5);
+				// The distance below its own rule is the anchor's, the same on all three pages. 0.5 px, not 0.05: the header's height is measured as a whole pixel (`offsetHeight`) and its rule sits at a fraction, so a taller header (MELODY in French with a voice type chosen) is up to half a pixel off its rule.
+				expect(Math.abs(got[d].top - got[d].ruleBottom - (got.text.top - got.text.ruleBottom)), `${language} ${d} top below its rule, against TEXT`).toBeLessThanOrEqual(0.5);
 			}
 			if (DOCS.every((d) => Math.abs(got[d].ruleBottom - got.text.ruleBottom) < 0.05)) {
-				for (const d of DOCS) expect(Math.abs(mid(d) - mid('text')), `${d} midpoint against TEXT`).toBeLessThanOrEqual(0.5);
+				for (const d of DOCS) expect(Math.abs(got[d].top - got.text.top), `${language} ${d} top edge against TEXT`).toBeLessThan(0.05);
 			}
-			test.info().annotations.push({ type: 'measured', description: JSON.stringify(got) });
-		});
-	}
+			test.info().annotations.push({ type: 'measured-' + language, description: JSON.stringify(got) });
+		}
+		for (const d of DOCS) expect(Math.abs(below[d].en - below[d].fr), `${d} top below its rule, English against French`).toBeLessThanOrEqual(0.5);
+	});
 }

@@ -572,7 +572,7 @@
 							{#each page as s, j (j)}{@render segment(s, COLUMN, INSIDE)}{/each}
 						</div>
 					{:else if headerHeight > 0 && footHeight > 0}
-						<!-- Lane 78, 79: the blank state, one squircle centred between the title rule and the footer in the one shared frame, drawn once both are measured. Its NOTES are this page's own notes block. -->
+						<!-- Lane 78, 79: the blank state, one squircle anchored below the title rule in the one shared frame, drawn once both are measured. Its NOTES are this page's own notes block. -->
 						<BlankState {language} accent="var(--rose)" ink="var(--rose-ink)" frame={blankFrame(headerHeight, footHeight)} paragraphs={[T('insights.blank'), T(askKey(adapted.completeness.formants ? 'score' : 'both'))]} links={{ input: links?.input, voice: links?.voice }} underneath={blocks.length > 0}>
 							{#if blocks.length}{@render blockAt(0, COLUMN)}{/if}
 						</BlankState>
