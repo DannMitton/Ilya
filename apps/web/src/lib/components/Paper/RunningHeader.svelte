@@ -67,9 +67,9 @@
 	}
 
 	/* The piece takes what the tab's name leaves. A piece too long for the line
-	   ends in an ellipsis rather than wrapping (DESK DEFAULT, row 64): Markup
-	   reserves a fixed head height (`HEADER_HEIGHTS.subsequent`), so a second
-	   line would run into its score, and page 1 prints the piece in full. */
+	   ends in an ellipsis rather than wrapping (DESK DEFAULT, row 64): every page
+	   reserves the header it measured (`pageFrame`), so a second line would
+	   move the window under it, and page 1 prints the piece in full. */
 	.header-line {
 		display: flex;
 		align-items: baseline;

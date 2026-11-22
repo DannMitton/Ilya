@@ -7,6 +7,7 @@ const HERE = path.dirname(fileURLToPath(import.meta.url));
 const FIX = path.resolve(process.cwd(), 'src/lib/score/ingestion/fixtures');
 const WHICH = process.argv[2] ?? 'before';
 const ONLY = process.env.ONLY;
+const BASE = process.env.BASE ?? 'http://localhost:5173'; // BASE is another origin when a scratch copy of an older commit is served; its storage needs the returning-browser flag too
 const P = (step, octave, alter = 0) => ({ step, octave, alter });
 const F = { i: [280, 2250], e: [400, 2100], 'ɪ': [330, 1900], 'ɨ': [350, 1500], 'ɛ': [520, 1800], a: [700, 1300], 'ɑ': [650, 1000], 'ʌ': [600, 1200], o: [450, 900], u: [240, 800] };
 const formants = {};
@@ -25,9 +26,9 @@ for (const width of [390, 1024]) {
 	for (const j of jobs) {
 		if (ONLY && !j.name.includes(ONLY)) continue;
 		const context = await browser.newContext({ viewport: { width, height: width === 390 ? 844 : 1366 }, deviceScaleFactor: 2, isMobile: width === 390, hasTouch: width === 390, storageState: path.resolve(process.cwd(), 'e2e/returning-browser.storage.json') });
-		await context.addInitScript(([l, s]) => { localStorage.setItem('ilya:language', l); localStorage.setItem('shane.profiles.v2', s); }, ['en', voice]);
+		await context.addInitScript(([l, s]) => { localStorage.setItem('ilya:welcomeSeen', '1'); localStorage.setItem('ilya:language', l); localStorage.setItem('shane.profiles.v2', s); }, ['en', voice]);
 		const page = await context.newPage();
-		await page.goto('http://localhost:5173/');
+		await page.goto(BASE + '/');
 		await page.locator('textarea.text-input').waitFor();
 		await page.waitForFunction(() => !document.querySelector('textarea.text-input').disabled, null, { timeout: 90000 });
 		if (j.file) {
