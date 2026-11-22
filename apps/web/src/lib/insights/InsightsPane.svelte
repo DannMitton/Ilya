@@ -35,8 +35,8 @@
 	import PageFit from '$lib/components/Paper/PageFit.svelte';
 	import BlankState from '$lib/components/Paper/BlankState.svelte';
 	import { askKey } from '$lib/components/Paper/blank-state';
-	import { PAGE_SIZES, MARGINS, HEADER_GAP, HEADER_HEIGHTS_AT_LETTER, blankFrame, formatRunningHeader } from '$lib/page-config';
-	import type { LineData } from '$lib/types';
+	import { PAGE_SIZES, FOOTER_FALLBACK, HEADER_GAP, HEADER_HEIGHTS_AT_LETTER, blankFrame, pageFrame, formatRunningHeader } from '$lib/page-config';
+	import type { LineData, PageSize } from '$lib/types';
 	import { t, type Language } from '$lib/i18n';
 	import { COMPOSERS, formatNameForPaper } from '$lib/composers-poets';
 	import { type Vowel, type CalibratedFormant, type VoiceCharacteristics } from '$lib/voice/engine/types';
@@ -113,6 +113,8 @@
 		drawnUnderlay?: DrawnUnderlay;
 		openSyllabification?: boolean;
 		isMobile?: boolean;
+		/** The sheet, as `Paper` and `MarkupPane` take it; the page shell passes letter today (lane 80). */
+		pageSize?: PageSize;
 		/** N.164, lane 61: "Add your range" opens "Describe your voice" at the Range. */
 		onaddrange?: () => void;
 		/** N.203 lane 61: the notes block's links to the VOICE pane (`links.ts`). */
@@ -153,13 +155,14 @@
 		tempoChoice = null,
 		ontempo = undefined,
 		ontoggleoctave = undefined,
+		pageSize = 'letter',
 	}: Props = $props();
 
 	const T = (key: string) => t(key, language);
 	const fill = (s: string, vars: Record<string, string | number>) =>
 		Object.entries(vars).reduce((out, [k, v]) => out.replaceAll(`{${k}}`, String(v)), s);
 
-	const dims = PAGE_SIZES.letter;
+	const dims = $derived(PAGE_SIZES[pageSize]);
 
 	// ── The chain, as `MarkupPane` runs it ───────────────────────
 	const adapted = $derived(buildVoiceProfileSnapshot(formants, characteristics, voiceName, intake, voiceType?.voiceType));
@@ -283,9 +286,17 @@
 	const composerDisplay = $derived(formatNameForPaper(composer, COMPOSERS, language));
 
 	let headerHeight = $state(0);
-	const contentTop = $derived(MARGINS.vertical + headerHeight + HEADER_GAP);
 	let runningHeight = $state(0);
-	const subsequentTop = $derived(MARGINS.vertical + (runningHeight || HEADER_HEIGHTS_AT_LETTER.subsequent) + HEADER_GAP);
+	/* Clear space between the last content and the footer's notes: Unlikely
+	   page 3's spacing, which Dann held up as the standard (03:42). DESK DEFAULT. */
+	const CLEAR = 40;
+	/* The footer the page reserves: the drawn footer of page 1, as MELODY measures it (lane 80). `CLEAR` stays until the second commit. */
+	let footHeight = $state(0);
+	const footer = $derived(footHeight || FOOTER_FALLBACK);
+	const firstFrame = $derived(pageFrame(headerHeight, footer, { bottom: CLEAR }));
+	const laterFrame = $derived(pageFrame(runningHeight || HEADER_HEIGHTS_AT_LETTER.subsequent, footer, { bottom: CLEAR }));
+	const contentTop = $derived(firstFrame.top);
+	const subsequentTop = $derived(laterFrame.top);
 
 	const hasTypedCharacteristics = $derived(
 		adapted.completeness.range || adapted.completeness.tessitura || adapted.completeness.passaggio,
@@ -370,12 +381,9 @@
 	// ── Measuring, then pages ──────────────────────────────────────────
 	/* The text column is the page's width less its margins; a squircle's
 	   blocks sit inside its 1 px border and 26 px padding. */
-	const COLUMN = dims.width - 2 * MARGINS.horizontal;
-	const INSIDE = COLUMN - 2 * 27;
+	const COLUMN = $derived(dims.width - firstFrame.left - firstFrame.right);
+	const INSIDE = $derived(COLUMN - 2 * 27);
 	const GEOMETRY = { gap: 16, inner: 12, pad: 17, openPad: 5 };
-	/* Clear space between the last content and the footer's notes: Unlikely
-	   page 3's spacing, which Dann held up as the standard (03:42). DESK DEFAULT. */
-	const CLEAR = 40;
 	const widthOf = (b: PlacedBlock) => (b.group === 'free' ? COLUMN : INSIDE);
 
 	let measureEls = $state<Array<HTMLElement | null>>([]);
@@ -384,8 +392,6 @@
 	   controls, and the cycles bar never break. */
 	const BREAKS = new Set(['comment', 'prose', 'endnote', 'note', 'notes', 'more', 'keyreveal']);
 	let breakTops = $state<number[][]>([]);
-	let footProbe = $state<HTMLElement | null>(null);
-	let footHeight = $state(0);
 	let fontsReady = $state(0);
 	$effect(() => {
 		document.fonts?.ready.then(() => (fontsReady += 1));
@@ -403,7 +409,6 @@
 			untrack(() => {
 				heights = measureEls.slice(0, blocks.length).map((el) => el?.offsetHeight ?? 0);
 				breakTops = measureEls.slice(0, blocks.length).map((el, k) => (el && BREAKS.has(blocks[k].block.kind) ? breakOffsets(lineBoxes(el)) : []));
-				footHeight = footProbe?.offsetHeight ?? 0;
 			});
 		});
 		return () => {
@@ -447,7 +452,7 @@
 	const printed = $derived(blocks.map((b, k) => ({ b, k })).filter(({ b, k }) => !b.screenOnly || openOf(k)));
 	const pages = $derived.by((): Segment[][] => {
 		if (!analysisScore) return [[]]; // the blank page is one sheet, drawn by `BlankState` (lane 78), not paginated
-		const room = (top: number) => dims.height - MARGINS.vertical - footHeight - CLEAR - top;
+		const room = (top: number) => dims.height - firstFrame.bottom - top;
 		const segs = paginate(
 			printed.map(({ b }) => b.group),
 			printed.map(({ k }) => heights[k] ?? 0),
@@ -546,9 +551,6 @@
 	{#each blocks as b, k (k)}
 		<div bind:this={measureEls[k]} style="width: {widthOf(b)}px;">{@render blockAt(k, widthOf(b), true)}</div>
 	{/each}
-	<div class="foot-probe" bind:this={footProbe} style="width: {COLUMN}px;">
-		<PageFooter pageNumber={1} totalPages={1} {language} hairlineAccent="var(--rose)" />
-	</div>
 </div>
 
 
@@ -568,7 +570,7 @@
 						<RunningHeader headerText={runningHeader} tabName={T('tab.insights')} accent="var(--rose)" onheightchange={(h) => (runningHeight = h)} />
 					{/if}
 					{#if analysisScore}
-						<div class="column" style="top: {n === 0 ? contentTop : subsequentTop}px;">
+						<div class="column" style="top: {n === 0 ? contentTop : subsequentTop}px; left: {firstFrame.left}px; right: {firstFrame.right}px;">
 							{#each page as s, j (j)}{@render segment(s, COLUMN, INSIDE)}{/each}
 						</div>
 					{:else if headerHeight > 0 && footHeight > 0}
@@ -578,7 +580,7 @@
 						</BlankState>
 					{/if}
 					<!-- QUEUE row 79: the footnote and the method line are endnotes now, in Notes; every page's footer is the same. -->
-					<PageFooter pageNumber={n + 1} {totalPages} {language} hairlineAccent="var(--rose)" />
+					<PageFooter pageNumber={n + 1} {totalPages} {language} hairlineAccent="var(--rose)" onheightchange={n === 0 ? (h) => (footHeight = h) : undefined} />
 				</article>
 			{/each}
 		</div>
@@ -606,8 +608,6 @@
 
 	.column {
 		position: absolute;
-		left: 96px;
-		right: 96px;
 		display: flex;
 		flex-direction: column;
 		gap: 16px;
@@ -654,11 +654,6 @@
 
 	.measurer > div {
 		box-sizing: border-box;
-	}
-
-	/* The probe's footer sits in flow, so its height is the footer's own. */
-	.foot-probe :global(.page-footer) {
-		position: static;
 	}
 
 	@media print {

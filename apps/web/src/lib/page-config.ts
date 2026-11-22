@@ -68,9 +68,30 @@ export const BLANK_ANCHOR = 315.2;
  * window's lower edge, measured, with no floor (a blank footer is not 80); it bounds the window and positions nothing. A page with content never reads this function.
  */
 export function blankFrame(header: number, footer: number): BlankFrame {
+	const frame = pageFrame(header, footer);
+	return { ...frame, top: frame.top + BLANK_ANCHOR };
+}
+
+/** The gaps a page leaves between its window and the header's rule (`top`) and the footer (`bottom`). Both default to `HEADER_GAP`. */
+export interface PageGaps {
+	top?: number;
+	bottom?: number;
+}
+
+/**
+ * THE WINDOW OF A PAGE (lane 80, QUEUE row 202): one function for every page of TEXT, MELODY, and INSIGHTS.
+ *
+ *     top    = MARGINS.vertical + the header actually drawn + the gap under its rule
+ *     bottom = MARGINS.vertical + the footer's whole height + the gap above it
+ *     left   = right = MARGINS.horizontal
+ *
+ * `bottom` is an inset from the sheet's lower edge, as a CSS `bottom` is. The panes pass their own `gaps` until the second commit of lane 80
+ * brings them all to `HEADER_GAP`; every pane's own arithmetic is this function's with that pane's numbers.
+ */
+export function pageFrame(header: number, footer: number, gaps: PageGaps = {}): BlankFrame {
 	return {
-		top: MARGINS.vertical + header + HEADER_GAP + BLANK_ANCHOR,
-		bottom: MARGINS.vertical + footer + HEADER_GAP,
+		top: MARGINS.vertical + header + (gaps.top ?? HEADER_GAP),
+		bottom: MARGINS.vertical + footer + (gaps.bottom ?? HEADER_GAP),
 		left: MARGINS.horizontal,
 		right: MARGINS.horizontal,
 	};
@@ -119,6 +140,13 @@ export const HEADER_HEIGHTS = {
  */
 export const FOOTER_MAX_HEIGHT = 80;
 
+/**
+ * The footer a page reserves before its own has reported (px): the plain footer, with no legend and no band, MEASURED at 816 px on 2026-11-21 (lane 80,
+ * step 0: 66 on every plain page of TEXT, MELODY, and INSIGHTS in both languages). A pane that paginates before its footer reports uses this, so the first pass
+ * and the measured pass agree.
+ */
+export const FOOTER_FALLBACK = 66;
+
 /** Gap between verse rows (px). Used as baseline for title page. */
 export const ROW_GAP = 20;
 
@@ -141,7 +169,16 @@ export const ROW_HEIGHT = 56;
  * measures wraps must reproduce: its width is the sheet's less `left`, `right` and `padLeft`, and its `padTop` is inside
  * the window. One place, so the pages and the probe cannot disagree about the width a line wraps at.
  */
-export const TEXT_CONTENT = { left: 88, right: 96, padLeft: 4, padTop: 4 } as const;
+/** The inset a word stack puts inside its own box (`WordStack.svelte`, 4 px), so a window's first glyph is `left + padLeft + WORD_STACK_PAD` from the sheet's edge. */
+export const WORD_STACK_PAD = 4;
+const TEXT_PAD_LEFT = 4;
+export const TEXT_CONTENT = {
+	/** 96 - 4 - 4 = 88: the window sits left of the margin by what is spent inside it, so the first glyph lands on `MARGINS.horizontal`. */
+	left: MARGINS.horizontal - WORD_STACK_PAD - TEXT_PAD_LEFT,
+	right: MARGINS.horizontal,
+	padLeft: TEXT_PAD_LEFT,
+	padTop: 4,
+} as const;
 
 /** The width a verse line wraps at on a sheet of this size (816 - 88 - 96 - 4 = 628 at letter). */
 export function contentWidth(pageWidth: number): number {

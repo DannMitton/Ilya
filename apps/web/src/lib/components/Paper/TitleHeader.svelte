@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { tick, type Snippet } from 'svelte';
 	import { t, type Language } from '$lib/i18n';
+	import { MARGINS } from '$lib/page-config';
 	import type { LegendItem } from '$lib/provenance';
 	import type { PreparedSmuflFont } from '@ilya/score-parser';
 	import LegendItems from './LegendItems.svelte';
@@ -151,7 +152,7 @@
 	});
 </script>
 
-<header class="title-header" class:has-aside={!!aside} style:--aside-room="{asideWidth + 14}px" bind:offsetHeight={measuredHeight}>
+<header class="title-header" class:has-aside={!!aside} style:--aside-room="{asideWidth + 14}px" style:top="{MARGINS.vertical}px" style:left="{MARGINS.horizontal}px" style:right="{MARGINS.horizontal}px" bind:offsetHeight={measuredHeight}>
 	{#if aside}<div class="header-aside" bind:clientWidth={asideWidth}>{@render aside()}</div>{/if}
 	<div class="logo" style="color: {markAccent}">
 		<span class="logo-bracket">[</span><span class="logo-name">Ilya</span><span class="logo-bracket">]</span>
@@ -209,9 +210,6 @@
 <style>
 	.title-header {
 		position: absolute;
-		top: 48px;
-		left: 96px;
-		right: 96px;
 	}
 
 	/* ── The corner slot (Insights' compass stave) ─────────── */

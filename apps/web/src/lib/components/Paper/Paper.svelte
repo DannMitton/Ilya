@@ -4,7 +4,7 @@
 	import type { NotationPreferences } from '@ilya/phonology';
 	import { t, type Language } from '$lib/i18n';
 	import { onMount, untrack } from 'svelte';
-	import { PAGE_SIZES, FOOTER_MAX_HEIGHT, GAP, HEADER_GAP, HEADER_HEIGHTS_AT_LETTER, MARGINS, blankFrame, formatRunningHeader } from '$lib/page-config';
+	import { PAGE_SIZES, FOOTER_MAX_HEIGHT, GAP, HEADER_HEIGHTS_AT_LETTER, blankFrame, pageFrame, formatRunningHeader } from '$lib/page-config';
 	import { FALLBACK_FIT, slicePages, type FitMetrics, type PieceMetrics } from '$lib/page-fit';
 	import { buildProvenanceLegend } from '$lib/provenance';
 	import { showsRichterIpa } from '$lib/latin';
@@ -86,8 +86,9 @@
 	const dims = $derived(PAGE_SIZES[pageSize]);
 	const fit = $derived<FitMetrics>({ ...FALLBACK_FIT, ...(constants.rowBox ? { rowBox: constants.rowBox } : {}), ...(constants.overhang !== undefined ? { overhang: constants.overhang } : {}) });
 	const footerReserve = $derived(Math.max(FOOTER_MAX_HEIGHT, footerMeasured));
-	const contentBottom = $derived(MARGINS.vertical + footerReserve + GAP);
-	const contentTopOf = (index: number) => MARGINS.vertical + (index === 0 ? titleHeader || HEADER_HEIGHTS_AT_LETTER.title : subHeader || HEADER_HEIGHTS_AT_LETTER.subsequent) + HEADER_GAP;
+	const frameOf = (index: number) => pageFrame(index === 0 ? titleHeader || HEADER_HEIGHTS_AT_LETTER.title : subHeader || HEADER_HEIGHTS_AT_LETTER.subsequent, footerReserve, { bottom: GAP });
+	const contentBottom = $derived(frameOf(0).bottom);
+	const contentTopOf = (index: number) => frameOf(index).top;
 
 	const sliced = $derived(
 		slicePages({ lines, metricsOf: (key) => measured.get(key), windowOf: (i) => dims.height - contentTopOf(i) - contentBottom, fit }),

@@ -11,6 +11,8 @@
 	 * the tab's colour, with no rule. It sits in the top margin, above the title
 	 * block, so nothing on page 1 moves (DESK DEFAULT, row 64 report).
 	 */
+	import { MARGINS } from '$lib/page-config';
+
 	interface Props {
 		headerText: string;
 		/** The tab's name, `t('tab.text')`, `t('tab.markedScore')`, or `t('tab.insights')`. */
@@ -48,9 +50,9 @@
 </script>
 
 {#if tabOnly}
-	<p class="tab-mark" style="--tab-ink: {accentInk};">{tabName}</p>
+	<p class="tab-mark" style="--tab-ink: {accentInk}; right: {MARGINS.horizontal}px;">{tabName}</p>
 {:else}
-	<header class="running-header" style="--header-accent: {accent};" bind:offsetHeight={measuredHeight}>
+	<header class="running-header" style="--header-accent: {accent}; top: {MARGINS.vertical}px; left: {MARGINS.horizontal}px; right: {MARGINS.horizontal}px;" bind:offsetHeight={measuredHeight}>
 		<div class="header-line">
 			<span class="header-text">{headerText}</span>
 			{#if tabName}<span class="header-text header-tab">{tabName}</span>{/if}
@@ -62,9 +64,6 @@
 <style>
 	.running-header {
 		position: absolute;
-		top: 48px;
-		left: 96px;
-		right: 96px;
 	}
 
 	/* The piece takes what the tab's name leaves. A piece too long for the line
@@ -107,7 +106,6 @@
 	.tab-mark {
 		position: absolute;
 		top: 24px;
-		right: 96px;
 		margin: 0;
 		font-family: var(--font-sans);
 		font-size: 14px;

@@ -47,7 +47,7 @@
 	import TitleHeader from '$lib/components/Paper/TitleHeader.svelte';
 	import PageFooter from '$lib/components/Paper/PageFooter.svelte';
 	import RunningHeader from '$lib/components/Paper/RunningHeader.svelte';
-	import { PAGE_SIZES, MARGINS, FOOTER_MAX_HEIGHT, GAP, HEADER_HEIGHTS, blankFrame, formatRunningHeader } from '$lib/page-config';
+	import { PAGE_SIZES, MARGINS, FOOTER_MAX_HEIGHT, GAP, HEADER_HEIGHTS, blankFrame, pageFrame, formatRunningHeader } from '$lib/page-config';
 	import PageFit from '$lib/components/Paper/PageFit.svelte';
 	import type { LineData, PageSize } from '$lib/types';
 	import { withSingerTempo } from '$lib/tempo/singer-tempo';
@@ -465,7 +465,6 @@
 	// pages that carry a score (changing it moves page 1 of every score); the blank state takes the shared `blankFrame` (lane 79).
 	const TITLE_HEADER_GAP = 18;
 	let headerHeight = $state(0);
-	const contentTop = $derived(MARGINS.vertical + headerHeight + TITLE_HEADER_GAP);
 
 	/**
 	 * N.83: the footer is MEASURED, the same way the header is.
@@ -485,9 +484,10 @@
 	 * every page here by the same rule the score pagination already follows.
 	 */
 	let footerHeight = $state(0);
-	const contentBottom = $derived(
-		MARGINS.vertical + Math.max(FOOTER_MAX_HEIGHT, footerHeight) + GAP
-	);
+	const footerReserve = $derived(Math.max(FOOTER_MAX_HEIGHT, footerHeight));
+	const firstFrame = $derived(pageFrame(headerHeight, footerReserve, { top: TITLE_HEADER_GAP, bottom: GAP }));
+	const contentTop = $derived(firstFrame.top);
+	const contentBottom = $derived(firstFrame.bottom);
 
 	function handleHeaderHeight(height: number) {
 		headerHeight = height;
@@ -504,8 +504,9 @@
 	// after the first simply carry a little extra room at the bottom.
 	// Row 48: the singer's tempo rides on the score (`ParsedScore.singerTempo`), so every reading below follows it.
 	const parsed = $derived(withSingerTempo(ingested?.result.score ?? null, tempoChoice));
-	const contentWidth = $derived(dims.width - 2 * MARGINS.horizontal);
-	const subsequentTop = MARGINS.vertical + HEADER_HEIGHTS.subsequent + GAP;
+	const contentWidth = $derived(dims.width - firstFrame.left - firstFrame.right);
+	const laterFrame = $derived(pageFrame(HEADER_HEIGHTS.subsequent, footerReserve, { top: GAP, bottom: GAP }));
+	const subsequentTop = $derived(laterFrame.top);
 
 	// `stripBackingRect` stood here and removed the white full-page rect
 	// `paginateScore` painted. N.133, Dann's ruling of 2026-09-13: the renderer
@@ -981,13 +982,13 @@
 						ruleAccent="var(--lavender)"
 						labelInk="var(--lavender-ink)"
 					/>
-					<div class="score-window" style="top: {contentTop}px; bottom: {contentBottom}px;">
+					<div class="score-window" style="top: {contentTop}px; bottom: {contentBottom}px; left: {firstFrame.left}px; right: {firstFrame.right}px;">
 						<!-- eslint-disable-next-line svelte/no-at-html-tags -- our own renderer's SVG -->
 						{@html page}
 					</div>
 				{:else}
 					<RunningHeader headerText={runningHeader} {tabName} accent="var(--lavender)" />
-					<div class="score-window" style="top: {subsequentTop}px; bottom: {contentBottom}px;">
+					<div class="score-window" style="top: {subsequentTop}px; bottom: {contentBottom}px; left: {laterFrame.left}px; right: {laterFrame.right}px;">
 						{@html page}
 					</div>
 				{/if}
@@ -1163,8 +1164,6 @@
 	   anchors to the top of the window. */
 	.score-window {
 		position: absolute;
-		left: 96px;
-		right: 96px;
 		overflow: hidden;
 	}
 

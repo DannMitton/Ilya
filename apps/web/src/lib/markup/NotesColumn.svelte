@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Italics from '$lib/components/Italics.svelte';
+	import { MARGINS } from '$lib/page-config';
 	/**
 	 * The trailing notes sheet's column: the withheld statement (item 1.8), the
 	 * octave notice, and the "For your consideration" band, in that order (Dann's
@@ -112,11 +113,11 @@
 {/snippet}
 
 {#if sheet}
-	<div class="commentary-window" style="top: {top}px; bottom: {bottom}px;">
+	<div class="commentary-window" style="top: {top}px; bottom: {bottom}px; left: {MARGINS.horizontal}px; right: {MARGINS.horizontal}px;">
 		{@render content()}
 	</div>
 {:else}
-	<div class="notes-measure" aria-hidden="true">
+	<div class="notes-measure" aria-hidden="true" style="left: {MARGINS.horizontal}px; right: {MARGINS.horizontal}px;">
 		<div class="commentary-column" bind:this={column}>
 			{@render content()}
 		</div>
@@ -132,8 +133,6 @@
 	   `notes-pages.ts` sees that nothing reaches it. */
 	.commentary-window {
 		position: absolute;
-		left: 96px;
-		right: 96px;
 		display: flex;
 		flex-direction: column;
 		gap: 1rem;
@@ -144,8 +143,6 @@
 	   unbounded, seen by nobody, and taking no room on the sheet. */
 	.notes-measure {
 		position: absolute;
-		left: 96px;
-		right: 96px;
 		top: 0;
 		height: 0;
 		overflow: hidden;

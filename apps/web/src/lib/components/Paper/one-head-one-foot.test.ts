@@ -63,9 +63,9 @@ describe('one footer for all three tabs', () => {
 		expect(insights).not.toContain('class="insights-foot"');
 	});
 
-	it('Insights still measures its footer', () => {
-		// Since QUEUE row 66 the page measures a probe footer and reserves its height on every page; since row 79 every footer is the same.
-		expect(insights).toContain('bind:this={footProbe}');
-		expect(insights).toContain('footHeight = footProbe?.offsetHeight ?? 0');
+	it('Insights still measures its footer, and since lane 80 it is the drawn footer of page 1, as MELODY measures it', () => {
+		// Row 66 measured a probe footer; every footer has been the same since row 79, and a probe with no legend measured what page 1 draws, so the probe is gone.
+		expect(insights).not.toContain('footProbe');
+		expect(insights).toContain('onheightchange={n === 0 ? (h) => (footHeight = h) : undefined}');
 	});
 });

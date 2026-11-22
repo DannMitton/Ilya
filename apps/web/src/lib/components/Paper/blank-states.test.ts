@@ -135,8 +135,16 @@ describe('one component, drawn once by each of the three pages', () => {
 		expect(paper).toContain('blankFrame(titleHeader, footerMeasured)');
 		expect(paper).not.toMatch(/blankFrame\([^)]*footerReserve/);
 	});
-	it('TEXT\u2019s paginated bottom is unchanged: the 80 px floor and GAP stay in `Paper.svelte` (lane 79 held it)', () => {
-		expect(read('src/lib/components/Paper/Paper.svelte')).toContain('const contentBottom = $derived(MARGINS.vertical + footerReserve + GAP);');
+	it('TEXT\u2019s paginated bottom is unchanged in lane 80\u2019s first commit: the 80 px floor and GAP are `pageFrame`\u2019s arguments in `Paper.svelte`', () => {
+		const paper = read('src/lib/components/Paper/Paper.svelte');
+		expect(paper).toContain('const footerReserve = $derived(Math.max(FOOTER_MAX_HEIGHT, footerMeasured));');
+		expect(paper).toContain('footerReserve, { bottom: GAP })');
+		expect(paper).toContain('const contentBottom = $derived(frameOf(0).bottom);');
+	});
+	it('every pane takes its window from `pageFrame` (lane 80), and none writes the margins as a number', () => {
+		for (const file of ['src/lib/components/Paper/Paper.svelte', pages.MELODY, pages.INSIGHTS]) expect(read(file).match(/pageFrame\(/g)?.length, file).toBeGreaterThanOrEqual(1);
+		for (const file of ['TitleHeader', 'RunningHeader', 'PageFooter', 'BlankState', 'TitlePage', 'SubsequentPage', 'Paper'].map((n) => `src/lib/components/Paper/${n}.svelte`).concat([pages.MELODY, pages.INSIGHTS, 'src/lib/markup/NotesColumn.svelte']))
+			expect(read(file), file).not.toMatch(/\b(left|right|top|bottom):\s*(96|48)px/);
 	});
 });
 

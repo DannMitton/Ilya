@@ -5,6 +5,7 @@
 	import { t, tv, type Language } from '$lib/i18n';
 	import { ILYA_VERSION } from '$lib/version';
 	import Italics from '$lib/components/Italics.svelte';
+	import { MARGINS } from '$lib/page-config';
 	import type { Snippet } from 'svelte';
 
 	interface Props {
@@ -71,7 +72,7 @@
 <footer
 	class="page-footer"
 	class:is-last-page={pageNumber === totalPages}
-	style="--footer-accent: {hairlineAccent};"
+	style="--footer-accent: {hairlineAccent}; bottom: {MARGINS.vertical}px; left: {MARGINS.horizontal}px; right: {MARGINS.horizontal}px;"
 	bind:offsetHeight={measuredHeight}
 	bind:this={element}
 >
@@ -106,9 +107,6 @@
 <style>
 	.page-footer {
 		position: absolute;
-		bottom: 48px;
-		left: 96px;
-		right: 96px;
 	}
 
 	/* ── Provenance legend (the footer's first row) ─────────── */
