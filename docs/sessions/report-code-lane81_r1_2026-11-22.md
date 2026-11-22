@@ -2,7 +2,7 @@
 
 r1, 2026-11-22, by the Code lane. Branch `cloud-lane-81`, cut from `origin/Shane` at `83270c74` after `git fetch origin`. The working tree carried one uncommitted file (`docs/memory/CONTRACT.md`) that I did not write and do not commit. Nothing under `docs/memory/` was written.
 
-**Outcome in one paragraph.** Step 1 is done and the table is below. Read from the pages, TEXT, MELODY, and INSIGHTS already agree on every row where two or more of them share a role: size, weight, line height, letter spacing, case, style, colour, margins, indent, rules, hairlines, and the footer. Every row the table marks is content (a word that is longer, a line that wraps, a stave, a legend, an aside). No row is eligible for the two-of-three rule, so **Step 2 changed no source file**. The one repair the brief named in advance, INSIGHTS' prose inset, is a row where I stopped, as the brief says to when the rule does not decide it. Section 5 gives the two ways to close it and what each moves. The eight gates were **not run** (no source changed); NOT ESTABLISHED as a claim about gate counts.
+**Outcome in one paragraph.** Step 1 is done and the table is below. Read from the pages, TEXT, MELODY, and INSIGHTS already agree on every row where two or more of them share a role: size, weight, line height, letter spacing, case, style, colour, margins, indent, rules, hairlines, and the footer. Every row the table marks is content (a word that is longer, a line that wraps, a stave, a legend, an aside). No row is eligible for the two-of-three rule, so the rule-driven repair changed nothing. **Afterwards, on Dann's reading of the pages, two edits were made (section 8).** The one repair the brief named in advance, INSIGHTS' prose inset, is a row where I stopped, as the brief says to when the rule does not decide it. Section 5 gives the two ways to close it and what each moves. The eight gates were **not run** (no source changed); NOT ESTABLISHED as a claim about gate counts.
 
 ## 1. Instrument
 
@@ -73,3 +73,12 @@ Also unresolved and Dann's: the "hollow or dashed" (MELODY) and "dashed" (INSIGH
 ## 7. Files in `report-code-lane81_r1_2026-11-22/`
 
 `census.mjs`, `table.py`, `pixdiff.py`, `roles.py`, `census-before.json`, `census-before-ph.json`, `table-before.md`, `marked-rows-before.md`, `pixdiff-before.txt`, `hdr-p2-1024.png` and `ftr-p2-1024.png` (the three documents' running header and footer stacked), `pics/`.
+
+## 8. Edits made after Dann's reading of the pages (2026-11-22)
+
+Dann saw that INSIGHTS' right margin looked more generous than MELODY's. Both causes are in the rendered numbers above and were missed by the table, because each belongs to a role only INSIGHTS has.
+
+1. `apps/web/src/lib/components/Paper/TitleHeader.svelte`: the aside's reserved room (`--aside-room`, the compass stave's width) no longer applies to `.header-note`. The note sits below the stave (note top 174.4, stave ends near 115), so it now spans 96 to 720 like MELODY's (measured: el 96, er 720 on both, English, 1024, placeholder voice). The title and the metadata lines keep the margin. The note wraps in 4 lines; INSIGHTS still has 6 pages.
+2. `apps/web/src/lib/insights/SingerBlock.svelte`: the intro paragraph's `max-width: 600px` is removed (right edge 696 to 720; 3 lines instead of 4).
+
+Checked: `vitest run src/lib/insights src/lib/components/Paper`, 30 files, 595 tests pass. NOT RUN: the other gates, and a full after-capture of the three documents in all four conditions. Trial pictures: `pics/trial-*`, `pics/trial3-*`, crop `trial3-insights-note-crop.png`. Ratchets: neither pane file was touched.

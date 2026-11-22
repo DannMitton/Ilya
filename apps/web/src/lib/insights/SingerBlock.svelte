@@ -223,7 +223,6 @@
 		line-height: 1.5;
 		font-style: italic;
 		color: var(--ink-secondary);
-		max-width: 600px;
 	}
 
 	.verdict,
@@ -234,7 +233,6 @@
 		line-height: 1.45;
 		color: var(--ink-primary);
 	}
-
 	.forward {
 		margin-top: 4px !important;
 		font-family: var(--font-sans);

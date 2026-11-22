@@ -221,8 +221,7 @@
 	}
 
 	.title-header.has-aside .song-title,
-	.title-header.has-aside .metadata-block,
-	.title-header.has-aside .header-note {
+	.title-header.has-aside .metadata-block {
 		margin-right: var(--aside-room, 0px);
 	}
 
