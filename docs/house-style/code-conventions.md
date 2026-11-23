@@ -8,7 +8,9 @@ Asked for by Dann 2026-11-01 13:26: align internal code with the best programmin
 
 A concept's code name is its English screen name, in the case its kind requires. After consistency batch 3, MELODY is `melody/` (folder), `MelodyPane.svelte` (component), `tab.melody` (i18n key). **Reason:** a newcomer goes from the screen to the code without a lookup. `apps/web/src/lib/names.ts` (consistency batch 1) records each concept's screen name, code name, and retired names.
 
-**Known exceptions today, closed by batch 3:** the folder `apps/web/src/lib/melody/` (15 files) and `MarkupPane.svelte`; `tab.markedScore` (the score tab); `BAND_IDS.scoreMarkup` (the VOICE band, `sections.svelte.ts`); `console.placeholder` (the ANALYSIS station's heading); `cosmetic.heading` (NOTATION); `songs.heading` (REPERTOIRE). The rule is met when this list is empty.
+**Known exceptions today, closed by the rest of batch 3:** `MarkupPane.svelte` and the other file names inside `apps/web/src/lib/melody/` (24 tracked files); `tab.markedScore` (the score tab); `console.placeholder` (the ANALYSIS station's heading); `cosmetic.heading` (NOTATION); `songs.heading` (REPERTOIRE). The rule is met when this list is empty.
+
+**Two corrections, 2026-11-23, by the desk.** (1) **The folder left this list** when batch 3's first slice renamed it to `melody/` (`70fee262`); the line also said 15 files when `git ls-files` finds 24. (2) **`BAND_IDS.scoreMarkup` is NOT an exception that batch 3 closes**, and listing it here was wrong. `i18n.ts:155-158` records that the key deliberately stays, because it is a wire value a gate asserts; it once matched `tab.markedScore` and no longer does. Where this file and `i18n.ts` disagreed, `i18n.ts` was right.
 
 ## 2. Case by kind of name (Google TypeScript Style Guide, "Identifiers")
 

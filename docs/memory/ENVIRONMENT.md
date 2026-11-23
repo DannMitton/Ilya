@@ -15,8 +15,11 @@ The index was added 2026-09-01. Nothing below it was moved, reworded, or removed
 **When you add a section, add its row here.** A trap nobody can find costs the
 next session the same hour it cost the last one.
 
+### Learned 2026-11-23 (Opus desk: lane 84 merged)
+- `lib/markup/ BECAME lib/melody/ ON 2026-11-23` (last sections of this file): every citation of `apps/web/src/lib/markup/...` written before `70fee262` reads through to `lib/melody/...`. The records are NOT rewritten.
+
 ### Learned 2026-11-22/23, overnight (Opus desk: batch 3's brief, the N.197 sweep, the N.200 re-score)
-- `A SYNC-CONFLICT COPY SITS IN apps/web/src AS "lib 2"` (last sections of this file): untracked, carries its own `markup/`, and inflates every grep under `apps/web/src`.
+- `A SYNC-CONFLICT COPY SITS IN apps/web/src AS "lib 2"` (last sections of this file): untracked and EMPTY. The entry is kept for the error it records: the desk repeated a helper's claim about its contents without reading it.
 - `THE RATCHETS MODULE MAP IS KEYED BY DIRECTORY NAME` (last sections): renaming a folder under `lib/` without rekeying `MODULES` turns the layering gate OFF for that module, in both directions, and the gate still passes green.
 - `SVELTE HASHES A COMPONENT'S FILE NAME INTO ITS SCOPED CLASSES` (last sections): moving a `.svelte` file changes built bytes by itself, so a determinism measurement is taken BEFORE any file move.
 - `svelte.config.js CANNOT IMPORT vite.config.ts` (last sections): it is plain JavaScript loaded by Node, which does not load `.ts`. Share a value through a third plain module.
@@ -5964,9 +5967,11 @@ render-score identity), so **one added key adds two tests**. The desk predicted 
 
 Learned 2026-11-22/23 (Opus desk), from a Sonnet sweep that reported hits nobody could place.
 
-`apps/web/src/lib 2` exists on disk and is **untracked**: `git --no-optional-locks ls-files "apps/web/src/lib 2"` returns zero files. It is a synchronization conflict copy on Dann's machine and it carries its own `markup/`. Duplicates named `" 2"` and `" 3"` also sit under `apps/web/build/` and `apps/web/.svelte-kit/output/`; one of them, `build/index 2.html`, cannot even be read ("Resource deadlock avoided").
+`apps/web/src/lib 2` exists on disk and is **untracked**: `git --no-optional-locks ls-files "apps/web/src/lib 2"` returns zero files. It is a synchronization conflict copy on Dann's machine.
 
-**What it costs:** every recursive grep under `apps/web/src` returns each hit twice, and a brief that quotes a count from one of those greps is wrong. Exclude it by name in any sweep, and say in a brief that it is to be excluded.
+**CORRECTED 2026-11-23 14:3x, and the correction is the point of this entry.** The first version of this section said it "carries its own `markup/`". **It does not: it is an EMPTY directory, zero files, dated 21 August** (`find "apps/web/src/lib 2" -type f | wc -l` returns 0; the desk read it). That claim came from a Sonnet sweep's report and the desk repeated it into a Code brief, into this file, and to Dann without reading the directory. A helper's report is not a line read (`CONTRACT.md` section 0). Fable caught it on the lane 84 as-built read. Duplicates named `" 2"` and `" 3"` also sit under `apps/web/build/` and `apps/web/.svelte-kit/output/`; one of them, `build/index 2.html`, cannot even be read ("Resource deadlock avoided").
+
+**What it costs today: nothing, because it is empty.** It would cost something if the same service ever copied a folder that holds test files: `apps/web/vite.config.ts:46` collects `src/**/*.{test,spec}.{js,ts}`, so a populated `melody 2/` would add tests and move gate 4. The ship script refuses on untracked files first (`~/Downloads/ilya-ship.sh:45-50`), so that would surface as a refusal rather than a silent count. Exclude it by name in a sweep anyway, and **read it before saying what is in it.**
 
 **It is Dann's to delete, not the desk's.** The bridge refuses `rm` by default, and deleting a file on his machine is irreversible.
 
@@ -6025,3 +6030,15 @@ Learned 2026-11-22/23 (a Sonnet helper, re-scoring the 31 takes).
 **Prove the override took effect** rather than assuming it: instrument the resample target (8,000 Hz at a 4,000 Hz ceiling, 10,000 Hz at 5,000) and the highest pole kept (3,950 Hz against 4,917 Hz). A value captured at import, or a resample factor computed once, would leave the run silently at 5,000 Hz.
 
 The script's default analysis stretch is the sidecar's `outcome.guard.segmentS` when the sidecar sits beside the WAV; 21 of the 31 takes of 2026-11-22 have no `segmentS`, so the whole file is used for those.
+
+---
+
+## lib/markup/ BECAME lib/melody/ ON 2026-11-23
+
+Merged at `70fee262` (consistency batch 3, first slice). Twenty-four files moved; 21 byte-identical.
+
+**Read every older citation through this rename.** `apps/web/src/lib/markup/<x>` written before `70fee262` is `apps/web/src/lib/melody/<x>` today. `markup/` appeared on about 699 lines in 231 files under `docs/memory/` and `docs/sessions/` at the merge.
+
+**Those records are NOT rewritten, deliberately.** A session record says what was true on its date, and editing 231 files of history to match today's tree would falsify the record and cost a lane for no gain. This entry is the pointer that makes them readable instead. The same rule applies to the next slice.
+
+**What did NOT move, so a citation to any of these is still literal:** every file name inside the folder, `MarkupPane.svelte` included; the tab id `'markup'`; `.markup-paper-container`, `#tab-markup`, `.tab-markup`; `PUBLIC_INCLUDE_MARKUP_INSIGHTS`; the `guide-markup-*` anchors; every i18n key, `tab.markedScore` and the `markup.` prefix included; `BAND_IDS.scoreMarkup`.
