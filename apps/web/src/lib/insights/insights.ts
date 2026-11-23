@@ -34,6 +34,7 @@ import {
 	fractionToNumber,
 	type AnalyzedScore,
 	type KeyChoice,
+	type KeySignature,
 	type ParsedScore,
 	type Pitch,
 	type TempoResolution,
@@ -236,6 +237,8 @@ export interface TessituragramModel {
 	quiet: boolean;
 	tessitura: PitchSpan | null;
 	passaggio: { primo: Pitch; secondo: Pitch } | null;
+	/** The piece's first key signature (lane 82): it spells the semitones PitchSeconds draws between and beyond the sung rows. Absent or null: spelled with no key. */
+	key?: KeySignature | null;
 	/** Whole percents that sum to 100. Null without both passaggi. */
 	zones: PassaggioZones | null;
 	/** N.123 part 2: the bracket, "half the singing" (`singing-measures.ts`). */
@@ -654,6 +657,7 @@ export function tessituragram(
 		quiet: findings.length === 0,
 		tessitura: tessitura.measured ? { low: tessitura.measured.low, high: tessitura.measured.high } : null,
 		passaggio: profile.passaggio ? { primo: profile.passaggio.primo, secondo: profile.passaggio.secondo } : null,
+		key: score.keySignatures[0]?.signature ?? null,
 		zones: shares && zones ? { below: shares[0], between: shares[1], above: shares[2] } : null,
 		halfMass: halfMassBand(rows),
 		centre: centreOfGravity(rows),
