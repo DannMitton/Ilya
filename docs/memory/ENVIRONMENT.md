@@ -5906,5 +5906,6 @@ stopped on it: 218 tracked, 207 in the baseline, 10 exempt.
 
 **Before shipping a lane that adds a tracked score, check that arithmetic.** The repair is to
 re-run the test with `UPDATE_STROPHIC_BASELINE=1` and confirm by `git diff` that exactly one
-entry was added, which also re-proves every other score hashes the same. Two other tests
-enumerate the same set, which is why the total moved to 6803 while the passes stayed at 6801.
+entry was added, which also re-proves every other score hashes the same. **MEASURED, not predicted:** the baseline's keys drive TWO generated suites (`:85` the hash, `:94` the
+render-score identity), so **one added key adds two tests**. The desk predicted 6802 and the run read
+**6804 passed | 1 skipped (6805)**. Count from the file, never from the failure message.
