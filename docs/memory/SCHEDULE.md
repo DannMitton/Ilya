@@ -53,19 +53,36 @@ Transcribed as written: *"I don't care about the four Guide characters. Delete t
 ### 9. The Ilya page images
 *What:* retake the six pictures on dannmitton.com/ilya after the gloss fixes and the new sigil (Dann 13:17: yes). *Dann:* a yes before publishing.
 
+### 9b. The ten pieces the after-release ruling of 2026-11-22 moved BEFORE
+*What:* Dann ruled all twenty-two after-release items one by one, 19:22 to 20:06 (`OPEN.md`, "THE AFTER-RELEASE LIST, RULED ITEM BY ITEM"). **His gate, ruled 19:55: Ilya is fully functional.** Not a date and not a public launch. The test for every item: does its absence leave something that does not work, or something merely not yet enhanced. These ten failed that test and come before.
+- [ ] **N.190, accidentals drawn as the print prints them** (item 5). Courtesies and redundancies included; Corrections changes only what is drawn. `OPEN.md`, N.190.
+- [ ] **Strophic lane C, INSIGHTS by verse** (item 7). Today `vowel-resolver.ts:673` takes verse 1 unless told otherwise and `analyze-per-verse.ts:36` has no caller in the app, so on a three-verse song the phonation totals, the watch list, and INSIGHTS describe about a third of what she sings.
+- [ ] **The four singer's marks in Corrections** (item 8): staccato, tenuto, fermata, breath. N.188 ships markings MELODY draws; `correction-verbs.svelte.ts:258-538` has no marks verb, so Ilya draws a marking it will not let her fix. *Dann:* strings in both languages.
+- [ ] **The INSIGHTS redundancy work** (item 11): his design of 2026-11-22 03:31 to 03:46 (the demand as the unit instead of the bar, the apparatus falling out of the grouping) with QUEUE row 130 inside it. The N.173 rule set itself stays after.
+- [ ] **N.170 steps 1 and 2** (item 15): the frozen review build and the review packet. **Step 3, colleagues watched, IS the release**, by his words of 19:55. *Dann:* the three or four questions the packet asks.
+- [ ] **Row 140, the WCAG 2.2 audit, whole** (item 16). Automated pass, keyboard and screen-reader walk, gaps fixed, level named. Brief `../sessions/brief-sonnet-wcag-automated-pass_r1_2026-11-22.md` (md5 `e514109b`); the automated pass started 2026-11-22 20:1x, Sonnet, cap 350k.
+- [ ] **N.197's verifying sweep** (item 17). The item itself is CLOSED AS BUILT: tesseract, webmscore, and the four Google families all serve from Ilya's own origin. The sweep covers the service worker, the manifest, the dictionary data path, and the build output. Desk work.
+- [ ] **Row 137, the name a printed or saved page takes** (item 18). Nothing sets `document.title`, so every save proposes the same filename. *Dann:* taste on the shape of the name.
+- [ ] **Vercel's storage** (item 19): settle whether the Deployment Storage meter is cumulative or a measure of live builds, and confirm retention at previews 1 week, canceled and errored 1 day, production 30 days. An over-limit team stops producing builds, which would bite during the walkthroughs. *Dann:* the 2FA prompt that blocks the dashboard.
+- [ ] **N.184's photographed-poem path** (item 20) onto the pre-reform model. The item is CLOSED AS BUILT for the score underlay (`rus_prereform_r2_29000.traineddata`, `underlay-recognize.ts:31`); a photographed poem still runs on stock `rus` (`:42`), so the same letters work under the notes and fail in the poem.
+- [ ] **Conditional, item 9:** the tie drawn through a grace notehead, before the release only if the desk's run on row 114's real set shows it happening there. The other two grace collisions stay after.
+
 ### 10. Release day
 `main` moves to the new Ilya; version 2026b with a git tag and a GitHub release; `CITATION.cff` dated; the announcement, ratified by Dann, says once that Ilya is now under the AGPL. *Dann:* the commands and the announcement.
 
 ---
 
-## AFTER THE RELEASE (on file; none needs Dann now; each is checked against the code before it is planned)
+## AFTER THE RELEASE (ruled item by item by Dann 2026-11-22, 19:22 to 20:06; the record is `OPEN.md`, "THE AFTER-RELEASE LIST, RULED ITEM BY ITEM")
 
-- **An explainer video** in the style of a mathematical animation (Dann 13:17: *"only after the build is stablizied in its final form for release"*). The desk has a video skill; whether it meets his picture of the result is shown with a short test first.
-- **Reading scans:** N.135, the scan reader's words to 9 of 10; N.184, pre-1918 letters; N.178, tempo and dynamics words from the page; N.189, systems with no voice staff.
-- **MELODY and notation:** strophic lanes B to E; N.191 ossias; N.190 accidentals as printed; N.177 dynamics; N.92's remainder; three grace-note collisions; slur shapes (row 145).
-- **INSIGHTS:** N.193 the piano's support; N.173 curation rules; N.168 the knowledge stores; the vowel space inside INSIGHTS (ideas of 2026-11-15).
-- **VOICE:** the voice profile card (row 168). (Row 167, the starting values for contralto, countertenor, and bass-baritone, was brought forward on 2026-11-19 and SHIPPED `496047c0` the same day; it is no longer an after-release item.)
-- **The whole app:** N.170 outside eyes; a WCAG 2.2 audit (row 140); N.197 no outside services; page names on print (row 137); Vercel's storage setting.
+- **Reading scans:** N.135, the scan reader's words to 9 of 10 (item 1); N.178, tempo and dynamics words from the page (item 21, behind N.177); N.189, systems with no voice staff (item 6).
+- **MELODY and notation:** strophic lanes B, D, and E (item 7); N.191 ossias (item 4); N.177 dynamics (item 2); N.92's tie to the note before and the page flag for a measure left over (item 8); two of the three grace-note collisions (item 9); slur shapes, row 145 (item 3).
+- **INSIGHTS:** N.193 the piano's support (item 10); the N.173 curation rule set (item 11); N.168 the knowledge stores (item 12); the vowel space inside INSIGHTS (item 13, already withdrawn by the desk 2026-11-15 on his reasoning).
+- **VOICE:** the voice profile card, row 168 (item 14). Carries a NOT ESTABLISHED legal question: whether formant values are personal information under Canadian privacy law.
+- **The whole app:** N.170 steps 4 to 7 (item 15); the 458 MB build reduction, inside N.204 (item 19).
+- **The explainer video** (item 22), in the style of 3Blue1Brown, his reference. His placement, 13:17: *"only after the build is stablizied in its final form for release"*. A short test piece shows whether the desk's video skill meets his picture before any real work.
+- **N.175, the video walkthroughs on a YouTube channel, is DROPPED** (Dann 2026-10-14 22:26). It is a different item from the explainer video. `STATE.md` carried it as open as well as dropped; resolved as dropped at this close, DESK DEFAULT.
+
+**HELD, not raised again:** a singer reading three INSIGHTS comments cannot tell coverage from judgement (from item 12). The desk offered it as a separate piece; he ruled the item only.
 
 ---
 

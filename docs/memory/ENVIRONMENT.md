@@ -15,6 +15,9 @@ The index was added 2026-09-01. Nothing below it was moved, reworded, or removed
 **When you add a section, add its row here.** A trap nobody can find costs the
 next session the same hour it cost the last one.
 
+### Learned 2026-11-22, night (Opus desk: the after-release ruling session)
+- `DANN'S IPHONE WALKS ARE WEBKIT WALKS` (last sections of this file): Chrome on an iPhone outside the EU renders with WebKit, so every walk he has done in Chrome on his iPhone 14 Pro Max already covers Safari's engine. Do not file his iPhone walks as Chromium-only, and do not tell him Safari is unestablished for layout or rendering.
+
 ### Learned 2026-11-22, late (Opus desk: the shared-properties catalogue)
 - `THE MAC'S node_modules DO NOT RUN FROM device_bash`: the bridge VM is Linux and the installed binaries are the Mac's, so vitest dies in rollup's native loader. A gate runs on his Mac or not at all.
 - `A NEW TRACKED .musicxml BREAKS A CENSUS TEST IN ANOTHER PACKAGE`: `strophic-byte-baseline.test.ts` counts every tracked score in the repository, so a fixture added in `packages/` fails a gate in `apps/web`.
@@ -5909,3 +5912,16 @@ re-run the test with `UPDATE_STROPHIC_BASELINE=1` and confirm by `git diff` that
 entry was added, which also re-proves every other score hashes the same. **MEASURED, not predicted:** the baseline's keys drive TWO generated suites (`:85` the hash, `:94` the
 render-score identity), so **one added key adds two tests**. The desk predicted 6802 and the run read
 **6804 passed | 1 skipped (6805)**. Count from the file, never from the failure message.
+
+
+## DANN'S IPHONE WALKS ARE WEBKIT WALKS. 2026-11-22, night
+
+**The desk's error, twice in one evening, caught by him both times.** The desk wrote that "everything measured was measured in Chromium and not Safari or a real iPhone", and he answered: *"Anything I walked with my iPHone was walked with a real physical ipHone 14 Pro Max, I assure you :)"* (2026-11-22 20:15, transcribed as written). Asked which browser, he answered *"CHROME"* (20:15).
+
+**The fact.** Apple requires every browser on iOS and iPadOS to use WebKit, and that requirement has been lifted only in the European Union, where a Blink-powered Chrome is available on iOS; in the United States, Japan, Canada, and most other markets Chrome on iPhone still runs on WebKit, the engine Safari uses. Read from the web by the desk 2026-11-22 20:1x: https://dzone.com/articles/webkit-pwas-ios and https://www.webpronews.com/google-chrome-just-became-the-fastest-mobile-browser-and-apple-should-be-worried/ . Dann is in Toronto.
+
+**What follows.** His walks in Chrome on the iPhone 14 Pro Max, from 2026-11-18 onward, are WebKit walks. Every layout, font, and rendering question previously carried as "Safari NOT ESTABLISHED" on a phone is walked. The same fact explains a known item: only Safari can add a site to the home screen on iOS, which is why a singer on Chrome for iPhone can never install Ilya there.
+
+**What is still NOT ESTABLISHED about Safari**, and it is narrow: Safari's own toolbar and viewport behaviour, which differ from Chrome's wrapper and can move anything pinned to the top or bottom edge; printing from Safari, including row 134's printed colours; and desktop Safari on macOS, which no walk has touched.
+
+**The desk's own measurements remain Chromium** at 1440 and 390 by 667 through `javascript_tool` and Playwright. A desk measurement is not a device, and the correct sentence is about the desk's instrument, never about his walking.

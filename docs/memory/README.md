@@ -20,6 +20,7 @@ Not part of the opening read; open each when its moment comes:
 - **`SEQUENCE.md`**: the build order and the dependencies that fix it. Open it when the next item is being chosen.
 - **`SCHEDULE.md`**: the week-by-week road to the release. Open it when choosing what to do next; tick it at every close.
 - **`OWED.md`**: standing debts and unsettled questions. Open it when one of its items comes up or when Dann asks what is outstanding.
+- **`DANN.md`**: the master list of what only Dann can do, created 2026-11-22 at his instruction. Open it whenever you are about to ask him for anything, and whenever he asks what is his. Offer ONE item at a time with what it unblocks; never hand him the list to triage. An item that could be the desk's is the desk's and comes off.
 - **`INBOX.md`**: append-only; you do not open it unless Dann asks.
 
 The archives are records, never authority. **The code beats this folder, and this folder beats the archive.**
@@ -38,6 +39,7 @@ The archives are records, never authority. **The code beats this folder, and thi
 | `ENVIRONMENT.md` | when a tool, path, or baseline moves | you, with an index row |
 | `OPEN.md`, `SEQUENCE.md`, `OWED.md` | when an item is numbered, ruled, started, closed, or a debt moves | you |
 | `STATE.md`, `QUEUE.md`, `SCHEDULE.md` | every session, at the close | you |
+| `DANN.md` | when something becomes his, and when he closes one | you; he never edits it |
 | `INBOX.md` | any time Dann digresses | you, one line, at once |
 | the archives | at a close, when something leaves a working file | you, verbatim |
 
