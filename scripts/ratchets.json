@@ -13,7 +13,7 @@
     "packages/phonology/src/engine.ts": 2048,
     "apps/web/src/lib/voice/CalibrationWizard.svelte": 1126,
     "apps/web/src/lib/components/Drawer/Drawer.svelte": 1990,
-    "apps/web/src/lib/markup/MarkupPane.svelte": 1231,
+    "apps/web/src/lib/melody/MarkupPane.svelte": 1231,
     "apps/web/src/lib/score/pairings.ts": 1422,
     "apps/web/src/lib/insights/InsightsPane.svelte": 668,
     "apps/web/src/lib/score/ScoreUploader.svelte": 867,

@@ -98,7 +98,7 @@ describe('no directional word in any string the three blank pages draw', () => {
 });
 
 describe('one component, drawn once by each of the three pages', () => {
-	const pages = { TEXT: 'src/lib/components/Paper/TitlePage.svelte', MELODY: 'src/lib/markup/MarkupPane.svelte', INSIGHTS: 'src/lib/insights/InsightsPane.svelte' };
+	const pages = { TEXT: 'src/lib/components/Paper/TitlePage.svelte', MELODY: 'src/lib/melody/MarkupPane.svelte', INSIGHTS: 'src/lib/insights/InsightsPane.svelte' };
 	for (const [name, file] of Object.entries(pages)) {
 		it(`${name} draws one BlankState`, () => {
 			expect(read(file).match(/<BlankState\b/g)).toHaveLength(1);
@@ -116,7 +116,7 @@ describe('one component, drawn once by each of the three pages', () => {
 		expect(b).toMatch(/\.blank-window\s*\{[^}]*flex-direction: column/);
 	});
 	it('MELODY\u2019s first-page window is the shared frame\u2019s: its own 18 is gone (lane 80) and the blank state does not read the score\u2019s window edges', () => {
-		const m = read('src/lib/markup/MarkupPane.svelte');
+		const m = read('src/lib/melody/MarkupPane.svelte');
 		expect(m).not.toContain('TITLE_HEADER_GAP');
 		expect(m).toContain('const firstFrame = $derived(pageFrame(headerHeight, footerReserve));');
 		expect(m).toContain('const page1WindowHeight = $derived(dims.height - contentTop - contentBottom);');
@@ -144,7 +144,7 @@ describe('one component, drawn once by each of the three pages', () => {
 	});
 	it('none of the retired window constants appears in any page component (lane 80, gate 4 pins by name)', () => {
 		const strip = (s: string) => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/<!--[\s\S]*?-->/g, '').replace(/^\s*\/\/.*$/gm, '');
-		const files = ['Paper', 'TitlePage', 'SubsequentPage', 'TitleHeader', 'RunningHeader', 'PageFooter', 'BlankState'].map((n) => `src/lib/components/Paper/${n}.svelte`).concat(['src/lib/markup/MarkupPane.svelte', 'src/lib/markup/NotesColumn.svelte', 'src/lib/insights/InsightsPane.svelte']);
+		const files = ['Paper', 'TitlePage', 'SubsequentPage', 'TitleHeader', 'RunningHeader', 'PageFooter', 'BlankState'].map((n) => `src/lib/components/Paper/${n}.svelte`).concat(['src/lib/melody/MarkupPane.svelte', 'src/lib/melody/NotesColumn.svelte', 'src/lib/insights/InsightsPane.svelte']);
 		for (const file of files) {
 			const src = strip(read(file));
 			for (const gone of ['TITLE_HEADER_GAP', 'CLEAR', 'HEADER_HEIGHTS.', 'FOOTER_MAX_HEIGHT', 'left: 96px', 'right: 96px', 'top: 48px', 'bottom: 48px']) expect(src, `${file} ${gone}`).not.toContain(gone);
@@ -153,7 +153,7 @@ describe('one component, drawn once by each of the three pages', () => {
 	});
 	it('every pane takes its window from `pageFrame` (lane 80), and none writes the margins as a number', () => {
 		for (const file of ['src/lib/components/Paper/Paper.svelte', pages.MELODY, pages.INSIGHTS]) expect(read(file).match(/pageFrame\(/g)?.length, file).toBeGreaterThanOrEqual(1);
-		for (const file of ['TitleHeader', 'RunningHeader', 'PageFooter', 'BlankState', 'TitlePage', 'SubsequentPage', 'Paper'].map((n) => `src/lib/components/Paper/${n}.svelte`).concat([pages.MELODY, pages.INSIGHTS, 'src/lib/markup/NotesColumn.svelte']))
+		for (const file of ['TitleHeader', 'RunningHeader', 'PageFooter', 'BlankState', 'TitlePage', 'SubsequentPage', 'Paper'].map((n) => `src/lib/components/Paper/${n}.svelte`).concat([pages.MELODY, pages.INSIGHTS, 'src/lib/melody/NotesColumn.svelte']))
 			expect(read(file), file).not.toMatch(/\b(left|right|top|bottom):\s*(96|48)px/);
 	});
 });
@@ -164,7 +164,7 @@ describe('no blank state prints, and the withheld list still does', () => {
 		expect(b.slice(b.lastIndexOf('@media print'))).toMatch(/\.blank-window\s*\{\s*display:\s*none/);
 	});
 	it('nothing hides the withheld statement or its list in print: it is the page\u2019s content when a score is present', () => {
-		const notes = read('src/lib/markup/NotesColumn.svelte');
+		const notes = read('src/lib/melody/NotesColumn.svelte');
 		const printBlocks = [...notes.matchAll(/@media print\s*\{([\s\S]*?)\n\t\}/g)].map((m) => m[1]).join('\n');
 		expect(printBlocks).not.toMatch(/withheld/);
 		const block = read('src/lib/insights/SingerBlock.svelte');
@@ -172,7 +172,7 @@ describe('no blank state prints, and the withheld list still does', () => {
 		expect(printCss).not.toMatch(/withheld|silence/);
 		// And the pane still hands it to the score pages: lane 78 did not touch what a score-present page shows.
 		expect(read('src/lib/insights/InsightsPane.svelte')).toContain("withheld: [T('profile.withheld.item3'), T('insights.silence.findings')]");
-		expect(read('src/lib/markup/MarkupPane.svelte')).toContain('withheld={showWithheld ? withheld : null}');
+		expect(read('src/lib/melody/MarkupPane.svelte')).toContain('withheld={showWithheld ? withheld : null}');
 	});
 });
 
@@ -230,7 +230,7 @@ describe('blankFrame, the window of a blank page (lane 79, and its second addend
 
 describe('the frame expressions, pinned whole (second addendum, amendment 4)', () => {
 	const paper = read('src/lib/components/Paper/Paper.svelte');
-	const melody = read('src/lib/markup/MarkupPane.svelte');
+	const melody = read('src/lib/melody/MarkupPane.svelte');
 	const insights = read('src/lib/insights/InsightsPane.svelte');
 	it('Paper.svelte passes the one exact expression, guard included', () => {
 		expect(paper).toContain('frame={titleHeader > 0 && footerMeasured > 0 ? blankFrame(titleHeader, footerMeasured) : null}');

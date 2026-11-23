@@ -52,9 +52,9 @@ import type { Language } from '$lib/i18n';
 
 /**
  * The song's chosen key, as Insights uses it (N.94 slice 2). The page shell
- * passes the Transposition ruler's state (`markup/transposition-ruler-state.svelte.ts`),
+ * passes the Transposition ruler's state (`melody/transposition-ruler-state.svelte.ts`),
  * which has this shape. It is declared here because insights/ may not import
- * markup/ (`scripts/ratchets.mjs`, the module map).
+ * melody/ (`scripts/ratchets.mjs`, the module map).
  */
 export interface SungKey {
 	/** The printed reading engraved in the song's key (`drawInKey`). */

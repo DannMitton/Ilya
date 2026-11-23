@@ -47,11 +47,11 @@
    insights.     195  the INSIGHTS document: lib/insights/singer-blocks.ts, lib/insights/InsightsPane.svelte, lib/insights/tessituragram-layout.ts (LEGACY KEYS: `insights.fit.*`)
    inspector.     43  lib/components/Drawer/InspectorPanel.svelte, lib/components/Drawer/Drawer.svelte, lib/components/Drawer/GlossOffer.svelte
    intake.        54  lib/components/Drawer/IntakePanel.svelte, lib/components/Drawer/IntakeViews.svelte, lib/components/Drawer/PoemLibraryCard.svelte, lib/text/input-line.ts, lib/components/Drawer/bandState.ts
-   key.           23  the key ruler: lib/markup/transposition-ruler.ts, lib/markup/TranspositionDock.svelte, lib/markup/TranspositionRuler.svelte
-   legend.         7  the legends: lib/provenance.ts, lib/markup/MarkupPane.svelte, lib/tempo/TempoReceipt.svelte
+   key.           23  the key ruler: lib/melody/transposition-ruler.ts, lib/melody/TranspositionDock.svelte, lib/melody/TranspositionRuler.svelte
+   legend.         7  the legends: lib/provenance.ts, lib/melody/MarkupPane.svelte, lib/tempo/TempoReceipt.svelte
    loupe.        129  lib/score/CorrectionSurface.svelte, lib/score/Loupe.svelte, lib/score/correction-verbs.svelte.ts, routes/+page.svelte
    lyrics.         3  lib/components/Drawer/IntakeViews.svelte (the receipt line and the tap note of the join of Poem to a scan's Lyrics)
-   markup.         2  lib/markup/melody-pages.ts
+   markup.         2  lib/melody/melody-pages.ts
    meta.          15  lib/components/Drawer/MetadataFields.svelte, lib/components/Paper/TitleHeader.svelte
    notation.      16  lib/score/CorrectionSurface.svelte, lib/components/Drawer/bandState.ts, routes/+page.svelte
    notePicker.    10  lib/voice/NotePicker.svelte, lib/analysis/watchlist.ts
@@ -60,7 +60,7 @@
    paper.          4  lib/components/Paper/TitlePage.svelte, lib/components/Paper/SubsequentPage.svelte, lib/text/text-header.ts, lib/one-action.ts
    placeholder.   13  lib/analysis/placeholder-line.ts
    portrait.       2  lib/components/ReadingAid.svelte, routes/+page.svelte
-   profile.       33  lib/markup/MarkupPane.svelte, lib/markup/profile-status.ts, lib/analysis/placeholder-line.ts
+   profile.       33  lib/melody/MarkupPane.svelte, lib/melody/profile-status.ts, lib/analysis/placeholder-line.ts
    provenance.     5  no literal consumer found
    recognize.      4  routes/+page.svelte
    replace.        4  routes/+page.svelte
@@ -86,9 +86,9 @@
    voice.          2  lib/components/Drawer/bandState.ts, lib/components/Drawer/Drawer.svelte
    voiceIntake.   60  lib/voice/DescribeVoice.svelte, lib/voice/InsightsShares.svelte, lib/voice/IntakeScale.svelte, lib/voice/VoiceTypeIntake.svelte
    voiceType.     46  lib/voice/VoiceTypeIntake.svelte, lib/voice/voiceTypes.ts, lib/voice/VoiceTypeFirst.svelte, lib/voice/OutsideNote.svelte
-   vowel.         11  lib/voice/vowel-names.ts, lib/markup/legend.ts
+   vowel.         11  lib/voice/vowel-names.ts, lib/melody/legend.ts
    wait.           2  lib/components/ReadingWait.svelte, lib/omr/wait.ts, lib/score/ScoreUploader.svelte
-   watch.         46  the watch list: lib/analysis/watchlist.ts, lib/analysis/gates.ts, lib/markup/transposition-ruler.ts
+   watch.         46  the watch list: lib/analysis/watchlist.ts, lib/analysis/gates.ts, lib/melody/transposition-ruler.ts
    welcome.        8  the welcome sheet: lib/components/Welcome/WelcomeSheet.svelte (its Begin is `calib.welcome.beginButton`; its three station labels are `tab.text`, `tab.markedScore`, `tab.insights`)
    witness.        8  no literal consumer found (its component was removed)
 
@@ -1469,7 +1469,7 @@ const strings: Record<string, Record<Language, string>> = {
 	//    migrated verbatim from the old inline WITHHELD_COPY object) ──────
 	'profile.subtitleNamed': { en: 'Resonance profile: a map of {voice}\u2019s resonances', fr: 'Profil de résonances\u00a0: une carte des résonances de la voix \u00ab\u00a0{voice}\u00a0\u00bb' },
 	'profile.subtitleYours': { en: 'Resonance profile: a map of your voice\u2019s resonances', fr: 'Profil de résonances\u00a0: une carte des résonances de votre voix' },
-	// QUEUE row 166, RATIFIED by Dann 2026-11-10 (12:54 to 12:59): printed in place of the two above when the voice has only placeholder values (`markup/subtitle.ts`).
+	// QUEUE row 166, RATIFIED by Dann 2026-11-10 (12:54 to 12:59): printed in place of the two above when the voice has only placeholder values (`melody/subtitle.ts`).
 	'profile.subtitlePlaceholder': { en: 'Resonance profile: placeholder values for a generic {voiceType}, not yet your own resonances.', fr: 'Profil de résonances\u00a0: valeurs par défaut pour une voix type de {voiceType}, pas encore vos propres résonances.' },
 	'profile.count.1': { en: 'One', fr: 'Une' },
 	'profile.count.2': { en: 'Two', fr: 'Deux' },

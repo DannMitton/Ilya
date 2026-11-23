@@ -12,7 +12,7 @@ import { describe, expect, it } from 'vitest';
 import { t, type Language } from '$lib/i18n';
 import { hasPlaceholderProfile, PLACEHOLDER_PROFILE_TYPES } from '$lib/voice/engine/stand-ins';
 import { TIER1, TIER2, OTHER, borrowedStaffLabel, fillVoiceType, isBorrowingType, voiceTypeBorrowingNote, voiceTypePrint } from '$lib/voice/voiceTypes';
-import { profileSubtitle } from '$lib/markup/subtitle';
+import { profileSubtitle } from '$lib/melody/subtitle';
 import { genericLede, methodLineKey, placeholderLabel } from '$lib/insights/identity';
 import { composeBroadNote } from '$lib/analysis/analyze-score-adapter';
 import { borrowingLine } from '$lib/analysis/placeholder-line';
@@ -167,7 +167,7 @@ describe('7. the draw rule of the borrowing line', () => {
 	}
 	it('both pages carry it as their own entry in the note array, so it draws on MELODY, on INSIGHTS, and on INSIGHTS with no score', () => {
 		const insights = readFileSync(new URL('./insights/InsightsPane.svelte', import.meta.url), 'utf8');
-		const markup = readFileSync(new URL('./markup/MarkupPane.svelte', import.meta.url), 'utf8');
+		const markup = readFileSync(new URL('./melody/MarkupPane.svelte', import.meta.url), 'utf8');
 		expect(insights).toMatch(/note=\{\[[^\n]*borrowingLine\(voiceType\?\.voiceType, formants, language\)[^\n]*placeholderLine\(/);
 		expect(markup).toMatch(/note=\{\[[^\n]*borrowingLine\(voiceType, formants, language\)[^\n]*placeholderNote/);
 		// It takes no analysis: it draws with an empty vowel list and no score (the function has no such parameter).

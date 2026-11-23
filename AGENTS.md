@@ -8,7 +8,7 @@ Guidance for AI agents working in this repository.
 
 **Ilya's transcription is not AI.** It is a rule-based, deterministic engine implementing a specific scholarly framework. Same input, same output, always. This distinction is load-bearing for the project's credibility with singers and teachers. Never blur it, and never describe Ilya as AI-powered. The one exception is reading a scan or a photograph: there Ilya runs trained recognition models in the browser (homr's ONNX models, its own time-signature network, and tesseract models for words), and shows the singer what they read to correct. See `ARCHITECTURE.md`.
 
-**MELODY** (code name today: `markup/`) and **INSIGHTS** (on branch `Shane`, behind `PUBLIC_INCLUDE_MARKUP_INSIGHTS=true`) are Ilya's voice-analysis documents. Where Ilya answers "how do I pronounce this?", they answer "does this piece suit my voice?" They operationalise Mitton (2020), *Sung Russian for the Low Male Voice* (D.M.A.).
+**MELODY** (folder `melody/`; its files and identifiers still say `markup` until the rest of consistency batch 3) and **INSIGHTS** (on branch `Shane`, behind `PUBLIC_INCLUDE_MARKUP_INSIGHTS=true`) are Ilya's voice-analysis documents. Where Ilya answers "how do I pronounce this?", they answer "does this piece suit my voice?" They operationalise Mitton (2020), *Sung Russian for the Low Male Voice* (D.M.A.).
 
 Developed under the codename Shane; shown on screen as Fit until 2026-09. N.174 (2026-09-27) renamed the code to Text, Markup, and Insights; the screen says TEXT, MELODY, and INSIGHTS since 2026-11-01.
 
@@ -18,7 +18,7 @@ Naming on screen and in code: `docs/house-style/interface-text.md` and `docs/hou
 
 A pnpm workspace monorepo, Node 20+, TypeScript, SvelteKit with Svelte 5 runes, tested with vitest.
 
-- `apps/web` (`@ilya/web`): the application. Three destinations (Studio, LEARN, GUIDE); Studio holds three documents (TEXT, MELODY, INSIGHTS), named in `apps/web/src/lib/destinations.ts`. Their code is in six modules under `apps/web/src/lib/`: `reader/`, `score/`, `voice/`, `analysis/`, `markup/` (MELODY), and `insights/`.
+- `apps/web` (`@ilya/web`): the application. Three destinations (Studio, LEARN, GUIDE); Studio holds three documents (TEXT, MELODY, INSIGHTS), named in `apps/web/src/lib/destinations.ts`. Their code is in six modules under `apps/web/src/lib/`: `reader/`, `score/`, `voice/`, `analysis/`, `melody/` (MELODY), and `insights/`.
 - `packages/phonology` (`@ilya/phonology`): the GraysonEngine. Russian phonological analysis per Grayson (2012).
 - `packages/dictionary` (`@ilya/dictionary`): dictionary loader, stress lookup, gloss pipeline.
 - `packages/blurb` (`@ilya/blurb`): context-aware educational explanations for phonological processes.

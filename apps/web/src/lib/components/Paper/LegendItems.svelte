@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { LegendItem } from '$lib/provenance';
 	import { WITHHELD_SIGLA, stemLegendDrawing, turningHeadLegendDrawing, type PreparedSmuflFont } from '@ilya/score-parser';
-	import { MARKUP_WITHHELD_TYPE } from '$lib/markup/legend';
+	import { MARKUP_WITHHELD_TYPE } from '$lib/melody/legend';
 
 	/**
 	 * The legend's entries, drawn one after another as inline items. Lifted out

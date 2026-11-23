@@ -39,7 +39,7 @@ describe('the footer credit', () => {
 	});
 
 	it('is passed to no footer as an override: every PageFooter prints the string as it is', () => {
-		for (const f of ['./Paper/PageFooter.svelte', '../insights/InsightsPane.svelte', '../markup/MarkupPane.svelte', './Paper/TitlePage.svelte', './Paper/SubsequentPage.svelte']) {
+		for (const f of ['./Paper/PageFooter.svelte', '../insights/InsightsPane.svelte', '../melody/MarkupPane.svelte', './Paper/TitlePage.svelte', './Paper/SubsequentPage.svelte']) {
 			const src = read(f);
 			expect(src, f).not.toMatch(/attribution=\{/);
 			expect(src, f).not.toContain('strikeLiederClause');

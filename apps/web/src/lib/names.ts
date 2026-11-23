@@ -107,7 +107,7 @@ export const CONCEPTS: readonly Concept[] = [
 			{ today: 'markup', after: 'melody' },
 			{ today: 'MarkupPane', after: 'MelodyPane' },
 		],
-		folder: { today: 'apps/web/src/lib/markup/', after: 'apps/web/src/lib/melody/' },
+		folder: { today: 'apps/web/src/lib/melody/', after: 'apps/web/src/lib/melody/' },
 		persisted: [
 			{
 				store: 'tabId',

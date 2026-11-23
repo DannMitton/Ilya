@@ -1,5 +1,5 @@
 /**
- * N.192 step 6b: a stored transposition when the opening key is corrected. Lives in `markup/` because the ruler is there and `score/` may not import it.
+ * N.192 step 6b: a stored transposition when the opening key is corrected. Lives in `melody/` because the ruler is there and `score/` may not import it.
  */
 import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';

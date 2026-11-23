@@ -8,7 +8,7 @@ Asked for by Dann 2026-11-01 13:26: align internal code with the best programmin
 
 A concept's code name is its English screen name, in the case its kind requires. After consistency batch 3, MELODY is `melody/` (folder), `MelodyPane.svelte` (component), `tab.melody` (i18n key). **Reason:** a newcomer goes from the screen to the code without a lookup. `apps/web/src/lib/names.ts` (consistency batch 1) records each concept's screen name, code name, and retired names.
 
-**Known exceptions today, closed by batch 3:** the folder `apps/web/src/lib/markup/` (15 files) and `MarkupPane.svelte`; `tab.markedScore` (the score tab); `BAND_IDS.scoreMarkup` (the VOICE band, `sections.svelte.ts`); `console.placeholder` (the ANALYSIS station's heading); `cosmetic.heading` (NOTATION); `songs.heading` (REPERTOIRE). The rule is met when this list is empty.
+**Known exceptions today, closed by batch 3:** the folder `apps/web/src/lib/melody/` (15 files) and `MarkupPane.svelte`; `tab.markedScore` (the score tab); `BAND_IDS.scoreMarkup` (the VOICE band, `sections.svelte.ts`); `console.placeholder` (the ANALYSIS station's heading); `cosmetic.heading` (NOTATION); `songs.heading` (REPERTOIRE). The rule is met when this list is empty.
 
 ## 2. Case by kind of name (Google TypeScript Style Guide, "Identifiers")
 

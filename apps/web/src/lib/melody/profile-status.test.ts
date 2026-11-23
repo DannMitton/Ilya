@@ -48,11 +48,11 @@ describe('the Markup profile status lines', () => {
 	});
 
 	it('counts the vowels the singer sampled, never the values the forecast holds', () => {
-		const pane = readFileSync('src/lib/markup/MarkupPane.svelte', 'utf8');
+		const pane = readFileSync('src/lib/melody/MarkupPane.svelte', 'utf8');
 		expect(pane).toMatch(/const sampledVowels = \$derived\(ROSTER_ORDER\.filter\(\(g\) => isSung\(formants\[g\]\)\)\);/);
-		// Lane 78: the pane hands the count to `melodyNotes`, which calls `statusLineFor` (`markup/blank-notes.ts`).
+		// Lane 78: the pane hands the count to `melodyNotes`, which calls `statusLineFor` (`melody/blank-notes.ts`).
 		expect(pane).toMatch(/melodyNotes\(\{ generic: adapted\.generic, sampledCount: sampledVowels\.length, personal: isPersonal\(formants\), core: stableCore\(formants\)/);
-		expect(readFileSync('src/lib/markup/blank-notes.ts', 'utf8')).toMatch(/statusLineFor\(\{ sampledCount: o\.sampledCount, personal: o\.personal, core: o\.core \}, o\.language\)/);
+		expect(readFileSync('src/lib/melody/blank-notes.ts', 'utf8')).toMatch(/statusLineFor\(\{ sampledCount: o\.sampledCount, personal: o\.personal, core: o\.core \}, o\.language\)/);
 		expect(pane).not.toMatch(/snapshot\.fR1\[/);
 	});
 

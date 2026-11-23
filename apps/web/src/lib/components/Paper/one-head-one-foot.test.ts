@@ -19,7 +19,7 @@ const read = (rel: string) => readFileSync(new URL(rel, import.meta.url), 'utf8'
 
 const text1 = read('./TitlePage.svelte');
 const textN = read('./SubsequentPage.svelte');
-const markup = read('../../markup/MarkupPane.svelte');
+const markup = read('../../melody/MarkupPane.svelte');
 const insights = read('../../insights/InsightsPane.svelte');
 
 describe('one running head for all three tabs', () => {

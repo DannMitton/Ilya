@@ -108,11 +108,11 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		type TabId,
 	} from '$lib/destinations';
 	import { INCLUDE_MARKUP_INSIGHTS } from '$lib/wall';
-	import { transpositionRulerState } from '$lib/markup/transposition-ruler-state.svelte';
+	import { transpositionRulerState } from '$lib/melody/transposition-ruler-state.svelte';
 	import TempoControl from '$lib/tempo/TempoControl.svelte';
 	import { tempoUi } from '$lib/tempo/tempo-ui.svelte';
 	import { clefUi } from '$lib/score/clef-ui.svelte';
-	import PieceKeyLine from '$lib/markup/PieceKeyLine.svelte';
+	import PieceKeyLine from '$lib/melody/PieceKeyLine.svelte';
 	import { currentGuideAnchor } from '$lib/guide-anchors';
 	import CalibrationWizard from '$lib/voice/CalibrationWizard.svelte';
 	import VoicePane from '$lib/components/Drawer/VoicePane.svelte';
@@ -146,7 +146,7 @@ import TextSourceLine from '$lib/components/TextSourceLine.svelte';
 		notationStateLine,
 		scoreStateLine,
 	} from '$lib/components/Drawer/bandState';
-	import MarkupPane from '$lib/markup/MarkupPane.svelte';
+	import MarkupPane from '$lib/melody/MarkupPane.svelte';
 	import InsightsPane from '$lib/insights/InsightsPane.svelte';
 	import ScoreUploader from '$lib/score/ScoreUploader.svelte';
 	import { ENGRAVING_DEFAULTS, type EngravingValues } from '$lib/score/engraving';

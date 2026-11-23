@@ -18,7 +18,7 @@
  *      so the legend's top (918 px) sat above the content window's bottom edge (920 px). (That constant, `FOOTER_MAX_HEIGHT`, is gone, with lane 80's
  *      one frame: every page reserves the footer's whole measured height.)
  * Taking those from the page, and passing them in as data, is the fix; restoring any of them as a constant brings the
- * overrun back. The same rule was applied to the marked score's footer by N.83 (`markup/MarkupPane.svelte`), so this is the second instance of a rule, not a
+ * overrun back. The same rule was applied to the marked score's footer by N.83 (`melody/MarkupPane.svelte`), so this is the second instance of a rule, not a
  * special case.
  *
  * THE GAP ABOVE THE FOOTER IS WHAT KEEPS THE DASHED "VERIFY" BOX OFF IT. That box is a pseudo-element about 5 px below its word (`WordStack.svelte`), which no

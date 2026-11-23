@@ -134,8 +134,8 @@ search, page layout, and `staff-renderer.ts`, which engraves a staff as SVG.
   choice on a score and reads it back.
 - `src/lib/approval/` holds tests only: the approval suites whose outputs sit in
   `__approved__/`, and the tests for invariants 4 and 11.
-- `src/lib/markup/` is the MELODY document (`markup/` is its code name today; the
-  screen says MELODY). `MarkupPane.svelte` analyzes the score, paginates it (`paginateScore`
+- `src/lib/melody/` is the MELODY document (its files and identifiers still say
+  `markup` until consistency batch 3; the screen says MELODY). `MarkupPane.svelte` analyzes the score, paginates it (`paginateScore`
   in `packages/score-parser`), and hands each page's SVG to
   `Paper/PageFit.svelte`. `legend.ts` builds its footer legend.
 - `src/lib/insights/` is the INSIGHTS document. `insights.ts` builds the page's figures, `comments.ts`, `comment-text.ts`, and `comment-sources.ts`
@@ -161,8 +161,8 @@ music meet, and **engrave** the marked-up score.
 Each named part of Ilya has one record in `apps/web/src/lib/names.ts`. This table
 is that record for people, in record order: `key` is the i18n key of the name on
 screen, `EN` and `FR` are what `t()` returns for it, `code today` and `folder today`
-are the names the code uses now (the screen's MELODY is still `markup/` here until
-consistency batch 3), and `retired` lists the patterns the guard keeps out of
+are the names the code uses now (the screen's MELODY is `melody/` as a folder, and
+still `markup` in its identifiers until the rest of consistency batch 3), and `retired` lists the patterns the guard keeps out of
 what a singer reads and out of this documentation. `names-table.test.ts` fails
 if a cell and its record disagree, or if either has a row the other lacks. The
 rules for naming are in `docs/house-style/`.
@@ -170,7 +170,7 @@ rules for naming are in `docs/house-style/`.
 | id | key | EN | FR | code today | folder today | retired |
 |---|---|---|---|---|---|---|
 | text | `tab.text` | TEXT | TEXTE | `text` | `apps/web/src/lib/text/` | `Transcribe and fit`, `click Transcribe`, `cliquez sur Transcrire`, `Transcription tab`, `l'onglet Transcription` |
-| melody | `tab.markedScore` | MELODY | CHANT | `markup`, `MarkupPane` | `apps/web/src/lib/markup/` | `\bMarkup\b`, `\bAnnotation\b`, `Partition annotée` |
+| melody | `tab.markedScore` | MELODY | CHANT | `markup`, `MarkupPane` | `apps/web/src/lib/melody/` | `\bMarkup\b`, `\bAnnotation\b`, `Partition annotée` |
 | insights | `tab.insights` | INSIGHTS | APERÇUS | `insights` | `apps/web/src/lib/insights/` | `\bFit\b` |
 | learn | `tab.learn` | LEARN | LEÇONS | `learn` |  |  |
 | guide | `tab.guide` | GUIDE | GUIDE | `guide` |  |  |
@@ -234,7 +234,7 @@ broken.
     under 1,000 lines. New work goes into a new module. *Tested:*
     `scripts/ratchets.mjs`.
 13. **Six modules under `src/lib/` import only from the ones before them:**
-    `reader`, then `score`, `voice`, and `analysis`, then `markup` and
+    `reader`, then `score`, `voice`, and `analysis`, then `melody` and
     `insights`, which do not import each other. Other folders are not checked.
     *Tested:* `scripts/ratchets.mjs`.
 

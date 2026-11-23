@@ -80,7 +80,7 @@ const MODULES = {
 	score: ['reader'],
 	voice: ['reader', 'score'],
 	analysis: ['reader', 'score', 'voice'],
-	markup: ['reader', 'score', 'voice', 'analysis'],
+	melody: ['reader', 'score', 'voice', 'analysis'],
 	insights: ['reader', 'score', 'voice', 'analysis'],
 };
 /** The module a repository path sits in, or null outside the six. */
