@@ -18,6 +18,8 @@ git -C "$HOME/mnt/ilya-rewrite" --no-optional-locks --no-pager log -1 --format="
 
 **CLOSE OF THE 2026-11-22 NIGHT OPUS DESK** (Opus 5; one Sonnet helper, the WCAG pass, running at the time of writing; opened 19:37 on Dann's standard opener). **THE NEXT DESK STARTS HERE; this paragraph wins over every paragraph after it.**
 
+**SHIPPED AT 20:28: `Shane` `82afa31b`** (Dann's ship of this desk's records; all eight gates at baseline on the Mac, gate 4 `6804 passed | 1 skipped (6805)`, gate 5 `911 passed | 5 skipped (916)`; 10 files, +290 -65; pushed `c233daad..82afa31b`). No code changed; no lane and no gate moved.
+
 **Tree at the open: `Shane` `c233daad`, clean** (2026-11-22 19:36:55, the previous desk's close records), one ahead of that desk's floor `f5db3381`. Nothing shipped this desk; no lane, no gate, no code changed.
 
 **THE ONE THING IS DONE. ALL TWENTY-TWO AFTER-RELEASE ITEMS ARE RULED**, 19:22 to 20:06, in plain text, one item per message, each with what it is, whether it is functional or cosmetic, what it costs him, and what a singer meets without it. **The record is `OPEN.md`, "THE AFTER-RELEASE LIST, RULED ITEM BY ITEM", twenty-two numbered entries with his words transcribed.** `SCHEDULE.md` carries the two lists: new section 9b holds the ten that moved BEFORE, and the AFTER section is rewritten to the ruled placements.

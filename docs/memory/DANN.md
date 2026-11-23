@@ -14,9 +14,6 @@ r1, created by the desk 2026-11-22 20:2x at Dann's instruction, transcribed as w
 
 | # | What | Why it is his | What it unblocks |
 |---|---|---|---|
-| D1 | **Commit tonight's records.** The twenty-two rulings in `OPEN.md`, the two lists in `SCHEDULE.md`, the WCAG brief, this file, and the inbox lines. All uncommitted in his tree. | No agent writes with git, ever (`CONTRACT.md` section 4) | Every later close; nothing below survives a lost thread without it |
-| D2 | **N.200 step 4: takes at the microphone.** | Only his voice | The whole VOICE track. The longest pole on the board; every other track can finish while this one waits |
-| D3 | **Clear the Vercel 2FA prompt** that blocks the dashboard on load. | His account | The desk's reading of the Deployment Storage meter (after-release item 19, ruled BEFORE) |
 | D4 | **Taste: the shape of the name a saved page takes.** Desk default, his to change: composer, title, the document's name. | Taste | QUEUE row 137's brief (item 18, ruled BEFORE) |
 | D5 | **The four singer's marks: ratify the English, rule the French.** Staccato, tenuto, fermata, breath, in Corrections. | His name on every string; French is his by the 2026-09-19 ruling | N.92's marks lane (item 8, ruled BEFORE) |
 | D6 | **The INSIGHTS redundancy strings**, once the desk drafts them from his design of 2026-11-22 03:31 to 03:46. | Same | The redundancy lane (item 11, ruled BEFORE) |
@@ -42,4 +39,8 @@ Every INSIGHTS screen, held back until the WYSIWYG repair redrew them and not wa
 
 ## CLOSED
 
-(nothing yet; each entry carries the date and what closed it)
+- **D3, the Vercel 2FA prompt: DISSOLVED 2026-11-22 21:04, not done, because it was never a blocker.** The desk opened the Usage page in his Chrome and read it normally. The 2FA prompt is a small dismissible card in the bottom-left of the sidebar ("Enable 2FA" and "Remind Me in 3 Days"), beside a settings page offering "Set Up Authenticator App". It blocks nothing. The desk's record that it "blocks the dashboard on load" was wrong and is corrected in the project memory file. **Enabling 2FA remains worth doing for his own account security and is his own call on his own timing; it is not on any critical path and is not a task the desk needs.** The reading it was supposed to unblock was taken in the same minute: Deployment Storage 8.82 GB of 10 GB, down from 10.74 on 18 Nov, under the limit.
+
+- **D2, N.200 step 4, takes at the microphone: DONE 2026-11-22 20:58.** Thirty-one takes in one sitting on the recorder build (`cloud-lane-69`, `?harness=1`), build `1d1d8836`, picker `path`. Three of each of the ten vowels, with a spare [o]. ZIP `~/Downloads/ilya-captures-1d1d8836-2026-11-23T01-58-51-353Z.zip`, 7,637,329 bytes; unpacked to `~/Downloads/_desk-2026-11-22-night/n200-takes/`, 31 WAVs and 31 sidecars counted, every sidecar's `sung` stamped equal to `asked` by the desk (DESK DEFAULT, the field is left empty during right-vowel takes because five of the ten symbols cannot be typed). The desk walked the whole path in his Chrome first and owns one state change there: a profile created as `zz-desk-walk-delete-me`, which he renamed to `DannTestVoice`; the profile menu showed New, Duplicate, and Rename and no Delete, which is correct behaviour and not a gap: Delete is context-apparent and appears once a second voice exists, because Ilya will not leave the station empty (Dann 2026-11-22 21:01, from his own walkthrough last week).
+
+- **D1, commit tonight's records: DONE 2026-11-22 20:28.** `82afa31b`, all eight gates at baseline on his Mac (gate 4 `6804 passed | 1 skipped (6805)`, gate 5 `911 passed | 5 skipped (916)`), 10 files, +290 -65, pushed `c233daad..82afa31b`.

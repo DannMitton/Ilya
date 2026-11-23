@@ -4441,3 +4441,42 @@ Dann 19:54, transcribed as written: *"Honestly I've been looking at the 'release
 **N.175, the video walkthroughs on a YouTube channel, is DROPPED.** Dann dropped it 2026-10-14 22:26 (`STATE.md` THE TRACKER); `STATE.md` also still carried it as an open `[ ]` row under "Numbered 2026-10-01", a desk bookkeeping contradiction, not his. Resolved as dropped at this close, DESK DEFAULT, told to him 2026-11-22 20:0x and not objected to. It is a different item from the explainer video above.
 
 **THE LIST IS COMPLETE: 22 of 22 ruled, 2026-11-22 19:22 to 20:06.** The gate is his of 19:55: Ilya is fully functional. See the BEFORE and AFTER lists in `SCHEDULE.md` and `STATE.md`, set from this section at the close.
+
+## THE NAME A PRINTED OR SAVED PAGE TAKES. Ruled by Dann 2026-11-22 21:28 and 21:32 (QUEUE row 137, ruled BEFORE the gate as after-release item 18)
+
+**The shape: `<identifier> - <composer> - <title> - <document>`**, for example `Mitton - Mussorgsky - Sunless 1 - MELODY`.
+
+- **An identifier is in the name, and that is Dann's, 21:28**, transcribed as written: *"I think we need an identifier in the filename, especially when teachers start juggling multiple imports"*. It overrides the desk's proposal of 21:2x, which had left the singer's name out on the ground that a filename travels further than a page does. His reason is better: the file's destination is often a teacher's folder holding several students' work, and the only thing that disambiguates it there is whose it is.
+- **Identifier first, ruled 21:32** (*"identifier first, as above,"*), on the desk's recommendation. In a teacher's folder it sorts by student; in the singer's own folder every file carries the same prefix, so composer still sorts underneath it, and it costs her nothing.
+- **The identifier is the singer's chosen one, not a legal name** (DESK DEFAULT, his to strike), so it is the same concept he ratified for the voice profile card on 2026-10-31 13:24 to 13:30 (QUEUE row 168), and one idea covers both.
+- Today nothing sets the page title: there is no `document.title` under `apps/web/src`, and `app.html:45` holds `Ilya — Russian Lyric Diction` for every view, so Chrome proposes the same filename for every save and the operating system numbers the duplicates.
+- **Not adopted, and recorded so it is not re-proposed:** a date in the name. Offered as option C with its one benefit, telling a reprint from last week's sheet; not taken. If reprinting proves common it is a later one-line change.
+- Row 137's old record still says "Markup" and is stale since the rename to MELODY.
+
+## GUIDE: HOW ILYA READS YOUR VOWEL, AND THE METHOD'S PROVENANCE. English RATIFIED by Dann 2026-11-22 21:44 (*"Yes to boht drafts, good work"*)
+
+Asked for by him at 21:41 and again at 21:42. **French OWED**, as a marked draft for his ruling.
+
+**For Reference, or About Ilya beside the fry essay:**
+
+> **How Ilya reads your vowel.** Your resonances are found by fitting a small number of them to the sound of your fry, and how well that fitting works depends on the length of your vocal tract. Rather than assume a length, Ilya reads each take fifteen times over, each reading allowing for a different tract, and keeps the one whose resonances hold most steadily from the beginning of the note to the end. That is how Ilya tells your first and second resonances apart on [o] and [u], where in a low voice the two sit close together and a single fixed reading can merge them into one.
+
+**For Licences and Acknowledgments:**
+
+> **The method is published work.** Ilya's reading of your resonances follows the method David Weenink described in 2015 and 2023, built from his papers rather than from any implementation of them.
+
+**Every claim in the first paragraph is read from the code, 2026-11-22:** fifteen readings is the L15 ladder (`path-extract.ts:49`, middle 4583 Hz, step 0.0605, j from -7 to +7, fifteen ceilings from 3000 to 7000 Hz); the steadiest wins (`choosePath`, `:254-257`, the lowest Weenink W); the value a singer sees is the median of that winning ceiling's first and second tracks (`:263`). The clean-room statement in the second paragraph is the code's own (`path-extract.ts:10`: Praat's source, its repository, and parselmouth were not opened).
+
+**Terms:** "resonances", "vocal fry", and "first and second resonances" are Dann's and the field's, adopted. **"Hold most steadily" is the desk's coinage**, to carry Weenink's smoothness criterion without the word *smooth*, which means something else to a singer. **"FormantPath" is deliberately not used:** it is Praat's name for a data structure, and the Guide speaks a singer's terms (`CONTRACT.md` section 1 item 22).
+
+**Occasion, recorded because it cost an hour.** The desk proposed the ceiling ladder and the guard as NEW work at 21:39, Dann ruled them in at 21:42, and the desk then found both already built and shipped since 2026-11-17 (`path-extract.ts`, the default picker since lane 64 Step 5). The desk's tree search had been piped through `head -10` and the ten lines returned were all from the capture ritual's three-second fry sweep, a name collision; `path-extract.ts` sat below the cut and the desk wrote "empty = nothing" under a truncated result. A truncated lookup is not an absence (tether 14). **Term collision to keep in mind: "sweep" in Ilya means the fry sweep of the capture ritual (`capture-ritual.svelte.ts:31`), never the ceiling ladder.**
+
+## N.204 STAYS ABOUT CODE. Ruled by Dann 2026-11-22 21:48
+
+Transcribed as written: *"I'm getting overwhelend. Will this help more than it complicates? I feel like we need th audit to deal with the code. Help!!"*
+
+**The audit is about code. Nothing about stale records joins it.** The desk had proposed three ratchet-style controls for record staleness as a possible phase 4 item and asked him to place them. That was the desk overloading him at the end of a long session, and it is the desk's failure, not a question that needed asking.
+
+**The record-staleness problem is the desk's, carried in how the desk works, never raised to him as a project item.** If anything is ever built for it, it reaches him as one line.
+
+**The occasion, kept because the observation stands even though the proposal was withdrawn.** Seven stale things surfaced on 2026-11-22: `QUEUE.md` on N.197, `STATE.md` on N.184's row 82, the N.204 plan's table on units d, g and h, QUEUE row 137 still saying "Markup" after the rename to MELODY, the lane 82 line reading RUNNING for hours, `PitchSeconds.svelte:8-12` describing a replaced axis, and Delete-is-context-apparent costing a second discovery. Six of the seven were records, not code, and `README.md`'s closing step 0 (added 2026-10-11 after an audit found 28 stale lines) did not catch them.

@@ -16,6 +16,7 @@ The index was added 2026-09-01. Nothing below it was moved, reworded, or removed
 next session the same hour it cost the last one.
 
 ### Learned 2026-11-22, night (Opus desk: the after-release ruling session)
+- `DELETE IS CONTEXT-APPARENT ON A VOICE PROFILE` (last sections of this file): the profile menu shows New, Duplicate, and Rename and NO Delete while only one voice exists. That is the design, not a missing control. Do not report it as a gap.
 - `DANN'S IPHONE WALKS ARE WEBKIT WALKS` (last sections of this file): Chrome on an iPhone outside the EU renders with WebKit, so every walk he has done in Chrome on his iPhone 14 Pro Max already covers Safari's engine. Do not file his iPhone walks as Chromium-only, and do not tell him Safari is unestablished for layout or rendering.
 
 ### Learned 2026-11-22, late (Opus desk: the shared-properties catalogue)
@@ -5925,3 +5926,23 @@ render-score identity), so **one added key adds two tests**. The desk predicted 
 **What is still NOT ESTABLISHED about Safari**, and it is narrow: Safari's own toolbar and viewport behaviour, which differ from Chrome's wrapper and can move anything pinned to the top or bottom edge; printing from Safari, including row 134's printed colours; and desktop Safari on macOS, which no walk has touched.
 
 **The desk's own measurements remain Chromium** at 1440 and 390 by 667 through `javascript_tool` and Playwright. A desk measurement is not a device, and the correct sentence is about the desk's instrument, never about his walking.
+
+## THE WCAG PASS, ACTUALS AND WHAT THE HARNESS SAID. 2026-11-22, night
+
+**ESTIMATES BY KIND OF JOB, a new kind:** a WCAG 2.2 automated pass with a keyboard walk, Sonnet, run in the desk's own container on a fresh clone and a dev server, 35 views in two languages at two widths (120 audits): **161,143 tokens, 61 tool uses, 32.1 minutes**, cap 350k. Quoted range was 150k to 350k and 15 to 40 minutes; both held.
+
+**The helper's own figures were wrong in both directions, again** (`A HELPER'S OWN TOKEN FIGURE IS NOT THE COUNT`, above): it reported "about 150,000 to 200,000" tokens, which brackets the true 161,143, and "about 60 minutes", which is nearly twice the measured 32.1. Record the harness figures.
+
+**Two environment facts it established, both useful beyond this job.**
+- **The sandbox Chromium is now revision 1243, not 1194.** `/opt/pw-browsers/chromium-1243` exists and 1194 does not. The `PW_CHROMIUM_PATH` line in `THE GATES RUN IN A CLOUD CLONE` (above) names 1194 and is stale for a container of this vintage. Check what is present before setting the path.
+- **`pnpm dev` reaches an outside host before the server starts.** `apps/web/scripts/fetch-omr-models.mjs:39` downloads five OMR model files, about 213 MB, from `github.com/liebharc/homr` releases. That is build tooling and not the app at run time, so it does not break N.197, but the desk's N.197 sweep names it so the question is closed on the record rather than by assumption.
+
+**The vowel capture screen can be audited with no microphone:** `?capture=stub` works on a dev server.
+
+## DELETE IS CONTEXT-APPARENT ON A VOICE PROFILE. 2026-11-22, night
+
+**The desk reported a missing control; Dann corrected it.** Walking the recorder build, the desk created a profile, found the menu beside the voice name offering New, Duplicate, and Rename and no Delete, and wrote that it could not remove what it had made. Dann, 21:01, transcribed as written: *"I saw it last week on another walkthrough and you discovered that Delete is context apparent. It doesn't appear when only one file is present: Ilya won't tolerate an empotry station. We're ok"*.
+
+**So:** Delete appears once a second voice exists. One voice and no Delete is Ilya refusing to leave the station empty, which is the intended behaviour. A desk that finds no Delete on a single profile has found the design, not a defect, and says nothing.
+
+**It had been discovered once before and was in no file**, which is why it cost a second discovery. That is the reason for this entry.

@@ -123,11 +123,11 @@ Measured by the desk, all by script:
 | a | `packages/phonology`, `dictionary`, `blurb` | 71k | **READ** 2026-11-19, 62 findings, 0 blockers, 6 behaviour defects |
 | b | `score-parser`: parsers and analysis | 112k | **READ** 2026-11-19, 35 findings, 6 blockers, 13 behaviour defects |
 | c | `score-parser`: renderer and layout | about 110k | after lane 56's second follow-up merges |
-| d | `apps/web/src/routes` | 75k | ready |
+| d | `apps/web/src/routes` | 75k | **READ** 2026-11-22, `read-fable-n204-unit-d_r1_2026-11-22.md` |
 | e | `score/`: Loupe and correction | about 140k | ready |
 | f | `score/`: the rest | about 140k | ready |
-| g | `components/Drawer/` | 109k | ready |
-| h | `Paper/`, `Welcome/`, `Field/`, loose components | about 85k | ready |
+| g | `components/Drawer/` | 109k | **READ** 2026-11-22, `read-fable-n204-unit-g_r1_2026-11-22.md` |
+| h | `Paper/`, `Welcome/`, `Field/`, loose components | about 85k | **READ** 2026-11-22, `read-fable-n204-unit-h_r1_2026-11-22.md`, 49 of 49 files whole |
 | i | `voice/engine`, `voice/chart` | about 90k | after N.200 settles |
 | j | `voice/`, the rest | about 45k | ready |
 | k | `omr/` | 113k | ready |
@@ -184,3 +184,17 @@ Ruled by Dann 2026-11-19 14:59. **The desk resolves a contradiction itself by ap
 - Whether any test hears sound (`voice/count-in.ts`).
 - Whether the performance baseline can be taken reproducibly in the cloud workspace, whose timings are not the Mac's.
 - The twenty-odd NOT ESTABLISHED items the two completed unit reads each filed, listed at the end of their own reports.
+
+---
+
+## Phase 1 progress, ticked by the desk 2026-11-22 21:4x
+
+**Five of sixteen units read: a, b, d, g, h.** The table above was stale for d, g, and h, which were read on 2026-11-22 and filed; corrected in the same pass. Phases 2, 3, and 4 have not started.
+
+By the table's own size column, about 452k of roughly 2,677k is read, so **under a fifth of phase 1 by volume**. Of the remainder, unit t (the tests, about 1.1M) and unit o (107k) go to Sonnet; the Fable-side remainder across c, e, f, i, j, k, l, m, n is about 1,018k.
+
+**Three units are gated, and two of those gates moved on 2026-11-22.** `c` waits on lane 56's second follow-up merging. `i` waits on N.200 settling, which moved a long way that night with Dann's 31 takes and the reference diagnosis. `l` waits on consistency batch 3, which is first in the desk's Track 1 order, so it clears early.
+
+**Eight units are ready and ungated: e, f, j, k, m, n, o, t.**
+
+**Dann ruled 2026-11-22 19:11 that phases 2 and 3, the refactoring itself, land BEFORE the release**, so this plan is on the critical path rather than beside it. No date is set and the desk makes no forecast. The binding constraints are Fable's weekly allowance for the judgement reads and Dann's attention for the rulings they produce.
