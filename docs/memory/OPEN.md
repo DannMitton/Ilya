@@ -4480,3 +4480,34 @@ Transcribed as written: *"I'm getting overwhelend. Will this help more than it c
 **The record-staleness problem is the desk's, carried in how the desk works, never raised to him as a project item.** If anything is ever built for it, it reaches him as one line.
 
 **The occasion, kept because the observation stands even though the proposal was withdrawn.** Seven stale things surfaced on 2026-11-22: `QUEUE.md` on N.197, `STATE.md` on N.184's row 82, the N.204 plan's table on units d, g and h, QUEUE row 137 still saying "Markup" after the rename to MELODY, the lane 82 line reading RUNNING for hours, `PitchSeconds.svelte:8-12` describing a replaced axis, and Delete-is-context-apparent costing a second discovery. Six of the seven were records, not code, and `README.md`'s closing step 0 (added 2026-10-11 after an audit found 28 stale lines) did not catch them.
+
+## LANE 82 DEPARTS FROM "ONLY SUNG PITCHES GET A ROW", AND WHY. Desk record, 2026-11-22/23, owed from Fable's as-built review
+
+Dann's default of 2026-09-23 03:15 was that only sung pitches get a row in the phonation figure. **Lane 82 gives every semitone of the figure's scale a row, sung or not, and no file reported that as a departure until this one.** Fable's as-built read (`../sessions/review-fable-lane82-as-built_r1_2026-11-22.md`) named the gap.
+
+**The reason holds, and it is Dann's own.** His report of 2026-11-22 03:37 was that the bracket collided with the graph and that the axis did not reach his typed zone. A scale built only from sung pitches cannot carry a bracket that lies inside its own rows, because the rows it needs are the ones nobody sang. The departure is what makes his two complaints answerable at once.
+
+**Under `CONTRACT.md` section 3 tether 19:** an older decision is a default with a reason, never a gate. The 03:15 default's reason was that an unsung row says nothing; the figure now uses unsung rows to say where the sung ones sit, which is a different job. Recorded as a departure rather than a reversal, and his to overrule.
+
+**Carried with it, a DESK DEFAULT adopted on Fable's recommendation:** an unsung row takes the piece's own spelling of that pitch class before the key's, because one column was spelling a pitch two ways (`B♭3` and `A♭3` sung against `A♯2` and `G♯2` unsung). **Not yet built.** For Dann at the walk, and it is taste: the rows inside the piece's own range that it never sings, four of them on Tchaikovsky.
+
+## LANE 82'S BRIEFS ARE LOST. Desk record, 2026-11-22/23
+
+**`cloud-lane-82`'s brief r1 and r2, and Fable's r1 review of them, are gone.** They were typed into a Code session and never committed, so no copy exists in the tree or in `../sessions/`. What survives is the lane's own report (`../sessions/report-code-lane82_r1_2026-11-22.md`) and Fable's as-built read.
+
+**The rule this costs, and it is already in `CONTRACT.md` section 4:** a brief the desk types into a session is not a brief the project has. Write it to `docs/sessions/` first, then point the session at the committed file. Lane 82 is the second instance; the first was the 2026-10-27 reports held in a desk workspace.
+
+## « CONDUIT VOCAL », NEVER « TRACTUS VOCAL ». Ruled by Dann, confirmed 2026-11-13 10:28 to 10:30, said again 2026-11-22 22:47
+
+Transcribed as written, 2026-11-22 22:47: *"We decided conduit not tractus"*. **It was decided, and the desk asked him again, which `CONTRACT.md` section 1 item 6a exists to prevent.** This section is the ruling's home so no later desk raises it.
+
+**The record of it.** `OPEN.md`, "Held, not raised" (2026-09-30): the Guide said « tractus vocal » once while Learn and the ratified calibration cue said « conduit vocal »; one term per concept, carried under N.84. Confirmed 2026-11-13 10:28 to 10:30 while Dann ratified the pause line's French, the note then reading "« conduit vocal » confirmed as the term in use, 8 uses in the app's French against one stray « tractus vocal » held for N.84". Today the count is **12 uses of « conduit vocal »**.
+
+**THE STRAY GREW FROM ONE SENTENCE TO TWO, AND THAT IS THE FINDING.** Read in the tree 2026-11-22/23:
+
+1. `components/Reading/GuideContent.svelte:53`, « des instructions chorégraphiques pour le tractus vocal ». This is the original stray; the record still cites it as `:46`, which is stale.
+2. `components/Reading/GuideContent.svelte:93`, « car la résonance suit la longueur du tractus vocal plutôt que l'étendue chantée », **pinned at `insights/ratified-lines.test.ts:472`**. This one is NEW: it entered in a draft ratified in November, after the term was settled in September and re-confirmed on 2026-11-13.
+
+**So a ratified French sentence was drafted with a term the project had already ruled against.** That is tether 17's tripwire exactly: a ruling is not built until a grep of the tree shows it. The desk drafted it, so the failure is the desk's.
+
+**What the desk does, and it is not a question for Dann.** Both sentences take « conduit vocal », and the pin at `ratified-lines.test.ts:472` changes in the same commit, under `CONTRACT.md` section 1 item 11a (ratification is approval at a moment, never fossilization; the desk changes the text and its pin together and lists what changed). No new French goes to him: « conduit vocal » is his own term, already in twelve places. Carried into the MELODY wording lane as its third item.

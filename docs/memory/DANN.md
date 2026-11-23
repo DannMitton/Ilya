@@ -23,6 +23,8 @@ r1, created by the desk 2026-11-22 20:2x at Dann's instruction, transcribed as w
 | D10 | **Merge and ship runs**, one paste per lane, as each lane lands. | The gates run on his Mac; `sh ~/Downloads/ilya-ship.sh` is his | Each lane |
 | D11 | **One walk session a week**, with that week's French drafts in the same sitting (his ruling 2026-11-22 19:14). | A singer's eye | The walk debt, which is listed under CARRIED below |
 | D12 | **At the gate: the frozen build, and sending it to colleagues.** | His call that Ilya is functional, which is the gate itself (his ruling 2026-11-22 19:55) | The release |
+| D13 | **Rule the French of the two GUIDE resonance paragraphs.** Marked drafts ready at `../sessions/draft-french-guide-resonance_r1_2026-11-22.md`; one collision inside it, « conduit vocal » (12 sites) against « tractus vocal » (3, one pinned in a ratified-lines test). | French, under `CONTRACT.md` section 7 | The GUIDE resonance paragraphs, English already ratified 21:44 |
+| D14 | **Taste: what the reference ceiling becomes.** A fixed lower value, or one chosen from the declared voice type. `burg.py` is a checking tool outside the app, so nothing a singer meets changes either way. | Taste | Closes the N.200 Step 4 question for good |
 
 ## CONDITIONAL, not yet his
 

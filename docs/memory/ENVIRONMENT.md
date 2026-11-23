@@ -15,6 +15,14 @@ The index was added 2026-09-01. Nothing below it was moved, reworded, or removed
 **When you add a section, add its row here.** A trap nobody can find costs the
 next session the same hour it cost the last one.
 
+### Learned 2026-11-22/23, overnight (Opus desk: batch 3's brief, the N.197 sweep, the N.200 re-score)
+- `A SYNC-CONFLICT COPY SITS IN apps/web/src AS "lib 2"` (last sections of this file): untracked, carries its own `markup/`, and inflates every grep under `apps/web/src`.
+- `THE RATCHETS MODULE MAP IS KEYED BY DIRECTORY NAME` (last sections): renaming a folder under `lib/` without rekeying `MODULES` turns the layering gate OFF for that module, in both directions, and the gate still passes green.
+- `SVELTE HASHES A COMPONENT'S FILE NAME INTO ITS SCOPED CLASSES` (last sections): moving a `.svelte` file changes built bytes by itself, so a determinism measurement is taken BEFORE any file move.
+- `svelte.config.js CANNOT IMPORT vite.config.ts` (last sections): it is plain JavaScript loaded by Node, which does not load `.ts`. Share a value through a third plain module.
+- `ILYA'S CSP IS REPORT-ONLY` (last sections): `vercel.json:36` is `Content-Security-Policy-Report-Only`, so N.197 rests on code discipline and not on the browser.
+- `burg.py's CEILING IS A MODULE GLOBAL READ AT CALL TIME` (last sections): how to re-run the reference extractor at another ceiling without editing the tracked file.
+
 ### Learned 2026-11-22, night (Opus desk: the after-release ruling session)
 - `DELETE IS CONTEXT-APPARENT ON A VOICE PROFILE` (last sections of this file): the profile menu shows New, Duplicate, and Rename and NO Delete while only one voice exists. That is the design, not a missing control. Do not report it as a gap.
 - `DANN'S IPHONE WALKS ARE WEBKIT WALKS` (last sections of this file): Chrome on an iPhone outside the EU renders with WebKit, so every walk he has done in Chrome on his iPhone 14 Pro Max already covers Safari's engine. Do not file his iPhone walks as Chromium-only, and do not tell him Safari is unestablished for layout or rendering.
@@ -5251,6 +5259,9 @@ Quote the range; cap at its top; add each actual when it lands. Actuals from `ST
 
 | kind of job | actuals (tokens) | range to quote |
 |---|---|---|
+| Fable review of one brief plus one report, read through the bridge, no build | 182k (2026-11-22/23, 25 tool uses, 5.7 min, cap 300k) | 160k to 300k |
+| Sonnet read-only whole-tree sweep for a class of string (outbound URLs) | 125k (2026-11-22/23, 21 tool uses, 2.1 min, cap 200k) | 110k to 200k |
+| Sonnet numerical re-score of staged audio (31 files, a Python harness, two conditions) | 134k (2026-11-22/23, 13 tool uses, 2.9 min, cap 300k) | 120k to 220k |
 | Sonnet browser measure on row 114 f1 | 148k, 155k, 158k, 192k, 206k, 208k, 208k, 238k (J2, three arms, 2026-11-09), 257k | 150k to 260k |
 | Fable review of a brief or design | 156k to 315k, most near 200k; 2026-11-13: 212k (N.200 r1), 222k in 6.6 min with 26 tool uses (N.199 readings r2, cap 330k; the brief pasted whole into the prompt, the desk's clone already installed); 2026-11-15: 360k in 15.2 min with 81 tool uses (N.202 r1, cap 250k, over by 110k: the helper read some sixty files, both lanes' diffs, and 100,000 characters of a web page); 2026-11-16: 227k in 6.2 min with 22 tool uses (lane 59 r2, cap 370k, with a Sonnet scout packet and the scout's clone) | 160k to 370k |
 | Fable review of two built lanes (as built, merge-tree, one probe) | 367k (2026-11-09, 46 min, cap 320k) | 300k to 400k |
@@ -5676,7 +5687,7 @@ A shallow clone cannot answer an ancestry question (`git merge-base --is-ancesto
 
 **2026-11-19 15:1x, measured.** Two consecutive `pnpm build` runs on an unchanged tree produce **15 differing files** of the 53 under `build/_app`, `build/sw.js`, and `build/index.html`.
 
-**Cause, read and confirmed:** `apps/web/svelte.config.js:18-22` sets `version.pollInterval: 0` and does not set `version.name`, so SvelteKit falls back to `Date.now()`. The timestamp lands in `build/_app/version.json` and is inlined into a chunk; changing that chunk changes its content hash, which renames it, which rewrites every entry chunk and `index.html` that point at it. `build/sw.js` stamps its own `CACHE_VERSION` separately.
+**Cause, read and confirmed:** `apps/web/svelte.config.js:18-22` sets `version.pollInterval: 0` and does not set `version.name`, so SvelteKit falls back to `Date.now()`. The timestamp lands in `build/_app/version.json` and is inlined into a chunk; changing that chunk changes its content hash, which renames it, which rewrites every entry chunk and `index.html` that point at it. **CORRECTED 2026-11-22/23 (Opus desk, confirmed by Fable against the tree): `build/sw.js` does NOT stamp its own version.** `apps/web/static/sw.js:20` holds the placeholder `ilya-__BUILD_VERSION__`, and `apps/web/scripts/stamp-sw.mjs:18` reads `build/_app/version.json`, `:27` takes `.version` from it, and `:75` substitutes it. The service worker already follows `kit.version.name`, so setting that name is the whole repair and a second wire into `sw.js` would be a duplicate. The earlier sentence here sent brief r1 to ask for that duplicate.
 
 **Why it matters:** N.204's behaviour baseline is the instrument every lane is diffed against, and against this build every lane shows 15 differences that mean nothing.
 
@@ -5946,3 +5957,71 @@ render-score identity), so **one added key adds two tests**. The desk predicted 
 **So:** Delete appears once a second voice exists. One voice and no Delete is Ilya refusing to leave the station empty, which is the intended behaviour. A desk that finds no Delete on a single profile has found the design, not a defect, and says nothing.
 
 **It had been discovered once before and was in no file**, which is why it cost a second discovery. That is the reason for this entry.
+
+---
+
+## A SYNC-CONFLICT COPY SITS IN apps/web/src AS "lib 2"
+
+Learned 2026-11-22/23 (Opus desk), from a Sonnet sweep that reported hits nobody could place.
+
+`apps/web/src/lib 2` exists on disk and is **untracked**: `git --no-optional-locks ls-files "apps/web/src/lib 2"` returns zero files. It is a synchronization conflict copy on Dann's machine and it carries its own `markup/`. Duplicates named `" 2"` and `" 3"` also sit under `apps/web/build/` and `apps/web/.svelte-kit/output/`; one of them, `build/index 2.html`, cannot even be read ("Resource deadlock avoided").
+
+**What it costs:** every recursive grep under `apps/web/src` returns each hit twice, and a brief that quotes a count from one of those greps is wrong. Exclude it by name in any sweep, and say in a brief that it is to be excluded.
+
+**It is Dann's to delete, not the desk's.** The bridge refuses `rm` by default, and deleting a file on his machine is irreversible.
+
+---
+
+## THE RATCHETS MODULE MAP IS KEYED BY DIRECTORY NAME
+
+Learned 2026-11-22/23 (Opus desk and Fable, reading `scripts/ratchets.mjs` at `Shane` `e8f64d4f`).
+
+`MODULES` (`:78-85`) lists what each module under `apps/web/src/lib/` may import, keyed by the **directory name**: `markup: ['reader', 'score', 'voice', 'analysis']` at `:83`. `moduleOfPath` (`:87-91`) takes the first path segment and returns it **only when it is a key of that map, otherwise `null`**. `:109` and `:113` guard the only MODULE check on a non-null value, and `moduleOfSpec` (`:93-97`) with `:115` does the same for imports *into* the module.
+
+**So renaming a folder under `lib/` without rekeying `MODULES` turns the layering gate off for that module, in both directions, and the gate still reports green.** A pass means the check was skipped, not that it held.
+
+**Rekey in the same commit as the move, and then prove the gate is live:** add one forbidden import to a file in the renamed folder, run `node scripts/ratchets.mjs`, paste the MODULE breach into the report, and remove the import.
+
+Contrast the ceiling half, which is safe: `ratchets.mjs:72-74` already breaches when a key in `ratchets.json` names a file that no longer exists ("Move the key with the file"). Only the module map fails quietly.
+
+---
+
+## SVELTE HASHES A COMPONENT'S FILE NAME INTO ITS SCOPED CLASSES
+
+Learned 2026-11-22/23 (Fable, reading `node_modules/svelte/src/compiler/validate-options.js:73-74` and `state.js:131-138`; inferred from reading, not from a build).
+
+Svelte's default `cssHash` hashes the component's **file name**, taken relative to the working directory, and vite-plugin-svelte replaces that default only under hot reload. **Moving or renaming a `.svelte` file therefore changes the built bytes by itself**, through its scoped class names.
+
+**Consequence for any refactor:** take a build determinism measurement, and a behaviour baseline, BEFORE moving any `.svelte` file. A before-and-after diff across a file move will show scoped-class differences that are expected and are not a finding. N.204's later phases will meet this every time they move a component.
+
+---
+
+## svelte.config.js CANNOT IMPORT vite.config.ts
+
+Learned 2026-11-22/23 (Fable, on batch 3's step 0).
+
+`apps/web/svelte.config.js:1-2` is plain JavaScript loaded by Node; `.github/workflows/ci.yml:26-29` pins Node 20, which does not load TypeScript. `vite.config.ts` is loaded by Vite, not by Node.
+
+**So a value both files need lives in a third plain module** (batch 3 slice 1 creates `apps/web/build-id.js` for `buildId()`), imported by each. Copying the function into both is the failure this entry exists to prevent: two sites computing one value is exactly what the consistency work is removing.
+
+---
+
+## ILYA'S CSP IS REPORT-ONLY
+
+Learned 2026-11-22/23 (Opus desk, from a Sonnet sweep, confirmed by reading `vercel.json:36`).
+
+The header is `Content-Security-Policy-Report-Only`, with `default-src 'self'`, `font-src 'self'`, `connect-src 'self'`, and `manifest-src 'self'`. **Report-only logs a violation; it does not block one.**
+
+**What that means for N.197** ("Ilya loads nothing from outside services at run time"): the guarantee rests on code discipline and on the sweep, not on the browser refusing. Two live traps to check whenever that area moves: `static/omr/models/underlay/worker.min.js` carries jsDelivr defaults that fire only if `createWorker` is called without `workerPath`, `corePath`, and `langPath`, and both current call sites pass all three (`omr/underlay-recognize.ts:120`, `score/ScoreUploader.svelte:371`); and `apps/web/build/` on disk is a stale 2026-11-11 build that still names Google Fonts, so it must never be read as evidence of what ships.
+
+---
+
+## burg.py's CEILING IS A MODULE GLOBAL READ AT CALL TIME
+
+Learned 2026-11-22/23 (a Sonnet helper, re-scoring the 31 takes).
+
+`tools/i-extractor-check/burg.py:28-29` sets `CEILING = 5000.0` and `N_FORMANTS = 5`, and the command line has **no ceiling flag**. `CEILING` is read at call time inside `analyse` (`sr2 = int(2 * CEILING)`) and `frame_formants` (the upper bound `CEILING - 50`), so **importing the module and overriding `burg.CEILING` works**, and the tracked file needs no edit.
+
+**Prove the override took effect** rather than assuming it: instrument the resample target (8,000 Hz at a 4,000 Hz ceiling, 10,000 Hz at 5,000) and the highest pole kept (3,950 Hz against 4,917 Hz). A value captured at import, or a resample factor computed once, would leave the run silently at 5,000 Hz.
+
+The script's default analysis stretch is the sidecar's `outcome.guard.segmentS` when the sidecar sits beside the WAV; 21 of the 31 takes of 2026-11-22 have no `segmentS`, so the whole file is used for those.
