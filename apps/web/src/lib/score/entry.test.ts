@@ -617,12 +617,35 @@ describe('a verb that ends where the read began leaves no record (defect 4)', ()
 		const drawn = applyCorrections(LINE, toRest);
 		expect(toggleRest(toRest, drawn, 'b', P('D', 4), LINE[1])).toEqual({});
 	});
-	it('rest to note and back, on a rest the reader found, leaves no record', () => {
+	it('rest to note, nudged, to rest and to note again, on a rest the reader found, brings her nudge back (Dann, 2026-11-24)', () => {
 		const line = [ev('a', P('F', 3)), ev('r', undefined)];
 		const toNote = toggleRest({}, line, 'r', P('B', 4), line[1]);
 		expect(toNote.r).toMatchObject({ type: 'note', pitch: P('B', 4) });
-		const drawn = applyCorrections(line, toNote);
-		expect(toggleRest(toNote, drawn, 'r', P('B', 4), line[1])).toEqual({});
+		const nudged = withCorrection(toNote, 'r', { pitch: P('A', 3) });
+		const toRest = toggleRest(nudged, applyCorrections(line, nudged), 'r', P('B', 4), line[1]);
+		expect(applyCorrections(line, toRest)[1].type).toBe('rest');
+		const back = toggleRest(toRest, applyCorrections(line, toRest), 'r', P('B', 4), line[1]);
+		expect(applyCorrections(line, back)[1]).toMatchObject({ type: 'note', pitch: P('A', 3) });
+	});
+	it('only the fields a verb wrote are settled: a tie press leaves an equal pitch alone', () => {
+		const map: CorrectionMap = { a: { pitch: P('F', 3), tied: 'none' } };
+		expect(settleAgainstRead(map, 'a', LINE[0], ['tied'])).toEqual({ a: { pitch: P('F', 3) } });
+		expect(settleAgainstRead(map, 'a', LINE[0])).toEqual({});
+	});
+	it('no pitch is settled while the map holds a key mark', () => {
+		const read = ev('a', P('B', 4, -1));
+		const map: CorrectionMap = { a: { pitch: P('B', 4, -1) }, b: { keySignature: { fifths: 2, through: 'next', notes: 'follow' } } };
+				expect(settleAgainstRead(map, 'a', read, ['pitch']).a).toEqual({ pitch: P('B', 4, -1) });
+		const free: CorrectionMap = { a: { pitch: P('B', 4, -1) } };
+		expect(settleAgainstRead(free, 'a', read, ['pitch'])).toEqual({});
+	});
+	it('base and dots on a record that holds a tuplet are left alone', () => {
+		const tuplet = { actualNotes: 3, normalNotes: 2, normalType: 'eighth' as NoteBase };
+		const read = ev('a', P('G', 3), 'eighth');
+		const map: CorrectionMap = { a: { base: 'eighth', dots: 0, tuplet } };
+		expect(settleAgainstRead(map, 'a', read, ['base', 'dots'])).toEqual(map);
+		const plain: CorrectionMap = { a: { base: 'eighth', dots: 0 } };
+		expect(settleAgainstRead(plain, 'a', read, ['base', 'dots'])).toEqual({});
 	});
 	it('without a read event nothing is settled, so an entered record is never pruned', () => {
 		const { map, id } = enterEntry({}, { kind: 'gap', after: 'a' }, { base: 'quarter', dots: 0, pitch: P('G', 3) });

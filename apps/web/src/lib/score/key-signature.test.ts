@@ -8,6 +8,8 @@ import { engraveInKey, MusicXmlScoreParser, type ParsedScore } from '@ilya/score
 import { parseXml } from './ingestion/mini-dom';
 import { BarLayer } from './bar-layer';
 import { withCorrection, type CorrectionMap } from './correction';
+import { CorrectionVerbs } from './correction-verbs.svelte';
+import type { Cursor } from './entry';
 import { applyKeyLayer, heldKey, KEY_CHOICES, keyLabelKey, removeKey, setKey } from './key-signature';
 
 async function fixture(): Promise<ParsedScore> {
@@ -224,5 +226,70 @@ describe('a mark on a bar opener that leaves the line is carried, as the time si
 		const replaced = setKey(s, line, map, next, { fifths: 1, through: 'next', notes: 'keep' })!;
 		expect(replaced[opener(s, 4)]?.keySignature).toBeUndefined();
 		expect(replaced[next]?.keySignature).toMatchObject({ fifths: 1 });
+	});
+});
+
+describe("a pitch the singer pinned against a key change survives a press that did not write it (round 2, Fable's table)", () => {
+	const mark = { fifths: 2, through: 'next' as const, notes: 'follow' as const };
+	const ID = 'm4-1-4';
+	const FLAT = { step: 'B' as const, octave: 4, alter: -1 };
+
+	/** A real BarLayer under the verbs, so what the page would draw after each press is what the test reads. */
+	function session(s: ParsedScore, start: CorrectionMap) {
+		let corrections = start;
+		let cursor: Cursor | null = { kind: 'entry', id: ID };
+		const bars = () => layer(s, corrections);
+		const verbs = new CorrectionVerbs({
+			corrections: () => corrections,
+			setCorrections: (n) => (corrections = n),
+			line: () => bars().line,
+			readLine: () => s.vocalLine,
+			cursor: () => cursor,
+			inGap: () => false,
+			selectedEventId: () => (cursor?.kind === 'entry' ? cursor.id : null),
+			setCursor: (n) => (cursor = n),
+			selectEntry: (id) => (cursor = id ? { kind: 'entry', id } : null),
+			keyOf: () => undefined,
+			clef: () => ({ sign: 'G' }),
+			label: () => '',
+			word: (k) => k,
+			pushUndo: () => {},
+		});
+		return { verbs, get map() { return corrections; }, drawn: () => bars().line.find((e) => e.id === ID)!.pitch! };
+	}
+
+	it('the read is a B flat and the mark draws it natural (the setting for the three rows)', async () => {
+		const s = await fixture();
+		expect(s.vocalLine.find((e) => e.id === ID)!.pitch).toMatchObject(FLAT);
+		expect(session(s, { [opener(s, 4)]: { keySignature: mark } }).drawn()).toMatchObject({ step: 'B', alter: 0 });
+	});
+	it('row 1: flat on the respelled B natural keeps the pitch record, and draws B flat', async () => {
+		const s = await fixture();
+		const h = session(s, { [opener(s, 4)]: { keySignature: mark } });
+		h.verbs.handleAccidental('flat');
+		expect(h.map[ID]).toEqual({ pitch: FLAT });
+		expect(h.drawn()).toMatchObject(FLAT);
+	});
+	it('row 2: a dot on a note pinned at B flat keeps the pin, and draws B flat', async () => {
+		const s = await fixture();
+		const h = session(s, { [opener(s, 4)]: { keySignature: mark }, [ID]: { pitch: FLAT } });
+		h.verbs.handleDot();
+		expect(h.map[ID]).toEqual({ pitch: FLAT, dots: 1 });
+		expect(h.drawn()).toMatchObject(FLAT);
+	});
+	it('row 3: a rest and back on a note pinned at B flat keeps the pin, and draws B flat', async () => {
+		const s = await fixture();
+		const h = session(s, { [opener(s, 4)]: { keySignature: mark }, [ID]: { pitch: FLAT } });
+		h.verbs.handleRest();
+		h.verbs.handleRest();
+		expect(h.map[ID]?.pitch).toEqual(FLAT);
+		expect(h.drawn()).toMatchObject(FLAT);
+	});
+	it('the tie press does not touch the pin either', async () => {
+		const s = await fixture();
+		const h = session(s, { [opener(s, 4)]: { keySignature: mark }, [ID]: { pitch: FLAT } });
+		h.verbs.handleTie();
+		h.verbs.handleTie();
+		expect(h.map[ID]?.pitch).toEqual(FLAT);
 	});
 });

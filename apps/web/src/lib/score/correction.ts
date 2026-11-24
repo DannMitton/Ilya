@@ -437,32 +437,50 @@ export function clearCorrection(map: CorrectionMap, id: string): CorrectionMap {
  * because an entered record IS the entry and a grace note has no read event
  * in the line.
  *
- * TWO CASES ARE LEFT ALONE ON PURPOSE. A pitch on a note the singer made a
- * rest is kept: it is the memory `toggleRest` returns to. A base or dots on a
- * record that holds a tuplet is kept: the tuplet row wrote it as part of the
- * definition.
+ * `fields` names the fields the verb wrote, and ONLY those are settled: a
+ * field the verb did not write is the singer's earlier decision and is not
+ * this function's to take. Without it every field is settled (the helper's
+ * own tests use that).
+ *
+ * THREE CASES ARE LEFT ALONE ON PURPOSE. A pitch on a note the singer made a
+ * rest is kept: it is the memory `toggleRest` returns to, and so is a pitch on
+ * a rest the reader found, which may be her nudge (Dann, 2026-11-24: keep it).
+ * A base or dots on a record that holds a tuplet is kept: the tuplet row wrote
+ * it as part of the definition. And NO PITCH IS SETTLED WHILE THE MAP HOLDS A
+ * KEY MARK: under a "notes follow" mark the key layer leaves a note alone when
+ * its record holds a pitch (`key-signature.ts`, `movable`), so a pitch equal to
+ * the read is then her pin and not an empty decision. Coarse on purpose, the
+ * cost being that a pitch nudged up and back leaves a record under a key mark;
+ * the exact alternative, comparing with what the note would draw after the key
+ * layer, was ruled too large a change at the centre of the model.
  */
-export function settleAgainstRead(map: CorrectionMap, id: string, read: VocalLineEvent | undefined): CorrectionMap {
+export type SettleField = 'pitch' | 'base' | 'dots' | 'type' | 'tied';
+
+export function settleAgainstRead(
+	map: CorrectionMap,
+	id: string,
+	read: VocalLineEvent | undefined,
+	fields?: readonly SettleField[],
+): CorrectionMap {
 	const c = map[id];
 	if (!c || !read || c.entered) return map;
+	const mine = (f: SettleField): boolean => fields === undefined || fields.includes(f);
 	const next: NoteCorrection = { ...c };
-	const effectiveType = next.type ?? read.type;
-	if (next.type === read.type) delete next.type;
-	if (next.pitch !== undefined) {
+	if (mine('type') && next.type === read.type) delete next.type;
+	if (mine('pitch') && next.pitch !== undefined && !Object.values(map).some((m) => m.keySignature !== undefined)) {
 		const same =
 			read.pitch !== undefined &&
 			next.pitch.step === read.pitch.step &&
 			next.pitch.alter === read.pitch.alter &&
 			next.pitch.octave === read.pitch.octave;
-		const dead = effectiveType === 'rest' && read.type === 'rest';
 		const memory = next.type === 'rest' && read.type !== 'rest';
-		if ((same || dead) && !memory) delete next.pitch;
+		if (same && !memory) delete next.pitch;
 	}
 	if (next.tuplet === undefined) {
-		if (next.base === read.duration.base) delete next.base;
-		if (next.dots === read.duration.dots) delete next.dots;
+		if (mine('base') && next.base === read.duration.base) delete next.base;
+		if (mine('dots') && next.dots === read.duration.dots) delete next.dots;
 	}
-	if (next.tied !== undefined) {
+	if (mine('tied') && next.tied !== undefined) {
 		const readTied = read.tied?.type === 'start' || read.tied?.type === 'continue';
 		if ((next.tied === 'start') === readTied) delete next.tied;
 	}

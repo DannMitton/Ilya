@@ -271,10 +271,10 @@ export function toggleRest(
 		   held a pitch of its own would have nothing to return to: MEASURED on
 		   the walk, a read G4 converted to a rest and back came back as D4,
 		   which was the arrival guess and not the note that was there. */
-		return settleAgainstRead({ ...map, [id]: { ...map[id], type: 'rest', pitch: map[id]?.pitch ?? ev.pitch } }, id, read);
+		return settleAgainstRead({ ...map, [id]: { ...map[id], type: 'rest', pitch: map[id]?.pitch ?? ev.pitch } }, id, read, ['type', 'pitch']);
 	}
 	const remembered = map[id]?.pitch ?? ev.pitch ?? fallback;
-	return settleAgainstRead({ ...map, [id]: { ...map[id], type: 'note', pitch: remembered } }, id, read);
+	return settleAgainstRead({ ...map, [id]: { ...map[id], type: 'note', pitch: remembered } }, id, read, ['type', 'pitch']);
 }
 
 /** Whether an entry currently carries a tie to the one after it. */
@@ -308,7 +308,7 @@ export function canTie(line: readonly VocalLineEvent[], map: CorrectionMap, id: 
 /** Toggle the tie that starts at this entry. */
 export function toggleTie(map: CorrectionMap, ev: VocalLineEvent, read?: VocalLineEvent): CorrectionMap {
 	const on = currentTie(ev, map);
-	return settleAgainstRead({ ...map, [ev.id]: { ...map[ev.id], tied: on ? 'none' : 'start' } }, ev.id, read);
+	return settleAgainstRead({ ...map, [ev.id]: { ...map[ev.id], tied: on ? 'none' : 'start' } }, ev.id, read, ['tied']);
 }
 
 /** The rhythmic sentence the definition row states. */

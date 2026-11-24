@@ -42,6 +42,7 @@ import {
 	stepAllowed,
 	stepPitch,
 	settleAgainstRead,
+	type SettleField,
 	withCorrection,
 	type CorrectionMap,
 } from './correction';
@@ -262,7 +263,8 @@ export class CorrectionVerbs {
 	#correct(change: Parameters<typeof withCorrection>[2]): void {
 		const id = this.#d.selectedEventId();
 		if (!id) return;
-		this.#d.setCorrections(settleAgainstRead(withCorrection(this.#d.corrections(), id, change), id, this.#readOf(id)));
+		const written = Object.keys(change).filter((k): k is SettleField => ['pitch', 'base', 'dots', 'type', 'tied'].includes(k));
+		this.#d.setCorrections(settleAgainstRead(withCorrection(this.#d.corrections(), id, change), id, this.#readOf(id), written));
 	}
 
 	/** The event as the reader read it, or undefined for a note the singer entered and for a grace stop. */
