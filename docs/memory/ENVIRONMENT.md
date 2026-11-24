@@ -6082,3 +6082,15 @@ Added by the desk at the close. `CONTRACT.md` section 4, estimates come from act
 **What to do:** build any file list for `tar`, `cp`, or a helper from a directory walk (`tar` over the folders, or `find`), never from `git ls-files`. Check the count afterwards. A silent short archive is the failure mode, because `tar` exits non-zero but still writes what it could.
 
 **A second lesson from the same hour:** `tar tzf | grep -c 'cursive/'` returns 63 and the folder holds 62 files, because the directory entry counts. Count files with `find -type f`.
+
+## A LONG PROMPT TYPED INTO claude.ai/code SENDS ITSELF AT EVERY NEWLINE. Desk, 2026-11-23 23:4x
+
+**Symptom.** The desk typed a 12,943-character prompt into the new-session composer with `computer` `type`. The composer treated every newline as Enter. The prompt went in as about twenty separate messages, the session started on the first ones before the rest arrived, and the last line was left sitting in the box. The session was created and began working from a brief it received in pieces.
+
+**This is not the 2026-10-15 failure, which is a different one.** That entry records a 45,076-character type freezing the renderer and then sending the prompt WHOLE. This one sends it in fragments at a length that does not freeze anything. Both entries stand.
+
+**The fix, and it is what every other lane already does: commit the brief, then send one short line pointing at it.** `../sessions/` is in the tree and a cloud session clones it. A prompt of two or three lines carries no newline risk worth the name. The desk departed from that here because the brief was written after the night's ship and was not yet committed, and the right answer was to ship it rather than to type it.
+
+**If a prompt must be typed in full**, type it as a single line with no newline characters at all, or paste through the clipboard rather than typing.
+
+**One more trap found the same minute, and it nearly produced a false report to Dann.** The session page's diff panel compares the lane against **`main`**, not against the branch it was cut from. `main` is months behind `Shane`, so the panel showed "+26152 -506" and a rewritten `.gitignore` and `AGENTS.md` for a session that had pushed nothing. **Read the comparison's base in the panel header before reading one number out of it**, and confirm a lane's real state with `git ls-remote` from the bridge.
