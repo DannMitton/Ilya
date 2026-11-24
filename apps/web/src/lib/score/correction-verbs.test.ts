@@ -434,3 +434,72 @@ describe('CorrectionVerbs, Rebar the notes passes its flag to the layer (QUEUE r
 		expect(seen).toEqual([false, true]);
 	});
 });
+
+describe('CorrectionVerbs, a press that changes nothing leaves no correction (defect 4)', () => {
+	// Characterization: a press that DOES change something is recorded, as before.
+	it('a different length is recorded and offers Restore', () => {
+		const h = harness({ cursor: { kind: 'entry', id: 'b' } });
+		h.verbs.handleBase('half');
+		expect(h.corrections.b).toEqual({ base: 'half' });
+		expect(h.verbs.restoreAvailable).toBe(true);
+	});
+
+	it('tie on then off leaves nothing, and Restore stays dark', () => {
+		const h = harness({ cursor: { kind: 'entry', id: 'b' } });
+		h.verbs.handleTie();
+		expect(h.corrections).toEqual({ b: { tied: 'start' } });
+		h.verbs.handleTie();
+		expect(h.corrections).toEqual({});
+		expect(h.verbs.restoreAvailable).toBe(false);
+	});
+
+	it('rest on then off leaves nothing', () => {
+		const h = harness({ cursor: { kind: 'entry', id: 'b' } });
+		h.verbs.handleRest();
+		expect(h.corrections.b?.type).toBe('rest');
+		h.verbs.handleRest();
+		expect(h.corrections).toEqual({});
+	});
+
+	it('dot on then off leaves nothing', () => {
+		const h = harness({ cursor: { kind: 'entry', id: 'b' } });
+		h.verbs.handleDot();
+		expect(h.corrections.b).toEqual({ dots: 1 });
+		h.verbs.handleDot();
+		expect(h.corrections).toEqual({});
+	});
+
+	it('a pitch stepped up and back leaves nothing', () => {
+		const h = harness({ cursor: { kind: 'entry', id: 'b' } });
+		h.verbs.handleStep(1);
+		expect(h.corrections.b?.pitch).toEqual(P('F', 4));
+		h.verbs.handleStep(-1);
+		expect(h.corrections).toEqual({});
+	});
+
+	it('pressing the length the note already has writes nothing and pushes no undo step', () => {
+		const h = harness({ cursor: { kind: 'entry', id: 'b' } });
+		h.verbs.handleBase('quarter');
+		expect(h.corrections).toEqual({});
+		expect(h.pushed).toEqual([]);
+		expect(h.verbs.restoreAvailable).toBe(false);
+	});
+
+	it('a length changed and changed back leaves nothing', () => {
+		const h = harness({ cursor: { kind: 'entry', id: 'b' } });
+		h.verbs.handleBase('half');
+		h.verbs.handleBase('quarter');
+		expect(h.corrections).toEqual({});
+	});
+
+	it('a note the singer entered keeps its record whatever is pressed', () => {
+		const entered = { entered: { after: 'a' }, base: 'quarter', pitch: P('C', 4) } as CorrectionMap[string];
+		const h = harness({
+			line: [note('a', P('C', 4)), note('hand:1', P('C', 4))],
+			corrections: { 'hand:1': entered },
+			cursor: { kind: 'entry', id: 'hand:1' },
+		});
+		h.verbs.handleBase('quarter');
+		expect(h.corrections['hand:1']).toEqual(entered);
+	});
+});

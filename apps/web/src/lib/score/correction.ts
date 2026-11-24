@@ -422,6 +422,53 @@ export function clearCorrection(map: CorrectionMap, id: string): CorrectionMap {
 	};
 }
 
+/**
+ * Take out of one note's record whatever the read already says, and the record
+ * itself if nothing is left (Corrections keeps what she did, defect 4).
+ *
+ * A VERB THAT ENDS WHERE THE READ BEGAN LEAVES NO CORRECTION BEHIND. A tie on
+ * and off, a dot on and off, a pitch nudged up and back, a length pressed that
+ * the note already had: each wrote a record equal to the read, which lit
+ * Restore and counted as a correction. `withCorrection` prunes an EMPTY record
+ * only; it cannot know the read, so this compares against it.
+ *
+ * `read` is the event as the reader read it. Without one (a note the singer
+ * entered, a grace stop) nothing is compared and the map comes back as given,
+ * because an entered record IS the entry and a grace note has no read event
+ * in the line.
+ *
+ * TWO CASES ARE LEFT ALONE ON PURPOSE. A pitch on a note the singer made a
+ * rest is kept: it is the memory `toggleRest` returns to. A base or dots on a
+ * record that holds a tuplet is kept: the tuplet row wrote it as part of the
+ * definition.
+ */
+export function settleAgainstRead(map: CorrectionMap, id: string, read: VocalLineEvent | undefined): CorrectionMap {
+	const c = map[id];
+	if (!c || !read || c.entered) return map;
+	const next: NoteCorrection = { ...c };
+	const effectiveType = next.type ?? read.type;
+	if (next.type === read.type) delete next.type;
+	if (next.pitch !== undefined) {
+		const same =
+			read.pitch !== undefined &&
+			next.pitch.step === read.pitch.step &&
+			next.pitch.alter === read.pitch.alter &&
+			next.pitch.octave === read.pitch.octave;
+		const dead = effectiveType === 'rest' && read.type === 'rest';
+		const memory = next.type === 'rest' && read.type !== 'rest';
+		if ((same || dead) && !memory) delete next.pitch;
+	}
+	if (next.tuplet === undefined) {
+		if (next.base === read.duration.base) delete next.base;
+		if (next.dots === read.duration.dots) delete next.dots;
+	}
+	if (next.tied !== undefined) {
+		const readTied = read.tied?.type === 'start' || read.tied?.type === 'continue';
+		if ((next.tied === 'start') === readTied) delete next.tied;
+	}
+	return withCorrection({ ...map, [id]: next }, id, {});
+}
+
 /** Whether a record says anything about the NOTE, beyond the bar's own marks. */
 export function amendsNote(c: NoteCorrection | undefined): boolean {
 	if (!c) return false;

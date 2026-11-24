@@ -13,7 +13,7 @@
 
 import { describe, it, expect } from 'vitest';
 import type { NoteBase, Pitch, VocalLineEvent } from '@ilya/score-parser';
-import { applyCorrections, durationFraction, orphanIds, withCorrection, type CorrectionMap } from './correction';
+import { applyCorrections, durationFraction, orphanIds, settleAgainstRead, withCorrection, type CorrectionMap } from './correction';
 import {
 	applyTuplet,
 	arrivalPitch,
@@ -582,5 +582,51 @@ describe('the beat one entry of a measure stands on', () => {
 		expect(beatOfEntry(line, 0, 'zz', FOUR_FOUR)).toBeNull();
 		expect(beatOfEntry(line, 9, 'a', FOUR_FOUR)).toBeNull();
 		expect(beatOfEntry(line, 0, 'a', undefined)).toBeNull();
+	});
+});
+
+describe('a verb that ends where the read began leaves no record (defect 4)', () => {
+	const same = [ev('a', P('G', 3)), ev('b', P('G', 3)), ev('c', P('A', 3))];
+
+	// Characterization: these held before the repair and hold after it.
+	it('a tie turned on is still recorded', () => {
+		expect(toggleTie({}, same[0], same[0])).toEqual({ a: { tied: 'start' } });
+	});
+	it('a conversion to a rest is still recorded, with the pitch it remembers', () => {
+		const map = toggleRest({}, LINE, 'b', P('B', 4), LINE[1]);
+		expect(map.b).toEqual({ type: 'rest', pitch: P('G', 3) });
+	});
+	it('a real correction beside a settled one is kept', () => {
+		const map = settleAgainstRead({ a: { pitch: P('F', 3), base: 'half' } }, 'a', LINE[0]);
+		expect(map).toEqual({ a: { base: 'half' } });
+	});
+
+	// The defect: the tie round trip left {"a":{"tied":"none"}}.
+	it('tie on then off leaves no record', () => {
+		const on = toggleTie({}, same[0], same[0]);
+		expect(toggleTie(on, same[0], same[0])).toEqual({});
+	});
+	it('tie off then on, on a note the reader found tied, leaves no record', () => {
+		const read = { ...ev('a', P('G', 3)), tied: { type: 'start' as const } };
+		const off = toggleTie({}, read, read);
+		expect(off).toEqual({ a: { tied: 'none' } });
+		expect(toggleTie(off, read, read)).toEqual({});
+	});
+	it('note to rest and back leaves no record', () => {
+		const toRest = toggleRest({}, LINE, 'b', P('B', 4), LINE[1]);
+		const drawn = applyCorrections(LINE, toRest);
+		expect(toggleRest(toRest, drawn, 'b', P('D', 4), LINE[1])).toEqual({});
+	});
+	it('rest to note and back, on a rest the reader found, leaves no record', () => {
+		const line = [ev('a', P('F', 3)), ev('r', undefined)];
+		const toNote = toggleRest({}, line, 'r', P('B', 4), line[1]);
+		expect(toNote.r).toMatchObject({ type: 'note', pitch: P('B', 4) });
+		const drawn = applyCorrections(line, toNote);
+		expect(toggleRest(toNote, drawn, 'r', P('B', 4), line[1])).toEqual({});
+	});
+	it('without a read event nothing is settled, so an entered record is never pruned', () => {
+		const { map, id } = enterEntry({}, { kind: 'gap', after: 'a' }, { base: 'quarter', dots: 0, pitch: P('G', 3) });
+		expect(settleAgainstRead(map, id, LINE[0])).toBe(map);
+		expect(settleAgainstRead(map, id, undefined)).toBe(map);
 	});
 });
