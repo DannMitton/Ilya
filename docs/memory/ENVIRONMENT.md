@@ -98,6 +98,7 @@ next session the same hour it cost the last one.
 | a subagent leaves a `.bak` file in the tree that nothing can delete | `A SUBAGENT'S .bak CANNOT BE DELETED` |
 | you are about to name a report file in a subagent's brief | `A REPORT PATH WAS ALREADY TAKEN` |
 | you are about to quote a cost for a Fable read of one audit unit | `ESTIMATES BY KIND OF JOB` |
+| you are about to quote a cost for a Fable review of a PLAN, or for a web-research pass | `ESTIMATES BY KIND OF JOB: THREE ACTUALS FROM 2026-11-23 EVENING` |
 | you are about to read Dann's usage page, or say how much Fable is left | `HOW TO READ THE FABLE BAR` |
 | a desk is about to cite "no vowel is ever blank" as Dann's ruling | `NO VOWEL IS EVER BLANK IS A GLOSS` |
 | you are about to cite one of Dann's rules as authority for your own convenience | `THE OPENING READ IS NOT A MENU` |
@@ -6059,3 +6060,13 @@ Merged at `70fee262` (consistency batch 3, first slice). Twenty-four files moved
 **What is still true and worth holding:** a REDEPLOY of one commit, for example after changing an environment variable without a commit, produces a second deployment with the same version name. An open tab gets no update notice from it, and `sw.js` is byte-identical unless a decoder chunk name changed. Pages are network-first (`static/sw.js:124-126`), so the next navigation still gets the new build. Small, and worth knowing before toggling a production variable without a commit.
 
 **Also confirmed in the same response, independently of N.197's sweep:** the `content-security-policy-report-only` header is live and names no outside host, which is the report-only CSP recorded above.
+
+## ESTIMATES BY KIND OF JOB: THREE ACTUALS FROM 2026-11-23 EVENING
+
+Added by the desk at the close. `CONTRACT.md` section 4, estimates come from actuals.
+
+- **A Fable review of one PLAN, read through the bridge, no source tree, no build.** Two actuals the same evening: **142,797 tokens, 13 tool uses, 4.8 min** (N.204 plan r5, against r4 plus one filed unit read plus four `CONTRACT.md` sections); and **174,607 tokens, 13 tool uses, 5.1 min** (plan r7, against r6 by line diff, plus the research report and the reviewer's own earlier review). **Quote 0.14M to 0.19M for this kind and cap at 300k.** It is cheaper than a review of a Code brief with the code read in full (328k, 2026-11-12) because no source file is opened.
+- **A Sonnet web-research pass over primary sources, full reads where obtainable, PDFs saved to `~/Downloads`.** **240,258 tokens, 74 tool uses, 9.8 min**, cap 350k. Twenty-eight sources attempted: 3 read in full, 11 in part, 12 NOT OBTAINED, mostly paywalled. **Quote 0.24M to 0.35M, and expect roughly half the named sources to be unobtainable** when the subject is academic software engineering rather than the open web. Compare the skins research of 2026-11-21: 285,960 tokens, 100 tool uses, 17.2 min, same cap, on an open-web subject.
+- **The desk's own evening, for scale:** three helpers, never more than two at once, 558k of helper tokens in total, against a Fable weekly allowance that measures near 7M.
+
+**The lesson the two plan reviews teach, and it is about the desk rather than the cost.** The r7 review's four blockers were all caused by the desk amending a long document in place twice in one evening and never re-reading the whole of it: six sections still instructed a design Dann had struck, and the surgical replacement deleted material five other sections cite. **A document amended twice is re-read whole before it is called finished, or it is rebuilt from the last internally consistent revision.** r8 was rebuilt from r6 for exactly this reason.
