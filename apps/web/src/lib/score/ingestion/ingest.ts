@@ -155,8 +155,11 @@ function withUnreadBars(result: ParseResult, text: string): ParseResult {
  * The parse with the notes a scan's printed extender sustains, if the MusicXML says so (`omr/extend-convention.ts`): an
  * `extender-notes` warning carrying their event ids. The parser reads no `<extend>`, so this is the one reader, at the same
  * seam as `withUnreadBars`. A kept reading reopened from its stored text passes through here again and the warning returns.
- * An authored score does not carry the convention's field and is not read. The bars that could not be lined up are named in
- * the message, so a loss is reported and never silent.
+ * An authored score does not carry the convention's field and is not read BY THIS READER. Since item 1 of the arrival seam
+ * (cloud-lane-88) the parser itself reads `<extend>` in every MusicXML file and warns first; where it has, this returns at
+ * once, so THE PARSER'S READING WINS where a file Ilya wrote carries both (both name the same notes: `extend-convention.test.ts`).
+ * This reader keeps its work for a file the parser's pass found nothing in, and for the bars it could not line up, which are
+ * named in the message, so a loss is reported and never silent.
  */
 function withExtenders(result: ParseResult, text: string): ParseResult {
 	if (result.warnings.some((w) => w.code === 'extender-notes')) return result;
