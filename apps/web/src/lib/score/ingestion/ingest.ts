@@ -45,7 +45,8 @@ import {
 import { listZipEntries, readZipEntry, ZipReadError, type ZipFailureKind } from '$lib/reader/zip-reader';
 import { t, type Language } from '$lib/i18n';
 import { foldVowelessSyllables } from './vowelless-fold';
-import { decodeBars, encodeBars, readUnreadBars, type BarRange } from '$lib/omr/unread-bars';
+import { countUnderlay, type UnderlayCount } from './underlay-count';
+import { decodeBars, encodeBars, mergeRanges, readUnreadBars, type BarRange } from '$lib/omr/unread-bars';
 import { extenderMelismaIds } from '$lib/omr/extend-convention';
 
 // ── Provenance (drives the fidelity surface, Round 9 Item 1) ─────
@@ -372,8 +373,63 @@ function withDictionMarksFolded(result: ParseResult): ParseResult {
 function withVowelPerNote(result: ParseResult): ParseResult {
 	if (!Array.isArray(result.score?.vocalLine)) return result;
 	const fold = foldVowelessSyllables(result.score);
-	if (fold.undrawn > 0) console.warn(`${fold.undrawn} vowelless syllable${fold.undrawn === 1 ? '' : 's'} with no host in the file's lyrics, not drawn (CONTRACT 0.1)`);
-	return fold.score === result.score ? result : { ...result, score: fold.score };
+	if (fold.undrawn > 0) console.warn(`${fold.undrawn} syllable${fold.undrawn === 1 ? '' : 's'} with no note in the file's lyrics, not drawn (CONTRACT 0.1)`);
+	const dealt = fold.score === result.score ? result : { ...result, score: fold.score };
+	const extenders = new Set(result.warnings.find((w) => w.code === 'extender-notes')?.eventIds ?? []);
+	const count = countUnderlay(fold, extenders);
+	return count.damaged ? withUnderlayRecord(dealt, count) : dealt;
+}
+
+/**
+ * Item 4 of the arrival seam (cloud-lane-88). WHAT IS LEFT OVER IS RECORDED, NEVER COVERED. Ilya invents no syllable and no
+ * melisma, so a place the count cannot account for is handed on, with its bars and its reason, in an `underlay-count` warning
+ * (`ParseWarning` carries `bars` and `eventIds`; the `Breach` shape cannot). No string a singer reads is added here: the telling
+ * belongs to slice 6R of `plan-corrections-build_r2_2026-11-05.md`.
+ *
+ * RECORDED, NOT MERELY COUNTED: a note with no syllable reads as a melisma to every reader (`types.ts`, `VocalLineEvent.syllable`),
+ * and the resolver would sustain the last vowel across it. The `#` fold's vacated tail is the one thing that does not, because
+ * the resolver abstains on it (`diction-marks.ts`, `vowelResolverAbstentions`). So the leftover is recorded the SAME way, in
+ * `score.dictionMarks.vacatedTailEventIds`: the notes the deal left with no syllable, and the sung notes with no text and no
+ * evidence of a held note. Text with no note (a syllable the cascade pushed off the end, a fragment with no host) is in the
+ * message with its bar and is never seated somewhere to be rid of it.
+ */
+function withUnderlayRecord(result: ParseResult, count: UnderlayCount): ParseResult {
+	const score = result.score;
+	const barOf = new Map<string, number>();
+	score.vocalLine.forEach((ev) => {
+		const m = score.measures?.[ev.measureIndex];
+		const n = m ? parseInt(m.number, 10) : NaN;
+		barOf.set(ev.id, Number.isFinite(n) ? n : ev.measureIndex + 1);
+	});
+	const bar = (id: string): number => barOf.get(id) ?? 0;
+	const ids = new Set<string>();
+	const abstain: Array<{ eventId: string; verseNumber: number }> = [];
+	const said: string[] = [];
+	for (const v of count.verses) {
+		const parts: string[] = [];
+		const noteless = [...v.vacated.map((p) => p.eventId), ...v.unexplained];
+		for (const id of noteless) {
+			abstain.push({ eventId: id, verseNumber: v.verse });
+			ids.add(id);
+		}
+		if (noteless.length > 0) parts.push(`${noteless.length} note(s) with no syllable in bar(s) ${[...new Set(noteless.map(bar))].sort((a, b) => a - b).join(', ')}`);
+		for (const [label, places] of [['text with no note', [...v.overflow, ...v.orphans]], ['a token the engine could not divide', v.undivided]] as const) {
+			if (places.length === 0) continue;
+			places.forEach((p) => ids.add(p.eventId));
+			parts.push(`${label}: ${places.map((p) => `«${p.text}» (bar ${bar(p.eventId)})`).join(', ')}`);
+		}
+		if (parts.length === 0 && !v.agrees) parts.push('the notes and the syllables do not come out even');
+		if (parts.length > 0) said.push(`Verse ${v.verse}: ${v.sung} sung note(s), ${v.syllables} syllable(s); ${parts.join('; ')}.`);
+	}
+	const known = new Set((score.dictionMarks?.vacatedTailEventIds ?? []).map((t) => `${t.verseNumber}|${t.eventId}`));
+	const fresh = abstain.filter((t, i) => !known.has(`${t.verseNumber}|${t.eventId}`) && abstain.findIndex((u) => u.eventId === t.eventId && u.verseNumber === t.verseNumber) === i);
+	const dictionMarks = fresh.length === 0 ? score.dictionMarks : { breaks: score.dictionMarks?.breaks ?? [], vacatedTailEventIds: [...(score.dictionMarks?.vacatedTailEventIds ?? []), ...fresh] };
+	const bars = mergeRanges([...ids].map((id): BarRange => [bar(id), bar(id)]).filter(([b]) => b > 0));
+	return {
+		...result,
+		score: dictionMarks === score.dictionMarks ? score : { ...score, dictionMarks },
+		warnings: [...result.warnings, { code: 'underlay-count', message: said.join(' '), bars, eventIds: [...ids] }],
+	};
 }
 
 // ── `.mxl` rootfile resolution ───────────────────────────────────

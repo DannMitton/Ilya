@@ -989,7 +989,8 @@ export type ParseWarningCode =
    * others. `ParseWarning.bars` names the bars of the others.
    */
   | 'words-partly-read'
-  | 'extender-notes'; // row 181: set by the application's ingestion (a scan's printed extender); `eventIds` names the notes
+  | 'extender-notes' // a printed extender; `eventIds` names the sustained notes (the parser reads `<extend>`; ingestion reads a scan's)
+  | 'underlay-count'; // cloud-lane-88, set by ingestion: syllables and sung notes do not come out even; `bars` and `eventIds` name the damage
 
 export type ParseErrorCode =
   | 'invalid-mnx-json'
