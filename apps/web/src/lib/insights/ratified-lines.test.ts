@@ -574,3 +574,60 @@ describe('N.202: the Guide says which Ilya this is, and how to cite it', () => {
 		expect(guideSource.slice(guideFrStart, guideFrEnd)).not.toContain('{:else}');
 	});
 });
+
+/* Lane 87: the two ratified GUIDE resonance paragraphs (`docs/sessions/draft-french-guide-resonance_r2_2026-11-23.md`).
+   Paragraph 1, `guide-markup-how-ilya-reads`: Dann rewrote it and ratified both languages 2026-11-23 22:28.
+   Paragraph 2, `guide-licences-method`: English ratified 2026-11-22 21:44, French 2026-11-23 22:16.
+   Each is found by its `<p id="…">` on its own side of the language split. The comparison basis: the seated text with its
+   tags stripped equals the draft's paragraph with its markdown markers stripped, every apostrophe U+2019, as written below. */
+describe('ratified Guide paragraphs (lane 87, resonance)', () => {
+	const guide = readFileSync(new URL('../components/Reading/GuideContent.svelte', import.meta.url), 'utf8');
+	const a = guide.indexOf("{#if language === 'fr'}");
+	const b = guide.indexOf('{:else}', a);
+	const fr = guide.slice(a, b);
+	const en = guide.slice(0, a) + guide.slice(b);
+	const seated = (side: string, id: string): string => {
+		const start = side.indexOf(`<p id="${id}">`);
+		expect(start, id).toBeGreaterThan(-1);
+		expect(side.indexOf(`<p id="${id}">`, start + 1), `${id} appears once on its side`).toBe(-1);
+		return side.slice(start, side.indexOf('</p>', start)).replace(/<[^>]+>/g, '');
+	};
+
+	it('paragraph 1, English: how Ilya reads your vowel', () => {
+		expect(seated(en, 'guide-markup-how-ilya-reads')).toBe(
+			'How Ilya reads your vowel. You sing each vowel in vocal fry, holding the shape of your vocal tract steady, and Ilya reads the resonances that shape makes. From your takes it builds your resonance profile. Ilya reads each take fifteen times over, each one made for a different length of vocal tract, and keeps the reading whose resonances hold most steadily from the beginning of the note to the end.',
+		);
+	});
+	it('paragraph 1, French: the same, in his rewrite', () => {
+		expect(seated(fr, 'guide-markup-how-ilya-reads')).toBe(
+			'Comment Ilya lit votre voyelle. Vous chantez chaque voyelle en friture vocale, en gardant la forme de votre conduit vocal, et Ilya lit les résonances que cette forme produit. À partir de vos prises, Ilya établit votre profil de résonances. Ilya lit chaque prise quinze fois, chaque lecture étant faite pour une longueur de conduit vocal différente, et retient celle dont les résonances restent les plus stables du début à la fin de la note.',
+		);
+	});
+	it('paragraph 2, English: the method is published work, with a U+2019 apostrophe', () => {
+		expect(seated(en, 'guide-licences-method')).toBe(
+			'The method is published work. Ilya’s reading of your resonances follows the method David Weenink described in 2015 and 2023, built from his papers rather than from any implementation of them.',
+		);
+	});
+	it('paragraph 2, French: la méthode provient de travaux publiés', () => {
+		expect(seated(fr, 'guide-licences-method')).toBe(
+			'La méthode provient de travaux publiés. Pour lire vos résonances, Ilya suit la méthode décrite par David Weenink en 2015 et en 2023, à partir de ses articles seuls et sans recourir à aucune mise en œuvre existante.',
+		);
+	});
+	it('each paragraph is a <p> with a <strong> lead and no heading, so the drawer contents gain nothing', () => {
+		for (const [side, id] of [[fr, 'guide-markup-how-ilya-reads'], [en, 'guide-markup-how-ilya-reads'], [fr, 'guide-licences-method'], [en, 'guide-licences-method']] as const) {
+			expect(side).toMatch(new RegExp(`<p id="${id}"><strong>[^<]*(<em>Ilya</em>[^<]*)?</strong> `));
+			expect(side).not.toMatch(new RegExp(`<h[1-6] id="${id}"`));
+		}
+	});
+	it('placement: paragraph 1 closes the characteristics passage, paragraph 2 follows the scholarship paragraph', () => {
+		const order = (side: string, ...marks: string[]): void => {
+			const at = marks.map((m) => side.indexOf(m));
+			at.forEach((i, k) => expect(i, marks[k]).toBeGreaterThan(-1));
+			expect([...at].sort((x, y) => x - y)).toEqual(at);
+		};
+		order(fr, 'id="guide-markup-characteristics"', 'Ces valeurs se saisissent au clavier', 'id="guide-markup-how-ilya-reads"', 'id="guide-markup-notation"');
+		order(en, 'id="guide-markup-characteristics"', 'These values are typed, not sung', 'id="guide-markup-how-ilya-reads"', 'id="guide-markup-notation"');
+		order(fr, 'id="guide-licences"', '<strong>Recherche savante.</strong>', 'id="guide-licences-method"', '<strong>Données de dictionnaire.</strong>');
+		order(en, 'id="guide-licences"', '<strong>Scholarship.</strong>', 'id="guide-licences-method"', '<strong>Dictionary data.</strong>');
+	});
+});
