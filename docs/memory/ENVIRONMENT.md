@@ -6101,3 +6101,17 @@ Added by the desk at the close. `CONTRACT.md` section 4, estimates come from act
 **If a prompt must be typed in full**, type it as a single line with no newline characters at all, or paste through the clipboard rather than typing.
 
 **One more trap found the same minute, and it nearly produced a false report to Dann.** The session page's diff panel compares the lane against **`main`**, not against the branch it was cut from. `main` is months behind `Shane`, so the panel showed "+26152 -506" and a rewritten `.gitignore` and `AGENTS.md` for a session that had pushed nothing. **Read the comparison's base in the panel header before reading one number out of it**, and confirm a lane's real state with `git ls-remote` from the bridge.
+
+## READING AN UNMERGED LANE: CLONE FROM GITHUB, NOT FROM THE MAC (2026-11-24)
+
+The Mac's clone does not hold a cloud lane's commits until someone fetches, and the remote-tracking ref goes stale silently: `git log -1 origin/cloud-lane-88` printed `5594904b`, the floor, while the lane's tip was `6c84747d`. **A fetch is a git write and the desk does not run one.** An as-built review therefore makes its own shallow clone in its own scratch space, outside the user's folders, and deletes it at the end:
+
+```
+git clone --filter=blob:none --no-tags --single-branch --branch cloud-lane-NN --depth 8 https://github.com/DannMitton/Ilya.git ~/lNN-review
+```
+
+Both Fable reads of 2026-11-24 did this, each at about 150,000 tokens, and both reached the Mac through `device_bash` only to read the brief and to write their report.
+
+## `md5` IS NOT IN THE BRIDGE VM (2026-11-24)
+
+`md5 -q` is a Mac command. The bridge is Linux: use `md5sum`, which prints the hash first and the filename after it.
