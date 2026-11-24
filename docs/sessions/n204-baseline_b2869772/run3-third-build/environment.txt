@@ -1,0 +1,10 @@
+commit: 93edb360d397265bcea7dde693dbda81643351ac
+node: v22.23.5
+pnpm: 10.28.0
+os: Linux 6.18.44-fc-v819 x86_64 GNU/Linux
+tz: America/St_Johns
+playwright: Version 1.58.2
+chromium: Google Chrome for Testing 158.0.8127.36 
+scipy: ModuleNotFoundError: No module named 'scipy'
+started: 2026-11-24T04:57:48Z
+finished: 2026-11-24T04:58:54Z

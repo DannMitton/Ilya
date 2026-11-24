@@ -1,0 +1,709 @@
+<svg viewBox="0 0 624 727" xmlns="http://www.w3.org/2000/svg" data-score-page="1">
+<svg x="0" y="0" width="624" height="99" viewBox="0 76 624 99" data-system="0-3">
+
+<line x1="0" y1="85" x2="624" y2="85" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="90.5" x2="624" y2="90.5" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="96" x2="624" y2="96" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="101.5" x2="624" y2="101.5" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="107" x2="624" y2="107" stroke="#3a352f" stroke-width="1"/>
+<g data-clef="treble">
+<g transform="translate(-28.5,0)">
+<line x1="46" y1="77" x2="46" y2="111.5" stroke="#3a352f" stroke-width="2.2"/>
+<circle cx="46" cy="101.5" r="4" fill="none" stroke="#3a352f" stroke-width="1.6"/>
+</g>
+</g>
+<g data-meter="4/4"><text x="39.13" y="94.9" text-anchor="middle" font-size="13.2" font-weight="bold" fill="#3a352f">4</text><text x="39.13" y="105.9" text-anchor="middle" font-size="13.2" font-weight="bold" fill="#3a352f">4</text></g>
+<g pointer-events="none">
+<rect data-hit="m0-0-1" x="40.45" y="65.75" width="92.49" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<rect x="55.45" y="93" width="10" height="6" rx="1.5" fill="#3a352f"/>
+</g>
+<line x1="187.43" y1="85" x2="187.43" y2="107" stroke="#3a352f" stroke-width="1"/>
+<g pointer-events="none">
+<rect data-hit="m1-0-1" x="132.94" y="65.75" width="144.98" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<rect x="200.43" y="93" width="10" height="6" rx="1.5" fill="#3a352f"/>
+</g>
+<line x1="332.41" y1="85" x2="332.41" y2="107" stroke="#3a352f" stroke-width="1"/>
+<g pointer-events="none">
+<rect data-hit="m2-0-1" x="277.92" y="65.75" width="144.98" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<rect x="345.41" y="93" width="10" height="6" rx="1.5" fill="#3a352f"/>
+</g>
+<line x1="477.39" y1="85" x2="477.39" y2="107" stroke="#3a352f" stroke-width="1"/>
+<line x1="484.39" y1="112.5" x2="506.39" y2="112.5" stroke="#3a352f" stroke-width="1"/>
+<g data-event-id="m3-0-1" pointer-events="none">
+<rect data-hit="m3-0-1" x="422.9" y="65.75" width="88.57" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="495.39" cy="112.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 495.39 112.5)"/>
+<line x1="500.89" y1="111.5" x2="500.89" y2="93.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m3-1-4" pointer-events="none">
+<rect data-hit="m3-1-4" x="511.47" y="65.75" width="32.15" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="527.54" cy="109.75" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 527.54 109.75)"/>
+<line x1="533.04" y1="108.75" x2="533.04" y2="90.5" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m3-1-2" pointer-events="none">
+<rect data-hit="m3-1-2" x="543.62" y="65.75" width="32.15" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="559.69" cy="107" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 559.69 107)"/>
+<line x1="565.19" y1="106" x2="565.19" y2="87.75" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m3-3-4" pointer-events="none">
+<rect data-hit="m3-3-4" x="575.77" y="65.75" width="36.08" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="591.85" cy="101.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 591.85 101.5)"/>
+<line x1="597.35" y1="100.5" x2="597.35" y2="82.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<text x="495.39" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">Ночь</text>
+<text x="527.54" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">ти</text>
+<text x="559.69" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">ха</text>
+<text x="591.85" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">над</text>
+<line x1="541.47" y1="151" x2="546.47" y2="151" stroke="#1a1612" stroke-width="1" data-hyphen="m3-1-4"/>
+<line x1="623.5" y1="85" x2="623.5" y2="107" stroke="#3a352f" stroke-width="1"/>
+
+</svg>
+<svg x="0" y="105" width="624" height="111" viewBox="0 64 624 111" data-system="4-7">
+
+<line x1="0" y1="85" x2="624" y2="85" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="90.5" x2="624" y2="90.5" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="96" x2="624" y2="96" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="101.5" x2="624" y2="101.5" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="107" x2="624" y2="107" stroke="#3a352f" stroke-width="1"/>
+<g data-clef="treble">
+<g transform="translate(-28.5,0)">
+<line x1="46" y1="77" x2="46" y2="111.5" stroke="#3a352f" stroke-width="2.2"/>
+<circle cx="46" cy="101.5" r="4" fill="none" stroke="#3a352f" stroke-width="1.6"/>
+</g>
+</g>
+<text data-bar-number="5" x="17.5" y="79.5" text-anchor="middle" font-size="12.5" font-style="italic" fill="#3a352f">5</text>
+<g data-event-id="m4-0-1" pointer-events="none">
+<rect data-hit="m4-0-1" x="29.45" y="65.75" width="36.08" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="49.45" cy="107" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 49.45 107)"/>
+<line x1="54.95" y1="106" x2="54.95" y2="87.75" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m4-1-4" pointer-events="none">
+<rect data-hit="m4-1-4" x="65.53" y="65.75" width="31.9" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="81.6" cy="109.75" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 81.6 109.75)"/>
+<line x1="87.1" y1="108.75" x2="87.1" y2="90.5" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<line x1="102.25" y1="112.5" x2="124.25" y2="112.5" stroke="#3a352f" stroke-width="1"/>
+<g data-event-id="m4-1-2" pointer-events="none">
+<rect data-hit="m4-1-2" x="97.43" y="65.75" width="32.48" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="113.25" cy="112.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 113.25 112.5)"/>
+<line x1="118.75" y1="111.5" x2="118.75" y2="93.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m4-3-4" pointer-events="none">
+<rect data-hit="m4-3-4" x="129.9" y="65.75" width="41.94" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="146.55" cy="109.75" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 146.55 109.75)"/>
+<line x1="152.05" y1="108.75" x2="152.05" y2="90.5" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<line x1="179.12" y1="85" x2="179.12" y2="107" stroke="#3a352f" stroke-width="1"/>
+<g data-event-id="m5-0-1" pointer-events="none">
+<rect data-hit="m5-0-1" x="171.84" y="65.75" width="41.1" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="197.12" cy="101.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 197.12 101.5)"/>
+<line x1="202.62" y1="100.5" x2="202.62" y2="82.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m5-1-4" pointer-events="none">
+<rect data-hit="m5-1-4" x="212.94" y="65.75" width="31.65" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="228.76" cy="98.75" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 228.76 98.75)"/>
+<line x1="234.26" y1="97.75" x2="234.26" y2="79.5" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m5-1-2" pointer-events="none">
+<rect data-hit="m5-1-2" x="244.59" y="65.75" width="31.65" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="260.41" cy="101.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 260.41 101.5)"/>
+<line x1="265.91" y1="100.5" x2="265.91" y2="82.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m5-3-4" pointer-events="none">
+<rect data-hit="m5-3-4" x="276.24" y="65.75" width="47.15" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="292.06" cy="107" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 292.06 107)"/>
+<line x1="297.56" y1="106" x2="297.56" y2="87.75" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<line x1="323.77" y1="85" x2="323.77" y2="107" stroke="#3a352f" stroke-width="1"/>
+<g data-meter="2/2"><text x="333.4" y="94.9" text-anchor="middle" font-size="13.2" font-weight="bold" fill="#3a352f">2</text><text x="333.4" y="105.9" text-anchor="middle" font-size="13.2" font-weight="bold" fill="#3a352f">2</text></g>
+<line x1="343.72" y1="112.5" x2="365.72" y2="112.5" stroke="#3a352f" stroke-width="1"/>
+<g data-event-id="m6-0-1" pointer-events="none">
+<rect data-hit="m6-0-1" x="323.39" y="65.75" width="47.15" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="354.72" cy="112.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 354.72 112.5)"/>
+<line x1="360.22" y1="111.5" x2="360.22" y2="93.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m6-1-4" pointer-events="none">
+<rect data-hit="m6-1-4" x="370.54" y="65.75" width="31.64" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="386.36" cy="109.75" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 386.36 109.75)"/>
+<line x1="391.86" y1="108.75" x2="391.86" y2="90.5" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m6-1-2" pointer-events="none">
+<rect data-hit="m6-1-2" x="402.19" y="65.75" width="31.65" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="418.01" cy="107" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 418.01 107)"/>
+<line x1="423.51" y1="106" x2="423.51" y2="87.75" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m6-3-4" pointer-events="none">
+<rect data-hit="m6-3-4" x="433.84" y="65.75" width="39.7" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="449.66" cy="101.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 449.66 101.5)"/>
+<line x1="455.16" y1="100.5" x2="455.16" y2="82.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<line x1="479.41" y1="85" x2="479.41" y2="107" stroke="#3a352f" stroke-width="1"/>
+<g data-event-id="m7-0-1" pointer-events="none">
+<rect data-hit="m7-0-1" x="473.54" y="65.75" width="39.7" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="497.41" cy="107" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 497.41 107)"/>
+<line x1="502.91" y1="106" x2="502.91" y2="87.75" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m7-1-4" pointer-events="none">
+<rect data-hit="m7-1-4" x="513.24" y="65.75" width="31.65" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="529.06" cy="109.75" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 529.06 109.75)"/>
+<line x1="534.56" y1="108.75" x2="534.56" y2="90.5" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<line x1="549.71" y1="112.5" x2="571.71" y2="112.5" stroke="#3a352f" stroke-width="1"/>
+<g data-event-id="m7-1-2" pointer-events="none">
+<rect data-hit="m7-1-2" x="544.89" y="65.75" width="31.64" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="560.71" cy="112.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 560.71 112.5)"/>
+<line x1="566.21" y1="111.5" x2="566.21" y2="93.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m7-3-4" pointer-events="none">
+<rect data-hit="m7-3-4" x="576.53" y="65.75" width="35.82" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="592.35" cy="109.75" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 592.35 109.75)"/>
+<line x1="597.85" y1="108.75" x2="597.85" y2="90.5" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<path d="M354.72 108.5 Q 370.54 95.54 386.36 105.75 Q 370.54 97.74 354.72 108.5 Z" fill="#1a1612" data-slur-printed="m6-0-1"/>
+<text x="49.45" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">ре</text>
+<text x="81.6" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">кой</text>
+<text x="113.25" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">ту</text>
+<text x="146.55" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">ман</text>
+<text x="190.92" y="155" text-anchor="start" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">Свет</text>
+<text x="260.41" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">зо</text>
+<text x="292.06" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">ра</text>
+<text x="348.52" y="155" text-anchor="start" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">Спит</text>
+<text x="418.01" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">ле</text>
+<text x="449.66" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">са</text>
+<text x="497.41" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">лю</text>
+<text x="529.06" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">ли</text>
+<text x="560.71" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">лю</text>
+<text x="592.35" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">ли</text>
+<line x1="60.87" y1="151" x2="65.87" y2="151" stroke="#1a1612" stroke-width="1" data-hyphen="m4-0-1"/>
+<line x1="124.76" y1="151" x2="129.76" y2="151" stroke="#1a1612" stroke-width="1" data-hyphen="m4-1-2"/>
+<line x1="273.35" y1="151" x2="278.35" y2="151" stroke="#1a1612" stroke-width="1" data-hyphen="m5-1-2"/>
+<line x1="431.58" y1="151" x2="436.58" y2="151" stroke="#1a1612" stroke-width="1" data-hyphen="m6-1-2"/>
+<line x1="511.29" y1="151" x2="516.29" y2="151" stroke="#1a1612" stroke-width="1" data-hyphen="m7-0-1"/>
+<line x1="574.59" y1="151" x2="579.59" y2="151" stroke="#1a1612" stroke-width="1" data-hyphen="m7-1-2"/>
+<line x1="223.07" y1="155" x2="234.76" y2="155" stroke="#1a1612" stroke-width="1" data-extender="m5-0-1"/>
+<line x1="383.75" y1="155" x2="392.36" y2="155" stroke="#1a1612" stroke-width="1" data-extender="m6-0-1"/>
+<line x1="623.5" y1="85" x2="623.5" y2="107" stroke="#3a352f" stroke-width="1"/>
+
+</svg>
+<svg x="0" y="222" width="624" height="128.5" viewBox="0 46.5 624 128.5" data-system="8-8">
+
+<line x1="0" y1="85" x2="624" y2="85" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="90.5" x2="624" y2="90.5" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="96" x2="624" y2="96" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="101.5" x2="624" y2="101.5" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="107" x2="624" y2="107" stroke="#3a352f" stroke-width="1"/>
+<g data-clef="treble">
+<g transform="translate(-28.5,0)">
+<line x1="46" y1="77" x2="46" y2="111.5" stroke="#3a352f" stroke-width="2.2"/>
+<circle cx="46" cy="101.5" r="4" fill="none" stroke="#3a352f" stroke-width="1.6"/>
+</g>
+</g>
+<text data-bar-number="9" x="17.5" y="79.5" text-anchor="middle" font-size="12.5" font-style="italic" fill="#3a352f">9</text>
+<line x1="38.45" y1="112.5" x2="60.45" y2="112.5" stroke="#3a352f" stroke-width="1"/>
+<g data-event-id="m8-0-1" pointer-events="none">
+<rect data-hit="m8-0-1" x="29.45" y="65.75" width="36.08" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="49.45" cy="112.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 49.45 112.5)"/>
+<line x1="54.95" y1="111.5" x2="54.95" y2="93.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m8-1-4" pointer-events="none">
+<rect data-hit="m8-1-4" x="65.54" y="65.75" width="31.78" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="81.62" cy="109.75" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 81.62 109.75)"/>
+<line x1="87.12" y1="108.75" x2="87.12" y2="90.5" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m8-1-2" pointer-events="none">
+<rect data-hit="m8-1-2" x="97.32" y="65.75" width="33.6" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="113.01" cy="107" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 113.01 107)"/>
+<line x1="118.51" y1="106" x2="118.51" y2="87.75" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m8-3-4" pointer-events="none">
+<rect data-hit="m8-3-4" x="130.92" y="65.75" width="51.21" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="148.82" cy="101.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 148.82 101.5)"/>
+<line x1="154.32" y1="100.5" x2="154.32" y2="82.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<line x1="184.47" y1="85" x2="184.47" y2="107" stroke="#3a352f" stroke-width="1"/>
+<g data-meter="4/4"><text x="194.1" y="94.9" text-anchor="middle" font-size="13.2" font-weight="bold" fill="#3a352f">4</text><text x="194.1" y="105.9" text-anchor="middle" font-size="13.2" font-weight="bold" fill="#3a352f">4</text></g>
+<line x1="204.42" y1="112.5" x2="226.42" y2="112.5" stroke="#3a352f" stroke-width="1"/>
+<g data-verse-event-id="m3-0-1~v2" pointer-events="none" data-verse="2">
+<rect data-verse-hit="m3-0-1~v2" x="182.12" y="65.75" width="49" height="60.5" fill="transparent" pointer-events="all" cursor="pointer" data-verse="2"/>
+<ellipse cx="215.42" cy="112.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 215.42 112.5)"/>
+<line x1="220.92" y1="111.5" x2="220.92" y2="93.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-verse-event-id="m3-1-4~v2" pointer-events="none" data-verse="2">
+<rect data-verse-hit="m3-1-4~v2" x="231.12" y="65.75" width="31.38" height="60.5" fill="transparent" pointer-events="all" cursor="pointer" data-verse="2"/>
+<ellipse cx="246.81" cy="109.75" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 246.81 109.75)"/>
+<line x1="252.31" y1="108.75" x2="252.31" y2="90.5" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-verse-event-id="m3-1-2~v2" pointer-events="none" data-verse="2">
+<rect data-verse-hit="m3-1-2~v2" x="262.5" y="65.75" width="31.38" height="60.5" fill="transparent" pointer-events="all" cursor="pointer" data-verse="2"/>
+<ellipse cx="278.19" cy="107" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 278.19 107)"/>
+<line x1="283.69" y1="106" x2="283.69" y2="87.75" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-verse-event-id="m3-3-4~v2" pointer-events="none" data-verse="2">
+<rect data-verse-hit="m3-3-4~v2" x="293.89" y="65.75" width="39.38" height="60.5" fill="transparent" pointer-events="all" cursor="pointer" data-verse="2"/>
+<ellipse cx="309.58" cy="101.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 309.58 101.5)"/>
+<line x1="315.08" y1="100.5" x2="315.08" y2="82.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<line x1="338.94" y1="85" x2="338.94" y2="107" stroke="#3a352f" stroke-width="1"/>
+<g data-verse-event-id="m4-0-1~v2" pointer-events="none" data-verse="2">
+<rect data-verse-hit="m4-0-1~v2" x="333.26" y="65.75" width="39.38" height="60.5" fill="transparent" pointer-events="all" cursor="pointer" data-verse="2"/>
+<ellipse cx="356.94" cy="107" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 356.94 107)"/>
+<line x1="362.44" y1="106" x2="362.44" y2="87.75" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-verse-event-id="m4-1-4~v2" pointer-events="none" data-verse="2">
+<rect data-verse-hit="m4-1-4~v2" x="372.64" y="65.75" width="31.38" height="60.5" fill="transparent" pointer-events="all" cursor="pointer" data-verse="2"/>
+<ellipse cx="388.33" cy="109.75" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 388.33 109.75)"/>
+<line x1="393.83" y1="108.75" x2="393.83" y2="90.5" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<line x1="408.71" y1="112.5" x2="430.71" y2="112.5" stroke="#3a352f" stroke-width="1"/>
+<g data-verse-event-id="m4-1-2~v2" pointer-events="none" data-verse="2">
+<rect data-verse-hit="m4-1-2~v2" x="404.02" y="65.75" width="31.38" height="60.5" fill="transparent" pointer-events="all" cursor="pointer" data-verse="2"/>
+<ellipse cx="419.71" cy="112.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 419.71 112.5)"/>
+<line x1="425.21" y1="111.5" x2="425.21" y2="93.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-verse-event-id="m4-3-4~v2" pointer-events="none" data-verse="2">
+<rect data-verse-hit="m4-3-4~v2" x="435.41" y="65.75" width="39.38" height="60.5" fill="transparent" pointer-events="all" cursor="pointer" data-verse="2"/>
+<ellipse cx="451.1" cy="109.75" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 451.1 109.75)"/>
+<line x1="456.6" y1="108.75" x2="456.6" y2="90.5" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<line x1="480.46" y1="85" x2="480.46" y2="107" stroke="#3a352f" stroke-width="1"/>
+<g data-verse-event-id="m5-0-1~v2" pointer-events="none" data-verse="2">
+<rect data-verse-hit="m5-0-1~v2" x="474.78" y="65.75" width="39.37" height="60.5" fill="transparent" pointer-events="all" cursor="pointer" data-verse="2"/>
+<ellipse cx="498.46" cy="101.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 498.46 101.5)"/>
+<line x1="503.96" y1="100.5" x2="503.96" y2="82.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-verse-event-id="m5-1-4~v2" pointer-events="none" data-verse="2">
+<rect data-verse-hit="m5-1-4~v2" x="514.15" y="65.75" width="31.39" height="60.5" fill="transparent" pointer-events="all" cursor="pointer" data-verse="2"/>
+<ellipse cx="529.84" cy="98.75" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 529.84 98.75)"/>
+<line x1="535.34" y1="97.75" x2="535.34" y2="79.5" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-verse-event-id="m5-1-2~v2" pointer-events="none" data-verse="2">
+<rect data-verse-hit="m5-1-2~v2" x="545.54" y="65.75" width="31.38" height="60.5" fill="transparent" pointer-events="all" cursor="pointer" data-verse="2"/>
+<ellipse cx="561.23" cy="101.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 561.23 101.5)"/>
+<line x1="566.73" y1="100.5" x2="566.73" y2="82.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-verse-event-id="m5-3-4~v2" pointer-events="none" data-verse="2">
+<rect data-verse-hit="m5-3-4~v2" x="576.92" y="65.75" width="35.69" height="60.5" fill="transparent" pointer-events="all" cursor="pointer" data-verse="2"/>
+<ellipse cx="592.61" cy="107" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 592.61 107)"/>
+<line x1="598.11" y1="106" x2="598.11" y2="87.75" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<text x="49.45" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">Спи</text>
+<text x="81.62" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">мой</text>
+<text x="113.01" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">ми</text>
+<text x="148.82" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">лый</text>
+<text x="215.42" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">День</text>
+<text data-verse-ipa-of="m3-0-1~v2" x="215.42" y="135" text-anchor="middle" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif" data-verse="2">ˈdʲeɲ</text>
+<text x="246.81" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">те</text>
+<text data-verse-ipa-of="m3-1-4~v2" x="246.81" y="135" text-anchor="middle" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif" data-verse="2">tʲe</text>
+<text x="278.19" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">пел</text>
+<text data-verse-ipa-of="m3-1-2~v2" x="278.19" y="135" text-anchor="middle" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif" data-verse="2">pʲɛɫ</text>
+<text x="309.58" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">за</text>
+<text data-verse-ipa-of="m3-3-4~v2" x="309.58" y="135" text-anchor="middle" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif" data-verse="2">zʌ</text>
+<text x="350.74" y="155" text-anchor="start" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">Лес</text>
+<text data-verse-ipa-of="m4-0-1~v2" x="350.74" y="135" text-anchor="start" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif" data-verse="2">ˈlʲɛs</text>
+<text x="419.71" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">ти</text>
+<text data-verse-ipa-of="m4-1-2~v2" x="419.71" y="135" text-anchor="middle" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif" data-verse="2">tʲi</text>
+<text x="451.1" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">хо</text>
+<text data-verse-ipa-of="m4-3-4~v2" x="451.1" y="135" text-anchor="middle" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif" data-verse="2">xo</text>
+<text x="498.46" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">зо</text>
+<text data-verse-ipa-of="m5-0-1~v2" x="498.46" y="135" text-anchor="middle" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif" data-verse="2">zo</text>
+<text x="529.84" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">лот</text>
+<text data-verse-ipa-of="m5-1-4~v2" x="529.84" y="135" text-anchor="middle" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif" data-verse="2">ɫod</text>
+<text x="561.23" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">зо</text>
+<text data-verse-ipa-of="m5-1-2~v2" x="561.23" y="135" text-anchor="middle" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif" data-verse="2">zo</text>
+<text x="592.61" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">ра</text>
+<text data-verse-ipa-of="m5-3-4~v2" x="592.61" y="135" text-anchor="middle" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif" data-verse="2">rɑ</text>
+<line x1="126.44" y1="151" x2="131.44" y2="151" stroke="#1a1612" stroke-width="1" data-hyphen="m8-1-2"/>
+<line x1="257.77" y1="151" x2="262.77" y2="151" stroke="#1a1612" stroke-width="1" data-hyphen="m3-1-4~v2"/>
+<line x1="433.14" y1="151" x2="438.14" y2="151" stroke="#1a1612" stroke-width="1" data-hyphen="m4-1-2~v2"/>
+<line x1="509.43" y1="151" x2="514.43" y2="151" stroke="#1a1612" stroke-width="1" data-hyphen="m5-0-1~v2"/>
+<line x1="574.04" y1="151" x2="579.04" y2="151" stroke="#1a1612" stroke-width="1" data-hyphen="m5-1-2~v2"/>
+<line x1="375.85" y1="155" x2="394.33" y2="155" stroke="#1a1612" stroke-width="1" data-extender="m4-0-1~v2"/>
+<line x1="623.5" y1="85" x2="623.5" y2="107" stroke="#3a352f" stroke-width="1"/>
+<text data-verse-label="2" x="209.22" y="59.63" text-anchor="start" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#3a352f">Verse 2</text>
+
+</svg>
+<svg x="0" y="356.5" width="624" height="128.5" viewBox="0 46.5 624 128.5" data-verse-system="12-15">
+
+<line x1="0" y1="85" x2="624" y2="85" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="90.5" x2="624" y2="90.5" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="96" x2="624" y2="96" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="101.5" x2="624" y2="101.5" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="107" x2="624" y2="107" stroke="#3a352f" stroke-width="1"/>
+<g data-clef="treble">
+<g transform="translate(-28.5,0)">
+<line x1="46" y1="77" x2="46" y2="111.5" stroke="#3a352f" stroke-width="2.2"/>
+<circle cx="46" cy="101.5" r="4" fill="none" stroke="#3a352f" stroke-width="1.6"/>
+</g>
+</g>
+<g data-meter="2/2"><text x="39.13" y="94.9" text-anchor="middle" font-size="13.2" font-weight="bold" fill="#3a352f">2</text><text x="39.13" y="105.9" text-anchor="middle" font-size="13.2" font-weight="bold" fill="#3a352f">2</text></g>
+<text data-bar-number="7" x="0" y="79.5" text-anchor="start" font-size="12.5" font-style="italic" fill="#3a352f">7 · verse 2</text>
+<line x1="49.45" y1="112.5" x2="71.45" y2="112.5" stroke="#3a352f" stroke-width="1"/>
+<g data-verse-event-id="m6-0-1~v2" pointer-events="none" data-verse="2">
+<rect data-verse-hit="m6-0-1~v2" x="40.45" y="65.75" width="35.37" height="60.5" fill="transparent" pointer-events="all" cursor="pointer" data-verse="2"/>
+<ellipse cx="60.45" cy="112.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 60.45 112.5)"/>
+<line x1="65.95" y1="111.5" x2="65.95" y2="93.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-verse-event-id="m6-1-4~v2" pointer-events="none" data-verse="2">
+<rect data-verse-hit="m6-1-4~v2" x="75.82" y="65.75" width="30.74" height="60.5" fill="transparent" pointer-events="all" cursor="pointer" data-verse="2"/>
+<ellipse cx="91.19" cy="109.75" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 91.19 109.75)"/>
+<line x1="96.69" y1="108.75" x2="96.69" y2="90.5" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-verse-event-id="m6-1-2~v2" pointer-events="none" data-verse="2">
+<rect data-verse-hit="m6-1-2~v2" x="106.56" y="65.75" width="30.74" height="60.5" fill="transparent" pointer-events="all" cursor="pointer" data-verse="2"/>
+<ellipse cx="121.93" cy="107" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 121.93 107)"/>
+<line x1="127.43" y1="106" x2="127.43" y2="87.75" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-verse-event-id="m6-3-4~v2" pointer-events="none" data-verse="2">
+<rect data-verse-hit="m6-3-4~v2" x="137.3" y="65.75" width="38.57" height="60.5" fill="transparent" pointer-events="all" cursor="pointer" data-verse="2"/>
+<ellipse cx="152.67" cy="101.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 152.67 101.5)"/>
+<line x1="158.17" y1="100.5" x2="158.17" y2="82.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<line x1="181.06" y1="85" x2="181.06" y2="107" stroke="#3a352f" stroke-width="1"/>
+<g data-verse-event-id="m7-0-1~v2" pointer-events="none" data-verse="2">
+<rect data-verse-hit="m7-0-1~v2" x="175.87" y="65.75" width="38.57" height="60.5" fill="transparent" pointer-events="all" cursor="pointer" data-verse="2"/>
+<ellipse cx="199.06" cy="107" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 199.06 107)"/>
+<line x1="204.56" y1="106" x2="204.56" y2="87.75" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-verse-event-id="m7-1-4~v2" pointer-events="none" data-verse="2">
+<rect data-verse-hit="m7-1-4~v2" x="214.43" y="65.75" width="30.74" height="60.5" fill="transparent" pointer-events="all" cursor="pointer" data-verse="2"/>
+<ellipse cx="229.8" cy="109.75" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 229.8 109.75)"/>
+<line x1="235.3" y1="108.75" x2="235.3" y2="90.5" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<line x1="249.54" y1="112.5" x2="271.54" y2="112.5" stroke="#3a352f" stroke-width="1"/>
+<g data-verse-event-id="m7-1-2~v2" pointer-events="none" data-verse="2">
+<rect data-verse-hit="m7-1-2~v2" x="245.17" y="65.75" width="30.74" height="60.5" fill="transparent" pointer-events="all" cursor="pointer" data-verse="2"/>
+<ellipse cx="260.54" cy="112.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 260.54 112.5)"/>
+<line x1="266.04" y1="111.5" x2="266.04" y2="93.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-verse-event-id="m7-3-4~v2" pointer-events="none" data-verse="2">
+<rect data-verse-hit="m7-3-4~v2" x="275.91" y="65.75" width="38.57" height="60.5" fill="transparent" pointer-events="all" cursor="pointer" data-verse="2"/>
+<ellipse cx="291.28" cy="109.75" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 291.28 109.75)"/>
+<line x1="296.78" y1="108.75" x2="296.78" y2="90.5" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<line x1="319.67" y1="85" x2="319.67" y2="107" stroke="#3a352f" stroke-width="1"/>
+<line x1="326.67" y1="112.5" x2="348.67" y2="112.5" stroke="#3a352f" stroke-width="1"/>
+<g data-verse-event-id="m8-0-1~v2" pointer-events="none" data-verse="2">
+<rect data-verse-hit="m8-0-1~v2" x="314.48" y="65.75" width="38.95" height="60.5" fill="transparent" pointer-events="all" cursor="pointer" data-verse="2"/>
+<ellipse cx="337.67" cy="112.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 337.67 112.5)"/>
+<line x1="343.17" y1="111.5" x2="343.17" y2="93.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-verse-event-id="m8-1-4~v2" pointer-events="none" data-verse="2">
+<rect data-verse-hit="m8-1-4~v2" x="353.43" y="65.75" width="31.13" height="60.5" fill="transparent" pointer-events="all" cursor="pointer" data-verse="2"/>
+<ellipse cx="369.18" cy="109.75" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 369.18 109.75)"/>
+<line x1="374.68" y1="108.75" x2="374.68" y2="90.5" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-verse-event-id="m8-1-2~v2" pointer-events="none" data-verse="2">
+<rect data-verse-hit="m8-1-2~v2" x="384.55" y="65.75" width="32.91" height="60.5" fill="transparent" pointer-events="all" cursor="pointer" data-verse="2"/>
+<ellipse cx="399.92" cy="107" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 399.92 107)"/>
+<line x1="405.42" y1="106" x2="405.42" y2="87.75" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-verse-event-id="m8-3-4~v2" pointer-events="none" data-verse="2">
+<rect data-verse-hit="m8-3-4~v2" x="417.46" y="65.75" width="50.55" height="60.5" fill="transparent" pointer-events="all" cursor="pointer" data-verse="2"/>
+<ellipse cx="435" cy="101.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 435 101.5)"/>
+<line x1="440.5" y1="100.5" x2="440.5" y2="82.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<line x1="470.07" y1="85" x2="470.07" y2="107" stroke="#3a352f" stroke-width="1"/>
+<g data-meter="4/4"><text x="479.7" y="94.9" text-anchor="middle" font-size="13.2" font-weight="bold" fill="#3a352f">4</text><text x="479.7" y="105.9" text-anchor="middle" font-size="13.2" font-weight="bold" fill="#3a352f">4</text></g>
+<line x1="490.02" y1="112.5" x2="512.02" y2="112.5" stroke="#3a352f" stroke-width="1"/>
+<g data-verse-event-id="m3-0-1~v3" pointer-events="none" data-verse="3">
+<rect data-verse-hit="m3-0-1~v3" x="468.01" y="65.75" width="48.38" height="60.5" fill="transparent" pointer-events="all" cursor="pointer" data-verse="3"/>
+<ellipse cx="501.02" cy="112.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 501.02 112.5)"/>
+<line x1="506.52" y1="111.5" x2="506.52" y2="93.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-verse-event-id="m3-1-4~v3" pointer-events="none" data-verse="3">
+<rect data-verse-hit="m3-1-4~v3" x="516.39" y="65.75" width="30.75" height="60.5" fill="transparent" pointer-events="all" cursor="pointer" data-verse="3"/>
+<ellipse cx="531.76" cy="109.75" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 531.76 109.75)"/>
+<line x1="537.26" y1="108.75" x2="537.26" y2="90.5" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-verse-event-id="m3-1-2~v3" pointer-events="none" data-verse="3">
+<rect data-verse-hit="m3-1-2~v3" x="547.14" y="65.75" width="30.75" height="60.5" fill="transparent" pointer-events="all" cursor="pointer" data-verse="3"/>
+<ellipse cx="562.52" cy="107" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 562.52 107)"/>
+<line x1="568.02" y1="106" x2="568.02" y2="87.75" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-verse-event-id="m3-3-4~v3" pointer-events="none" data-verse="3">
+<rect data-verse-hit="m3-3-4~v3" x="577.89" y="65.75" width="35.37" height="60.5" fill="transparent" pointer-events="all" cursor="pointer" data-verse="3"/>
+<ellipse cx="593.26" cy="101.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 593.26 101.5)"/>
+<line x1="598.76" y1="100.5" x2="598.76" y2="82.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<path d="M60.45 108.5 Q 75.82 95.59 91.19 105.75 Q 75.82 97.79 60.45 108.5 Z" fill="#1a1612" data-slur-printed="m6-0-1~v2"/>
+<text x="54.25" y="155" text-anchor="start" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">Спят</text>
+<text data-verse-ipa-of="m6-0-1~v2" x="54.25" y="135" text-anchor="start" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif" data-verse="2">ˈsʲpʲɑt</text>
+<text x="121.93" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">ле</text>
+<text data-verse-ipa-of="m6-1-2~v2" x="121.93" y="135" text-anchor="middle" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif" data-verse="2">lʲɛ</text>
+<text x="152.67" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">са</text>
+<text data-verse-ipa-of="m6-3-4~v2" x="152.67" y="135" text-anchor="middle" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif" data-verse="2">sɑ</text>
+<text x="199.06" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">лю</text>
+<text data-verse-ipa-of="m7-0-1~v2" x="199.06" y="135" text-anchor="middle" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif" data-verse="2">lʲu</text>
+<text x="229.8" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">ли</text>
+<text data-verse-ipa-of="m7-1-4~v2" x="229.8" y="135" text-anchor="middle" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif" data-verse="2">lʲi</text>
+<text x="260.54" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">лю</text>
+<text data-verse-ipa-of="m7-1-2~v2" x="260.54" y="135" text-anchor="middle" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif" data-verse="2">lʲu</text>
+<text x="291.28" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">ли</text>
+<text data-verse-ipa-of="m7-3-4~v2" x="291.28" y="135" text-anchor="middle" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif" data-verse="2">lʲi</text>
+<text x="337.67" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">Спи</text>
+<text data-verse-ipa-of="m8-0-1~v2" x="337.67" y="135" text-anchor="middle" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif" data-verse="2">ˈsʲpʲi</text>
+<text x="369.18" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">мой</text>
+<text data-verse-ipa-of="m8-1-4~v2" x="369.18" y="135" text-anchor="middle" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif" data-verse="2">ˈmoj</text>
+<text x="399.92" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">ми</text>
+<text data-verse-ipa-of="m8-1-2~v2" x="399.92" y="135" text-anchor="middle" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif" data-verse="2">mʲi</text>
+<text x="435" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">лый</text>
+<text data-verse-ipa-of="m8-3-4~v2" x="435" y="135" text-anchor="middle" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif" data-verse="2">ɫɨj</text>
+<text x="501.02" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">Мгла</text>
+<text data-verse-ipa-of="m3-0-1~v3" x="501.02" y="135" text-anchor="middle" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif" data-verse="3">ˈmɡɫɑ</text>
+<text x="531.76" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">ни</text>
+<text data-verse-ipa-of="m3-1-4~v3" x="531.76" y="135" text-anchor="middle" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif" data-verse="3">ɲis</text>
+<text x="562.52" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">зка</text>
+<text data-verse-ipa-of="m3-1-2~v3" x="562.52" y="135" text-anchor="middle" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif" data-verse="3">kɑ</text>
+<text x="593.26" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">на</text>
+<text data-verse-ipa-of="m3-3-4~v3" x="593.26" y="135" text-anchor="middle" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif" data-verse="3">nʌ</text>
+<line x1="135.04" y1="151" x2="140.04" y2="151" stroke="#1a1612" stroke-width="1" data-hyphen="m6-1-2~v2"/>
+<line x1="212.49" y1="151" x2="217.49" y2="151" stroke="#1a1612" stroke-width="1" data-hyphen="m7-0-1~v2"/>
+<line x1="273.97" y1="151" x2="278.97" y2="151" stroke="#1a1612" stroke-width="1" data-hyphen="m7-1-2~v2"/>
+<line x1="412.98" y1="151" x2="417.98" y2="151" stroke="#1a1612" stroke-width="1" data-hyphen="m8-1-2~v2"/>
+<line x1="543.78" y1="151" x2="548.78" y2="151" stroke="#1a1612" stroke-width="1" data-hyphen="m3-1-4~v3"/>
+<line x1="88.36" y1="155" x2="97.19" y2="155" stroke="#1a1612" stroke-width="1" data-extender="m6-0-1~v2"/>
+<line x1="623.5" y1="85" x2="623.5" y2="107" stroke="#3a352f" stroke-width="1"/>
+<text data-verse-label="3" x="494.82" y="59.63" text-anchor="start" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#3a352f">Verse 3</text>
+
+</svg>
+<svg x="0" y="491" width="624" height="111" viewBox="0 64 624 111" data-verse-system="16-19">
+
+<line x1="0" y1="85" x2="624" y2="85" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="90.5" x2="624" y2="90.5" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="96" x2="624" y2="96" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="101.5" x2="624" y2="101.5" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="107" x2="624" y2="107" stroke="#3a352f" stroke-width="1"/>
+<g data-clef="treble">
+<g transform="translate(-28.5,0)">
+<line x1="46" y1="77" x2="46" y2="111.5" stroke="#3a352f" stroke-width="2.2"/>
+<circle cx="46" cy="101.5" r="4" fill="none" stroke="#3a352f" stroke-width="1.6"/>
+</g>
+</g>
+<text data-bar-number="5" x="0" y="79.5" text-anchor="start" font-size="12.5" font-style="italic" fill="#3a352f">5 · verse 3</text>
+<g data-verse-event-id="m4-0-1~v3" pointer-events="none" data-verse="3">
+<rect data-verse-hit="m4-0-1~v3" x="29.45" y="65.75" width="35.86" height="60.5" fill="transparent" pointer-events="all" cursor="pointer" data-verse="3"/>
+<ellipse cx="49.45" cy="107" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 49.45 107)"/>
+<line x1="54.95" y1="106" x2="54.95" y2="87.75" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-verse-event-id="m4-1-4~v3" pointer-events="none" data-verse="3">
+<rect data-verse-hit="m4-1-4~v3" x="65.32" y="65.75" width="31.73" height="60.5" fill="transparent" pointer-events="all" cursor="pointer" data-verse="3"/>
+<ellipse cx="81.18" cy="109.75" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 81.18 109.75)"/>
+<line x1="86.68" y1="108.75" x2="86.68" y2="90.5" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<line x1="101.9" y1="112.5" x2="123.9" y2="112.5" stroke="#3a352f" stroke-width="1"/>
+<g data-verse-event-id="m4-1-2~v3" pointer-events="none" data-verse="3">
+<rect data-verse-hit="m4-1-2~v3" x="97.04" y="65.75" width="31.72" height="60.5" fill="transparent" pointer-events="all" cursor="pointer" data-verse="3"/>
+<ellipse cx="112.9" cy="112.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 112.9 112.5)"/>
+<line x1="118.4" y1="111.5" x2="118.4" y2="93.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-verse-event-id="m4-3-4~v3" pointer-events="none" data-verse="3">
+<rect data-verse-hit="m4-3-4~v3" x="128.76" y="65.75" width="39.81" height="60.5" fill="transparent" pointer-events="all" cursor="pointer" data-verse="3"/>
+<ellipse cx="144.63" cy="109.75" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 144.63 109.75)"/>
+<line x1="150.13" y1="108.75" x2="150.13" y2="90.5" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<line x1="174.51" y1="85" x2="174.51" y2="107" stroke="#3a352f" stroke-width="1"/>
+<g data-verse-event-id="m5-0-1~v3" pointer-events="none" data-verse="3">
+<rect data-verse-hit="m5-0-1~v3" x="168.57" y="65.75" width="41.57" height="60.5" fill="transparent" pointer-events="all" cursor="pointer" data-verse="3"/>
+<ellipse cx="192.51" cy="101.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 192.51 101.5)"/>
+<line x1="198.01" y1="100.5" x2="198.01" y2="82.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-verse-event-id="m5-1-4~v3" pointer-events="none" data-verse="3">
+<rect data-verse-hit="m5-1-4~v3" x="210.14" y="65.75" width="33.49" height="60.5" fill="transparent" pointer-events="all" cursor="pointer" data-verse="3"/>
+<ellipse cx="227.76" cy="98.75" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 227.76 98.75)"/>
+<line x1="233.26" y1="97.75" x2="233.26" y2="79.5" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-verse-event-id="m5-1-2~v3" pointer-events="none" data-verse="3">
+<rect data-verse-hit="m5-1-2~v3" x="243.63" y="65.75" width="31.73" height="60.5" fill="transparent" pointer-events="all" cursor="pointer" data-verse="3"/>
+<ellipse cx="259.49" cy="101.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 259.49 101.5)"/>
+<line x1="264.99" y1="100.5" x2="264.99" y2="82.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-verse-event-id="m5-3-4~v3" pointer-events="none" data-verse="3">
+<rect data-verse-hit="m5-3-4~v3" x="275.35" y="65.75" width="47.27" height="60.5" fill="transparent" pointer-events="all" cursor="pointer" data-verse="3"/>
+<ellipse cx="291.21" cy="107" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 291.21 107)"/>
+<line x1="296.71" y1="106" x2="296.71" y2="87.75" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<line x1="323.08" y1="85" x2="323.08" y2="107" stroke="#3a352f" stroke-width="1"/>
+<g data-meter="2/2"><text x="332.71" y="94.9" text-anchor="middle" font-size="13.2" font-weight="bold" fill="#3a352f">2</text><text x="332.71" y="105.9" text-anchor="middle" font-size="13.2" font-weight="bold" fill="#3a352f">2</text></g>
+<line x1="343.03" y1="112.5" x2="365.03" y2="112.5" stroke="#3a352f" stroke-width="1"/>
+<g data-verse-event-id="m6-0-1~v3" pointer-events="none" data-verse="3">
+<rect data-verse-hit="m6-0-1~v3" x="322.62" y="65.75" width="47.27" height="60.5" fill="transparent" pointer-events="all" cursor="pointer" data-verse="3"/>
+<ellipse cx="354.03" cy="112.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 354.03 112.5)"/>
+<line x1="359.53" y1="111.5" x2="359.53" y2="93.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-verse-event-id="m6-1-4~v3" pointer-events="none" data-verse="3">
+<rect data-verse-hit="m6-1-4~v3" x="369.9" y="65.75" width="31.73" height="60.5" fill="transparent" pointer-events="all" cursor="pointer" data-verse="3"/>
+<ellipse cx="385.76" cy="109.75" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 385.76 109.75)"/>
+<line x1="391.26" y1="108.75" x2="391.26" y2="90.5" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-verse-event-id="m6-1-2~v3" pointer-events="none" data-verse="3">
+<rect data-verse-hit="m6-1-2~v3" x="401.63" y="65.75" width="31.73" height="60.5" fill="transparent" pointer-events="all" cursor="pointer" data-verse="3"/>
+<ellipse cx="417.49" cy="107" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 417.49 107)"/>
+<line x1="422.99" y1="106" x2="422.99" y2="87.75" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-verse-event-id="m6-3-4~v3" pointer-events="none" data-verse="3">
+<rect data-verse-hit="m6-3-4~v3" x="433.35" y="65.75" width="39.8" height="60.5" fill="transparent" pointer-events="all" cursor="pointer" data-verse="3"/>
+<ellipse cx="449.21" cy="101.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 449.21 101.5)"/>
+<line x1="454.71" y1="100.5" x2="454.71" y2="82.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<line x1="479.09" y1="85" x2="479.09" y2="107" stroke="#3a352f" stroke-width="1"/>
+<g data-verse-event-id="m7-0-1~v3" pointer-events="none" data-verse="3">
+<rect data-verse-hit="m7-0-1~v3" x="473.15" y="65.75" width="39.81" height="60.5" fill="transparent" pointer-events="all" cursor="pointer" data-verse="3"/>
+<ellipse cx="497.09" cy="107" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 497.09 107)"/>
+<line x1="502.59" y1="106" x2="502.59" y2="87.75" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-verse-event-id="m7-1-4~v3" pointer-events="none" data-verse="3">
+<rect data-verse-hit="m7-1-4~v3" x="512.96" y="65.75" width="31.73" height="60.5" fill="transparent" pointer-events="all" cursor="pointer" data-verse="3"/>
+<ellipse cx="528.82" cy="109.75" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 528.82 109.75)"/>
+<line x1="534.32" y1="108.75" x2="534.32" y2="90.5" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<line x1="549.55" y1="112.5" x2="571.55" y2="112.5" stroke="#3a352f" stroke-width="1"/>
+<g data-verse-event-id="m7-1-2~v3" pointer-events="none" data-verse="3">
+<rect data-verse-hit="m7-1-2~v3" x="544.68" y="65.75" width="31.73" height="60.5" fill="transparent" pointer-events="all" cursor="pointer" data-verse="3"/>
+<ellipse cx="560.55" cy="112.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 560.55 112.5)"/>
+<line x1="566.05" y1="111.5" x2="566.05" y2="93.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-verse-event-id="m7-3-4~v3" pointer-events="none" data-verse="3">
+<rect data-verse-hit="m7-3-4~v3" x="576.41" y="65.75" width="35.86" height="60.5" fill="transparent" pointer-events="all" cursor="pointer" data-verse="3"/>
+<ellipse cx="592.27" cy="109.75" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 592.27 109.75)"/>
+<line x1="597.77" y1="108.75" x2="597.77" y2="90.5" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<path d="M354.03 108.5 Q 369.9 95.54 385.76 105.75 Q 369.9 97.74 354.03 108.5 Z" fill="#1a1612" data-slur-printed="m6-0-1~v3"/>
+<text x="43.25" y="155" text-anchor="start" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">Дол</text>
+<text data-verse-ipa-of="m4-0-1~v3" x="43.25" y="135" text-anchor="start" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif" data-verse="3">ˈdoɫ</text>
+<text x="112.9" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">ти</text>
+<text data-verse-ipa-of="m4-1-2~v3" x="112.9" y="135" text-anchor="middle" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif" data-verse="3">tʲi</text>
+<text x="144.63" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">хо</text>
+<text data-verse-ipa-of="m4-3-4~v3" x="144.63" y="135" text-anchor="middle" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif" data-verse="3">xo</text>
+<text x="192.51" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">се</text>
+<text data-verse-ipa-of="m5-0-1~v3" x="192.51" y="135" text-anchor="middle" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif" data-verse="3">sʲe</text>
+<text x="227.76" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">ребр</text>
+<text data-verse-ipa-of="m5-1-4~v3" x="227.76" y="135" text-anchor="middle" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif" data-verse="3">rʲɛbr</text>
+<text x="259.49" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">зо</text>
+<text data-verse-ipa-of="m5-1-2~v3" x="259.49" y="135" text-anchor="middle" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif" data-verse="3">zo</text>
+<text x="291.21" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">ра</text>
+<text data-verse-ipa-of="m5-3-4~v3" x="291.21" y="135" text-anchor="middle" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif" data-verse="3">rɑ</text>
+<text x="347.83" y="155" text-anchor="start" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">Тих</text>
+<text data-verse-ipa-of="m6-0-1~v3" x="347.83" y="135" text-anchor="start" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif" data-verse="3">ˈtʲix</text>
+<text x="417.49" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">ле</text>
+<text data-verse-ipa-of="m6-1-2~v3" x="417.49" y="135" text-anchor="middle" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif" data-verse="3">lʲɛ</text>
+<text x="449.21" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">са</text>
+<text data-verse-ipa-of="m6-3-4~v3" x="449.21" y="135" text-anchor="middle" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif" data-verse="3">sɑ</text>
+<text x="497.09" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">лю</text>
+<text data-verse-ipa-of="m7-0-1~v3" x="497.09" y="135" text-anchor="middle" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif" data-verse="3">lʲu</text>
+<text x="528.82" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">ли</text>
+<text data-verse-ipa-of="m7-1-4~v3" x="528.82" y="135" text-anchor="middle" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif" data-verse="3">lʲi</text>
+<text x="560.55" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">лю</text>
+<text data-verse-ipa-of="m7-1-2~v3" x="560.55" y="135" text-anchor="middle" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif" data-verse="3">lʲu</text>
+<text x="592.27" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">ли</text>
+<text data-verse-ipa-of="m7-3-4~v3" x="592.27" y="135" text-anchor="middle" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif" data-verse="3">lʲi</text>
+<line x1="126.5" y1="151" x2="131.5" y2="151" stroke="#1a1612" stroke-width="1" data-hyphen="m4-1-2~v3"/>
+<line x1="203.55" y1="151" x2="208.55" y2="151" stroke="#1a1612" stroke-width="1" data-hyphen="m5-0-1~v3"/>
+<line x1="272.47" y1="151" x2="277.47" y2="151" stroke="#1a1612" stroke-width="1" data-hyphen="m5-1-2~v3"/>
+<line x1="431.09" y1="151" x2="436.09" y2="151" stroke="#1a1612" stroke-width="1" data-hyphen="m6-1-2~v3"/>
+<line x1="511.01" y1="151" x2="516.01" y2="151" stroke="#1a1612" stroke-width="1" data-hyphen="m7-0-1~v3"/>
+<line x1="574.47" y1="151" x2="579.47" y2="151" stroke="#1a1612" stroke-width="1" data-hyphen="m7-1-2~v3"/>
+<line x1="70.4" y1="155" x2="87.18" y2="155" stroke="#1a1612" stroke-width="1" data-extender="m4-0-1~v3"/>
+<line x1="374.49" y1="155" x2="391.76" y2="155" stroke="#1a1612" stroke-width="1" data-extender="m6-0-1~v3"/>
+<line x1="623.5" y1="85" x2="623.5" y2="107" stroke="#3a352f" stroke-width="1"/>
+
+</svg>
+<svg x="0" y="608" width="412.63" height="111" viewBox="0 64 412.63 111" data-system="9-10">
+
+<line x1="0" y1="85" x2="412.63" y2="85" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="90.5" x2="412.63" y2="90.5" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="96" x2="412.63" y2="96" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="101.5" x2="412.63" y2="101.5" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="107" x2="412.63" y2="107" stroke="#3a352f" stroke-width="1"/>
+<g data-clef="treble">
+<g transform="translate(-28.5,0)">
+<line x1="46" y1="77" x2="46" y2="111.5" stroke="#3a352f" stroke-width="2.2"/>
+<circle cx="46" cy="101.5" r="4" fill="none" stroke="#3a352f" stroke-width="1.6"/>
+</g>
+</g>
+<text data-bar-number="9" x="0" y="79.5" text-anchor="start" font-size="12.5" font-style="italic" fill="#3a352f">9 · verse 3</text>
+<line x1="38.45" y1="112.5" x2="60.45" y2="112.5" stroke="#3a352f" stroke-width="1"/>
+<g data-verse-event-id="m8-0-1~v3" pointer-events="none" data-verse="3">
+<rect data-verse-hit="m8-0-1~v3" x="29.45" y="65.75" width="34.1" height="60.5" fill="transparent" pointer-events="all" cursor="pointer" data-verse="3"/>
+<ellipse cx="49.45" cy="112.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 49.45 112.5)"/>
+<line x1="54.95" y1="111.5" x2="54.95" y2="93.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-verse-event-id="m8-1-4~v3" pointer-events="none" data-verse="3">
+<rect data-verse-hit="m8-1-4~v3" x="63.55" y="65.75" width="27.85" height="60.5" fill="transparent" pointer-events="all" cursor="pointer" data-verse="3"/>
+<ellipse cx="77.64" cy="109.75" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 77.64 109.75)"/>
+<line x1="83.14" y1="108.75" x2="83.14" y2="90.5" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-verse-event-id="m8-1-2~v3" pointer-events="none" data-verse="3">
+<rect data-verse-hit="m8-1-2~v3" x="91.39" y="65.75" width="29.44" height="60.5" fill="transparent" pointer-events="all" cursor="pointer" data-verse="3"/>
+<ellipse cx="105.14" cy="107" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 105.14 107)"/>
+<line x1="110.64" y1="106" x2="110.64" y2="87.75" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-verse-event-id="m8-3-4~v3" pointer-events="none" data-verse="3">
+<rect data-verse-hit="m8-3-4~v3" x="120.83" y="65.75" width="36.44" height="60.5" fill="transparent" pointer-events="all" cursor="pointer" data-verse="3"/>
+<ellipse cx="136.52" cy="101.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 136.52 101.5)"/>
+<line x1="142.02" y1="100.5" x2="142.02" y2="82.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<line x1="160.02" y1="85" x2="160.02" y2="107" stroke="#3a352f" stroke-width="1"/>
+<g data-event-id="m9-0-1" pointer-events="none">
+<rect data-hit="m9-0-1" x="157.27" y="65.75" width="34.5" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="178.02" cy="101.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 178.02 101.5)"/>
+<line x1="183.52" y1="100.5" x2="183.52" y2="82.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m9-1-4" pointer-events="none">
+<rect data-hit="m9-1-4" x="191.77" y="65.75" width="27.5" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="205.52" cy="98.75" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 205.52 98.75)"/>
+<line x1="211.02" y1="97.75" x2="211.02" y2="79.5" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m9-1-2" pointer-events="none">
+<rect data-hit="m9-1-2" x="219.27" y="65.75" width="27.8" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="233.02" cy="101.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 233.02 101.5)"/>
+<line x1="238.52" y1="100.5" x2="238.52" y2="82.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m9-3-4" pointer-events="none">
+<rect data-hit="m9-3-4" x="247.08" y="65.75" width="34.81" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="261.13" cy="107" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 261.13 107)"/>
+<line x1="266.63" y1="106" x2="266.63" y2="87.75" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<line x1="284.63" y1="85" x2="284.63" y2="107" stroke="#3a352f" stroke-width="1"/>
+<g data-event-id="m10-0-1" pointer-events="none">
+<rect data-hit="m10-0-1" x="281.88" y="65.75" width="34.5" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="302.63" cy="101.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 302.63 101.5)"/>
+<line x1="308.13" y1="100.5" x2="308.13" y2="82.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m10-1-4" pointer-events="none">
+<rect data-hit="m10-1-4" x="316.38" y="65.75" width="27.5" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="330.13" cy="107" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 330.13 107)"/>
+<line x1="335.63" y1="106" x2="335.63" y2="87.75" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m10-1-2" pointer-events="none">
+<rect data-hit="m10-1-2" x="343.88" y="65.75" width="27.5" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="357.63" cy="109.75" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 357.63 109.75)"/>
+<line x1="363.13" y1="108.75" x2="363.13" y2="90.5" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<line x1="374.13" y1="112.5" x2="396.13" y2="112.5" stroke="#3a352f" stroke-width="1"/>
+<g data-event-id="m10-3-4" pointer-events="none">
+<rect data-hit="m10-3-4" x="371.38" y="65.75" width="33.75" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="385.13" cy="112.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 385.13 112.5)"/>
+<line x1="390.63" y1="111.5" x2="390.63" y2="93.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<text x="49.45" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">Спи</text>
+<text data-verse-ipa-of="m8-0-1~v3" x="49.45" y="135" text-anchor="middle" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif" data-verse="3">ˈsʲpʲi</text>
+<text x="77.64" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">мой</text>
+<text data-verse-ipa-of="m8-1-4~v3" x="77.64" y="135" text-anchor="middle" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif" data-verse="3">ˈmoj</text>
+<text x="105.14" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">ми</text>
+<text data-verse-ipa-of="m8-1-2~v3" x="105.14" y="135" text-anchor="middle" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif" data-verse="3">mʲi</text>
+<text x="136.52" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">лый</text>
+<text data-verse-ipa-of="m8-3-4~v3" x="136.52" y="135" text-anchor="middle" font-size="12" fill="#6a655f" font-family="'Lato IPA', sans-serif" data-verse="3">ɫɨj</text>
+<text x="178.02" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">Вот</text>
+<text x="205.52" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">и</text>
+<text x="233.02" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">ко</text>
+<text x="261.13" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">нец</text>
+<text x="302.63" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">Всё</text>
+<text x="330.13" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">тих</text>
+<text x="357.63" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">но</text>
+<text x="385.13" y="155" text-anchor="middle" font-size="12.5" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" fill="#1a1612">ей</text>
+<line x1="116.35" y1="151" x2="121.35" y2="151" stroke="#1a1612" stroke-width="1" data-hyphen="m8-1-2~v3"/>
+<line x1="242.43" y1="151" x2="247.43" y2="151" stroke="#1a1612" stroke-width="1" data-hyphen="m9-1-2"/>
+<line x1="408.28" y1="85" x2="408.28" y2="107" stroke="#3a352f" stroke-width="1"/>
+<line x1="411.83" y1="85" x2="411.83" y2="107" stroke="#3a352f" stroke-width="1.6"/>
+
+</svg>
+</svg>

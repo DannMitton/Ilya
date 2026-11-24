@@ -1,0 +1,1348 @@
+{"key":"a11y.drawer","en":"Controls","fr":"Commandes"}
+{"key":"a11y.paper","en":"the page","fr":"la page"}
+{"key":"a11y.tabs","en":"Navigation","fr":"Navigation"}
+{"key":"a11y.tocToggle","en":"Expand or collapse","fr":"Développer ou réduire"}
+{"key":"aid.endOfVerse","en":"· end of verse %s ·","fr":"· fin du couplet %s ·"}
+{"key":"aid.label","en":"Reading aid, not the page","fr":"Aide à la lecture, non la page"}
+{"key":"analysis.broad.body","en":"Broad analysis: this score is shown without {items}, because the matching voice characteristics were left blank. The forecast still reflects your measured resonances.","fr":"Analyse large : cette partition est présentée sans {items}, car les caractéristiques vocales correspondantes ont été laissées vides. La prévision reflète tout de même vos résonances mesurées."}
+{"key":"analysis.broad.body.generic","en":"Broad analysis: this score is shown without {items}, because the matching voice characteristics were left blank. The forecast uses placeholder values.","fr":"Analyse large : cette partition est présentée sans {items}, car les caractéristiques vocales correspondantes ont été laissées vides. La prévision repose sur des valeurs par défaut."}
+{"key":"analysis.broad.itemPassaggio","en":"positional passaggio flags","fr":"le signalement des notes de *passaggio*"}
+{"key":"analysis.broad.itemRange","en":"range guidance","fr":"les repères d’ambitus"}
+{"key":"analysis.broad.join","en":"and","fr":"ni"}
+{"key":"analysis.verifyCount.many","en":"{n} to verify","fr":"{n} à vérifier"}
+{"key":"analysis.verifyCount.one","en":"1 to verify","fr":"1 à vérifier"}
+{"key":"app.subtitle","en":"Russian Lyric Diction","fr":"Diction lyrique russe"}
+{"key":"app.title","en":"Ilya — Russian Lyric Diction","fr":"Ilya — Diction lyrique russe"}
+{"key":"binder.err.damaged","en":"This file is damaged and could not be read. Nothing has changed.","fr":"Ce fichier est endommagé et n’a pas pu être lu. Rien n’a été modifié."}
+{"key":"binder.err.newer","en":"This file was made by a newer version of Ilya than this one, which cannot read it. Open it in the newest Ilya. Nothing has changed.","fr":"Ce fichier a été créé par une version d’Ilya plus récente que celle-ci, qui ne peut pas le lire. Ouvrez-le dans la version la plus récente. Rien n’a été modifié."}
+{"key":"binder.err.notIlya","en":"This file was not made by Ilya. Nothing has changed.","fr":"Ce fichier n’a pas été créé par Ilya. Rien n’a été modifié."}
+{"key":"binder.export","en":"Export this song","fr":"Exporter ce chant"}
+{"key":"binder.exportAll","en":"Export all songs","fr":"Exporter tous les chants"}
+{"key":"binder.exportFirst","en":"Export this song first","fr":"Exporter ce chant d’abord"}
+{"key":"binder.heading","en":"EXPORT AND IMPORT","fr":"EXPORTATION ET IMPORTATION"}
+{"key":"binder.import","en":"Import a song","fr":"Importer un chant"}
+{"key":"binder.importedMany","en":"%s songs were added.","fr":"%s chants ont été ajoutés."}
+{"key":"binder.importedOne","en":"One song was added.","fr":"Un chant a été ajouté."}
+{"key":"calib.anchor.calibrate","en":"Calibrate","fr":"Calibrer"}
+{"key":"calib.anchor.named","en":"Voice: {voice}","fr":"Voix : « {voice} »"}
+{"key":"calib.anchor.recalibrate","en":"Re-calibrate","fr":"Recalibrer"}
+{"key":"calib.anchor.uncalibrated","en":"Voice: not yet calibrated","fr":"Voix : pas encore calibrée"}
+{"key":"calib.capture.allSet","en":"All set.","fr":"Tout est prêt."}
+{"key":"calib.capture.cuePrefix","en":"Tap the","fr":"Touchez la voyelle"}
+{"key":"calib.capture.cueSuffix","en":"vowel to begin. First sing it as you usually do, to set the shape of your vocal tract. Then stop, keep that shape, and begin again in vocal fry. Ilya measures only the fry.","fr":"pour commencer. Chantez-la d’abord comme d’habitude, pour régler la forme de votre conduit vocal. Puis arrêtez, gardez cette forme et recommencez en friture vocale. Ilya ne mesure que la friture."}
+{"key":"calib.capture.hold.captured","en":", captured.","fr":", captée."}
+{"key":"calib.capture.hold.noted","en":"Noted, moving on. You can re-take it from the summary.","fr":"C’est noté, on poursuit. Vous pourrez la refaire depuis le sommaire."}
+{"key":"calib.capture.hold.rolledBack","en":"New sample was less certain, so the previous one was kept.","fr":"Le nouvel échantillon était moins certain, donc le précédent a été conservé."}
+{"key":"calib.capture.pauseButton","en":"Pause","fr":"Pause"}
+{"key":"calib.capture.paused","en":"Paused. Resume when you're ready.","fr":"En pause. Reprenez au moment qui vous convient."}
+{"key":"calib.capture.resumeButton","en":"Resume","fr":"Reprendre"}
+{"key":"calib.capture.returnToSummary","en":"Return to summary","fr":"Retour au sommaire"}
+{"key":"calib.capture.toast","en":"The room sounds a little lively. Your sample is still good, but a quieter space would help.","fr":"La pièce sonne un peu réverbérante. Votre échantillon reste bon, mais un endroit plus silencieux aiderait."}
+{"key":"calib.capture.toastDismissAria","en":"Dismiss","fr":"Fermer"}
+{"key":"calib.challengingInvite.button","en":"Sing the three Ilya derived for you","fr":"Chanter les trois qu’Ilya a déduites pour vous"}
+{"key":"calib.challengingInvite.caption","en":"None of the ten vowels is optional. These three are the hardest to produce on demand, so Ilya derives them from your own anchors until you choose to sing them.","fr":"Aucune des dix voyelles n’est facultative. Ces trois-là sont les plus difficiles à produire sur demande, donc Ilya les déduit de vos propres points d’ancrage jusqu’à ce que vous choisissiez de les chanter."}
+{"key":"calib.characteristics.addButton","en":"Add voice characteristics","fr":"Ajouter des caractéristiques vocales"}
+{"key":"calib.characteristics.doneButton","en":"Done","fr":"Terminé"}
+{"key":"calib.characteristics.editButton","en":"Edit voice characteristics","fr":"Modifier les caractéristiques vocales"}
+{"key":"calib.characteristics.lede","en":"These optional values sharpen MELODY and INSIGHTS. Any field can stay blank; where a value is missing, the analysis simply stays broad for that dimension.","fr":"Ces valeurs facultatives précisent le CHANT et les APERÇUS. Tout champ peut rester vide. Là où une valeur manque, l’analyse demeure simplement générale pour cette dimension."}
+{"key":"calib.characteristics.passaggioHeading","en":"Passaggio","fr":"*Passaggio*"}
+{"key":"calib.characteristics.passaggioHint","en":"The zona lies between two turns, a lower and an upper. Enter both to flag it; with either blank it stays unmarked, which does not mean it is absent.","fr":"La *zona* se situe entre deux événements vocaux acoustiques, l’un inférieur et l’autre supérieur. Saisissez les deux pour la signaler. Si l’un des deux reste vide, elle demeure non marquée, ce qui ne veut pas dire qu’elle est absente."}
+{"key":"calib.characteristics.passaggioPrimaryLabel","en":"Primary passaggio","fr":"*Passaggio* primaire"}
+{"key":"calib.characteristics.passaggioSecondaryLabel","en":"Secondary passaggio","fr":"*Passaggio* secondaire"}
+{"key":"calib.characteristics.rangeHeading","en":"Range","fr":"Ambitus"}
+{"key":"calib.characteristics.rangeHighLabel","en":"Highest comfortable note","fr":"Note la plus aiguë confortable"}
+{"key":"calib.characteristics.rangeInvertedNote","en":"The lowest note is set above the highest.","fr":"La note la plus grave est placée au-dessus de la plus aiguë."}
+{"key":"calib.characteristics.rangeLowLabel","en":"Lowest comfortable note","fr":"Note la plus grave confortable"}
+{"key":"calib.characteristics.tessituraHeading","en":"Comfortable working zone","fr":"Zone de travail confortable"}
+{"key":"calib.characteristics.tessituraHighLabel","en":"Working zone ceiling","fr":"Plafond de la zone de travail"}
+{"key":"calib.characteristics.tessituraHint","en":"Where you live, not your edges.","fr":"Dans votre zone de confort, et non aux extrémités de votre ambitus."}
+{"key":"calib.characteristics.tessituraInvertedNote","en":"The working zone's floor is set above its ceiling.","fr":"Le plancher de la zone de travail est placé au-dessus de son plafond."}
+{"key":"calib.characteristics.tessituraLowLabel","en":"Working zone floor","fr":"Plancher de la zone de travail"}
+{"key":"calib.characteristics.title","en":"Voice characteristics","fr":"Caractéristiques vocales"}
+{"key":"calib.common.continue","en":"Continue","fr":"Continuer"}
+{"key":"calib.common.hz","en":"Hz","fr":"Hz"}
+{"key":"calib.common.of","en":"of","fr":"sur"}
+{"key":"calib.common.retake","en":"Re-take","fr":"Reprendre"}
+{"key":"calib.common.vowelWord","en":"Vowel","fr":"Voyelle"}
+{"key":"calib.common.vowels","en":"vowels","fr":"voyelles"}
+{"key":"calib.compact.vowelsSampled","en":"vowels sampled","fr":"voyelles échantillonnées"}
+{"key":"calib.defaultVoiceName","en":"Voice","fr":"Voix"}
+{"key":"calib.log.addedPrefix","en":"Added to progress:","fr":"Ajouté à la progression :"}
+{"key":"calib.log.hertz","en":"hertz","fr":"hertz"}
+{"key":"calib.pane.all","en":"You have recorded all ten vowels. Your resonance profile is complete.","fr":"Vous avez capté les dix voyelles. Votre profil de résonances est complet."}
+{"key":"calib.pane.belowCore","en":"You have sampled {n} of the 6 core vowels so far ({vowels}). To complete your personal vowel space, Ilya needs at least 5 stable fry samples. Until you provide {m} more, unsampled vowels are assigned placeholder values.","fr":"Vous avez échantillonné {n} des 6 voyelles de base jusqu’ici ({vowels}). Pour compléter votre espace vocalique personnel, Ilya a besoin d’au moins 5 échantillons stables en friture vocale. D’ici à ce que vous en fournissiez {m} de plus, les voyelles non échantillonnées reçoivent des valeurs par défaut."}
+{"key":"calib.pane.belowCoreOne","en":"You have sampled {n} of the 6 core vowels so far ({vowels}). To complete your personal vowel space, Ilya needs at least 5 stable fry samples. Until you provide 1 more, unsampled vowels are assigned placeholder values.","fr":"Vous avez échantillonné {n} des 6 voyelles de base jusqu’ici ({vowels}). Pour compléter votre espace vocalique personnel, Ilya a besoin d’au moins 5 échantillons stables en friture vocale. D’ici à ce que vous en fournissiez une de plus, les voyelles non échantillonnées reçoivent des valeurs par défaut."}
+{"key":"calib.pane.chooseType","en":"Choose a voice type","fr":"Choisir un type de voix"}
+{"key":"calib.pane.core","en":"You have recorded {n} of the 6 core vowels. Record {m} more, and Ilya builds your resonance profile.","fr":"Vous avez capté {n} des 6 voyelles de base. Captez-en {m} de plus, et Ilya établit votre profil de résonances."}
+{"key":"calib.pane.coreGeneric","en":"You have recorded {n} of the 6 core vowels. Record {m} more, and Ilya builds your resonance profile. Until then, it uses generic values for a {voiceType} voice.","fr":"Vous avez capté {n} des 6 voyelles de base. Captez-en {m} de plus, et Ilya établit votre profil de résonances. D’ici là, il utilise des valeurs par défaut pour une voix type de {voiceType}."}
+{"key":"calib.pane.coreGenericOne","en":"You have recorded 4 of the 6 core vowels. Record one more, and Ilya builds your resonance profile. Until then, it uses generic values for a {voiceType} voice.","fr":"Vous avez capté 4 des 6 voyelles de base. Captez-en une de plus, et Ilya établit votre profil de résonances. D’ici là, il utilise des valeurs par défaut pour une voix type de {voiceType}."}
+{"key":"calib.pane.coreOne","en":"You have recorded 4 of the 6 core vowels. Record one more, and Ilya builds your resonance profile.","fr":"Vous avez capté 4 des 6 voyelles de base. Captez-en une de plus, et Ilya établit votre profil de résonances."}
+{"key":"calib.pane.door.again","en":"Record a vowel again","fr":"Capter de nouveau une voyelle"}
+{"key":"calib.pane.door.carryOn","en":"Carry on recording","fr":"Continuer la captation"}
+{"key":"calib.pane.door.describe","en":"Describe your voice","fr":"Décrire votre voix"}
+{"key":"calib.pane.door.insights","en":"What INSIGHTS shares, and how","fr":"Ce que partagent les APERÇUS, et comment"}
+{"key":"calib.pane.door.record","en":"Record your vowels","fr":"Capter vos voyelles"}
+{"key":"calib.pane.door.space","en":"Your vowel space","fr":"Votre espace vocalique"}
+{"key":"calib.pane.fills","en":"You have recorded {n} of the 10 vowels. Ilya fills the other {m} from what you have recorded so far.","fr":"Vous avez capté {n} des 10 voyelles. Ilya complète les {m} autres à partir de ce que vous avez capté jusqu’ici."}
+{"key":"calib.pane.fillsOne","en":"You have recorded {n} of the 10 vowels. Ilya fills the last one from what you have recorded so far.","fr":"Vous avez capté {n} des 10 voyelles. Ilya complète la dernière à partir de ce que vous avez capté jusqu’ici."}
+{"key":"calib.pane.none","en":"Record your ten vowels, and Ilya builds your resonance profile. Or choose a voice type, and Ilya starts from generic values for now.","fr":"Captez vos dix voyelles, et Ilya établit votre profil de résonances. Ou choisissez un type de voix, et Ilya part de valeurs par défaut pour l’instant."}
+{"key":"calib.pane.notSure","en":"Not knowing is a fine answer. Record your vowels in vocal fry and Ilya works from your own voice, which also gives you evidence in your own search. Or choose a voice type, and Ilya starts from published values for it.","fr":"Ne pas savoir est une réponse valable. Captez vos voyelles en friture vocale et Ilya travaille à partir de votre propre voix, ce qui vous donne aussi des indices dans votre propre recherche. Ou choisissez un type de voix, et Ilya part de valeurs publiées pour celui-ci."}
+{"key":"calib.pane.typedGeneric","en":"Ilya is using generic values for a {voiceType} voice until you record your own.","fr":"Ilya utilise des valeurs par défaut pour une voix type de {voiceType} jusqu’à ce que vous captiez les vôtres."}
+{"key":"calib.pane.typedNone","en":"Ilya has no generic values for a {voiceType} voice yet, so it works from your own vowels. Record them to begin.","fr":"Ilya n’a pas encore de valeurs par défaut pour une voix de {voiceType}; il travaille donc à partir de vos propres voyelles. Captez-les pour commencer."}
+{"key":"calib.pane.worksOut","en":"You have recorded {n} of the 10 vowels. Ilya works out the other {m} from your own vowels.","fr":"Vous avez capté {n} des 10 voyelles. Ilya déduit les {m} autres de vos propres voyelles."}
+{"key":"calib.pane.worksOutOne","en":"You have recorded {n} of the 10 vowels. Ilya works out the last one from your own vowels.","fr":"Vous avez capté {n} des 10 voyelles. Ilya déduit la dernière de vos propres voyelles."}
+{"key":"calib.readiness.captureAria","en":"Recording your test fry","fr":"Enregistrement de votre friture d’essai"}
+{"key":"calib.readiness.captureLede","en":"Fry now, until the line fills.","fr":"Faites la friture maintenant, jusqu’à ce que la ligne se remplisse."}
+{"key":"calib.readiness.complete","en":"Readiness check complete.","fr":"Vérification préalable terminée."}
+{"key":"calib.readiness.countOne","en":"One.","fr":"Un."}
+{"key":"calib.readiness.countThree","en":"Three.","fr":"Trois."}
+{"key":"calib.readiness.countTwo","en":"Two.","fr":"Deux."}
+{"key":"calib.readiness.guidance","en":"You can carry on; each vowel asks for the microphone again.","fr":"Vous pouvez poursuivre : chaque voyelle redemande le microphone."}
+{"key":"calib.readiness.intro","en":"First, Ilya listens to the room for a moment. Then it asks you for three seconds of vocal fry, to check that the microphone hears you.","fr":"D’abord, Ilya écoute la pièce un moment. Puis il vous demande trois secondes de friture vocale, pour vérifier que le microphone vous entend."}
+{"key":"calib.readiness.marginal","en":"Your fry is reading near the edge of our range; a little lower or higher may read cleaner.","fr":"Votre friture se lit près de la limite de notre plage. Un peu plus grave ou plus aigu se lirait plus nettement."}
+{"key":"calib.readiness.noFry","en":"Ilya heard the room, but no vocal fry. Try again, or continue: each vowel listens for fry on its own.","fr":"Ilya a entendu la pièce, mais pas de friture vocale. Réessayez, ou continuez : chaque voyelle vérifie la friture à son tour."}
+{"key":"calib.readiness.noMic","en":"Ilya could not reach your microphone, so nothing was measured.","fr":"Ilya n’a pas pu accéder à votre microphone, donc rien n’a été mesuré."}
+{"key":"calib.readiness.partQuiet","en":"Quiet","fr":"Silence"}
+{"key":"calib.readiness.prepareLede","en":"Next, a short test fry, so Ilya can check that the microphone hears you.","fr":"Ensuite, une courte friture d’essai, pour qu’Ilya vérifie que le micro vous entend."}
+{"key":"calib.readiness.quiet","en":"Stay silent.","fr":"Restez en silence."}
+{"key":"calib.readiness.start","en":"Start","fr":"Commencer"}
+{"key":"calib.readiness.title","en":"Getting ready","fr":"Préparation"}
+{"key":"calib.roster.actionsHeader","en":"Actions","fr":"Actions"}
+{"key":"calib.roster.kept","en":"Beyond Ilya’s reference values","fr":"Au-delà des valeurs de référence d’Ilya"}
+{"key":"calib.roster.noiseFloorLabel","en":"Noise floor: Unmeasured","fr":"Bruit de fond : non mesuré"}
+{"key":"calib.roster.noiseFloorTitle","en":"The room's noise floor could not be measured for this sample.","fr":"Le niveau de bruit de fond de la pièce n’a pas pu être mesuré pour cet échantillon."}
+{"key":"calib.roster.oNoteAria","en":"About the sung [o] vowel (opens the Learn note)","fr":"À propos de la voyelle [o] chantée (ouvre la note dans Leçons)"}
+{"key":"calib.roster.reading.captured","en":"Captured","fr":"Captée"}
+{"key":"calib.roster.reading.estimated","en":"Estimated","fr":"Estimée"}
+{"key":"calib.roster.reading.provisional","en":"Provisional","fr":"Provisoire"}
+{"key":"calib.roster.tryAgain","en":"Try again","fr":"Réessayer"}
+{"key":"calib.section.ariaLabel","en":"Your Resonances: voice calibration","fr":"Vos résonances : calibration de la voix"}
+{"key":"calib.summary.backToTen","en":"Back to the ten vowels","fr":"Retour aux dix voyelles"}
+{"key":"calib.summary.finishButton","en":"Finish","fr":"Terminer"}
+{"key":"calib.summary.keepAll","en":"Keep them","fr":"Les garder"}
+{"key":"calib.summary.keepOne","en":"Keep it","fr":"Le garder"}
+{"key":"calib.summary.keepProfileButton","en":"Keep my profile","fr":"Conserver mon profil"}
+{"key":"calib.summary.outside","en":"These readings sit outside the values Ilya draws on for {type} voices: {vowels}. Keep them as they are, or sing them again.","fr":"Ces lectures se situent hors des valeurs sur lesquelles Ilya s’appuie pour les voix de {type} : {vowels}. Gardez-les telles quelles, ou chantez-les de nouveau."}
+{"key":"calib.summary.outsideIgh","en":"Your current [ɨ] sits away from where your [i] and [u] would likely place it. For now, Ilya has an estimate ready, built from your own [i] and [u], so you can carry on. You can offer new vowel samples anytime.","fr":"Votre [ɨ] actuel ne se trouve pas tout à fait là où vos [i] et [u] le placeraient probablement. Pour l’instant, Ilya a une estimation prête, calculée à partir de vos propres [i] et [u] : vous pouvez donc continuer. Vous pouvez fournir de nouveaux échantillons de voyelles à tout moment."}
+{"key":"calib.summary.outsideNoType","en":"These readings sit outside the values Ilya draws on for any voice type: {vowels}. Keep them as they are, or sing them again.","fr":"Ces lectures se situent hors des valeurs sur lesquelles Ilya s’appuie pour tous les types de voix : {vowels}. Gardez-les telles quelles, ou chantez-les de nouveau."}
+{"key":"calib.summary.progressLedeSuffix","en":"vowels sampled. Review each reading and re-take anything uncertain before you finish.","fr":"voyelles échantillonnées. Passez en revue chaque lecture et refaites tout ce qui est incertain avant de terminer."}
+{"key":"calib.summary.resetConfirm","en":"This clears every reading saved for this voice. Start fresh?","fr":"Ceci efface toutes les lectures enregistrées pour cette voix. Recommencer?"}
+{"key":"calib.summary.savedLede","en":"Your profile is saved on this device. You can keep refining any reading below.","fr":"Votre profil est enregistré sur cet appareil. Vous pouvez continuer à affiner n’importe quelle lecture ci-dessous."}
+{"key":"calib.summary.startFreshButton","en":"Start fresh","fr":"Recommencer"}
+{"key":"calib.summary.startOverButton","en":"Start over","fr":"Tout recommencer"}
+{"key":"calib.summary.title","en":"Profile summary","fr":"Sommaire du profil"}
+{"key":"calib.summary.unstable","en":"These readings were unstable: {vowels}. Another try may help.","fr":"Ces lectures étaient instables : {vowels}. Une reprise pourrait aider."}
+{"key":"calib.summary.unstableOne","en":"This reading was unstable: {vowels}. Another try may help.","fr":"Cette lecture était instable : {vowels}. Une reprise pourrait aider."}
+{"key":"calib.summary.useEstimate","en":"Use Ilya's estimate for now","fr":"Utiliser l’estimation d’Ilya pour l’instant"}
+{"key":"calib.switcher.cancelButton","en":"Cancel","fr":"Annuler"}
+{"key":"calib.switcher.deleteButton","en":"Delete","fr":"Supprimer"}
+{"key":"calib.switcher.deleteConfirm","en":"This deletes {name} and its readings from this device. Delete?","fr":"Ceci supprime {name} et ses lectures de cet appareil. Supprimer?"}
+{"key":"calib.switcher.duplicateButton","en":"Duplicate","fr":"Dupliquer"}
+{"key":"calib.switcher.firstLaunchLede","en":"Please name your profile so we can map your voice across the ten sung Russian vowels.","fr":"Veuillez nommer votre profil afin que nous puissions cartographier votre voix sur l’ensemble des dix voyelles chantées du russe."}
+{"key":"calib.switcher.keepButton","en":"Keep it","fr":"Conserver"}
+{"key":"calib.switcher.nameLabel","en":"What shall we call this voice?","fr":"Comment appellerons-nous cette voix?"}
+{"key":"calib.switcher.newButton","en":"New","fr":"Créer"}
+{"key":"calib.switcher.renameButton","en":"Rename","fr":"Renommer"}
+{"key":"calib.switcher.renameLabel","en":"Rename this voice","fr":"Renommer cette voix"}
+{"key":"calib.switcher.saveButton","en":"Save","fr":"Enregistrer"}
+{"key":"calib.switcher.startButton","en":"Start","fr":"Démarrer"}
+{"key":"calib.voiceTypeFirst.heading","en":"Your voice type","fr":"Votre type de voix"}
+{"key":"calib.voiceTypeFirst.hint","en":"Ilya can use generic values with your guidance, until you record your own vowels. This doesn’t change what Ilya measures. “Not sure” is a valid answer.","fr":"Ilya peut utiliser des valeurs par défaut selon vos indications, jusqu’à ce que vous captiez vos propres voyelles. Cela ne change pas ce qu’Ilya mesure. « Je ne sais pas » est une réponse valable."}
+{"key":"calib.welcome.beginButton","en":"Begin","fr":"Commencer"}
+{"key":"calib.welcome.fryAnswer","en":"A low, creaky voice register, easy to sustain and gentle on the voice. Ilya reads its resonances rather than your sung pitch, so comfort matters more than pitch here.","fr":"Un registre vocal grave et grésillant, facile à tenir et doux pour la voix. Ilya en lit les résonances plutôt que la hauteur de votre chant, donc le confort importe ici davantage que la hauteur."}
+{"key":"calib.welcome.fryQuestion","en":"What is vocal fry?","fr":"Qu’est-ce que la friture vocale?"}
+{"key":"calib.welcome.lede","en":"Ilya will measure your voice to build a resonance profile, which is a map of your voice's resonances that will be applied to your repertoire to determine how well it suits your voice. Follow the prompts. This wizard assumes you read IPA. Your device needs a working mic and you should be in a quiet space for the best capture of your resonances.","fr":"Ilya mesurera votre voix afin de constituer un profil de résonances, c’est-à-dire une carte des résonances de votre voix, qui sera ensuite appliquée à votre répertoire pour en évaluer la correspondance. Suivez les indications. Cet assistant présume que vous lisez l’API. Votre appareil doit disposer d’un microphone fonctionnel, et vous devriez vous trouver dans un endroit calme pour bien capter vos résonances."}
+{"key":"calib.welcome.title","en":"Finding Your Resonances","fr":"Trouver vos résonances"}
+{"key":"capture.bar","en":"Progress of this take","fr":"Progression de cette prise"}
+{"key":"capture.button.placed","en":"placeholder","fr":"valeur par défaut"}
+{"key":"capture.button.selected","en":"selected","fr":"sélectionnée"}
+{"key":"capture.button.sung","en":"recorded","fr":"captée"}
+{"key":"capture.chartAlt","en":"Chart of the vowel zones. It moves in on the vowel in focus, and a dot shows each reading.","fr":"Graphique des zones des voyelles. Il se rapproche de la voyelle affichée, et un point montre chaque lecture."}
+{"key":"capture.clearAll","en":"Clear all","fr":"Tout effacer"}
+{"key":"capture.count","en":"{n} of 10","fr":"{n} sur 10"}
+{"key":"capture.credit.noPlate","en":"Drawing: Dann Mitton. Bolla has no plate for this vowel.","fr":"Dessin : Dann Mitton. Bolla ne donne pas de planche pour cette voyelle."}
+{"key":"capture.credit.plate","en":"Drawing: Dann Mitton, after Bolla (1981), plate {n}.","fr":"Dessin : Dann Mitton, d’après Bolla (1981), planche {n}."}
+{"key":"capture.cue.allTen","en":"All ten captured. This is your vowel space.","fr":"Les dix voyelles sont captées. Voici votre espace vocalique."}
+{"key":"capture.cue.breathe","en":"Breathe.","fr":"Respirez."}
+{"key":"capture.cue.isCaptured","en":"{v} is captured.","fr":"Capture de {v} effectuée."}
+{"key":"capture.cue.ready","en":"Ready for {v}.","fr":"Au tour de {v}."}
+{"key":"capture.done","en":"Done","fr":"Terminé"}
+{"key":"capture.drawingAlt","en":"Side view of the mouth and throat for {name}","fr":"Vue de profil de la bouche et de la gorge pour {name}"}
+{"key":"capture.explain","en":"Each dot is one of your vowels: the higher your tongue, the higher the dot; the further forward, the nearer the front edge.","fr":"Chaque point est l’une de vos voyelles : plus votre langue est haute, plus le point est haut; plus elle est avancée, plus il s’approche du bord avant."}
+{"key":"capture.finish.useRecorded","en":"Use what I’ve recorded","fr":"Utiliser ce que j’ai capté"}
+{"key":"capture.finish.useRecorded.caption","en":"If you wish, you can stop here: Ilya fills the other {m} from what you have recorded so far.","fr":"Si vous le souhaitez, vous pouvez vous arrêter ici : Ilya complète les {m} autres à partir de ce que vous avez capté jusqu’ici."}
+{"key":"capture.finish.useRecorded.captionLast","en":"If you wish, you can stop here: Ilya fills the last one from what you have recorded so far.","fr":"Si vous le souhaitez, vous pouvez vous arrêter ici : Ilya complète la dernière à partir de ce que vous avez capté jusqu’ici."}
+{"key":"capture.finish.workOut.caption","en":"You have recorded the vowels Ilya needs. If you wish, it can work out the other {m} from them: {vowels}.","fr":"Vous avez capté les voyelles dont Ilya a besoin. Si vous le souhaitez, il peut en déduire les {m} autres : {vowels}."}
+{"key":"capture.finish.workOut.captionLast","en":"You have recorded the vowels Ilya needs. If you wish, it can work out the last one from them: {vowel}.","fr":"Vous avez capté les voyelles dont Ilya a besoin. Si vous le souhaitez, il peut en déduire la dernière : {vowel}."}
+{"key":"capture.finish.workOut.last","en":"Let Ilya work out the last one","fr":"Laisser Ilya déduire la dernière"}
+{"key":"capture.finish.workOut.many","en":"Let Ilya work out the other {m}","fr":"Laisser Ilya déduire les {m} autres"}
+{"key":"capture.firstTime","en":"Start gives you a breath, then {v}. Sing it first as you usually do, to coordinate the shape of your vocal tract. Then stop, but keep that shape, and begin again, this time in vocal fry. Ilya measures the fry.","fr":"Commencer vous laisse le temps d’une respiration, puis vient {v}. Chantez-la d’abord comme d’habitude, pour coordonner la forme de votre conduit vocal. Puis arrêtez, mais gardez cette forme, et recommencez, cette fois en friture vocale. Ilya mesure la friture."}
+{"key":"capture.hidden","en":"The chart and the readout are hidden during the take. They return when this vowel is captured.","fr":"Le graphique et l’affichage sont masqués pendant la prise. Ils réapparaissent quand cette voyelle est captée."}
+{"key":"capture.hide","en":"Hide the chart and the readout during a take","fr":"Masquer le graphique et l’affichage pendant une prise"}
+{"key":"capture.hint.active","en":"Stop ends this take and sets it aside.","fr":"Arrêter met fin à cette prise et la met de côté."}
+{"key":"capture.hint.confirmClear","en":"Tap Clear all to clear every reading for this voice.","fr":"Touchez Tout effacer pour effacer toutes les lectures de cette voix."}
+{"key":"capture.hint.finished","en":"Tap any vowel to focus on it. Re-take records it again.","fr":"Touchez une voyelle pour l’afficher. Reprendre la capte de nouveau."}
+{"key":"capture.hint.first","en":"Tap a vowel to focus on it. Tap Start to record it.","fr":"Touchez une voyelle pour l’afficher. Touchez Commencer pour la capter."}
+{"key":"capture.hint.placed.typed","en":"Ilya has placed {v} from its {borrowed} values for now. Its placeholder moves as you record.","fr":"Ilya a placé {v} d’après ses valeurs de {borrowed}, pour l’instant. Sa valeur par défaut évolue à mesure que vous captez vos voyelles."}
+{"key":"capture.hint.placed.untyped","en":"Ilya has placed {v} from typical voices for now. Its placeholder moves as you record.","fr":"Ilya a placé {v} d’après des voix typiques, pour l’instant. Sa valeur par défaut évolue à mesure que vous captez vos voyelles."}
+{"key":"capture.hint.retake","en":"A re-take replaces {v} only if the new reading is as clear.","fr":"Une reprise ne remplace {v} que si la nouvelle lecture est aussi nette."}
+{"key":"capture.hint.toGo","en":"{count} to go, in any order. Ilya keeps a placeholder for each until you record it.","fr":"Il en reste {count}, dans l’ordre de votre choix. Ilya garde une valeur par défaut pour chaque voyelle jusqu’à ce que vous la captiez."}
+{"key":"capture.inProgress","en":"{v} in progress","fr":"{v} en cours"}
+{"key":"capture.list.and","en":"and","fr":"et"}
+{"key":"capture.number.2","en":"two","fr":"deux"}
+{"key":"capture.number.3","en":"three","fr":"trois"}
+{"key":"capture.number.4","en":"four","fr":"quatre"}
+{"key":"capture.number.5","en":"five","fr":"cinq"}
+{"key":"capture.number.6","en":"six","fr":"six"}
+{"key":"capture.number.7","en":"seven","fr":"sept"}
+{"key":"capture.number.8","en":"eight","fr":"huit"}
+{"key":"capture.number.9","en":"nine","fr":"neuf"}
+{"key":"capture.part.breathe","en":"Breathe","fr":"Respiration"}
+{"key":"capture.part.fry","en":"Fry","fr":"Friture"}
+{"key":"capture.part.shape","en":"Shape","fr":"Forme"}
+{"key":"capture.part.sing","en":"Sing","fr":"Chant"}
+{"key":"capture.retake","en":"Re-take {v}","fr":"Reprendre {v}"}
+{"key":"capture.seeSpace","en":"See your vowel space","fr":"Voir votre espace vocalique"}
+{"key":"capture.start","en":"Start {v}","fr":"Commencer {v}"}
+{"key":"capture.stop","en":"Stop","fr":"Arrêter"}
+{"key":"capture.title","en":"Your resonances","fr":"Vos résonances"}
+{"key":"capture.uncertain","en":"{v} is noted, though this take was less clear. A re-take can replace it.","fr":"{v} est noté, même si cette prise était moins nette. Une reprise peut le remplacer."}
+{"key":"capture.vowels","en":"The ten vowels","fr":"Les dix voyelles"}
+{"key":"clitic.seated","en":"%s cannot take a note of its own, so Ilya seated it with %s and moved %s notes.","fr":"%s ne peut pas avoir de note à lui seul, alors Ilya l’a placé avec %s et a déplacé %s notes."}
+{"key":"clitic.seatedOne","en":"%s cannot take a note of its own, so Ilya seated it with %s and moved one note.","fr":"%s ne peut pas avoir de note à lui seul, alors Ilya l’a placé avec %s et a déplacé une note."}
+{"key":"clitic.undo","en":"Undo","fr":"Annuler"}
+{"key":"collide.body","en":"The song in this file has the same identity as one you already have. Yours was last changed %s. The one in this file was last changed %s. Ilya cannot undo taking the one in this file.","fr":"Le chant de ce fichier a la même identité qu’un chant que vous avez déjà. Le vôtre a été modifié pour la dernière fois le %s. Celui de ce fichier a été modifié pour la dernière fois le %s. Ilya ne peut pas annuler le remplacement."}
+{"key":"collide.both","en":"Keep both","fr":"Conserver les deux"}
+{"key":"collide.mine","en":"Keep mine","fr":"Conserver le mien"}
+{"key":"collide.take","en":"Take the one in this file","fr":"Prendre celui de ce fichier"}
+{"key":"collide.title","en":"You already have this song: %s.","fr":"Vous avez déjà ce chant : %s."}
+{"key":"comment.heading","en":"Comments on this piece","fr":"Commentaires sur cette pièce"}
+{"key":"comment.hidden.many","en":"{n} observations hidden by your settings","fr":"{n} observations masquées selon vos choix"}
+{"key":"comment.hidden.one","en":"One observation hidden by your settings","fr":"Une observation masquée selon vos choix"}
+{"key":"comment.more.many","en":"{n} more observations","fr":"{n} observations de plus"}
+{"key":"comment.more.one","en":"One more observation","fr":"Une observation de plus"}
+{"key":"comment.opener.1","en":"You might try {action}","fr":"Vous pourriez essayer {de}{action}"}
+{"key":"comment.opener.2","en":"Consider {action}","fr":"Vous pouvez songer à {action}"}
+{"key":"comment.opener.3","en":"You can experiment with {action}","fr":"Il peut être intéressant {de}{action}"}
+{"key":"comment.opener.4","en":"One thing to explore is {action}","fr":"Une piste à explorer : {action}"}
+{"key":"comment.opener.5","en":"Try {action}","fr":"Essayez {de}{action}"}
+{"key":"comment.opener.7","en":"{author} suggests {action}","fr":"{author} propose {de}{action}"}
+{"key":"comment.sourcesCited","en":"Sources cited","fr":"Sources citées"}
+{"key":"comment.tap","en":"Further reading","fr":"Lectures complémentaires"}
+{"key":"comment.working.consequence.closedU","en":"Here the [{vowel}] tends to open a little on its own {cite:RMR-057}; but keeping it closed tends toward *whoop* timbre {cite:PVA2-C-025}.","fr":"Ici, le [{vowel}] tend à s’ouvrir un peu de lui-même {cite:RMR-057}; mais le garder fermé tend vers un timbre *youhou* {cite:PVA2-C-025}."}
+{"key":"comment.working.consequence.resonance","en":"Here the [{vowel}] tends toward *whoop* timbre on its own; but narrowing it instead of opening the mouth tends to thin it {cite:KVP2-022+KVP2-026}.","fr":"Ici, le [{vowel}] tend de lui-même vers un timbre *youhou*; mais le resserrer au lieu d’ouvrir la bouche tend à l’amincir {cite:KVP2-022+KVP2-026}."}
+{"key":"comment.working.consequence.turn","en":"The colour tends to close here on its own; but keeping it open can nudge it toward a *yell* {cite:PVA2-A-046+PVA2-B-014}.","fr":"La couleur tend ici à se fermer d’elle-même; mais la garder ouverte peut la pousser vers un *cri* {cite:PVA2-A-046+PVA2-B-014}."}
+{"key":"comment.working.frame.sits","en":"This [{vowel}] on {pitch} sits {where}.","fr":"Ce [{vowel}] sur {pitch} se situe {where}."}
+{"key":"comment.working.frame.sustained","en":"This [{vowel}] on {pitch} is sustained for about {seconds} seconds{where}.","fr":"Ce [{vowel}] sur {pitch} se prolonge environ {seconds} secondes{where}."}
+{"key":"comment.working.frame.sustainedOne","en":"This [{vowel}] on {pitch} is sustained for about {seconds} second{where}.","fr":"Ce [{vowel}] sur {pitch} se prolonge environ {seconds} seconde{where}."}
+{"key":"comment.working.frame.sustainedUntimed","en":"This [{vowel}] on {pitch} is sustained{where}.","fr":"Ce [{vowel}] sur {pitch} se prolonge{where}."}
+{"key":"comment.working.try.closePosture.action","en":"keeping a fairly close vowel posture through the turn and a little beyond it","fr":"garder une posture vocalique assez fermée tout au long du changement de timbre, et un peu au-delà"}
+{"key":"comment.working.try.closePosture.closer","en":". Notice whether the colour closes more easily","fr":". Observez si la couleur se ferme plus facilement"}
+{"key":"comment.working.try.decrescendo.action","en":"easing into the note with a slight decrescendo","fr":"aborder la note avec un léger *decrescendo*"}
+{"key":"comment.working.try.decrescendo.closer","en":", to see whether the [{vowel}] keeps its shape","fr":", pour voir si le [{vowel}] garde sa forme"}
+{"key":"comment.working.try.jaw.action","en":"You might let the jaw drop with the pitch, tongue tip forward","fr":"Vous pourriez laisser la mâchoire descendre avec la hauteur, la pointe de la langue vers l’avant"}
+{"key":"comment.working.try.jaw.closer","en":", and notice whether the [{vowel}] keeps its colour","fr":", et observer si le [{vowel}] garde sa couleur"}
+{"key":"comment.working.try.lean.action","en":"If it suits your voice, let it lean toward [ʊ]","fr":"Si cela convient à votre voix, laissez-le pencher vers [ʊ]"}
+{"key":"comment.working.try.lean.closer","en":", and notice whether the [{vowel}] keeps its colour","fr":", et observez si le [{vowel}] garde sa couleur"}
+{"key":"comment.working.try.legato.action","en":"singing the leap legato, thinking of the {pitch} as a note that asks for more energy, space, and depth, not simply a high one","fr":"chanter le saut *legato*, en pensant au {pitch} comme à une note qui demande plus d’énergie, d’espace et de profondeur, et non simplement comme à une note aiguë"}
+{"key":"comment.working.try.mixed.action","en":"singing the passage first entirely on [œ], then beginning each note on the briefest [œ] and moving at once to the written vowel, before returning to the text","fr":"chanter d’abord le passage entièrement sur [œ], puis commencer chaque note sur le plus bref [œ] en passant aussitôt à la voyelle écrite, avant de revenir au texte"}
+{"key":"comment.working.try.preface.action","en":"singing “you” on a quick five-note descending scale, then dropping the [j] and singing only the [{vowel}], keeping the same shape of lips and face","fr":"chanter « you » sur cinq notes descendantes rapides, puis omettre le [j] et ne chanter que le [{vowel}], en gardant la même forme des lèvres et du visage"}
+{"key":"comment.working.where.above","en":"above the first resonance{fR1} of your [{vowel}]","fr":"au-dessus de la première résonance{fR1} de votre [{vowel}]"}
+{"key":"comment.working.where.and","en":" and ","fr":" et "}
+{"key":"comment.working.where.secondoAbove","en":"above your secondo passaggio","fr":"au-dessus de votre *secondo passaggio*"}
+{"key":"comment.working.where.secondoAt","en":"at your secondo passaggio","fr":"sur votre *secondo passaggio*"}
+{"key":"comment.working.where.secondoJustAbove","en":"just above your secondo passaggio","fr":"juste au-dessus de votre *secondo passaggio*"}
+{"key":"comment.working.where.secondoJustUnder","en":"just under your secondo passaggio","fr":"juste en dessous de votre *secondo passaggio*"}
+{"key":"comment.working.where.turnJustPast","en":"just past where your [{vowel}] turns (about {turn})","fr":"juste après la hauteur où votre [{vowel}] change de timbre (autour de {turn})"}
+{"key":"comment.working.where.turnPast","en":"past where your [{vowel}] turns (about {turn})","fr":"après la hauteur où votre [{vowel}] change de timbre (autour de {turn})"}
+{"key":"comment.working.where.under","en":"a little under the first resonance{fR1} of your [{vowel}]","fr":"un peu en dessous de la première résonance{fR1} de votre [{vowel}]"}
+{"key":"console.placeholder","en":"ANALYSIS","fr":"ANALYSE"}
+{"key":"console.selectWord","en":"Select a word on the page to analyse it here.","fr":"Sélectionnez un mot sur la page pour l’analyser ici."}
+{"key":"correct.barlineAdd","en":"Add a barline after this note","fr":"Ajouter une barre de mesure après cette note"}
+{"key":"correct.barlineRemove","en":"Remove the barline after this note","fr":"Supprimer la barre de mesure après cette note"}
+{"key":"correct.delete","en":"Remove this note","fr":"Supprimer cette note"}
+{"key":"correct.deselect","en":"Done","fr":"Terminé"}
+{"key":"correct.dot","en":"Dot","fr":"Point"}
+{"key":"correct.graceAdd","en":"Add a grace note before the note that follows","fr":"Ajouter une petite note avant la note qui suit"}
+{"key":"correct.graceFull","en":"Make this a full note again","fr":"Redonner à cette note sa pleine valeur"}
+{"key":"correct.graceMake","en":"Make this a grace note","fr":"Transformer cette note en petite note"}
+{"key":"correct.graceSlash","en":"Add or remove the slash on this grace note","fr":"Ajouter ou retirer la barre oblique de cette petite note"}
+{"key":"correct.heading","en":"Correct the read","fr":"Corriger la lecture"}
+{"key":"correct.keyChange","en":"Change the key from this bar","fr":"Changer l’armure à partir de cette mesure"}
+{"key":"correct.keyFlat","en":"1 flat","fr":"1 bémol"}
+{"key":"correct.keyFlats","en":"%s flats","fr":"%s bémols"}
+{"key":"correct.keyFollow","en":"The notes follow the new key","fr":"Les notes suivent la nouvelle armure"}
+{"key":"correct.keyFollowHelp","en":"A note with no accidental of its own takes the new key’s sharp or flat. Turn this off to keep every pitch as it is.","fr":"Une note sans altération propre prend le dièse ou le bémol de la nouvelle armure. Désactivez cette option pour garder chaque hauteur telle quelle."}
+{"key":"correct.keyNone","en":"No sharps or flats","fr":"Aucune altération"}
+{"key":"correct.keyRemove","en":"Remove this key change","fr":"Supprimer ce changement d’armure"}
+{"key":"correct.keySharp","en":"1 sharp","fr":"1 dièse"}
+{"key":"correct.keySharps","en":"%s sharps","fr":"%s dièses"}
+{"key":"correct.keyToEnd","en":"To the end of the song","fr":"Jusqu’à la fin du chant"}
+{"key":"correct.keyToNext","en":"To the next key change","fr":"Jusqu’au prochain changement d’armure"}
+{"key":"correct.len16th","en":"Sixteenth","fr":"Double croche"}
+{"key":"correct.len32nd","en":"Thirty-second","fr":"Triple croche"}
+{"key":"correct.len64th","en":"Sixty-fourth","fr":"Quadruple croche"}
+{"key":"correct.len8th","en":"Eighth","fr":"Croche"}
+{"key":"correct.lenHalf","en":"Half","fr":"Blanche"}
+{"key":"correct.lenQuarter","en":"Quarter","fr":"Noire"}
+{"key":"correct.lenWhole","en":"Whole","fr":"Ronde"}
+{"key":"correct.length","en":"Length","fr":"Durée"}
+{"key":"correct.next","en":"Next note","fr":"Note suivante"}
+{"key":"correct.none","en":"Choose a note to correct it.","fr":"Choisissez une note pour la corriger."}
+{"key":"correct.octaveDown","en":"Down an octave","fr":"Une octave vers le bas"}
+{"key":"correct.octaveUp","en":"Up an octave","fr":"Une octave vers le haut"}
+{"key":"correct.prev","en":"Previous note","fr":"Note précédente"}
+{"key":"correct.restore","en":"Undo my corrections to this note","fr":"Annuler mes corrections sur cette note"}
+{"key":"correct.selected","en":"Selected: %s","fr":"Sélectionnée : %s"}
+{"key":"correct.semitoneDown","en":"Down a semitone","fr":"Un demi-ton vers le bas"}
+{"key":"correct.semitoneUp","en":"Up a semitone","fr":"Un demi-ton vers le haut"}
+{"key":"correct.stepDown","en":"Down a step","fr":"Un degré vers le bas"}
+{"key":"correct.stepUp","en":"Up a step","fr":"Un degré vers le haut"}
+{"key":"correct.tsBeatType","en":"Beat duration","fr":"Unité de temps"}
+{"key":"correct.tsBeats","en":"Number of beats","fr":"Nombre de temps"}
+{"key":"correct.tsChange","en":"Change the time signature from this bar","fr":"Changer le chiffrage de mesure à partir de cette mesure"}
+{"key":"correct.tsRebar","en":"Rebar the notes","fr":"Redistribuer les notes"}
+{"key":"correct.tsRebarHelp","en":"Moves notes across barlines to fill bars of the new time signature, tying any note that crosses one.","fr":"Déplace les notes d’une mesure à l’autre pour remplir les mesures du nouveau chiffrage, en liant toute note qui franchit une barre de mesure."}
+{"key":"correct.tsToEnd","en":"To the end of the song","fr":"Jusqu’à la fin du chant"}
+{"key":"correct.tsToNext","en":"To the next time signature change","fr":"Jusqu’au prochain changement de chiffrage"}
+{"key":"cosmetic.geminates.left","en":"Separate geminates [tt]","fr":"Géminées séparées [tt]"}
+{"key":"cosmetic.geminates.right","en":"Length markers [tː]","fr":"Marqueurs de durée [tː]"}
+{"key":"cosmetic.heading","en":"NOTATION","fr":"NOTATION"}
+{"key":"cosmetic.openSyllabification.left","en":"Default syllabification","fr":"Syllabification par défaut"}
+{"key":"cosmetic.openSyllabification.right","en":"Open syllables","fr":"Syllabes ouvertes"}
+{"key":"cosmetic.palatalNasal.left","en":"Palatal nasal [ɲ]","fr":"Nasale palatale [ɲ]"}
+{"key":"cosmetic.palatalNasal.right","en":"Palatalized nasal [nʲ]","fr":"Nasale palatalisée [nʲ]"}
+{"key":"cosmetic.reconstitution.left","en":"Default reduction","fr":"Réduction par défaut"}
+{"key":"cosmetic.reconstitution.right","en":"Reconstitution","fr":"Reconstitution"}
+{"key":"cosmetic.reducedVowel.left","en":"Default [ʌ]","fr":"Par défaut [ʌ]"}
+{"key":"cosmetic.reducedVowel.right","en":"Display [ə] instead","fr":"Afficher [ə]"}
+{"key":"cosmetic.shcha.left","en":"Shcha notation [ʃʲʃʲ]","fr":"Notation chtcha [ʃʲʃʲ]"}
+{"key":"cosmetic.shcha.right","en":"Length marker [ʃʲː]","fr":"Marqueur de durée [ʃʲː]"}
+{"key":"cosmetic.stressAcutes.left","en":"No stress marks","fr":"Sans accents toniques"}
+{"key":"cosmetic.stressAcutes.right","en":"Apply stress acutes","fr":"Appliquer les accents toniques"}
+{"key":"dict.inflections","en":"inflections","fr":"flexions"}
+{"key":"dict.loading","en":"Loading dictionary…","fr":"Chargement du dictionnaire…"}
+{"key":"dict.words","en":"words","fr":"mots"}
+{"key":"display.heading","en":"Display","fr":"Affichage"}
+{"key":"display.stressDiacritics","en":"Stress diacritics","fr":"Diacritiques d’accent"}
+{"key":"display.stressDiacritics.desc","en":"Show acute accent on Cyrillic","fr":"Afficher l’accent aigu sur le cyrillique"}
+{"key":"display.stressDiacritics.left","en":"No stress marks","fr":"Sans accents toniques"}
+{"key":"display.stressDiacritics.right","en":"Apply stress acutes","fr":"Appliquer les accents toniques"}
+{"key":"drawer.collapse","en":"Collapse drawer","fr":"Réduire le tiroir"}
+{"key":"drawer.expand","en":"Expand drawer","fr":"Ouvrir le tiroir"}
+{"key":"drawer.paper","en":"the page","fr":"la page"}
+{"key":"drawer.pull","en":"DRAWER","fr":"TIROIR"}
+{"key":"engraving.heading","en":"Engraving","fr":"Gravure"}
+{"key":"engraving.noteSpacing","en":"Note spacing","fr":"Espacement des notes"}
+{"key":"engraving.reset","en":"Reset","fr":"Réinitialiser"}
+{"key":"engraving.staveSize","en":"Stave size","fr":"Taille de la portée"}
+{"key":"engraving.systemSpacing","en":"Between systems","fr":"Entre les systèmes"}
+{"key":"field.saved","en":"Saved","fr":"Enregistré"}
+{"key":"footer.attribution","en":"Free and open source, <em>Ilya</em> {version} operationalizes Craig Grayson’s <em>Russian Lyric Diction</em> (University of Washington, 2012). Stress data and translation glosses via <a href=\"https://kaikki.org\" target=\"_blank\" rel=\"noopener\">kaikki.org</a> (<a href=\"https://creativecommons.org/licenses/by-sa/4.0/deed.en\" target=\"_blank\" rel=\"noopener\">CC BY-SA 4.0</a>). Made with love in Canada <svg viewBox=\"0 0 9600 4800\" aria-label=\"Canada\" role=\"img\" style=\"display:inline-block;width:14px;height:7px;vertical-align:baseline;position:relative;top:0.5px\"><path fill=\"#f00\" d=\"m0 0h2400l99 99h4602l99-99h2400v4800h-2400l-99-99h-4602l-99 99H0z\"/><path fill=\"#fff\" d=\"m2400 0h4800v4800h-4800zm2490 4430-45-863a95 95 0 0 1 111-98l859 151-116-320a65 65 0 0 1 20-73l941-762-212-99a65 65 0 0 1-34-79l186-572-542 115a65 65 0 0 1-73-38l-105-247-423 454a65 65 0 0 1-111-57l204-1052-327 189a65 65 0 0 1-91-27l-332-652-332 652a65 65 0 0 1-91 27l-327-189 204 1052a65 65 0 0 1-111 57l-423-454-105 247a65 65 0 0 1-73 38l-542-115 186 572a65 65 0 0 1-34 79l-212 99 941 762a65 65 0 0 1 20 73l-116 320 859-151a95 95 0 0 1 111 98l-45 863z\"/></svg>","fr":"Gratuit et à code ouvert, <em>Ilya</em> {version} met en œuvre <em>Russian Lyric Diction</em> de Craig Grayson (University of Washington, 2012). Données d’accentuation et glossaires de traduction via <a href=\"https://kaikki.org\" target=\"_blank\" rel=\"noopener\">kaikki.org</a> (<a href=\"https://creativecommons.org/licenses/by-sa/4.0/deed.fr\" target=\"_blank\" rel=\"noopener\">CC BY-SA 4.0</a>). Fait avec cœur au Canada <svg viewBox=\"0 0 9600 4800\" aria-label=\"Canada\" role=\"img\" style=\"display:inline-block;width:14px;height:7px;vertical-align:baseline;position:relative;top:0.5px\"><path fill=\"#f00\" d=\"m0 0h2400l99 99h4602l99-99h2400v4800h-2400l-99-99h-4602l-99 99H0z\"/><path fill=\"#fff\" d=\"m2400 0h4800v4800h-4800zm2490 4430-45-863a95 95 0 0 1 111-98l859 151-116-320a65 65 0 0 1 20-73l941-762-212-99a65 65 0 0 1-34-79l186-572-542 115a65 65 0 0 1-73-38l-105-247-423 454a65 65 0 0 1-111-57l204-1052-327 189a65 65 0 0 1-91-27l-332-652-332 652a65 65 0 0 1-91 27l-327-189 204 1052a65 65 0 0 1-111 57l-423-454-105 247a65 65 0 0 1-73 38l-542-115 186 572a65 65 0 0 1-34 79l-212 99 941 762a65 65 0 0 1 20 73l-116 320 859-151a95 95 0 0 1 111 98l-45 863z\"/></svg>"}
+{"key":"footer.of","en":"of","fr":"sur"}
+{"key":"footer.page","en":"Page","fr":"Page"}
+{"key":"footer.richter","en":"The Latin words’ IPA follows Laurence R. Richter’s <em>Mussorgsky’s Complete Song Texts</em> (Leyerle, 2002, pp. 43–49).","fr":"L’API des mots latins suit <em>Mussorgsky’s Complete Song Texts</em> de Laurence R. Richter (Leyerle, 2002, p. 43–49)."}
+{"key":"group.input","en":"INPUT","fr":"ENTRÉE"}
+{"key":"group.piece","en":"PIECE","fr":"PIÈCE"}
+{"key":"group.scoreMarkup","en":"VOICE","fr":"VOIX"}
+{"key":"guide.sources.deck","en":"Every work Ilya cites or builds on, in full, so that each claim can be checked at its page.","fr":"Tous les ouvrages qu’Ilya cite ou sur lesquels il s’appuie, en référence complète, pour que chaque affirmation puisse être vérifiée à sa page."}
+{"key":"guide.sources.group.diction","en":"Russian lyric diction","fr":"La diction lyrique russe"}
+{"key":"guide.sources.group.texts","en":"Song texts","fr":"Les textes chantés"}
+{"key":"guide.sources.group.voice","en":"The voice and its acoustics","fr":"La voix et son acoustique"}
+{"key":"guide.sources.heading","en":"Sources","fr":"Sources"}
+{"key":"input.clear","en":"Clear text","fr":"Effacer le texte"}
+{"key":"input.placeholder","en":"Paste Russian text here…","fr":"Collez le texte russe ici…"}
+{"key":"input.print","en":"Print","fr":"Imprimer"}
+{"key":"input.transcribe","en":"Transcribe and fit","fr":"Transcribe and fit"}
+{"key":"input.transcribeLoading","en":"Loading dictionary…","fr":"Chargement du dictionnaire…"}
+{"key":"input.warning","en":"characters. Large texts may be slow to process.","fr":"caractères. Les textes longs peuvent être lents à traiter."}
+{"key":"input.watermark","en":"poem","fr":"poème"}
+{"key":"input.watermarkLyrics","en":"lyrics","fr":"paroles"}
+{"key":"insights.blank","en":"INSIGHTS looks at how your voice meets your score, and comments on what it finds.","fr":"Les APERÇUS observent la rencontre de votre voix et de votre partition, et commentent ce qu’ils y trouvent."}
+{"key":"insights.citationUnverified","en":"CITATION NOT YET VERIFIED","fr":"CITATION NON ENCORE VÉRIFIÉE"}
+{"key":"insights.figure.caption","en":"Seconds of phonation per pitch","fr":"Secondes de phonation par hauteur"}
+{"key":"insights.figure.captionFocus","en":"dark: sung on {vowels}","fr":"en foncé : chanté sur {vowels}"}
+{"key":"insights.figure.captionQuavers","en":"Phonation per pitch, in quavers","fr":"Phonation par hauteur, en croches"}
+{"key":"insights.figure.centre","en":"centre","fr":"centre"}
+{"key":"insights.figure.cycleDose","en":"Cycle dose: about {cycles} (number of fold collisions in this piece)","fr":"Dose de cycles : environ {cycles} (nombre de collisions des plis vocaux dans cette pièce)"}
+{"key":"insights.figure.halfMass","en":"half the singing","fr":"la moitié du temps chanté"}
+{"key":"insights.figure.highest","en":"{pitch} highest","fr":"{pitch} la plus aiguë"}
+{"key":"insights.figure.key.ledger","en":"ledger line","fr":"ligne supplémentaire"}
+{"key":"insights.figure.key.passaggi","en":"your passaggi","fr":"vos *passaggi*"}
+{"key":"insights.figure.key.tessitura","en":"tessitura","fr":"tessiture"}
+{"key":"insights.figure.lowest","en":"{pitch} lowest","fr":"{pitch} la plus grave"}
+{"key":"insights.figure.primo","en":"primo passaggio","fr":"*primo passaggio*"}
+{"key":"insights.figure.rangeLabel","en":"your range, {low} to {high}","fr":"votre ambitus, {low} à {high}"}
+{"key":"insights.figure.secondo","en":"secondo passaggio","fr":"*secondo passaggio*"}
+{"key":"insights.figure.tessitura","en":"tessitura","fr":"tessiture"}
+{"key":"insights.figure.zoneAbove","en":"above · {share}","fr":"au-dessus · {share}"}
+{"key":"insights.figure.zoneBelow","en":"below · {share}","fr":"au-dessous · {share}"}
+{"key":"insights.figure.zoneBetween","en":"between · {share}","fr":"entre · {share}"}
+{"key":"insights.finding.crossing","en":"Your {vowel} meets your first resonance here, so the tone will want to turn full and heady, toward a whoop.","fr":"Votre {vowel} rencontre ici votre première résonance : le son voudra devenir plein et de tête, vers le youhou."}
+{"key":"insights.finding.passaggio","en":"This falls near your passaggio; expect the turn to want managing.","fr":"Cela tombe près de votre *passaggio*; attendez-vous à devoir le gérer."}
+{"key":"insights.finding.rangeAbove","en":"The note rises above the range you typed.","fr":"La note monte au-dessus de l’ambitus que vous avez indiqué."}
+{"key":"insights.finding.rangeBelow","en":"The note drops below the range you typed.","fr":"La note descend sous l’ambitus que vous avez indiqué."}
+{"key":"insights.finding.sustain","en":"The longer {vowel} here sits on its pitch of turning, so the colour may feel unsteady as you sustain it.","fr":"Le {vowel} plus long, ici, se pose sur sa hauteur de changement de timbre : la couleur peut sembler instable pendant qu’il se prolonge."}
+{"key":"insights.finding.tighten","en":"The {vowel} at the top of your range and sustained here is an exposed spot where the vowel can tighten.","fr":"Le {vowel}, au sommet de votre ambitus et prolongé ici, est un endroit exposé où la voyelle peut se resserrer."}
+{"key":"insights.finding.timbreCloseToOpen","en":"Your {vowel} turns close to open inside the word, so the colour shifts as you sing it.","fr":"Votre {vowel} passe de fermé à ouvert à l’intérieur du mot : la couleur change pendant que vous le chantez."}
+{"key":"insights.finding.timbreOpenToClose","en":"Your {vowel} turns open to close inside the word, so the colour shifts as you sing it.","fr":"Votre {vowel} passe d’ouvert à fermé à l’intérieur du mot : la couleur change pendant que vous le chantez."}
+{"key":"insights.finding.turnover","en":"The {vowel} at the top of your range and sustained here is an exposed spot where the tone can spread or press.","fr":"Le {vowel}, au sommet de votre ambitus et prolongé ici, est un endroit exposé où le son peut s’étaler ou se presser."}
+{"key":"insights.findings.deferredHeading","en":"The findings page one deferred","fr":"Les observations reportées par la page 1"}
+{"key":"insights.findings.furtherMany","en":"{n} further instances, in the score.","fr":"{n} autres occurrences, dans la partition."}
+{"key":"insights.findings.furtherOne","en":"One further instance, in the score.","fr":"Une autre occurrence, dans la partition."}
+{"key":"insights.findings.heading","en":"What is flagged, by how much time you spend singing it","fr":"Ce qui est signalé, selon le temps de chant que vous y consacrez"}
+{"key":"insights.findings.none","en":"Nothing in this piece is flagged for your voice.","fr":"Rien dans cette pièce n’est signalé pour votre voix."}
+{"key":"insights.findings.remainderMany","en":"{n} further findings print in full on page 2.","fr":"{n} autres observations sont imprimées en entier à la page 2."}
+{"key":"insights.findings.remainderOne","en":"One further finding prints in full on page 2.","fr":"Une autre observation est imprimée en entier à la page 2."}
+{"key":"insights.fit.colFlag","en":"Flag","fr":"Signalement"}
+{"key":"insights.fit.colMeasured","en":"Measured in this piece","fr":"Mesuré dans cette pièce"}
+{"key":"insights.fit.colReference","en":"Your references","fr":"Vos repères"}
+{"key":"insights.fit.colTerm","en":"Term","fr":"Terme"}
+{"key":"insights.fit.compass","en":"Compass {low} to {high}","fr":"Ambitus {low} à {high}"}
+{"key":"insights.fit.crossings","en":"Passaggio crossings","fr":"Croisements de *passaggio*"}
+{"key":"insights.fit.crossingsCount","en":"{primo} of the primo passaggio, {secondo} of the secondo passaggio","fr":"{primo} du *primo passaggio*, {secondo} du *secondo passaggio*"}
+{"key":"insights.fit.crossingsUncounted","en":"Not counted without both passaggi","fr":"Non comptés sans les deux *passaggi*"}
+{"key":"insights.fit.heading","en":"Ilya reads your compatibility from these three measurements.","fr":"Ilya évalue votre compatibilité à partir de ces trois relevés."}
+{"key":"insights.fit.noPitches","en":"No sung pitch","fr":"Aucune hauteur chantée"}
+{"key":"insights.fit.notTyped","en":"Not typed","fr":"Non indiqué"}
+{"key":"insights.fit.nothingSung","en":"Nothing sung to measure","fr":"Rien de chanté à mesurer"}
+{"key":"insights.fit.passaggiTyped","en":"Primo passaggio {primo}, secondo passaggio {secondo}, typed","fr":"*Primo passaggio* {primo}, *secondo passaggio* {secondo}, indiqués"}
+{"key":"insights.fit.range","en":"Range containment","fr":"Inclusion de l’ambitus"}
+{"key":"insights.fit.span","en":"{low} to {high}","fr":"{low} à {high}"}
+{"key":"insights.fit.spanTyped","en":"{low} to {high}, typed","fr":"{low} à {high}, indiqué"}
+{"key":"insights.fit.tessitura","en":"Tessitura containment","fr":"Inclusion de la tessiture"}
+{"key":"insights.fit.tessituraFallback","en":"cut at half the second-longest pitch, because the published rule gave one note","fr":"coupure à la moitié de la deuxième hauteur la plus longue, car la règle publiée n’en donnait qu’une"}
+{"key":"insights.fit.tessituraMarginal","en":"a pitch sits within half a quaver of the cut, so the band could move","fr":"une hauteur se situe à moins d’une demi-croche de la coupure, de sorte que la bande pourrait se déplacer"}
+{"key":"insights.fit.withheldMany","en":"Not printed: measures {measures} do not add up to their time signatures","fr":"Non imprimé : les mesures {measures} ne correspondent pas à leur chiffrage de mesure"}
+{"key":"insights.fit.withheldOne","en":"Not printed: measure {measures} does not add up to its time signature","fr":"Non imprimé : la mesure {measures} ne correspond pas à son chiffrage de mesure"}
+{"key":"insights.flag.above","en":"Above","fr":"Au-dessus"}
+{"key":"insights.flag.below","en":"Below","fr":"En dessous"}
+{"key":"insights.flag.contained","en":"Contained","fr":"Inclus"}
+{"key":"insights.flag.noThreshold","en":"No threshold","fr":"Aucun seuil"}
+{"key":"insights.flag.wider","en":"Wider","fr":"Plus large"}
+{"key":"insights.footnote.tessitura","en":"Tessitura by Pacheco’s method: the span from the lowest to the highest pitch sung for at least half as long as the longest-sung pitch. Alberto José Vieira Pacheco, “Angelica Catalani’s Voice According to a Method of Statistical Analysis,” <em>Journal of Singing</em> 69, no. 5 (2013), p. 559.","fr":"Tessiture selon la méthode de Pacheco : l’étendue de la hauteur la plus grave à la hauteur la plus aiguë chantée au moins la moitié du temps de la hauteur la plus longuement chantée. Alberto José Vieira Pacheco, “Angelica Catalani’s Voice According to a Method of Statistical Analysis,” <em>Journal of Singing</em> 69, no. 5 (2013), p. 559. [« La voix d’Angelica Catalani selon une méthode d’analyse statistique ».]"}
+{"key":"insights.generic.lede","en":"These findings use placeholder values for a generic {voiceType}, not your specific voice.","fr":"Ces constats reposent sur des valeurs par défaut pour une voix type de {voiceType}, et non sur votre voix en particulier."}
+{"key":"insights.identity","en":"INSIGHTS for {voice} · {voiceType} · calibrated {date}","fr":"APERÇUS pour {voice} · {voiceType} · calibration du {date}"}
+{"key":"insights.identityUncalibrated","en":"INSIGHTS for {voice} · {voiceType} · not calibrated","fr":"APERÇUS pour {voice} · {voiceType} · sans calibration"}
+{"key":"insights.key.fraction.half","en":"about half","fr":"environ la moitié"}
+{"key":"insights.key.fraction.most","en":"more than half","fr":"plus de la moitié"}
+{"key":"insights.key.fraction.nearHalf","en":"nearly half","fr":"près de la moitié"}
+{"key":"insights.key.fraction.quarter","en":"about a quarter","fr":"environ un quart"}
+{"key":"insights.key.fraction.third","en":"about a third","fr":"environ un tiers"}
+{"key":"insights.key.line","en":"{readout}: {parts}.","fr":"{readout} : {parts}."}
+{"key":"insights.key.noWorkable","en":"No key within a tritone brings this song inside your range. Taking it on as a technical project, or choosing other repertoire, is your decision.","fr":"Aucune tonalité à moins d’un triton ne fait entrer cette mélodie dans votre ambitus. L’aborder comme un projet technique, ou choisir un autre répertoire, vous revient."}
+{"key":"insights.key.noneBetter","en":"No better key: no other key within a tritone eases these challenges.","fr":"Aucune meilleure tonalité : aucune autre tonalité à moins d’un triton n’atténue ces difficultés."}
+{"key":"insights.key.noun.primo.plain","en":"your first passaggio","fr":"votre premier *passaggio*"}
+{"key":"insights.key.noun.primo.technical","en":"your primo passaggio","fr":"votre *primo passaggio*"}
+{"key":"insights.key.noun.primo.working","en":"your primo","fr":"votre *primo*"}
+{"key":"insights.key.noun.secondo.plain","en":"your second passaggio","fr":"votre second *passaggio*"}
+{"key":"insights.key.noun.secondo.technical","en":"your secondo passaggio","fr":"votre *secondo passaggio*"}
+{"key":"insights.key.noun.secondo.working","en":"your secondo","fr":"votre *secondo*"}
+{"key":"insights.key.part.above","en":"reaches above your range in {where}","fr":"dépasse votre ambitus vers l’aigu dans {where}"}
+{"key":"insights.key.part.below","en":"reaches below your range in {where}","fr":"dépasse votre ambitus vers le grave dans {where}"}
+{"key":"insights.key.part.by","en":"{part}, by {interval}","fr":"{part} ({interval} au-delà)"}
+{"key":"insights.key.part.inside","en":"stays inside your range","fr":"reste dans votre ambitus"}
+{"key":"insights.key.part.primo","en":"{fraction} of the singing sits at or above {primo}","fr":"{fraction} du chant se situe à la hauteur de {primo} ou au-dessus"}
+{"key":"insights.key.part.primoNone","en":"nothing sits at or above {primo}","fr":"rien ne se situe à la hauteur de {primo} ou au-dessus"}
+{"key":"insights.key.part.primoSome","en":"some of the singing sits at or above {primo}","fr":"une partie du chant se situe à la hauteur de {primo} ou au-dessus"}
+{"key":"insights.key.part.secondo","en":"{fraction} of the singing sits above {secondo}","fr":"{fraction} du chant se situe au-dessus de {secondo}"}
+{"key":"insights.key.part.secondoNone","en":"nothing sits above {secondo}","fr":"rien ne se situe au-dessus de {secondo}"}
+{"key":"insights.key.part.secondoSome","en":"some of the singing sits above {secondo}","fr":"une partie du chant se situe au-dessus de {secondo}"}
+{"key":"insights.key.part.semitones","en":"{n} semitones","fr":"{n} demi-tons"}
+{"key":"insights.key.part.sustained","en":"a sustained note above {secondo}, in bar {bar}","fr":"une note tenue au-dessus de {secondo}, à la mesure {bar}"}
+{"key":"insights.key.part.sustainedNone","en":"no sustained note above {secondo}","fr":"aucune note tenue au-dessus de {secondo}"}
+{"key":"insights.key.part.turn","en":"{fraction} of the singing sits past where your vowels turn","fr":"{fraction} du chant se situe au-delà du changement de timbre de vos voyelles"}
+{"key":"insights.key.reveal.both","en":"Show keys that reach higher or lower","fr":"Afficher les tonalités plus aiguës ou plus graves"}
+{"key":"insights.key.reveal.higher","en":"Show keys that reach higher","fr":"Afficher les tonalités plus aiguës"}
+{"key":"insights.key.reveal.lower","en":"Show keys that reach lower","fr":"Afficher les tonalités plus graves"}
+{"key":"insights.key.suits.primo","en":"No alternate key suggested: as it stands, the song stays inside your range and below {primo}.","fr":"Aucune autre tonalité suggérée : telle quelle, la mélodie reste dans votre ambitus et sous {primo}."}
+{"key":"insights.key.suits.range","en":"No alternate key suggested: as it stands, the song stays inside your range.","fr":"Aucune autre tonalité suggérée : telle quelle, la mélodie reste dans votre ambitus."}
+{"key":"insights.key.suits.secondo","en":"No alternate key suggested: as it stands, the song stays inside your range and below {secondo}.","fr":"Aucune autre tonalité suggérée : telle quelle, la mélodie reste dans votre ambitus et sous {secondo}."}
+{"key":"insights.key.terse.above","en":"above your range in {where}","fr":"au-dessus de votre ambitus dans {where}"}
+{"key":"insights.key.terse.below","en":"below your range in {where}","fr":"sous votre ambitus dans {where}"}
+{"key":"insights.key.where.and","en":"{a} and {b}","fr":"{a} et {b}"}
+{"key":"insights.key.where.bar","en":"bar {n}","fr":"la mesure {n}"}
+{"key":"insights.key.where.bars","en":"bars {from} to {to}","fr":"les mesures {from} à {to}"}
+{"key":"insights.key.where.elsewhere","en":"{where}, and elsewhere","fr":"{where}, et ailleurs"}
+{"key":"insights.key.why.passaggio","en":"where the voice turns","fr":"au changement de timbre de la voix"}
+{"key":"insights.key.why.range","en":"beyond the range you gave","fr":"au-delà de l’ambitus que vous avez indiqué"}
+{"key":"insights.key.why.sustained","en":"a long note in the upper passaggio","fr":"une note longue dans le *passaggio* supérieur"}
+{"key":"insights.method.generic.typed","en":"Method: computed from placeholder values, the voice characteristics you typed, and the score as sung, including repeats.","fr":"Méthode : calculé à partir de valeurs par défaut, des caractéristiques vocales que vous avez indiquées et de la partition telle que chantée, reprises comprises."}
+{"key":"insights.method.generic.untyped","en":"Method: computed from placeholder values and the score as sung, including repeats.","fr":"Méthode : calculé à partir de valeurs par défaut et de la partition telle que chantée, reprises comprises."}
+{"key":"insights.method.noScore.generic","en":"Method: from placeholder values, until you record your own vowels.","fr":"Méthode : à partir de valeurs par défaut, jusqu’à ce que vous captiez vos propres voyelles."}
+{"key":"insights.method.noScore.samples","en":"Method: from your resonance profile, measured in VOICE.","fr":"Méthode : à partir de votre profil de résonances, mesuré dans VOIX."}
+{"key":"insights.method.silent","en":"Method: no voice has been measured, so nothing on this page is computed from one.","fr":"Méthode : aucune voix n’a été mesurée, donc rien sur cette page n’en est calculé."}
+{"key":"insights.method.typed","en":"Method: computed from your calibration of {date}, the voice characteristics you typed, and the score as sung, including repeats.","fr":"Méthode : calculé à partir de votre calibration du {date}, des caractéristiques vocales que vous avez indiquées et de la partition telle que chantée, reprises comprises."}
+{"key":"insights.method.untyped","en":"Method: computed from your calibration of {date} and the score as sung, including repeats.","fr":"Méthode : calculé à partir de votre calibration du {date} et de la partition telle que chantée, reprises comprises."}
+{"key":"insights.offer.after","en":", and it can tell you whether this key suits you.","fr":", et elle pourra vous dire si cette tonalité vous convient."}
+{"key":"insights.offer.before","en":"This page doesn’t know your range yet.","fr":"Cette page ne connaît pas encore votre ambitus."}
+{"key":"insights.offer.decline","en":"No thanks","fr":"Non merci"}
+{"key":"insights.offer.link","en":"Add your range","fr":"Indiquez votre ambitus"}
+{"key":"insights.pageAria","en":"Insights, page {n} of {total}","fr":"Aperçus, page {n} sur {total}"}
+{"key":"insights.phonation.byVowel","en":"Seconds of phonation per vowel","fr":"Secondes de phonation par voyelle"}
+{"key":"insights.phonation.byVowelShare","en":"Share of phonation per vowel","fr":"Part de la phonation par voyelle"}
+{"key":"insights.phonation.estimatedMetre","en":"Ilya estimates {beat} = {low} to {high} from this score's {metre} time signature, so you phonate for about {t1} to {t2}.","fr":"Ilya estime le tempo à {beat} = {low} à {high} d’après le chiffrage de mesure {metre} de cette partition; votre phonation occupe donc environ {t1} à {t2}."}
+{"key":"insights.phonation.estimatedWalking","en":"Ilya estimates {beat} = {low} to {high}, a walking pace, so you phonate for about {t1} to {t2}.","fr":"Ilya estime le tempo à {beat} = {low} à {high}, l’allure de la marche; votre phonation occupe donc environ {t1} à {t2}."}
+{"key":"insights.phonation.finding","en":"{n} instances, {seconds} of phonation in all.","fr":"{n} occurrences, {seconds} de phonation en tout."}
+{"key":"insights.phonation.findingOne","en":"One instance, {seconds} of phonation in all.","fr":"Une occurrence, {seconds} de phonation en tout."}
+{"key":"insights.phonation.heading","en":"Phonation time","fr":"Temps de phonation"}
+{"key":"insights.phonation.headline","en":"You phonate for about {phonation} of this {length} piece, at {tempo}.","fr":"Votre phonation occupe environ {phonation} des {length} de la pièce, à {tempo}."}
+{"key":"insights.phonation.headlineInferred","en":"Your phonation takes about {low} to {high} of this piece, at the speed {tempoWord} usually means.","fr":"Votre phonation occupe environ {low} à {high} de la pièce, au tempo qu’indique habituellement {tempoWord}."}
+{"key":"insights.phonation.headlineYours","en":"You phonate for about {phonation} of this {length} piece, at {tempo}, your tempo.","fr":"Votre phonation occupe environ {phonation} des {length} de la pièce, à {tempo}, votre tempo."}
+{"key":"insights.phonation.noTempo","en":"This score states no tempo, so phonation time cannot be given in seconds.","fr":"Cette partition n’indique aucun tempo; le temps de phonation ne peut donc pas être donné en secondes."}
+{"key":"insights.phonation.share","en":"{n}%","fr":"{n} %"}
+{"key":"insights.phonation.tempoPointer","en":"You may assign tempi manually using the LOUPE.","fr":"Vous pouvez indiquer vos tempi vous-même dans la LOUPE."}
+{"key":"insights.phonation.untrustedMany","en":"Measures {measures} do not add up to their time signatures, so their notes are counted as written.","fr":"Les mesures {measures} ne correspondent pas à leur chiffrage de mesure; leurs notes sont comptées telles qu’écrites."}
+{"key":"insights.phonation.untrustedOne","en":"Measure {measures} does not add up to its time signature, so its notes are counted as written.","fr":"La mesure {measures} ne correspond pas à son chiffrage de mesure; ses notes sont comptées telles qu’écrites."}
+{"key":"insights.r2.cycles","en":"Your vocal folds contact about {n} times as you sing this piece.","fr":"Vos plis vocaux entrent en contact environ {n} fois pendant que vous chantez cette pièce."}
+{"key":"insights.r2.cycles.above","en":"{n} above your comfortable working zone","fr":"{n} au-dessus de votre zone de travail confortable"}
+{"key":"insights.r2.cycles.under","en":"{n} under your comfortable working zone","fr":"{n} sous votre zone de travail confortable"}
+{"key":"insights.r2.cycles.within","en":"{n} within your comfortable working zone, {low} to {high}, typed","fr":"{n} dans votre zone de travail confortable, {low} à {high}, telle que vous l’avez indiquée"}
+{"key":"insights.r2.fr1.many","en":"{count} notes meet a vowel’s first resonance (fR1), in “{heading}.”","fr":"{count} notes rencontrent la première résonance (fR1) de leur voyelle, dans « {heading} »."}
+{"key":"insights.r2.fr1.one","en":"One note meets a vowel’s first resonance (fR1): the {vowel} of bar {bar}, in “{heading}.”","fr":"Une note rencontre la première résonance (fR1) d’une voyelle : le {vowel} de la mesure {bar}, dans « {heading} »."}
+{"key":"insights.r2.frame","en":"Ilya’s advice is drawn from the intersection of your voice as you calibrate and describe it, and the demands of the music you are investigating. Citations connect Ilya’s findings to specific voice pedagogy literature. Since a computer program cannot experience your actual singing, discuss anything Ilya suggests with your voice teacher.","fr":"Les conseils d’Ilya sont tirés de la rencontre entre votre voix, telle que vous la calibrez et la décrivez, et les exigences de la musique que vous étudiez. Des citations relient les constats d’Ilya à des passages précis de la littérature en pédagogie du chant. Comme un logiciel ne peut pas percevoir votre chant réel, discutez des suggestions d’Ilya avec votre professeure ou professeur de chant."}
+{"key":"insights.r2.moments","en":"Where this piece meets your voice","fr":"Là où cette pièce rencontre votre voix"}
+{"key":"insights.r2.nearPassaggio","en":"Notes in {count} bars sit near your passaggio: {bars}.","fr":"Dans {count} mesures, des notes se situent près de votre *passaggio* : {bars}."}
+{"key":"insights.r2.nearPassaggioOne","en":"Notes in bar {bars} sit near your passaggio.","fr":"Dans la mesure {bars}, des notes se situent près de votre *passaggio*."}
+{"key":"insights.r2.notes","en":"Notes","fr":"Notes"}
+{"key":"insights.r2.otherApproaches.many.a","en":"There are other ways in.","fr":"Il existe d’autres approches."}
+{"key":"insights.r2.otherApproaches.many.b","en":"You can also come at it differently.","fr":"On peut aussi s’y prendre autrement."}
+{"key":"insights.r2.otherApproaches.one.a","en":"There is another way in.","fr":"Il existe une autre approche."}
+{"key":"insights.r2.otherApproaches.one.b","en":"You can also come at it differently.","fr":"On peut aussi s’y prendre autrement."}
+{"key":"insights.r2.pieceTessitura","en":"this piece’s tessitura","fr":"la tessiture de la pièce"}
+{"key":"insights.r2.pitchKey","en":"(A4 = 440 Hz)","fr":"(A4 = 440 Hz)"}
+{"key":"insights.r2.primo.none","en":"{n} percent of the singing lies at or above your primo passaggio, {p}, and none above your secondo passaggio, {s}.","fr":"{n} % du chant se situe sur votre *primo passaggio*, {p}, ou au-dessus, et rien au-dessus de votre *secondo passaggio*, {s}."}
+{"key":"insights.r2.primo.some","en":"{n} percent of the singing lies at or above your primo passaggio, {p}, and {m} percent above your secondo passaggio, {s}.","fr":"{n} % du chant se situe sur votre *primo passaggio*, {p}, ou au-dessus, et {m} % au-dessus de votre *secondo passaggio*, {s}."}
+{"key":"insights.r2.range.inside","en":"Compass {low} to {high} sits inside your range, {lo} to {hi}, typed.","fr":"L’ambitus de la pièce, {low} à {high}, entre dans le vôtre, {lo} à {hi}, tel que vous l’avez indiqué."}
+{"key":"insights.r2.range.outside","en":"Compass {low} to {high} reaches outside your range, {lo} to {hi}, typed.","fr":"L’ambitus de la pièce, {low} à {high}, dépasse le vôtre, {lo} à {hi}, tel que vous l’avez indiqué."}
+{"key":"insights.r2.readingTopic","en":"[{vowel}] on {pitch}, bar {bar}:","fr":"[{vowel}] sur {pitch}, mesure {bar} :"}
+{"key":"insights.r2.readingTopicNoPitch","en":"[{vowel}], bar {bar}:","fr":"[{vowel}], mesure {bar} :"}
+{"key":"insights.r2.reason.key","en":"What another key would change","fr":"Ce que changerait une autre tonalité"}
+{"key":"insights.r2.reason.range","en":"Range","fr":"Ambitus"}
+{"key":"insights.r2.sourcesLine","en":"A vowel turns about an octave under its first resonance in your voice (Bozeman 2010 and 2014; Titze 2007, p. 200; Titze 2012, p. 544). The cycle dose counts vocal-fold cycles (Titze, Švec, and Popolo 2003), set beside your comfortable working zone after Titze 2008.","fr":"Dans votre voix, une voyelle change de timbre environ une octave sous sa première résonance (Bozeman 2010 et 2014; Titze 2007, p. 200; Titze 2012, p. 544). La dose de cycles compte les cycles des plis vocaux (Titze, Švec et Popolo 2003); elle est placée à côté de votre zone de travail confortable d’après Titze 2008."}
+{"key":"insights.r2.teacherA","en":"Discuss this approach with your voice teacher.","fr":"Discutez de cette approche lors de vos cours de chant."}
+{"key":"insights.r2.teacherA.many","en":"Discuss these approaches with your voice teacher.","fr":"Discutez de ces approches lors de vos cours de chant."}
+{"key":"insights.r2.teacherC","en":"Review these sources with your voice teacher, who can weigh in on which of them actually apply to your voice.","fr":"Passez ces sources en revue avec votre professeure ou professeur de chant, qui pourra donner son avis sur celles qui s’appliquent effectivement à votre voix."}
+{"key":"insights.r2.totals","en":"The measures behind these reasons","fr":"Ce sur quoi reposent ces constats"}
+{"key":"insights.r2.unlikely.alone","en":"This makes the song unlikely to sit comfortably in your voice as written.","fr":"Cet élément fait que la pièce, telle qu’écrite, a peu de chances de reposer avec aisance dans votre voix."}
+{"key":"insights.r2.unlikely.held","en":"In this key, bar {bar} holds {a} {pitch} {vowel} for about {s} seconds, above your secondo passaggio, {secondo}.","fr":"Dans cette tonalité, la mesure {bar} prolonge un {vowel} sur {pitch} pendant environ {s} secondes, au-dessus de votre *secondo passaggio*, {secondo}."}
+{"key":"insights.r2.unlikely.range","en":"Bar {bar} reaches {a} {pitch}, outside the range you typed, {low} to {high}.","fr":"La mesure {bar} atteint {pitch}, hors de votre ambitus, {low} à {high}, tel que vous l’avez indiqué."}
+{"key":"insights.r2.unlikely.share","en":"In this key, {n} percent of the singing lies above your primo passaggio, {primo}.","fr":"Dans cette tonalité, {n} % du chant se situe au-dessus de votre *primo passaggio*, {primo}."}
+{"key":"insights.r2.unlikely.shareHeld","en":"In this key, {n} percent of the singing lies above your primo passaggio, {primo}, and bar {bar} holds {a} {pitch} {vowel} for about {s} seconds, above your secondo passaggio, {secondo}.","fr":"Dans cette tonalité, {n} % du chant se situe au-dessus de votre *primo passaggio*, {primo}, et la mesure {bar} prolonge un {vowel} sur {pitch} pendant environ {s} secondes, au-dessus de votre *secondo passaggio*, {secondo}."}
+{"key":"insights.r2.unlikely.together","en":"Together, these make the song unlikely to sit comfortably in your voice as written.","fr":"Ensemble, ces éléments font que la pièce, telle qu’écrite, a peu de chances de reposer avec aisance dans votre voix."}
+{"key":"insights.r2.vowels.against","en":"against where each vowel turns in your voice","fr":"selon la hauteur où chaque voyelle change de timbre dans votre voix"}
+{"key":"insights.r2.vowels.against.generic","en":"against where each vowel turns in a generic {voiceType}","fr":"selon la hauteur où chaque voyelle change de timbre pour une voix type de {voiceType}"}
+{"key":"insights.r2.vowels.allPast","en":"{s}, all past the turn","fr":"{s}, entièrement après le changement"}
+{"key":"insights.r2.vowels.before","en":"before the turn","fr":"avant le changement de timbre"}
+{"key":"insights.r2.vowels.noTurn","en":"{s}, no first resonance in your calibration","fr":"{s}, aucune première résonance mesurée lors de votre calibration"}
+{"key":"insights.r2.vowels.past","en":"past the turn","fr":"après le changement de timbre"}
+{"key":"insights.r2.vowels.ring","en":"{n}% of your singing lies past the turn.","fr":"{n} % de votre chant se situe après le changement de timbre."}
+{"key":"insights.r2.vowels.somePast","en":"{s}, {p} past","fr":"{s}, dont {p} après le changement"}
+{"key":"insights.r2.vowels.turns","en":"turns about {pitch}","fr":"change de timbre autour de {pitch}"}
+{"key":"insights.r2.yourTessitura","en":"your comfortable working zone, typed","fr":"votre zone de travail confortable, telle que vous l’avez indiquée"}
+{"key":"insights.silence.findings","en":"Any finding about where this piece may challenge your voice.","fr":"Toute observation sur les endroits où cette pièce pourrait solliciter votre voix."}
+{"key":"insights.silence.noBoth","en":"Set up your voice in VOICE, and add a score in INPUT, to begin.","fr":"Établissez votre voix dans VOIX et ajoutez une partition dans ENTRÉE pour commencer."}
+{"key":"insights.silence.noScore","en":"Add a score in INPUT to begin.","fr":"Ajoutez une partition dans ENTRÉE pour commencer."}
+{"key":"insights.silence.noVoice","en":"Set up your voice in VOICE to begin.","fr":"Établissez votre voix dans VOIX pour commencer."}
+{"key":"insights.silence.unmeasured","en":"No voice has been measured, so this page does not compare this piece with your voice. Withheld until one is:","fr":"Aucune voix n’a été mesurée, donc cette page ne compare pas cette pièce avec votre voix. Retenu jusqu’à ce qu’une voix le soit :"}
+{"key":"insights.tryKey","en":"Try this key","fr":"Essayer cette tonalité"}
+{"key":"insights.verdict.cannotSay","en":"Without the range you typed, this page cannot say whether this key suits you.","fr":"Sans l’ambitus que vous avez indiqué, cette page ne peut pas dire si cette tonalité vous convient."}
+{"key":"insights.verdict.fit","en":"This key seems like a good fit for you.","fr":"Cette tonalité semble vous convenir."}
+{"key":"insights.verdict.heading","en":"How this key sits for you","fr":"Comment cette tonalité vous convient"}
+{"key":"insights.verdict.outsideRange","en":"This key takes the piece outside the range you typed.","fr":"Cette tonalité place la pièce hors de l’ambitus que vous avez indiqué."}
+{"key":"insights.verdict.outsideTessitura","en":"The compass fits the range you typed, but the piece's tessitura sits outside the comfortable working zone you typed.","fr":"L’ambitus de la pièce entre dans celui que vous avez indiqué, mais la tessiture de la pièce se situe hors de la zone de travail confortable que vous avez indiquée."}
+{"key":"insights.verdict.rangeOnly","en":"The compass fits the range you typed, and nothing on this page compares the tessitura.","fr":"L’ambitus de la pièce entre dans celui que vous avez indiqué, et rien sur cette page ne compare la tessiture."}
+{"key":"insights.yourVoice","en":"your voice","fr":"votre voix"}
+{"key":"inspector.back","en":"← Back","fr":"← Retour"}
+{"key":"inspector.blurbs","en":"Phonological notes","fr":"Notes phonologiques"}
+{"key":"inspector.clitic","en":"Clitic (unstressed)","fr":"Clitique (atone)"}
+{"key":"inspector.cliticArrow.enclitic","en":"Enclitic arrow","fr":"Flèche enclitique"}
+{"key":"inspector.cliticArrow.encliticBlurb","en":"This word is an enclitic: it has no stress of its own and attaches phonologically to the preceding word. Its vowels reduce relative to the host word’s stress position. On the page, an arrow (←) shows in place of IPA, and the clitic’s phonetic material appears fused into the host word’s IPA.","fr":"Ce mot est un enclitique : il n’a pas d’accent propre et s’attache phonologiquement au mot précédent. Ses voyelles se réduisent en fonction de la position de l’accent du mot hôte. Sur la page, une flèche (←) remplace l’API, et le matériel phonétique du clitique apparaît fusionné dans l’API du mot hôte."}
+{"key":"inspector.cliticArrow.encliticLabel","en":"Enclitic","fr":"Enclitique"}
+{"key":"inspector.cliticArrow.proclitic","en":"Proclitic arrow","fr":"Flèche proclitique"}
+{"key":"inspector.cliticArrow.procliticBlurb","en":"This word is a proclitic: it has no stress of its own and attaches phonologically to the following word. Its vowels reduce relative to the host word’s stress position. On the page, an arrow (→) shows in place of IPA, and the clitic’s phonetic material appears fused into the host word’s IPA.","fr":"Ce mot est un proclitique : il n’a pas d’accent propre et s’attache phonologiquement au mot suivant. Ses voyelles se réduisent en fonction de la position de l’accent du mot hôte. Sur la page, une flèche (→) remplace l’API, et le matériel phonétique du clitique apparaît fusionné dans l’API du mot hôte."}
+{"key":"inspector.cliticArrow.procliticLabel","en":"Proclitic","fr":"Proclitique"}
+{"key":"inspector.dictCapacity","en":"Maximum 20 characters","fr":"Maximum de 20 caractères"}
+{"key":"inspector.dictChoose","en":"Use this reading:","fr":"Utiliser cette lecture :"}
+{"key":"inspector.dictEntryMissing","en":"Full entry unavailable","fr":"Entrée complète indisponible"}
+{"key":"inspector.dictionary","en":"DICTIONARY","fr":"DICTIONNAIRE"}
+{"key":"inspector.editGlossAria","en":"Edit gloss","fr":"Modifier la glose"}
+{"key":"inspector.glossFallbackEN","en":"Gloss available in English only","fr":"Glose disponible en anglais seulement"}
+{"key":"inspector.glossFallbackFR","en":"Gloss available in French only","fr":"Glose disponible en français seulement"}
+{"key":"inspector.glossFromGlossary","en":"From your other songs","fr":"De vos autres chants"}
+{"key":"inspector.glossMissing","en":"No translation available for this form.","fr":"Aucune traduction française disponible pour cette forme."}
+{"key":"inspector.glossOffer","en":"Use for this word in your other songs","fr":"Utiliser pour ce mot dans vos autres chants"}
+{"key":"inspector.glossOfferDismiss","en":"Not now","fr":"Pas maintenant"}
+{"key":"inspector.glossOfferDone","en":"Used in your other songs","fr":"Utilisée dans vos autres chants"}
+{"key":"inspector.glossOfferFailed","en":"Could not be kept on this device","fr":"Impossible de la conserver sur cet appareil"}
+{"key":"inspector.glossStopUsing","en":"Stop using","fr":"Ne plus utiliser"}
+{"key":"inspector.noBlurb","en":"No phonological note for this character.","fr":"Aucune note phonologique pour ce caractère."}
+{"key":"inspector.notationDefault","en":"Notation: default (Grayson)","fr":"Notation : par défaut (Grayson)"}
+{"key":"inspector.provenance","en":"Provenance","fr":"Provenance"}
+{"key":"inspector.resetWordAria","en":"Reset word to engine defaults","fr":"Réinitialiser le mot aux valeurs par défaut"}
+{"key":"inspector.rhyme.stage","en":"Stage reading","fr":"Prononciation scénique"}
+{"key":"inspector.ribbon","en":"Character breakdown","fr":"Décomposition par caractère"}
+{"key":"inspector.spot.reconstitution","en":"Spot reconstitution","fr":"Reconstitution ponctuelle"}
+{"key":"inspector.spot.reduction","en":"Spot reduction","fr":"Réduction ponctuelle"}
+{"key":"inspector.spotRecon.globalOn","en":"Global reconstitution is active. Disable it in Cosmetic Options to use per-word reconstitution.","fr":"La reconstitution globale est active. Désactivez-la dans les Options cosmétiques pour utiliser la reconstitution par mot."}
+{"key":"inspector.spotRecon.heading","en":"Reconstitution","fr":"Reconstitution"}
+{"key":"inspector.spotRecon.left","en":"Default reduction","fr":"Réduction par défaut"}
+{"key":"inspector.spotRecon.right","en":"Spot reconstitution","fr":"Reconstitution ponctuelle"}
+{"key":"inspector.stress","en":"Stress","fr":"Accent tonique"}
+{"key":"inspector.stressAssign.composer","en":"Composer","fr":"Compositrice ou compositeur"}
+{"key":"inspector.stressAssign.default","en":"Default","fr":"Par défaut"}
+{"key":"inspector.stressAssign.dictionary","en":"Dictionary","fr":"Dictionnaire"}
+{"key":"inspector.stressAssign.myAssignment","en":"My assignment","fr":"Mon choix"}
+{"key":"inspector.syllable","en":"Syllable","fr":"Syllabe"}
+{"key":"inspector.unknownStress","en":"Unknown stress · verify manually","fr":"Accent inconnu · vérifier manuellement"}
+{"key":"inspector.yoToggle","en":"ё ↔ е","fr":"ё ↔ е"}
+{"key":"intake.camera","en":"Take a photograph","fr":"Prendre une photographie"}
+{"key":"intake.caption","en":"A score or a photograph can go here too, or you can choose a file.","fr":"Une partition ou une photographie peut aussi aller ici, ou vous pouvez choisir un fichier."}
+{"key":"intake.captionLink","en":"choose a file","fr":"choisir un fichier"}
+{"key":"intake.clear","en":"Clear","fr":"Retirer"}
+{"key":"intake.dropHint","en":"Drop your file here.","fr":"Déposez votre fichier ici."}
+{"key":"intake.line","en":"%s line","fr":"%s ligne"}
+{"key":"intake.lines","en":"%s lines","fr":"%s lignes"}
+{"key":"intake.pdf.noText","en":"There are no words in this PDF to read. If it is a picture of a page, drop it again and choose The score.","fr":"Il n’y a aucun mot à lire dans ce PDF. S’il s’agit d’une image de page, déposez-le de nouveau et choisissez La partition."}
+{"key":"intake.pdf.poem","en":"The poem","fr":"Le poème"}
+{"key":"intake.pdf.reading","en":"Reading the words out of the PDF…","fr":"Lecture des mots du PDF…"}
+{"key":"intake.pdf.score","en":"The score","fr":"La partition"}
+{"key":"intake.pdf.title","en":"Is this PDF the poem, or the score?","fr":"Ce PDF est-il le poème ou la partition?"}
+{"key":"intake.pdf.why","en":"Ilya cannot tell from the file itself. %s","fr":"Ilya ne peut pas le déterminer à partir du fichier lui-même. %s"}
+{"key":"intake.picture.reading","en":"Reading the words out of the picture…","fr":"Lecture des mots de l’image…"}
+{"key":"intake.picture.title","en":"Is this picture the poem, or the score?","fr":"Cette image est-elle le poème ou la partition?"}
+{"key":"intake.placed","en":"%s / %s placed","fr":"%s / %s placées"}
+{"key":"intake.placeholder","en":"Paste, type, or drop the published poem here.","fr":"Collez, saisissez ou déposez le poème publié ici."}
+{"key":"intake.placeholderLyrics","en":"Your score's sung words appear here. You can also paste or type them.","fr":"Les paroles chantées de votre partition s’affichent ici. Vous pouvez aussi les coller ou les saisir."}
+{"key":"intake.poemLibrary.by","en":"{author}, translated by {translator}","fr":"{author}, traduit par {translator}"}
+{"key":"intake.poemLibrary.cardColours","en":"Coloured words in LYRICS now show where your song departs from this poem.","fr":"Les mots en couleur du champ PAROLES montrent maintenant où la mise en musique s’écarte de ce poème."}
+{"key":"intake.poemLibrary.cardHeading","en":"Ilya found this poem for your song:","fr":"Ilya a trouvé ce poème pour votre chant :"}
+{"key":"intake.poemLibrary.cardSource","en":"From {site}.","fr":"Tiré de {site}."}
+{"key":"intake.poemLibrary.cardSourceModernized","en":"From {site}, in modern spelling.","fr":"Tiré de {site}, en orthographe moderne."}
+{"key":"intake.poemLibrary.keep","en":"Keep this poem","fr":"Conserver ce poème"}
+{"key":"intake.poemLibrary.notThis","en":"Not this poem","fr":"Pas ce poème"}
+{"key":"intake.poemLibrary.passage","en":"a passage beginning “{line}”","fr":"un passage commençant par « {line} »"}
+{"key":"intake.poemLibrary.removed","en":"Poem removed.","fr":"Poème retiré."}
+{"key":"intake.poemLibrary.site.azLib","en":"Maxim Moshkov’s Library (az.lib.ru)","fr":"la Bibliothèque de Maxime Mochkov (az.lib.ru)"}
+{"key":"intake.poemLibrary.site.feb","en":"the Fundamental Electronic Library (feb-web.ru)","fr":"la Bibliothèque électronique fondamentale (feb-web.ru)"}
+{"key":"intake.poemLibrary.site.ilibrary","en":"ilibrary.ru","fr":"ilibrary.ru"}
+{"key":"intake.poemLibrary.site.operalib","en":"operalib.eu","fr":"operalib.eu"}
+{"key":"intake.poemLibrary.site.russianWikisource","en":"Russian Wikisource","fr":"Wikisource en russe"}
+{"key":"intake.poemLibrary.site.rvb","en":"the Russian Virtual Library (rvb.ru)","fr":"la Bibliothèque virtuelle russe (rvb.ru)"}
+{"key":"intake.poemLibrary.undo","en":"Undo","fr":"Annuler"}
+{"key":"intake.poemReplace.body","en":"This page was read as a poem, and POEM already holds one. Ilya cannot undo its replacement.","fr":"Cette page a été lue comme un poème, et le champ POÈME en contient déjà un. Ilya ne peut pas annuler le remplacement de celui-ci."}
+{"key":"intake.poemReplace.keep","en":"Keep the poem","fr":"Conserver le poème"}
+{"key":"intake.poemReplace.replace","en":"Replace the poem","fr":"Remplacer le poème"}
+{"key":"intake.poemReplace.title","en":"Replace the poem?","fr":"Remplacer le poème?"}
+{"key":"intake.replace","en":"Replace","fr":"Remplacer"}
+{"key":"intake.tempo.estimated","en":"estimated","fr":"estimé"}
+{"key":"intake.tempo.label","en":"TEMPO","fr":"TEMPO"}
+{"key":"intake.tempo.printed","en":"printed","fr":"imprimé"}
+{"key":"intake.tempo.yours","en":"your tempo","fr":"votre tempo"}
+{"key":"intake.view.landedLyrics","en":"Your score supplied the words in LYRICS. Add the whole published poem here to see where the song departs from it.","fr":"Votre partition a fourni les paroles du champ PAROLES. Ajoutez ici le poème publié en entier pour voir où la mise en musique s’en écarte."}
+{"key":"intake.view.landedPoem","en":"This page read as a poem and is in POEM. The sung words in LYRICS may differ from it.","fr":"Cette page a été lue comme un poème; elle est dans le champ POÈME. Les paroles chantées, dans le champ PAROLES, peuvent en différer."}
+{"key":"intake.view.libraryPoem","en":"{author}, “{title}”, from {site}.","fr":"{author}, « {title} », tiré de {site}."}
+{"key":"intake.view.libraryPoemEdited","en":"Based on {author}, “{title}”, from {site}.","fr":"D’après {author}, « {title} », tiré de {site}."}
+{"key":"intake.view.lyrics","en":"LYRICS","fr":"PAROLES"}
+{"key":"intake.view.lyricsLine","en":"The words as sung, as the score sets them. Coloured words differ from the poem: a repeat, a change, or an addition.","fr":"Les paroles telles que chantées, comme la partition les place. Les mots en couleur diffèrent du poème : une reprise, un changement ou un ajout."}
+{"key":"intake.view.omittedLine","en":"Greyed words are those left out of the song by the composer.","fr":"Les mots grisés sont ceux que le compositeur a laissés de côté dans ce chant."}
+{"key":"intake.view.poem","en":"POEM","fr":"POÈME"}
+{"key":"intake.view.poemLine","en":"Edits here change the published poem. The sung words come from your score; edit them in LYRICS.","fr":"Les modifications faites ici changent le poème publié. Les paroles chantées viennent de votre partition; modifiez-les dans le champ PAROLES."}
+{"key":"intake.word","en":"%s word","fr":"%s mot"}
+{"key":"intake.words","en":"%s words","fr":"%s mots"}
+{"key":"key.band.asPrinted","en":"Key: {key}, as printed","fr":"Tonalité : {key}, telle qu’imprimée"}
+{"key":"key.band.backToPrinted","en":"As printed","fr":"Tonalité imprimée"}
+{"key":"key.band.transposed","en":"Key: {key}, transposed","fr":"Tonalité : {key}, après transposition"}
+{"key":"key.band.try","en":"Try another key","fr":"Essayer une autre tonalité"}
+{"key":"key.dock.asPrinted","en":"As printed · {tonic}","fr":"Tonalité imprimée · {tonic}"}
+{"key":"key.dock.pick","en":"Ilya’s pick · {tonic}","fr":"Choix d’Ilya · {tonic}"}
+{"key":"key.page.header","en":"Transposed {interval} from {key}, at the singer’s choice.","fr":"Transposition {interval} à partir de {key}, au choix de l’interprète."}
+{"key":"key.ruler.cancel","en":"Cancel","fr":"Annuler"}
+{"key":"key.ruler.doubleFlatMany","en":"Carries {n} double flats","fr":"Comporte {n} doubles bémols"}
+{"key":"key.ruler.doubleFlatOne","en":"Carries 1 double flat","fr":"Comporte 1 double bémol"}
+{"key":"key.ruler.doubleSharpMany","en":"Carries {n} double sharps","fr":"Comporte {n} doubles dièses"}
+{"key":"key.ruler.doubleSharpOne","en":"Carries 1 double sharp","fr":"Comporte 1 double dièse"}
+{"key":"key.ruler.down","en":"Down {a}","fr":"{a} plus bas"}
+{"key":"key.ruler.interval.1","en":"a semitone","fr":"Un demi-ton"}
+{"key":"key.ruler.interval.2","en":"a whole tone","fr":"Un ton"}
+{"key":"key.ruler.interval.3","en":"a minor third","fr":"Une tierce mineure"}
+{"key":"key.ruler.interval.4","en":"a major third","fr":"Une tierce majeure"}
+{"key":"key.ruler.interval.5","en":"a perfect fourth","fr":"Une quarte juste"}
+{"key":"key.ruler.interval.6","en":"a tritone","fr":"Un triton"}
+{"key":"key.ruler.readout","en":"{interval} · {key}","fr":"{interval} · {key}"}
+{"key":"key.ruler.readoutPick","en":"{interval} · {key} · Ilya’s recommendation","fr":"{interval} · {key} · recommandation d’Ilya"}
+{"key":"key.ruler.up","en":"Up {a}","fr":"{a} plus haut"}
+{"key":"key.ruler.use","en":"Use this key","fr":"Utiliser cette tonalité"}
+{"key":"legend.inferred","en":"Verify stress","fr":"Vérifier l’accent"}
+{"key":"legend.spot-reconstitution","en":"Spot reconstitution","fr":"Reconstitution ponctuelle"}
+{"key":"legend.tempo-estimated","en":"tempo estimated by Ilya","fr":"tempo estimé par Ilya"}
+{"key":"legend.user-composer","en":"Composer setting","fr":"Réglage de la partition"}
+{"key":"legend.user-dictionary","en":"Verified in dictionary","fr":"Vérifié dans le dictionnaire"}
+{"key":"legend.user-override","en":"User override","fr":"Correction manuelle"}
+{"key":"legend.yo","en":"ё stress","fr":"Accent de ё"}
+{"key":"loupe.barline","en":"Barline","fr":"Barre de mesure"}
+{"key":"loupe.beat","en":"beat %b","fr":"temps %b"}
+{"key":"loupe.beatPulse","en":"beat %b, pulse %p","fr":"temps %b, division %p"}
+{"key":"loupe.checkNext","en":"Next bar to check","fr":"Mesure suivante à vérifier"}
+{"key":"loupe.checkPrev","en":"Previous bar to check","fr":"Mesure précédente à vérifier"}
+{"key":"loupe.close","en":"Close","fr":"Fermer"}
+{"key":"loupe.delete","en":"Delete","fr":"Supprimer"}
+{"key":"loupe.divide","en":"Divide it by the time signature","fr":"La diviser selon le chiffrage de mesure"}
+{"key":"loupe.divideOffer","en":"This bar holds %k bars of %m.","fr":"Cette mesure contient %k mesures à %m."}
+{"key":"loupe.divideOfferClosing","en":"This bar holds %k bars of %m and a short final bar.","fr":"Cette mesure contient %k mesures à %m et une mesure finale incomplète."}
+{"key":"loupe.divideOfferOpening","en":"This bar holds a pickup and %k bars of %m.","fr":"Cette mesure contient une anacrouse et %k mesures à %m."}
+{"key":"loupe.doubleDot","en":"Double dot","fr":"Double point"}
+{"key":"loupe.fill.over","en":"over","fr":"trop pleine"}
+{"key":"loupe.fill.short","en":"short","fr":"incomplète"}
+{"key":"loupe.fillFromPoem","en":"Fill from the poem","fr":"Compléter à partir du poème"}
+{"key":"loupe.gap","en":"after %s · the next duration enters here","fr":"après %s · la prochaine durée s’inscrit ici"}
+{"key":"loupe.gapHead","en":"before the first entry · the next duration enters here","fr":"avant la première entrée · la prochaine durée s’inscrit ici"}
+{"key":"loupe.grace","en":"Grace note","fr":"Petite note"}
+{"key":"loupe.graceSlash","en":"Slash","fr":"Barre oblique"}
+{"key":"loupe.keySignature","en":"Key signature","fr":"Armure"}
+{"key":"loupe.lyric.melisma","en":"This note sustains the syllable","fr":"Cette note prolonge la syllabe"}
+{"key":"loupe.lyric.toEnd","en":"Syllables, to the end of the lyric","fr":"Les syllabes, jusqu’à la fin du texte"}
+{"key":"loupe.lyric.toNextOpen","en":"Syllables, to the next open note","fr":"Les syllabes, jusqu’à la prochaine note libre"}
+{"key":"loupe.measureTag","en":"m. %m · system %s of %t","fr":"mes. %m · système %s sur %t"}
+{"key":"loupe.measureTagBoth","en":"m. %m · system %s of %t · %a of %e","fr":"mes. %m · système %s sur %t · %a sur %e"}
+{"key":"loupe.measureTagCheck","en":"m. %m · to check, %s of %t","fr":"mes. %m · à vérifier, %s sur %t"}
+{"key":"loupe.measureTagFill","en":"m. %m · %a of %e","fr":"mes. %m · %a sur %e"}
+{"key":"loupe.measureTagShort","en":"m. %m","fr":"mes. %m"}
+{"key":"loupe.melisma","en":"Melisma","fr":"Mélisme"}
+{"key":"loupe.moveBottom","en":"Move the Loupe to the bottom","fr":"Placer la loupe en bas"}
+{"key":"loupe.moveTop","en":"Move the Loupe to the top","fr":"Placer la loupe en haut"}
+{"key":"loupe.nolet.back","en":"Back to durations","fr":"Retour aux durées"}
+{"key":"loupe.nolet.fewer","en":"One fewer","fr":"Un de moins"}
+{"key":"loupe.nolet.inSpaceOf","en":"in the space of","fr":"dans l’espace de"}
+{"key":"loupe.nolet.more","en":"One more","fr":"Un de plus"}
+{"key":"loupe.nolet.of","en":"of","fr":"de"}
+{"key":"loupe.nolet.step","en":"Next value","fr":"Valeur suivante"}
+{"key":"loupe.pitch.octave","en":"octave","fr":"octave"}
+{"key":"loupe.pitch.semitone","en":"semitone","fr":"demi-ton"}
+{"key":"loupe.pitch.step","en":"step","fr":"degré"}
+{"key":"loupe.place.breakAfter","en":"Break after this word","fr":"Frontière après ce mot"}
+{"key":"loupe.place.breakImplied","en":"A break is already implied here.","fr":"Une frontière est déjà implicite ici."}
+{"key":"loupe.place.breakRemove","en":"Remove break","fr":"Retirer la frontière"}
+{"key":"loupe.place.clear","en":"Clear placements","fr":"Retirer le placement"}
+{"key":"loupe.place.fromHere","en":"Place from here","fr":"Placer à partir d’ici"}
+{"key":"loupe.place.scope.all","en":"the whole piece","fr":"toute la pièce"}
+{"key":"loupe.place.scope.measure","en":"this measure","fr":"cette mesure"}
+{"key":"loupe.place.scope.toEnd","en":"to the end","fr":"jusqu’à la fin"}
+{"key":"loupe.printAlt","en":"Bar {bar} as printed in your score","fr":"La mesure {bar} telle qu’imprimée dans votre partition"}
+{"key":"loupe.redo","en":"Redo: %s","fr":"Refaire : %s"}
+{"key":"loupe.rest","en":"Rest","fr":"Silence"}
+{"key":"loupe.restValue.16th.0","en":"Rest · Sixteenth","fr":"Quart de soupir"}
+{"key":"loupe.restValue.16th.1","en":"Rest · Dotted sixteenth","fr":"Quart de soupir pointé"}
+{"key":"loupe.restValue.16th.2","en":"Rest · Double-dotted sixteenth","fr":"Quart de soupir doublement pointé"}
+{"key":"loupe.restValue.32nd.0","en":"Rest · Thirty-second","fr":"Huitième de soupir"}
+{"key":"loupe.restValue.32nd.1","en":"Rest · Dotted thirty-second","fr":"Huitième de soupir pointé"}
+{"key":"loupe.restValue.32nd.2","en":"Rest · Double-dotted thirty-second","fr":"Huitième de soupir doublement pointé"}
+{"key":"loupe.restValue.64th.0","en":"Rest · Sixty-fourth","fr":"Seizième de soupir"}
+{"key":"loupe.restValue.64th.1","en":"Rest · Dotted sixty-fourth","fr":"Seizième de soupir pointé"}
+{"key":"loupe.restValue.64th.2","en":"Rest · Double-dotted sixty-fourth","fr":"Seizième de soupir doublement pointé"}
+{"key":"loupe.restValue.eighth.0","en":"Rest · Eighth","fr":"Demi-soupir"}
+{"key":"loupe.restValue.eighth.1","en":"Rest · Dotted eighth","fr":"Demi-soupir pointé"}
+{"key":"loupe.restValue.eighth.2","en":"Rest · Double-dotted eighth","fr":"Demi-soupir doublement pointé"}
+{"key":"loupe.restValue.half.0","en":"Rest · Half","fr":"Demi-pause"}
+{"key":"loupe.restValue.half.1","en":"Rest · Dotted half","fr":"Demi-pause pointée"}
+{"key":"loupe.restValue.half.2","en":"Rest · Double-dotted half","fr":"Demi-pause doublement pointée"}
+{"key":"loupe.restValue.quarter.0","en":"Rest · Quarter","fr":"Soupir"}
+{"key":"loupe.restValue.quarter.1","en":"Rest · Dotted quarter","fr":"Soupir pointé"}
+{"key":"loupe.restValue.quarter.2","en":"Rest · Double-dotted quarter","fr":"Soupir doublement pointé"}
+{"key":"loupe.restValue.whole.0","en":"Rest · Whole","fr":"Pause"}
+{"key":"loupe.restValue.whole.1","en":"Rest · Dotted whole","fr":"Pause pointée"}
+{"key":"loupe.restValue.whole.2","en":"Rest · Double-dotted whole","fr":"Pause doublement pointée"}
+{"key":"loupe.restore","en":"Restore","fr":"Rétablir"}
+{"key":"loupe.station.accidental","en":"ACCIDENTAL · ENTRY","fr":"ALTÉRATION · SAISIE"}
+{"key":"loupe.station.corrections","en":"CORRECTIONS","fr":"CORRECTIONS"}
+{"key":"loupe.station.duration","en":"DURATION","fr":"DURÉE"}
+{"key":"loupe.station.lyric","en":"UNDERLAY","fr":"PLACEMENT DES PAROLES"}
+{"key":"loupe.station.lyricTake","en":"UNDERLAY · take a note to shift its syllable","fr":"PLACEMENT DES PAROLES · prenez une note pour décaler sa syllabe"}
+{"key":"loupe.station.pitch","en":"PITCH","fr":"HAUTEUR"}
+{"key":"loupe.station.pitchMiddle","en":"PITCH · arrives on the middle line","fr":"HAUTEUR · arrive sur la ligne médiane"}
+{"key":"loupe.station.pitchTakes","en":"PITCH · takes the pitch of %s","fr":"HAUTEUR · prend la hauteur de %s"}
+{"key":"loupe.syllables","en":"SYLLABLES","fr":"SYLLABES"}
+{"key":"loupe.tie","en":"Tie","fr":"Liaison"}
+{"key":"loupe.timeSignature","en":"Time signature","fr":"Chiffrage de mesure"}
+{"key":"loupe.title","en":"LOUPE","fr":"LOUPE"}
+{"key":"loupe.tuplet","en":"Tuplet","fr":"Nolet"}
+{"key":"loupe.undo","en":"Undo: %s","fr":"Annuler : %s"}
+{"key":"loupe.undo.barlineAdded","en":"barline added","fr":"barre de mesure ajoutée"}
+{"key":"loupe.undo.barlineRemoved","en":"barline removed","fr":"barre de mesure retirée"}
+{"key":"loupe.undo.breakPlaced","en":"break placed","fr":"frontière placée"}
+{"key":"loupe.undo.breakRemoved","en":"break removed","fr":"frontière retirée"}
+{"key":"loupe.undo.cleared","en":"placements cleared","fr":"placement retiré"}
+{"key":"loupe.undo.deleted","en":"note removed","fr":"note supprimée"}
+{"key":"loupe.undo.divided","en":"bar divided","fr":"mesure divisée"}
+{"key":"loupe.undo.dotDouble","en":"double dot added","fr":"double point ajouté"}
+{"key":"loupe.undo.dotOff","en":"dot removed","fr":"point retiré"}
+{"key":"loupe.undo.dotOn","en":"dot added","fr":"point ajouté"}
+{"key":"loupe.undo.entered","en":"entry added","fr":"entrée ajoutée"}
+{"key":"loupe.undo.grace","en":"grace note changed","fr":"petite note modifiée"}
+{"key":"loupe.undo.graceAdded","en":"grace note added","fr":"petite note ajoutée"}
+{"key":"loupe.undo.graceSlash","en":"slash changed","fr":"barre oblique modifiée"}
+{"key":"loupe.undo.keyChanged","en":"key changed","fr":"armure modifiée"}
+{"key":"loupe.undo.keyRemoved","en":"key change removed","fr":"changement d’armure supprimé"}
+{"key":"loupe.undo.lyrics","en":"syllables shifted","fr":"syllabes décalées"}
+{"key":"loupe.undo.melisma","en":"melisma set","fr":"mélisme défini"}
+{"key":"loupe.undo.melismaOff","en":"melisma cleared","fr":"mélisme effacé"}
+{"key":"loupe.undo.placed","en":"syllable placed","fr":"syllabe placée"}
+{"key":"loupe.undo.placedFromHere","en":"syllables placed from here","fr":"syllabes placées à partir d’ici"}
+{"key":"loupe.undo.rest","en":"rest changed","fr":"silence modifié"}
+{"key":"loupe.undo.restored","en":"corrections cleared","fr":"corrections effacées"}
+{"key":"loupe.undo.tie","en":"tie changed","fr":"liaison modifiée"}
+{"key":"loupe.undo.timeSignature","en":"time signature changed","fr":"chiffrage de mesure modifié"}
+{"key":"loupe.undo.tuplet","en":"tuplet defined","fr":"nolet défini"}
+{"key":"loupe.value.16th.1","en":"Dotted sixteenth","fr":"Double croche pointée"}
+{"key":"loupe.value.16th.2","en":"Double-dotted sixteenth","fr":"Double croche doublement pointée"}
+{"key":"loupe.value.32nd.1","en":"Dotted thirty-second","fr":"Triple croche pointée"}
+{"key":"loupe.value.32nd.2","en":"Double-dotted thirty-second","fr":"Triple croche doublement pointée"}
+{"key":"loupe.value.64th.1","en":"Dotted sixty-fourth","fr":"Quadruple croche pointée"}
+{"key":"loupe.value.64th.2","en":"Double-dotted sixty-fourth","fr":"Quadruple croche doublement pointée"}
+{"key":"loupe.value.eighth.1","en":"Dotted eighth","fr":"Croche pointée"}
+{"key":"loupe.value.eighth.2","en":"Double-dotted eighth","fr":"Croche doublement pointée"}
+{"key":"loupe.value.half.1","en":"Dotted half","fr":"Blanche pointée"}
+{"key":"loupe.value.half.2","en":"Double-dotted half","fr":"Blanche doublement pointée"}
+{"key":"loupe.value.quarter.1","en":"Dotted quarter","fr":"Noire pointée"}
+{"key":"loupe.value.quarter.2","en":"Double-dotted quarter","fr":"Noire doublement pointée"}
+{"key":"loupe.value.whole.1","en":"Dotted whole","fr":"Ronde pointée"}
+{"key":"loupe.value.whole.2","en":"Double-dotted whole","fr":"Ronde doublement pointée"}
+{"key":"loupe.zoomIn","en":"Zoom in","fr":"Agrandir le zoom"}
+{"key":"loupe.zoomOut","en":"Zoom out","fr":"Réduire le zoom"}
+{"key":"lyrics.filled.note","en":"Filled from your poem. Your score’s print read “{scan}”.","fr":"Complété à partir de votre poème. Votre partition portait « {scan} »."}
+{"key":"lyrics.receipt.fromPoem","en":"{n} syllables filled from your poem","fr":"{n} syllabes complétées à partir de votre poème"}
+{"key":"lyrics.receipt.fromPoemOne","en":"1 syllable filled from your poem","fr":"1 syllabe complétée à partir de votre poème"}
+{"key":"markup.verseLabel","en":"Verse %s","fr":"Couplet %s"}
+{"key":"markup.verseTag","en":"%m · verse %v","fr":"%m · couplet %v"}
+{"key":"meta.arrAbbr","en":"Arr.","fr":"Arr."}
+{"key":"meta.composer","en":"Composer","fr":"Compositrice ou compositeur"}
+{"key":"meta.detectedFrom","en":"Detected from","fr":"Détecté dans le fichier"}
+{"key":"meta.fromScore","en":"from score","fr":"de la partition"}
+{"key":"meta.heading","en":"Metadata","fr":"Métadonnées"}
+{"key":"meta.opus","en":"Opera, song cycle, opus number","fr":"Opéra, cycle de mélodies, numéro d’opus"}
+{"key":"meta.placeholderLine","en":"Composer, opus, and poet information","fr":"Informations sur la compositrice ou le compositeur, l’opus et la ou le poète"}
+{"key":"meta.poet","en":"Poet or librettist","fr":"Poète ou librettiste"}
+{"key":"meta.reset","en":"Reset","fr":"Réinitialiser"}
+{"key":"meta.revertToScore","en":"Revert to score header","fr":"Rétablir l’en-tête de la partition"}
+{"key":"meta.textBy","en":"Text by","fr":"Texte de"}
+{"key":"meta.title","en":"Aria or song title","fr":"Aria ou titre du chant"}
+{"key":"meta.transcriber","en":"Transcriber name","fr":"Nom du transcripteur"}
+{"key":"meta.transl","en":"TRANSL.","fr":"TRAD."}
+{"key":"meta.translator","en":"Translator","fr":"Traductrice ou traducteur"}
+{"key":"notation.geminates","en":"Geminates","fr":"Géminées"}
+{"key":"notation.geminates.desc","en":"Show length markers","fr":"Afficher les marqueurs de durée"}
+{"key":"notation.heading","en":"NOTATION","fr":"NOTATION"}
+{"key":"notation.orphans","en":"%s corrections no longer find their note","fr":"%s corrections ne retrouvent plus leur note"}
+{"key":"notation.palatalNasal","en":"Palatal nasal","fr":"Nasale palatale"}
+{"key":"notation.palatalNasal.desc","en":"ɲ → nʲ","fr":"ɲ → nʲ"}
+{"key":"notation.reconstitution","en":"Reconstitution","fr":"Reconstitution"}
+{"key":"notation.reconstitution.desc","en":"Show reconstitution","fr":"Afficher la reconstitution"}
+{"key":"notation.reducedVowel","en":"Reduced vowel","fr":"Voyelle réduite"}
+{"key":"notation.reducedVowel.desc","en":"ʌ → ə","fr":"ʌ → ə"}
+{"key":"notation.shcha","en":"Shcha notation","fr":"Notation chtcha"}
+{"key":"notation.shcha.desc","en":"ʃʲʃʲ → ʃʲː","fr":"ʃʲʃʲ → ʃʲː"}
+{"key":"notation.state.changed","en":"%s of %s changed","fr":"%s sur %s modifiés"}
+{"key":"notation.tool.flat","en":"Flat","fr":"Bémol"}
+{"key":"notation.tool.natural","en":"Natural","fr":"Bécarre"}
+{"key":"notation.tool.sharp","en":"Sharp","fr":"Dièse"}
+{"key":"notePicker.acc.doubleFlat","en":"double flat","fr":"double bémol"}
+{"key":"notePicker.acc.doubleSharp","en":"double sharp","fr":"double dièse"}
+{"key":"notePicker.acc.flat","en":"flat","fr":"bémol"}
+{"key":"notePicker.acc.natural","en":"natural","fr":"bécarre"}
+{"key":"notePicker.acc.sharp","en":"sharp","fr":"dièse"}
+{"key":"notePicker.accidentalAria","en":"Accidental","fr":"Altération"}
+{"key":"notePicker.clear","en":"Clear","fr":"Effacer"}
+{"key":"notePicker.empty","en":"No note set","fr":"Aucune note définie"}
+{"key":"notePicker.letterAria","en":"Note letter","fr":"Lettre de la note"}
+{"key":"notePicker.octaveAria","en":"Octave","fr":"Octave"}
+{"key":"octave.asWrittenState","en":"Voice line as written","fr":"Ligne vocale telle qu’écrite"}
+{"key":"octave.readHigher","en":"Voice line read an octave higher, for your range","fr":"Ligne vocale lue une octave plus haut, pour votre ambitus"}
+{"key":"octave.readLower","en":"Voice line read an octave lower, for your range","fr":"Ligne vocale lue une octave plus bas, pour votre ambitus"}
+{"key":"octave.toAsWritten","en":"As written","fr":"Telle qu’écrite"}
+{"key":"octave.toForRange","en":"Read for your range","fr":"Lire pour votre ambitus"}
+{"key":"pacifier.beginPhonating","en":"Now {v} in vocal fry.","fr":"Maintenant, {v} en friture vocale."}
+{"key":"pacifier.cancelled","en":"Capture cancelled.","fr":"Capture annulée."}
+{"key":"pacifier.captured","en":"{v} captured.","fr":"Capture de {v} effectuée."}
+{"key":"pacifier.error.default","en":"That sample could not be read. Can you try that again?","fr":"Cet échantillon n’a pas pu être lu. Pouvez-vous réessayer?"}
+{"key":"pacifier.error.micNotFound","en":"No microphone was found. Can you connect one and try again?","fr":"Aucun microphone n’a été trouvé. Pouvez-vous en brancher un et réessayer?"}
+{"key":"pacifier.error.micPermission","en":"Microphone access is needed to hear your fry. Can you allow it and try again?","fr":"L’accès au microphone est nécessaire pour entendre votre friture. Pouvez-vous l’autoriser et réessayer?"}
+{"key":"pacifier.error.noAudio","en":"No sound came through. Can you check the microphone and try again?","fr":"Aucun son n’est parvenu. Pouvez-vous vérifier le microphone et réessayer?"}
+{"key":"pacifier.error.tooShort","en":"That sample was a little short. Can you sustain the fry a moment longer?","fr":"Cet échantillon était un peu court. Pouvez-vous soutenir la friture un instant de plus?"}
+{"key":"pacifier.nowSustain","en":"Now sustain. Ilya is measuring.","fr":"Soutenez maintenant. Ilya mesure."}
+{"key":"pacifier.pause","en":"Stop. Hold that shape, silently.","fr":"Arrêtez. Gardez cette forme, en silence."}
+{"key":"pacifier.ready","en":"Tap {v} to begin.","fr":"Touchez {v} pour commencer."}
+{"key":"pacifier.rolledBack","en":"{v}: new sample was less certain, so the previous one was kept.","fr":"Pour {v}, le nouvel échantillon était moins certain, donc le précédent a été conservé."}
+{"key":"pacifier.sampleUncertain","en":"{v} sample uncertain. Tap to retry.","fr":"Échantillon incertain pour {v}. Touchez pour réessayer."}
+{"key":"pacifier.singFirst","en":"Sing {v} as you usually do.","fr":"Chantez {v} comme d’habitude."}
+{"key":"pacifier.skipped","en":"{v} skipped.","fr":"Capture ignorée pour {v}."}
+{"key":"pacifier.tapToCapture","en":"Tap a vowel to capture it.","fr":"Touchez une voyelle pour la capter."}
+{"key":"pacifier.wheelAria","en":"Vowel calibration. Tap a vowel to begin, tap again to cancel, long-press to skip.","fr":"Calibration des voyelles. Touchez une voyelle pour commencer, touchez-la de nouveau pour annuler, appuyez longuement pour l’ignorer."}
+{"key":"paper.blank","en":"TEXT transcribes the words you give it, syllable by syllable, into IPA.","fr":"Le TEXTE transcrit en API, syllabe par syllabe, les mots que vous lui donnez."}
+{"key":"paper.blank.ask","en":"Add your score’s words as LYRICS, or its source poem as POEM, in INPUT to begin.","fr":"Ajoutez le texte chanté de votre partition comme PAROLES, ou son poème source comme POÈME, dans ENTRÉE pour commencer."}
+{"key":"paper.headerLyrics","en":"TEXT: LYRICS","fr":"TEXTE : PAROLES"}
+{"key":"paper.headerPoem","en":"TEXT: POEM","fr":"TEXTE : POÈME"}
+{"key":"placeholder.borrowing","en":"The field has not yet published resonance values for a {type}, so Ilya is using its {borrowed} values until you sample your own vowels in VOICE.","fr":"La recherche n’a pas encore publié de valeurs de résonance pour un {type}. Ilya utilise donc ses valeurs de {borrowed} jusqu’à ce que vous échantillonniez vos propres voyelles dans VOIX."}
+{"key":"placeholder.comment","en":"This finding rests on a placeholder value for {vowel}. To replace it with your own value, sample {vowel} in vocal fry.","fr":"Ce constat repose sur une valeur par défaut pour la voyelle {vowel}. Pour obtenir votre propre valeur, échantillonnez {vowel} en friture vocale."}
+{"key":"placeholder.comment.generic","en":"This finding rests on a placeholder value for {vowel}.","fr":"Ce constat repose sur une valeur par défaut pour la voyelle {vowel}."}
+{"key":"placeholder.line.belowCore","en":"To complete your personal vowel space, Ilya needs you to sample at least 5 of these 6 core vowels: [i], [e], [ɛ], [ɑ], [o], and [u]. You have sampled {n} so far ({vowels}). Until you provide {m} more, unsampled vowels are assigned placeholder values. Findings that rest on a placeholder are drawn dashed. You can add new fry samples anytime through the DRAWER on the left.","fr":"Pour compléter votre espace vocalique personnel, Ilya a besoin que vous échantillonniez au moins 5 de ces 6 voyelles de base : [i], [e], [ɛ], [ɑ], [o] et [u]. Vous en avez échantillonné {n} jusqu’ici ({vowels}). D’ici à ce que vous en fournissiez {m} de plus, les voyelles non échantillonnées reçoivent des valeurs par défaut. Les constats qui en dépendent sont tracés en pointillé. Vous pouvez ajouter de nouveaux échantillons en friture vocale à tout moment depuis le TIROIR de gauche."}
+{"key":"placeholder.line.belowCoreOne","en":"To complete your personal vowel space, Ilya needs you to sample at least 5 of these 6 core vowels: [i], [e], [ɛ], [ɑ], [o], and [u]. You have sampled {n} so far ({vowels}). Until you provide 1 more, unsampled vowels are assigned placeholder values. Findings that rest on a placeholder are drawn dashed. You can add new fry samples anytime through the DRAWER on the left.","fr":"Pour compléter votre espace vocalique personnel, Ilya a besoin que vous échantillonniez au moins 5 de ces 6 voyelles de base : [i], [e], [ɛ], [ɑ], [o] et [u]. Vous en avez échantillonné {n} jusqu’ici ({vowels}). D’ici à ce que vous en fournissiez une de plus, les voyelles non échantillonnées reçoivent des valeurs par défaut. Les constats qui en dépendent sont tracés en pointillé. Vous pouvez ajouter de nouveaux échantillons en friture vocale à tout moment depuis le TIROIR de gauche."}
+{"key":"placeholder.line.many","en":"Your {vowels} use placeholder values until you sample them in vocal fry, which you can do anytime through the DRAWER on the left. Findings that rest on a placeholder are drawn dashed.","fr":"Vos voyelles {vowels} reposent sur des valeurs par défaut jusqu’à ce que vous les échantillonniez en friture vocale, ce que vous pouvez faire à tout moment depuis le TIROIR de gauche. Les constats qui en dépendent sont tracés en pointillé."}
+{"key":"placeholder.line.markup.belowCore","en":"To complete your personal vowel space, Ilya needs you to sample at least 5 of these 6 core vowels: [i], [e], [ɛ], [ɑ], [o], and [u]. You have sampled {n} so far ({vowels}). Until you provide {m} more, unsampled vowels are assigned placeholder values. Findings that rest on a placeholder are drawn hollow or dashed. You can add new fry samples anytime through the DRAWER on the left.","fr":"Pour compléter votre espace vocalique personnel, Ilya a besoin que vous échantillonniez au moins 5 de ces 6 voyelles de base : [i], [e], [ɛ], [ɑ], [o] et [u]. Vous en avez échantillonné {n} jusqu’ici ({vowels}). D’ici à ce que vous en fournissiez {m} de plus, les voyelles non échantillonnées reçoivent des valeurs par défaut. Les constats qui en dépendent sont tracés évidés ou en pointillé. Vous pouvez ajouter de nouveaux échantillons en friture vocale à tout moment depuis le TIROIR de gauche."}
+{"key":"placeholder.line.markup.belowCoreOne","en":"To complete your personal vowel space, Ilya needs you to sample at least 5 of these 6 core vowels: [i], [e], [ɛ], [ɑ], [o], and [u]. You have sampled {n} so far ({vowels}). Until you provide 1 more, unsampled vowels are assigned placeholder values. Findings that rest on a placeholder are drawn hollow or dashed. You can add new fry samples anytime through the DRAWER on the left.","fr":"Pour compléter votre espace vocalique personnel, Ilya a besoin que vous échantillonniez au moins 5 de ces 6 voyelles de base : [i], [e], [ɛ], [ɑ], [o] et [u]. Vous en avez échantillonné {n} jusqu’ici ({vowels}). D’ici à ce que vous en fournissiez une de plus, les voyelles non échantillonnées reçoivent des valeurs par défaut. Les constats qui en dépendent sont tracés évidés ou en pointillé. Vous pouvez ajouter de nouveaux échantillons en friture vocale à tout moment depuis le TIROIR de gauche."}
+{"key":"placeholder.line.markup.many","en":"Your {vowels} use placeholder values until you sample them in vocal fry, which you can do anytime through the DRAWER on the left. Findings that rest on a placeholder are drawn hollow or dashed.","fr":"Vos voyelles {vowels} reposent sur des valeurs par défaut jusqu’à ce que vous les échantillonniez en friture vocale, ce que vous pouvez faire à tout moment depuis le TIROIR de gauche. Les constats qui en dépendent sont tracés évidés ou en pointillé."}
+{"key":"placeholder.line.markup.one","en":"Your {vowels} uses a placeholder value until you sample it in vocal fry, which you can do anytime through the DRAWER on the left. Findings that rest on it are drawn hollow or dashed.","fr":"Votre voyelle {vowels} repose sur une valeur par défaut jusqu’à ce que vous l’échantillonniez en friture vocale, ce que vous pouvez faire à tout moment depuis le TIROIR de gauche. Les constats qui en dépendent sont tracés évidés ou en pointillé."}
+{"key":"placeholder.line.one","en":"Your {vowels} uses a placeholder value until you sample it in vocal fry, which you can do anytime through the DRAWER on the left. Findings that rest on it are drawn dashed.","fr":"Votre voyelle {vowels} repose sur une valeur par défaut jusqu’à ce que vous l’échantillonniez en friture vocale, ce que vous pouvez faire à tout moment depuis le TIROIR de gauche. Les constats qui en dépendent sont tracés en pointillé."}
+{"key":"placeholder.turns.many","en":"The turns of {vowels} rest on placeholder values, so their bars are drawn dashed.","fr":"Les changements de timbre des voyelles {vowels} reposent sur des valeurs par défaut : leurs barres sont tracées en pointillé."}
+{"key":"placeholder.turns.one","en":"The turn of {vowels} rests on a placeholder value, so its bar is drawn dashed.","fr":"Le changement de timbre de la voyelle {vowels} repose sur une valeur par défaut : sa barre est tracée en pointillé."}
+{"key":"portrait.read","en":"Read","fr":"Lire"}
+{"key":"portrait.thePage","en":"The page","fr":"La page"}
+{"key":"profile.blank","en":"MELODY marks your own resonances as it draws your score.","fr":"Le CHANT trace votre partition en y marquant vos propres résonances."}
+{"key":"profile.count.1","en":"One","fr":"Une"}
+{"key":"profile.count.10","en":"Ten","fr":"Dix"}
+{"key":"profile.count.2","en":"Two","fr":"Deux"}
+{"key":"profile.count.3","en":"Three","fr":"Trois"}
+{"key":"profile.count.4","en":"Four","fr":"Quatre"}
+{"key":"profile.count.5","en":"Five","fr":"Cinq"}
+{"key":"profile.count.6","en":"Six","fr":"Six"}
+{"key":"profile.count.7","en":"Seven","fr":"Sept"}
+{"key":"profile.count.8","en":"Eight","fr":"Huit"}
+{"key":"profile.count.9","en":"Nine","fr":"Neuf"}
+{"key":"profile.emptyStateAria","en":"Voice profile","fr":"Profil vocal"}
+{"key":"profile.notesPageAria","en":"Analysis notes","fr":"Notes d’analyse"}
+{"key":"profile.octaveNotice","en":"This voice line is notated in treble clef but sits an octave above the range you gave, so it's being read an octave lower to match your voice, as lower voices often sing treble parts. Check the score's clef if that's not right.","fr":"Cette ligne vocale est notée en clé de sol, mais se situe une octave au-dessus de l’ambitus que vous avez indiqué. Elle est donc lue une octave plus bas pour correspondre à votre voix, comme les voix graves chantent souvent des parties en clé de sol. Vérifiez la clé de la partition si ce n’est pas le cas."}
+{"key":"profile.provisional.listSepFinal","en":", and ","fr":" et "}
+{"key":"profile.provisional.listSepMedial","en":", ","fr":", "}
+{"key":"profile.provisional.listSepPair","en":" and ","fr":" et "}
+{"key":"profile.provisional.sentencePlural","en":"Your {vowels} are provisional; set them in VOICE.","fr":"Vos voyelles {vowels} sont provisoires; réglez-les dans VOIX."}
+{"key":"profile.provisional.sentenceSingular","en":"Your {vowels} is provisional; set it in VOICE.","fr":"Votre voyelle {vowels} est provisoire; réglez-la dans VOIX."}
+{"key":"profile.scorePageAria","en":"Score page {n} of {total}","fr":"Page {n} sur {total} de la partition"}
+{"key":"profile.scoreRegionAria","en":"Melody","fr":"Chant"}
+{"key":"profile.statusSetMeasuredPlural","en":"Your profile is now set with {count} vowels measured.","fr":"Votre profil est maintenant établi, avec {count} voyelles mesurées."}
+{"key":"profile.statusSetMeasuredSingular","en":"Your profile is now set with {count} vowel measured.","fr":"Votre profil est maintenant établi, avec {count} voyelle mesurée."}
+{"key":"profile.statusSetPlain","en":"Your profile is now set.","fr":"Votre profil est maintenant établi."}
+{"key":"profile.subtitleNamed","en":"Resonance profile: a map of {voice}’s resonances","fr":"Profil de résonances : une carte des résonances de la voix « {voice} »"}
+{"key":"profile.subtitlePlaceholder","en":"Resonance profile: placeholder values for a generic {voiceType}, not yet your own resonances.","fr":"Profil de résonances : valeurs par défaut pour une voix type de {voiceType}, pas encore vos propres résonances."}
+{"key":"profile.subtitleYours","en":"Resonance profile: a map of your voice’s resonances","fr":"Profil de résonances : une carte des résonances de votre voix"}
+{"key":"profile.withheld.close","en":"The stave carries no marks because none can be earned.","fr":"La portée ne porte aucune marque, car aucune ne peut être fondée."}
+{"key":"profile.withheld.heading","en":"Nothing is claimed about your voice","fr":"Rien n’est affirmé sur votre voix"}
+{"key":"profile.withheld.item1","en":"Every acoustic mark: no crossings, no timbre turns.","fr":"Toute marque acoustique : aucun croisement, aucun changement de timbre."}
+{"key":"profile.withheld.item2","en":"The watch list, entirely. An empty list is the truthful output here.","fr":"La liste des points à surveiller, entièrement. Une liste vide est ici la réponse honnête."}
+{"key":"profile.withheld.item3","en":"Any reading of your range, your comfortable working zone, or your passaggio.","fr":"Toute lecture de votre ambitus, de votre zone de travail confortable ou de votre *passaggio*."}
+{"key":"profile.withheld.lede","en":"Ilya has read your score, but no voice has been measured, so there is nothing to compare this line against.","fr":"Ilya a lu votre partition, mais aucune voix n’a été mesurée, donc il n’y a rien à quoi comparer cette ligne."}
+{"key":"provenance.dictionary","en":"Stress verified from dictionary","fr":"Accent vérifié dans le dictionnaire"}
+{"key":"provenance.inferred","en":"Stress algorithmically inferred","fr":"Accent inféré algorithmiquement"}
+{"key":"provenance.supplement","en":"Stress from singer supplement","fr":"Accent du supplément pour chanteuses et chanteurs"}
+{"key":"provenance.unknown","en":"Unknown stress — verify manually","fr":"Accent inconnu — vérifier manuellement"}
+{"key":"provenance.yo","en":"Stress derived from ё","fr":"Accent dérivé de ё"}
+{"key":"recognize.body","en":"This score is the one %s was built on. You can open that song and keep the work already in it, or put this file in the song you are in.","fr":"Cette partition est celle sur laquelle %s a été construit. Vous pouvez ouvrir ce chant et conserver le travail qu’il contient déjà, ou placer ce fichier dans le chant où vous êtes."}
+{"key":"recognize.here","en":"Put it in this song","fr":"Le placer dans ce chant"}
+{"key":"recognize.open","en":"Open that song","fr":"Ouvrir ce chant"}
+{"key":"recognize.title","en":"Ilya has met this music before.","fr":"Ilya a déjà rencontré cette musique."}
+{"key":"replace.body","en":"This score is not the one this song was built on. %s of your %s syllable placements have no note in it. Continuing replaces the whole song, its title, its score file, and every placement. Ilya cannot undo that. Export this song first if you want to keep it.","fr":"Cette partition n’est pas celle sur laquelle ce chant a été construit. %s de vos %s placements de syllabes n’y ont aucune note. Continuer remplace le chant entier, son titre, son fichier de partition et tous ses placements. Ilya ne peut pas annuler cette action. Exportez ce chant d’abord si vous voulez le conserver."}
+{"key":"replace.keep","en":"Keep this song","fr":"Conserver ce chant"}
+{"key":"replace.replace","en":"Replace this song","fr":"Remplacer ce chant"}
+{"key":"replace.title","en":"This is not the same music.","fr":"Ce n’est pas la même musique."}
+{"key":"result.words","en":"words in","fr":"mots en"}
+{"key":"ribbon.immediatePost","en":"immediate post-stress","fr":"posttonique immédiate"}
+{"key":"ribbon.immediatePre","en":"immediate pre-stress","fr":"prétonique immédiate"}
+{"key":"ribbon.remotePost","en":"remote post-stress","fr":"posttonique éloignée"}
+{"key":"ribbon.remotePre","en":"remote pre-stress","fr":"prétonique éloignée"}
+{"key":"ribbon.stressed","en":"stressed","fr":"tonique"}
+{"key":"ribbon.unstressed","en":"unstressed","fr":"atone"}
+{"key":"select.filter","en":"Type to filter…","fr":"Filtrer…"}
+{"key":"select.noResults","en":"No results","fr":"Aucun résultat"}
+{"key":"select.notInList","en":"Not in list (enter custom)","fr":"Absent de la liste (saisir manuellement)"}
+{"key":"select.resultCount.many","en":"{n} results","fr":"{n} résultats"}
+{"key":"select.resultCount.one","en":"{n} result","fr":"{n} résultat"}
+{"key":"sheet.axis.back","en":"tongue back","fr":"langue reculée"}
+{"key":"sheet.axis.front","en":"tongue forward","fr":"langue avancée"}
+{"key":"sheet.axis.open","en":"mouth more open","fr":"bouche plus ouverte"}
+{"key":"sheet.chartAlt","en":"Chart of your vowel space. Each vowel is a coloured zone, a filled dot where you sang it, or a hollow dot where Ilya has placed it for now.","fr":"Graphique de votre espace vocalique. Chaque voyelle est une zone colorée, un point plein là où vous l’avez chantée, ou un point creux là où Ilya l’a placée pour l’instant."}
+{"key":"sheet.col.fr1","en":"Hz and note","fr":"Hz et note"}
+{"key":"sheet.col.fr2","en":"Hz and note","fr":"Hz et note"}
+{"key":"sheet.col.vowel","en":"Vowel","fr":"Voyelle"}
+{"key":"sheet.legend.hull","en":"The outline surrounds your recorded vowels. It is dashed until all ten are recorded.","fr":"Le contour entoure vos voyelles captées. Il reste en pointillé jusqu’à ce que les dix soient captées."}
+{"key":"sheet.legend.placeholder","en":"A placeholder: where Ilya expects a vowel you have not recorded yet.","fr":"Une valeur par défaut : là où Ilya attend une voyelle que vous n’avez pas encore captée."}
+{"key":"sheet.legend.sung","en":"A vowel you recorded, measured in vocal fry.","fr":"Une voyelle que vous avez captée, mesurée en friture vocale."}
+{"key":"sheet.legend.zones","en":"Each coloured area reflects the neighbourhood where Ilya expects a vowel to resonate in a voice like yours. The lavender areas mark [ɪ], [ɨ], [a], and [ʌ]: Ilya can work out these four from your samples of the other six, or you can choose to sample them directly. Overlap between areas (where the colours blend) is normal.","fr":"Chaque zone colorée reflète le voisinage où Ilya s’attend à ce qu’une voyelle résonne dans une voix comme la vôtre. Les zones lavande marquent [ɪ], [ɨ], [a] et [ʌ] : Ilya peut déduire ces quatre-là de vos échantillons des six autres, ou vous pouvez choisir de les chanter directement. Le chevauchement entre les zones (là où les couleurs se fondent) est normal."}
+{"key":"sheet.print","en":"Print this sheet","fr":"Imprimer cette feuille"}
+{"key":"sheet.provenance","en":"Zones along the first resonance: Bozeman, *Kinesthetic Voice Pedagogy*, 2nd ed. (2021), Figs. 8 to 10; for baritones, Bozeman, “Levels of Acoustic Registration” (kenbozeman.com). The second resonance’s range: Bozeman, *Practical Vocal Acoustics*, 2nd ed. (2025), p. 35. Placeholder values: the centre of each zone for the first resonance, and Mitton (2020), Table 5.3, scaled to the {borrowed} staff, for the second. Each zone’s width along the second resonance is Ilya’s own estimate.","fr":"Zones le long de la première résonance : Bozeman, *Kinesthetic Voice Pedagogy*, 2e éd. (2021), fig. 8 à 10; pour les barytons, Bozeman, “Levels of Acoustic Registration” (kenbozeman.com). Étendue de la deuxième résonance : Bozeman, *Practical Vocal Acoustics*, 2e éd. (2025), p. 35. Valeurs par défaut : le centre de chaque zone pour la première résonance, et Mitton (2020), tableau 5.3, ajusté à la portée de {borrowed}, pour la deuxième. La largeur de chaque zone le long de la deuxième résonance est une estimation d’Ilya."}
+{"key":"sheet.provenance.undeclared","en":"Zones along the first resonance: Bozeman, *Kinesthetic Voice Pedagogy*, 2nd ed. (2021), Figs. 8 to 10; for baritones, Bozeman, “Levels of Acoustic Registration” (kenbozeman.com). The second resonance’s range: Bozeman, *Practical Vocal Acoustics*, 2nd ed. (2025), p. 35. Placeholder values: the centre of each zone for the first resonance, and Mitton (2020), Table 5.3, scaled to the middle of Ilya’s five staves, for the second. Each zone’s width along the second resonance is Ilya’s own estimate.","fr":"Zones le long de la première résonance : Bozeman, *Kinesthetic Voice Pedagogy*, 2e éd. (2021), fig. 8 à 10; pour les barytons, Bozeman, “Levels of Acoustic Registration” (kenbozeman.com). Étendue de la deuxième résonance : Bozeman, *Practical Vocal Acoustics*, 2e éd. (2025), p. 35. Valeurs par défaut : le centre de chaque zone pour la première résonance, et Mitton (2020), tableau 5.3, ajusté au milieu des cinq portées d’Ilya, pour la deuxième. La largeur de chaque zone le long de la deuxième résonance est une estimation d’Ilya."}
+{"key":"sheet.readings","en":"Your readings","fr":"Vos lectures"}
+{"key":"sheet.subtitle","en":"The ten vowels of sung Russian, as your voice shapes them","fr":"Les dix voyelles du russe chanté, telles que votre voix les façonne"}
+{"key":"sheet.title","en":"Your vowel space","fr":"Votre espace vocalique"}
+{"key":"shiftLyrics.backAria","en":"Back","fr":"Vers l'arrière"}
+{"key":"shiftLyrics.forwardAria","en":"Forward","fr":"Vers l'avant"}
+{"key":"shiftLyrics.title","en":"Shift Lyrics","fr":"Décaler les paroles"}
+{"key":"shiftLyrics.toEndOfLyric","en":"to the End of the Lyric","fr":"jusqu’à la fin du texte"}
+{"key":"shiftLyrics.toNextOpenNote","en":"to the Next Open Note","fr":"jusqu’à la prochaine note libre"}
+{"key":"song.newerIlya","en":"This song was saved by a newer Ilya. Reload the app to update, then try again.","fr":"Ce chant a été enregistré par une version plus récente d’Ilya. Rechargez l’application pour la mettre à jour, puis réessayez."}
+{"key":"song.unreadable","en":"This song could not be read. It has been left untouched. You can still export it.","fr":"Ce chant n’a pas pu être lu. Il a été laissé intact. Vous pouvez tout de même l’exporter."}
+{"key":"songs.cancel","en":"Cancel","fr":"Annuler"}
+{"key":"songs.count.many","en":"{n} songs","fr":"{n} chants"}
+{"key":"songs.count.one","en":"1 song","fr":"1 chant"}
+{"key":"songs.delete","en":"Delete","fr":"Supprimer"}
+{"key":"songs.deleteBody","en":"This deletes %s from this device, with its score file and every placement it holds. Ilya cannot undo that.","fr":"Ceci supprime %s de cet appareil, avec son fichier de partition et tous les placements qu’il contient. Ilya ne peut pas annuler cette action."}
+{"key":"songs.deleteConfirm","en":"Delete this song","fr":"Supprimer ce chant"}
+{"key":"songs.deleteTitle","en":"Delete this song?","fr":"Supprimer ce chant?"}
+{"key":"songs.err.write","en":"Ilya could not change your library. Nothing has changed.","fr":"Ilya n’a pas pu modifier votre bibliothèque. Rien n’a été modifié."}
+{"key":"songs.heading","en":"REPERTOIRE","fr":"RÉPERTOIRE"}
+{"key":"songs.nameLabel","en":"What shall we call this song?","fr":"Comment appellerons-nous ce chant?"}
+{"key":"songs.new","en":"New song","fr":"Nouveau chant"}
+{"key":"songs.openAria","en":"Open %s","fr":"Ouvrir %s"}
+{"key":"songs.rename","en":"Rename","fr":"Renommer"}
+{"key":"songs.save","en":"Save","fr":"Enregistrer"}
+{"key":"songs.untitled","en":"Untitled","fr":"Sans titre"}
+{"key":"source.heading","en":"Source","fr":"Source"}
+{"key":"station.orphaned","en":"%s placements have no note in this score. They have been kept.","fr":"%s placements n’ont plus de note dans cette partition. Ils ont été conservés."}
+{"key":"storage.evictionRisk","en":"This browser may delete Ilya’s storage after a period of disuse. Export your songs to keep them safe.","fr":"Ce navigateur peut supprimer le stockage d’Ilya après une période d’inactivité. Exportez vos chants pour les garder en sécurité."}
+{"key":"storage.loadFailed","en":"Your saved syllable placements could not be read back.","fr":"Vos syllabes enregistrées n’ont pas pu être relues."}
+{"key":"storage.none","en":"Nothing can be saved in this browsing mode. Your work will not survive closing the page. You can still export your songs.","fr":"Rien ne peut être enregistré dans ce mode de navigation. Votre travail ne survivra pas à la fermeture de la page. Vous pouvez tout de même exporter vos chants."}
+{"key":"storage.otherTab","en":"This song was changed in another Ilya tab. Your work here has been kept.","fr":"Ce chant a été modifié dans un autre onglet d’Ilya. Votre travail ici a été conservé."}
+{"key":"storage.partialLoss","en":"Ilya’s storage looks incomplete: the last open song is not in the library. If you have an exported file, import it to bring your songs back.","fr":"Le stockage d’Ilya semble incomplet : le dernier chant ouvert n’est pas dans la bibliothèque. Si vous avez un fichier exporté, importez-le pour retrouver vos chants."}
+{"key":"storage.quotaFull","en":"Ilya could not save: this browser’s storage is full. Your work is still on screen. Export your songs now to keep them, or free space and try again.","fr":"Ilya n’a pas pu enregistrer : le stockage de ce navigateur est plein. Votre travail est toujours à l’écran. Exportez vos chants maintenant pour les conserver, ou libérez de l’espace et réessayez."}
+{"key":"storage.quotaNumbers","en":"Storage: %s of %s used.","fr":"Stockage : %s utilisés sur %s."}
+{"key":"storage.saveFailed.generic","en":"Your syllable placements could not be saved on this device. They will be lost when you leave this page.","fr":"Vos syllabes n’ont pas pu être enregistrées sur cet appareil. Elles seront perdues lorsque vous quittez cette page."}
+{"key":"stress.dictionary","en":"Verified from dictionary","fr":"Vérifié dans le dictionnaire"}
+{"key":"stress.inferred","en":"Algorithmically inferred","fr":"Inféré algorithmiquement"}
+{"key":"stress.supplement","en":"Singer supplement","fr":"Supplément pour chanteuses et chanteurs"}
+{"key":"stress.unknown","en":"Unknown — verify manually","fr":"Inconnu — vérifier manuellement"}
+{"key":"stress.userComposer","en":"Composer setting","fr":"Choix de la partition"}
+{"key":"stress.userDictionary","en":"User verified","fr":"Vérifié par l’utilisateur"}
+{"key":"stress.userOverride","en":"User assignment","fr":"Choix de l’utilisateur"}
+{"key":"stress.yoRestored","en":"ё restored from dictionary","fr":"ё restauré du dictionnaire"}
+{"key":"stress.yoRule","en":"Derived from ё","fr":"Dérivé de ё"}
+{"key":"tab.guide","en":"GUIDE","fr":"GUIDE"}
+{"key":"tab.insights","en":"INSIGHTS","fr":"APERÇUS"}
+{"key":"tab.learn","en":"LEARN","fr":"LEÇONS"}
+{"key":"tab.markedScore","en":"MELODY","fr":"CHANT"}
+{"key":"tab.text","en":"TEXT","fr":"TEXTE"}
+{"key":"tempo.change","en":"Change the tempo","fr":"Modifier le tempo"}
+{"key":"tempo.hint","en":"Your tempo. Every figure follows.","fr":"Votre tempo. Tous les résultats en tiennent compte."}
+{"key":"tempo.useEstimate","en":"Use Ilya's estimate","fr":"Utiliser l’estimation d’Ilya"}
+{"key":"text.source.lyrics","en":"From LYRICS","fr":"D’après PAROLES"}
+{"key":"text.source.poem","en":"From POEM","fr":"D’après POÈME"}
+{"key":"toc.guide.ai","en":"Is Ilya an AI tool?","fr":"Ilya et l’IA"}
+{"key":"toc.guide.aria","en":"Guide table of contents","fr":"Table des matières du Guide"}
+{"key":"toc.guide.cite","en":"How do I cite Ilya?","fr":"Comment citer Ilya?"}
+{"key":"toc.guide.contributors","en":"Contributors","fr":"Collaborateurs"}
+{"key":"toc.guide.future","en":"Where is Ilya headed?","fr":"Où va Ilya?"}
+{"key":"toc.guide.grayson-intro","en":"Introduction to Russian Lyric Diction","fr":"Introduction à Russian Lyric Diction"}
+{"key":"toc.guide.how","en":"How Ilya Works","fr":"Comment fonctionne Ilya"}
+{"key":"toc.guide.licences","en":"Licences and Acknowledgments","fr":"Licences et remerciements"}
+{"key":"toc.guide.limits","en":"Limitations","fr":"Limites d’Ilya"}
+{"key":"toc.guide.markup-characteristics","en":"Voice characteristics","fr":"Caractéristiques vocales"}
+{"key":"toc.guide.markup-forecast","en":"Insights forecasts, it does not declare","fr":"Les Aperçus prévoient, ils ne déclarent pas"}
+{"key":"toc.guide.markup-notation","en":"The notation conventions used by MELODY","fr":"Les conventions de notation utilisées par le CHANT"}
+{"key":"toc.guide.mitton-note","en":"Builder's Note","fr":"Mot du créateur"}
+{"key":"toc.guide.paste","en":"Pasting a Russian text","fr":"Saisie d’un texte russe"}
+{"key":"toc.guide.role","en":"Your role as user","fr":"Rôle de l’utilisateur"}
+{"key":"toc.guide.source","en":"Why only one source?","fr":"Pourquoi une seule source?"}
+{"key":"toc.guide.version","en":"Which Ilya is this?","fr":"De quelle version d’Ilya s’agit-il?"}
+{"key":"toc.guide.walk-analysis","en":"Analysing words","fr":"Analyser les mots"}
+{"key":"toc.guide.walk-interface","en":"The interface at a glance","fr":"L’interface en un coup d’œil"}
+{"key":"toc.guide.walk-metadata","en":"Entering metadata","fr":"Renseigner les métadonnées"}
+{"key":"toc.guide.walk-notation","en":"Notation preferences","fr":"Les préférences de notation"}
+{"key":"toc.guide.walk-print","en":"Printing and resetting","fr":"Imprimer et réinitialiser"}
+{"key":"toc.guide.walk-tabs","en":"Navigating the tabs","fr":"Naviguer entre les onglets"}
+{"key":"toc.guide.walk-transcribe","en":"Transcribing","fr":"Transcrire"}
+{"key":"toc.guide.walkthrough","en":"A Walkthrough","fr":"Une visite guidée"}
+{"key":"toc.guide.what","en":"What does Ilya do?","fr":"Que fait Ilya?"}
+{"key":"toc.learn.about","en":"About This Module","fr":"À propos de ce module"}
+{"key":"toc.learn.arc","en":"The Learning Arc","fr":"L’arc d’apprentissage"}
+{"key":"toc.learn.aria","en":"Table of contents","fr":"Table des matières"}
+{"key":"toc.learn.coda","en":"8 · What These Rules Do Not Teach","fr":"8 · Les inclassables"}
+{"key":"toc.learn.notation","en":"A Note on Notation","fr":"Note sur la notation"}
+{"key":"toc.learn.title","en":"Russian Lyric Diction for Singers","fr":"La diction lyrique russe pour chanteuses et chanteurs"}
+{"key":"toc.learn.try","en":"Try This","fr":"Essayez"}
+{"key":"toc.learn.u1-alphabet","en":"The Alphabet","fr":"L’alphabet"}
+{"key":"toc.learn.u1-familiar","en":"What You Already Know","fr":"Ce que vous connaissez déjà"}
+{"key":"toc.learn.u1-glyphs","en":"The Glyph Table","fr":"Le tableau des glyphes"}
+{"key":"toc.learn.u1-signs","en":"The Two Signs","fr":"Les deux signes"}
+{"key":"toc.learn.u1-song","en":"The Alphabet Song","fr":"La chanson de l’alphabet"}
+{"key":"toc.learn.u1-try","en":"Try This","fr":"Essayez"}
+{"key":"toc.learn.u1-yo","en":"A Note on ⟨Ё⟩","fr":"Note sur ⟨Ё⟩"}
+{"key":"toc.learn.u2-dictionary","en":"A dictionary problem","fr":"Problème de dictionnaire"}
+{"key":"toc.learn.u2-meaning","en":"Stress changes meaning","fr":"L’accent change le sens"}
+{"key":"toc.learn.u2-moves","en":"Stress moves","fr":"L’accent se déplace"}
+{"key":"toc.learn.u2-sounds","en":"How stress sounds","fr":"Comment l’accent sonne"}
+{"key":"toc.learn.u2-try","en":"Try this","fr":"Essayez"}
+{"key":"toc.learn.u3-interpalatal","en":"Two vowels change colour near soft consonants","fr":"Deux voyelles changent de couleur au voisinage des consonnes molles"}
+{"key":"toc.learn.u3-inventory","en":"Stressed vowels are the targets","fr":"Ce sont les voyelles accentuées qui constituent les cibles"}
+{"key":"toc.learn.u3-iotated","en":"Four vowel letters carry a hidden consonant","fr":"Quatre lettres vocaliques portent une consonne cachée"}
+{"key":"toc.learn.u3-note-o","en":"A note on /o/","fr":"Un mot sur le /o/"}
+{"key":"toc.learn.u3-try","en":"Try this in Ilya","fr":"Essayez dans Ilya"}
+{"key":"toc.learn.u3-yo","en":"⟨ё⟩ is always stressed","fr":"⟨ё⟩ est toujours accentué"}
+{"key":"toc.learn.u4-akanye","en":"⟨о⟩ and ⟨а⟩ when unstressed","fr":"⟨о⟩ et ⟨а⟩ sans accent"}
+{"key":"toc.learn.u4-ikanye","en":"⟨е⟩ and ⟨я⟩ toward [ɪ]","fr":"⟨е⟩ et ⟨я⟩ vers [ɪ]"}
+{"key":"toc.learn.u4-reconstitution","en":"Reconstitution","fr":"La reconstitution"}
+{"key":"toc.learn.u4-try","en":"Try this in Ilya","fr":"Essayez dans Ilya"}
+{"key":"toc.learn.u5-attention","en":"Focused attention","fr":"Attention ciblée"}
+{"key":"toc.learn.u5-devoicing","en":"Final devoicing","fr":"Dévoisement final"}
+{"key":"toc.learn.u5-familiar","en":"The consonant system","fr":"Le système consonantique"}
+{"key":"toc.learn.u5-fixed","en":"Fixed hardness or softness","fr":"Dureté ou mollesse fixe"}
+{"key":"toc.learn.u5-pairs","en":"Voiced-voiceless pairs","fr":"Paires voisées-non voisées"}
+{"key":"toc.learn.u5-signs","en":"The two signs","fr":"Les deux signes"}
+{"key":"toc.learn.u5-try","en":"Try this in Ilya","fr":"Essayez dans Ilya"}
+{"key":"toc.learn.u6-clusters","en":"Regressive in clusters","fr":"Régressive dans les groupes"}
+{"key":"toc.learn.u6-paired","en":"Paired versus unpaired","fr":"Appariées et non appariées"}
+{"key":"toc.learn.u6-practice","en":"Putting it together","fr":"Mise en pratique"}
+{"key":"toc.learn.u6-signals","en":"Signals on the page","fr":"Repérer la palatalisation à l’écrit"}
+{"key":"toc.learn.u6-stops","en":"What stops the spread","fr":"Les six frontières"}
+{"key":"toc.learn.u6-velari","en":"Velar-i [ɨ]","fr":"Le i vélaire [ɨ]"}
+{"key":"toc.learn.u6-what","en":"What palatalization is","fr":"Qu’est-ce que la palatalisation?"}
+{"key":"toc.learn.u7-boundary","en":"Across word boundaries","fr":"D’un mot à l’autre"}
+{"key":"toc.learn.u7-deletion","en":"Consonant deletion","fr":"L’effacement consonantique"}
+{"key":"toc.learn.u7-geminates","en":"Geminates","fr":"Les géminées"}
+{"key":"toc.learn.u7-mergers","en":"Mergers and acquisitions","fr":"Fusions et absorptions"}
+{"key":"toc.learn.u7-stops","en":"What stops the spread","fr":"Les limites du voisement"}
+{"key":"toc.learn.u7-tryit","en":"Try this in Ilya","fr":"À vous de jouer"}
+{"key":"toc.learn.u7-two","en":"Two kinds of assimilation","fr":"Deux formes d’assimilation"}
+{"key":"toc.learn.u7-unusual","en":"скучно and что","fr":"скучно et что"}
+{"key":"toc.learn.u7-voiced","en":"Voiced meets voiceless","fr":"Voisée rencontre sourde"}
+{"key":"toc.learn.unit-1","en":"1 · The Letters","fr":"1 · Les lettres"}
+{"key":"toc.learn.unit-2","en":"2 · Stress","fr":"2 · L’accent tonique"}
+{"key":"toc.learn.unit-3","en":"3 · Stressed Vowels","fr":"3 · Les voyelles accentuées"}
+{"key":"toc.learn.unit-4","en":"4 · Vowel Reduction","fr":"4 · La réduction vocalique"}
+{"key":"toc.learn.unit-5","en":"5 · The Consonants","fr":"5 · Les consonnes"}
+{"key":"toc.learn.unit-6","en":"6 · Palatalization","fr":"6 · La palatalisation"}
+{"key":"toc.learn.unit-7","en":"7 · Assimilation and Boundaries","fr":"7 · Assimilation et frontières"}
+{"key":"underlay.heading","en":"UNDERLAY","fr":"PLACEMENT DES PAROLES"}
+{"key":"update.action","en":"Refresh","fr":"Actualiser"}
+{"key":"update.dismiss","en":"Dismiss","fr":"Ignorer"}
+{"key":"update.notice","en":"A new version of Ilya is ready.","fr":"Une nouvelle version d’Ilya est prête."}
+{"key":"update.offline","en":"The new version could not be loaded. Check your connection, then press Refresh again.","fr":"La nouvelle version n’a pas pu être chargée. Vérifiez votre connexion, puis appuyez de nouveau sur Actualiser."}
+{"key":"upload.ask.cancel","en":"Cancel","fr":"Annuler"}
+{"key":"upload.ask.clef","en":"Clef","fr":"Clé"}
+{"key":"upload.ask.clefBass","en":"Bass","fr":"Clé de fa"}
+{"key":"upload.ask.clefTreble","en":"Treble","fr":"Clé de sol"}
+{"key":"upload.ask.clefTrebleOttava","en":"Treble, sounding an octave lower","fr":"Clé de sol, à l’octave inférieure"}
+{"key":"upload.banner.denigma","en":"Converted from Finale format by denigma. Lyric alignment and measure structure are preserved. Verify custom expressions or complex layouts if the score appears unusual.","fr":"Converti depuis le format Finale par denigma. L’alignement des paroles et la structure des mesures sont préservés. Vérifiez les expressions personnalisées ou les mises en page complexes si la partition semble inhabituelle."}
+{"key":"upload.banner.dismiss","en":"Dismiss","fr":"Ignorer"}
+{"key":"upload.banner.noLyrics","en":"This score has no words in it. The text you add in LYRICS goes under the notes, assigned one syllable per note. Click a note to move a syllable.","fr":"Cette partition ne porte aucune parole. Le texte que vous ajoutez dans le champ PAROLES se place sous les notes, réparti à raison d’une syllabe par note. Cliquez sur une note pour déplacer une syllabe."}
+{"key":"upload.banner.noLyricsScan","en":"Ilya could not read any words from this image. You can add lyrics through the LYRICS pane and seat them under the right notes using the Loupe’s SYLLABLES controls.","fr":"Ilya n’a pu lire aucune parole dans cette image. Vous pouvez ajouter les paroles dans le champ PAROLES, puis les placer sous les bonnes notes à l’aide des commandes SYLLABES de la loupe."}
+{"key":"upload.banner.reader","en":"This score is Ilya’s synthesis from an image (scan or photograph). The optical recognition of musical notes and printed text is imperfect, so you should check Ilya’s reading against your original source. You may rectify any errors through the Loupe’s CORRECTIONS pane.","fr":"Cette partition est la synthèse qu’Ilya a faite à partir d’une image (numérisation ou photographie). La reconnaissance optique des notes de musique et du texte imprimé est imparfaite; vérifiez donc la lecture d’Ilya sur votre source originale. Vous pouvez corriger toute erreur dans le volet CORRECTIONS de la loupe."}
+{"key":"upload.banner.wordsPartlyRead","en":"Ilya’s reading of printed words is still imperfect; it could not read the words in bars {bars}. Choose a bar to see your score’s print there and fill the missing words. Check every word against your score.","fr":"Ilya lit encore imparfaitement les paroles imprimées et n’a pas pu lire celles des mesures {bars}. Choisissez une mesure pour voir l’imprimé de votre partition et compléter les paroles manquantes. Vérifiez chaque mot sur votre partition."}
+{"key":"upload.banner.wordsPartlyReadOne","en":"Ilya’s reading of printed words is still imperfect; it could not read the words in bar {bar}. Choose the bar to see your score’s print there and fill the missing words. Check every word against your score.","fr":"Ilya lit encore imparfaitement les paroles imprimées et n’a pas pu lire celles de la mesure {bar}. Choisissez la mesure pour voir l’imprimé de votre partition et compléter les paroles manquantes. Vérifiez chaque mot sur votre partition."}
+{"key":"upload.err.conversionFailed","en":"This Finale file could not be converted.","fr":"Ce fichier Finale n’a pas pu être converti."}
+{"key":"upload.err.imageHeic","en":"Ilya could not open this iPhone photo. On a Mac, open the photo in Preview and choose File, then Export, then JPEG, and try again.","fr":"Ilya n’a pas pu ouvrir cette photo d’iPhone. Sur un Mac, ouvrez la photo dans Aperçu et choisissez Fichier, puis Exporter, puis JPEG, et réessayez."}
+{"key":"upload.err.imageUndecodable","en":"This browser cannot open that picture. A JPEG or a PNG will work.","fr":"Ce navigateur ne peut pas ouvrir cette image. Un JPEG ou un PNG fonctionnera."}
+{"key":"upload.err.invalidMnxJson","en":"This .mnx file is not valid MNX JSON.","fr":"Ce fichier .mnx n’est pas un MNX JSON valide."}
+{"key":"upload.err.jsonNotMnx","en":"This JSON file is not an MNX score.","fr":"Ce fichier JSON n’est pas une partition MNX."}
+{"key":"upload.err.midi","en":"This is a MIDI file, which Ilya cannot read. If it came from notation software, export MusicXML from the same program, then upload that.","fr":"Ceci est un fichier MIDI, qu’Ilya ne peut pas lire. S’il provient d’un logiciel de notation, exportez-le en MusicXML depuis le même logiciel, puis téléversez-le."}
+{"key":"upload.err.msczConversionFailed","en":"This MuseScore file could not be converted.","fr":"Ce fichier MuseScore n’a pas pu être converti."}
+{"key":"upload.err.msczUnreadable","en":"This .mscz file could not be opened. It may be corrupt.","fr":"Ce fichier .mscz n’a pas pu être ouvert. Il est peut-être corrompu."}
+{"key":"upload.err.msczWasmLoadFailed","en":"The MuseScore converter could not load. Reload the page and try again.","fr":"Le convertisseur MuseScore n’a pas pu se charger. Rechargez la page et réessayez."}
+{"key":"upload.err.mus","en":"This is a pre-2014 Finale file (.mus). This closed format cannot be read directly. Resave it as .musx in Finale 2014 or later, or export it to MusicXML, then upload again.","fr":"Ceci est un fichier Finale antérieur à 2014 (.mus). Ce format fermé ne peut pas être lu directement. Réenregistrez-le en .musx dans Finale 2014 ou ultérieur, ou exportez-le en MusicXML, puis téléversez-le à nouveau."}
+{"key":"upload.err.mxlNoRootfile","en":"No score was found inside this .mxl archive.","fr":"Aucune partition n’a été trouvée dans cette archive .mxl."}
+{"key":"upload.err.mxlUnreadable","en":"This .mxl file could not be opened. It may be corrupt.","fr":"Ce fichier .mxl n’a pas pu être ouvert. Il est peut-être corrompu."}
+{"key":"upload.err.parseFailed","en":"This score could not be read. It may be incomplete or use unsupported features.","fr":"Cette partition n’a pas pu être lue. Elle est peut-être incomplète ou utilise des fonctions non prises en charge."}
+{"key":"upload.err.pdfJbig2","en":"This PDF stores its pages in JBIG2-compressed images, and they could not be decoded.","fr":"Ce PDF enregistre ses pages en images compressées JBIG2, qui n'ont pas pu être décodées."}
+{"key":"upload.err.pdfUnreadable","en":"Ilya could not open that PDF. If it is password protected, save an unlocked copy and try again.","fr":"Ilya n’a pas pu ouvrir ce PDF. S’il est protégé par un mot de passe, enregistrez-en une copie déverrouillée et réessayez."}
+{"key":"upload.err.pictureUnclear","en":"Ilya could not read this picture clearly. A flat scan or a PDF works best.","fr":"Ilya n’a pas pu lire cette image clairement. Une numérisation à plat ou un PDF donne de meilleurs résultats."}
+{"key":"upload.err.readerLoadFailed","en":"The page reader could not be loaded. Check your connection and try again.","fr":"Le lecteur de page n’a pas pu être chargé. Vérifiez votre connexion et réessayez."}
+{"key":"upload.err.tooLarge","en":"This score is too large to process on this device.","fr":"Cette partition est trop volumineuse pour être traitée sur cet appareil."}
+{"key":"upload.err.unrecognised","en":"This file was not recognised as a score.","fr":"Ce fichier n’a pas été reconnu comme une partition."}
+{"key":"upload.err.wasmLoadFailed","en":"The Finale converter could not load. Reload the page and try again.","fr":"Le convertisseur Finale n’a pas pu se charger. Rechargez la page et réessayez."}
+{"key":"upload.err.xmlNotMusicxml","en":"This XML file is not MusicXML.","fr":"Ce fichier XML n’est pas du MusicXML."}
+{"key":"upload.err.xmlRootIs","en":"The root element is %s.","fr":"L’élément racine est %s."}
+{"key":"upload.err.zipUnrecognised","en":"This ZIP file is not a recognised score container.","fr":"Ce fichier ZIP n’est pas un conteneur de partition reconnu."}
+{"key":"upload.format.imageReader","en":"Format: photograph → MusicXML","fr":"Format : photographie → MusicXML"}
+{"key":"upload.format.mnxDirect","en":"Format: MNX (direct)","fr":"Format : MNX (direct)"}
+{"key":"upload.format.msczWebmscore","en":"Format: MuseScore → MusicXML","fr":"Format : MuseScore → MusicXML"}
+{"key":"upload.format.musicxmlDirect","en":"Format: MusicXML (direct)","fr":"Format : MusicXML (direct)"}
+{"key":"upload.format.musxDenigma","en":"Format: Finale .musx → MNX","fr":"Format : Finale .musx → MNX"}
+{"key":"upload.format.mxl","en":"Format: MusicXML (.mxl)","fr":"Format : MusicXML (.mxl)"}
+{"key":"upload.format.pdfReader","en":"Format: PDF → MusicXML","fr":"Format : PDF → MusicXML"}
+{"key":"upload.soon.mscz","en":"MuseScore (.mscz) import is coming soon.","fr":"L’import MuseScore (.mscz) arrive bientôt."}
+{"key":"upload.status.converting","en":"Converting Finale file…","fr":"Conversion du fichier Finale…"}
+{"key":"upload.status.convertingMscz","en":"Converting MuseScore file…","fr":"Conversion du fichier MuseScore…"}
+{"key":"upload.status.preparingReader","en":"Ilya is reading the notes off your page. Starting the reader might take about one minute, then a few seconds for each page of music after that.","fr":"Ilya lit les notes sur votre page. Le démarrage du lecteur peut prendre environ une minute, et après quelques secondes par page de partition."}
+{"key":"upload.status.reading","en":"Reading file…","fr":"Lecture du fichier…"}
+{"key":"upload.status.readingPage","en":"Reading the page…","fr":"Lecture de la page…"}
+{"key":"upload.tryAnother","en":"Try another file","fr":"Essayer un autre fichier"}
+{"key":"upload.watermark","en":"score","fr":"partition"}
+{"key":"verify.label","en":"verify","fr":"à vérifier"}
+{"key":"voice.heading","en":"VOICE","fr":"VOIX"}
+{"key":"voice.state.count","en":"%s of %s","fr":"%s sur %s"}
+{"key":"voiceIntake.acoustics.1","en":"These terms are new to me.","fr":"Ces termes sont nouveaux pour moi."}
+{"key":"voiceIntake.acoustics.2","en":"I have heard them, but I do not use them.","fr":"Je les ai déjà entendus, sans les employer."}
+{"key":"voiceIntake.acoustics.3","en":"I know the main ideas: resonance, harmonics, and turning over.","fr":"J’en connais les idées principales : la résonance, les harmoniques, le changement de timbre."}
+{"key":"voiceIntake.acoustics.4","en":"I use them in my teaching or my practice.","fr":"Je les emploie dans mon enseignement ou ma pratique."}
+{"key":"voiceIntake.acoustics.5","en":"I read and discuss voice acoustics research.","fr":"Je lis et commente la recherche en acoustique vocale."}
+{"key":"voiceIntake.acoustics.stem","en":"How comfortable are you with voice acoustics terms such as fundamental (fo), harmonic (nfo), resonance (fR1), and formant (F1)?","fr":"Dans quelle mesure êtes-vous à l’aise avec des termes comme fondamentale (fo), harmonique (nfo), résonance (fR1) et formant (F1)?"}
+{"key":"voiceIntake.appear.all","en":"All of them","fr":"Toutes"}
+{"key":"voiceIntake.appear.count","en":"How many suggestions should each comment show?","fr":"Combien de suggestions chaque commentaire doit-il afficher?"}
+{"key":"voiceIntake.appear.heading","en":"How comments appear","fr":"Présentation des commentaires"}
+{"key":"voiceIntake.appear.imagery","en":"Include imagery and metaphor cues","fr":"Inclure des images et des métaphores"}
+{"key":"voiceIntake.appear.two","en":"Two, with the rest a tap away","fr":"Deux, les autres affichées sur demande"}
+{"key":"voiceIntake.bottom.1","en":"The lowest notes do not sound reliably yet.","fr":"Les notes les plus graves ne sortent pas encore de façon fiable."}
+{"key":"voiceIntake.bottom.2","en":"The notes sound, but they lack body.","fr":"Les notes sortent, mais elles manquent de corps."}
+{"key":"voiceIntake.bottom.3","en":"They carry when I prepare them.","fr":"Elles portent quand je les prépare."}
+{"key":"voiceIntake.bottom.4","en":"They carry in performance most of the time.","fr":"Elles portent en concert la plupart du temps."}
+{"key":"voiceIntake.bottom.5","en":"They carry reliably, and I can colour them as I choose.","fr":"Elles portent de façon fiable, et je peux les colorer à mon gré."}
+{"key":"voiceIntake.bottom.stem","en":"How is the bottom of your range right now?","fr":"Où en est le bas de votre ambitus en ce moment?"}
+{"key":"voiceIntake.clear","en":"Clear answer","fr":"Effacer la réponse"}
+{"key":"voiceIntake.count.10","en":"Ten","fr":"Dix"}
+{"key":"voiceIntake.count.2","en":"Two","fr":"Deux"}
+{"key":"voiceIntake.count.3","en":"Three","fr":"Trois"}
+{"key":"voiceIntake.count.4","en":"Four","fr":"Quatre"}
+{"key":"voiceIntake.count.5","en":"Five","fr":"Cinq"}
+{"key":"voiceIntake.count.6","en":"Six","fr":"Six"}
+{"key":"voiceIntake.count.7","en":"Seven","fr":"Sept"}
+{"key":"voiceIntake.count.8","en":"Eight","fr":"Huit"}
+{"key":"voiceIntake.count.9","en":"Nine","fr":"Neuf"}
+{"key":"voiceIntake.intro","en":"{count} quick questions so INSIGHTS understands your voice. Skip any you like, and change your answers whenever you want.","fr":"{count} questions rapides pour que les APERÇUS comprennent votre voix. Passez celles que vous voulez, et modifiez vos réponses quand vous le souhaitez."}
+{"key":"voiceIntake.notSure","en":"Not sure","fr":"Je ne sais pas"}
+{"key":"voiceIntake.passaggi.1","en":"I notice a clear shift in my sound there.","fr":"J’entends un net changement dans mon son à cet endroit."}
+{"key":"voiceIntake.passaggi.2","en":"I can smooth it in exercises, not yet in songs.","fr":"Je peux la rendre homogène dans les exercices, pas encore dans le répertoire."}
+{"key":"voiceIntake.passaggi.3","en":"It is smooth in songs when I prepare it.","fr":"Elle est homogène dans le répertoire quand je la prépare."}
+{"key":"voiceIntake.passaggi.4","en":"It is smooth in performance most of the time.","fr":"Elle est homogène en concert la plupart du temps."}
+{"key":"voiceIntake.passaggi.5","en":"It is even throughout, and I can choose where the colour changes.","fr":"Elle est égale d’un bout à l’autre, et je choisis où la couleur change."}
+{"key":"voiceIntake.passaggi.stem","en":"How does moving through your passaggi feel in your singing right now?","fr":"Comment se passe en ce moment la traversée de vos <em>passaggi</em> quand vous chantez?"}
+{"key":"voiceIntake.softHigh.1","en":"I cannot sing softly up high yet.","fr":"Je ne peux pas encore chanter <em>piano</em> dans l’aigu."}
+{"key":"voiceIntake.softHigh.2","en":"I can sing softly there, but it feels fragile.","fr":"Je peux chanter <em>piano</em> dans l’aigu, mais cela reste fragile."}
+{"key":"voiceIntake.softHigh.3","en":"It works when I prepare it.","fr":"Cela fonctionne quand je le prépare."}
+{"key":"voiceIntake.softHigh.4","en":"It is reliable in performance most of the time.","fr":"C’est fiable en concert la plupart du temps."}
+{"key":"voiceIntake.softHigh.5","en":"It is reliable, and I can move freely between soft and loud there.","fr":"C’est fiable, et je passe librement du <em>piano</em> au <em>forte</em> à cet endroit."}
+{"key":"voiceIntake.softHigh.stem","en":"How is soft singing up high for you right now?","fr":"Où en est votre chant <em>piano</em> dans l’aigu en ce moment?"}
+{"key":"voiceIntake.sustained.1","en":"Long notes tire me quickly.","fr":"Les notes longues me fatiguent vite."}
+{"key":"voiceIntake.sustained.2","en":"I can sustain them, but the tone wavers or thins.","fr":"Je peux les mener jusqu’au bout, mais le son vacille ou s’amincit."}
+{"key":"voiceIntake.sustained.3","en":"They stay steady when I plan the breath.","fr":"Elles restent stables quand je prévois mon souffle."}
+{"key":"voiceIntake.sustained.4","en":"They are steady in performance most of the time.","fr":"Elles sont stables en concert la plupart du temps."}
+{"key":"voiceIntake.sustained.5","en":"They are steady, and I can shape them as I choose.","fr":"Elles sont stables, et je peux les façonner à mon gré."}
+{"key":"voiceIntake.sustained.stem","en":"How do long, sustained notes go for you right now?","fr":"Comment se passent en ce moment vos notes longues et prolongées?"}
+{"key":"voiceIntake.top.1","en":"I cannot reach it reliably yet.","fr":"Je ne l’atteins pas encore de façon fiable."}
+{"key":"voiceIntake.top.2","en":"I can reach it, but it feels unpredictable.","fr":"Je peux l’atteindre, mais c’est imprévisible."}
+{"key":"voiceIntake.top.3","en":"It works in practice when I prepare it.","fr":"Cela fonctionne à l’étude quand je le prépare."}
+{"key":"voiceIntake.top.4","en":"It is reliable in performance most of the time.","fr":"C’est fiable en concert la plupart du temps."}
+{"key":"voiceIntake.top.5","en":"It is reliable, and I can colour it as I choose.","fr":"C’est fiable, et je peux le colorer à mon gré."}
+{"key":"voiceIntake.top.stem","en":"How is the top of your voice right now, around and above your secondary passaggio?","fr":"Où en est le haut de votre voix en ce moment, autour et au-dessus de votre <em>passaggio</em> secondaire?"}
+{"key":"voiceIntake.topic.high","en":"High notes","fr":"Les notes aiguës"}
+{"key":"voiceIntake.topic.low","en":"Low notes","fr":"Les notes graves"}
+{"key":"voiceIntake.topic.other","en":"Other things worth noticing","fr":"Les autres points à remarquer"}
+{"key":"voiceIntake.topic.passaggi","en":"Moving through the passaggi","fr":"La traversée des <em>passaggi</em>"}
+{"key":"voiceIntake.topic.softHigh","en":"Soft singing up high","fr":"Le chant <em>piano</em> dans l’aigu"}
+{"key":"voiceIntake.topic.sustained","en":"Sustained notes","fr":"Les notes prolongées"}
+{"key":"voiceIntake.topics.stem","en":"What would you like INSIGHTS to comment on?","fr":"Qu’aimeriez-vous que les APERÇUS commentent?"}
+{"key":"voiceType.borrowing","en":"The field has not yet published resonance values for a {type}. Ilya can start from the {borrowed} staff, or you can record your vowels in vocal fry and Ilya works from your own voice.","fr":"La recherche n’a pas encore publié de valeurs de résonance pour un {type}. Ilya peut partir de la portée de {borrowed}, ou vous pouvez capter vos voyelles en friture vocale et Ilya travaille à partir de votre propre voix."}
+{"key":"voiceType.heading","en":"Voice type","fr":"Type de voix"}
+{"key":"voiceType.hint","en":"Choose the category you use for yourself. You can add a more specific one.","fr":"Choisissez la catégorie que vous utilisez pour vous-même. Vous pouvez en préciser une plus fine."}
+{"key":"voiceType.more","en":"More specific (optional)","fr":"Plus précis (facultatif)"}
+{"key":"voiceType.other","en":"Other (type your own)","fr":"Autre (saisissez le vôtre)"}
+{"key":"voiceType.specific.baryton-martin","en":"Baryton Martin","fr":"Baryton Martin"}
+{"key":"voiceType.specific.bass-baritone","en":"Bass-baritone","fr":"Baryton-basse"}
+{"key":"voiceType.specific.basso-buffo","en":"Basso buffo","fr":"Basse bouffe"}
+{"key":"voiceType.specific.basso-cantante","en":"Basso cantante","fr":"Basse chantante"}
+{"key":"voiceType.specific.basso-profondo","en":"Basso profondo","fr":"Basse profonde"}
+{"key":"voiceType.specific.character-tenor","en":"Character tenor","fr":"Ténor bouffe"}
+{"key":"voiceType.specific.coloratura-mezzo","en":"Coloratura mezzo","fr":"Mezzo-soprano colorature"}
+{"key":"voiceType.specific.coloratura-soprano","en":"Coloratura soprano","fr":"Soprano colorature"}
+{"key":"voiceType.specific.contralto","en":"Contralto","fr":"Contralto"}
+{"key":"voiceType.specific.countertenor","en":"Countertenor","fr":"Contre-ténor"}
+{"key":"voiceType.specific.dramatic-baritone","en":"Dramatic baritone","fr":"Baryton dramatique"}
+{"key":"voiceType.specific.dramatic-mezzo","en":"Dramatic mezzo","fr":"Mezzo-soprano dramatique"}
+{"key":"voiceType.specific.dramatic-soprano","en":"Dramatic soprano","fr":"Soprano dramatique"}
+{"key":"voiceType.specific.dramatic-tenor","en":"Dramatic tenor","fr":"Ténor dramatique"}
+{"key":"voiceType.specific.haute-contre","en":"Haute-contre","fr":"Haute-contre"}
+{"key":"voiceType.specific.heldenbariton","en":"Heldenbariton","fr":"Heldenbariton"}
+{"key":"voiceType.specific.heldentenor","en":"Heldentenor","fr":"Heldentenor"}
+{"key":"voiceType.specific.light-tenor","en":"Light tenor","fr":"Ténor léger"}
+{"key":"voiceType.specific.lyric-baritone","en":"Lyric baritone","fr":"Baryton lyrique"}
+{"key":"voiceType.specific.lyric-mezzo","en":"Lyric mezzo","fr":"Mezzo-soprano lyrique"}
+{"key":"voiceType.specific.lyric-soprano","en":"Lyric soprano","fr":"Soprano lyrique"}
+{"key":"voiceType.specific.lyric-tenor","en":"Lyric tenor","fr":"Ténor lyrique"}
+{"key":"voiceType.specific.male-alto","en":"Male alto","fr":"Alto masculin"}
+{"key":"voiceType.specific.octavist","en":"Octavist","fr":"Octaviste"}
+{"key":"voiceType.specific.sopranist","en":"Sopranist","fr":"Sopraniste"}
+{"key":"voiceType.specific.soubrette","en":"Soubrette","fr":"Soubrette"}
+{"key":"voiceType.specific.spinto-soprano","en":"Spinto soprano","fr":"Soprano spinto"}
+{"key":"voiceType.specific.spinto-tenor","en":"Spinto tenor","fr":"Ténor spinto"}
+{"key":"voiceType.specific.tenor-altino","en":"Tenor altino","fr":"Ténor altino"}
+{"key":"voiceType.staff.bass","en":"bass","fr":"basse"}
+{"key":"voiceType.staff.mezzo-soprano","en":"mezzo-soprano","fr":"mezzo-soprano"}
+{"key":"voiceType.staff.mezzo-tenor","en":"mezzo and tenor","fr":"mezzo et ténor"}
+{"key":"voiceType.type.baritone","en":"Baritone","fr":"Baryton"}
+{"key":"voiceType.type.bass","en":"Bass","fr":"Basse"}
+{"key":"voiceType.type.bass-baritone","en":"Bass-baritone","fr":"Baryton-basse"}
+{"key":"voiceType.type.contralto","en":"Contralto","fr":"Contralto"}
+{"key":"voiceType.type.countertenor","en":"Countertenor","fr":"Contre-ténor"}
+{"key":"voiceType.type.mezzo-soprano","en":"Mezzo-soprano","fr":"Mezzo-soprano"}
+{"key":"voiceType.type.not-sure","en":"Not sure","fr":"Je ne sais pas"}
+{"key":"voiceType.type.soprano","en":"Soprano","fr":"Soprano"}
+{"key":"voiceType.type.tenor","en":"Tenor","fr":"Ténor"}
+{"key":"vowel.name.a","en":"bright-a","fr":"a clair"}
+{"key":"vowel.name.e","en":"close-e","fr":"e fermé"}
+{"key":"vowel.name.i","en":"cardinal-i","fr":"i cardinal"}
+{"key":"vowel.name.o","en":"Russian-o","fr":"o russe"}
+{"key":"vowel.name.u","en":"cardinal-u","fr":"u cardinal"}
+{"key":"vowel.name.ɑ","en":"dark-a","fr":"a sombre"}
+{"key":"vowel.name.ɛ","en":"open-e","fr":"e ouvert"}
+{"key":"vowel.name.ɨ","en":"velar-i","fr":"i vélaire"}
+{"key":"vowel.name.ɪ","en":"smallcaps-i","fr":"i petite capitale"}
+{"key":"vowel.name.ʌ","en":"turned-v","fr":"v culbuté"}
+{"key":"vowel.spoken","en":"the {name} vowel","fr":"la voyelle {name}"}
+{"key":"wait.once","en":"Ilya reads each score once and keeps the reading.","fr":"Ilya ne lit chaque partition qu’une fois et en garde la lecture."}
+{"key":"wait.reading","en":"Reading your score · page {page} of {pages}","fr":"Lecture de votre partition · page {page} sur {pages}"}
+{"key":"watch.advice.iCrossing","en":"relaxing the jaw and leaning the vowel toward [{target}], giving it a touch more space, which can lift your first resonance clear of the pitch","fr":"relâcher la mâchoire et orienter la voyelle vers [{target}], en lui donnant un peu plus d’espace, ce qui peut dégager votre première résonance de la hauteur chantée"}
+{"key":"watch.advice.maleTurnover","en":"letting the [{vowel}] turn and gather here rather than spreading it open for more sound; up this high the ring tends to come from letting it settle, not from pushing it wider","fr":"laisser le [{vowel}] changer de timbre et se rassembler ici, plutôt que de l’ouvrir davantage pour obtenir plus de son; dans cet aigu, la brillance tend à venir de ce que vous le laissez se poser, et non de ce que vous l’élargissez"}
+{"key":"watch.advice.oCover","en":"allowing the vowel to open and darken toward [{target}]; that can be a more comfortable option than a close [o] this high","fr":"laisser la voyelle s’ouvrir et s’assombrir vers [{target}]; cela peut être une option plus confortable qu’un [o] fermé dans cet aigu"}
+{"key":"watch.advice.openOCrossing","en":"allowing the turn and letting the vowel open into that fuller, headier resonance; up here it can settle the tone rather than straining to stay bright","fr":"accepter le changement de timbre et laisser la voyelle s’ouvrir vers cette résonance plus pleine, plus tournée vers la tête; dans cet aigu, cela peut poser le son plutôt que de le forcer à rester clair"}
+{"key":"watch.advice.openTracking","en":"letting the jaw drop to open the vowel here, raising your first resonance to the pitch; that can ease the sound rather than keeping a close [{vowel}] squeezed this high","fr":"laisser la mâchoire descendre pour ouvrir la voyelle ici, en élevant votre première résonance jusqu’à la hauteur chantée; cela peut libérer le son, plutôt que de garder un [{vowel}] fermé et serré dans cet aigu"}
+{"key":"watch.direction.down","en":"down","fr":"vers le bas"}
+{"key":"watch.direction.up","en":"up","fr":"vers le haut"}
+{"key":"watch.header","en":"For your consideration","fr":"À considérer"}
+{"key":"watch.interval.1","en":"a semitone","fr":"d’un demi-ton"}
+{"key":"watch.interval.2","en":"a whole tone","fr":"d’un ton"}
+{"key":"watch.interval.3","en":"a minor third","fr":"d’une tierce mineure"}
+{"key":"watch.interval.4","en":"a major third","fr":"d’une tierce majeure"}
+{"key":"watch.interval.5","en":"a perfect fourth","fr":"d’une quarte juste"}
+{"key":"watch.interval.6","en":"a tritone","fr":"d’un triton"}
+{"key":"watch.intervalPhrase.mixed","en":"{dirA} {a} or {dirB} {b}","fr":"{a} {dirA} ou {b} {dirB}"}
+{"key":"watch.intervalPhrase.one","en":"{direction} {a}","fr":"{a} {direction}"}
+{"key":"watch.intervalPhrase.shared","en":"{direction} {a} or {b}","fr":"{a} ou {b} {direction}"}
+{"key":"watch.key.letter.A","en":"A","fr":"la"}
+{"key":"watch.key.letter.B","en":"B","fr":"si"}
+{"key":"watch.key.letter.C","en":"C","fr":"do"}
+{"key":"watch.key.letter.D","en":"D","fr":"ré"}
+{"key":"watch.key.letter.E","en":"E","fr":"mi"}
+{"key":"watch.key.letter.F","en":"F","fr":"fa"}
+{"key":"watch.key.letter.G","en":"G","fr":"sol"}
+{"key":"watch.key.mode.major","en":"major","fr":"majeur"}
+{"key":"watch.key.mode.minor","en":"minor","fr":"mineur"}
+{"key":"watch.key.name","en":"{tonic} {mode}","fr":"{tonic} {mode}"}
+{"key":"watch.key.tonic","en":"{letter} {accidental}","fr":"{letter} {accidental}"}
+{"key":"watch.keyPhrase.one","en":"to {a}","fr":"en {a}"}
+{"key":"watch.keyPhrase.two","en":"to {a} or {b}","fr":"en {a} ou en {b}"}
+{"key":"watch.lead.many","en":"Bars {bars}","fr":"Mesures {bars}"}
+{"key":"watch.lead.one","en":"Bar {bar}","fr":"Mesure {bar}"}
+{"key":"watch.line.crossing","en":"Bar {bar}: your {vowel} meets your first resonance here, so the tone will want to turn full and heady, toward a whoop.","fr":"Mesure {bar} : votre {vowel} rencontre ici votre première résonance, de sorte que le son voudra devenir plein et de tête, vers le youhou."}
+{"key":"watch.line.passaggio","en":"Bar {bar}: your {vowel} falls near your passaggio; expect the turn to want managing.","fr":"Mesure {bar} : votre {vowel} tombe près de votre *passaggio*; attendez-vous à devoir gérer le changement de timbre."}
+{"key":"watch.line.passaggioWord","en":"Bar {bar}: '{word}' falls near your passaggio; expect the turn to want managing.","fr":"Mesure {bar} : « {word} » tombe près de votre *passaggio*; attendez-vous à devoir gérer le changement de timbre."}
+{"key":"watch.line.rangeAbove","en":"Bar {bar} rises above the range you gave.","fr":"Mesure {bar} : la note monte au-dessus de l’ambitus que vous avez indiqué."}
+{"key":"watch.line.rangeAboveTranspose","en":"Bar {bar} rises above the range you gave; you may want to transpose {phrase}.","fr":"Mesure {bar} : la note monte au-dessus de l’ambitus que vous avez indiqué; vous pouvez songer à transposer {phrase}."}
+{"key":"watch.line.rangeBelow","en":"Bar {bar} drops below the range you gave.","fr":"Mesure {bar} : la note descend sous l’ambitus que vous avez indiqué."}
+{"key":"watch.line.rangeBelowTranspose","en":"Bar {bar} drops below the range you gave; you may want to transpose {phrase}.","fr":"Mesure {bar} : la note descend sous l’ambitus que vous avez indiqué; vous pouvez songer à transposer {phrase}."}
+{"key":"watch.line.sustain","en":"Bar {bar}: the longer {vowel} here sits on its pitch of turning, so the colour may feel unsteady as you sustain it.","fr":"Mesure {bar} : le {vowel} plus long, ici, se pose sur sa hauteur de changement de timbre, de sorte que la couleur peut sembler instable pendant qu’il se prolonge."}
+{"key":"watch.line.tighten","en":"Bar {bar}: the {vowel} at the top of your range and sustained here is an exposed spot where the vowel can tighten.","fr":"Mesure {bar} : le {vowel}, au sommet de votre ambitus et prolongé ici, est un endroit exposé où la voyelle peut se resserrer."}
+{"key":"watch.line.timbreCloseToOpen","en":"Bar {bar}: your {vowel} turns close to open inside the word, so the colour shifts as you sing it.","fr":"Mesure {bar} : votre {vowel} passe de fermé à ouvert à l’intérieur du mot, de sorte que la couleur change pendant que vous le chantez."}
+{"key":"watch.line.timbreCloseToOpenWord","en":"Bar {bar}: your {vowel} on '{word}' turns close to open inside the word, so the colour shifts as you sing it.","fr":"Mesure {bar} : votre {vowel} sur « {word} » passe de fermé à ouvert à l’intérieur du mot, de sorte que la couleur change pendant que vous le chantez."}
+{"key":"watch.line.timbreOpenToClose","en":"Bar {bar}: your {vowel} turns open to close inside the word, so the colour shifts as you sing it.","fr":"Mesure {bar} : votre {vowel} passe d’ouvert à fermé à l’intérieur du mot, de sorte que la couleur change pendant que vous le chantez."}
+{"key":"watch.line.timbreOpenToCloseWord","en":"Bar {bar}: your {vowel} on '{word}' turns open to close inside the word, so the colour shifts as you sing it.","fr":"Mesure {bar} : votre {vowel} sur « {word} » passe d’ouvert à fermé à l’intérieur du mot, de sorte que la couleur change pendant que vous le chantez."}
+{"key":"watch.line.turnover","en":"Bar {bar}: the {vowel} at the top of your range and sustained here is an exposed spot where the tone can spread or press.","fr":"Mesure {bar} : le {vowel}, au sommet de votre ambitus et prolongé ici, est un endroit exposé où le son peut s’étaler ou se presser."}
+{"key":"welcome.band","en":"WELCOME","fr":"BIENVENUE"}
+{"key":"welcome.body","en":"<em>Ilya</em> bundles a live IPA transcription engine, an onboard Russian dictionary with English and French glosses, optical music recognition (OMR) that reads scores by machine, and an acoustic module that estimates your resonances using the microphone in your own device. Any of these steps can go wrong. So treat what <em>Ilya</em> shares as an early consultation within a much longer process of studying your song or aria, and <strong>confirm anything <em>Ilya</em> tells you with your teacher or coach before you rely on it.</strong>","fr":"<em>Ilya</em> réunit un moteur de transcription en API en direct, un dictionnaire russe intégré avec des gloses anglaises et françaises, une reconnaissance optique de la musique qui lit les partitions par machine, et un module acoustique qui estime vos résonances au moyen du microphone de votre propre appareil. Chacune de ces étapes peut faillir. Considérez donc ce qu’<em>Ilya</em> vous présente comme une première consultation dans un processus bien plus long d’étude de votre chant ou de votre air, et <strong>vérifiez tout ce qu’<em>Ilya</em> vous indique auprès de votre professeure ou professeur de chant, ou de votre coach, avant de vous y fier.</strong>"}
+{"key":"welcome.lead","en":"<em>Ilya</em> can make mistakes.","fr":"<em>Ilya</em> peut se tromper."}
+{"key":"welcome.licence","en":"<em>Ilya</em> is free and open source, © 2026 Dann Mitton, and released under the GNU Affero General Public License, version 3. The name <em>Ilya</em> and its icon are not licensed under it.","fr":"<em>Ilya</em> est gratuit et à code ouvert, © 2026 Dann Mitton, et publié selon les termes de la licence publique générale GNU Affero, version 3. Le nom <em>Ilya</em> et son icône ne sont pas visés par cette licence."}
+{"key":"welcome.madeIn","en":"Made with love in Canada, in English and French","fr":"Fait avec cœur au Canada, en anglais et en français"}
+{"key":"welcome.maker","en":"Made by Dann Mitton, voice teacher and researcher, <a target=\"_blank\" rel=\"noopener\" href=\"https://dannmitton.com\">dannmitton.com</a>. His doctoral research, <a target=\"_blank\" rel=\"noopener\" href=\"https://hdl.handle.net/1807/100864\"><em>Sung Russian for the Low Male Voice Classical Singer</em></a> (University of Toronto, 2020), is the argument behind <em>Ilya</em>; <a target=\"_blank\" rel=\"noopener\" href=\"https://ilya.dannmitton.com\">ilya.dannmitton.com</a> is its home.","fr":"Créé par Dann Mitton, professeur de chant et chercheur, <a target=\"_blank\" rel=\"noopener\" href=\"https://dannmitton.com\">dannmitton.com</a>. Ses recherches doctorales, <a target=\"_blank\" rel=\"noopener\" href=\"https://hdl.handle.net/1807/100864\"><em>Sung Russian for the Low Male Voice Classical Singer</em></a> (University of Toronto, 2020), en fournissent l’argumentaire; <em>Ilya</em> vit à <a target=\"_blank\" rel=\"noopener\" href=\"https://ilya.dannmitton.com\">ilya.dannmitton.com</a>."}
+{"key":"welcome.method","en":"The method is Craig Grayson’s: <a target=\"_blank\" rel=\"noopener\" href=\"https://hdl.handle.net/1773/20548\"><em>Russian Lyric Diction</em></a> (University of Washington, 2012).","fr":"La méthode est celle de Craig Grayson : <a target=\"_blank\" rel=\"noopener\" href=\"https://hdl.handle.net/1773/20548\"><em>Russian Lyric Diction</em></a> (University of Washington, 2012)."}
+{"key":"welcome.title","en":"Sung Russian made easier.","fr":"Le russe chanté, simplifié."}
+{"key":"witness.agree","en":"Score and poem agree","fr":"La partition et le poème concordent"}
+{"key":"witness.divergePrefix","en":"Score and poem diverge in","fr":"La partition et le poème divergent à"}
+{"key":"witness.heading","en":"Textual witnesses","fr":"Témoins textuels"}
+{"key":"witness.measureAbbr","en":"m.","fr":"mes."}
+{"key":"witness.placeMany","en":"places","fr":"endroits"}
+{"key":"witness.placeOne","en":"place","fr":"endroit"}
+{"key":"witness.poemLabel","en":"POEM","fr":"POÈME"}
+{"key":"witness.scoreLabel","en":"Score","fr":"Partition"}
