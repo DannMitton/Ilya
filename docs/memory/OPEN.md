@@ -4530,7 +4530,7 @@ Transcribed as written, 2026-11-22 22:47: *"We decided conduit not tractus"*. **
 
 ## WHAT ILYA DOES FOR A SINGER: THE MODEL. Drafted by the desk 2026-11-23 21:0x from Dann's own words, corrected by him 21:18 and 21:22. N.204 step 2
 
-**What this is for.** It is the high-level model the code is compared against at r7's step 5 (`../sessions/plan-code-audit-maintainability_r7_2026-11-23.md`). Every one of the 552 source files lands in one of these boxes or lands nowhere, and where the code disagrees with Dann's own description of Ilya, that is the finding. **Its own test: if a real part of Ilya has no box, the model is wrong, not the code.**
+**What this is for.** It is the high-level model the code is compared against at step 5 of the governing plan, `../sessions/plan-code-audit-maintainability_r9_2026-11-23.md` (md5 `6d0cd1e1`). r7 and r8 are superseded and kept. Every one of the 552 source files lands in one of these boxes or lands nowhere, and where the code disagrees with Dann's own description of Ilya, that is the finding. **Its own test: if a real part of Ilya has no box, the model is wrong, not the code.**
 
 **Drafted on his instruction of 2026-11-23 21:07**, transcribed as written: *"My words already animate this entire app. We have en ough information in our Project files and in LEARN and GUIDE to answer this question. please draft an answer"*. **Awaiting his ruling. Nothing else is owed on it.**
 

@@ -5266,6 +5266,8 @@ Quote the range; cap at its top; add each actual when it lands. Actuals from `ST
 | kind of job | actuals (tokens) | range to quote |
 |---|---|---|
 | Fable review of one brief plus one report, read through the bridge, no build | 182k (2026-11-22/23, 25 tool uses, 5.7 min, cap 300k) | 160k to 300k |
+| Fable CONFIRMATION read of one plan document against two earlier revisions and two earlier reviews, staged into the container, no source opened | 245k (2026-11-23 22:0x, 30 tool uses, 10.5 min, cap 300k) | 190k to 300k |
+| Sonnet static-analysis instrument build on a staged source tarball: an area map, a dependency-tool trial, a keep-list, and a commit-log measure, no install and no build | 241k (2026-11-23 23:0x, 72 tool uses, 13.5 min, cap 300k) | 200k to 300k |
 | Sonnet read-only whole-tree sweep for a class of string (outbound URLs) | 125k (2026-11-22/23, 21 tool uses, 2.1 min, cap 200k) | 110k to 200k |
 | Sonnet numerical re-score of staged audio (31 files, a Python harness, two conditions) | 134k (2026-11-22/23, 13 tool uses, 2.9 min, cap 300k) | 120k to 220k |
 | Sonnet browser measure on row 114 f1 | 148k, 155k, 158k, 192k, 206k, 208k, 208k, 238k (J2, three arms, 2026-11-09), 257k | 150k to 260k |
@@ -6070,3 +6072,13 @@ Added by the desk at the close. `CONTRACT.md` section 4, estimates come from act
 - **The desk's own evening, for scale:** three helpers, never more than two at once, 558k of helper tokens in total, against a Fable weekly allowance that measures near 7M.
 
 **The lesson the two plan reviews teach, and it is about the desk rather than the cost.** The r7 review's four blockers were all caused by the desk amending a long document in place twice in one evening and never re-reading the whole of it: six sections still instructed a design Dann had struck, and the surgical replacement deleted material five other sections cite. **A document amended twice is re-read whole before it is called finished, or it is rebuilt from the last internally consistent revision.** r8 was rebuilt from r6 for exactly this reason.
+
+## A FILE LIST BUILT FROM `git ls-files` THROUGH THE BRIDGE SILENTLY DROPS CYRILLIC-NAMED FILES. Desk, 2026-11-23 22:5x
+
+**Symptom:** `tar -T` fed from `git --no-optional-locks ls-files` fails with `Cannot stat: No such file or directory` on every file whose name holds a Cyrillic letter, and the resulting archive is short by exactly those files. On 2026-11-23 it dropped all 62 SVGs under `apps/web/src/lib/components/Reading/cursive/`.
+
+**Cause, read rather than inferred.** macOS writes those names decomposed (NFD) and git's index holds them composed (NFC). `od -c` on the two forms shows the difference: git gives `01-` then the composed А, the directory listing gives `01-` then `320 220`. Git on the Mac sets `core.precomposeunicode` and is content, so **`git status` stays clean and nothing is actually missing**; only a list built from the index and then resolved against the mounted filesystem comes up short.
+
+**What to do:** build any file list for `tar`, `cp`, or a helper from a directory walk (`tar` over the folders, or `find`), never from `git ls-files`. Check the count afterwards. A silent short archive is the failure mode, because `tar` exits non-zero but still writes what it could.
+
+**A second lesson from the same hour:** `tar tzf | grep -c 'cursive/'` returns 63 and the folder holds 62 files, because the directory entry counts. Count files with `find -type f`.
