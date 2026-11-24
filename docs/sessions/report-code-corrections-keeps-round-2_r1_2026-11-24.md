@@ -58,3 +58,17 @@ The grace-note orphan (`correction.ts` around `:534` and `:940` in Fable's numbe
 
 - The page: nothing was driven in a browser, including whether `doc.corrections` hands back one stable proxy on the real page. A throwaway `$state` test in round 1 said it does; it is not committed, and Fable flagged that.
 - The four burg tests, for want of scipy.
+
+## Round 3: a rest carrying her remembered pitch is named by INSIGHTS
+
+Written 2026-11-24, on Fable's MERGE WITH FIXES (its report is on the Mac and is not in this repository, so I worked from the defect as the brief stated it, not from the report).
+
+**The defect.** A rest the reader found, made a note, nudged above her range, then made a rest again: round 2 settled `type` away and kept the pitch, so the record held only a pitch. `applyCorrections` drops a rest's pitch only where the record says `type: 'rest'` (`correction.ts:768`), so the drawn rest carried A4, and `firstOutsideRange` (`insights/singer-page.ts:139`) has no type test and named it as her first note outside her range.
+
+**Built.** One condition at `correction.ts:469`: `settleAgainstRead` keeps `type: 'rest'` on a read rest whose record holds a pitch. Nothing else changed: the nudge ruling, the two tuplet fixes, row 205, and the grace stop are as they were.
+
+**Test.** `entry.test.ts`, "a rest carrying her remembered pitch is not a note". In one run it proves both halves: after rest, note, nudge to A4 (above a range ending at G4), rest, the record is `{type: 'rest', pitch: A4}`, the drawn rest carries no pitch, and `firstOutsideRange` returns `null`; then rest to note brings A4 back, and `firstOutsideRange` names it, as it should for a note she sings. With the repair taken out the test fails (the record holds only the pitch); with it, all 77 in the file pass. I did not separately print what `firstOutsideRange` returns without the repair, since the test stops at the record assertion first; Fable's measurement of A4 on the tip stands as stated.
+
+**Gate 4: `6853 passed | 5 skipped (6858)`**, 367 files, Linux: round 2's 6852 plus the one new test. The five skips are the same five as in round 2 (four `burg.test.ts` tests without scipy, one HEIC test without `ILYA_HEIC_REAL`). Type check: 0 errors, 12 warnings.
+
+**Guess.** The repair keys on "read rest and record holds a pitch", as Fable recommended, so a read rest with a pitch record and no round trip (a pitch written some other way) also keeps its `type: 'rest'`; that is harmless, since it is what the parent's round trip left.

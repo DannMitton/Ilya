@@ -466,7 +466,12 @@ export function settleAgainstRead(
 	if (!c || !read || c.entered) return map;
 	const mine = (f: SettleField): boolean => fields === undefined || fields.includes(f);
 	const next: NoteCorrection = { ...c };
-	if (mine('type') && next.type === read.type) delete next.type;
+	/* A read rest whose record holds a pitch KEEPS `type: 'rest'`. The pitch is
+	   her nudge, kept on purpose, and only `type` makes `applyCorrections` drop
+	   a rest's pitch (`c.type === 'rest'`); without it the drawn rest carries the
+	   pitch and the readers with no type test (INSIGHTS, `firstOutsideRange`)
+	   name a rest as a note outside her range. */
+	if (mine('type') && next.type === read.type && !(read.type === 'rest' && next.pitch !== undefined)) delete next.type;
 	if (mine('pitch') && next.pitch !== undefined && !Object.values(map).some((m) => m.keySignature !== undefined)) {
 		const same =
 			read.pitch !== undefined &&
