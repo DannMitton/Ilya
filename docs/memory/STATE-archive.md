@@ -1604,3 +1604,8 @@ The close of the 2026-11-21 evening desk and the close of the 2026-11-20/21 desk
 
 **WHAT DANN IS OWED, and none of it is work at a keyboard:** his ruling on the model (r9 step 2); the list of what is likely to change about Ilya (r9 step 3, briefly his); the taste question on the reference ceiling; and the merge for `cloud-lane-85`.
 
+## Moved from STATE.md 2026-11-24 afternoon (both merged in `5594904b` and `39b2096b`), verbatim
+
+**LANE 87 IS BUILT, REVIEWED, AND READY TO MERGE AS A FAST-FORWARD.** `cloud-lane-87` at `a2642dde`, three items, one commit each: the VOIX comment (`07fc9c0b`), the two ratified GUIDE resonance paragraphs seated as bold run-in paragraphs with six pins (`21f8b319`), and Dann's ratified DRAWER-to-VOICE change of 2026-11-20 (`594de275`). **Fable as built: MERGE, no blockers** (`../sessions/review-fable-lane87-as-built_r1_2026-11-24.md`, ~110k tokens). **Expect gate 4 at `6810 passed | 1 skipped (6811)`**: six tests added, four that skip in Linux and run on the Mac. Arithmetic, not a measurement.
+
+**LANE 86 IS COMPLETE, READ AS BUILT, AND MERGED IN `5594904b`.** Four commits; the last, at 02:27, carries family 10, family 9's recapture with the symlink followed, the top-level manifest, and the whole report. **Fable's as-built read: `../sessions/review-fable-lane86-as-built_r1_2026-11-24.md`** (~175k tokens). **Dann's merge is the one thing owed on it.**

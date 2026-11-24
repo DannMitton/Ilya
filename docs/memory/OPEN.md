@@ -4659,3 +4659,23 @@ He struck: "a decision about the work, not about a page: it is true whether or n
 **THE TENSION THE RULING EXPOSES, put to him 2026-11-24 00:3x.** By this principle the crossing squircle's dash is arguably correct usage rather than a mistake: a stand-in resonance is precisely a value the singer has not verified with her own voice, and the remedy is the same, which is to sing it. So the choice is which of two things changes, the sentence or the drawing. The desk's recommendation is on record with the question.
 
 **What it governs going forward:** no future mark takes a dashed squircle for any idea other than "you need to verify this".
+
+---
+
+## OPEN FOR DANN: THE COUNT GATE'S REACH OVER A WHOLE SONG (2026-11-24, found by Fable inside lane 88)
+
+**The gate is his own, option 1, named in the comment at `apps/web/src/lib/score/slur-seat.ts:55-61`:** `observedTargets` takes today's syllable targets, finds the slur continuations among them, and treats every continuation as a melisma only where the poem's slot count equals targets minus continuations. **It is taken once, over the whole song** (`:63-66`). When the count does not match, no slur in the file counts as melisma evidence.
+
+**Before lane 88, a failed gate cost nothing visible:** the seating fell back to today's targets. **After lane 88 it costs vowels.** The ratified rule is that a surplus note is a melisma only where the print says so, and that anything left over is damage recorded to Corrections. So a file whose gate fails now hands every slurred melisma to Corrections as unexplained, and `vowel-resolver.ts:653-656` blanks the vowel and the IPA on each. Fable measured `n188-markings`: 4 notes lost, two of them slur ends.
+
+**What a singer meets.** One phrasing slur anywhere in a song, over syllables that are not a melisma at all, makes the count fail, and then every genuine slurred melisma in that song comes up blank. The engraver's legato marking costs her the notes the slur was never about.
+
+**Three readings, none of them the desk's to choose.**
+
+1. **Keep the gate whole, as ruled.** One count, one answer for the song. Cost: the all-or-nothing loss above. Honest in that Ilya never guesses, but the blank reaches notes the print does describe.
+2. **Take the gate slur by slur.** A slur whose continuations carry no text of their own is melisma evidence for its own notes, and a slur that fails says nothing about any other. Cost: a phrasing slur drawn over textless notes would be read as a melisma, which is the invention the rule forbids, so this trades a wide blank for a narrow guess.
+3. **Keep the gate whole and soften what a failure means.** The notes stay seated as today, and the file carries one record saying the slurs could not be trusted, so Corrections shows the singer one thing to check rather than many blanks. Cost: the page then shows a seating Ilya cannot defend note by note, which is what the rule was written against.
+
+**The desk's recommendation: 3**, because it keeps his gate, keeps Ilya from inventing a melisma, and still tells the singer the truth in one place instead of emptying her line. **NOT ESTABLISHED: how many of the tracked fixtures fail the gate.** That count is one probe and it should be measured before he rules.
+
+**Neither round-2 brief touches the gate.** Lane 88 round 2 is told to leave its shape alone; its fix 4 (taking extender-held notes off before the gate) is a correction inside the existing formula, not a change to it.
