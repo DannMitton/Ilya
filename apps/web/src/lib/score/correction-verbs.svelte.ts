@@ -352,11 +352,13 @@ export class CorrectionVerbs {
 		// Move the selection off the note before removing it, so the singer is
 		// left somewhere rather than nowhere. Forward first, then back, because
 		// a run of false positives is usually deleted left to right.
-		// A grace note is not in the read; its neighbour is found in the line with the grace notes in it.
-		const readLine = this.selectedIsGrace ? this.#d.line() : this.#d.readLine();
+		// The neighbour is found in the line as drawn, for every entry: a grace
+		// note and a note the singer entered are not in the read, and the stops
+		// the arrow keys walk are the drawn line's.
+		const drawn = this.#d.line();
 		const next =
-			neighbourId(readLine, this.#d.corrections(), id, 1) ??
-			neighbourId(readLine, this.#d.corrections(), id, -1);
+			neighbourId(drawn, this.#d.corrections(), id, 1) ??
+			neighbourId(drawn, this.#d.corrections(), id, -1);
 		this.#d.pushUndo({ kind: 'text', key: 'loupe.undo.deleted' });
 		this.#d.setCorrections(withCorrection(this.#d.corrections(), id, { deleted: true }));
 		this.#d.selectEntry(next);
