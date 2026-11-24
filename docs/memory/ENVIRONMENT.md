@@ -5652,7 +5652,12 @@ Add to that table. All Fable 5.2, harness counts:
 
 - Fable review of one Code brief read from the tree through the bridge: **180,962** (lane 71 r1, cap 260k, 21 tool uses, 6.1 min).
 - Fable DELTA review of a brief revision carrying new material: **196,090** (lane 71 r2, cap 200k, 15 tool uses, 6.8 min); **164,319** (lane 71 r3, cap 200k, 15 tool uses, 4.7 min).
+- **Fable judgement read of one audit unit, all source read whole, THIRD AND FOURTH ACTUALS:** unit f, 55 files and 10,644 lines of `score/`, **419,827 tokens, 42 tool uses, 16.3 min** (cap 650k), 42 findings, no blockers. The read reported about 30,000 of it wasted on one mis-built `grep`. **The quoted range of 3.3 to 4 times the unit's source tokens held.**
 - **Fable judgement read of one audit unit, all source read whole, NEW KIND:** unit a, 23 files and about 72k tokens of source, **300,258** (cap 400k, 28 tool uses, 10.7 min); unit b, 27 files and about 112k tokens of source, **367,358** (cap 600k, 42 tool uses, 12.4 min). **Range to quote: about 4 times the unit's source-token figure for a small unit, falling to about 3.3 times at 112k.** Both reads were complete, every file read whole.
+
+### VITEST CANNOT RUN IN THE BRIDGE VM FOR THIS REPOSITORY. Learned by unit f's read, 2026-11-24
+
+The bridge VM is Linux aarch64 and the mounted `node_modules` holds darwin builds only, so vitest cannot start there. **A unit read therefore cannot settle a behaviour claim by running the suite**, and every behaviour finding it files is read, not ran. Each such finding must name the one test that would settle it, and the settling happens on Dann's Mac or in a cloud lane with its own install. This does not contradict the entry below: a read can still run a small piece of source with `node --experimental-strip-types`, which needs no installed packages.
 
 ### A FABLE UNIT READ RUNS CODE WHEN READING CANNOT SETTLE A CLAIM
 

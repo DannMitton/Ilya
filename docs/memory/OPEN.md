@@ -4220,6 +4220,38 @@ Built by lane 74, item 4 (`../sessions/brief-code-lane74-voice-type-followup_r2_
 
 **THE EIGHT TO SHIP, RULED 21:16** (*"Eight with Constructivism."*): Manuscript, Night View, Clarion, Atelier, Lectern, Mir iskusstva, Russian Ballet, Constructivism. Urtext and Phosphor are cut.
 
+## QUEUE ROW 51 IS FINISHED, NOT DELETED. Ruled by Dann 2026-11-24 02:35
+
+**His words, transcribed as written:** *"Yes, let's finish it as you recommend"*, on the desk's two defensible ends: finish the bars-to-confirm work, or remove its three modules and its stored field together. **The indefensible middle, which is where it stands today, is a song record that carries `barAnswers` while nothing ever writes it.**
+
+**What is already built:** slices 1, 2, and 3 as pure modules with tests (`score/bars-to-confirm.ts` 138 lines, `score/offers-for-a-bar.ts` 218, `score/bar-answers.ts` 174), and the storage wired through `library/library.ts:81-82`, `:115`, `:169` and `library/document.svelte.ts:142-146`, `:341`, `:482`. **What is missing is the asking**, which is slice 6 of `../sessions/plan-corrections-build_r1_2026-10-08.md`.
+
+**THE SIZE OF IT, FOUND AFTER HIS RULING AND REPORTED TO HIM THE SAME MINUTE.** The desk recommended it as one lane. It is two slices: slice 6 depends on slice 5, the rail and the fixed panel, and the panel in the tree carries four stations where the design carries six (`CorrectionSurface.svelte:3-4`). **DESK DEFAULT on the sequence, his to overrule: slice 5 rides with the audit's tier 3 split of `CorrectionSurface.svelte`, which sits exactly on its ratchet ceiling at 1,227 lines, and slice 6 follows it.** Building a six-station rail into a file that is full and about to be split means building it twice.
+
+**Its strings are ratified and unbuilt:** `../sessions/draft-corrections-wording_r1_2026-10-08.md` (English) and `draft-corrections-french_r1_2026-10-08.md` (French, ratified 2026-10-08 22:31 and 22:34), with `draft-corrections-remaining-labels_r1_2026-10-08.md` ratified 22:40. None is an i18n key today.
+
+## MONOCHROME: A NINTH SKIN, BOARD BUILT 2026-11-24. Asked for by Dann 01:26; the taste question is his and is not yet ruled
+
+**His words, transcribed as written:** *"Yes for Skins I'm excited to develop MONOCHROME and would love to see a board for it."*
+
+**The board:** https://claude.ai/artifact/GHwEqn9eQT7QyaGrG3wkjz (four artboards: the drawer, the page, the table, where it strains).
+
+**What it is.** One warm neutral hue throughout, the five families told apart by value alone. The names do not change, only how each one looks, as his rule of 2026-11-21 requires. Family to idea is unchanged and was read from `apps/web/src/app.css:32-41`.
+
+**The values, computed by the desk 2026-11-24 01:4x, not estimated.** Heads `#E5DFD6`, `#CAC5BD`, `#B0ACA5`, `#96928C`, `#7C7974`; inks `#5C5A56`, `#4B4946`, `#393835`, `#222120`, `#000000`. **Head on ink: 5.20, 5.23, 5.19, 5.20, 4.84, every one inside the ruled 4.8 to 5.7**, and no label is white on a solid bar. White on jewel runs 6.96 to 13.14, so buttons keep white text. The full six-step table for all five families is on the board's third artboard.
+
+**THE ONE CONSTRAINT MONOCHROME CANNOT MEET, and it is the taste question.** Neighbouring bands separate by only 1.30, 1.32, 1.37, and 1.40 to 1. **The spread cannot widen:** one step darker and the fifth band needs a pale label on a solid bar, which the 2026-10-30 recipe forbids. So monochrome either accepts that bands are told apart by order and words, or carries a second signal that is not colour. **Three options are drawn on the fourth artboard; the desk recommends the second (a rule under each band, differing in weight), because it survives a greyscale print and a colour-blind eye.** Dann's to rule.
+
+**ITS PURPOSE, Dann 2026-11-24 01:44, transcribed as written:** *"One of the goals of MONOCHROME is to offer colourblind users an option"*. **This makes the second non-colour signal compulsory, not an option**, so the board draws it in: each band carries a rule of its own weight (solid, double, dotted, dashed, thick). The desk had offered three answers and he settled it by naming the purpose.
+
+**THE FIRST DRAFT WAS A LEGIBILITY REGRESSION AND IS REPLACED.** It carried the whole value spread in the group fills as well as the bands, which put the words of the last group at 5.56 against their fill. **The revision keeps every group fill light** (`#F4EEE4` to `#D4CFC6`), so the words inside all five groups read dark on light at 14.70, 13.68, 12.69, 11.76, and 10.94, and the spread lives in the bands alone.
+
+**HIS SECOND QUESTION, on contrast, ANSWERED WITH THE NUMBERS:** monochrome is NOT a higher-contrast skin on the page. The words sit at 14.79 against today's 15.13, which is the same reading surface. Only the drawer's bands run darker. **Ilya already carries Clarion as the high-contrast skin**, and maximum contrast is not automatically more legible.
+
+**THE TYPEFACES, DESK DEFAULT on his question of 01:42** (*"Would different typefaces help? Maybe Google fonts that are widely available and whoe licenses agree with ours?"*): **chrome in IBM Plex Mono, the page unchanged in Source Serif 4.** Both OFL, so both self-host as Ilya's fonts already do and nothing is fetched at run time (N.197). Coverage from the skins research of 2026-11-21, which read each font file's character map: Plex Mono carries Cyrillic 66 of 66 and the combining acute, and **1 IPA symbol in 96, so it never touches a transcription.** Alternatives named on the board: PT Mono for plainer, or figures alone in mono for warmer. His occasion was four reference images of instrument panels and early system interfaces (Jetson Power GUI, Unity's inspector, pixel icon sheet, a Xerox Star revival).
+
+**Not yet ruled either: whether MONOCHROME joins the eight of 2026-11-21 21:16 or displaces one.**
+
 ## THE DRAWER IS THE HARDEST TEST A SKIN FACES. Desk finding, 2026-11-21 21:1x, read from the tree on `ac4bc6d8`
 
 Dann asked the desk to read the Drawer before specifying skins. What it found, from `components/Drawer/Drawer.svelte`:

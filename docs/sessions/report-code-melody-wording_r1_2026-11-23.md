@@ -18,7 +18,7 @@ Command: recursive grep over `apps`, `packages`, and `tests`, excluding `node_mo
 | `apps/web/src/lib/i18n.ts:2622` | a comment quoting an old string, "from your voice type", about the `capture.hint.placed` keys | **no**, a different phrase, left alone |
 | `apps/web/e2e/insights-no-score.test.ts:38` | the INSIGHTS method line, "computes from your voice" | **no**, a different string on a different page, left alone |
 
-### « d’après » (typographic or straight apostrophe, or the `’` escape): 16 lines
+### « d’après » (typographic or straight apostrophe, or the `\u2019` escape): 16 lines
 
 | file:line | in the brief's scope |
 |---|---|
@@ -90,7 +90,7 @@ The `FR` constant, the same sentence as `GuideContent.svelte:93`: `tractus` to `
 
 ## 4. Where the brief and the tree disagree, and what I decided
 
-**The `:80` apostrophe.** Section 2a says the file writes the apostrophe as an escape ("exactly as the line is written today") and then prints the target line with a literal `’`. The tree today is `d’après`, an escape. I followed the stated rule and the file's existing practice: `'= la même, mais à partir d’une valeur par défaut'`. The rendered string is identical either way (U+2019), and `legend.test.ts:116` pins it with the literal character, so the test would catch a straight apostrophe. If Dann wants the literal character in `legend.ts`, it is a one-character change.
+**The `:80` apostrophe.** Section 2a says the file writes the apostrophe as an escape ("exactly as the line is written today") and then prints the target line with a literal `’`. The tree today is `d\u2019après`, an escape. I followed the stated rule and the file's existing practice: `'= la même, mais à partir d\u2019une valeur par défaut'`. The rendered string is identical either way (U+2019), and `legend.test.ts:116` pins it with the literal character, so the test would catch a straight apostrophe. If Dann wants the literal character in `legend.ts`, it is a one-character change.
 
 ## 5. Gates
 
@@ -117,7 +117,7 @@ No number Ilya computes changed. `CONTRACT.md` section 4 does not apply. I found
 
 ## 7. NOT ESTABLISHED, and what the sweep did establish
 
-- **Forms the section 3 greps would miss.** I also searched the whole repository outside `docs/` for the English fragments `where this vowel turns` and `from a placeholder value`, the French `la même, d`, `d’après votre voix`, `d’après une valeur par défaut`, and `change de timbre, d`, and for `tractus`, the `’` escape, and the HTML entities `&rsquo;` and `&#8217;` beside « d'apr ». Every hit is a line already listed above. I found none outside `legend.ts`, `legend.test.ts`, and the `GuideContent.svelte` and `ratified-lines.test.ts` sites. That rules out the forms I searched for. It does not rule out a string assembled from fragments at run time, which a grep cannot see.
+- **Forms the section 3 greps would miss.** I also searched the whole repository outside `docs/` for the English fragments `where this vowel turns` and `from a placeholder value`, the French `la même, d`, `d’après votre voix`, `d’après une valeur par défaut`, and `change de timbre, d`, and for `tractus`, the `\u2019` escape, and the HTML entities `&rsquo;` and `&#8217;` beside « d'apr ». Every hit is a line already listed above. I found none outside `legend.ts`, `legend.test.ts`, and the `GuideContent.svelte` and `ratified-lines.test.ts` sites. That rules out the forms I searched for. It does not rule out a string assembled from fragments at run time, which a grep cannot see.
 - **Snapshots, fixtures, generated artefacts.** No `*.snap`, `__snapshots__`, or `*.golden*` file exists under `apps`, `packages`, or `tests`. I did not inspect build output (`.svelte-kit`, `build`, `dist`), and none exists in this fresh clone. A generated artefact in the maintainer's own tree is NOT ESTABLISHED.
 - **`tractus` beyond the three sites.** None in `apps`, `packages`, or `tests`. It does appear in 12 files under `docs/`: `docs/memory/` (`QUEUE.md`, `STATE.md`, `DANN.md`, `OPEN.md`, `STATE-archive.md`) and `docs/sessions/` (the brief's r2, r3, and r4, `draft-french-guide-resonance_r1_2026-11-22.md`, `ratified-voice-type-stand-ins_2026-11-19.md`, `memo-open-work-decisions_r1_2026-10-14.md`, `draft-sing-first-cue_r1_2026-09-30.md`). I checked file names only and did not read those hits, and I did not edit any of them: they are outside the brief's lane and the brief forbids writing under `docs/memory/`. Whether any is a stray in a document that should say « conduit » is NOT ESTABLISHED.
 - **The two rulings (12:45 and 14:52) and the « conduit vocal » ruling** are taken from the brief's own account. I did not read `docs/memory/INBOX.md`, `OPEN.md`, or `CONTRACT.md` to confirm them.
