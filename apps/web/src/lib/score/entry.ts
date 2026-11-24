@@ -403,6 +403,32 @@ export function applyTuplet(
 }
 
 /**
+ * Take the tuplet row's own write off the entries of its last run, back to what
+ * `to` held for them: `base`, `dots`, and `tuplet` only, so a pitch or a tie the
+ * singer set on a member since stays. A record left saying nothing is removed.
+ * Used when the row retakes its base for the SAME entry, so a smaller count does
+ * not leave the old run's last member holding the old count.
+ */
+export function unapplyTuplet(map: CorrectionMap, ids: readonly string[], to: CorrectionMap): CorrectionMap {
+	const next = { ...map };
+	for (const id of ids) {
+		const c = next[id];
+		if (!c || c.entered) continue;
+		const was = to[id];
+		const { base: _b, dots: _d, tuplet: _t, ...rest } = c;
+		const back: NoteCorrection = {
+			...rest,
+			...(was?.base !== undefined ? { base: was.base } : {}),
+			...(was?.dots !== undefined ? { dots: was.dots } : {}),
+			...(was?.tuplet !== undefined ? { tuplet: was.tuplet } : {}),
+		};
+		if (Object.values(back).some((v) => v !== undefined)) next[id] = back;
+		else delete next[id];
+	}
+	return next;
+}
+
+/**
  * What a measure holds against what its time signature asks for, or null when
  * the two agree.
  *

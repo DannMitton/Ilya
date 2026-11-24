@@ -199,4 +199,35 @@ describe('TupletRow', () => {
 		h.row.apply({ ...DEFAULT_TUPLET, actualNotes: 2 });
 		expect(h.pushed).toHaveLength(1);
 	});
+
+	it('a second entry with nothing between still keeps the first tuplet (the base is keyed to the entry)', () => {
+		const h = harness({ line: LINE2, selected: 'a' });
+		h.row.openRow();
+		h.row.apply(DEFAULT_TUPLET);
+		h.select('d');
+		h.row.apply(DEFAULT_TUPLET);
+		expect(Object.keys(h.corrections).sort()).toEqual(['a', 'b', 'c', 'd', 'e', 'f']);
+		expect(h.pushed).toHaveLength(2);
+	});
+
+	it('a count made smaller after a correction elsewhere leaves no stranded member', () => {
+		const h = harness({ line: LINE2, selected: 'a' });
+		h.row.openRow();
+		h.row.apply(DEFAULT_TUPLET);
+		h.edit('f', { base: 'half' });
+		h.row.apply({ ...DEFAULT_TUPLET, actualNotes: 2 });
+		expect(h.corrections.a).toMatchObject({ tuplet: { actualNotes: 2 } });
+		expect(h.corrections.b).toMatchObject({ tuplet: { actualNotes: 2 } });
+		expect(h.corrections.c).toBeUndefined();
+		expect(h.corrections.f).toEqual({ base: 'half' });
+	});
+
+	it('taking the old run back keeps a pitch she set on a member since', () => {
+		const h = harness({ line: LINE2, selected: 'a' });
+		h.row.openRow();
+		h.row.apply(DEFAULT_TUPLET);
+		h.edit('c', { ...h.corrections.c, pitch: { step: 'A', octave: 3, alter: 0 } });
+		h.row.apply({ ...DEFAULT_TUPLET, actualNotes: 2 });
+		expect(h.corrections.c).toEqual({ pitch: { step: 'A', octave: 3, alter: 0 } });
+	});
 });

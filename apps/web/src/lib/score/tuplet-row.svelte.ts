@@ -24,7 +24,7 @@
  */
 import type { VocalLineEvent } from '@ilya/score-parser';
 import type { CorrectionMap } from './correction';
-import { applyTuplet, DEFAULT_TUPLET, tupletRun, type TupletDefinition } from './entry';
+import { applyTuplet, DEFAULT_TUPLET, tupletRun, unapplyTuplet, type TupletDefinition } from './entry';
 import type { UndoNote } from './undo-history.svelte';
 
 export interface TupletRowDeps {
@@ -47,6 +47,8 @@ export class TupletRow {
 	#baseId: string | null = null;
 	/** The map as the page held it right after the row last wrote. */
 	#written: CorrectionMap | null = null;
+	/** The ids the row's last write put a tuplet on. */
+	#run: string[] = [];
 	readonly #deps: TupletRowDeps;
 
 	constructor(deps: TupletRowDeps) {
@@ -75,6 +77,7 @@ export class TupletRow {
 		this.#base = null;
 		this.#baseId = null;
 		this.#written = null;
+		this.#run = [];
 	}
 
 	apply = (next: TupletDefinition): void => {
@@ -88,7 +91,11 @@ export class TupletRow {
 		   wrote (the singer corrected something between, or undid). Otherwise
 		   a re-apply would put back a map older than her work. */
 		if (this.#base === null || this.#baseId !== id || this.#deps.corrections() !== this.#written) {
-			this.#base = this.#deps.corrections();
+			/* For the SAME entry, the map now holds the row's own last write, and
+			   applying again only overlays: a smaller count would leave the old
+			   run's last member on the old count. Take that write back first. */
+			const again = this.#base !== null && this.#baseId === id;
+			this.#base = again ? unapplyTuplet(this.#deps.corrections(), this.#run, this.#base!) : this.#deps.corrections();
 			this.#baseId = id;
 			this.#deps.pushUndo({ kind: 'text', key: 'loupe.undo.tuplet' });
 		}
@@ -96,5 +103,6 @@ export class TupletRow {
 		/* Read back, not kept from `next`: the page's store may hand back a
 		   proxy of what it was given, and identity is what is compared. */
 		this.#written = this.#deps.corrections();
+		this.#run = tupletRun(line, id, next.actualNotes).map((e) => e.id);
 	};
 }
