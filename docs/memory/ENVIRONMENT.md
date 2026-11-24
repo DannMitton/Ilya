@@ -147,6 +147,7 @@ next session the same hour it cost the last one.
 | starting a cloud session by typing into claude.ai/code | `STARTING A CLOUD SESSION, 2026-10-14` |
 | you need a cloud branch's report and gh says access is not enabled | `READING A CLOUD BRANCH WITHOUT GH` |
 | driving the Code tab on the Mac, typing a long cloud prompt, or the cloud workspace restarted | `THE CLAUDE APP CANNOT BE DRIVEN` |
+| starting a cloud lane yourself: branch control, prompt, Send | `THE CLAUDE APP CANNOT BE DRIVEN` (the superseded-Send bullet under it) |
 | writing a brief for Code | `A BRIEF THAT CARRIES A CAUSE COSTS A PASS` |
 | a float Tesseract model aborts in the browser (DotProductSSE) | `A FLOAT MODEL LOADS WHEN corePath NAMES THE SIMD CORE FILE` |
 | running N.135's underlay harness without the Mac | `THE UNDERLAY HARNESS RUNS IN THE DESK'S WORKSPACE` |
@@ -5444,6 +5445,7 @@ The page is https://dannmitton.com/ilya, built in GoDaddy Website Builder (Urban
 
 ## LEARNED BY THE 2026-11-16 AFTERNOON DESK (Opus 5.5, 12:05 to 14:1x)
 - **Chrome's safety check refuses the desk's press of Send in a Code session** ("Unsanctioned Communication", 12:5x). Typing into the box works; Dann presses the arrow. Say so in the same message that names the tab.
+- **SUPERSEDED 2026-11-23 20:5x: the desk pressed Send itself and the session started.** Through Claude in Chrome, on `https://claude.ai/code`: open the branch control at the foot of the task box, type the branch name to filter, click it, confirm the line above the box reads "Claude will push directly to \<branch\>", type the prompt, and click the button the accessibility tree names `Send`. The lane `cloud-lane-85` started this way as session `session_01Vk7wM4VyTN2SRUsT7P2avW`. The 2026-11-16 refusal did not recur. **Do not go back to handing Dann the arrow without trying Send first.**
 - **A finished lane's page looks idle.** At 13:41 the desk told Dann two lanes were working when both had pushed and stopped 20 minutes earlier. Before any sentence about a lane's state, `git ls-remote` or `fetch` and read its tip time.
 - **A clean merge with the key-count conflict, shipped in one paste:** the resolver `~/Downloads/_desk-2026-11-16/resolve-lane59-count.sh` refuses unless the conflict is the measured one and the result's md5 is the desk's; Dann's merge printed "matches the desk's" (14:0x).
 - **Estimates, actuals:** Fable as built of lane 59 265,618 (cap 400k); Fable as built of lane 56 follow-up 198,204 (cap 300k); Fable review of a plan 168,989 (cap 250k); Sonnet phase 0 map of the whole code, by script, 250,641 (cap 300k, 10 min); the desk's eight gates on a merge in its workspace about 9 minutes, gate 4 most of it.

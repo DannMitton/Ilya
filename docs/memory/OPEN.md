@@ -4527,3 +4527,59 @@ Transcribed as written, 2026-11-22 22:47: *"We decided conduit not tractus"*. **
 **NOT ESTABLISHED, and it is why this is a default rather than a finding.** How often a singer meets a dashed crossing at all. One page with one voice showed none; `CONTRACT.md` section 5 holds that an edge case reaches Dann only with a count showing it is common, and the desk has no such count. If he wants the dash kept, the sentence goes back to "hollow or dashed" and nothing else changes.
 
 **The record gap behind all of this.** Dann's words of 2026-11-22 12:48 were never transcribed. `INBOX.md` has no entry for that time; the only records are the desk's paraphrase in `STATE-archive.md` and `QUEUE.md`. His 12:45 and 14:52 rulings are in `INBOX.md` but had no home here until now, so `CONTRACT.md` section 1 item 6a's test, grep `OPEN.md` before asking him, would have found none of the three. This section is their home.
+
+## WHAT ILYA DOES FOR A SINGER: THE MODEL. Drafted by the desk 2026-11-23 21:0x from Dann's own words, corrected by him 21:18 and 21:22. N.204 step 2
+
+**What this is for.** It is the high-level model the code is compared against at r7's step 5 (`../sessions/plan-code-audit-maintainability_r7_2026-11-23.md`). Every one of the 552 source files lands in one of these boxes or lands nowhere, and where the code disagrees with Dann's own description of Ilya, that is the finding. **Its own test: if a real part of Ilya has no box, the model is wrong, not the code.**
+
+**Drafted on his instruction of 2026-11-23 21:07**, transcribed as written: *"My words already animate this entire app. We have en ough information in our Project files and in LEARN and GUIDE to answer this question. please draft an answer"*. **Awaiting his ruling. Nothing else is owed on it.**
+
+### The purpose, his, from the Builder's Note in the GUIDE
+
+> **Ilya is about eliminating barriers to Cyrillic literacy, and barriers to accessing quality scholarly tools.**
+
+And under it, Grayson's sentence that Dann borrows to close the Note: to help singers have the confidence to explore the canon of great Russian vocal literature. **Every box is tested against that line, and it is what makes a box wrong when a box is wrong.**
+
+### The frame, his, 2026-09-21
+
+There is one work, a text joined to a music. The views are reflections of it. Neither view owns anything; both render.
+
+**Consistency is the product.** Months of applying Grayson's rules by hand gave him transcriptions he calls reasonable yet inconsistent; Ilya does a whole cycle in about three seconds. Speed is what makes the consistency affordable.
+
+### What Ilya has
+
+1. **The work.** One text joined to one music. A text and a music are separately reusable: two verses are one music with two texts, and a poem set by two composers is one text with two musics.
+2. **The text as it arrives.** Typed Russian, a photographed poem, a .musx or MXL file, or the words printed under the notes of a scanned score. *(His wording, 21:18.)*
+3. **The music as it arrives.** A file the singer drops or navigates to, or a page they photograph or scan. *(His wording, 21:18.)*
+4. **The transcription.** Russian into IPA, using Grayson's ten-vowel inventory and no others. *(His wording, 21:18.)* Grayson's introduction gives the reason the inventory is applied rather than the symbols handed over: singers were reading published transcriptions through the filter of their existing training, recognizing familiar symbols and assuming they knew how those symbols were being used.
+5. **The seating.** Which syllable sings on which note. One vowel per note, no more and no less (`CONTRACT.md` section 0.1).
+6. **The voice.** What Ilya has heard of this singer. A resonance per vowel, measured in vocal fry, or borrowed from the nearest voice it can defend and said on the page to be borrowed.
+7. **The crossing.** Where this singer's vowel turns against this music's pitches. *(Split out as its own box by the desk; the whole of INSIGHTS rests on it.)*
+8. **The notation choices.** How the song is sung: transposition, repeats, the clef, the singer's own marks.
+9. **The corrections.** Everything the singer may change.
+
+### What Ilya shows
+
+10. **TEXT** / « TEXTE ». The words, their transcription, and dictionary gloss. *(His wording, 21:18.)*
+11. **MELODY** / « CHANT ». The visual shorthand: the score carrying the singer's words and marks. It reports acoustic events that are not apparent on commercial scores. *(His wording, 21:18.)*
+12. **INSIGHTS** / « APERÇUS ». Does this piece suit my voice? It offers insights and some pedagogical approaches. *(His wording, 21:18. It governs, and it agrees with his amendments of 2026-09-23; see "INSIGHTS ADVISES WHERE A SOURCE SUPPORTS IT" in `PRODUCT.md`.)*
+13. **THE PAGE** / « LA PAGE ». What prints. **The loupe, the Transposition ruler, and the passing layers float above it and never print**; a layer prints only if Dann rules that one in by name. No control is ever on it. *(Corrected 21:22 on his challenge: the desk's first draft had collapsed appearing on screen and printing into one claim, which the loupe alone disproves.)*
+14. **CONTROLS** / « LES COMMANDES ». Where a singer acts on the work. CONTROLS manipulates; THE PAGE displays and prints. **Ruled by him 2026-11-18 at 23:41 and 23:55, one name on every device, with the article. Not built; the rename's cost is still NOT MEASURED and that measure runs after the advice-lines lane.**
+15. **GUIDE and LEARN.** Not "what Ilya says about itself". They carry the system that makes the transcription safe to use, which by Grayson's own account is what stops a singer reading familiar symbols through old training. **LEARN is load-bearing, not supporting material.**
+16. **Both languages, start to finish.**
+
+### What may depend on what
+
+- The views depend on the work and on the voice. **The work never depends on a view.**
+- The seating depends on the text and the music, and on nothing that draws.
+- The crossing depends on the seating and the voice, and on neither view that shows it.
+- CONTROLS acts on the work. **Nothing depends on CONTROLS.**
+- GUIDE and LEARN depend on nothing.
+
+### What is the desk's inside this, and his to strike
+
+The grouping into has, shows, and depends. Splitting the crossing out as box 7. Treating the seating as a thing Ilya has rather than something it does, which follows from his ruling that a setting is a decision about the work.
+
+### Five sentences struck by him 2026-11-23 21:18 as slop, four of which are his own
+
+He struck: "a decision about the work, not about a page: it is true whether or not anyone is looking at a score"; "the one place the text half and the singer half actually meet"; "a view that ignores them is not rendering the work"; "with no stopping rule"; "it forecasts and never declares". **Four came from `PRODUCT.md`, where they are his own rulings of 2026-09-21 and the tabs table; only the second was the desk's.** They are struck from this model and **they still stand in `PRODUCT.md`**, so a later desk will meet them again there. Whether they leave `PRODUCT.md` too is his.
