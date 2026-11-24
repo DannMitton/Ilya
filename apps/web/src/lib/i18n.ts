@@ -155,7 +155,7 @@ const strings: Record<string, Record<Language, string>> = {
 	//    `group.scoreMarkup` READS "Voice" / « Voix » since N.150 (2026-09-20).
 	//    The KEY stays, because `BAND_IDS.scoreMarkup` is a wire value and a
 	//    gate asserts it. It once matched `tab.markedScore`; it no longer does,
-	//    and the French « Voix » is a desk proposal awaiting Dann's ratification.
+	//    and Dann ratified the French « Voix » on 2026-11-23 at 22:10.
 	'group.piece':                 { en: 'PIECE',                        fr: 'PIÈCE' },
 	//    `group.text` IS DELETED in both languages, N.115 increment 3: the
 	//    Text fold was its last reader, and Dann ruled the fold away
