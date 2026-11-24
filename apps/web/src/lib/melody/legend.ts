@@ -62,22 +62,21 @@ const MARKUP_STEMS_COPY: Record<'up' | 'down', Record<Language, { label: string;
 };
 
 /**
- * The two turning-head entries (QUEUE row 78b). RATIFIED by Dann 2026-10-11 20:01, both languages, as the desk drafted
- * them (`OPEN.md`, "PLACEHOLDER TURNING NOTES ARE HOLLOW"); each is drawn with its head, in lavender, before the words.
- * "from your voice", not "from your sample", because a derived vowel also draws filled. The record has straight
- * apostrophes in « d'après »; built with U+2019, as « n’est » below.
+ * The two turning-head entries (QUEUE row 78b). The English was ruled by Dann 2026-11-22 12:45 and the French by Dann
+ * 2026-11-22 14:52; each is drawn with its head, in lavender, before the words. The apostrophe in « d’une » is written
+ * as a Unicode escape for U+2019; the accented letters are literal.
  */
 export const MARKUP_TURN_FILLED_TYPE = 'markup-turn-filled';
 export const MARKUP_TURN_HOLLOW_TYPE = 'markup-turn-hollow';
 
 const MARKUP_TURN_COPY: Record<'filled' | 'hollow', Record<Language, string>> = {
 	filled: {
-		en: '= the pitch where this vowel turns, from your voice',
-		fr: '= la hauteur où cette voyelle change de timbre, d\u2019après votre voix'
+		en: '= your pitch of turning for this vowel',
+		fr: '= votre hauteur de changement de timbre pour cette voyelle'
 	},
 	hollow: {
-		en: '= the same, from a placeholder value',
-		fr: '= la même, d\u2019après une valeur par défaut'
+		en: '= the same, but using a placeholder value',
+		fr: '= la même, mais à partir d\u2019une valeur par défaut'
 	}
 };
 
@@ -105,7 +104,7 @@ const MARKUP_WITHHELD_COPY: Record<Language, string> = {
  * (`turningHeads`, the stems entries' condition); the hollow one only when at
  * least one is hollow (`hollowHeads`, DESK DEFAULT). `filledHeads`, default true, is false where every head is a
  * placeholder (`AdaptedProfile.generic`, row 166, Fable's amendment 39-5): no filled head is drawn, so its entry
- * ("from your voice") is left out.
+ * ("your pitch of turning for this vowel") is left out.
  */
 export function buildMarkupLegend(
 	language: Language,

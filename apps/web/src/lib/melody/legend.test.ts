@@ -102,7 +102,7 @@ describe('the turning-head entries (QUEUE row 78b)', () => {
 		expect(buildMarkupLegend('en', { stems: false, turningHeads: false, hollowHeads: true })).toEqual([]);
 	});
 
-	it('row 166, amendment 39-5: with no filled head on the page the "from your voice" entry is left out; the default keeps it', () => {
+	it('row 166, amendment 39-5: with no filled head on the page the "your pitch of turning for this vowel" entry is left out; the default keeps it', () => {
 		const generic = buildMarkupLegend('en', { stems: true, turningHeads: true, hollowHeads: true, filledHeads: false });
 		expect(generic.filter((i) => i.head).map((i) => i.head)).toEqual(['hollow']);
 		expect(generic.map((i) => i.type)).not.toContain(MARKUP_TURN_FILLED_TYPE);
@@ -110,9 +110,9 @@ describe('the turning-head entries (QUEUE row 78b)', () => {
 		expect(buildMarkupLegend('en', { turningHeads: true, hollowHeads: true }).filter((i) => i.head).map((i) => i.head)).toEqual(['filled', 'hollow']);
 	});
 
-	it('says what Dann ratified at 20:01, in both languages, the apostrophes typographic', () => {
+	it('says what Dann ruled at 12:45 and 14:52 on 2026-11-22, in both languages, the apostrophes typographic', () => {
 		const label = (language: 'en' | 'fr') => buildMarkupLegend(language, { turningHeads: true, hollowHeads: true }).map((i) => i.label);
-		expect(label('en')).toEqual(['= the pitch where this vowel turns, from your voice', '= the same, from a placeholder value']);
-		expect(label('fr')).toEqual(['= la hauteur où cette voyelle change de timbre, d’après votre voix', '= la même, d’après une valeur par défaut']);
+		expect(label('en')).toEqual(['= your pitch of turning for this vowel', '= the same, but using a placeholder value']);
+		expect(label('fr')).toEqual(['= votre hauteur de changement de timbre pour cette voyelle', '= la même, mais à partir d’une valeur par défaut']);
 	});
 });
