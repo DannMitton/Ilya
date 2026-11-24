@@ -16,6 +16,7 @@ The index was added 2026-09-01. Nothing below it was moved, reworded, or removed
 next session the same hour it cost the last one.
 
 ### Learned 2026-11-23 (Opus desk: lane 84 merged)
+- `VERCEL BUILDS GET THE COMMIT, NOT 'unknown'` (last sections of this file): measured on the first deployment after N.211. `VERCEL_GIT_COMMIT_SHA` reaches the build, so `build-id.js`'s fallback does not fire in production.
 - `lib/markup/ BECAME lib/melody/ ON 2026-11-23` (last sections of this file): every citation of `apps/web/src/lib/markup/...` written before `70fee262` reads through to `lib/melody/...`. The records are NOT rewritten.
 
 ### Learned 2026-11-22/23, overnight (Opus desk: batch 3's brief, the N.197 sweep, the N.200 re-score)
@@ -6042,3 +6043,17 @@ Merged at `70fee262` (consistency batch 3, first slice). Twenty-four files moved
 **Those records are NOT rewritten, deliberately.** A session record says what was true on its date, and editing 231 files of history to match today's tree would falsify the record and cost a lane for no gain. This entry is the pointer that makes them readable instead. The same rule applies to the next slice.
 
 **What did NOT move, so a citation to any of these is still literal:** every file name inside the folder, `MarkupPane.svelte` included; the tab id `'markup'`; `.markup-paper-container`, `#tab-markup`, `.tab-markup`; `PUBLIC_INCLUDE_MARKUP_INSIGHTS`; the `guide-markup-*` anchors; every i18n key, `tab.markedScore` and the `markup.` prefix included; `BAND_IDS.scoreMarkup`.
+
+---
+
+## VERCEL BUILDS GET THE COMMIT, NOT 'unknown'
+
+**MEASURED 2026-11-23 14:40** by the desk through the Vercel connector, on `dpl_EavxZD2C6Tgk1Byi6TVzjrPricKP`, the first deployment after N.211 (`ac06d520`), state READY.
+
+`https://ilya-git-shane-dannmittons-projects.vercel.app/_app/version.json` returned **`{"version":"ac06d520"}`**, the first eight characters of the commit.
+
+**What this settles.** Since N.211, `apps/web/svelte.config.js` takes `kit.version.name` from `build-id.js`, which reads `VERCEL_GIT_COMMIT_SHA` first and falls back to `git rev-parse` and then to the literal `unknown`. Fable's as-built review of lane 84 flagged that a build reaching the `unknown` fallback would give every deployment one version name, so no update notice and no new service worker, which is the N.72 fault at `static/sw.js:4-9`. **The variable reaches the build, so the fallback does not fire here.** NOT ESTABLISHED before this reading; established now.
+
+**What is still true and worth holding:** a REDEPLOY of one commit, for example after changing an environment variable without a commit, produces a second deployment with the same version name. An open tab gets no update notice from it, and `sw.js` is byte-identical unless a decoder chunk name changed. Pages are network-first (`static/sw.js:124-126`), so the next navigation still gets the new build. Small, and worth knowing before toggling a production variable without a commit.
+
+**Also confirmed in the same response, independently of N.197's sweep:** the `content-security-policy-report-only` header is live and names no outside host, which is the report-only CSP recorded above.
