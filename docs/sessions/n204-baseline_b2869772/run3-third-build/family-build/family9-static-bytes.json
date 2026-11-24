@@ -1,11 +1,18 @@
 {
 	"measuredAt": "apps/web/static/ after pnpm build (the build step copies the pdf.js, ort, heif, metre and underlay files into it and fetches the five omr model files)",
-	"files": 157,
-	"bytes": 269554504,
+	"symlinksFollowed": [
+		{
+			"path": "data",
+			"target": "../../../data"
+		}
+	],
+	"files": 165,
+	"bytes": 444049813,
 	"buildDirBytes": 478881053,
 	"buildDirFiles": 218,
 	"staticBytesByTopFolder": {
-		"(files at the top)": 4587331,
+		"data": 174499405,
+		"(files at the top)": 4583235,
 		"fonts": 3940650,
 		"guide": 1268198,
 		"heif": 1507872,
