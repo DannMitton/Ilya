@@ -554,8 +554,11 @@ export function applyCorrections(
 			// The entries hung off a deleted one still stand: the singer deleted
 			// the reader's note, not their own work, and re-anchoring them keeps
 			// them in the line where they were entered. A note made a grace note
-			// (N.187) is left out the same way, and its entries stand too.
+			// (N.187) is left out the same way, and its entries stand too, and so
+			// do the entries made after the read grace notes that leaned on it.
+			for (const g of readGraces.get(ev.id)?.before ?? []) emitEntered(g.id, stubAt(ev), 0);
 			emitEntered(ev.id, ev, 0);
+			for (const g of readGraces.get(ev.id)?.after ?? []) emitEntered(g.id, ev, 0);
 			continue;
 		}
 		out.push(amend(ev, c));
