@@ -96,17 +96,24 @@ describe('N.171 the fold at arrival, on the engraved Sunless no. 1', () => {
 		expect(fused).toHaveLength(2);
 	});
 
-	// Was: the sung verse after arrival equalled the file's, text for text and word for word. Now (N.135 step 4, `CONTRACT.md` §0.1):
-	// the copy's lone «в» on a note of its own is the one change, the arrival repair `foldVowelessSyllables` makes. «в» is a proclitic,
-	// so it joins its host «бью» on the host's note, its own note has no syllable, and nothing after it moves. The `#` fold touches verse 2 only.
-	it('leaves the sung verse as the file prints it, but for the lone «в»: it joins its host and its note has no syllable', async () => {
+	// Was (N.135 step 4): the lone «в» joined its host and nothing after it moved. Now (cloud-lane-88, item 2 of the arrival seam):
+	// the fused unit takes the clitic's OWN note and the tail closes up onto the notes that held text, so the page matches the print;
+	// the last note that held text is left with no syllable, and that leftover is the count's to record (item 4). The `#` fold touches
+	// verse 2 only.
+	it('closes the tail up under the lone «в»: the fused unit takes its note, every later syllable moves one note back, the last note is empty', async () => {
 		const folded = await ingest('sunless-01-engraved.musicxml', sunless01);
 		const raw = await parseUnfolded(sunless01);
 		// Verse 1 by name: a note that loses its verse-1 text keeps verse 2 (the IPA verse), which then becomes its primary text.
 		const rawTexts = raw.vocalLine.map((e) => verseText(raw, e.id, 1));
-		const at = rawTexts.indexOf('в');
+		const held = rawTexts.flatMap((t, i) => (t === undefined ? [] : [i]));
+		const at = held.findIndex((i) => rawTexts[i] === 'в');
 		expect(at).toBeGreaterThan(0);
-		expect(folded.vocalLine.map((e) => verseText(folded, e.id, 1))).toEqual(rawTexts.map((t, i) => (i === at ? undefined : i === at + 1 ? `в\u00A0${t}` : t)));
+		const expected = rawTexts.slice();
+		held.forEach((eventIndex, j) => {
+			if (j < at) return;
+			expected[eventIndex] = j === at ? `в\u00A0${rawTexts[held[at + 1]]}` : j < held.length - 1 ? rawTexts[held[j + 1]] : undefined;
+		});
+		expect(folded.vocalLine.map((e) => verseText(folded, e.id, 1))).toEqual(expected);
 		const words = collectScoreWords(folded, 1).map((w) => w.raw);
 		expect(words).not.toContain('в');
 	});

@@ -424,9 +424,10 @@ describe('the tracked files, after arrival through the real parser', () => {
 		const score = await arrive(file);
 		return versesOf(score).flatMap((verse) => {
 			const texts = verseTexts(score, verse);
-			// This rule's breaches: no vowel, and a mark alone (`no-syllable` is counted separately, below). A note of two vowels is another rule (the backup copy has one: «кая.»).
+			// This rule's breaches: no vowel, a mark alone, and (since cloud-lane-88, item 2 of the arrival seam) a note of two vowels
+			// or more, which is this rule too. The `many-vowels` filter that stood here said "a note of two vowels is another rule" and
+			// would now hide a division the lane failed to make. `no-syllable` is counted separately, below.
 			return vowelsPerNote(texts.map((text, id) => ({ id, text })), { vowelCount: isCyrillicVerse(texts), noSyllable: false })
-				.filter((b) => b.kind !== 'many-vowels')
 				.map((b) => `${file} verse ${verse} note ${b.id} «${b.text}» ${b.kind}`);
 		});
 	};
@@ -444,15 +445,17 @@ describe('the tracked files, after arrival through the real parser', () => {
 		expect(await breachesAfterArrival(file)).toEqual([]);
 	});
 
-	it('repairs the lone «в» of the copy: it joins its host («в» is a proclitic) and its own note has no syllable', async () => {
+	it('closes the tail up under the lone «в» of the copy: «в» is a proclitic, so it joins its host on its OWN note and every later syllable moves one note back', async () => {
 		const raw = verseTexts((await musicxmlParser.parse({ format: 'musicxml', data: read(LONE_V), sourcePath: 'x.musicxml' })).score, 1);
 		const at = raw.findIndex((t) => t === 'в');
 		expect(at).toBeGreaterThan(0);
 		const after = verseTexts(await arrive(LONE_V), 1);
-		expect(after[at]).toBeNull();
-		expect(after[at + 1]).toBe(`в\u00A0${raw[at + 1]}`);
-		// Nothing after the host moved.
-		expect(after.slice(at + 2)).toEqual(raw.slice(at + 2));
+		expect(after[at]).toBe(`в\u00A0${raw[at + 1]}`);
+		// The tail closes up: each later note sings the syllable the file printed on the note after it, to the end.
+		for (let k = 1; at + k < raw.length - 1; k++) expect(after[at + k]).toBe(raw[at + k + 1]);
+		// The last note is the leftover: no syllable, and the count records it (`underlay-count.test.ts`).
+		expect(after[raw.length - 1]).toBeNull();
+		expect(after.slice(0, at)).toEqual(raw.slice(0, at));
 	});
 
 	it('repairs the hand-written fixture n188-markings: «знь» and «в» are no longer under a note of their own', async () => {
