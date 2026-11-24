@@ -4220,6 +4220,22 @@ Built by lane 74, item 4 (`../sessions/brief-code-lane74-voice-type-followup_r2_
 
 **THE EIGHT TO SHIP, RULED 21:16** (*"Eight with Constructivism."*): Manuscript, Night View, Clarion, Atelier, Lectern, Mir iskusstva, Russian Ballet, Constructivism. Urtext and Phosphor are cut.
 
+## WHAT A SYLLABLE IS, AND THE ONE TEST THAT FOLLOWS. Derived with Dann 2026-11-24 03:15 to 03:19 and ratified by him at 03:19
+
+**This is the home `README.md`'s closing step 2 requires; before it the rule lived only in `INBOX.md` and in a brief.**
+
+**His words, transcribed as written.** 03:16: *"Does «знь», three letters, include a vowel? If it included no vowel, can it be a syllable? The vowel is the syllable nucleus in sung Russian : I have said this before ."* 03:17: *"Do you think a sykllable is any combination of [space} letter {space}? It is not."* 03:18: *"There are no true polyvowel diphthongs in sung Russian, only the [vowel]+glide construct, and Russians view glides as consonants."* 03:19, on the desk's statement of the rule: *"Correct. proceed."*
+
+**THE RULE. A syllable is a vowel with the consonants attached to it, and nothing else is a syllable.** A token between spaces or hyphens in a `<lyric>` is whatever the engraver typed. **So one test decides every note: count the vowel letters in the text under it.** None is a fragment and fuses to its neighbour by direction; one is a syllable and takes its note; two or more are that many adjacent syllables, dividing between the nuclei and cascading right. **Fusing gives a note back, dividing asks for one.**
+
+**Why it needs no exceptions list:** sung Russian has no true polyvowel diphthong, so two vowel letters are always two nuclei. The one construct that could look like an exception is vowel plus glide, and the glide is a consonant. `apps/web/src/lib/score/vowel-resolver.ts:159` already excludes «й».
+
+**Then the count.** Syllables against sung notes, per verse. Equal, seat. A surplus note is a melisma only where the print marks it, by a tie, an extender, or a slur under the gate Dann ruled on 2026-10-20 03:37. **Anything left over in either direction is damage: Ilya invents no syllable and no melisma to cover it, records the place, and hands it to Corrections**, which exists to give the singer agency to repair what Ilya cannot (Dann 2026-11-24 03:05).
+
+**What this replaces.** A stack of rulings the desk had been reading as walls, which he struck at 03:15: *"Please stop positioning rulings as inviolate."* The rulings remain the record of why; they are not the reasoning.
+
+**Where it is built:** `../sessions/brief-code-arrival-seam-closes-up_r5_2026-11-24.md`, Fable-reviewed through four revisions.
+
 ## QUEUE ROW 51 IS FINISHED, NOT DELETED. Ruled by Dann 2026-11-24 02:35
 
 **His words, transcribed as written:** *"Yes, let's finish it as you recommend"*, on the desk's two defensible ends: finish the bars-to-confirm work, or remove its three modules and its stored field together. **The indefensible middle, which is where it stands today, is a song record that carries `barAnswers` while nothing ever writes it.**
