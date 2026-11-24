@@ -174,3 +174,55 @@ describe('the fifteen labels exist in both languages', () => {
 		expect(t('correct.keySharp', 'en')).toBe('1 sharp');
 	});
 });
+
+describe('a mark on a bar opener that leaves the line is carried, as the time signature is (defect 5)', () => {
+	const mark = { fifths: 2, through: 'next' as const, notes: 'follow' as const };
+	const SET = [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3];
+
+	// Characterization: these held before the repair and hold after it.
+	it('with the opener standing, the mark governs its own bar', async () => {
+		const s = await fixture();
+		expect(fifths(layer(s, { [opener(s, 4)]: { keySignature: mark } }).score!)).toEqual(SET);
+	});
+	it('deleting a note that carries no mark changes no key', async () => {
+		const s = await fixture();
+		expect(fifths(layer(s, { [opener(s, 4)]: { deleted: true } }).score!)).toEqual(fifths(s));
+	});
+	it('without the read score, a mark on an entry that left the line is not placed (the old answer, kept as the fallback)', async () => {
+		const s = await fixture();
+		const map: CorrectionMap = { [opener(s, 4)]: { deleted: true, keySignature: mark } };
+		const pre = layer(s, {}).line.filter((e) => e.id !== opener(s, 4));
+		expect(fifths(applyKeyLayer(s, pre, map).score)).toEqual(fifths(s));
+	});
+
+	// The defect: deleting the opener lost the change. Before the repair this read the reading's own keys.
+	it('a deleted opener passes its mark to the next note standing in the bar', async () => {
+		const s = await fixture();
+		const l = layer(s, { [opener(s, 4)]: { deleted: true, keySignature: mark } });
+		expect(fifths(l.score!)).toEqual(SET);
+		// The notes follow the key as they do when the opener stands.
+		expect(l.line.find((e) => e.id === 'm4-1-4')!.pitch).toMatchObject({ step: 'B', alter: 0 });
+	});
+	it('a note made a grace note passes its mark on the same way', async () => {
+		const s = await fixture();
+		const l = layer(s, { [opener(s, 4)]: { grace: { slash: true }, keySignature: mark } });
+		expect(fifths(l.score!)).toEqual(SET);
+	});
+	it('a standing note\'s own mark wins over one carried to it', async () => {
+		const s = await fixture();
+		const second = s.vocalLine.filter((e) => e.measureIndex === 4)[1].id;
+		const own = { fifths: 3, through: 'next' as const, notes: 'keep' as const };
+		const l = layer(s, { [opener(s, 4)]: { deleted: true, keySignature: mark }, [second]: { keySignature: own } });
+		expect(fifths(l.score!).slice(4, 8)).toEqual([3, 3, 3, 3]);
+	});
+	it('the card finds the carried mark, and setting a key in that bar replaces it', async () => {
+		const s = await fixture();
+		const map: CorrectionMap = { [opener(s, 4)]: { deleted: true, keySignature: mark } };
+		const line = layer(s, map).preLine;
+		const next = line.find((e) => e.measureIndex === 4)!.id;
+		expect(heldKey(s, line, map, next)).toMatchObject({ bar: 4, fifths: 2, mine: mark });
+		const replaced = setKey(s, line, map, next, { fifths: 1, through: 'next', notes: 'keep' })!;
+		expect(replaced[opener(s, 4)]?.keySignature).toBeUndefined();
+		expect(replaced[next]?.keySignature).toMatchObject({ fifths: 1 });
+	});
+});

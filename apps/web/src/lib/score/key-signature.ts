@@ -18,7 +18,7 @@
  */
 import type { GraceNote, ParsedScore, Pitch, VocalLineEvent } from '@ilya/score-parser';
 import { keySignatureAlter } from '@ilya/score-parser';
-import type { CorrectionMap, NoteCorrection } from './correction';
+import { applyCorrections, madeGrace, type CorrectionMap, type NoteCorrection } from './correction';
 import { rebar } from './rebar';
 
 export type KeyMark = NonNullable<NoteCorrection['keySignature']>;
@@ -43,12 +43,48 @@ interface Placed {
 	mark: KeyMark;
 }
 
-function marksIn(line: readonly VocalLineEvent[], map: CorrectionMap): Placed[] {
+/**
+ * The singer's key marks, each with the bar it governs.
+ *
+ * A MARK ON A DELETED NOTE, OR ON A NOTE MADE A GRACE NOTE, IS CARRIED to the next entry standing, as the time signature layer carries its own
+ * (`rebar.ts`, `effectiveMarks`): the singer deleted a note, not the bar. Both leave the line the mark was keyed to. `read` is what the walk needs
+ * to know where such an entry stood; without it a mark on an entry that has left the line is not placed, as before. A standing entry's own
+ * mark is placed after the carried ones, so it wins the bar. `id` is always the record the mark is written on, so clearing it clears the right one.
+ */
+function marksIn(line: readonly VocalLineEvent[], map: CorrectionMap, read?: ParsedScore): Placed[] {
 	const out: Placed[] = [];
+	const left = (c: NoteCorrection | undefined): boolean => !!c && (!!c.deleted || madeGrace(c));
+	const carries = !!read && Object.values(map).some((c) => c.keySignature !== undefined && left(c));
+	if (!carries) {
+		for (const [id, c] of Object.entries(map)) {
+			if (c.keySignature === undefined || c.deleted) continue;
+			const ev = line.find((e) => e.id === id);
+			if (ev) out.push({ bar: ev.measureIndex, id, mark: c.keySignature });
+		}
+		return out.sort((a, b) => a.bar - b.bar);
+	}
+	// The line with the deletions and the made-grace notes undone, so each one's place is known.
+	const kept: CorrectionMap = {};
 	for (const [id, c] of Object.entries(map)) {
-		if (c.keySignature === undefined || c.deleted) continue;
-		const ev = line.find((e) => e.id === id);
-		if (ev) out.push({ bar: ev.measureIndex, id, mark: c.keySignature });
+		if (left(c)) {
+			const { deleted: _d, grace: _g, ...rest } = c;
+			kept[id] = rest;
+		} else kept[id] = c;
+	}
+	const full = applyCorrections(read!.vocalLine, kept, read!.graceNotes);
+	const inLine = new Map(line.map((e) => [e.id, e] as const));
+	let pending: { id: string; mark: KeyMark }[] = [];
+	for (const ev of full) {
+		const c = map[ev.id];
+		if (left(c)) {
+			if (c!.keySignature !== undefined) pending.push({ id: ev.id, mark: c!.keySignature });
+			continue;
+		}
+		const here = inLine.get(ev.id);
+		if (!here) continue;
+		for (const p of pending) out.push({ bar: here.measureIndex, id: p.id, mark: p.mark });
+		pending = [];
+		if (c?.keySignature !== undefined) out.push({ bar: here.measureIndex, id: ev.id, mark: c.keySignature });
 	}
 	return out.sort((a, b) => a.bar - b.bar);
 }
@@ -71,9 +107,11 @@ export function applyKeyLayer(
 	line: VocalLineEvent[],
 	map: CorrectionMap,
 	graces?: GraceNote[],
+	/** The score as read, so a mark on a deleted or grace-made entry can be carried to the next one standing. */
+	read?: ParsedScore,
 ): { score: ParsedScore; line: VocalLineEvent[]; graces: GraceNote[] | undefined } {
 	if (!hasKeyMarks(map)) return { score, line, graces };
-	const placed = marksIn(line, map);
+	const placed = marksIn(line, map, read);
 	if (placed.length === 0) return { score, line, graces };
 	const n = score.measures.length;
 	const reading = score.measures.map((m) => m.keySignature.fifths);
@@ -139,10 +177,10 @@ export function heldKey(read: ParsedScore, line: VocalLineEvent[], map: Correcti
 	const opener = r.line.find((e) => e.measureIndex === bar);
 	const here = r.score.measures.find((m) => m.index === bar);
 	if (!opener || !here) return null;
-	const k = applyKeyLayer(r.score, r.line, map);
+	const k = applyKeyLayer(r.score, r.line, map, undefined, read);
 	const fifths = k.score.measures.find((m) => m.index === bar)?.keySignature.fifths ?? here.keySignature.fifths;
 	const before = k.score.measures.find((m) => m.index === bar - 1)?.keySignature.fifths;
-	const mine = marksIn(r.line, map).find((p) => p.bar === bar)?.mark;
+	const mine = marksIn(r.line, map, read).find((p) => p.bar === bar)?.mark;
 	return { bar, openerId: opener.id, fifths, reading: here.keySignature.fifths, ...(before !== undefined ? { before } : {}), ...(mine ? { mine } : {}), canRemove: bar > 0 && before !== undefined && before !== fifths };
 }
 
@@ -159,7 +197,7 @@ function withoutKey(map: CorrectionMap, id: string): CorrectionMap {
 function cleared(read: ParsedScore, line: VocalLineEvent[], map: CorrectionMap, bar: number, through: KeyThrough | 'bar'): CorrectionMap {
 	const r = rebar(read, line, map);
 	let next = map;
-	for (const p of marksIn(r.line, map)) if (p.bar === bar || (through === 'end' && p.bar > bar)) next = withoutKey(next, p.id);
+	for (const p of marksIn(r.line, map, read)) if (p.bar === bar || (through === 'end' && p.bar > bar)) next = withoutKey(next, p.id);
 	return next;
 }
 
