@@ -1,0 +1,380 @@
+chromium	failed	unexpected	heic-offline.test.ts:43	heic-offline.test.ts > a singer offline who never opened a HEIC can open one
+chromium	failed	unexpected	loupe-header.test.ts:47	the Loupe header > a drag on the desk moves the card, holds while open, and resets on close
+chromium	failed	unexpected	repertoire-recedes.test.ts:13	repertoire-recedes.test.ts > REPERTOIRE opens on arrival at two songs, folds on each of its three events
+chromium	passed	expected	barline-head-caret.test.ts:15	barline-head-caret.test.ts > a note entered at the head caret of a hand-made bar is the first of that bar, and the bar before is untouched
+chromium	passed	expected	barline-verb.test.ts:37	the Barline verb > Add divides the fused bar at once, Undo takes it back, Redo puts it back
+chromium	passed	expected	barline-verb.test.ts:59	the Barline verb > Remove joins two clean bars (the merged bar reads over), Undo restores, and a second press adds the barline back
+chromium	passed	expected	barline-verb.test.ts:81	the Barline verb > the next note is in the next bar after Add, and the tag counts it
+chromium	passed	expected	barline-verb.test.ts:96	the Barline verb > a barline she added is saved with the song: after a reload the reading is read again and the barline is still there
+chromium	passed	expected	borrowing-with-score.test.ts:36	borrowing-with-score.test.ts > en: a contralto with a score reads the borrowing line on MELODY and on INSIGHTS
+chromium	passed	expected	borrowing-with-score.test.ts:36	borrowing-with-score.test.ts > fr: a contralto with a score reads the borrowing line on MELODY and on INSIGHTS
+chromium	passed	expected	calibrate-new.test.ts:108	the new capture screen on the stub > the microphone is held open for the visit: open when the capture screen mounts, closed after Back, open on return, closed after See your vowel space (N.203 follow-up, fix 3)
+chromium	passed	expected	calibrate-new.test.ts:127	the new capture screen on the stub > a tap on a zone of the chart focuses that vowel and records nothing (N.203 Step 5)
+chromium	passed	expected	calibrate-new.test.ts:146	the new capture screen on the stub > a tap on the chart during a take changes nothing, and a vertical drag that starts on the chart leaves the focus alone (N.203 Step 5)
+chromium	passed	expected	calibrate-new.test.ts:171	the new capture screen on the stub > a tap focuses and never records; Start records; a tap during a take does nothing; Ilya carries on from the singer’s lead; Use what I’ve recorded shows after one vowel
+chromium	passed	expected	calibrate-new.test.ts:195	the new capture screen on the stub > Use what I’ve recorded shows from the fifth core vowel, and opens the summary with the five rows (lane 67)
+chromium	passed	expected	calibrate-new.test.ts:204	the new capture screen on the stub > a cancel in each phase ends the take, saves no reading, and records a cancel
+chromium	passed	expected	calibrate-new.test.ts:233	the new capture screen on the stub > a rolled-back re-take keeps the reading and says so; an error says what happened; both leave a record
+chromium	passed	expected	calibrate-new.test.ts:256	the new capture screen on the stub > a re-take from the summary walks its pass and returns by itself when the take is clean
+chromium	passed	expected	calibrate-new.test.ts:265	the new capture screen on the stub > a tap during the dwell at the end of a re-take pass keeps the screen: it does not return to the summary under the singer (follow-up fix 4)
+chromium	passed	expected	calibrate-new.test.ts:279	the new capture screen on the stub > the summary offers Back to the ten vowels, and it opens the capture screen on the next vowel in Ilya’s order (B3)
+chromium	passed	expected	calibrate-new.test.ts:289	the new capture screen on the stub > Start over takes two taps, then clears the readings and the take record
+chromium	passed	expected	calibrate-new.test.ts:305	the new capture screen on the stub > hidden mode replaces the chart from the tap to the reading, returns it at the capture, and marks the reading
+chromium	passed	expected	calibrate-new.test.ts:320	the new capture screen on the stub > there is no wheel, and an address still carrying the retired ?calibrate=new loads the same screen and breaks nothing
+chromium	passed	expected	calibrate-new.test.ts:328	the new capture screen on the stub > a lively room raises the room notice on the capture screen, and it can be dismissed (B2)
+chromium	passed	expected	calibrate-new.test.ts:338	the new capture screen on the stub > a soprano sees ten zones and ten placeholders, and the first-move hint
+chromium	passed	expected	calibrate-new.test.ts:350	the capture screen in the Drawer as a sheet > at 1024 px wide and 800 high: 484 px wide, centred, and the ten buttons and both actions are in view with nothing scrolled
+chromium	passed	expected	calibrate-new.test.ts:350	the capture screen in the Drawer as a sheet > at 1244 px wide and 800 high: 484 px wide, centred, and the ten buttons and both actions are in view with nothing scrolled
+chromium	passed	expected	calibrate-new.test.ts:350	the capture screen in the Drawer as a sheet > at 768 px wide and 800 high: 484 px wide, centred, and the ten buttons and both actions are in view with nothing scrolled
+chromium	passed	expected	calibrate-new.test.ts:372	the readings list > is closed by default with a summary at least 44 px tall, opens to ten rows, and never opens by itself
+chromium	passed	expected	calibrate-new.test.ts:393	the readings list > with the chart hidden, a take closes it and keeps its closed line in place, invisible and inert, so the toggle does not move; it returns at the landing, still closed
+chromium	passed	expected	calibrate-new.test.ts:436	the screen in order, in view (Step 4) > desk en, after: the Start row is in view, the order holds, and a take scrolls nothing
+chromium	passed	expected	calibrate-new.test.ts:436	the screen in order, in view (Step 4) > desk en, first visit: the Start row is in view, the order holds, and a take scrolls nothing
+chromium	passed	expected	calibrate-new.test.ts:436	the screen in order, in view (Step 4) > desk fr, after: the Start row is in view, the order holds, and a take scrolls nothing
+chromium	passed	expected	calibrate-new.test.ts:436	the screen in order, in view (Step 4) > desk fr, first visit: the Start row is in view, the order holds, and a take scrolls nothing
+chromium	passed	expected	calibrate-new.test.ts:436	the screen in order, in view (Step 4) > phone en, after: the Start row is in view, the order holds, and a take scrolls nothing
+chromium	passed	expected	calibrate-new.test.ts:436	the screen in order, in view (Step 4) > phone en, first visit: the Start row is in view, the order holds, and a take scrolls nothing
+chromium	passed	expected	calibrate-new.test.ts:436	the screen in order, in view (Step 4) > phone fr, after: the Start row is in view, the order holds, and a take scrolls nothing
+chromium	passed	expected	calibrate-new.test.ts:436	the screen in order, in view (Step 4) > phone fr, first visit: the Start row is in view, the order holds, and a take scrolls nothing
+chromium	passed	expected	calibrate-new.test.ts:472	the main and stop buttons hold one line (Step 8c.2) > en at 320 px: the main and stop buttons each on one line, at rest and during a take
+chromium	passed	expected	calibrate-new.test.ts:472	the main and stop buttons hold one line (Step 8c.2) > en at 375 px: the main and stop buttons each on one line, at rest and during a take
+chromium	passed	expected	calibrate-new.test.ts:472	the main and stop buttons hold one line (Step 8c.2) > en at 390 px: the main and stop buttons each on one line, at rest and during a take
+chromium	passed	expected	calibrate-new.test.ts:472	the main and stop buttons hold one line (Step 8c.2) > fr at 320 px: the main and stop buttons each on one line, at rest and during a take
+chromium	passed	expected	calibrate-new.test.ts:472	the main and stop buttons hold one line (Step 8c.2) > fr at 375 px: the main and stop buttons each on one line, at rest and during a take
+chromium	passed	expected	calibrate-new.test.ts:472	the main and stop buttons hold one line (Step 8c.2) > fr at 390 px: the main and stop buttons each on one line, at rest and during a take
+chromium	passed	expected	calibrate-new.test.ts:490	the main and stop buttons hold one line (Step 8c.2) > en at 375 px: Re-take [i] on one line
+chromium	passed	expected	calibrate-new.test.ts:490	the main and stop buttons hold one line (Step 8c.2) > fr at 375 px: Re-take [i] on one line
+chromium	passed	expected	calibrate-new.test.ts:50	the new capture screen on the stub > a full tour: ten captures in Ilya’s order, the hull whole, Re-take and See your vowel space, and every take kept
+chromium	passed	expected	calibrate-new.test.ts:81	the new capture screen on the stub > the chart glides to the focused vowel on every change of focus, it does not snap, and the hide box is not live during a take
+chromium	passed	expected	clef-controls.test.ts:110	the clef choice on the Paper (row 144) > the Input band row, the chip and the menu are one choice (French strings)
+chromium	passed	expected	clef-controls.test.ts:62	the clef choice on the Paper (row 144) > the chip speaks once, the clef button brings the choices back, Escape closes, and nothing prints
+chromium	passed	expected	core-loop.test.ts:121	Ilya core loop > keyboard navigation: Tab between WordStacks
+chromium	passed	expected	core-loop.test.ts:143	Ilya core loop > Enter on WordStack opens Inspector
+chromium	passed	expected	core-loop.test.ts:158	Ilya core loop > notation toggle updates switch state
+chromium	passed	expected	core-loop.test.ts:174	Ilya core loop > provenance icons are visible on transcribed words
+chromium	passed	expected	core-loop.test.ts:194	Ilya core loop > clitics show no provenance icon
+chromium	passed	expected	core-loop.test.ts:203	Ilya core loop > Inspector shows ribbon for transcribed word
+chromium	passed	expected	core-loop.test.ts:224	bilingual interface > language pill switches the app and then offers the way back
+chromium	passed	expected	core-loop.test.ts:236	bilingual interface > French empty state shows French placeholder
+chromium	passed	expected	core-loop.test.ts:251	bilingual interface > language toggle updates gloss language after transcription
+chromium	passed	expected	core-loop.test.ts:270	WYSIWYG Paper > Paper renders transcription in main content area
+chromium	passed	expected	core-loop.test.ts:280	WYSIWYG Paper > word stacks show three rows: IPA, Cyrillic, gloss
+chromium	passed	expected	core-loop.test.ts:293	WYSIWYG Paper > VERIFY treatment wraps inferred stress words
+chromium	passed	expected	core-loop.test.ts:316	clitic display > proclitic is identified with is-clitic class
+chromium	passed	expected	core-loop.test.ts:324	clitic display > clitic has reduced padding for visual connection to host
+chromium	passed	expected	core-loop.test.ts:331	clitic display > Inspector shows full IPA for clitic word
+chromium	passed	expected	core-loop.test.ts:352	open syllabification > open syllabification toggle changes IPA spacing on Paper
+chromium	passed	expected	core-loop.test.ts:41	Ilya core loop > shows empty state before transcription
+chromium	passed	expected	core-loop.test.ts:54	Ilya core loop > transcribes Russian text and shows IPA on Paper
+chromium	passed	expected	core-loop.test.ts:69	Ilya core loop > handles multi-word input across lines
+chromium	passed	expected	core-loop.test.ts:78	Ilya core loop > clicking a word opens the Inspector
+chromium	passed	expected	core-loop.test.ts:99	Ilya core loop > Clear button dismisses Word Console
+chromium	passed	expected	gloss-reuse.test.ts:35	an edited gloss keeps its language and is reused > French: the offer stands under the field, is kept, and the other form shows the French
+chromium	passed	expected	gloss-reuse.test.ts:68	an edited gloss keeps its language and is reused > "Pas maintenant" hides the offer for this word, and an unanswered offer returns on reopening
+chromium	passed	expected	gloss-reuse.test.ts:82	an edited gloss keeps its language and is reused > the edit stays in its language, and Reset clears it (walk items 6 and 8)
+chromium	passed	expected	glue-typed-marks.test.ts:20	a typed # takes the no-break form when the singer leaves Lyrics > leaving the field glues it, and typing does not
+chromium	passed	expected	glue-typed-marks.test.ts:32	a typed # takes the no-break form when the singer leaves Lyrics > tidies «я #на дом» to «я #» (no-break space) and the next word on leaving the field
+chromium	passed	expected	glue-typed-marks.test.ts:43	a typed # takes the no-break form when the singer leaves Lyrics > the tidy value stays after the blur, and the undo key does not restore the plain space
+chromium	passed	expected	grace-corrections.test.ts:33	grace notes in Corrections > a click on a grace note selects it, and the Grace note cell reads as it
+chromium	passed	expected	grace-corrections.test.ts:41	grace notes in Corrections > the pitch keys move it, one Undo step puts it back, and Delete removes it
+chromium	passed	expected	grace-corrections.test.ts:56	grace notes in Corrections > `;` turns a grace note into a full note, and back; the bar then reads over, and the grace note is gone from the page
+chromium	passed	expected	grace-corrections.test.ts:67	grace notes in Corrections > `/` adds a grace note before the taken note, selected at once; Slash toggles its stroke
+chromium	passed	expected	grace-corrections.test.ts:80	grace notes in Corrections > the arrow keys walk onto a grace note and then onto its principal
+chromium	passed	expected	grace-key-saved.test.ts:35	saved and reloaded > a key change corrected from bar 5 is still corrected after a reload
+chromium	passed	expected	grace-key-saved.test.ts:44	saved and reloaded > a grace note made a full note, and one added by hand, are still so after a reload
+chromium	passed	expected	heic-fallback.test.ts:16	heic-fallback.test.ts > a lossless HEIC page reads as the same ink as its source PNG
+chromium	passed	expected	heic-reader-path.test.ts:47	heic-reader-path.test.ts > a HEIC score photograph, (a) the lossless staff page, reaches the reader
+chromium	passed	expected	heic-reader-path.test.ts:47	heic-reader-path.test.ts > a HEIC score photograph, (c) the grey photo-like page, reaches the reader
+chromium	passed	expected	heic-reader-path.test.ts:83	heic-reader-path.test.ts > a HEIC poem with no staves reaches tesseract as a PNG
+chromium	passed	expected	insights-key-lines.test.ts:100	the key lines, desktop > no better key: the one-line answer, no key, and the keys under the reveal
+chromium	passed	expected	insights-key-lines.test.ts:100	the key lines, phone > no better key: the one-line answer, no key, and the keys under the reveal
+chromium	passed	expected	insights-key-lines.test.ts:108	the key lines, desktop > two groups: two lines, each a different move, each with its "Try this key"
+chromium	passed	expected	insights-key-lines.test.ts:108	the key lines, phone > two groups: two lines, each a different move, each with its "Try this key"
+chromium	passed	expected	insights-key-lines.test.ts:118	the key lines, desktop > a key that suits a voice with no primo axis names her secondo, not a primo
+chromium	passed	expected	insights-key-lines.test.ts:118	the key lines, phone > a key that suits a voice with no primo axis names her secondo, not a primo
+chromium	passed	expected	insights-key-lines.test.ts:125	the key lines, desktop > no workable key: the one-line answer and the teacher line, no key
+chromium	passed	expected	insights-key-lines.test.ts:125	the key lines, phone > no workable key: the one-line answer and the teacher line, no key
+chromium	passed	expected	insights-key-lines.test.ts:133	the key lines, desktop > the reveal: "Show keys that reach higher" opens on its own, and says where and how far
+chromium	passed	expected	insights-key-lines.test.ts:133	the key lines, phone > the reveal: "Show keys that reach higher" opens on its own, and says where and how far
+chromium	passed	expected	insights-key-lines.test.ts:145	the key lines, desktop > more groups than the cap: three are shown and the rest wait under the reveal
+chromium	passed	expected	insights-key-lines.test.ts:145	the key lines, phone > more groups than the cap: three are shown and the rest wait under the reveal
+chromium	passed	expected	insights-key-lines.test.ts:158	from a key line to the analysis in that key (desktop) > "Try this key" opens the ruler on MELODY; "Use this key" puts INSIGHTS in that key; cancelling leaves it as it was
+chromium	passed	expected	insights-key-lines.test.ts:89	the key lines, desktop > a key that suits: one line, no key offered under it
+chromium	passed	expected	insights-key-lines.test.ts:89	the key lines, phone > a key that suits: one line, no key offered under it
+chromium	passed	expected	insights-links.test.ts:105	L4: a link to record vowels, beside L1, where the findings rest on placeholder values > in French the link is the pane’s door: « Capter vos voyelles »
+chromium	passed	expected	insights-links.test.ts:111	L4: a link to record vowels, beside L1, where the findings rest on placeholder values > is not drawn when the singer's own profile stands, five of the six core vowels (the Method line then rests on the singer’s samples; lane 67)
+chromium	passed	expected	insights-links.test.ts:126	L6: INPUT and VOICE, in the blank page’s squircle for a piece with no score (lane 78) > the sentence reads as it always did, and INPUT opens the INPUT pane and brings its head into view
+chromium	passed	expected	insights-links.test.ts:136	L6: INPUT and VOICE, in the blank page’s squircle for a piece with no score (lane 78) > in French the word is ENTRÉE
+chromium	passed	expected	insights-links.test.ts:143	L6: INPUT and VOICE, in the blank page’s squircle for a piece with no score (lane 78) > with the takeover up on the summary it leaves the takeover and opens INPUT
+chromium	passed	expected	insights-links.test.ts:156	L6: INPUT and VOICE, in the blank page’s squircle for a piece with no score (lane 78) > over the capture screen it is dropped, and never answered later
+chromium	passed	expected	insights-links.test.ts:170	L6: INPUT and VOICE, in the blank page’s squircle for a piece with no score (lane 78) > the blank state does not print: the sheet keeps its header and footer, and the squircle is screen only (DESK DEFAULT)
+chromium	passed	expected	insights-links.test.ts:178	L6: INPUT and VOICE, in the blank page’s squircle for a piece with no score (lane 78) > with a saved voice that has no type and nothing sampled, VOICE opens the VOICE band, its head in view, and never the takeover
+chromium	passed	expected	insights-links.test.ts:33	L1: What INSIGHTS shares, and how > is drawn after the Method line; with the VOICE band closed it opens the band and the station and brings the station into view
+chromium	passed	expected	insights-links.test.ts:44	L1: What INSIGHTS shares, and how > with INPUT and VOICE already open the Drawer scrolls to the station
+chromium	passed	expected	insights-links.test.ts:55	L1: What INSIGHTS shares, and how > is not drawn with no voice saved
+chromium	passed	expected	insights-links.test.ts:63	L1: What INSIGHTS shares, and how > prints nothing of it: the link is display none in print, and the notes keep their Method line
+chromium	passed	expected	insights-links.test.ts:74	L1: What INSIGHTS shares, and how > in French the link is « Ce que partagent les APERÇUS, et comment »
+chromium	passed	expected	insights-links.test.ts:92	L4: a link to record vowels, beside L1, where the findings rest on placeholder values > with nothing recorded and a voice type it says "Record your vowels" beside L1, and opens Welcome, also when pressed again
+chromium	passed	expected	insights-no-score.test.ts:41	INSIGHTS with no score > en: a voice that rests on the singer's own samples
+chromium	passed	expected	insights-no-score.test.ts:41	INSIGHTS with no score > fr: a voice that rests on the singer's own samples
+chromium	passed	expected	insights-no-score.test.ts:50	INSIGHTS with no score > en: a voice type with generic values and nothing recorded
+chromium	passed	expected	insights-no-score.test.ts:50	INSIGHTS with no score > fr: a voice type with generic values and nothing recorded
+chromium	passed	expected	insights-no-score.test.ts:59	INSIGHTS with no score > en: a voice with nothing usable and no generic values ("Not sure") asks for both, and says no NOTES
+chromium	passed	expected	insights-no-score.test.ts:59	INSIGHTS with no score > fr: a voice with nothing usable and no generic values ("Not sure") asks for both, and says no NOTES
+chromium	passed	expected	insights-no-score.test.ts:70	INSIGHTS with no score > en: a contralto with nothing recorded reads the generic method line and the borrowing line
+chromium	passed	expected	insights-no-score.test.ts:70	INSIGHTS with no score > fr: a contralto with nothing recorded reads the generic method line and the borrowing line
+chromium	passed	expected	insights-page.test.ts:103	insights-page.test.ts > the page runs the frame, the conclusion, then the moments, the totals, and the sources, and nothing reaches a footer
+chromium	passed	expected	insights-page.test.ts:215	insights-page.test.ts > no label of the pitch chart touches another label, a bar, or a line, in either language
+chromium	passed	expected	insights-page.test.ts:76	insights-page.test.ts > the compass is a small stave in the top-right corner, in the same place in both languages and on both clefs
+chromium	passed	expected	key-change-melody.test.ts:29	key changes in MELODY > the page draws each change once, and the Loupe head shows the key in force in the held bar
+chromium	passed	expected	key-signature-card.test.ts:30	the key signature card > opens from bar 5, lists the fifteen signatures, and offers Remove on a bar that opens a change
+chromium	passed	expected	key-signature-card.test.ts:49	the key signature card > Remove this key change: bars 5 to 8 take the key before, the notes follow, one Undo step puts it all back
+chromium	passed	expected	key-signature-card.test.ts:60	the key signature card > a key chosen to the end of the song, keeping the pitches, is one Undo step
+chromium	passed	expected	key-signature-card.test.ts:73	the key signature card > Escape closes the card and changes nothing
+chromium	passed	expected	loupe-head-caret.test.ts:42	the head caret keeps the loupe on its own measure > Left from a measure’s first entry lands on its head caret and the tag does not change
+chromium	passed	expected	loupe-head-caret.test.ts:61	the head caret keeps the loupe on its own measure > a note entered at the head caret is the first of that measure, and the loupe stays
+chromium	passed	expected	loupe-header.test.ts:28	the Loupe header > names the Loupe in capitals, and Close is the page’s one way out
+chromium	passed	expected	loupe-header.test.ts:35	the Loupe header > Undo and Redo live in the header, not in the bottom bar
+chromium	passed	expected	loupe-header.test.ts:77	the Loupe header > a drag cannot take the header off the screen
+chromium	passed	expected	loupe-header.test.ts:97	the Loupe header > pressing a header button starts no drag
+chromium	passed	expected	markup-pages-lose-no-bars.test.ts:17	markup-pages-lose-no-bars.test.ts > Markup draws every bar of sunless-01-engraved.musicxml once, inside its page
+chromium	passed	expected	markup-pages-lose-no-bars.test.ts:17	markup-pages-lose-no-bars.test.ts > Markup draws every bar of tchaikovsky-op38-3-voice.musicxml once, inside its page
+chromium	passed	expected	melody-no-score-count.test.ts:30	MELODY with no score: the line that says where the voice stands > one core vowel sampled: how many of the six, and how many more Ilya needs
+chromium	passed	expected	melody-no-score-count.test.ts:37	MELODY with no score: the line that says where the voice stands > five stable core vowels sampled: the profile is set, with five vowels measured
+chromium	passed	expected	octave-line.test.ts:130	sunless-01: read higher for the range > the choice survives a reload in the same browser context
+chromium	passed	expected	octave-line.test.ts:130	tchaikovsky-op38-3: read lower for the range > the choice survives a reload in the same browser context
+chromium	passed	expected	octave-line.test.ts:146	sunless-01: read higher for the range > French, both states
+chromium	passed	expected	octave-line.test.ts:146	tchaikovsky-op38-3: read lower for the range > French, both states
+chromium	passed	expected	octave-line.test.ts:170	octave-line.test.ts > a song that fits as written shows no line at all
+chromium	passed	expected	octave-line.test.ts:95	sunless-01: read higher for the range > the line appears in both tabs, the tap flips it, and the other tab follows
+chromium	passed	expected	octave-line.test.ts:95	tchaikovsky-op38-3: read lower for the range > the line appears in both tabs, the tap flips it, and the other tab follows
+chromium	passed	expected	offline-dictionary.test.ts:13	offline-dictionary.test.ts > the stored dictionary starts when /data/ cannot be fetched
+chromium	passed	expected	one-frame.ts:148	one-frame.test.ts > a real score, en: TEXT, MELODY, and INSIGHTS share one frame on every page, and TEXT loses no line
+chromium	passed	expected	one-frame.ts:148	one-frame.test.ts > a real score, fr: TEXT, MELODY, and INSIGHTS share one frame on every page, and TEXT loses no line
+chromium	passed	expected	one-frame.ts:161	one-frame.test.ts > a text with a Latin word, en: the Richter credit sits above the divider and the divider does not move
+chromium	passed	expected	one-frame.ts:161	one-frame.test.ts > a text with a Latin word, fr: the Richter credit sits above the divider and the divider does not move
+chromium	passed	expected	one-page-frame.ts:57	one-page-frame.test.ts > voice none: the three blank pages share a left edge, a width, and a top edge, in English and in French
+chromium	passed	expected	one-page-frame.ts:57	one-page-frame.test.ts > voice samples: the three blank pages share a left edge, a width, and a top edge, in English and in French
+chromium	passed	expected	one-page-frame.ts:57	one-page-frame.test.ts > voice type only: the three blank pages share a left edge, a width, and a top edge, in English and in French
+chromium	passed	expected	pages-without-gaps.test.ts:144	pages-without-gaps.test.ts > Tchaikovsky Op. 38 no. 3, insights, en: nothing on any page reaches its footer
+chromium	passed	expected	pages-without-gaps.test.ts:144	pages-without-gaps.test.ts > Tchaikovsky Op. 38 no. 3, insights, fr: nothing on any page reaches its footer
+chromium	passed	expected	pages-without-gaps.test.ts:144	pages-without-gaps.test.ts > Tchaikovsky Op. 38 no. 3, markup, en: nothing on any page reaches its footer
+chromium	passed	expected	pages-without-gaps.test.ts:144	pages-without-gaps.test.ts > Tchaikovsky Op. 38 no. 3, markup, fr: nothing on any page reaches its footer
+chromium	passed	expected	pages-without-gaps.test.ts:144	pages-without-gaps.test.ts > Tchaikovsky Op. 38 no. 3, text, en: nothing on any page reaches its footer
+chromium	passed	expected	pages-without-gaps.test.ts:144	pages-without-gaps.test.ts > Tchaikovsky Op. 38 no. 3, text, fr: nothing on any page reaches its footer
+chromium	passed	expected	pages-without-gaps.test.ts:144	pages-without-gaps.test.ts > Without Sun, no. 1, insights, en: nothing on any page reaches its footer
+chromium	passed	expected	pages-without-gaps.test.ts:144	pages-without-gaps.test.ts > Without Sun, no. 1, insights, fr: nothing on any page reaches its footer
+chromium	passed	expected	pages-without-gaps.test.ts:144	pages-without-gaps.test.ts > Without Sun, no. 1, markup, en: nothing on any page reaches its footer
+chromium	passed	expected	pages-without-gaps.test.ts:144	pages-without-gaps.test.ts > Without Sun, no. 1, markup, fr: nothing on any page reaches its footer
+chromium	passed	expected	pages-without-gaps.test.ts:144	pages-without-gaps.test.ts > Without Sun, no. 1, text, en: nothing on any page reaches its footer
+chromium	passed	expected	pages-without-gaps.test.ts:144	pages-without-gaps.test.ts > Without Sun, no. 1, text, fr: nothing on any page reaches its footer
+chromium	passed	expected	pages-without-gaps.test.ts:199	pages-without-gaps.test.ts > 14 wrapping lines, text, en: every page ends above its footer, on screen and in print, and none is left half empty
+chromium	passed	expected	pages-without-gaps.test.ts:199	pages-without-gaps.test.ts > 14 wrapping lines, text, fr: every page ends above its footer, on screen and in print, and none is left half empty
+chromium	passed	expected	pages-without-gaps.test.ts:199	pages-without-gaps.test.ts > 36 short lines under a taller footer, text, en: every page ends above its footer, on screen and in print, and none is left half empty
+chromium	passed	expected	pages-without-gaps.test.ts:199	pages-without-gaps.test.ts > 36 short lines under a taller footer, text, fr: every page ends above its footer, on screen and in print, and none is left half empty
+chromium	passed	expected	pages-without-gaps.test.ts:199	pages-without-gaps.test.ts > 36 short lines, text, en: every page ends above its footer, on screen and in print, and none is left half empty
+chromium	passed	expected	pages-without-gaps.test.ts:199	pages-without-gaps.test.ts > 36 short lines, text, fr: every page ends above its footer, on screen and in print, and none is left half empty
+chromium	passed	expected	pages-without-gaps.test.ts:229	pages-without-gaps.test.ts > a placeholder baritone, French, song 1: MELODY then INSIGHTS reach no footer, and print as many pages as there are sheets
+chromium	passed	expected	pages-without-gaps.test.ts:91	pages-without-gaps.test.ts > Tchaikovsky Op. 38 no. 3, insights, en: no page but the last is more than 15 percent empty
+chromium	passed	expected	pages-without-gaps.test.ts:91	pages-without-gaps.test.ts > Tchaikovsky Op. 38 no. 3, insights, fr: no page but the last is more than 15 percent empty
+chromium	passed	expected	pages-without-gaps.test.ts:91	pages-without-gaps.test.ts > Tchaikovsky Op. 38 no. 3, markup, en: no page but the last is more than 15 percent empty
+chromium	passed	expected	pages-without-gaps.test.ts:91	pages-without-gaps.test.ts > Tchaikovsky Op. 38 no. 3, markup, fr: no page but the last is more than 15 percent empty
+chromium	passed	expected	pages-without-gaps.test.ts:91	pages-without-gaps.test.ts > Tchaikovsky Op. 38 no. 3, text, en: no page but the last is more than 15 percent empty
+chromium	passed	expected	pages-without-gaps.test.ts:91	pages-without-gaps.test.ts > Tchaikovsky Op. 38 no. 3, text, fr: no page but the last is more than 15 percent empty
+chromium	passed	expected	pages-without-gaps.test.ts:91	pages-without-gaps.test.ts > Without Sun, no. 1, insights, en: no page but the last is more than 15 percent empty
+chromium	passed	expected	pages-without-gaps.test.ts:91	pages-without-gaps.test.ts > Without Sun, no. 1, insights, fr: no page but the last is more than 15 percent empty
+chromium	passed	expected	pages-without-gaps.test.ts:91	pages-without-gaps.test.ts > Without Sun, no. 1, markup, en: no page but the last is more than 15 percent empty
+chromium	passed	expected	pages-without-gaps.test.ts:91	pages-without-gaps.test.ts > Without Sun, no. 1, markup, fr: no page but the last is more than 15 percent empty
+chromium	passed	expected	pages-without-gaps.test.ts:91	pages-without-gaps.test.ts > Without Sun, no. 1, text, en: no page but the last is more than 15 percent empty
+chromium	passed	expected	pages-without-gaps.test.ts:91	pages-without-gaps.test.ts > Without Sun, no. 1, text, fr: no page but the last is more than 15 percent empty
+chromium	passed	expected	poem-library.test.ts:113	walk 1 to 3: she pastes a song, sees a card, and keeps the poem > the poem is in POEM, and the Lyrics are as she pasted them
+chromium	passed	expected	poem-library.test.ts:127	walk 1 to 3: she pastes a song, sees a card, and keeps the poem > Keep this poem folds the card to one quiet line, which shows under POEM only
+chromium	passed	expected	poem-library.test.ts:145	walk 4: she taps Not this poem > Poem empties, Lyrics are as they were, and Undo restores the filled state
+chromium	passed	expected	poem-library.test.ts:169	walk 4: she taps Not this poem > the same poem is not offered again for that song this session
+chromium	passed	expected	poem-library.test.ts:189	walk 5: she ignores the card > the poem stays, and a reload of the song shows the card again
+chromium	passed	expected	poem-library.test.ts:203	walk 5: she ignores the card > after Keep, a reload shows no card and the quiet line
+chromium	passed	expected	poem-library.test.ts:219	walk 6 and 7: she edits the poem, and her own poem wins > a typed key makes the poem hers: the card is gone and the line reads Based on
+chromium	passed	expected	poem-library.test.ts:233	walk 6 and 7: she edits the poem, and her own poem wins > a poem page asks before it replaces a poem she edited
+chromium	passed	expected	poem-library.test.ts:252	walk 6 and 7: she edits the poem, and her own poem wins > a poem page replaces an unedited library poem with no question
+chromium	passed	expected	poem-library.test.ts:267	step 8: the title is not printed twice, and a whole poem fills whole > fixture P: all five stanzas of «Средь шумного бала, случайно», one title, no first-line line
+chromium	passed	expected	poem-library.test.ts:280	walk 8: her song sets a passage of a long poem > fixture S fills the stanzas of the fish’s song only, and the card says passage
+chromium	passed	expected	poem-library.test.ts:296	walk 9: nothing she did not ask for happens later > typing the Lyrics fills nothing, however long she waits
+chromium	passed	expected	poem-library.test.ts:307	walk 9: nothing she did not ask for happens later > a Lyrics with no poem in the library fills nothing
+chromium	passed	expected	poem-library.test.ts:316	walk 9: nothing she did not ask for happens later > a cycle of several songs fills nothing
+chromium	passed	expected	poem-library.test.ts:325	walk 9: nothing she did not ask for happens later > a song reopened after Not this poem is not filled again, and a poem she wrote herself is never filled over
+chromium	passed	expected	poem-library.test.ts:339	walk 9: nothing she did not ask for happens later > her own Poem is never filled over
+chromium	passed	expected	poem-library.test.ts:353	nothing about the singer or the song leaves the device > a paste, a keep, and a decline make no request that carries the song, and fetch the poem file once, by name
+chromium	passed	expected	poem-library.test.ts:393	the same walk in French > the card and the line speak the ratified French
+chromium	passed	expected	poem-library.test.ts:420	row 182: she pastes an aria > POEM fills, the card names the role and the opera, and the empty Title, Composer, and Poet fill
+chromium	passed	expected	poem-library.test.ts:439	row 182: she pastes an aria > "Not this poem" empties what the fill put, keeps a Title she edited since, and Undo puts the rest back
+chromium	passed	expected	poem-library.test.ts:71	walk 1 to 3: she pastes a song, sees a card, and keeps the poem > the card names the poem, and nothing takes her focus
+chromium	passed	expected	print-pages.test.ts:20	print-pages.test.ts > Text, Markup, and Insights each print the pages Ilya numbers
+chromium	passed	expected	rhyme-set-aside.test.ts:23	rhyme-set-aside.test.ts > a rhymed -кий reads [kʌj], explains itself, and its Stage reading box sets the rhyme aside and back
+chromium	passed	expected	rhyme-set-aside.test.ts:57	rhyme-set-aside.test.ts > the set-aside is saved with the song and is shown after a reload
+chromium	passed	expected	singer-paths.test.ts:105	bilingual Markup and Insights > switching EN/FR updates the Insights pane's uncalibrated message
+chromium	passed	expected	singer-paths.test.ts:127	the library > a song saves to the library and reopens after a reload
+chromium	passed	expected	singer-paths.test.ts:167	Learn and Guide > Learn and Guide open and show their first heading in English and French
+chromium	passed	expected	singer-paths.test.ts:188	Markup with no calibration > Markup shows its honest empty state with no calibration
+chromium	passed	expected	singer-paths.test.ts:19	opening a score > opening a MusicXML score through the upload UI shows the score and its transcription
+chromium	passed	expected	singer-paths.test.ts:48	correcting a word > correcting a word's gloss in the Inspector sticks
+chromium	passed	expected	singer-paths.test.ts:92	bilingual Markup and Insights > switching EN/FR updates the Markup page's uncalibrated message
+chromium	passed	expected	strophic-melody-taps.test.ts:22	taps in a strophic song > fix 4: the second ending has live handles, and a tap on a later-pass copy picks its source bar
+chromium	passed	expected	strophic-melody-taps.test.ts:40	taps in a strophic song > a tap on a later-pass grace note names its source grace note
+chromium	passed	expected	strophic-melody-taps.test.ts:51	taps in a strophic song > a syllable corrected through the live second ending shows on the page
+chromium	passed	expected	strophic-melody.test.ts:101	MELODY unfolds a strophic song > the Loupe on a bar after the passage
+chromium	passed	expected	strophic-melody.test.ts:123	the page's time-signature controls and taps in a strophic song (follow-up fixes 3 and 4) > fix 3: a time signature drawn at a later-pass bar binds its control to that bar's source bar
+chromium	passed	expected	strophic-melody.test.ts:46	MELODY unfolds a strophic song > each later pass starts mid-system, later passes are inert, and the page has no live hit for them
+chromium	passed	expected	strophic-melody.test.ts:83	MELODY unfolds a strophic song > pageMetrics: the frame's above and below with three verses against the one-verse copy
+chromium	passed	expected	tempo.test.ts:143	Tchaikovsky op. 38 no. 3, no printed tempo > the receipt opens the control too, the choice survives a reload, and Escape closes
+chromium	passed	expected	tempo.test.ts:161	Tchaikovsky op. 38 no. 3, no printed tempo > French: the ratified sentences, the receipt, and the control
+chromium	passed	expected	tempo.test.ts:183	Tchaikovsky op. 38 no. 3, no printed tempo > on a phone the control spans the bottom and the sentence still reads
+chromium	passed	expected	tempo.test.ts:200	tempo.test.ts > a song with a printed tempo word keeps its own sentence, and its receipt says printed
+chromium	passed	expected	tempo.test.ts:72	Tchaikovsky op. 38 no. 3, no printed tempo > the estimate, the receipt, the control, the singer's tempo, and the way back
+chromium	passed	expected	text-header.test.ts:50	text-header.test.ts > Lyrics only: TEXT: LYRICS, on page 1 and page 2, on screen and in print
+chromium	passed	expected	text-header.test.ts:50	text-header.test.ts > Lyrics only: TEXTE : PAROLES, on page 1 and page 2, on screen and in print
+chromium	passed	expected	text-header.test.ts:50	text-header.test.ts > Poem only, INPUT on LYRICS: TEXT: POEM, on page 1 and page 2, on screen and in print
+chromium	passed	expected	text-header.test.ts:50	text-header.test.ts > Poem only, INPUT on LYRICS: TEXTE : POÈME, on page 1 and page 2, on screen and in print
+chromium	passed	expected	text-header.test.ts:50	text-header.test.ts > a POEM view with an empty POEM: TEXT: LYRICS, on page 1 and page 2, on screen and in print
+chromium	passed	expected	text-header.test.ts:50	text-header.test.ts > a POEM view with an empty POEM: TEXTE : PAROLES, on page 1 and page 2, on screen and in print
+chromium	passed	expected	text-header.test.ts:50	text-header.test.ts > both and the same: no pair: TEXT: LYRICS, on page 1 and page 2, on screen and in print
+chromium	passed	expected	text-header.test.ts:50	text-header.test.ts > both and the same: no pair: TEXTE : PAROLES, on page 1 and page 2, on screen and in print
+chromium	passed	expected	text-header.test.ts:50	text-header.test.ts > both, different, INPUT on LYRICS: TEXT: LYRICS, on page 1 and page 2, on screen and in print
+chromium	passed	expected	text-header.test.ts:50	text-header.test.ts > both, different, INPUT on LYRICS: TEXTE : PAROLES, on page 1 and page 2, on screen and in print
+chromium	passed	expected	text-header.test.ts:50	text-header.test.ts > both, different, INPUT on POEM: TEXT: POEM, on page 1 and page 2, on screen and in print
+chromium	passed	expected	text-header.test.ts:50	text-header.test.ts > both, different, INPUT on POEM: TEXTE : POÈME, on page 1 and page 2, on screen and in print
+chromium	passed	expected	text-header.test.ts:72	text-header.test.ts > nothing entered: the bare tab name, en
+chromium	passed	expected	text-header.test.ts:72	text-header.test.ts > nothing entered: the bare tab name, fr
+chromium	passed	expected	text-witness-tools.test.ts:9	text-witness-tools.test.ts > a gloss on a poem word stays on the poem and survives a reload
+chromium	passed	expected	time-signature-card.test.ts:114	the time signature card > in French the face, the sentence, the fields, and the scopes are the ratified words
+chromium	passed	expected	time-signature-card.test.ts:127	the time signature card > a tap on the time signature drawn on the score opens the card on its bar, with no Loupe and no note held
+chromium	passed	expected	time-signature-card.test.ts:149	the time signature card > Rebar the notes: a 3/4 song laid out in bars of four comes right with ties, one Undo takes it all back, and Redo does it again
+chromium	passed	expected	time-signature-card.test.ts:192	the time signature card > Rebar the notes is off every time the card opens, and in French it reads as ratified
+chromium	passed	expected	time-signature-card.test.ts:37	the time signature card > 4/8 to 3/4 to the end, keeping the barlines: every bar adds up, Undo restores, Redo applies again
+chromium	passed	expected	time-signature-card.test.ts:78	the time signature card > any signature can be typed; an impossible one cannot be applied; Escape and Cancel close the card and change nothing
+chromium	passed	expected	time-signature-card.test.ts:98	the time signature card > choosing the signature the reading has, to the next change, is the way back and writes nothing
+chromium	passed	expected	typed-hyphens.test.ts:29	row 106: a typed hyphen under the open-syllables switch, in the Inspector > «прог-ляд-на-я» keeps its typed break; «проглядная» opens
+chromium	passed	expected	voice-links.test.ts:39	"Add your range" lands on the Range pickers > with the VOICE band closed: the band opens, the station opens, the Range is in view
+chromium	passed	expected	voice-links.test.ts:48	"Add your range" lands on the Range pickers > with the VOICE band open and INPUT open above it (the station starts below the fold): the Drawer scrolls to bring the Range into view
+chromium	passed	expected	voice-links.test.ts:60	"Add your range" lands on the Range pickers > with an inverted pair stored the station shows its amber note (INSIGHTS offers the link only to a voice with no range, so here the station opens from its header)
+chromium	passed	expected	voice-links.test.ts:69	"Add your range" lands on the Range pickers > with the takeover up on Welcome: the press leaves the takeover and lands, and the restore does not undo it
+chromium	passed	expected	voice-links.test.ts:69	"Add your range" lands on the Range pickers > with the takeover up on the summary: the press leaves the takeover and lands, and the restore does not undo it
+chromium	passed	expected	voice-links.test.ts:86	"Add your range" lands on the Range pickers > from the test fry: the press leaves the takeover, lands, and releases the microphone
+chromium	passed	expected	voice-pane.test.ts:103	the VOICE pane at rest > the switcher in the pane changes the page’s voice, and the closed band follows
+chromium	passed	expected	voice-pane.test.ts:112	the VOICE pane at rest > the door to recording is named for the state, and opens Welcome for a voice with nothing recorded
+chromium	passed	expected	voice-pane.test.ts:120	the VOICE pane at rest > with nine recorded the pane says so and offers to carry on, and the door opens the capture screen
+chromium	passed	expected	voice-pane.test.ts:127	the VOICE pane at rest > with the six anchors stored the pane says Ilya works out the rest (line 5b)
+chromium	passed	expected	voice-pane.test.ts:133	the VOICE pane at rest > with five of the six anchors stored the pane says Ilya fills the rest, not works it out
+chromium	passed	expected	voice-pane.test.ts:139	the VOICE pane at rest > Back to the ten vowels clears a pending Start over, so the summary does not come back asking it (review fix 3)
+chromium	passed	expected	voice-pane.test.ts:153	the VOICE pane at rest > a request from rest lands on the asked screen even though the wizard was left stowed on the capture screen; Finish returns to the pane and writes nothing
+chromium	passed	expected	voice-pane.test.ts:172	the VOICE pane at rest > "Describe your voice" opens in place with no microphone and no takeover, and closes again; the voice's date does not move
+chromium	passed	expected	voice-pane.test.ts:172	the VOICE pane at rest > "What INSIGHTS shares, and how" opens in place with no microphone and no takeover, and closes again; the voice's date does not move
+chromium	passed	expected	voice-pane.test.ts:193	the test fry (N.203 lane 60, Step 4) > says what is coming before anything runs, and waits for Start
+chromium	passed	expected	voice-pane.test.ts:205	the test fry (N.203 lane 60, Step 4) > refuses a sound that is not fry: the line says so, Try again runs it again, Continue goes on, and the rate is not stored
+chromium	passed	expected	voice-pane.test.ts:218	the test fry (N.203 lane 60, Step 4) > refusal, then Try again, then acceptance: the refusal clears, and the accepted rate is stored (amendment 16 in full)
+chromium	passed	expected	voice-pane.test.ts:237	the test fry (N.203 lane 60, Step 4) > Back during the run ends it and keeps nothing, and the run does not finish behind the singer’s back
+chromium	passed	expected	voice-pane.test.ts:250	the test fry (N.203 lane 60, Step 4) > one microphone visit spans the test fry and the first vowel: closed before Start, open from Start, still open on the capture screen, closed on Back
+chromium	passed	expected	voice-pane.test.ts:267	a take is never orphaned by a remount (fix 1 of the review of 38ec37c2) > four readings stored: door, Back, the door again (the screen remounts), Start, Back mid-take: the take ends, is recorded as cancelled, and nothing runs on behind the Drawer
+chromium	passed	expected	voice-pane.test.ts:29	the VOICE pane at rest > with no voice saved it is the first-launch form, and Start names the voice and shows the pane
+chromium	passed	expected	voice-pane.test.ts:303	INSIGHTS "Add your range" and the seam > refused over the capture screen and dropped: nothing follows when the singer leaves; from rest it opens the Describe station at the Range
+chromium	passed	expected	voice-pane.test.ts:326	INSIGHTS "Add your range" and the seam > with no voice saved INSIGHTS offers no range link, and the takeover never opens onto an empty wizard (the no-voice branch of openVoice is not reachable from this link)
+chromium	passed	expected	voice-pane.test.ts:49	the VOICE pane at rest > the pane’s children stand in the ruled order for a voice with no type, with a type, and with readings
+chromium	passed	expected	voice-pane.test.ts:56	the VOICE pane at rest > with a type chosen the row names the type, in the same order
+chromium	passed	expected	voice-pane.test.ts:61	the VOICE pane at rest > with readings stored the order is the same, and the doors name the state
+chromium	passed	expected	voice-pane.test.ts:67	the VOICE pane at rest > the voice type row opens and closes the control in place, closed on arrival
+chromium	passed	expected	voice-pane.test.ts:78	the VOICE pane at rest > the voice type row is a full-width row like the two station rows
+chromium	passed	expected	voice-pane.test.ts:86	the VOICE pane at rest > the type control in the pane writes the stored voice type, and the sentence and the doors follow
+chromium	passed	expected	voice-stations.test.ts:106	the two VOICE stations > both stay open together on a desk, and are closed again after a reload
+chromium	passed	expected	voice-stations.test.ts:119	the two VOICE stations > the French names: « Décrire votre voix » and « Ce que partagent les APERÇUS, et comment »
+chromium	passed	expected	voice-stations.test.ts:25	the two VOICE stations > both are closed on arrival, with no state line
+chromium	passed	expected	voice-stations.test.ts:34	the two VOICE stations > a note written from "Describe your voice" reaches the stored voice, and the voice’s date does not move
+chromium	passed	expected	voice-stations.test.ts:48	the two VOICE stations > a voice that was never dated keeps the date it had: calibratedAt becomes the previous updatedAt and stays
+chromium	passed	expected	voice-stations.test.ts:61	the two VOICE stations > an inverted pair draws its amber note; the note goes when the pair is right again
+chromium	passed	expected	voice-stations.test.ts:75	the two VOICE stations > the five questions: the intro counts five, an answer is stored, Clear answer removes it
+chromium	passed	expected	voice-stations.test.ts:88	the two VOICE stations > "What INSIGHTS shares, and how": the topics, the acoustics question, and how comments appear are stored, and no intro is drawn
+chromium	passed	expected	welcome-sheet.test.ts:105	a first visit > never prints
+chromium	passed	expected	welcome-sheet.test.ts:114	language > the head-band pill is the app's own: it switches the app, the sheet follows, and the choice is stored as the app's own
+chromium	passed	expected	welcome-sheet.test.ts:129	language > a French app opens a French sheet
+chromium	passed	expected	welcome-sheet.test.ts:140	when storage throws > the sheet shows, Begin still closes it, and nothing crashes
+chromium	passed	expected	welcome-sheet.test.ts:164	motion > the plate turns five times, once, and every text is readable from the first frame
+chromium	passed	expected	welcome-sheet.test.ts:180	motion > the station labels light in turn: TEXT, MELODY, INSIGHTS
+chromium	passed	expected	welcome-sheet.test.ts:195	motion > prefers-reduced-motion shows the final state at once, with no motion
+chromium	passed	expected	welcome-sheet.test.ts:205	motion > the plate is an image named Илья, and the pictures are hidden from a screen reader
+chromium	passed	expected	welcome-sheet.test.ts:217	a short window (1280 x 600): the text overflows, and the keyboard reaches all of it > focus lands where the keys scroll, and the arrow keys, Space, Page Down, and End move the text
+chromium	passed	expected	welcome-sheet.test.ts:22	a first visit > shows the sheet over the app, labelled by its title, with focus inside it
+chromium	passed	expected	welcome-sheet.test.ts:238	a short window (1280 x 600): the text overflows, and the keyboard reaches all of it > a link inside the text keeps the arrow keys working, and Tab still reaches Begin
+chromium	passed	expected	welcome-sheet.test.ts:34	a first visit > has Begin on screen from the first frame, and the licence line and the made-in line beside it
+chromium	passed	expected	welcome-sheet.test.ts:45	a first visit > Escape does nothing, and Tab never leaves the sheet
+chromium	passed	expected	welcome-sheet.test.ts:60	a first visit > Begin writes the flag and closes the sheet, and the app is usable again
+chromium	passed	expected	welcome-sheet.test.ts:69	a first visit > after Begin, focus is on a real control in the header, never on the document
+chromium	passed	expected	welcome-sheet.test.ts:89	a first visit > a returning browser never sees it
+chromium	passed	expected	welcome-sheet.test.ts:98	a first visit > does not hold the dictionary back: the field enables while the sheet is up
+chromium	passed	expected	word-marks-saved.test.ts:60	word-marks-saved.test.ts > a stress and a spot reconstitution set on song 1 are shown after a reload (lyrics)
+chromium	passed	expected	word-marks-saved.test.ts:60	word-marks-saved.test.ts > a stress and a spot reconstitution set on song 1 are shown after a reload (poem)
+chromium	passed	expected	word-tap-opens-analysis.test.ts:23	a word tap, desktop > opens ANALYSIS, leaves INPUT open, and leaves ANALYSIS open on a second tap
+chromium	passed	expected	word-tap-opens-analysis.test.ts:32	a word tap, desktop > marks the tapped word alone, and the mark does not print
+chromium	passed	expected	word-tap-opens-analysis.test.ts:46	a word tap, desktop > keeps the dashed VERIFY box beside the mark
+chromium	timedOut	unexpected	insights-page.test.ts:224	insights-page.test.ts > the passaggio names clear the bracket whatever the secondo is, and the bracket lies inside the rows, in both languages
+phone	failed	unexpected	../e2e-phone/input-views.test.ts:134	Input, two views (N.135 stage 3) > a poem typed into Poem moves no seat of «Within Four Walls»
+phone	failed	unexpected	../e2e-phone/phrase-ends.test.ts:26	../e2e-phone/phrase-ends.test.ts > Tchaikovsky onto an empty song: 172 seats, and «так» reads [ˈtɑk] in Text
+phone	failed	unexpected	../e2e-phone/relining.test.ts:70	../e2e-phone/relining.test.ts > y. a poem pasted into Poem lays Lyrics out in its lines and moves no seat
+phone	failed	unexpected	../e2e-phone/relining.test.ts:95	../e2e-phone/relining.test.ts > bb. a poem typed key by key lays Lyrics out after the pause, and Text is not rebuilt before it
+phone	passed	expected	../e2e-phone/clef-controls.test.ts:56	the clef choice on a phone (row 144) > chip, then a 44 px clef button, then a sheet from the foot (en)
+phone	passed	expected	../e2e-phone/clef-controls.test.ts:56	the clef choice on a phone (row 144) > chip, then a 44 px clef button, then a sheet from the foot (fr)
+phone	passed	expected	../e2e-phone/gloss-offer.test.ts:20	../e2e-phone/gloss-offer.test.ts > the field and the offer stay in view with the keyboard up
+phone	passed	expected	../e2e-phone/grace-corrections.test.ts:19	../e2e-phone/grace-corrections.test.ts > a tap on the grace note selects it; a tap on its principal selects the principal
+phone	passed	expected	../e2e-phone/grace-corrections.test.ts:41	../e2e-phone/grace-corrections.test.ts > a grace note before the first note of a system can be tapped, and the clef control still opens from the clef
+phone	passed	expected	../e2e-phone/input-views.test.ts:103	Input, two views (N.135 stage 3) > the colour layer sits exactly under the textarea's own text, coloured or not
+phone	passed	expected	../e2e-phone/input-views.test.ts:124	Input, two views (N.135 stage 3) > the pair's touch strip is 44 px tall and the drawn pair is not
+phone	passed	expected	../e2e-phone/input-views.test.ts:84	Input, two views (N.135 stage 3) > the pair shows, each view holds its own text, and the line says which view this is
+phone	passed	expected	../e2e-phone/insights-label.test.ts:38	../e2e-phone/insights-label.test.ts > the comfortable-zone label stays inside the figure at 390 px, en, five semitones, G3 to D4
+phone	passed	expected	../e2e-phone/insights-label.test.ts:38	../e2e-phone/insights-label.test.ts > the comfortable-zone label stays inside the figure at 390 px, en, two semitones, G3 to A3
+phone	passed	expected	../e2e-phone/insights-label.test.ts:38	../e2e-phone/insights-label.test.ts > the comfortable-zone label stays inside the figure at 390 px, fr, five semitones, G3 to D4
+phone	passed	expected	../e2e-phone/insights-label.test.ts:38	../e2e-phone/insights-label.test.ts > the comfortable-zone label stays inside the figure at 390 px, fr, two semitones, G3 to A3
+phone	passed	expected	../e2e-phone/insights-links.test.ts:32	../e2e-phone/insights-links.test.ts > L1 with the Drawer lowered lands on its station, in view
+phone	passed	expected	../e2e-phone/insights-links.test.ts:32	../e2e-phone/insights-links.test.ts > L1 with the Drawer open on VOICE lands on its station, in view
+phone	passed	expected	../e2e-phone/insights-links.test.ts:66	../e2e-phone/insights-links.test.ts > L6 (INPUT) with the Drawer lowered opens the INPUT pane, its head in view
+phone	passed	expected	../e2e-phone/insights-links.test.ts:66	../e2e-phone/insights-links.test.ts > L6 (INPUT) with the Drawer open on VOICE opens the INPUT pane, its head in view
+phone	passed	expected	../e2e-phone/insights-links.test.ts:84	../e2e-phone/insights-links.test.ts > L4 (Record your vowels) with the Drawer lowered opens Welcome on a phone
+phone	passed	expected	../e2e-phone/key-change-melody.test.ts:29	key changes in MELODY > the page draws each change once, and the Loupe head shows the key in force in the held bar
+phone	passed	expected	../e2e-phone/key-signature-card.test.ts:9	../e2e-phone/key-signature-card.test.ts > the card is a sheet, offers no Remove on a bar that opens no change, and applies a key chosen from bar 6
+phone	passed	expected	../e2e-phone/loupe-header.test.ts:34	the Loupe header on a phone > a tap flips the card between the bottom and the top, and the label says where it goes
+phone	passed	expected	../e2e-phone/loupe-header.test.ts:48	the Loupe header on a phone > at the bottom the panel rises above the header and the music, which stay put
+phone	passed	expected	../e2e-phone/loupe-header.test.ts:65	the Loupe header on a phone > a swipe down from the header closes the Loupe and flips nothing
+phone	passed	expected	../e2e-phone/loupe-header.test.ts:76	the Loupe header on a phone > a finger that wanders sideways flips nothing
+phone	passed	expected	../e2e-phone/loupe-header.test.ts:89	the Loupe header on a phone > every header button is at least 44 by 44, and the band is 44 tall
+phone	passed	expected	../e2e-phone/loupe-scan.test.ts:219	../e2e-phone/loupe-scan.test.ts > the whole-fixture scan, and the five rules
+phone	passed	expected	../e2e-phone/loupe-scan.test.ts:392	../e2e-phone/loupe-scan.test.ts > real clicks resolve note, rest and caret taps on a converged measure
+phone	passed	expected	../e2e-phone/path-picker-time.test.ts:17	../e2e-phone/path-picker-time.test.ts > runCapture under the shipped and the path picker, at phone width, 1x and 4x
+phone	passed	expected	../e2e-phone/poem-arias-time.test.ts:17	../e2e-phone/poem-arias-time.test.ts > the match time on the longest aria and the longest text, before (the 14 first poems) and after (the whole library), at phone width
+phone	passed	expected	../e2e-phone/relining.test.ts:112	../e2e-phone/relining.test.ts > cc. five letters typed into Lyrics on a seated song rebuild Text once, after the pause
+phone	passed	expected	../e2e-phone/strophic-melody.test.ts:20	../e2e-phone/strophic-melody.test.ts > at 390 px each later pass starts mid-system and later passes are inert
+phone	passed	expected	../e2e-phone/strophic-melody.test.ts:46	../e2e-phone/strophic-melody.test.ts > follow-up 2, fix 4: a clef's tap box stops short of the first note of its system, a later-pass note included
+phone	passed	expected	../e2e-phone/text-witness.test.ts:114	Text shows the witness there is (rows 109 and 110) > clearing Poem leaves Lyrics
+phone	passed	expected	../e2e-phone/text-witness.test.ts:130	../e2e-phone/text-witness.test.ts > a score with words dropped on a new song shows Lyrics with no tap, and a tapped Poem stays
+phone	passed	expected	../e2e-phone/text-witness.test.ts:141	../e2e-phone/text-witness.test.ts > a Poem the singer tapped stays when a score with words arrives
+phone	passed	expected	../e2e-phone/text-witness.test.ts:153	INPUT's pill decides what Text shows (rows 110 and 172) > with both texts differing: Lyrics on open, Poem on a tap in INPUT whole with its unset words grey, back to Lyrics, seats unchanged
+phone	passed	expected	../e2e-phone/text-witness.test.ts:201	INPUT's pill decides what Text shows (rows 110 and 172) > with both texts the same words: no source line
+phone	passed	expected	../e2e-phone/text-witness.test.ts:212	INPUT's pill decides what Text shows (rows 110 and 172) > with only a poem or only Lyrics: no source line
+phone	passed	expected	../e2e-phone/text-witness.test.ts:52	Text shows the witness there is (rows 109 and 110) > a new song opens Input on Poem, and a poem alone is what Text transcribes
+phone	passed	expected	../e2e-phone/text-witness.test.ts:61	Text shows the witness there is (rows 109 and 110) > a wordless score onto an empty Lyrics takes the poem and seats 5 of 5 (poem first)
+phone	passed	expected	../e2e-phone/text-witness.test.ts:72	Text shows the witness there is (rows 109 and 110) > a wordless score first, then a poem pasted: Lyrics takes it and seats
+phone	passed	expected	../e2e-phone/text-witness.test.ts:85	Text shows the witness there is (rows 109 and 110) > a wordless score onto Lyrics the singer wrote leaves it alone
+phone	passed	expected	../e2e-phone/text-witness.test.ts:97	Text shows the witness there is (rows 109 and 110) > a reload does not refill an emptied Lyrics from the poem
+phone	passed	expected	../e2e-phone/time-signature-card.test.ts:14	the time signature card on a phone > a sheet from the foot over the Loupe, every target 44 px, and one tap on Apply changes the bars
+phone	passed	expected	../e2e-phone/voice-stations.test.ts:103	../e2e-phone/voice-stations.test.ts > the voice type row open, then "Describe your voice": the type row is closed
+phone	passed	expected	../e2e-phone/voice-stations.test.ts:123	../e2e-phone/voice-stations.test.ts > the voice type row open, then a link to a station: the station lands in view and the type row is closed
+phone	passed	expected	../e2e-phone/voice-stations.test.ts:21	../e2e-phone/voice-stations.test.ts > opening one VOICE station shuts the other, and shuts NOTATION
+phone	passed	expected	../e2e-phone/voice-stations.test.ts:62	../e2e-phone/voice-stations.test.ts > "Add your range" with the Drawer lowered lands on the Range pickers, in view
+phone	passed	expected	../e2e-phone/voice-stations.test.ts:62	../e2e-phone/voice-stations.test.ts > "Add your range" with the Drawer raised lands on the Range pickers, in view
+phone	passed	expected	../e2e-phone/voice-stations.test.ts:81	../e2e-phone/voice-stations.test.ts > "Add your range" with the takeover up on Welcome leaves the takeover and lands on a phone
+phone	passed	expected	../e2e-phone/welcome-sheet.test.ts:15	../e2e-phone/welcome-sheet.test.ts > phone: the sheet fits the screen, with a small plate, and Begin is full width in a footer that does not scroll
+phone	passed	expected	../e2e-phone/welcome-sheet.test.ts:39	../e2e-phone/welcome-sheet.test.ts > phone: the made-in line and the licence line show once, inside the body
+phone	passed	expected	../e2e-phone/welcome-sheet.test.ts:46	../e2e-phone/welcome-sheet.test.ts > phone: Begin closes the sheet and writes the flag; the pill switches to French
+phone	passed	expected	../e2e-phone/wizard-begin.test.ts:61	360 by 640 > en: contralto chosen, Begin is whole on screen at the moment of choice, uncovered, and covers neither the nine choices nor the note
+phone	passed	expected	../e2e-phone/wizard-begin.test.ts:61	360 by 640 > fr: contralto chosen, Begin is whole on screen at the moment of choice, uncovered, and covers neither the nine choices nor the note
+phone	passed	expected	../e2e-phone/wizard-begin.test.ts:61	375 by 667 > en: contralto chosen, Begin is whole on screen at the moment of choice, uncovered, and covers neither the nine choices nor the note
+phone	passed	expected	../e2e-phone/wizard-begin.test.ts:61	375 by 667 > fr: contralto chosen, Begin is whole on screen at the moment of choice, uncovered, and covers neither the nine choices nor the note
+phone	passed	expected	../e2e-phone/wizard-begin.test.ts:61	390 by 667 > en: contralto chosen, Begin is whole on screen at the moment of choice, uncovered, and covers neither the nine choices nor the note
+phone	passed	expected	../e2e-phone/wizard-begin.test.ts:61	390 by 667 > fr: contralto chosen, Begin is whole on screen at the moment of choice, uncovered, and covers neither the nine choices nor the note
+phone	passed	expected	../e2e-phone/word-tap-opens-analysis.test.ts:12	../e2e-phone/word-tap-opens-analysis.test.ts > a word tap opens ANALYSIS in view and folds INPUT on a phone
+phone	skipped	skipped	../e2e-phone/loupe-scan.test.ts:409	../e2e-phone/loupe-scan.test.ts > real clicks on a measure that did not converge

@@ -1,0 +1,13 @@
+Files cap1/MANIFEST.sha256 and cap2/MANIFEST.sha256 differ
+Files cap1/environment.txt and cap2/environment.txt differ
+Files cap1/family4-print/insights.en.pdf and cap2/family4-print/insights.en.pdf differ
+Files cap1/family4-print/insights.fr.pdf and cap2/family4-print/insights.fr.pdf differ
+Files cap1/family4-print/markup.en.pdf and cap2/family4-print/markup.en.pdf differ
+Files cap1/family4-print/markup.fr.pdf and cap2/family4-print/markup.fr.pdf differ
+Files cap1/family4-print/text.en.pdf and cap2/family4-print/text.en.pdf differ
+Files cap1/family4-print/text.fr.pdf and cap2/family4-print/text.fr.pdf differ
+Files cap1/family5-binder-voice/binder.en.ilya and cap2/family5-binder-voice/binder.en.ilya differ
+Files cap1/family5-binder-voice/binder.en.members.txt and cap2/family5-binder-voice/binder.en.members.txt differ
+Files cap1/family5-binder-voice/binder.fr.ilya and cap2/family5-binder-voice/binder.fr.ilya differ
+Files cap1/family5-binder-voice/binder.fr.members.txt and cap2/family5-binder-voice/binder.fr.members.txt differ
+Files cap1/live-capture.log and cap2/live-capture.log differ

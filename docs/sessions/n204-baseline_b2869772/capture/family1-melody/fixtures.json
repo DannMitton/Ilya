@@ -1,0 +1,2607 @@
+[
+	{
+		"path": "apps/web/src/lib/omr/fixtures/barline-clean-4-4.musicxml",
+		"source": "file-source (no software tag; provenance not established)",
+		"bytesIn": 4131,
+		"pages": 1,
+		"bytesOut": 12549,
+		"pageSha256": [
+			"f30181cd97a5c2830d5359827d3299639387505ba2ad8b2ac7f9f6144aa94314"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "apps/web/src/lib/omr/fixtures/barline-fused-rest-dropped.musicxml",
+		"source": "file-source (no software tag; provenance not established)",
+		"bytesIn": 4036,
+		"pages": 1,
+		"bytesOut": 12228,
+		"pageSha256": [
+			"966231d57e5630e189e0b13b6f34880669a8bf5d233824924868e778fdd5f1ce"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "apps/web/src/lib/omr/fixtures/barline-fused.musicxml",
+		"source": "file-source (no software tag; provenance not established)",
+		"bytesIn": 4103,
+		"pages": 1,
+		"bytesOut": 13317,
+		"pageSha256": [
+			"cd8889d451d76960cff479928508b270f7edecb61c5d45b2630161295a1d4002"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "apps/web/src/lib/omr/fixtures/sun3-2.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 110652,
+		"pages": 1,
+		"bytesOut": 34895,
+		"pageSha256": [
+			"b293fafaab97fffdca5b97930b9139a4cf9c874f03d435b591c5b0e16c2a586b"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "apps/web/src/lib/omr/fixtures/tch-1.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 81109,
+		"pages": 1,
+		"bytesOut": 28302,
+		"pageSha256": [
+			"e47b8553fc3ebe321ab5be38c82193004bbb6f5bcd359aa9c8e77a69ce7980aa"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "apps/web/src/lib/omr/fixtures/tch-2.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 111390,
+		"pages": 1,
+		"bytesOut": 43922,
+		"pageSha256": [
+			"654b60f6b6f79eccc7bcd5abf7f4768f305dd7bae1b0ac359159fd2731ab49be"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "apps/web/src/lib/omr/fixtures/tch-3.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 116199,
+		"pages": 1,
+		"bytesOut": 44291,
+		"pageSha256": [
+			"56411414b3995f81d5c6da4fd93f57ce40c05136b9f05843f441295efee126a2"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "apps/web/src/lib/omr/fixtures/time-signature-barlines-wrong.musicxml",
+		"source": "file-source (no software tag; provenance not established)",
+		"bytesIn": 2740,
+		"pages": 1,
+		"bytesOut": 8496,
+		"pageSha256": [
+			"6e0cdfe164538c33445a28228721ae5d7c0b1415a1a0757f3f75001b7478bcf1"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "apps/web/src/lib/omr/fixtures/time-signature-wrong.musicxml",
+		"source": "file-source (no software tag; provenance not established)",
+		"bytesIn": 3233,
+		"pages": 1,
+		"bytesOut": 9781,
+		"pageSha256": [
+			"1c21494f87c09ca2df13dbe77bf92c9a5d3eef2dcdff3ee19004826704544e8e"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "apps/web/src/lib/score/ingestion/fixtures/sunless-01-engraved.musicxml",
+		"source": "file-source (software tag: musx2mxl 0.2.9)",
+		"bytesIn": 121222,
+		"pages": 2,
+		"bytesOut": 77146,
+		"pageSha256": [
+			"64e4761ed3b33f1a5dcd7bf4a11603f9af6211894cc4f7c80376547b37d3cd9e",
+			"47ca2fea9a8becdc793ccc2b8c1250570e8f28c01fff0a00849e86fcf85baf1a"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "apps/web/src/lib/score/ingestion/fixtures/sunless-01-finale-lone-v.musicxml",
+		"source": "file-source (software tag: musx2mxl 0.2.9)",
+		"bytesIn": 122058,
+		"pages": 2,
+		"bytesOut": 79101,
+		"pageSha256": [
+			"3f237739e74aef93c47031780cb8389bcc1ae55e72f645529b1225da22f49980",
+			"9d32882aa8dccb8b34c093dfe4e9ea1289706f0026d8e1395d0fc21e63a19148"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "apps/web/src/lib/score/ingestion/fixtures/tchaikovsky-op38-3-voice.musicxml",
+		"source": "file-source (no software tag; provenance not established)",
+		"bytesIn": 38857,
+		"pages": 3,
+		"bytesOut": 154967,
+		"pageSha256": [
+			"b67805dcb0dc6077dafb9e2974d9ee624e2d593e68735544b52b755e90b66f7d",
+			"1d833b19de72fd660fee73aadc82107b5e128442317c011aaac8524a49404ad9",
+			"4abc3c4ad567b7986f75c00d31a9e5433359c0a7f226240feca310cd59c2576f"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/assembly-a-scan-to-a-seated-song_r1_2026-10-04/tch-op38-3-from-scan_as-printed.musicxml",
+		"source": "file-source (no software tag; provenance not established)",
+		"bytesIn": 56407,
+		"pages": 3,
+		"bytesOut": 154679,
+		"pageSha256": [
+			"5d1ffb401c0e94eb6d6a368be77b07d92ac4a05ae6591d7b7e85aac7572e5c51",
+			"3278bfc50a5f3ad9f29381203e7c25bb5e43e9ca98c2add214aaf9dd2b0a07e9",
+			"6abe54fa4faa2bc6d08ed1d2a4bd3eccabe06983dae8f076b7b4773fa4c00014"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/assembly-a-scan-to-a-seated-song_r1_2026-10-04/tch-op38-3-from-scan_modern.musicxml",
+		"source": "file-source (no software tag; provenance not established)",
+		"bytesIn": 56361,
+		"pages": 3,
+		"bytesOut": 155087,
+		"pageSha256": [
+			"5e87ea1e9647796f5cc1443cfe3e385575d284df3bc9702652bb87399d7e2bdf",
+			"4ed46fca17a2173773bb859623d62666eebe1198e7ceec94e6ba975825fb1483",
+			"74d39918b898493439164edc3465e028d525801a4a23cd576f1d604f5987ca3f"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/baseline-on-the-singers-path_r1_2026-10-06/joined/sun1.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 33300,
+		"pages": 2,
+		"bytesOut": 55179,
+		"pageSha256": [
+			"7b2e7d2bedad59d35ca06afae61b92f0dbf2d9f2e3cd048167c03260a51fc87b",
+			"cdb2a3069c7a74bd34927c568ee544263280d672aa26eb1ca64663ebd0314a8f"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/baseline-on-the-singers-path_r1_2026-10-06/joined/sun4.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 43226,
+		"pages": 2,
+		"bytesOut": 71296,
+		"pageSha256": [
+			"0b563ac4ac0b7e1bd519694d9fb8712f6c04375c82ee95d8ea07c8519b338b1f",
+			"2505980dae565bdd60c7563d885224964fa61640d63d622c941fac87e2eb4b05"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/baseline-on-the-singers-path_r1_2026-10-06/joined/sun5.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 100746,
+		"pages": 4,
+		"bytesOut": 171344,
+		"pageSha256": [
+			"2dda472bc6aa04c0c342c0af079bcb23e311d864d17b14a41e4b5255949dd266",
+			"fc8e0d28b925c75f52436935821a53ed0f916af2790b4e62124b43255222cb09",
+			"03e22e5830bcd3d4f29ddfe833da8d83d692379a02ef2628f85e8a7157e3190e",
+			"6988416a33d7cc168ea41cbcd5e8b91396f95e29a41b1fd7fb998051b0a3a449"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/baseline-on-the-singers-path_r1_2026-10-06/joined/sun6.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 58472,
+		"pages": 3,
+		"bytesOut": 104633,
+		"pageSha256": [
+			"42cbc21699296ae45d80b7f2e0a3d67de9fd2161819bf92b997d7485d79c8cfc",
+			"47815d803e1c0362c98bd24f75522809ae72389fab957b9811b17b13fe81314c",
+			"bc1ab86bb706306f742c6c3adb049044ee177b540c53071eb84c230054427954"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/baseline-on-the-singers-path_r1_2026-10-06/joined/tch.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 64744,
+		"pages": 2,
+		"bytesOut": 112586,
+		"pageSha256": [
+			"f0b333bbb14f8175a2e0b61884d86b509942de30d571525e832ddc3b80e7a25f",
+			"2b1884b391c916b4d865e1ede2eed5261e68b57dc3874bd9dcbba4ff9b06df78"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-4f-quadruplet_2026-10-12/diag/P.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 52350,
+		"pages": 3,
+		"bytesOut": 88393,
+		"pageSha256": [
+			"94bb33d52c2cea6572961ae7d243907549ef456b6e0ba9fcb0ccac37e37280e8",
+			"1e8419a863fc4519e0538807e6991113795458f980f4a0d6834580d063a5861d",
+			"5aa040fabff92cb8bcc157d2ad45dba04688be98979dcfa442c2bbe7ea891de6"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-checks_r1_2026-10-05/joined/sun1.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 33300,
+		"pages": 2,
+		"bytesOut": 55179,
+		"pageSha256": [
+			"7b2e7d2bedad59d35ca06afae61b92f0dbf2d9f2e3cd048167c03260a51fc87b",
+			"cdb2a3069c7a74bd34927c568ee544263280d672aa26eb1ca64663ebd0314a8f"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-checks_r1_2026-10-05/joined/sun4.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 43225,
+		"pages": 2,
+		"bytesOut": 71296,
+		"pageSha256": [
+			"0b563ac4ac0b7e1bd519694d9fb8712f6c04375c82ee95d8ea07c8519b338b1f",
+			"2505980dae565bdd60c7563d885224964fa61640d63d622c941fac87e2eb4b05"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-checks_r1_2026-10-05/joined/sun5.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 100749,
+		"pages": 4,
+		"bytesOut": 171252,
+		"pageSha256": [
+			"2dda472bc6aa04c0c342c0af079bcb23e311d864d17b14a41e4b5255949dd266",
+			"fc8e0d28b925c75f52436935821a53ed0f916af2790b4e62124b43255222cb09",
+			"fdae668bf7624d3fa6f167a38b0e4a58a43e8884fae4956675f35c6bbe824ac6",
+			"6988416a33d7cc168ea41cbcd5e8b91396f95e29a41b1fd7fb998051b0a3a449"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-checks_r1_2026-10-05/joined/sun6.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 58472,
+		"pages": 3,
+		"bytesOut": 104633,
+		"pageSha256": [
+			"42cbc21699296ae45d80b7f2e0a3d67de9fd2161819bf92b997d7485d79c8cfc",
+			"47815d803e1c0362c98bd24f75522809ae72389fab957b9811b17b13fe81314c",
+			"bc1ab86bb706306f742c6c3adb049044ee177b540c53071eb84c230054427954"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-checks_r1_2026-10-05/joined/tch.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 59469,
+		"pages": 2,
+		"bytesOut": 112586,
+		"pageSha256": [
+			"f0b333bbb14f8175a2e0b61884d86b509942de30d571525e832ddc3b80e7a25f",
+			"2b1884b391c916b4d865e1ede2eed5261e68b57dc3874bd9dcbba4ff9b06df78"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-final-test-set3_2026-10-11/rehearsal/drops/K.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 49308,
+		"pages": 2,
+		"bytesOut": 82852,
+		"pageSha256": [
+			"12da88a3cdcb620a9b8742a2ef7d7ead5afa54d8ad95b1f1acaa0249a068dec0",
+			"04dd5e3bf4d578401cfbed49a5ed811f449a7b085f50568177908f14e080a0dc"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-final-test-set3_2026-10-11/rehearsal/drops/M.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 21055,
+		"pages": 1,
+		"bytesOut": 33675,
+		"pageSha256": [
+			"c12f2b4b269f7de61cab32e16f8fb093f03520e7b984866d1462b7a9a6bddeb0"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-final-test-set3_2026-10-11/ten/drops/Q.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 32189,
+		"pages": 1,
+		"bytesOut": 51409,
+		"pageSha256": [
+			"813398341f81fcbcfe33eef50dac0c3dd153893960a6327e710fcf69ae58bdb4"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-final-test-set3_2026-10-11/ten/drops/R.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 72992,
+		"pages": 4,
+		"bytesOut": 120991,
+		"pageSha256": [
+			"3cdd44c94d4fc77f54b4cf529124e1d217ba7dc5c40935f70092036071a6c7a5",
+			"c4f26bea2f1ad2c1dcb657ebc81d1478166b60e949f8285ca5b3e9a772c89fdf",
+			"e712c07d5b6657cfe9cd62c207db38c4869da05f9c9b037eaaa6369512f898cd",
+			"5a95ce4eafdfee09c21d2874722461e332f93e7622d058f6eec29590d14d463f"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-final-test-set3_2026-10-11/ten/drops/S.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 62101,
+		"pages": 3,
+		"bytesOut": 96852,
+		"pageSha256": [
+			"2c77cfc67d41e7c8535ea378afcfb9de0d7e17bd7b1aa5e349d1598f5676c827",
+			"fb82bd1c322bee2920580427326536a2fcd4c072c5f26ea0bf0bfde77978c217",
+			"b0deef4a8e1f75cc9fa01e17950fea7cfa426e29c7c4d11225cc5ff06e8ed982"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-final-test-set3_2026-10-11/ten/drops/T.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 70538,
+		"pages": 4,
+		"bytesOut": 122562,
+		"pageSha256": [
+			"e55556cc44f299ef86238d6c4efa6982b73c73e7826985f19c76d5507d7ccf14",
+			"cf23ea1a6a3cf110be37a37ad2c63699b39adde335ca646e8c7d7bd4484ed373",
+			"290173a583710536604183834e2f53a9daabed060f07f75843c2cb9307a4a492",
+			"c823bb7ab167b1e0c656c6a85ab8516c47114fa535d7b20ae1444122c2027e92"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-final-test-set3_2026-10-11/ten/drops/U.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 26117,
+		"pages": 1,
+		"bytesOut": 45576,
+		"pageSha256": [
+			"bdd97c75b60e66b5facb7494f0d4c81480e2f923d46101f549369a000333da38"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-final-test-set3_2026-10-11/ten/drops/V.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 50017,
+		"pages": 2,
+		"bytesOut": 78538,
+		"pageSha256": [
+			"8237596bff9f73afd67aeac1493d61bf88ba2aea91ed4cd5ed7d73e4a3a5cfca",
+			"e1f4c0a1e4ae80093750cb725f50034c85d8357cd12a1e00905b5810af37c24e"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-final-test-set3_2026-10-11/ten/drops/W.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 32900,
+		"pages": 2,
+		"bytesOut": 54351,
+		"pageSha256": [
+			"413b42fdf916809723bf28e8125e61ae60cc7c1f6ab976d99dcce6e3a57fb5c9",
+			"a467ed639765d69b771b96bcc3165467460265afb3112a6eef9e8154f7ee06d7"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-final-test-set3_2026-10-11/ten/drops/X.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 51525,
+		"pages": 2,
+		"bytesOut": 87674,
+		"pageSha256": [
+			"4f03d7c724cf2e32186efde37f72e11099e9f3ffd7e3c38c9818c6396a26a88e",
+			"472299b25064d39233cef06e7a9eecfffe805e66d5e05c99955b2d2b06ac5724"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-final-test-set3_2026-10-11/ten/drops/Y.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 62352,
+		"pages": 3,
+		"bytesOut": 106056,
+		"pageSha256": [
+			"feca49cc9e0c159ed5c2b7f55b77819c9d4b2e0ec38efe9fd1c0726ba93fafaa",
+			"b998c99c4a3d5b47413f3a46049e1b4da46e79f71786e1be289bb72b4d791eaa",
+			"3dc09a8ec4ed42f431d9393ccc8b6cfca53f76732b8f36c6816e8d7fa350073e"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-final-test-set3_2026-10-11/ten/drops/Z.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 95101,
+		"pages": 4,
+		"bytesOut": 158381,
+		"pageSha256": [
+			"bb16d89e034d339557aea60fef75776ce0076fede994e91790e4ad6a8ccbb1d2",
+			"df7eb3245dbfd306aea39e4f17f93d1634bca20f9de170950df701168f850877",
+			"067eb27bb24e66f3d6505041b90ad7b4040302b9f63ff7645f8d60a0129138b1",
+			"9babb3e7c5d470656a1bd8a90e948df8c8b8b460aea77040ba7844a491aee973"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/A.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 24300,
+		"pages": 1,
+		"bytesOut": 40120,
+		"pageSha256": [
+			"be98559de633c8825db7f07fb0a58e987b40662945c93854d7f1ad7c3ff2b0d7"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/B.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 25223,
+		"pages": 1,
+		"bytesOut": 41772,
+		"pageSha256": [
+			"337f560f122c70f0e4dbb950cd7dfee500a96a76fa7bea715fbb879768de3c57"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/C.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 49177,
+		"pages": 2,
+		"bytesOut": 73451,
+		"pageSha256": [
+			"37816c697395e8b193f2a6ac92cee236f368922da5725107e23fa071f6df4d61",
+			"71db7dc616a41146a1c6f1552e1b9f27510ee59d67f246158b02f77ac3963d7d"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/E.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 84520,
+		"pages": 3,
+		"bytesOut": 135357,
+		"pageSha256": [
+			"b3564ba1699da855b4e9b4d2bfe1411a0efe8b125dcab9d4f370f66fb2166852",
+			"3f3ac709ff07da6095c82a9afa060b6e63b4d5cf01683db0c0046475d55ae7c3",
+			"5decda81be45a820ead1c07ce7a3337f7b3dec84b689baa43a2ba7990615e758"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/F.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 29563,
+		"pages": 1,
+		"bytesOut": 50163,
+		"pageSha256": [
+			"285fe0f31ceecdeb5f14916c3eaecefe60f3f026984c243b91cd292e955f5410"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/grech.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 56756,
+		"pages": 2,
+		"bytesOut": 101034,
+		"pageSha256": [
+			"f6b9d6edb300bf6498885698425d6cfa4ba90d53252dadc7f7bb09d54ecfe8ba",
+			"999eced8905466f252f8ba8aa42a673226dc0c76601217410594a19282cdc6fc"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/gur.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 52399,
+		"pages": 2,
+		"bytesOut": 88450,
+		"pageSha256": [
+			"992d90e405760d29a10d28d270070467d09c66297135ad4b21f1e65ac3b41b92",
+			"1ca2a4184b9fa64bc5ecc5dd1961105cce5920a7fab2181491cc33445e85f07f"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/k01.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 49799,
+		"pages": 3,
+		"bytesOut": 89219,
+		"pageSha256": [
+			"fa58e29720184a8d478a00c371d47e5629edaea61e2161309eb9a9abbcd49b3a",
+			"f2c41699e31c3e26e4d38f970112886fab4134bd840e2ccb13347a8a6f7c795c",
+			"aff309673331abe840b18909e237ee1b0d9fe7196aa49265ef7ad53c4624b7d0"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/k02.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 31595,
+		"pages": 1,
+		"bytesOut": 55547,
+		"pageSha256": [
+			"4667495679bc775874ccf2bb1b80e85d6986001ba0afea5a7c38bd034e60b971"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/k03.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 52976,
+		"pages": 2,
+		"bytesOut": 97265,
+		"pageSha256": [
+			"d3b89c04f025c0e3251c1932788f4e733444ce40997309ac8f47c049cfd3ef66",
+			"8ca159768e9ca031232211b47e9aa6867c00bb0fdc09323da5367878bda24ec6"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/k04.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 49305,
+		"pages": 2,
+		"bytesOut": 88793,
+		"pageSha256": [
+			"4c9f0dba189e584193f55ffb6372b7930b3d6999189df7fde6ef69ed0c2243ce",
+			"a0facf59ec1293d2e423c80e48360058e87e65009aee8e8b0331d2f0e9d5f003"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/k06.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 53619,
+		"pages": 2,
+		"bytesOut": 91779,
+		"pageSha256": [
+			"e71052705474e77c2d2e42fca9029cba353ed2d35fe873a29d63030a0f2ba5f8",
+			"2871feb444b3bab4eb1c521c3a4638fe11622c342e6d580208b4ecfd79ca7059"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/k07.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 55082,
+		"pages": 2,
+		"bytesOut": 93066,
+		"pageSha256": [
+			"99661427a81e6ba2d7feeb0c61acb31b5c70ab643f38b04772d9e7e417a9f415",
+			"b5b10326bb0ad48271a5916f03cc175c86b2753f6fd92a6b6a72dede0249a4e7"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/k08.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 51156,
+		"pages": 2,
+		"bytesOut": 87171,
+		"pageSha256": [
+			"d1a40c6eba35ee40cc3435bae6553aba16970b600df995ceca4dd581bf4282a4",
+			"470ef06804858d1403567937a44432ad47e78a2eab1794907c53fc09bfa7bc68"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/k09.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 51121,
+		"pages": 2,
+		"bytesOut": 91473,
+		"pageSha256": [
+			"a34887e55e74534adba59883f73cd4142d144446884cc27fabf54e552b4db481",
+			"8518270c0d491608e92c8b6c0a7d930b60577f14d4734dbbf3a44c4b4b2f0178"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/k10.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 53292,
+		"pages": 3,
+		"bytesOut": 97111,
+		"pageSha256": [
+			"26479be35a41a6e8c4242faebf96fb179321cc2e6e92e1123537499159ea43fa",
+			"9a533f6ca23b77657ff5c02dce4feda16903cb3b26fdce771f9f3bc5759199e8",
+			"e51f239ff97bb085a52465ee453d171ea7e477230fa9cdaf558457b095637a02"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/sun1.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 33295,
+		"pages": 2,
+		"bytesOut": 55179,
+		"pageSha256": [
+			"7b2e7d2bedad59d35ca06afae61b92f0dbf2d9f2e3cd048167c03260a51fc87b",
+			"cdb2a3069c7a74bd34927c568ee544263280d672aa26eb1ca64663ebd0314a8f"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/sun4.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 43298,
+		"pages": 2,
+		"bytesOut": 71786,
+		"pageSha256": [
+			"6ea793021a39bdf45b35ddddef55e984492e8b6d2b8a28ee2c07ca73b280b326",
+			"2505980dae565bdd60c7563d885224964fa61640d63d622c941fac87e2eb4b05"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/sun5.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 94892,
+		"pages": 3,
+		"bytesOut": 161148,
+		"pageSha256": [
+			"b8efcb48bebd11ac8b1cd51a43cd3729072cdf728cd9ffc977db801755e6a862",
+			"42a3cacc1c017fe535caaccab80f6c66d467823e4740d8c3622da829331135ee",
+			"87deca2acb75dc2f7f4b6958b81ac13ca5d15b1fa8fc6afcdc7ab3744809da32"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/sun6.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 58446,
+		"pages": 3,
+		"bytesOut": 104728,
+		"pageSha256": [
+			"42cbc21699296ae45d80b7f2e0a3d67de9fd2161819bf92b997d7485d79c8cfc",
+			"2b1c091f18a0c401504046243283cfd8d576f372829e6fb38a7ad095e246da7c",
+			"bf3cfc51587041fb78bb1edb3516c907aa2e92dd3eb23f4b695f9a83283d1138"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/tch.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 64765,
+		"pages": 2,
+		"bytesOut": 112480,
+		"pageSha256": [
+			"e089a3f2a4f08260e312c05a511c816670bba18335e8109a22e0825bf5886425",
+			"2b1884b391c916b4d865e1ede2eed5261e68b57dc3874bd9dcbba4ff9b06df78"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/rule-off/drops/varl.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 24798,
+		"pages": 1,
+		"bytesOut": 41640,
+		"pageSha256": [
+			"8f7f087e1b81b1a4689d3b29960bf2410157fe19ca943373485a21d0ddf970e6"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/rule-off/stalled/grech.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 56756,
+		"pages": 2,
+		"bytesOut": 101034,
+		"pageSha256": [
+			"f6b9d6edb300bf6498885698425d6cfa4ba90d53252dadc7f7bb09d54ecfe8ba",
+			"999eced8905466f252f8ba8aa42a673226dc0c76601217410594a19282cdc6fc"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/A.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 24300,
+		"pages": 1,
+		"bytesOut": 40120,
+		"pageSha256": [
+			"be98559de633c8825db7f07fb0a58e987b40662945c93854d7f1ad7c3ff2b0d7"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/B.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 25223,
+		"pages": 1,
+		"bytesOut": 41772,
+		"pageSha256": [
+			"337f560f122c70f0e4dbb950cd7dfee500a96a76fa7bea715fbb879768de3c57"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/C.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 49177,
+		"pages": 2,
+		"bytesOut": 73451,
+		"pageSha256": [
+			"37816c697395e8b193f2a6ac92cee236f368922da5725107e23fa071f6df4d61",
+			"71db7dc616a41146a1c6f1552e1b9f27510ee59d67f246158b02f77ac3963d7d"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/E.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 84520,
+		"pages": 3,
+		"bytesOut": 135357,
+		"pageSha256": [
+			"b3564ba1699da855b4e9b4d2bfe1411a0efe8b125dcab9d4f370f66fb2166852",
+			"3f3ac709ff07da6095c82a9afa060b6e63b4d5cf01683db0c0046475d55ae7c3",
+			"5decda81be45a820ead1c07ce7a3337f7b3dec84b689baa43a2ba7990615e758"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/F.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 29563,
+		"pages": 1,
+		"bytesOut": 50163,
+		"pageSha256": [
+			"285fe0f31ceecdeb5f14916c3eaecefe60f3f026984c243b91cd292e955f5410"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/grech.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 56756,
+		"pages": 2,
+		"bytesOut": 101034,
+		"pageSha256": [
+			"f6b9d6edb300bf6498885698425d6cfa4ba90d53252dadc7f7bb09d54ecfe8ba",
+			"999eced8905466f252f8ba8aa42a673226dc0c76601217410594a19282cdc6fc"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/gur.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 52399,
+		"pages": 2,
+		"bytesOut": 88450,
+		"pageSha256": [
+			"992d90e405760d29a10d28d270070467d09c66297135ad4b21f1e65ac3b41b92",
+			"1ca2a4184b9fa64bc5ecc5dd1961105cce5920a7fab2181491cc33445e85f07f"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/k01.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 49799,
+		"pages": 3,
+		"bytesOut": 89219,
+		"pageSha256": [
+			"fa58e29720184a8d478a00c371d47e5629edaea61e2161309eb9a9abbcd49b3a",
+			"f2c41699e31c3e26e4d38f970112886fab4134bd840e2ccb13347a8a6f7c795c",
+			"aff309673331abe840b18909e237ee1b0d9fe7196aa49265ef7ad53c4624b7d0"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/k02.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 31595,
+		"pages": 1,
+		"bytesOut": 55547,
+		"pageSha256": [
+			"4667495679bc775874ccf2bb1b80e85d6986001ba0afea5a7c38bd034e60b971"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/k03.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 52976,
+		"pages": 2,
+		"bytesOut": 97265,
+		"pageSha256": [
+			"d3b89c04f025c0e3251c1932788f4e733444ce40997309ac8f47c049cfd3ef66",
+			"8ca159768e9ca031232211b47e9aa6867c00bb0fdc09323da5367878bda24ec6"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/k04.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 49305,
+		"pages": 2,
+		"bytesOut": 88793,
+		"pageSha256": [
+			"4c9f0dba189e584193f55ffb6372b7930b3d6999189df7fde6ef69ed0c2243ce",
+			"a0facf59ec1293d2e423c80e48360058e87e65009aee8e8b0331d2f0e9d5f003"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/k06.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 53619,
+		"pages": 2,
+		"bytesOut": 91779,
+		"pageSha256": [
+			"e71052705474e77c2d2e42fca9029cba353ed2d35fe873a29d63030a0f2ba5f8",
+			"2871feb444b3bab4eb1c521c3a4638fe11622c342e6d580208b4ecfd79ca7059"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/k07.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 55082,
+		"pages": 2,
+		"bytesOut": 93066,
+		"pageSha256": [
+			"99661427a81e6ba2d7feeb0c61acb31b5c70ab643f38b04772d9e7e417a9f415",
+			"b5b10326bb0ad48271a5916f03cc175c86b2753f6fd92a6b6a72dede0249a4e7"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/k08.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 51156,
+		"pages": 2,
+		"bytesOut": 87171,
+		"pageSha256": [
+			"d1a40c6eba35ee40cc3435bae6553aba16970b600df995ceca4dd581bf4282a4",
+			"470ef06804858d1403567937a44432ad47e78a2eab1794907c53fc09bfa7bc68"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/k09.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 51121,
+		"pages": 2,
+		"bytesOut": 91473,
+		"pageSha256": [
+			"a34887e55e74534adba59883f73cd4142d144446884cc27fabf54e552b4db481",
+			"8518270c0d491608e92c8b6c0a7d930b60577f14d4734dbbf3a44c4b4b2f0178"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/k10.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 53292,
+		"pages": 3,
+		"bytesOut": 97111,
+		"pageSha256": [
+			"26479be35a41a6e8c4242faebf96fb179321cc2e6e92e1123537499159ea43fa",
+			"9a533f6ca23b77657ff5c02dce4feda16903cb3b26fdce771f9f3bc5759199e8",
+			"e51f239ff97bb085a52465ee453d171ea7e477230fa9cdaf558457b095637a02"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/sun1.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 33295,
+		"pages": 2,
+		"bytesOut": 55179,
+		"pageSha256": [
+			"7b2e7d2bedad59d35ca06afae61b92f0dbf2d9f2e3cd048167c03260a51fc87b",
+			"cdb2a3069c7a74bd34927c568ee544263280d672aa26eb1ca64663ebd0314a8f"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/sun4.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 43298,
+		"pages": 2,
+		"bytesOut": 71786,
+		"pageSha256": [
+			"6ea793021a39bdf45b35ddddef55e984492e8b6d2b8a28ee2c07ca73b280b326",
+			"2505980dae565bdd60c7563d885224964fa61640d63d622c941fac87e2eb4b05"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/sun5.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 94892,
+		"pages": 3,
+		"bytesOut": 161148,
+		"pageSha256": [
+			"b8efcb48bebd11ac8b1cd51a43cd3729072cdf728cd9ffc977db801755e6a862",
+			"42a3cacc1c017fe535caaccab80f6c66d467823e4740d8c3622da829331135ee",
+			"87deca2acb75dc2f7f4b6958b81ac13ca5d15b1fa8fc6afcdc7ab3744809da32"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/sun6.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 58446,
+		"pages": 3,
+		"bytesOut": 104728,
+		"pageSha256": [
+			"42cbc21699296ae45d80b7f2e0a3d67de9fd2161819bf92b997d7485d79c8cfc",
+			"2b1c091f18a0c401504046243283cfd8d576f372829e6fb38a7ad095e246da7c",
+			"bf3cfc51587041fb78bb1edb3516c907aa2e92dd3eb23f4b695f9a83283d1138"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/tch.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 64765,
+		"pages": 2,
+		"bytesOut": 112480,
+		"pageSha256": [
+			"e089a3f2a4f08260e312c05a511c816670bba18335e8109a22e0825bf5886425",
+			"2b1884b391c916b4d865e1ede2eed5261e68b57dc3874bd9dcbba4ff9b06df78"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/rule-on/drops/varl.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 24798,
+		"pages": 1,
+		"bytesOut": 41640,
+		"pageSha256": [
+			"8f7f087e1b81b1a4689d3b29960bf2410157fe19ca943373485a21d0ddf970e6"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/step1/drops/K.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 49308,
+		"pages": 2,
+		"bytesOut": 82852,
+		"pageSha256": [
+			"12da88a3cdcb620a9b8742a2ef7d7ead5afa54d8ad95b1f1acaa0249a068dec0",
+			"04dd5e3bf4d578401cfbed49a5ed811f449a7b085f50568177908f14e080a0dc"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/step1/drops/L.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 36010,
+		"pages": 2,
+		"bytesOut": 60676,
+		"pageSha256": [
+			"b5a04aaec95c7a93ee2090c42db12a2e1f57caad67af2f9cc551153f388e3db4",
+			"9842e804cfd8bc958081dbd85dffd852085de42a11200f660393720e69b7e8bc"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/step1/drops/M.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 25295,
+		"pages": 2,
+		"bytesOut": 42447,
+		"pageSha256": [
+			"b98e704212efad6c5ba3110e38e6582441440c48ab0178d958327ece520506df",
+			"1e6e761c5f63f1feeb6a6971f78831fc397d657aa5404df7f90b97d213ed203c"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/step1/drops/P.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 52350,
+		"pages": 3,
+		"bytesOut": 88393,
+		"pageSha256": [
+			"94bb33d52c2cea6572961ae7d243907549ef456b6e0ba9fcb0ccac37e37280e8",
+			"1e8419a863fc4519e0538807e6991113795458f980f4a0d6834580d063a5861d",
+			"5aa040fabff92cb8bcc157d2ad45dba04688be98979dcfa442c2bbe7ea891de6"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/step2/drops/G.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 41600,
+		"pages": 2,
+		"bytesOut": 72780,
+		"pageSha256": [
+			"b48170a2fc6eee85d58164459d6db8035a24a2f3899a5d2e35ea3d871b0583cd",
+			"a42f50a786710ae3a2fe04ce56e88ebe72d5263db3d777717e1bac4785fdc1aa"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/step2/drops/H.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 54802,
+		"pages": 2,
+		"bytesOut": 89094,
+		"pageSha256": [
+			"2c8406a9eb835fb692c693b2d52d1dfa5034b385266ca1981b1583cd44812e77",
+			"c749018d82079bb1915087d9198f110513f415447ebaa2b7ca47d74c51b947dc"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/step2/drops/I.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 44396,
+		"pages": 2,
+		"bytesOut": 110602,
+		"pageSha256": [
+			"186c3035f7ec6e84ce3ce1a2f6c9a059b72f981da259105e22b071c9f36b9b61",
+			"cfbe4d6aad1427441e46f14ce0a8193dd530b1a5d05c06a2211201924de302af"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/step2/drops/J.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 31305,
+		"pages": 2,
+		"bytesOut": 53732,
+		"pageSha256": [
+			"476004a824ca73a33ac2d3f3722a6b1037fc9012dd8c34167cafc0a52dfb2335",
+			"eb3fd67b14fee63b21ca81461d7c2803f5724d098895ea204f731c286d6bdb04"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/step2/drops/N.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 71850,
+		"pages": 3,
+		"bytesOut": 122310,
+		"pageSha256": [
+			"842c04fe18bb30f40686ba7c08d9088c1d75b89999c5b96dfda58772b606eb02",
+			"552a59f6d30ece27b13368f68420325976bc476e5179114af5c5c3b11babffc8",
+			"721fefd4b660bc7a3d8fdf076f35a519d65d8679d61e001bdc0acd87b7c79b33"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/step2/drops/O.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 57273,
+		"pages": 2,
+		"bytesOut": 94430,
+		"pageSha256": [
+			"33ffc3de98d0416002a40936d8422bd33d3f8b02b54f8337dd3b067bc54fd570",
+			"f96cef664686cbb4ef34a27ca232ba5a328102d55856522c84fb686262fd1833"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/step3on/drops/G.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 41600,
+		"pages": 2,
+		"bytesOut": 72780,
+		"pageSha256": [
+			"b48170a2fc6eee85d58164459d6db8035a24a2f3899a5d2e35ea3d871b0583cd",
+			"a42f50a786710ae3a2fe04ce56e88ebe72d5263db3d777717e1bac4785fdc1aa"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/step3on/drops/H.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 54802,
+		"pages": 2,
+		"bytesOut": 89094,
+		"pageSha256": [
+			"2c8406a9eb835fb692c693b2d52d1dfa5034b385266ca1981b1583cd44812e77",
+			"c749018d82079bb1915087d9198f110513f415447ebaa2b7ca47d74c51b947dc"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/step3on/drops/I.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 43000,
+		"pages": 2,
+		"bytesOut": 72115,
+		"pageSha256": [
+			"a1216440c856082d17275e1a1dc3347154d0696b727d3adc7f06251d918e622b",
+			"304f5bf0645b38a50f97f588265cc22ca4291a9734d3d4722e655a19bd9265cd"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/step3on/drops/J.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 31305,
+		"pages": 2,
+		"bytesOut": 53732,
+		"pageSha256": [
+			"476004a824ca73a33ac2d3f3722a6b1037fc9012dd8c34167cafc0a52dfb2335",
+			"eb3fd67b14fee63b21ca81461d7c2803f5724d098895ea204f731c286d6bdb04"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/step3on/drops/K.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 49308,
+		"pages": 2,
+		"bytesOut": 82852,
+		"pageSha256": [
+			"12da88a3cdcb620a9b8742a2ef7d7ead5afa54d8ad95b1f1acaa0249a068dec0",
+			"04dd5e3bf4d578401cfbed49a5ed811f449a7b085f50568177908f14e080a0dc"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/step3on/drops/L.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 36010,
+		"pages": 2,
+		"bytesOut": 60676,
+		"pageSha256": [
+			"b5a04aaec95c7a93ee2090c42db12a2e1f57caad67af2f9cc551153f388e3db4",
+			"9842e804cfd8bc958081dbd85dffd852085de42a11200f660393720e69b7e8bc"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/step3on/drops/M.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 21055,
+		"pages": 1,
+		"bytesOut": 33675,
+		"pageSha256": [
+			"c12f2b4b269f7de61cab32e16f8fb093f03520e7b984866d1462b7a9a6bddeb0"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/step3on/drops/N.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 71850,
+		"pages": 3,
+		"bytesOut": 122310,
+		"pageSha256": [
+			"842c04fe18bb30f40686ba7c08d9088c1d75b89999c5b96dfda58772b606eb02",
+			"552a59f6d30ece27b13368f68420325976bc476e5179114af5c5c3b11babffc8",
+			"721fefd4b660bc7a3d8fdf076f35a519d65d8679d61e001bdc0acd87b7c79b33"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/step3on/drops/O.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 57273,
+		"pages": 2,
+		"bytesOut": 94430,
+		"pageSha256": [
+			"33ffc3de98d0416002a40936d8422bd33d3f8b02b54f8337dd3b067bc54fd570",
+			"f96cef664686cbb4ef34a27ca232ba5a328102d55856522c84fb686262fd1833"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-m-p-r74_2026-10-11/step3on/drops/P.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 52350,
+		"pages": 3,
+		"bytesOut": 88393,
+		"pageSha256": [
+			"94bb33d52c2cea6572961ae7d243907549ef456b6e0ba9fcb0ccac37e37280e8",
+			"1e8419a863fc4519e0538807e6991113795458f980f4a0d6834580d063a5861d",
+			"5aa040fabff92cb8bcc157d2ad45dba04688be98979dcfa442c2bbe7ea891de6"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-phase1_r1_2026-10-02/tchaikovsky-op38-3-voice.musicxml",
+		"source": "file-source (no software tag; provenance not established)",
+		"bytesIn": 38857,
+		"pages": 3,
+		"bytesOut": 154967,
+		"pageSha256": [
+			"b67805dcb0dc6077dafb9e2974d9ee624e2d593e68735544b52b755e90b66f7d",
+			"1d833b19de72fd660fee73aadc82107b5e128442317c011aaac8524a49404ad9",
+			"4abc3c4ad567b7986f75c00d31a9e5433359c0a7f226240feca310cd59c2576f"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-set3-four-below_2026-10-11/after/drops/A.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 24300,
+		"pages": 1,
+		"bytesOut": 40120,
+		"pageSha256": [
+			"be98559de633c8825db7f07fb0a58e987b40662945c93854d7f1ad7c3ff2b0d7"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-set3-four-below_2026-10-11/after/drops/B.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 25223,
+		"pages": 1,
+		"bytesOut": 41772,
+		"pageSha256": [
+			"337f560f122c70f0e4dbb950cd7dfee500a96a76fa7bea715fbb879768de3c57"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-set3-four-below_2026-10-11/after/drops/C.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 49177,
+		"pages": 2,
+		"bytesOut": 73451,
+		"pageSha256": [
+			"37816c697395e8b193f2a6ac92cee236f368922da5725107e23fa071f6df4d61",
+			"71db7dc616a41146a1c6f1552e1b9f27510ee59d67f246158b02f77ac3963d7d"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-set3-four-below_2026-10-11/after/drops/E.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 84520,
+		"pages": 3,
+		"bytesOut": 135357,
+		"pageSha256": [
+			"b3564ba1699da855b4e9b4d2bfe1411a0efe8b125dcab9d4f370f66fb2166852",
+			"3f3ac709ff07da6095c82a9afa060b6e63b4d5cf01683db0c0046475d55ae7c3",
+			"5decda81be45a820ead1c07ce7a3337f7b3dec84b689baa43a2ba7990615e758"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-set3-four-below_2026-10-11/after/drops/F.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 29563,
+		"pages": 1,
+		"bytesOut": 50163,
+		"pageSha256": [
+			"285fe0f31ceecdeb5f14916c3eaecefe60f3f026984c243b91cd292e955f5410"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-set3-four-below_2026-10-11/after/drops/G.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 41600,
+		"pages": 2,
+		"bytesOut": 72780,
+		"pageSha256": [
+			"b48170a2fc6eee85d58164459d6db8035a24a2f3899a5d2e35ea3d871b0583cd",
+			"a42f50a786710ae3a2fe04ce56e88ebe72d5263db3d777717e1bac4785fdc1aa"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-set3-four-below_2026-10-11/after/drops/H.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 54802,
+		"pages": 2,
+		"bytesOut": 89094,
+		"pageSha256": [
+			"2c8406a9eb835fb692c693b2d52d1dfa5034b385266ca1981b1583cd44812e77",
+			"c749018d82079bb1915087d9198f110513f415447ebaa2b7ca47d74c51b947dc"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-set3-four-below_2026-10-11/after/drops/I.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 43000,
+		"pages": 2,
+		"bytesOut": 72115,
+		"pageSha256": [
+			"a1216440c856082d17275e1a1dc3347154d0696b727d3adc7f06251d918e622b",
+			"304f5bf0645b38a50f97f588265cc22ca4291a9734d3d4722e655a19bd9265cd"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-set3-four-below_2026-10-11/after/drops/J.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 31305,
+		"pages": 2,
+		"bytesOut": 53732,
+		"pageSha256": [
+			"476004a824ca73a33ac2d3f3722a6b1037fc9012dd8c34167cafc0a52dfb2335",
+			"eb3fd67b14fee63b21ca81461d7c2803f5724d098895ea204f731c286d6bdb04"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-set3-four-below_2026-10-11/after/drops/K.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 49308,
+		"pages": 2,
+		"bytesOut": 82852,
+		"pageSha256": [
+			"12da88a3cdcb620a9b8742a2ef7d7ead5afa54d8ad95b1f1acaa0249a068dec0",
+			"04dd5e3bf4d578401cfbed49a5ed811f449a7b085f50568177908f14e080a0dc"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-set3-four-below_2026-10-11/after/drops/L.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 36010,
+		"pages": 2,
+		"bytesOut": 60676,
+		"pageSha256": [
+			"b5a04aaec95c7a93ee2090c42db12a2e1f57caad67af2f9cc551153f388e3db4",
+			"9842e804cfd8bc958081dbd85dffd852085de42a11200f660393720e69b7e8bc"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-set3-four-below_2026-10-11/after/drops/M.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 21055,
+		"pages": 1,
+		"bytesOut": 33675,
+		"pageSha256": [
+			"c12f2b4b269f7de61cab32e16f8fb093f03520e7b984866d1462b7a9a6bddeb0"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-set3-four-below_2026-10-11/after/drops/N.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 71850,
+		"pages": 3,
+		"bytesOut": 122310,
+		"pageSha256": [
+			"842c04fe18bb30f40686ba7c08d9088c1d75b89999c5b96dfda58772b606eb02",
+			"552a59f6d30ece27b13368f68420325976bc476e5179114af5c5c3b11babffc8",
+			"721fefd4b660bc7a3d8fdf076f35a519d65d8679d61e001bdc0acd87b7c79b33"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-set3-four-below_2026-10-11/after/drops/O.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 57273,
+		"pages": 2,
+		"bytesOut": 94430,
+		"pageSha256": [
+			"33ffc3de98d0416002a40936d8422bd33d3f8b02b54f8337dd3b067bc54fd570",
+			"f96cef664686cbb4ef34a27ca232ba5a328102d55856522c84fb686262fd1833"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-set3-four-below_2026-10-11/after/drops/P.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 52350,
+		"pages": 3,
+		"bytesOut": 88393,
+		"pageSha256": [
+			"94bb33d52c2cea6572961ae7d243907549ef456b6e0ba9fcb0ccac37e37280e8",
+			"1e8419a863fc4519e0538807e6991113795458f980f4a0d6834580d063a5861d",
+			"5aa040fabff92cb8bcc157d2ad45dba04688be98979dcfa442c2bbe7ea891de6"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-set3-four-below_2026-10-11/after/drops/Q.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 32189,
+		"pages": 1,
+		"bytesOut": 51409,
+		"pageSha256": [
+			"813398341f81fcbcfe33eef50dac0c3dd153893960a6327e710fcf69ae58bdb4"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-set3-four-below_2026-10-11/after/drops/R.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 72992,
+		"pages": 4,
+		"bytesOut": 120991,
+		"pageSha256": [
+			"3cdd44c94d4fc77f54b4cf529124e1d217ba7dc5c40935f70092036071a6c7a5",
+			"c4f26bea2f1ad2c1dcb657ebc81d1478166b60e949f8285ca5b3e9a772c89fdf",
+			"e712c07d5b6657cfe9cd62c207db38c4869da05f9c9b037eaaa6369512f898cd",
+			"5a95ce4eafdfee09c21d2874722461e332f93e7622d058f6eec29590d14d463f"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-set3-four-below_2026-10-11/after/drops/S.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 48711,
+		"pages": 3,
+		"bytesOut": 84448,
+		"pageSha256": [
+			"2c77cfc67d41e7c8535ea378afcfb9de0d7e17bd7b1aa5e349d1598f5676c827",
+			"324a79926a984e62c1706a19d34fec14248bc7dca0de74e44a68de16c860ce06",
+			"2183ffc2f66ab6b68b8ab520c0b0ec8b43912503165a75016955440ece9c7d74"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-set3-four-below_2026-10-11/after/drops/T.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 70538,
+		"pages": 4,
+		"bytesOut": 122562,
+		"pageSha256": [
+			"e55556cc44f299ef86238d6c4efa6982b73c73e7826985f19c76d5507d7ccf14",
+			"cf23ea1a6a3cf110be37a37ad2c63699b39adde335ca646e8c7d7bd4484ed373",
+			"290173a583710536604183834e2f53a9daabed060f07f75843c2cb9307a4a492",
+			"c823bb7ab167b1e0c656c6a85ab8516c47114fa535d7b20ae1444122c2027e92"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-set3-four-below_2026-10-11/after/drops/U.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 26117,
+		"pages": 1,
+		"bytesOut": 45576,
+		"pageSha256": [
+			"bdd97c75b60e66b5facb7494f0d4c81480e2f923d46101f549369a000333da38"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-set3-four-below_2026-10-11/after/drops/V.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 50017,
+		"pages": 2,
+		"bytesOut": 78538,
+		"pageSha256": [
+			"8237596bff9f73afd67aeac1493d61bf88ba2aea91ed4cd5ed7d73e4a3a5cfca",
+			"e1f4c0a1e4ae80093750cb725f50034c85d8357cd12a1e00905b5810af37c24e"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-set3-four-below_2026-10-11/after/drops/W.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 32900,
+		"pages": 2,
+		"bytesOut": 54351,
+		"pageSha256": [
+			"413b42fdf916809723bf28e8125e61ae60cc7c1f6ab976d99dcce6e3a57fb5c9",
+			"a467ed639765d69b771b96bcc3165467460265afb3112a6eef9e8154f7ee06d7"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-set3-four-below_2026-10-11/after/drops/X.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 49559,
+		"pages": 2,
+		"bytesOut": 84886,
+		"pageSha256": [
+			"224f10c730504b7de4a68785d19ab269424fc81692e33708a590de94855f02c7",
+			"5515c567bb8739e68b0aaa59afd11ca4b743efb1d6b17931bcd8ed845ad1d82e"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-set3-four-below_2026-10-11/after/drops/Y.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 62352,
+		"pages": 3,
+		"bytesOut": 106056,
+		"pageSha256": [
+			"feca49cc9e0c159ed5c2b7f55b77819c9d4b2e0ec38efe9fd1c0726ba93fafaa",
+			"b998c99c4a3d5b47413f3a46049e1b4da46e79f71786e1be289bb72b4d791eaa",
+			"3dc09a8ec4ed42f431d9393ccc8b6cfca53f76732b8f36c6816e8d7fa350073e"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-set3-four-below_2026-10-11/after/drops/Z.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 95101,
+		"pages": 4,
+		"bytesOut": 158381,
+		"pageSha256": [
+			"bb16d89e034d339557aea60fef75776ce0076fede994e91790e4ad6a8ccbb1d2",
+			"df7eb3245dbfd306aea39e4f17f93d1634bca20f9de170950df701168f850877",
+			"067eb27bb24e66f3d6505041b90ad7b4040302b9f63ff7645f8d60a0129138b1",
+			"9babb3e7c5d470656a1bd8a90e948df8c8b8b460aea77040ba7844a491aee973"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-set3-four-below_2026-10-11/after/drops/grech.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 56756,
+		"pages": 2,
+		"bytesOut": 101034,
+		"pageSha256": [
+			"f6b9d6edb300bf6498885698425d6cfa4ba90d53252dadc7f7bb09d54ecfe8ba",
+			"999eced8905466f252f8ba8aa42a673226dc0c76601217410594a19282cdc6fc"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-set3-four-below_2026-10-11/after/drops/gur.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 52399,
+		"pages": 2,
+		"bytesOut": 88450,
+		"pageSha256": [
+			"992d90e405760d29a10d28d270070467d09c66297135ad4b21f1e65ac3b41b92",
+			"1ca2a4184b9fa64bc5ecc5dd1961105cce5920a7fab2181491cc33445e85f07f"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-set3-four-below_2026-10-11/after/drops/k01.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 49799,
+		"pages": 3,
+		"bytesOut": 89219,
+		"pageSha256": [
+			"fa58e29720184a8d478a00c371d47e5629edaea61e2161309eb9a9abbcd49b3a",
+			"f2c41699e31c3e26e4d38f970112886fab4134bd840e2ccb13347a8a6f7c795c",
+			"aff309673331abe840b18909e237ee1b0d9fe7196aa49265ef7ad53c4624b7d0"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-set3-four-below_2026-10-11/after/drops/k02.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 31595,
+		"pages": 1,
+		"bytesOut": 55547,
+		"pageSha256": [
+			"4667495679bc775874ccf2bb1b80e85d6986001ba0afea5a7c38bd034e60b971"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-set3-four-below_2026-10-11/after/drops/k03.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 52976,
+		"pages": 2,
+		"bytesOut": 97265,
+		"pageSha256": [
+			"d3b89c04f025c0e3251c1932788f4e733444ce40997309ac8f47c049cfd3ef66",
+			"8ca159768e9ca031232211b47e9aa6867c00bb0fdc09323da5367878bda24ec6"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-set3-four-below_2026-10-11/after/drops/k04.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 49305,
+		"pages": 2,
+		"bytesOut": 88793,
+		"pageSha256": [
+			"4c9f0dba189e584193f55ffb6372b7930b3d6999189df7fde6ef69ed0c2243ce",
+			"a0facf59ec1293d2e423c80e48360058e87e65009aee8e8b0331d2f0e9d5f003"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-set3-four-below_2026-10-11/after/drops/k06.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 53619,
+		"pages": 2,
+		"bytesOut": 91779,
+		"pageSha256": [
+			"e71052705474e77c2d2e42fca9029cba353ed2d35fe873a29d63030a0f2ba5f8",
+			"2871feb444b3bab4eb1c521c3a4638fe11622c342e6d580208b4ecfd79ca7059"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-set3-four-below_2026-10-11/after/drops/k07.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 55082,
+		"pages": 2,
+		"bytesOut": 93066,
+		"pageSha256": [
+			"99661427a81e6ba2d7feeb0c61acb31b5c70ab643f38b04772d9e7e417a9f415",
+			"b5b10326bb0ad48271a5916f03cc175c86b2753f6fd92a6b6a72dede0249a4e7"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-set3-four-below_2026-10-11/after/drops/k08.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 51156,
+		"pages": 2,
+		"bytesOut": 87171,
+		"pageSha256": [
+			"d1a40c6eba35ee40cc3435bae6553aba16970b600df995ceca4dd581bf4282a4",
+			"470ef06804858d1403567937a44432ad47e78a2eab1794907c53fc09bfa7bc68"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-set3-four-below_2026-10-11/after/drops/k09.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 51121,
+		"pages": 2,
+		"bytesOut": 91473,
+		"pageSha256": [
+			"a34887e55e74534adba59883f73cd4142d144446884cc27fabf54e552b4db481",
+			"8518270c0d491608e92c8b6c0a7d930b60577f14d4734dbbf3a44c4b4b2f0178"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-set3-four-below_2026-10-11/after/drops/k10.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 53292,
+		"pages": 3,
+		"bytesOut": 97111,
+		"pageSha256": [
+			"26479be35a41a6e8c4242faebf96fb179321cc2e6e92e1123537499159ea43fa",
+			"9a533f6ca23b77657ff5c02dce4feda16903cb3b26fdce771f9f3bc5759199e8",
+			"e51f239ff97bb085a52465ee453d171ea7e477230fa9cdaf558457b095637a02"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-set3-four-below_2026-10-11/after/drops/sun1.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 33295,
+		"pages": 2,
+		"bytesOut": 55179,
+		"pageSha256": [
+			"7b2e7d2bedad59d35ca06afae61b92f0dbf2d9f2e3cd048167c03260a51fc87b",
+			"cdb2a3069c7a74bd34927c568ee544263280d672aa26eb1ca64663ebd0314a8f"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-set3-four-below_2026-10-11/after/drops/sun4.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 43298,
+		"pages": 2,
+		"bytesOut": 71786,
+		"pageSha256": [
+			"6ea793021a39bdf45b35ddddef55e984492e8b6d2b8a28ee2c07ca73b280b326",
+			"2505980dae565bdd60c7563d885224964fa61640d63d622c941fac87e2eb4b05"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-set3-four-below_2026-10-11/after/drops/sun5.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 94892,
+		"pages": 3,
+		"bytesOut": 161148,
+		"pageSha256": [
+			"b8efcb48bebd11ac8b1cd51a43cd3729072cdf728cd9ffc977db801755e6a862",
+			"42a3cacc1c017fe535caaccab80f6c66d467823e4740d8c3622da829331135ee",
+			"87deca2acb75dc2f7f4b6958b81ac13ca5d15b1fa8fc6afcdc7ab3744809da32"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-set3-four-below_2026-10-11/after/drops/sun6.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 58446,
+		"pages": 3,
+		"bytesOut": 104728,
+		"pageSha256": [
+			"42cbc21699296ae45d80b7f2e0a3d67de9fd2161819bf92b997d7485d79c8cfc",
+			"2b1c091f18a0c401504046243283cfd8d576f372829e6fb38a7ad095e246da7c",
+			"bf3cfc51587041fb78bb1edb3516c907aa2e92dd3eb23f4b695f9a83283d1138"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-set3-four-below_2026-10-11/after/drops/tch.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 64765,
+		"pages": 2,
+		"bytesOut": 112480,
+		"pageSha256": [
+			"e089a3f2a4f08260e312c05a511c816670bba18335e8109a22e0825bf5886425",
+			"2b1884b391c916b4d865e1ede2eed5261e68b57dc3874bd9dcbba4ff9b06df78"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-set3-four-below_2026-10-11/after/drops/varl.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 24798,
+		"pages": 1,
+		"bytesOut": 41640,
+		"pageSha256": [
+			"8f7f087e1b81b1a4689d3b29960bf2410157fe19ca943373485a21d0ddf970e6"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-set3-four-below_2026-10-11/before/drops/S.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 62101,
+		"pages": 3,
+		"bytesOut": 96852,
+		"pageSha256": [
+			"2c77cfc67d41e7c8535ea378afcfb9de0d7e17bd7b1aa5e349d1598f5676c827",
+			"fb82bd1c322bee2920580427326536a2fcd4c072c5f26ea0bf0bfde77978c217",
+			"b0deef4a8e1f75cc9fa01e17950fea7cfa426e29c7c4d11225cc5ff06e8ed982"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-set3-four-below_2026-10-11/before/drops/T.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 70538,
+		"pages": 4,
+		"bytesOut": 122562,
+		"pageSha256": [
+			"e55556cc44f299ef86238d6c4efa6982b73c73e7826985f19c76d5507d7ccf14",
+			"cf23ea1a6a3cf110be37a37ad2c63699b39adde335ca646e8c7d7bd4484ed373",
+			"290173a583710536604183834e2f53a9daabed060f07f75843c2cb9307a4a492",
+			"c823bb7ab167b1e0c656c6a85ab8516c47114fa535d7b20ae1444122c2027e92"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-set3-four-below_2026-10-11/before/drops/V.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 50017,
+		"pages": 2,
+		"bytesOut": 78538,
+		"pageSha256": [
+			"8237596bff9f73afd67aeac1493d61bf88ba2aea91ed4cd5ed7d73e4a3a5cfca",
+			"e1f4c0a1e4ae80093750cb725f50034c85d8357cd12a1e00905b5810af37c24e"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-set3-four-below_2026-10-11/before/drops/X.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 51525,
+		"pages": 2,
+		"bytesOut": 87674,
+		"pageSha256": [
+			"4f03d7c724cf2e32186efde37f72e11099e9f3ffd7e3c38c9818c6396a26a88e",
+			"472299b25064d39233cef06e7a9eecfffe805e66d5e05c99955b2d2b06ac5724"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-set3-four-below_2026-10-11/fixA/drops/X.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 49559,
+		"pages": 2,
+		"bytesOut": 84886,
+		"pageSha256": [
+			"224f10c730504b7de4a68785d19ab269424fc81692e33708a590de94855f02c7",
+			"5515c567bb8739e68b0aaa59afd11ca4b743efb1d6b17931bcd8ed845ad1d82e"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-set3-four-below_2026-10-11/superseded/after-first-ilya7/drops/S.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 48711,
+		"pages": 3,
+		"bytesOut": 84448,
+		"pageSha256": [
+			"2c77cfc67d41e7c8535ea378afcfb9de0d7e17bd7b1aa5e349d1598f5676c827",
+			"324a79926a984e62c1706a19d34fec14248bc7dca0de74e44a68de16c860ce06",
+			"2183ffc2f66ab6b68b8ab520c0b0ec8b43912503165a75016955440ece9c7d74"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-set3-four-below_2026-10-11/superseded/after-first-ilya7/drops/T.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 70538,
+		"pages": 4,
+		"bytesOut": 122562,
+		"pageSha256": [
+			"e55556cc44f299ef86238d6c4efa6982b73c73e7826985f19c76d5507d7ccf14",
+			"cf23ea1a6a3cf110be37a37ad2c63699b39adde335ca646e8c7d7bd4484ed373",
+			"290173a583710536604183834e2f53a9daabed060f07f75843c2cb9307a4a492",
+			"c823bb7ab167b1e0c656c6a85ab8516c47114fa535d7b20ae1444122c2027e92"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-set3-four-below_2026-10-11/superseded/after-first-ilya7/drops/V.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 50017,
+		"pages": 2,
+		"bytesOut": 78538,
+		"pageSha256": [
+			"8237596bff9f73afd67aeac1493d61bf88ba2aea91ed4cd5ed7d73e4a3a5cfca",
+			"e1f4c0a1e4ae80093750cb725f50034c85d8357cd12a1e00905b5810af37c24e"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/measure-set3-four-below_2026-10-11/superseded/after-first-ilya7/drops/X.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 49559,
+		"pages": 2,
+		"bytesOut": 84886,
+		"pageSha256": [
+			"224f10c730504b7de4a68785d19ab269424fc81692e33708a590de94855f02c7",
+			"5515c567bb8739e68b0aaa59afd11ca4b743efb1d6b17931bcd8ed845ad1d82e"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/restore-reads-with-homr_r1_2026-10-05/after-drop-reload.kept.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 64771,
+		"pages": 2,
+		"bytesOut": 112480,
+		"pageSha256": [
+			"e089a3f2a4f08260e312c05a511c816670bba18335e8109a22e0825bf5886425",
+			"2b1884b391c916b4d865e1ede2eed5261e68b57dc3874bd9dcbba4ff9b06df78"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/restore-reads-with-homr_r1_2026-10-05/after-drop.dropped.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 64771,
+		"pages": 2,
+		"bytesOut": 112480,
+		"pageSha256": [
+			"e089a3f2a4f08260e312c05a511c816670bba18335e8109a22e0825bf5886425",
+			"2b1884b391c916b4d865e1ede2eed5261e68b57dc3874bd9dcbba4ff9b06df78"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/restore-reads-with-homr_r1_2026-10-05/after-restore-1-old-state.kept.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 64771,
+		"pages": 2,
+		"bytesOut": 112480,
+		"pageSha256": [
+			"e089a3f2a4f08260e312c05a511c816670bba18335e8109a22e0825bf5886425",
+			"2b1884b391c916b4d865e1ede2eed5261e68b57dc3874bd9dcbba4ff9b06df78"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/restore-reads-with-homr_r1_2026-10-05/after-restore-2-kept.kept.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 64771,
+		"pages": 2,
+		"bytesOut": 112480,
+		"pageSha256": [
+			"e089a3f2a4f08260e312c05a511c816670bba18335e8109a22e0825bf5886425",
+			"2b1884b391c916b4d865e1ede2eed5261e68b57dc3874bd9dcbba4ff9b06df78"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/restore-reads-with-homr_r1_2026-10-05/after-restore-3-stamp-changed.kept.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 64771,
+		"pages": 2,
+		"bytesOut": 112480,
+		"pageSha256": [
+			"e089a3f2a4f08260e312c05a511c816670bba18335e8109a22e0825bf5886425",
+			"2b1884b391c916b4d865e1ede2eed5261e68b57dc3874bd9dcbba4ff9b06df78"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/restore-reads-with-homr_r1_2026-10-05/before-drop.dropped.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 64771,
+		"pages": 2,
+		"bytesOut": 112480,
+		"pageSha256": [
+			"e089a3f2a4f08260e312c05a511c816670bba18335e8109a22e0825bf5886425",
+			"2b1884b391c916b4d865e1ede2eed5261e68b57dc3874bd9dcbba4ff9b06df78"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/row93-rekey_2026-10-13/out-a1/a1-redrop.kept.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 64765,
+		"pages": 2,
+		"bytesOut": 112480,
+		"pageSha256": [
+			"e089a3f2a4f08260e312c05a511c816670bba18335e8109a22e0825bf5886425",
+			"2b1884b391c916b4d865e1ede2eed5261e68b57dc3874bd9dcbba4ff9b06df78"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/row93-rekey_2026-10-13/out-a1/a1-reopen1.kept.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 64765,
+		"pages": 2,
+		"bytesOut": 112480,
+		"pageSha256": [
+			"e089a3f2a4f08260e312c05a511c816670bba18335e8109a22e0825bf5886425",
+			"2b1884b391c916b4d865e1ede2eed5261e68b57dc3874bd9dcbba4ff9b06df78"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/row93-rekey_2026-10-13/out-a1/a1-reopen2.kept.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 64765,
+		"pages": 2,
+		"bytesOut": 112480,
+		"pageSha256": [
+			"e089a3f2a4f08260e312c05a511c816670bba18335e8109a22e0825bf5886425",
+			"2b1884b391c916b4d865e1ede2eed5261e68b57dc3874bd9dcbba4ff9b06df78"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/row93-rekey_2026-10-13/out-before-r1/before-reopen2.kept.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 64765,
+		"pages": 2,
+		"bytesOut": 112480,
+		"pageSha256": [
+			"e089a3f2a4f08260e312c05a511c816670bba18335e8109a22e0825bf5886425",
+			"2b1884b391c916b4d865e1ede2eed5261e68b57dc3874bd9dcbba4ff9b06df78"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/row93-rekey_2026-10-13/out/after-redrop.kept.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 64765,
+		"pages": 2,
+		"bytesOut": 112480,
+		"pageSha256": [
+			"e089a3f2a4f08260e312c05a511c816670bba18335e8109a22e0825bf5886425",
+			"2b1884b391c916b4d865e1ede2eed5261e68b57dc3874bd9dcbba4ff9b06df78"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/row93-rekey_2026-10-13/out/after-reopen1.kept.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 64765,
+		"pages": 2,
+		"bytesOut": 112480,
+		"pageSha256": [
+			"e089a3f2a4f08260e312c05a511c816670bba18335e8109a22e0825bf5886425",
+			"2b1884b391c916b4d865e1ede2eed5261e68b57dc3874bd9dcbba4ff9b06df78"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/row93-rekey_2026-10-13/out/after-reopen2.kept.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 64765,
+		"pages": 2,
+		"bytesOut": 112480,
+		"pageSha256": [
+			"e089a3f2a4f08260e312c05a511c816670bba18335e8109a22e0825bf5886425",
+			"2b1884b391c916b4d865e1ede2eed5261e68b57dc3874bd9dcbba4ff9b06df78"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/row93-rekey_2026-10-13/out/before-reopen2.kept.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 64765,
+		"pages": 2,
+		"bytesOut": 112480,
+		"pageSha256": [
+			"e089a3f2a4f08260e312c05a511c816670bba18335e8109a22e0825bf5886425",
+			"2b1884b391c916b4d865e1ede2eed5261e68b57dc3874bd9dcbba4ff9b06df78"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/step2-on-the-alias_r1_2026-10-06/alias-drop.dropped.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 64771,
+		"pages": 2,
+		"bytesOut": 112480,
+		"pageSha256": [
+			"e089a3f2a4f08260e312c05a511c816670bba18335e8109a22e0825bf5886425",
+			"2b1884b391c916b4d865e1ede2eed5261e68b57dc3874bd9dcbba4ff9b06df78"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/step2-on-the-alias_r1_2026-10-06/alias-old-restore-1.kept.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 64771,
+		"pages": 2,
+		"bytesOut": 112480,
+		"pageSha256": [
+			"e089a3f2a4f08260e312c05a511c816670bba18335e8109a22e0825bf5886425",
+			"2b1884b391c916b4d865e1ede2eed5261e68b57dc3874bd9dcbba4ff9b06df78"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/step2-on-the-alias_r1_2026-10-06/alias-old-restore-2.kept.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 64771,
+		"pages": 2,
+		"bytesOut": 112480,
+		"pageSha256": [
+			"e089a3f2a4f08260e312c05a511c816670bba18335e8109a22e0825bf5886425",
+			"2b1884b391c916b4d865e1ede2eed5261e68b57dc3874bd9dcbba4ff9b06df78"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/step2-on-the-alias_r1_2026-10-06/alias-reload-1.kept.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 64771,
+		"pages": 2,
+		"bytesOut": 112480,
+		"pageSha256": [
+			"e089a3f2a4f08260e312c05a511c816670bba18335e8109a22e0825bf5886425",
+			"2b1884b391c916b4d865e1ede2eed5261e68b57dc3874bd9dcbba4ff9b06df78"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/step2-on-the-alias_r1_2026-10-06/alias-reload-2.kept.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 64771,
+		"pages": 2,
+		"bytesOut": 112480,
+		"pageSha256": [
+			"e089a3f2a4f08260e312c05a511c816670bba18335e8109a22e0825bf5886425",
+			"2b1884b391c916b4d865e1ede2eed5261e68b57dc3874bd9dcbba4ff9b06df78"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/join-repro-raw-page1.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 56048,
+		"pages": 1,
+		"bytesOut": 45090,
+		"pageSha256": [
+			"40ce1ea43e57b9cea4cf1bedcf143d12fa1d030fc01b02dd61c4b842a0a3ba72"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/join-repro-raw-page2.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 88688,
+		"pages": 2,
+		"bytesOut": 67346,
+		"pageSha256": [
+			"c3495025f816a917f1e9e14bdaee17c36463785a7c476752bfbd6ac76fa02cde",
+			"cb6b63afacc518f8e50bd5d15f0ca11d608a125e1165cec4b50043e69ae6a4d0"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/join-repro-raw-page3.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 80168,
+		"pages": 3,
+		"bytesOut": 99580,
+		"pageSha256": [
+			"b25500ae592765319c65ffe4cc23750fc6f1eca559ae773b2e7205e36372eeab",
+			"e848fb953e6da0c14542efd21706a1012e2e27929e5dfaa37dfec4cb6d973f3d",
+			"46785dca680ad11ed2c99be7773033ac75c1a182bc305099b3624f6db168a1c5"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/join-repro-raw-page4.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 102983,
+		"pages": 3,
+		"bytesOut": 123481,
+		"pageSha256": [
+			"7e765a8361aefe93fbba0d782ad0397dd64b579e2d6258239ff4e6a221f7d814",
+			"56a4c541bfd1d59b650794d4e65c1b7e20a74dc4f2b415dc52cc910ff5c1e9cb",
+			"262068571dccb52707cf31d8e39fdc310f42ebf3fe528e4c4c7616ddeb474096"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-wasm-joined.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 77636,
+		"pages": 3,
+		"bytesOut": 119817,
+		"pageSha256": [
+			"2eb02497105f8ccdda9cd00a281d6e7b95f367350cba1eada3fb096beb39454c",
+			"fe703cfcb9b94ce94273075a5de59c1e0f74574cbdb4545aef67b5eb37c3f876",
+			"df36c4e787bd5a461117dbfd3d1b069487454a4e4efc10f27a9fd72a48ba23b3"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-wasm-page1.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 17848,
+		"pages": 1,
+		"bytesOut": 30359,
+		"pageSha256": [
+			"fac6869c6628bc4b335720be8432070f2729a228989c117c1e00c02806120d80"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-wasm-page2.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 22266,
+		"pages": 1,
+		"bytesOut": 34895,
+		"pageSha256": [
+			"b293fafaab97fffdca5b97930b9139a4cf9c874f03d435b591c5b0e16c2a586b"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-wasm-page3.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 23293,
+		"pages": 1,
+		"bytesOut": 31914,
+		"pageSha256": [
+			"17d58f2ef9be3a96bbed396c8645e96c249a74208348337a1e5ed3396e3b3a67"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-wasm-page4.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 17103,
+		"pages": 1,
+		"bytesOut": 23655,
+		"pageSha256": [
+			"caf8ff015806d2ff6888311dc51bf20d0b6298e71c6d1484e9ec63a3b9d6d9d2"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-webgpu-joined.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 77636,
+		"pages": 3,
+		"bytesOut": 119817,
+		"pageSha256": [
+			"2eb02497105f8ccdda9cd00a281d6e7b95f367350cba1eada3fb096beb39454c",
+			"fe703cfcb9b94ce94273075a5de59c1e0f74574cbdb4545aef67b5eb37c3f876",
+			"df36c4e787bd5a461117dbfd3d1b069487454a4e4efc10f27a9fd72a48ba23b3"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-webgpu-page1.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 17848,
+		"pages": 1,
+		"bytesOut": 30359,
+		"pageSha256": [
+			"fac6869c6628bc4b335720be8432070f2729a228989c117c1e00c02806120d80"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-webgpu-page2.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 22266,
+		"pages": 1,
+		"bytesOut": 34895,
+		"pageSha256": [
+			"b293fafaab97fffdca5b97930b9139a4cf9c874f03d435b591c5b0e16c2a586b"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-webgpu-page3.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 23293,
+		"pages": 1,
+		"bytesOut": 31914,
+		"pageSha256": [
+			"17d58f2ef9be3a96bbed396c8645e96c249a74208348337a1e5ed3396e3b3a67"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/sunless3-diagnosis_r1_2026-10-06/reads/sunless3-webgpu-page4.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 17103,
+		"pages": 1,
+		"bytesOut": 23655,
+		"pageSha256": [
+			"caf8ff015806d2ff6888311dc51bf20d0b6298e71c6d1484e9ec63a3b9d6d9d2"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.joined.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 64771,
+		"pages": 2,
+		"bytesOut": 112480,
+		"pageSha256": [
+			"e089a3f2a4f08260e312c05a511c816670bba18335e8109a22e0825bf5886425",
+			"2b1884b391c916b4d865e1ede2eed5261e68b57dc3874bd9dcbba4ff9b06df78"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page1.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 81269,
+		"pages": 1,
+		"bytesOut": 28302,
+		"pageSha256": [
+			"e47b8553fc3ebe321ab5be38c82193004bbb6f5bcd359aa9c8e77a69ce7980aa"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page2.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 111612,
+		"pages": 1,
+		"bytesOut": 43804,
+		"pageSha256": [
+			"f6d5b490ed286f1e43d40c1056a0f1ca5ad738f7caf62b36f9e396441e395e7e"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/webgpu-against-wasm_r1_2026-10-05/wasm.page3.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 116772,
+		"pages": 1,
+		"bytesOut": 44291,
+		"pageSha256": [
+			"56411414b3995f81d5c6da4fd93f57ce40c05136b9f05843f441295efee126a2"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.joined.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 64771,
+		"pages": 2,
+		"bytesOut": 112480,
+		"pageSha256": [
+			"e089a3f2a4f08260e312c05a511c816670bba18335e8109a22e0825bf5886425",
+			"2b1884b391c916b4d865e1ede2eed5261e68b57dc3874bd9dcbba4ff9b06df78"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page1.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 81269,
+		"pages": 1,
+		"bytesOut": 28302,
+		"pageSha256": [
+			"e47b8553fc3ebe321ab5be38c82193004bbb6f5bcd359aa9c8e77a69ce7980aa"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page2.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 111611,
+		"pages": 1,
+		"bytesOut": 43804,
+		"pageSha256": [
+			"f6d5b490ed286f1e43d40c1056a0f1ca5ad738f7caf62b36f9e396441e395e7e"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "docs/sessions/webgpu-against-wasm_r1_2026-10-05/webgpu.page3.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 116849,
+		"pages": 1,
+		"bytesOut": 44291,
+		"pageSha256": [
+			"56411414b3995f81d5c6da4fd93f57ce40c05136b9f05843f441295efee126a2"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "packages/score-parser/src/fixtures/grace-notes.musicxml",
+		"source": "file-source (no software tag; provenance not established)",
+		"bytesIn": 8507,
+		"pages": 1,
+		"bytesOut": 24564,
+		"pageSha256": [
+			"4f4edf6c8a50c0a60055c01a4eea2b9c906054e9b777c471d6916aad3530a622"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "packages/score-parser/src/fixtures/key-and-grace.musicxml",
+		"source": "file-source (no software tag; provenance not established)",
+		"bytesIn": 10756,
+		"pages": 1,
+		"bytesOut": 30735,
+		"pageSha256": [
+			"72bb65707a7bf0559a66024490c1f8eed9b1272f83241ff4b51f16ce579ea488"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "packages/score-parser/src/fixtures/key-changes.musicxml",
+		"source": "file-source (no software tag; provenance not established)",
+		"bytesIn": 10081,
+		"pages": 1,
+		"bytesOut": 27552,
+		"pageSha256": [
+			"354ec3c4e4f0dd249488c3afdee4616a61825d0f02a178dcaffc1f388e449cf4"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "packages/score-parser/src/fixtures/n188-markings.musicxml",
+		"source": "file-source (no software tag; provenance not established)",
+		"bytesIn": 7979,
+		"pages": 1,
+		"bytesOut": 17328,
+		"pageSha256": [
+			"1a6105ee25ca453451004afdc7f56e20727f4afa70332773288d437384bd2ab1"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "packages/score-parser/src/fixtures/repeat-one-verse.musicxml",
+		"source": "file-source (no software tag; provenance not established)",
+		"bytesIn": 4287,
+		"pages": 1,
+		"bytesOut": 10677,
+		"pageSha256": [
+			"64608039587204399918528f9a819b9543102a18b4650df0a5a0571ba609e59b"
+		],
+		"strophicBaseline": "not in the committed baseline"
+	},
+	{
+		"path": "packages/score-parser/src/fixtures/row126-song1-bars-9-10.musicxml",
+		"source": "scanned-source (software tag: homr)",
+		"bytesIn": 4586,
+		"pages": 1,
+		"bytesOut": 8949,
+		"pageSha256": [
+			"f3edf48432323bbce9a5e8b9630c2fe4df46e854039db0f6c4113598ac4bb076"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "packages/score-parser/src/fixtures/strophic-repeat-grace.musicxml",
+		"source": "file-source (no software tag; provenance not established)",
+		"bytesIn": 10915,
+		"pages": 1,
+		"bytesOut": 67455,
+		"pageSha256": [
+			"d39b0705f87890f06cc1d2960ef72450ddd07504721a05a53d25fae75efe2dc7"
+		],
+		"strophicBaseline": "not in the committed baseline"
+	},
+	{
+		"path": "packages/score-parser/src/fixtures/strophic-repeat-key.musicxml",
+		"source": "file-source (no software tag; provenance not established)",
+		"bytesIn": 10820,
+		"pages": 1,
+		"bytesOut": 65777,
+		"pageSha256": [
+			"b30d6b334a26749d815a855cddb208af84612f430cbf2aa858b1ae3df1db2390"
+		],
+		"strophicBaseline": "not in the committed baseline"
+	},
+	{
+		"path": "packages/score-parser/src/fixtures/strophic-repeat-meter.musicxml",
+		"source": "file-source (no software tag; provenance not established)",
+		"bytesIn": 10881,
+		"pages": 1,
+		"bytesOut": 66219,
+		"pageSha256": [
+			"162b61229c299eb60ab396d5c14af31e3703837e7a633b591487ae379bf3aee8"
+		],
+		"strophicBaseline": "not in the committed baseline"
+	},
+	{
+		"path": "packages/score-parser/src/fixtures/strophic-repeat.musicxml",
+		"source": "file-source (no software tag; provenance not established)",
+		"bytesIn": 10547,
+		"pages": 1,
+		"bytesOut": 65029,
+		"pageSha256": [
+			"ec2604598c3dccbe05c391513dd4932c0e4e603745f32f0578cbfc06cf2de894"
+		],
+		"strophicBaseline": "not in the committed baseline"
+	},
+	{
+		"path": "packages/score-parser/src/fixtures/strophic-stacked.musicxml",
+		"source": "file-source (no software tag; provenance not established)",
+		"bytesIn": 8450,
+		"pages": 1,
+		"bytesOut": 44889,
+		"pageSha256": [
+			"27610fb17dd54c08661c64e878baa233b6c581087cd3ee9103238fe407528f2c"
+		],
+		"strophicBaseline": "not in the committed baseline"
+	},
+	{
+		"path": "packages/score-parser/src/fixtures/strophic-tacet-boundary.musicxml",
+		"source": "file-source (no software tag; provenance not established)",
+		"bytesIn": 5316,
+		"pages": 1,
+		"bytesOut": 16707,
+		"pageSha256": [
+			"1116947921cb39259c131936bc8d35b5f024b4648d2436abe520841b493353d7"
+		],
+		"strophicBaseline": "not in the committed baseline"
+	},
+	{
+		"path": "packages/score-parser/src/fixtures/strophic-volta-23.musicxml",
+		"source": "file-source (no software tag; provenance not established)",
+		"bytesIn": 8282,
+		"pages": 1,
+		"bytesOut": 40964,
+		"pageSha256": [
+			"afa3150c79e9b4144779b04b0555508d015bc3940ae3fd5f731418fcf9661327"
+		],
+		"strophicBaseline": "not in the committed baseline"
+	},
+	{
+		"path": "packages/score-parser/src/fixtures/strophic-volta-from-top.musicxml",
+		"source": "file-source (no software tag; provenance not established)",
+		"bytesIn": 7156,
+		"pages": 1,
+		"bytesOut": 26858,
+		"pageSha256": [
+			"cb38e9affe1b27afe2dd00b7b93bbb0ef3d418f7cd064357ed79447ebcdd1a66"
+		],
+		"strophicBaseline": "not in the committed baseline"
+	},
+	{
+		"path": "packages/score-parser/src/fixtures/strophic-volta.musicxml",
+		"source": "file-source (no software tag; provenance not established)",
+		"bytesIn": 7195,
+		"pages": 1,
+		"bytesOut": 26858,
+		"pageSha256": [
+			"cb38e9affe1b27afe2dd00b7b93bbb0ef3d418f7cd064357ed79447ebcdd1a66"
+		],
+		"strophicBaseline": "not in the committed baseline"
+	},
+	{
+		"path": "packages/score-parser/src/fixtures/underlay-gap.musicxml",
+		"source": "file-source (no software tag; provenance not established)",
+		"bytesIn": 2391,
+		"pages": 1,
+		"bytesOut": 5880,
+		"pageSha256": [
+			"4f32fd221f12f2e87ba4cb827cf72d3c8532f865f66d9096ca47aac5d4841510"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "tools/e16-harness/b1-ledger-lines/b1-ledger-lines.musicxml",
+		"source": "file-source (no software tag; provenance not established)",
+		"bytesIn": 4849,
+		"pages": 1,
+		"bytesOut": 10607,
+		"pageSha256": [
+			"c0ff62769fa55ad8c75b57209c009a37e32d7826ebbe0fb5b4ff670617b5d868"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "tools/e16-harness/b2-tuplets/b2-tuplets.musicxml",
+		"source": "file-source (no software tag; provenance not established)",
+		"bytesIn": 13052,
+		"pages": 1,
+		"bytesOut": 19281,
+		"pageSha256": [
+			"6e4a853bafd3e4e2a8606dd1a54c9c6289c6f25718ccb5bcbdffa3204508a808"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "tools/e16-harness/b3-ledger-lines-scale/b3-ledger-lines-scale.musicxml",
+		"source": "file-source (no software tag; provenance not established)",
+		"bytesIn": 4849,
+		"pages": 1,
+		"bytesOut": 10607,
+		"pageSha256": [
+			"c0ff62769fa55ad8c75b57209c009a37e32d7826ebbe0fb5b4ff670617b5d868"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "tools/e16-harness/close-fixture/close-fixture.musicxml",
+		"source": "file-source (no software tag; provenance not established)",
+		"bytesIn": 6873,
+		"pages": 1,
+		"bytesOut": 13273,
+		"pageSha256": [
+			"d84cff2a9488bfc89327885560696a1e2637de926d899473125e3def2642d33a"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "tools/e16-harness/irregular-fixtures/a/fixture-a.musicxml",
+		"source": "file-source (no software tag; provenance not established)",
+		"bytesIn": 8039,
+		"pages": 1,
+		"bytesOut": 15581,
+		"pageSha256": [
+			"2a3243e69d67576a85722bcbea10261f7edac49b74163db0465d01b7a80928cb"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "tools/e16-harness/irregular-fixtures/b/fixture-b.musicxml",
+		"source": "file-source (no software tag; provenance not established)",
+		"bytesIn": 8698,
+		"pages": 1,
+		"bytesOut": 22579,
+		"pageSha256": [
+			"c52565745c977daaa241b5213b374be7f38529b6abb54a8fb33a0daf7d782c32"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	},
+	{
+		"path": "tools/e16-harness/irregular-fixtures/c/fixture-c.musicxml",
+		"source": "file-source (no software tag; provenance not established)",
+		"bytesIn": 4350,
+		"pages": 1,
+		"bytesOut": 10760,
+		"pageSha256": [
+			"d7c1d4020c9d006067410432e2384e1f30991a5e4884c72546c38001971c2bcb"
+		],
+		"strophicBaseline": "agrees with strophic-byte-baseline.json"
+	}
+]

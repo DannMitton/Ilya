@@ -1,0 +1,1145 @@
+<svg viewBox="0 0 624 727" xmlns="http://www.w3.org/2000/svg" data-score-page="1">
+<svg x="0" y="0" width="624" height="103" viewBox="0 72 624 103" data-system="0-3">
+
+<line x1="0" y1="85" x2="624" y2="85" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="90.5" x2="624" y2="90.5" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="96" x2="624" y2="96" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="101.5" x2="624" y2="101.5" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="107" x2="624" y2="107" stroke="#3a352f" stroke-width="1"/>
+<g data-clef="treble">
+<g transform="translate(-28.5,0)">
+<line x1="46" y1="77" x2="46" y2="111.5" stroke="#3a352f" stroke-width="2.2"/>
+<circle cx="46" cy="101.5" r="4" fill="none" stroke="#3a352f" stroke-width="1.6"/>
+</g>
+</g>
+<text data-key-signature="" x="35" y="100" font-size="15" fill="#3a352f">♭</text>
+<text data-key-signature="" x="44" y="91.75" font-size="15" fill="#3a352f">♭</text>
+<text data-key-signature="" x="53" y="102.75" font-size="15" fill="#3a352f">♭</text>
+<g data-meter="4/4"><text x="71.63" y="94.9" text-anchor="middle" font-size="13.2" font-weight="bold" fill="#3a352f">4</text><text x="71.63" y="105.9" text-anchor="middle" font-size="13.2" font-weight="bold" fill="#3a352f">4</text></g>
+<g data-event-id="m0-0-1" pointer-events="none">
+<rect data-hit="m0-0-1" x="72.95" y="65.75" width="29.55" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="92.95" cy="107" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 92.95 107)"/>
+<line x1="98.45" y1="106" x2="98.45" y2="87.75" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m0-1-8" pointer-events="none">
+<rect data-hit="m0-1-8" x="102.51" y="65.75" width="27.91" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="112.06" cy="104.25" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 112.06 104.25)"/>
+<line x1="117.56" y1="103.25" x2="117.56" y2="85" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<line x1="130.76" y1="85" x2="130.76" y2="107" stroke="#3a352f" stroke-width="1"/>
+<circle data-of-event="m1-0-1" cx="158.81" cy="98.75" r="1.1" fill="#1a1612"/>
+<g data-event-id="m1-0-1" pointer-events="none">
+<rect data-hit="m1-0-1" x="130.41" y="65.75" width="44.28" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="148.76" cy="101.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 148.76 101.5)"/>
+<line x1="154.26" y1="100.5" x2="154.26" y2="82.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m1-3-8" pointer-events="none">
+<rect data-hit="m1-3-8" x="174.69" y="65.75" width="35.49" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="200.62" cy="101.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 200.62 101.5)"/>
+<line x1="206.12" y1="100.5" x2="206.12" y2="82.25" stroke="#1a1612" stroke-width="1.5"/>
+<path d="M206.12 82.25 q8 3 7 12" fill="none" stroke="#1a1612" stroke-width="1.4"/>
+</g>
+<g data-event-id="m1-1-2" pointer-events="none">
+<rect data-hit="m1-1-2" x="210.18" y="65.75" width="26.84" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="219.73" cy="101.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 219.73 101.5)"/>
+<line x1="225.23" y1="100.5" x2="225.23" y2="82.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m1-3-4" pointer-events="none">
+<rect data-hit="m1-3-4" x="237.02" y="65.75" width="43.37" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="254.3" cy="101.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 254.3 101.5)"/>
+<line x1="259.8" y1="100.5" x2="259.8" y2="82.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<line x1="288.46" y1="85" x2="288.46" y2="107" stroke="#3a352f" stroke-width="1"/>
+<g data-event-id="m2-0-1" pointer-events="none">
+<rect data-hit="m2-0-1" x="280.38" y="65.75" width="43.37" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="306.46" cy="101.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 306.46 101.5)"/>
+<line x1="311.96" y1="100.5" x2="311.96" y2="82.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<line x1="330.03" y1="112.5" x2="352.03" y2="112.5" stroke="#3a352f" stroke-width="1"/>
+<g data-event-id="m2-1-4" pointer-events="none">
+<rect data-hit="m2-1-4" x="323.75" y="65.75" width="26.08" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="341.03" cy="112.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 341.03 112.5)"/>
+<line x1="346.53" y1="111.5" x2="346.53" y2="93.25" stroke="#1a1612" stroke-width="1.5"/>
+<path d="M346.53 93.25 q8 3 7 12" fill="none" stroke="#1a1612" stroke-width="1.4"/>
+</g>
+<g pointer-events="none">
+<rect data-hit="m2-3-8" x="349.83" y="65.75" width="17.6" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<rect x="353.63" y="93" width="10" height="6" rx="1.5" fill="#3a352f"/>
+</g>
+<g pointer-events="none">
+<rect data-hit="m2-1-2" x="367.43" y="65.75" width="26.08" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<rect x="371.23" y="93" width="10" height="6" rx="1.5" fill="#3a352f"/>
+</g>
+<g data-event-id="m2-3-4" pointer-events="none">
+<rect data-hit="m2-3-4" x="393.52" y="65.75" width="26.84" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="410.8" cy="101.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 410.8 101.5)"/>
+<line x1="416.3" y1="100.5" x2="416.3" y2="82.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m2-7-8" pointer-events="none">
+<rect data-hit="m2-7-8" x="420.36" y="65.75" width="27.9" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="429.91" cy="98.75" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 429.91 98.75)"/>
+<line x1="435.41" y1="97.75" x2="435.41" y2="79.5" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<line x1="448.61" y1="85" x2="448.61" y2="107" stroke="#3a352f" stroke-width="1"/>
+<circle data-of-event="m3-0-1" cx="476.66" cy="93.25" r="1.1" fill="#1a1612"/>
+<g data-event-id="m3-0-1" pointer-events="none">
+<rect data-hit="m3-0-1" x="448.26" y="65.75" width="44.28" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="466.61" cy="96" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 466.61 96)"/>
+<line x1="461.11" y1="97" x2="461.11" y2="115.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m3-3-8" pointer-events="none">
+<rect data-hit="m3-3-8" x="492.54" y="65.75" width="44.12" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="518.47" cy="96" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 518.47 96)"/>
+<line x1="512.97" y1="97" x2="512.97" y2="115.25" stroke="#1a1612" stroke-width="1.5"/>
+<path d="M512.97 115.25 q8 3 7 12" fill="none" stroke="#1a1612" stroke-width="1.4"/>
+</g>
+<text data-of-event="m3-1-2" x="534.86" y="97.25" font-size="15" fill="#1a1612">♭</text>
+<g data-event-id="m3-1-2" pointer-events="none">
+<rect data-hit="m3-1-2" x="536.67" y="65.75" width="35.48" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="554.86" cy="93.25" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 554.86 93.25)"/>
+<line x1="549.36" y1="94.25" x2="549.36" y2="112.5" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m3-3-4" pointer-events="none">
+<rect data-hit="m3-3-4" x="572.15" y="65.75" width="37.28" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="589.43" cy="93.25" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 589.43 93.25)"/>
+<line x1="583.93" y1="94.25" x2="583.93" y2="112.5" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<line x1="98.45" y1="87.75" x2="117.56" y2="85" stroke="#1a1612" stroke-width="4" data-beam-level="1"/>
+<line x1="416.3" y1="82.25" x2="435.41" y2="79.5" stroke="#1a1612" stroke-width="4" data-beam-level="1"/>
+<line x1="623.5" y1="85" x2="623.5" y2="107" stroke="#3a352f" stroke-width="1"/>
+
+</svg>
+<svg x="0" y="115" width="624" height="111" viewBox="0 64 624 111" data-system="4-7">
+
+<line x1="0" y1="85" x2="624" y2="85" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="90.5" x2="624" y2="90.5" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="96" x2="624" y2="96" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="101.5" x2="624" y2="101.5" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="107" x2="624" y2="107" stroke="#3a352f" stroke-width="1"/>
+<g data-clef="treble">
+<g transform="translate(-28.5,0)">
+<line x1="46" y1="77" x2="46" y2="111.5" stroke="#3a352f" stroke-width="2.2"/>
+<circle cx="46" cy="101.5" r="4" fill="none" stroke="#3a352f" stroke-width="1.6"/>
+</g>
+</g>
+<text data-key-signature="" x="35" y="100" font-size="15" fill="#3a352f">♭</text>
+<text data-key-signature="" x="44" y="91.75" font-size="15" fill="#3a352f">♭</text>
+<text data-key-signature="" x="53" y="102.75" font-size="15" fill="#3a352f">♭</text>
+<text data-bar-number="5" x="17.5" y="79.5" text-anchor="middle" font-size="12.5" font-style="italic" fill="#3a352f">5</text>
+<g data-event-id="m4-0-1" pointer-events="none">
+<rect data-hit="m4-0-1" x="61.95" y="65.75" width="35.17" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="81.95" cy="96" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 81.95 96)"/>
+<line x1="76.45" y1="97" x2="76.45" y2="115.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m4-1-4" pointer-events="none">
+<rect data-hit="m4-1-4" x="97.12" y="65.75" width="22.89" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="112.28" cy="107" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 112.28 107)"/>
+<line x1="117.78" y1="106" x2="117.78" y2="87.75" stroke="#1a1612" stroke-width="1.5"/>
+<path d="M117.78 87.75 q8 3 7 12" fill="none" stroke="#1a1612" stroke-width="1.4"/>
+</g>
+<g pointer-events="none">
+<rect data-hit="m4-3-8" x="120.01" y="65.75" width="15.44" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<rect x="122.73" y="93" width="10" height="6" rx="1.5" fill="#3a352f"/>
+</g>
+<g pointer-events="none">
+<rect data-hit="m4-1-2" x="135.45" y="65.75" width="22.89" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<rect x="138.17" y="93" width="10" height="6" rx="1.5" fill="#3a352f"/>
+</g>
+<g data-event-id="m4-3-4" pointer-events="none">
+<rect data-hit="m4-3-4" x="158.34" y="65.75" width="23.55" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="173.51" cy="98.75" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 173.51 98.75)"/>
+<line x1="179.01" y1="97.75" x2="179.01" y2="79.5" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m4-7-8" pointer-events="none">
+<rect data-hit="m4-7-8" x="181.89" y="65.75" width="24.46" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="190.27" cy="96" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 190.27 96)"/>
+<line x1="195.77" y1="95" x2="195.77" y2="76.75" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<line x1="204.43" y1="85" x2="204.43" y2="107" stroke="#3a352f" stroke-width="1"/>
+<circle data-of-event="m5-0-1" cx="232.48" cy="98.75" r="1.1" fill="#1a1612"/>
+<g data-event-id="m5-0-1" pointer-events="none">
+<rect data-hit="m5-0-1" x="206.35" y="65.75" width="38.83" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="222.43" cy="101.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 222.43 101.5)"/>
+<line x1="227.93" y1="100.5" x2="227.93" y2="82.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m5-3-8" pointer-events="none">
+<rect data-hit="m5-3-8" x="245.18" y="65.75" width="31.13" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="267.93" cy="101.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 267.93 101.5)"/>
+<line x1="273.43" y1="100.5" x2="273.43" y2="82.25" stroke="#1a1612" stroke-width="1.5"/>
+<path d="M273.43 82.25 q8 3 7 12" fill="none" stroke="#1a1612" stroke-width="1.4"/>
+</g>
+<g data-event-id="m5-1-2" pointer-events="none">
+<rect data-hit="m5-1-2" x="276.31" y="65.75" width="23.55" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="284.69" cy="104.25" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 284.69 104.25)"/>
+<line x1="290.19" y1="103.25" x2="290.19" y2="85" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m5-3-4" pointer-events="none">
+<rect data-hit="m5-3-4" x="299.86" y="65.75" width="38.06" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="315.03" cy="101.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 315.03 101.5)"/>
+<line x1="320.53" y1="100.5" x2="320.53" y2="82.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<line x1="342.81" y1="85" x2="342.81" y2="107" stroke="#3a352f" stroke-width="1"/>
+<g data-event-id="m6-0-1" pointer-events="none">
+<rect data-hit="m6-0-1" x="337.92" y="65.75" width="31.27" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="360.81" cy="107" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 360.81 107)"/>
+<line x1="366.31" y1="106" x2="366.31" y2="87.75" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m6-1-8" pointer-events="none">
+<rect data-hit="m6-1-8" x="369.19" y="65.75" width="16.1" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="377.57" cy="107" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 377.57 107)"/>
+<line x1="383.07" y1="106" x2="383.07" y2="87.75" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g pointer-events="none">
+<rect data-hit="m6-1-4" x="385.29" y="65.75" width="22.89" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<rect x="388.02" y="93" width="10" height="6" rx="1.5" fill="#3a352f"/>
+</g>
+<line x1="412.35" y1="112.5" x2="434.35" y2="112.5" stroke="#3a352f" stroke-width="1"/>
+<circle data-of-event="m6-1-2" cx="438.2" cy="109.75" r="1.1" fill="#1a1612"/>
+<g data-event-id="m6-1-2" pointer-events="none">
+<rect data-hit="m6-1-2" x="408.19" y="65.75" width="37.92" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="423.35" cy="112.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 423.35 112.5)"/>
+<line x1="428.85" y1="111.5" x2="428.85" y2="93.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m6-7-8" pointer-events="none">
+<rect data-hit="m6-7-8" x="446.1" y="65.75" width="38.86" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="468.85" cy="109.75" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 468.85 109.75)"/>
+<line x1="474.35" y1="108.75" x2="474.35" y2="90.5" stroke="#1a1612" stroke-width="1.5"/>
+<path d="M474.35 90.5 q8 3 7 12" fill="none" stroke="#1a1612" stroke-width="1.4"/>
+</g>
+<line x1="483.06" y1="85" x2="483.06" y2="107" stroke="#3a352f" stroke-width="1"/>
+<circle data-of-event="m7-0-1" cx="511.11" cy="104.25" r="1.1" fill="#1a1612"/>
+<g data-event-id="m7-0-1" pointer-events="none">
+<rect data-hit="m7-0-1" x="484.96" y="65.75" width="38.85" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="501.06" cy="107" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 501.06 107)"/>
+<line x1="506.56" y1="106" x2="506.56" y2="87.75" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m7-3-8" pointer-events="none">
+<rect data-hit="m7-3-8" x="523.81" y="65.75" width="31.13" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="546.56" cy="107" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 546.56 107)"/>
+<line x1="552.06" y1="106" x2="552.06" y2="87.75" stroke="#1a1612" stroke-width="1.5"/>
+<path d="M552.06 87.75 q8 3 7 12" fill="none" stroke="#1a1612" stroke-width="1.4"/>
+</g>
+<g data-event-id="m7-1-2" pointer-events="none">
+<rect data-hit="m7-1-2" x="554.94" y="65.75" width="23.56" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="563.33" cy="104.25" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 563.33 104.25)"/>
+<line x1="568.83" y1="103.25" x2="568.83" y2="85" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<line x1="582.67" y1="112.5" x2="604.67" y2="112.5" stroke="#3a352f" stroke-width="1"/>
+<g data-event-id="m7-3-4" pointer-events="none">
+<rect data-hit="m7-3-4" x="578.5" y="65.75" width="35.17" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="593.67" cy="112.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 593.67 112.5)"/>
+<line x1="599.17" y1="111.5" x2="599.17" y2="93.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<line x1="179.01" y1="79.5" x2="195.77" y2="76.75" stroke="#1a1612" stroke-width="4" data-beam-level="1"/>
+<line x1="366.31" y1="87.75" x2="383.07" y2="87.75" stroke="#1a1612" stroke-width="4" data-beam-level="1"/>
+<line x1="623.5" y1="85" x2="623.5" y2="107" stroke="#3a352f" stroke-width="1"/>
+
+</svg>
+<svg x="0" y="238" width="624" height="112" viewBox="0 63 624 112" data-system="8-12">
+
+<line x1="0" y1="85" x2="624" y2="85" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="90.5" x2="624" y2="90.5" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="96" x2="624" y2="96" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="101.5" x2="624" y2="101.5" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="107" x2="624" y2="107" stroke="#3a352f" stroke-width="1"/>
+<g data-clef="treble">
+<g transform="translate(-28.5,0)">
+<line x1="46" y1="77" x2="46" y2="111.5" stroke="#3a352f" stroke-width="2.2"/>
+<circle cx="46" cy="101.5" r="4" fill="none" stroke="#3a352f" stroke-width="1.6"/>
+</g>
+</g>
+<text data-key-signature="" x="35" y="100" font-size="15" fill="#3a352f">♭</text>
+<text data-key-signature="" x="44" y="91.75" font-size="15" fill="#3a352f">♭</text>
+<text data-key-signature="" x="53" y="102.75" font-size="15" fill="#3a352f">♭</text>
+<text data-bar-number="9" x="17.5" y="79.5" text-anchor="middle" font-size="12.5" font-style="italic" fill="#3a352f">9</text>
+<line x1="223.74" y1="85" x2="223.74" y2="107" stroke="#3a352f" stroke-width="1"/>
+<g data-tacet="9-10" data-tacet-count="2">
+<rect x="230.62" y="94.02" width="60.68" height="3.96" fill="#3a352f"/>
+<rect x="230.62" y="90.35" width="1.38" height="11.3" fill="#3a352f"/>
+<rect x="289.92" y="90.35" width="1.38" height="11.3" fill="#3a352f"/>
+<text x="260.96" y="80.05" text-anchor="middle" font-size="11" fill="#3a352f">2</text>
+</g>
+<text data-bar-number="12" x="298.17" y="79.5" text-anchor="middle" font-size="12.5" font-style="italic" fill="#3a352f">[12]</text>
+<g data-event-id="m8-0-1" pointer-events="none">
+<rect data-hit="m8-0-1" x="61.95" y="65.75" width="55.3" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="81.95" cy="101.5" rx="6.2" ry="4.6" fill="none" stroke="#1a1612" stroke-width="1.6" transform="rotate(-18 81.95 101.5)"/>
+<line x1="87.45" y1="100.5" x2="87.45" y2="82.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<line x1="141.54" y1="112.5" x2="163.54" y2="112.5" stroke="#3a352f" stroke-width="1"/>
+<g data-event-id="m8-1-2" pointer-events="none">
+<rect data-hit="m8-1-2" x="117.25" y="65.75" width="44.28" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="152.54" cy="112.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 152.54 112.5)"/>
+<line x1="158.04" y1="111.5" x2="158.04" y2="93.25" stroke="#1a1612" stroke-width="1.5"/>
+<path d="M158.04 93.25 q8 3 7 12" fill="none" stroke="#1a1612" stroke-width="1.4"/>
+</g>
+<g pointer-events="none">
+<rect data-hit="m8-5-8" x="161.52" y="65.75" width="17.97" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<rect x="165.51" y="93" width="10" height="6" rx="1.5" fill="#3a352f"/>
+</g>
+<g pointer-events="none">
+<rect data-hit="m8-3-4" x="179.49" y="65.75" width="72.83" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<rect x="183.47" y="93" width="10" height="6" rx="1.5" fill="#3a352f"/>
+</g>
+<line x1="298.17" y1="85" x2="298.17" y2="107" stroke="#3a352f" stroke-width="1"/>
+<g pointer-events="none">
+<rect data-hit="m11-0-1" x="252.32" y="65.75" width="81.5" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<rect x="311.17" y="93" width="10" height="6" rx="1.5" fill="#3a352f"/>
+</g>
+<g data-event-id="m11-1-4" pointer-events="none">
+<rect data-hit="m11-1-4" x="333.82" y="65.75" width="27.37" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="351.47" cy="87.75" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 351.47 87.75)"/>
+<line x1="345.97" y1="88.75" x2="345.97" y2="107" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m11-3-8" pointer-events="none">
+<rect data-hit="m11-3-8" x="361.19" y="65.75" width="19.44" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="370.91" cy="87.75" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 370.91 87.75)"/>
+<line x1="365.41" y1="88.75" x2="365.41" y2="107" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<circle data-of-event="m11-1-2" cx="400.4" cy="87.75" r="1.1" fill="#1a1612"/>
+<g data-event-id="m11-1-2" pointer-events="none">
+<rect data-hit="m11-1-2" x="380.63" y="65.75" width="36.2" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="390.35" cy="90.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 390.35 90.5)"/>
+<line x1="384.85" y1="91.5" x2="384.85" y2="109.75" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m11-7-8" pointer-events="none">
+<rect data-hit="m11-7-8" x="416.83" y="65.75" width="45.18" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="443.3" cy="93.25" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 443.3 93.25)"/>
+<line x1="437.8" y1="94.25" x2="437.8" y2="112.5" stroke="#1a1612" stroke-width="1.5"/>
+<path d="M437.8 112.5 q8 3 7 12" fill="none" stroke="#1a1612" stroke-width="1.4"/>
+</g>
+<line x1="462.71" y1="85" x2="462.71" y2="107" stroke="#3a352f" stroke-width="1"/>
+<g data-event-id="m12-0-1" pointer-events="none">
+<rect data-hit="m12-0-1" x="462.01" y="65.75" width="36.35" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="480.71" cy="90.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 480.71 90.5)"/>
+<line x1="475.21" y1="91.5" x2="475.21" y2="109.75" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m12-1-4" pointer-events="none">
+<rect data-hit="m12-1-4" x="498.36" y="65.75" width="35.29" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="516" cy="87.75" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 516 87.75)"/>
+<line x1="510.5" y1="88.75" x2="510.5" y2="107" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m12-1-2" pointer-events="none">
+<rect data-hit="m12-1-2" x="533.65" y="65.75" width="27.37" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="551.29" cy="93.25" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 551.29 93.25)"/>
+<line x1="545.79" y1="94.25" x2="545.79" y2="112.5" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m12-5-8" pointer-events="none">
+<rect data-hit="m12-5-8" x="561.02" y="65.75" width="18.71" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="570.74" cy="93.25" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 570.74 93.25)"/>
+<line x1="565.24" y1="94.25" x2="565.24" y2="112.5" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g pointer-events="none">
+<rect data-hit="m12-3-4" x="579.73" y="65.75" width="28.99" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<rect x="583.71" y="93" width="10" height="6" rx="1.5" fill="#3a352f"/>
+</g>
+<line x1="345.97" y1="107" x2="365.41" y2="107" stroke="#1a1612" stroke-width="4" data-beam-level="1"/>
+<line x1="545.79" y1="112.5" x2="565.24" y2="112.5" stroke="#1a1612" stroke-width="4" data-beam-level="1"/>
+<line x1="623.5" y1="85" x2="623.5" y2="107" stroke="#3a352f" stroke-width="1"/>
+
+</svg>
+<svg x="0" y="362" width="624" height="111" viewBox="0 64 624 111" data-system="13-16">
+
+<line x1="0" y1="85" x2="624" y2="85" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="90.5" x2="624" y2="90.5" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="96" x2="624" y2="96" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="101.5" x2="624" y2="101.5" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="107" x2="624" y2="107" stroke="#3a352f" stroke-width="1"/>
+<g data-clef="treble">
+<g transform="translate(-28.5,0)">
+<line x1="46" y1="77" x2="46" y2="111.5" stroke="#3a352f" stroke-width="2.2"/>
+<circle cx="46" cy="101.5" r="4" fill="none" stroke="#3a352f" stroke-width="1.6"/>
+</g>
+</g>
+<text data-key-signature="" x="35" y="100" font-size="15" fill="#3a352f">♭</text>
+<text data-key-signature="" x="44" y="91.75" font-size="15" fill="#3a352f">♭</text>
+<text data-key-signature="" x="53" y="102.75" font-size="15" fill="#3a352f">♭</text>
+<text data-bar-number="14" x="17.5" y="79.5" text-anchor="middle" font-size="12.5" font-style="italic" fill="#3a352f">14</text>
+<circle data-of-event="m13-0-1" cx="92" cy="93.25" r="1.1" fill="#1a1612"/>
+<g data-event-id="m13-0-1" pointer-events="none">
+<rect data-hit="m13-0-1" x="61.95" y="65.75" width="42.11" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="81.95" cy="96" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 81.95 96)"/>
+<line x1="76.45" y1="97" x2="76.45" y2="115.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m13-3-8" pointer-events="none">
+<rect data-hit="m13-3-8" x="104.07" y="65.75" width="30.24" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="126.18" cy="93.25" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 126.18 93.25)"/>
+<line x1="120.68" y1="94.25" x2="120.68" y2="112.5" stroke="#1a1612" stroke-width="1.5"/>
+<path d="M120.68 112.5 q8 3 7 12" fill="none" stroke="#1a1612" stroke-width="1.4"/>
+</g>
+<g data-event-id="m13-1-2" pointer-events="none">
+<rect data-hit="m13-1-2" x="134.31" y="65.75" width="16.27" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="142.43" cy="98.75" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 142.43 98.75)"/>
+<line x1="147.93" y1="97.75" x2="147.93" y2="76.93" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m13-5-8" pointer-events="none">
+<rect data-hit="m13-5-8" x="150.58" y="65.75" width="16.27" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="158.73" cy="93.25" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 158.73 93.25)"/>
+<line x1="164.23" y1="92.25" x2="164.23" y2="74" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m13-3-4" pointer-events="none">
+<rect data-hit="m13-3-4" x="166.85" y="65.75" width="16.25" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="174.97" cy="96" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 174.97 96)"/>
+<line x1="169.47" y1="97" x2="169.47" y2="115.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m13-7-8" pointer-events="none">
+<rect data-hit="m13-7-8" x="183.1" y="65.75" width="23.75" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="191.22" cy="93.25" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 191.22 93.25)"/>
+<line x1="185.72" y1="94.25" x2="185.72" y2="112.5" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<line x1="204.48" y1="85" x2="204.48" y2="107" stroke="#3a352f" stroke-width="1"/>
+<g data-event-id="m14-0-1" pointer-events="none">
+<rect data-hit="m14-0-1" x="206.85" y="65.75" width="23.78" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="222.48" cy="98.75" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 222.48 98.75)"/>
+<line x1="227.98" y1="97.75" x2="227.98" y2="79.5" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m14-1-8" pointer-events="none">
+<rect data-hit="m14-1-8" x="230.63" y="65.75" width="16.3" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="238.77" cy="98.75" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 238.77 98.75)"/>
+<line x1="244.27" y1="97.75" x2="244.27" y2="79.5" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m14-1-4" pointer-events="none">
+<rect data-hit="m14-1-4" x="246.92" y="65.75" width="16.3" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="255.07" cy="101.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 255.07 101.5)"/>
+<line x1="260.57" y1="100.5" x2="260.57" y2="82.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m14-3-8" pointer-events="none">
+<rect data-hit="m14-3-8" x="263.22" y="65.75" width="16.3" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="271.37" cy="98.75" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 271.37 98.75)"/>
+<line x1="276.87" y1="97.75" x2="276.87" y2="79.5" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<circle data-of-event="m14-1-2" cx="297.72" cy="104.25" r="1.1" fill="#1a1612"/>
+<g data-event-id="m14-1-2" pointer-events="none">
+<rect data-hit="m14-1-2" x="279.52" y="65.75" width="30.26" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="287.67" cy="104.25" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 287.67 104.25)"/>
+<line x1="293.17" y1="103.25" x2="293.17" y2="85" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m14-7-8" pointer-events="none">
+<rect data-hit="m14-7-8" x="309.78" y="65.75" width="37.78" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="331.9" cy="98.75" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 331.9 98.75)"/>
+<line x1="337.4" y1="97.75" x2="337.4" y2="79.5" stroke="#1a1612" stroke-width="1.5"/>
+<path d="M337.4 79.5 q8 3 7 12" fill="none" stroke="#1a1612" stroke-width="1.4"/>
+</g>
+<line x1="345.22" y1="85" x2="345.22" y2="107" stroke="#3a352f" stroke-width="1"/>
+<g data-event-id="m15-0-1" pointer-events="none">
+<rect data-hit="m15-0-1" x="347.56" y="65.75" width="30.4" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="363.22" cy="101.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 363.22 101.5)"/>
+<line x1="368.72" y1="100.5" x2="368.72" y2="82.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m15-1-4" pointer-events="none">
+<rect data-hit="m15-1-4" x="377.96" y="65.75" width="29.48" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="392.7" cy="98.75" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 392.7 98.75)"/>
+<line x1="398.2" y1="97.75" x2="398.2" y2="79.5" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m15-1-2" pointer-events="none">
+<rect data-hit="m15-1-2" x="407.45" y="65.75" width="22.9" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="422.19" cy="104.25" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 422.19 104.25)"/>
+<line x1="427.69" y1="103.25" x2="427.69" y2="85" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m15-5-8" pointer-events="none">
+<rect data-hit="m15-5-8" x="430.34" y="65.75" width="15.65" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="438.49" cy="104.25" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 438.49 104.25)"/>
+<line x1="443.99" y1="103.25" x2="443.99" y2="85" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g pointer-events="none">
+<rect data-hit="m15-3-4" x="446" y="65.75" width="29.75" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<rect x="448.5" y="93" width="10" height="6" rx="1.5" fill="#3a352f"/>
+</g>
+<line x1="480" y1="85" x2="480" y2="107" stroke="#3a352f" stroke-width="1"/>
+<g pointer-events="none">
+<rect data-hit="m16-0-1" x="475.75" y="65.75" width="37" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<rect x="493" y="93" width="10" height="6" rx="1.5" fill="#3a352f"/>
+</g>
+<g data-event-id="m16-1-4" pointer-events="none">
+<rect data-hit="m16-1-4" x="512.75" y="65.75" width="22.89" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="527.49" cy="107" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 527.49 107)"/>
+<line x1="532.99" y1="106" x2="532.99" y2="87.75" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m16-3-8" pointer-events="none">
+<rect data-hit="m16-3-8" x="535.64" y="65.75" width="16.3" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="543.79" cy="107" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 543.79 107)"/>
+<line x1="549.29" y1="106" x2="549.29" y2="87.75" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m16-1-2" pointer-events="none">
+<rect data-hit="m16-1-2" x="551.94" y="65.75" width="16.3" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="560.09" cy="104.25" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 560.09 104.25)"/>
+<line x1="565.59" y1="103.25" x2="565.59" y2="85" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m16-5-8" pointer-events="none">
+<rect data-hit="m16-5-8" x="568.24" y="65.75" width="16.3" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="576.39" cy="104.25" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 576.39 104.25)"/>
+<line x1="581.89" y1="103.25" x2="581.89" y2="85" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m16-3-4" pointer-events="none">
+<rect data-hit="m16-3-4" x="584.54" y="65.75" width="16.3" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="592.69" cy="98.75" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 592.69 98.75)"/>
+<line x1="598.19" y1="97.75" x2="598.19" y2="79.5" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m16-7-8" pointer-events="none">
+<rect data-hit="m16-7-8" x="600.84" y="65.75" width="28.15" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="608.99" cy="104.25" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 608.99 104.25)"/>
+<line x1="614.49" y1="103.25" x2="614.49" y2="82.43" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<line x1="147.93" y1="76.93" x2="164.23" y2="74" stroke="#1a1612" stroke-width="4" data-beam-level="1"/>
+<line x1="169.47" y1="115.25" x2="185.72" y2="112.5" stroke="#1a1612" stroke-width="4" data-beam-level="1"/>
+<line x1="227.98" y1="79.5" x2="244.27" y2="79.5" stroke="#1a1612" stroke-width="4" data-beam-level="1"/>
+<line x1="260.57" y1="82.25" x2="276.87" y2="79.5" stroke="#1a1612" stroke-width="4" data-beam-level="1"/>
+<line x1="427.69" y1="85" x2="443.99" y2="85" stroke="#1a1612" stroke-width="4" data-beam-level="1"/>
+<line x1="532.99" y1="87.75" x2="549.29" y2="87.75" stroke="#1a1612" stroke-width="4" data-beam-level="1"/>
+<line x1="565.59" y1="85" x2="581.89" y2="85" stroke="#1a1612" stroke-width="4" data-beam-level="1"/>
+<line x1="598.19" y1="79.5" x2="614.49" y2="82.43" stroke="#1a1612" stroke-width="4" data-beam-level="1"/>
+<line x1="623.5" y1="85" x2="623.5" y2="107" stroke="#3a352f" stroke-width="1"/>
+
+</svg>
+<svg x="0" y="485" width="624" height="111" viewBox="0 64 624 111" data-system="17-20">
+
+<line x1="0" y1="85" x2="624" y2="85" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="90.5" x2="624" y2="90.5" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="96" x2="624" y2="96" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="101.5" x2="624" y2="101.5" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="107" x2="624" y2="107" stroke="#3a352f" stroke-width="1"/>
+<g data-clef="treble">
+<g transform="translate(-28.5,0)">
+<line x1="46" y1="77" x2="46" y2="111.5" stroke="#3a352f" stroke-width="2.2"/>
+<circle cx="46" cy="101.5" r="4" fill="none" stroke="#3a352f" stroke-width="1.6"/>
+</g>
+</g>
+<text data-key-signature="" x="35" y="100" font-size="15" fill="#3a352f">♭</text>
+<text data-key-signature="" x="44" y="91.75" font-size="15" fill="#3a352f">♭</text>
+<text data-key-signature="" x="53" y="102.75" font-size="15" fill="#3a352f">♭</text>
+<text data-bar-number="18" x="17.5" y="79.5" text-anchor="middle" font-size="12.5" font-style="italic" fill="#3a352f">18</text>
+<line x1="225.22" y1="85" x2="225.22" y2="107" stroke="#3a352f" stroke-width="1"/>
+<g data-tacet="18-18" data-tacet-count="1">
+<rect x="259.27" y="88.91" width="7.04" height="1.6" fill="#3a352f"/>
+</g>
+<g data-event-id="m17-0-1" pointer-events="none">
+<rect data-hit="m17-0-1" x="61.95" y="65.75" width="55.62" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="81.95" cy="96" rx="6.2" ry="4.6" fill="none" stroke="#1a1612" stroke-width="1.6" transform="rotate(-18 81.95 96)"/>
+<line x1="76.45" y1="97" x2="76.45" y2="115.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m17-1-2" pointer-events="none">
+<rect data-hit="m17-1-2" x="117.57" y="65.75" width="44.69" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="153.2" cy="104.25" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 153.2 104.25)"/>
+<line x1="158.7" y1="103.25" x2="158.7" y2="85" stroke="#1a1612" stroke-width="1.5"/>
+<path d="M158.7 85 q8 3 7 12" fill="none" stroke="#1a1612" stroke-width="1.4"/>
+</g>
+<g pointer-events="none">
+<rect data-hit="m17-5-8" x="162.26" y="65.75" width="18.14" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<rect x="166.33" y="93" width="10" height="6" rx="1.5" fill="#3a352f"/>
+</g>
+<g pointer-events="none">
+<rect data-hit="m17-3-4" x="180.4" y="65.75" width="73.52" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<rect x="184.47" y="93" width="10" height="6" rx="1.5" fill="#3a352f"/>
+</g>
+<line x1="300.36" y1="85" x2="300.36" y2="107" stroke="#3a352f" stroke-width="1"/>
+<g data-event-id="m19-0-1" pointer-events="none">
+<rect data-hit="m19-0-1" x="253.92" y="65.75" width="82.26" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="318.36" cy="104.25" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 318.36 104.25)"/>
+<line x1="323.86" y1="103.25" x2="323.86" y2="85" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m19-1-4" pointer-events="none">
+<rect data-hit="m19-1-4" x="336.17" y="65.75" width="35.62" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="353.98" cy="101.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 353.98 101.5)"/>
+<line x1="359.48" y1="100.5" x2="359.48" y2="82.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<circle data-of-event="m19-1-2" cx="399.65" cy="104.25" r="1.1" fill="#1a1612"/>
+<g data-event-id="m19-1-2" pointer-events="none">
+<rect data-hit="m19-1-2" x="371.79" y="65.75" width="44.53" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="389.6" cy="107" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 389.6 107)"/>
+<line x1="395.1" y1="106" x2="395.1" y2="87.75" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m19-7-8" pointer-events="none">
+<rect data-hit="m19-7-8" x="416.32" y="65.75" width="45.63" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="443.04" cy="101.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 443.04 101.5)"/>
+<line x1="448.54" y1="100.5" x2="448.54" y2="82.25" stroke="#1a1612" stroke-width="1.5"/>
+<path d="M448.54 82.25 q8 3 7 12" fill="none" stroke="#1a1612" stroke-width="1.4"/>
+</g>
+<line x1="462.86" y1="85" x2="462.86" y2="107" stroke="#3a352f" stroke-width="1"/>
+<g data-event-id="m20-0-1" pointer-events="none">
+<rect data-hit="m20-0-1" x="461.95" y="65.75" width="36.72" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="480.86" cy="104.25" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 480.86 104.25)"/>
+<line x1="486.36" y1="103.25" x2="486.36" y2="85" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m20-1-4" pointer-events="none">
+<rect data-hit="m20-1-4" x="498.67" y="65.75" width="35.63" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="516.48" cy="101.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 516.48 101.5)"/>
+<line x1="521.98" y1="100.5" x2="521.98" y2="82.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m20-1-2" pointer-events="none">
+<rect data-hit="m20-1-2" x="534.3" y="65.75" width="35.63" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="552.11" cy="96" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 552.11 96)"/>
+<line x1="546.61" y1="97" x2="546.61" y2="115.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m20-3-4" pointer-events="none">
+<rect data-hit="m20-3-4" x="569.92" y="65.75" width="26.88" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="587.73" cy="101.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 587.73 101.5)"/>
+<line x1="593.23" y1="100.5" x2="593.23" y2="82.25" stroke="#1a1612" stroke-width="1.5"/>
+<path d="M593.23 82.25 q8 3 7 12" fill="none" stroke="#1a1612" stroke-width="1.4"/>
+</g>
+<g pointer-events="none">
+<rect data-hit="m20-7-8" x="596.8" y="65.75" width="29.06" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<rect x="600.86" y="93" width="10" height="6" rx="1.5" fill="#3a352f"/>
+</g>
+<line x1="623.5" y1="85" x2="623.5" y2="107" stroke="#3a352f" stroke-width="1"/>
+
+</svg>
+<svg x="0" y="608" width="624" height="111" viewBox="0 64 624 111" data-system="21-24">
+
+<line x1="0" y1="85" x2="624" y2="85" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="90.5" x2="624" y2="90.5" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="96" x2="624" y2="96" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="101.5" x2="624" y2="101.5" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="107" x2="624" y2="107" stroke="#3a352f" stroke-width="1"/>
+<g data-clef="treble">
+<g transform="translate(-28.5,0)">
+<line x1="46" y1="77" x2="46" y2="111.5" stroke="#3a352f" stroke-width="2.2"/>
+<circle cx="46" cy="101.5" r="4" fill="none" stroke="#3a352f" stroke-width="1.6"/>
+</g>
+</g>
+<text data-key-signature="" x="35" y="100" font-size="15" fill="#3a352f">♭</text>
+<text data-key-signature="" x="44" y="91.75" font-size="15" fill="#3a352f">♭</text>
+<text data-key-signature="" x="53" y="102.75" font-size="15" fill="#3a352f">♭</text>
+<text data-bar-number="22" x="17.5" y="79.5" text-anchor="middle" font-size="12.5" font-style="italic" fill="#3a352f">22</text>
+<g data-event-id="m21-0-1" pointer-events="none">
+<rect data-hit="m21-0-1" x="61.95" y="65.75" width="35.03" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="81.95" cy="96" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 81.95 96)"/>
+<line x1="76.45" y1="97" x2="76.45" y2="115.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m21-1-4" pointer-events="none">
+<rect data-hit="m21-1-4" x="96.98" y="65.75" width="30.06" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="112.01" cy="93.25" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 112.01 93.25)"/>
+<line x1="106.51" y1="94.25" x2="106.51" y2="112.5" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<circle data-of-event="m21-1-2" cx="152.12" cy="98.75" r="1.1" fill="#1a1612"/>
+<g data-event-id="m21-1-2" pointer-events="none">
+<rect data-hit="m21-1-2" x="127.04" y="65.75" width="37.58" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="142.07" cy="98.75" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 142.07 98.75)"/>
+<line x1="147.57" y1="97.75" x2="147.57" y2="79.5" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m21-7-8" pointer-events="none">
+<rect data-hit="m21-7-8" x="164.62" y="65.75" width="38.47" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="187.16" cy="93.25" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 187.16 93.25)"/>
+<line x1="181.66" y1="94.25" x2="181.66" y2="112.5" stroke="#1a1612" stroke-width="1.5"/>
+<path d="M181.66 112.5 q8 3 7 12" fill="none" stroke="#1a1612" stroke-width="1.4"/>
+</g>
+<line x1="201.02" y1="85" x2="201.02" y2="107" stroke="#3a352f" stroke-width="1"/>
+<g data-event-id="m22-0-1" pointer-events="none">
+<rect data-hit="m22-0-1" x="203.09" y="65.75" width="30.96" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="219.02" cy="96" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 219.02 96)"/>
+<line x1="213.52" y1="97" x2="213.52" y2="115.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m22-1-4" pointer-events="none">
+<rect data-hit="m22-1-4" x="234.05" y="65.75" width="30.06" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="249.08" cy="93.25" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 249.08 93.25)"/>
+<line x1="243.58" y1="94.25" x2="243.58" y2="112.5" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m22-1-2" pointer-events="none">
+<rect data-hit="m22-1-2" x="264.11" y="65.75" width="30.06" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="279.14" cy="87.75" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 279.14 87.75)"/>
+<line x1="273.64" y1="88.75" x2="273.64" y2="107" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m22-3-4" pointer-events="none">
+<rect data-hit="m22-3-4" x="294.17" y="65.75" width="22.68" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="309.2" cy="93.25" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 309.2 93.25)"/>
+<line x1="303.7" y1="94.25" x2="303.7" y2="112.5" stroke="#1a1612" stroke-width="1.5"/>
+<path d="M303.7 112.5 q8 3 7 12" fill="none" stroke="#1a1612" stroke-width="1.4"/>
+</g>
+<g pointer-events="none">
+<rect data-hit="m22-7-8" x="316.85" y="65.75" width="22.95" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<rect x="319.5" y="93" width="10" height="6" rx="1.5" fill="#3a352f"/>
+</g>
+<line x1="337.11" y1="85" x2="337.11" y2="107" stroke="#3a352f" stroke-width="1"/>
+<g pointer-events="none">
+<rect data-hit="m23-0-1" x="339.81" y="65.75" width="30.33" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<rect x="350.11" y="93" width="10" height="6" rx="1.5" fill="#3a352f"/>
+</g>
+<g data-event-id="m23-1-4" pointer-events="none">
+<rect data-hit="m23-1-4" x="370.14" y="65.75" width="23.34" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="385.17" cy="98.75" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 385.17 98.75)"/>
+<line x1="390.67" y1="97.75" x2="390.67" y2="79.5" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m23-3-8" pointer-events="none">
+<rect data-hit="m23-3-8" x="393.48" y="65.75" width="16.61" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="401.78" cy="98.75" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 401.78 98.75)"/>
+<line x1="407.28" y1="97.75" x2="407.28" y2="79.5" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m23-1-2" pointer-events="none">
+<rect data-hit="m23-1-2" x="410.09" y="65.75" width="16.58" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="418.39" cy="93.25" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 418.39 93.25)"/>
+<line x1="412.89" y1="94.25" x2="412.89" y2="112.5" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m23-5-8" pointer-events="none">
+<rect data-hit="m23-5-8" x="426.67" y="65.75" width="16.56" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="434.95" cy="93.25" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 434.95 93.25)"/>
+<line x1="429.45" y1="94.25" x2="429.45" y2="112.5" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m23-3-4" pointer-events="none">
+<rect data-hit="m23-3-4" x="443.23" y="65.75" width="16.59" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="451.51" cy="98.75" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 451.51 98.75)"/>
+<line x1="457.01" y1="97.75" x2="457.01" y2="79.5" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m23-7-8" pointer-events="none">
+<rect data-hit="m23-7-8" x="459.82" y="65.75" width="24.27" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="468.13" cy="101.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 468.13 101.5)"/>
+<line x1="473.63" y1="100.5" x2="473.63" y2="82.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<line x1="482.05" y1="85" x2="482.05" y2="107" stroke="#3a352f" stroke-width="1"/>
+<g data-event-id="m24-0-1" pointer-events="none">
+<rect data-hit="m24-0-1" x="484.09" y="65.75" width="24.26" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="500.05" cy="104.25" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 500.05 104.25)"/>
+<line x1="505.55" y1="103.25" x2="505.55" y2="85" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m24-1-8" pointer-events="none">
+<rect data-hit="m24-1-8" x="508.36" y="65.75" width="15.95" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="516.66" cy="104.25" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 516.66 104.25)"/>
+<line x1="522.16" y1="103.25" x2="522.16" y2="85" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g pointer-events="none">
+<rect data-hit="m24-1-4" x="524.31" y="65.75" width="22.68" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<rect x="526.96" y="93" width="10" height="6" rx="1.5" fill="#3a352f"/>
+</g>
+<g data-event-id="m24-1-2" pointer-events="none">
+<rect data-hit="m24-1-2" x="546.99" y="65.75" width="23.34" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="562.02" cy="104.25" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 562.02 104.25)"/>
+<line x1="567.52" y1="103.25" x2="567.52" y2="85" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m24-5-8" pointer-events="none">
+<rect data-hit="m24-5-8" x="570.33" y="65.75" width="15.96" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="578.64" cy="104.25" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 578.64 104.25)"/>
+<line x1="584.14" y1="103.25" x2="584.14" y2="85" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g pointer-events="none">
+<rect data-hit="m24-3-4" x="586.29" y="65.75" width="27.65" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<rect x="588.94" y="93" width="10" height="6" rx="1.5" fill="#3a352f"/>
+</g>
+<line x1="390.67" y1="79.5" x2="407.28" y2="79.5" stroke="#1a1612" stroke-width="4" data-beam-level="1"/>
+<line x1="412.89" y1="112.5" x2="429.45" y2="112.5" stroke="#1a1612" stroke-width="4" data-beam-level="1"/>
+<line x1="457.01" y1="79.5" x2="473.63" y2="82.25" stroke="#1a1612" stroke-width="4" data-beam-level="1"/>
+<line x1="505.55" y1="85" x2="522.16" y2="85" stroke="#1a1612" stroke-width="4" data-beam-level="1"/>
+<line x1="567.52" y1="85" x2="584.14" y2="85" stroke="#1a1612" stroke-width="4" data-beam-level="1"/>
+<line x1="623.5" y1="85" x2="623.5" y2="107" stroke="#3a352f" stroke-width="1"/>
+
+</svg>
+</svg>
+<!-- ilya-baseline: page break -->
+<svg viewBox="0 0 624 727" xmlns="http://www.w3.org/2000/svg" data-score-page="2">
+<svg x="0" y="0" width="624" height="111" viewBox="0 64 624 111" data-system="25-28">
+
+<line x1="0" y1="85" x2="624" y2="85" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="90.5" x2="624" y2="90.5" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="96" x2="624" y2="96" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="101.5" x2="624" y2="101.5" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="107" x2="624" y2="107" stroke="#3a352f" stroke-width="1"/>
+<g data-clef="treble">
+<g transform="translate(-28.5,0)">
+<line x1="46" y1="77" x2="46" y2="111.5" stroke="#3a352f" stroke-width="2.2"/>
+<circle cx="46" cy="101.5" r="4" fill="none" stroke="#3a352f" stroke-width="1.6"/>
+</g>
+</g>
+<text data-key-signature="" x="35" y="100" font-size="15" fill="#3a352f">♭</text>
+<text data-key-signature="" x="44" y="91.75" font-size="15" fill="#3a352f">♭</text>
+<text data-key-signature="" x="53" y="102.75" font-size="15" fill="#3a352f">♭</text>
+<text data-bar-number="26" x="17.5" y="79.5" text-anchor="middle" font-size="12.5" font-style="italic" fill="#3a352f">26</text>
+<line x1="405.78" y1="85" x2="405.78" y2="107" stroke="#3a352f" stroke-width="1"/>
+<g data-tacet="27-27" data-tacet-count="1">
+<rect x="440.82" y="88.91" width="7.04" height="1.6" fill="#3a352f"/>
+</g>
+<g pointer-events="none">
+<rect data-hit="m25-0-1" x="61.95" y="65.75" width="55.04" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<rect x="76.95" y="93" width="10" height="6" rx="1.5" fill="#3a352f"/>
+</g>
+<g data-event-id="m25-1-2" pointer-events="none">
+<rect data-hit="m25-1-2" x="116.99" y="65.75" width="44.72" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="152.02" cy="101.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 152.02 101.5)"/>
+<line x1="157.52" y1="100.5" x2="157.52" y2="82.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m25-7-12" pointer-events="none">
+<rect data-hit="m25-7-12" x="161.7" y="65.75" width="19.37" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="171.39" cy="104.25" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 171.39 104.25)"/>
+<line x1="176.89" y1="103.25" x2="176.89" y2="83.63" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m25-2-3" pointer-events="none">
+<rect data-hit="m25-2-3" x="181.07" y="65.75" width="18.6" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="190.75" cy="104.25" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 190.75 104.25)"/>
+<line x1="196.25" y1="103.25" x2="196.25" y2="85" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g pointer-events="none">
+<rect data-hit="m25-3-4" x="199.67" y="65.75" width="35.36" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<rect x="203.59" y="93" width="10" height="6" rx="1.5" fill="#3a352f"/>
+</g>
+<line x1="243.47" y1="85" x2="243.47" y2="107" stroke="#3a352f" stroke-width="1"/>
+<g pointer-events="none">
+<rect data-hit="m26-0-1" x="235.03" y="65.75" width="43.95" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<rect x="256.47" y="93" width="10" height="6" rx="1.5" fill="#3a352f"/>
+</g>
+<g pointer-events="none">
+<rect data-hit="m26-1-4" x="278.99" y="65.75" width="26.43" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<rect x="291.5" y="93" width="10" height="6" rx="1.5" fill="#3a352f"/>
+</g>
+<g data-event-id="m26-3-8" pointer-events="none">
+<rect data-hit="m26-3-8" x="305.42" y="65.75" width="18.6" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="314.34" cy="109.75" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 314.34 109.75)"/>
+<line x1="319.84" y1="108.75" x2="319.84" y2="90.5" stroke="#1a1612" stroke-width="1.5"/>
+<path d="M319.84 90.5 q8 3 7 12" fill="none" stroke="#1a1612" stroke-width="1.4"/>
+</g>
+<g data-event-id="m26-1-2" pointer-events="none">
+<rect data-hit="m26-1-2" x="324.02" y="65.75" width="19.37" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="333.7" cy="101.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 333.7 101.5)"/>
+<line x1="339.2" y1="100.5" x2="339.2" y2="82.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m26-5-8" pointer-events="none">
+<rect data-hit="m26-5-8" x="343.39" y="65.75" width="18.61" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="353.07" cy="101.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 353.07 101.5)"/>
+<line x1="358.57" y1="100.5" x2="358.57" y2="82.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g pointer-events="none">
+<rect data-hit="m26-3-4" x="361.99" y="65.75" width="79.79" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<rect x="365.91" y="93" width="10" height="6" rx="1.5" fill="#3a352f"/>
+</g>
+<line x1="482.9" y1="85" x2="482.9" y2="107" stroke="#3a352f" stroke-width="1"/>
+<g data-meter="3/4"><text x="492.53" y="94.9" text-anchor="middle" font-size="13.2" font-weight="bold" fill="#3a352f">3</text><text x="492.53" y="105.9" text-anchor="middle" font-size="13.2" font-weight="bold" fill="#3a352f">4</text></g>
+<g pointer-events="none">
+<rect data-hit="m28-0-1" x="441.78" y="65.75" width="79.79" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<rect x="507.65" y="93" width="10" height="6" rx="1.5" fill="#3a352f"/>
+</g>
+<g data-event-id="m28-1-8" pointer-events="none">
+<rect data-hit="m28-1-8" x="521.57" y="65.75" width="18.6" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="530.48" cy="107" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 530.48 107)"/>
+<line x1="535.98" y1="106" x2="535.98" y2="87.75" stroke="#1a1612" stroke-width="1.5"/>
+<path d="M535.98 87.75 q8 3 7 12" fill="none" stroke="#1a1612" stroke-width="1.4"/>
+</g>
+<g data-event-id="m28-1-4" pointer-events="none">
+<rect data-hit="m28-1-4" x="540.17" y="65.75" width="28.16" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="549.85" cy="101.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 549.85 101.5)"/>
+<line x1="555.35" y1="100.5" x2="555.35" y2="82.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<text data-of-event="m28-1-2" x="566.8" y="108.25" font-size="15" fill="#1a1612">♯</text>
+<g data-event-id="m28-1-2" pointer-events="none">
+<rect data-hit="m28-1-2" x="568.33" y="65.75" width="28.15" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="586.8" cy="104.25" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 586.8 104.25)"/>
+<line x1="592.3" y1="103.25" x2="592.3" y2="85" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m28-5-8" pointer-events="none">
+<rect data-hit="m28-5-8" x="596.48" y="65.75" width="29.68" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="606.16" cy="104.25" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 606.16 104.25)"/>
+<line x1="611.66" y1="103.25" x2="611.66" y2="85" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<line x1="157.52" y1="82.25" x2="196.25" y2="85" stroke="#1a1612" stroke-width="4" data-beam-level="1"/>
+<line x1="339.2" y1="82.25" x2="358.57" y2="82.25" stroke="#1a1612" stroke-width="4" data-beam-level="1"/>
+<line x1="592.3" y1="85" x2="611.66" y2="85" stroke="#1a1612" stroke-width="4" data-beam-level="1"/>
+<g data-tuplet="3"><text x="176.89" y="77.75" text-anchor="middle" font-size="11" font-style="italic" fill="#1a1612">3</text></g>
+<line x1="623.5" y1="85" x2="623.5" y2="107" stroke="#3a352f" stroke-width="1"/>
+
+</svg>
+<svg x="0" y="123" width="624" height="111" viewBox="0 64 624 111" data-system="29-32">
+
+<line x1="0" y1="85" x2="624" y2="85" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="90.5" x2="624" y2="90.5" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="96" x2="624" y2="96" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="101.5" x2="624" y2="101.5" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="107" x2="624" y2="107" stroke="#3a352f" stroke-width="1"/>
+<g data-clef="treble">
+<g transform="translate(-28.5,0)">
+<line x1="46" y1="77" x2="46" y2="111.5" stroke="#3a352f" stroke-width="2.2"/>
+<circle cx="46" cy="101.5" r="4" fill="none" stroke="#3a352f" stroke-width="1.6"/>
+</g>
+</g>
+<text data-key-signature="" x="35" y="100" font-size="15" fill="#3a352f">♭</text>
+<text data-key-signature="" x="44" y="91.75" font-size="15" fill="#3a352f">♭</text>
+<text data-key-signature="" x="53" y="102.75" font-size="15" fill="#3a352f">♭</text>
+<text data-bar-number="30" x="17.5" y="79.5" text-anchor="middle" font-size="12.5" font-style="italic" fill="#3a352f">30</text>
+<circle data-of-event="m29-0-1" cx="92" cy="93.25" r="1.1" fill="#1a1612"/>
+<g data-event-id="m29-0-1" pointer-events="none">
+<rect data-hit="m29-0-1" x="61.95" y="65.75" width="38.52" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="81.95" cy="96" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 81.95 96)"/>
+<line x1="87.45" y1="95" x2="87.45" y2="76.75" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<text data-of-event="m29-3-16" x="99" y="102.75" font-size="15" fill="#1a1612">♮</text>
+<g data-event-id="m29-3-16" pointer-events="none">
+<rect data-hit="m29-3-16" x="100.48" y="65.75" width="26.83" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="119" cy="98.75" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 119 98.75)"/>
+<line x1="124.5" y1="97.75" x2="124.5" y2="79.5" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m29-1-4" pointer-events="none">
+<rect data-hit="m29-1-4" x="127.31" y="65.75" width="15.96" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="135.61" cy="98.75" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 135.61 98.75)"/>
+<line x1="141.11" y1="97.75" x2="141.11" y2="79.5" stroke="#1a1612" stroke-width="1.5"/>
+<path d="M141.11 79.5 q8 3 7 12" fill="none" stroke="#1a1612" stroke-width="1.4"/>
+</g>
+<g pointer-events="none">
+<rect data-hit="m29-3-8" x="143.26" y="65.75" width="15.31" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<rect x="145.92" y="93" width="10" height="6" rx="1.5" fill="#3a352f"/>
+</g>
+<g pointer-events="none">
+<rect data-hit="m29-1-2" x="158.57" y="65.75" width="30.32" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<rect x="161.22" y="93" width="10" height="6" rx="1.5" fill="#3a352f"/>
+</g>
+<line x1="193.57" y1="85" x2="193.57" y2="107" stroke="#3a352f" stroke-width="1"/>
+<g pointer-events="none">
+<rect data-hit="m30-0-1" x="188.9" y="65.75" width="30.33" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<rect x="206.57" y="93" width="10" height="6" rx="1.5" fill="#3a352f"/>
+</g>
+<g data-event-id="m30-1-8" pointer-events="none">
+<rect data-hit="m30-1-8" x="219.23" y="65.75" width="15.96" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="226.88" cy="107" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 226.88 107)"/>
+<line x1="232.38" y1="106" x2="232.38" y2="87.75" stroke="#1a1612" stroke-width="1.5"/>
+<path d="M232.38 87.75 q8 3 7 12" fill="none" stroke="#1a1612" stroke-width="1.4"/>
+</g>
+<g data-event-id="m30-1-4" pointer-events="none">
+<rect data-hit="m30-1-4" x="235.19" y="65.75" width="24.15" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="243.49" cy="101.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 243.49 101.5)"/>
+<line x1="248.99" y1="100.5" x2="248.99" y2="82.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<text data-of-event="m30-1-2" x="255.18" y="108.25" font-size="15" fill="#1a1612">♯</text>
+<g data-event-id="m30-1-2" pointer-events="none">
+<rect data-hit="m30-1-2" x="259.34" y="65.75" width="38.52" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="275.18" cy="104.25" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 275.18 104.25)"/>
+<line x1="280.68" y1="103.25" x2="280.68" y2="85" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<line x1="302.54" y1="85" x2="302.54" y2="107" stroke="#3a352f" stroke-width="1"/>
+<circle data-of-event="m31-0-1" cx="330.59" cy="93.25" r="1.1" fill="#1a1612"/>
+<g data-event-id="m31-0-1" pointer-events="none">
+<rect data-hit="m31-0-1" x="297.86" y="65.75" width="41.2" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="320.54" cy="96" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 320.54 96)"/>
+<line x1="326.04" y1="95" x2="326.04" y2="76.75" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<text data-of-event="m31-3-16" x="337.59" y="102.75" font-size="15" fill="#1a1612">♮</text>
+<g data-event-id="m31-3-16" pointer-events="none">
+<rect data-hit="m31-3-16" x="339.07" y="65.75" width="26.83" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="357.59" cy="98.75" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 357.59 98.75)"/>
+<line x1="363.09" y1="97.75" x2="363.09" y2="79.5" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m31-1-4" pointer-events="none">
+<rect data-hit="m31-1-4" x="365.9" y="65.75" width="15.96" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="374.21" cy="98.75" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 374.21 98.75)"/>
+<line x1="379.71" y1="97.75" x2="379.71" y2="79.5" stroke="#1a1612" stroke-width="1.5"/>
+<path d="M379.71 79.5 q8 3 7 12" fill="none" stroke="#1a1612" stroke-width="1.4"/>
+</g>
+<g pointer-events="none">
+<rect data-hit="m31-3-8" x="381.86" y="65.75" width="15.3" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<rect x="384.51" y="93" width="10" height="6" rx="1.5" fill="#3a352f"/>
+</g>
+<g pointer-events="none">
+<rect data-hit="m31-1-2" x="397.16" y="65.75" width="36.75" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<rect x="399.81" y="93" width="10" height="6" rx="1.5" fill="#3a352f"/>
+</g>
+<line x1="433.26" y1="85" x2="433.26" y2="107" stroke="#3a352f" stroke-width="1"/>
+<g data-meter="4/4"><text x="442.89" y="94.9" text-anchor="middle" font-size="13.2" font-weight="bold" fill="#3a352f">4</text><text x="442.89" y="105.9" text-anchor="middle" font-size="13.2" font-weight="bold" fill="#3a352f">4</text></g>
+<g pointer-events="none">
+<rect data-hit="m32-0-1" x="433.91" y="65.75" width="47" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<rect x="458.01" y="93" width="10" height="6" rx="1.5" fill="#3a352f"/>
+</g>
+<text data-of-event="m32-1-8" x="473.8" y="102.75" font-size="15" fill="#1a1612">(♭)</text>
+<g data-event-id="m32-1-8" pointer-events="none">
+<rect data-hit="m32-1-8" x="480.91" y="65.75" width="26.21" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="498.8" cy="98.75" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 498.8 98.75)"/>
+<line x1="504.3" y1="97.75" x2="504.3" y2="79.5" stroke="#1a1612" stroke-width="1.5"/>
+<path d="M504.3 79.5 q8 3 7 12" fill="none" stroke="#1a1612" stroke-width="1.4"/>
+</g>
+<g data-event-id="m32-1-4" pointer-events="none">
+<rect data-hit="m32-1-4" x="507.11" y="65.75" width="24.13" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="515.42" cy="93.25" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 515.42 93.25)"/>
+<line x1="509.92" y1="94.25" x2="509.92" y2="112.5" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<text data-of-event="m32-1-2" x="527.06" y="100" font-size="15" fill="#1a1612">♮</text>
+<g data-event-id="m32-1-2" pointer-events="none">
+<rect data-hit="m32-1-2" x="531.24" y="65.75" width="24.1" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="547.06" cy="96" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 547.06 96)"/>
+<line x1="541.56" y1="97" x2="541.56" y2="115.25" stroke="#1a1612" stroke-width="1.5"/>
+<path d="M541.56 115.25 q8 3 7 12" fill="none" stroke="#1a1612" stroke-width="1.4"/>
+</g>
+<circle data-of-event="m32-5-8" cx="573.66" cy="87.75" r="1.1" fill="#1a1612"/>
+<g data-event-id="m32-5-8" pointer-events="none">
+<rect data-hit="m32-5-8" x="555.34" y="65.75" width="30.82" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="563.61" cy="87.75" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 563.61 87.75)"/>
+<line x1="558.11" y1="88.75" x2="558.11" y2="107" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m32-1-1" pointer-events="none">
+<rect data-hit="m32-1-1" x="586.16" y="65.75" width="42.55" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="608.7" cy="90.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 608.7 90.5)"/>
+<line x1="603.2" y1="91.5" x2="603.2" y2="109.75" stroke="#1a1612" stroke-width="1.5"/>
+<path d="M603.2 109.75 q8 3 7 12" fill="none" stroke="#1a1612" stroke-width="1.4"/>
+</g>
+<line x1="87.45" y1="76.75" x2="124.5" y2="79.5" stroke="#1a1612" stroke-width="4" data-beam-level="1"/>
+<line x1="115.5" y1="85.83" x2="124.5" y2="86.5" stroke="#1a1612" stroke-width="4" data-beam-level="2"/>
+<line x1="326.04" y1="76.75" x2="363.09" y2="79.5" stroke="#1a1612" stroke-width="4" data-beam-level="1"/>
+<line x1="354.09" y1="85.83" x2="363.09" y2="86.5" stroke="#1a1612" stroke-width="4" data-beam-level="2"/>
+<line x1="623.5" y1="85" x2="623.5" y2="107" stroke="#3a352f" stroke-width="1"/>
+
+</svg>
+<svg x="0" y="246" width="629.23" height="111" viewBox="0 64 629.23 111" data-system="33-36">
+
+<line x1="0" y1="85" x2="629.23" y2="85" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="90.5" x2="629.23" y2="90.5" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="96" x2="629.23" y2="96" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="101.5" x2="629.23" y2="101.5" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="107" x2="629.23" y2="107" stroke="#3a352f" stroke-width="1"/>
+<g data-clef="treble">
+<g transform="translate(-28.5,0)">
+<line x1="46" y1="77" x2="46" y2="111.5" stroke="#3a352f" stroke-width="2.2"/>
+<circle cx="46" cy="101.5" r="4" fill="none" stroke="#3a352f" stroke-width="1.6"/>
+</g>
+</g>
+<text data-key-signature="" x="35" y="100" font-size="15" fill="#3a352f">♭</text>
+<text data-key-signature="" x="44" y="91.75" font-size="15" fill="#3a352f">♭</text>
+<text data-key-signature="" x="53" y="102.75" font-size="15" fill="#3a352f">♭</text>
+<text data-bar-number="34" x="17.5" y="79.5" text-anchor="middle" font-size="12.5" font-style="italic" fill="#3a352f">34</text>
+<g data-event-id="m33-0-1" pointer-events="none">
+<rect data-hit="m33-0-1" x="61.95" y="65.75" width="33.75" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="81.95" cy="90.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 81.95 90.5)"/>
+<line x1="76.45" y1="91.5" x2="76.45" y2="109.75" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m33-1-4" pointer-events="none">
+<rect data-hit="m33-1-4" x="95.7" y="65.75" width="21.33" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="109.45" cy="90.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 109.45 90.5)"/>
+<line x1="103.95" y1="91.5" x2="103.95" y2="109.75" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m33-3-8" pointer-events="none">
+<rect data-hit="m33-3-8" x="117.03" y="65.75" width="15.15" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="124.6" cy="90.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 124.6 90.5)"/>
+<line x1="119.1" y1="91.5" x2="119.1" y2="109.75" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m33-1-2" pointer-events="none">
+<rect data-hit="m33-1-2" x="132.18" y="65.75" width="15.15" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="139.75" cy="93.25" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 139.75 93.25)"/>
+<line x1="134.25" y1="94.25" x2="134.25" y2="112.5" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m33-5-8" pointer-events="none">
+<rect data-hit="m33-5-8" x="147.32" y="65.75" width="24.55" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="154.9" cy="90.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 154.9 90.5)"/>
+<line x1="149.4" y1="91.5" x2="149.4" y2="109.77" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<text data-of-event="m33-3-4" x="163.85" y="100" font-size="15" fill="#1a1612">(♭)</text>
+<g data-event-id="m33-3-4" pointer-events="none">
+<rect data-hit="m33-3-4" x="171.88" y="65.75" width="24.55" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="188.85" cy="96" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 188.85 96)"/>
+<line x1="183.35" y1="97" x2="183.35" y2="115.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m33-7-8" pointer-events="none">
+<rect data-hit="m33-7-8" x="196.43" y="65.75" width="22.15" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="204" cy="96" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 204 96)"/>
+<line x1="198.5" y1="97" x2="198.5" y2="115.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<line x1="215.15" y1="85" x2="215.15" y2="107" stroke="#3a352f" stroke-width="1"/>
+<g data-event-id="m34-0-1" pointer-events="none">
+<rect data-hit="m34-0-1" x="218.58" y="65.75" width="22.18" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="233.15" cy="98.75" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 233.15 98.75)"/>
+<line x1="238.65" y1="97.75" x2="238.65" y2="79.5" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m34-1-8" pointer-events="none">
+<rect data-hit="m34-1-8" x="240.75" y="65.75" width="22.1" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="248.35" cy="101.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 248.35 101.5)"/>
+<line x1="253.85" y1="100.5" x2="253.85" y2="82.24" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<text data-of-event="m34-1-4" x="257.35" y="108.25" font-size="15" fill="#1a1612">♯</text>
+<g data-event-id="m34-1-4" pointer-events="none">
+<rect data-hit="m34-1-4" x="262.85" y="65.75" width="22.1" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="277.35" cy="104.25" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 277.35 104.25)"/>
+<line x1="282.85" y1="103.25" x2="282.85" y2="85" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m34-3-8" pointer-events="none">
+<rect data-hit="m34-3-8" x="284.95" y="65.75" width="14.6" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="292.55" cy="104.25" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 292.55 104.25)"/>
+<line x1="298.05" y1="103.25" x2="298.05" y2="85" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g pointer-events="none">
+<rect data-hit="m34-1-2" x="299.55" y="65.75" width="20.75" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<rect x="301.55" y="93" width="10" height="6" rx="1.5" fill="#3a352f"/>
+</g>
+<g data-event-id="m34-3-4" pointer-events="none">
+<rect data-hit="m34-3-4" x="320.3" y="65.75" width="37.75" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="334.05" cy="101.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 334.05 101.5)"/>
+<line x1="339.55" y1="100.5" x2="339.55" y2="82.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<line x1="364.05" y1="85" x2="364.05" y2="107" stroke="#3a352f" stroke-width="1"/>
+<text data-of-event="m35-0-1" x="366.05" y="108.25" font-size="15" fill="#1a1612">(♮)</text>
+<g data-event-id="m35-0-1" pointer-events="none">
+<rect data-hit="m35-0-1" x="358.05" y="65.75" width="31.6" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="382.05" cy="104.25" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 382.05 104.25)"/>
+<line x1="387.55" y1="103.25" x2="387.55" y2="84.99" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m35-1-8" pointer-events="none">
+<rect data-hit="m35-1-8" x="389.65" y="65.75" width="15.2" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="397.25" cy="101.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 397.25 101.5)"/>
+<line x1="402.75" y1="100.5" x2="402.75" y2="82.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<circle data-of-event="m35-1-4" cx="422.5" cy="104.25" r="1.1" fill="#1a1612"/>
+<g data-event-id="m35-1-4" pointer-events="none">
+<rect data-hit="m35-1-4" x="404.85" y="65.75" width="17.91" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="412.45" cy="107" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 412.45 107)"/>
+<line x1="417.95" y1="106" x2="417.95" y2="87.75" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m35-7-16" pointer-events="none">
+<rect data-hit="m35-7-16" x="422.77" y="65.75" width="17.91" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="433.08" cy="107" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 433.08 107)"/>
+<line x1="438.58" y1="106" x2="438.58" y2="87.75" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m35-1-2" pointer-events="none">
+<rect data-hit="m35-1-2" x="440.68" y="65.75" width="21.35" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="448.28" cy="109.75" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 448.28 109.75)"/>
+<line x1="453.78" y1="108.75" x2="453.78" y2="90.5" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m35-3-4" pointer-events="none">
+<rect data-hit="m35-3-4" x="462.03" y="65.75" width="35.23" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="475.78" cy="96" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 475.78 96)"/>
+<line x1="470.28" y1="97" x2="470.28" y2="115.25" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<line x1="500.73" y1="85" x2="500.73" y2="107" stroke="#3a352f" stroke-width="1"/>
+<text data-of-event="m36-0-1" x="505.73" y="102.75" font-size="15" fill="#1a1612">♮</text>
+<g data-event-id="m36-0-1" pointer-events="none">
+<rect data-hit="m36-0-1" x="497.26" y="65.75" width="48.98" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="518.73" cy="98.75" rx="6.2" ry="4.6" fill="none" stroke="#1a1612" stroke-width="1.6" transform="rotate(-18 518.73 98.75)"/>
+<line x1="524.23" y1="97.75" x2="524.23" y2="79.5" stroke="#1a1612" stroke-width="1.5"/>
+</g>
+<g data-event-id="m36-1-2" pointer-events="none">
+<rect data-hit="m36-1-2" x="546.23" y="65.75" width="34.5" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<ellipse cx="573.73" cy="101.5" rx="6.2" ry="4.6" fill="#1a1612" transform="rotate(-18 573.73 101.5)"/>
+<line x1="579.23" y1="100.5" x2="579.23" y2="82.25" stroke="#1a1612" stroke-width="1.5"/>
+<path d="M579.23 82.25 q8 3 7 12" fill="none" stroke="#1a1612" stroke-width="1.4"/>
+</g>
+<g pointer-events="none">
+<rect data-hit="m36-5-8" x="580.73" y="65.75" width="14" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<rect x="582.73" y="93" width="10" height="6" rx="1.5" fill="#3a352f"/>
+</g>
+<g pointer-events="none">
+<rect data-hit="m36-3-4" x="594.73" y="65.75" width="27" height="60.5" fill="transparent" pointer-events="all" cursor="pointer"/>
+<rect x="596.73" y="93" width="10" height="6" rx="1.5" fill="#3a352f"/>
+</g>
+<line x1="103.95" y1="109.75" x2="119.1" y2="109.75" stroke="#1a1612" stroke-width="4" data-beam-level="1"/>
+<line x1="134.25" y1="112.5" x2="149.4" y2="109.77" stroke="#1a1612" stroke-width="4" data-beam-level="1"/>
+<line x1="183.35" y1="115.25" x2="198.5" y2="115.25" stroke="#1a1612" stroke-width="4" data-beam-level="1"/>
+<line x1="238.65" y1="79.5" x2="253.85" y2="82.24" stroke="#1a1612" stroke-width="4" data-beam-level="1"/>
+<line x1="282.85" y1="85" x2="298.05" y2="85" stroke="#1a1612" stroke-width="4" data-beam-level="1"/>
+<line x1="387.55" y1="84.99" x2="402.75" y2="82.25" stroke="#1a1612" stroke-width="4" data-beam-level="1"/>
+<line x1="417.95" y1="87.75" x2="438.58" y2="87.75" stroke="#1a1612" stroke-width="4" data-beam-level="1"/>
+<line x1="429.58" y1="94.75" x2="438.58" y2="94.75" stroke="#1a1612" stroke-width="4" data-beam-level="2"/>
+<line x1="628.73" y1="85" x2="628.73" y2="107" stroke="#3a352f" stroke-width="1"/>
+
+</svg>
+<svg x="0" y="369" width="125.95" height="112" viewBox="0 63 125.95 112" data-system="37-50">
+
+<line x1="0" y1="85" x2="125.95" y2="85" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="90.5" x2="125.95" y2="90.5" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="96" x2="125.95" y2="96" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="101.5" x2="125.95" y2="101.5" stroke="#3a352f" stroke-width="1"/>
+<line x1="0" y1="107" x2="125.95" y2="107" stroke="#3a352f" stroke-width="1"/>
+<g data-clef="treble">
+<g transform="translate(-28.5,0)">
+<line x1="46" y1="77" x2="46" y2="111.5" stroke="#3a352f" stroke-width="2.2"/>
+<circle cx="46" cy="101.5" r="4" fill="none" stroke="#3a352f" stroke-width="1.6"/>
+</g>
+</g>
+<text data-key-signature="" x="35" y="100" font-size="15" fill="#3a352f">♭</text>
+<text data-key-signature="" x="44" y="91.75" font-size="15" fill="#3a352f">♭</text>
+<text data-key-signature="" x="53" y="102.75" font-size="15" fill="#3a352f">♭</text>
+<text data-bar-number="38" x="17.5" y="79.5" text-anchor="middle" font-size="12.5" font-style="italic" fill="#3a352f">38</text>
+<g data-tacet="37-50" data-tacet-count="14">
+<rect x="68.88" y="94.02" width="45.85" height="3.96" fill="#3a352f"/>
+<rect x="68.88" y="90.35" width="1.38" height="11.3" fill="#3a352f"/>
+<rect x="113.35" y="90.35" width="1.38" height="11.3" fill="#3a352f"/>
+<text x="91.8" y="80.05" text-anchor="middle" font-size="11" fill="#3a352f">14</text>
+</g>
+<line x1="121.6" y1="85" x2="121.6" y2="107" stroke="#3a352f" stroke-width="1"/>
+<line x1="125.15" y1="85" x2="125.15" y2="107" stroke="#3a352f" stroke-width="1.6"/>
+
+</svg>
+</svg>

@@ -1,0 +1,23 @@
+# source: apps/web/static/sw.js
+const CACHE_VERSION = 'ilya-__BUILD_VERSION__';
+APP_SHELL
+'/',
+'/favicon.png',
+'/icons/icon-192.png',
+'/icons/icon-512.png'
+DECODER_FILES
+'/heif/libheif.wasm',
+'/heif/LICENSE-libheif.txt',
+/*__HEIF_CHUNKS__*/
+
+# built: apps/web/build/sw.js
+const CACHE_VERSION = 'ilya-93edb360';
+APP_SHELL
+'/',
+'/favicon.png',
+'/icons/icon-192.png',
+'/icons/icon-512.png'
+DECODER_FILES
+'/heif/libheif.wasm',
+'/heif/LICENSE-libheif.txt',
+'/_app/immutable/chunks/DQaJwkMB.js','/_app/immutable/chunks/KqkYyNJv.js','/_app/immutable/chunks/Bx2EM-6T.js','/_app/immutable/chunks/B0pjmcWk.js','/_app/immutable/chunks/BOmLZ8f_.js','/_app/immutable/chunks/CzcagZEo.js'
