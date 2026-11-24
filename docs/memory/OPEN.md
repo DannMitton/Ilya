@@ -4512,7 +4512,15 @@ Transcribed as written, 2026-11-22 22:47: *"We decided conduit not tractus"*. **
 
 **What the desk does, and it is not a question for Dann.** Both sentences take « conduit vocal », and the pin at `ratified-lines.test.ts:472` changes in the same commit, under `CONTRACT.md` section 1 item 11a (ratification is approval at a moment, never fossilization; the desk changes the text and its pin together and lists what changed). No new French goes to him: « conduit vocal » is his own term, already in twelve places. Carried into the MELODY wording lane as its third item.
 
-## MELODY'S CROSSING SQUIRCLE LOSES ITS DASH, SO DANN'S SENTENCE IS TRUE. Desk application of his rule of 2026-11-18, 2026-11-23; his to overrule
+## SUPERSEDED 2026-11-24 00:37. MELODY'S CROSSING SQUIRCLE KEEPS ITS DASH
+
+**Dann ruled at 00:37, transcribed as written:** *"Functionally I see \"rests on a stand in\" as then same basic gesture as \"verify this\"? It's a good correspindence."* Under his rule of 00:33 a dashed squircle says verification is necessary, and a crossing resting on a stand-in resonance is exactly a value he has not verified by singing it. **So the dash on MELODY's crossing squircle is correct usage, the sentence "drawn hollow or dashed" is already true, and nothing is built.**
+
+**What this departs from, named as tether 19 requires:** the desk default below, which read his words as requiring the build to change. The words were true of the build; the desk had read them wrongly and proposed removing a mark that was doing its job. **`placeholder-mark.ts`'s header claim that the crossing squircle keeps its dash is therefore correct and stays.**
+
+**The superseded section is kept below, unchanged, as the record of what was proposed and why.**
+
+## MELODY'S CROSSING SQUIRCLE LOSES ITS DASH, SO DANN'S SENTENCE IS TRUE. Desk application of his rule of 2026-11-18, 2026-11-23; his to overrule. SUPERSEDED, see above
 
 **The conflict.** Dann ruled on 2026-11-22 12:48 that MELODY's placeholder sentence ends `drawn hollow`, cutting `or dashed`. The tree draws dashed: `apps/web/src/lib/score/crossing-ring.ts:34-35` says in its own header that a crossing resting on a placeholder fR1 is dashed; `:72-76` sets `stroke-dasharray` when `placeholder` is true; `:96` applies it per crossing; `melody/MarkupPane.svelte:94` imports `drawCrossingRings` and `:409` draws it on `.markup-paper-container`; `crossing-ring.test.ts:47` pins it. Found by Fable's review of the wording brief r3, which returned DO NOT SEND on this.
 
@@ -4583,3 +4591,23 @@ The grouping into has, shows, and depends. Splitting the crossing out as box 7. 
 ### Five sentences struck by him 2026-11-23 21:18 as slop, four of which are his own
 
 He struck: "a decision about the work, not about a page: it is true whether or not anyone is looking at a score"; "the one place the text half and the singer half actually meet"; "a view that ignores them is not rendering the work"; "with no stopping rule"; "it forecasts and never declares". **Four came from `PRODUCT.md`, where they are his own rulings of 2026-09-21 and the tabs table; only the second was the desk's.** They are struck from this model and **they still stand in `PRODUCT.md`**, so a later desk will meet them again there. Whether they leave `PRODUCT.md` too is his.
+
+
+## A DASHED SQUIRCLE MEANS VERIFICATION IS NECESSARY. Ruled by Dann 2026-11-24 00:33
+
+**His words, transcribed as written:** *"Semiotically the dashed squircle communicates the idea that verification is necessary."*
+
+**The occasion.** He said, to his knowledge, that TEXT's VERIFY badge is the only dashed squircle in Ilya and every other squircle is solid, and asked the desk to verify. **It is not, today.** Two squircles are dashed:
+
+- **TEXT's VERIFY box**, a rounded rectangle with a dashed border (`WordStack.svelte:247-248`), drawn when the stress is inferred (`verify-words.ts:21`). LEARN describes it to singers in those words (`LearnContent.svelte:2785`).
+- **MELODY's crossing squircle**, a rounded rectangle (`crossing-ring.ts:68`, `:95`) dashed when the note's vowel rests on a stand-in fR1 (`:75`, from `overlay-engine.ts:231`).
+
+**Everything else dashed in Ilya is not a squircle**, checked site by site: INSIGHTS' turn ring is a circle (`SingerBlock.svelte:150`); its placeholder track bars are square-cornered outlines (`:417-428`); a comment resting on a stand-in carries a dashed left rule (`:432`); the tessitura chart and the vowel space use dashed lines. MELODY's selection ring is a rounded rectangle and is solid.
+
+**So his sentence is true of the design and not yet of the build.** `OPEN.md`, MELODY'S CROSSING SQUIRCLE LOSES ITS DASH makes it true.
+
+**THE TENSION THE RULING EXPOSED, RULED BY HIM 2026-11-24 00:37: the two meanings are one gesture, so the crossing squircle keeps its dash and nothing is built.** The original note follows.
+
+**THE TENSION THE RULING EXPOSES, put to him 2026-11-24 00:3x.** By this principle the crossing squircle's dash is arguably correct usage rather than a mistake: a stand-in resonance is precisely a value the singer has not verified with her own voice, and the remedy is the same, which is to sing it. So the choice is which of two things changes, the sentence or the drawing. The desk's recommendation is on record with the question.
+
+**What it governs going forward:** no future mark takes a dashed squircle for any idea other than "you need to verify this".

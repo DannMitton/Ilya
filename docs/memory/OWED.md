@@ -1060,3 +1060,29 @@ Each stood in a close block of 2026-10-01 under "Waiting on Dann, never to be pu
 Found while resolving a different contradiction (whether batch 3 closes `BAND_IDS.scoreMarkup`; it does not). Not raised to Dann at the time, because `CONTRACT.md` section 5 holds one question at a time and the lane 84 merge was in his hands. **It rides in the next French sitting** (`CONTRACT.md` section 5, walks are one session a week and the week's French drafts ride with them).
 
 **RATIFIED 2026-11-23 22:10**, as item 1 of that sitting, offered with its seven sibling band and tab names (PIÈCE, VOIX, ENTRÉE, TEXTE, LEÇONS, GUIDE, CHANT, APERÇUS) and the desk's recommendation to keep the bare noun. Dann, transcribed as written: *"Yes, I ratify « VOIX » as it stands."* **One thing remains and it is the desk's:** `i18n.ts:155-158`'s own comment still says the French is "a desk proposal awaiting Dann's ratification", which is now false in the tree. DESK DEFAULT: the comment correction rides with the dash row's brief, which already touches nothing a singer reads and is owed anyway.
+
+
+## THE CROSSING DOES NOT MEAN THE SAME THING IN EVERY VOICE. Dann, 2026-11-24 00:30. OPEN, and his
+
+**His words, transcribed as written:** *"One of the nuances of the squircle flagging a whoop timbre is that trebles routinely experience this so it is literally not a big deal to them. Low male vocies (LMV) expereicne this more radically. I have not yet reached a workable rule for deciding how to handle this so that the results are resonable per voice type"*.
+
+**What it says.** The crossing squircle fires on one acoustic condition, fo within a semitone of fR1 (`overlay-engine.ts:173`, `CROSSING_TOLERANCE_CENTS` 50). **That one condition does not carry one meaning.** A treble meets it routinely and it costs her little. A low male voice meets it more radically. So a mark that is right for one voice over-reports for another, and Ilya currently draws both the same.
+
+**Its status: OPEN, unsolved, and his.** He said *"I don't know"* and *"I have not yet reached a workable rule"*. **No desk proposes a rule, derives one from the code, or treats this as settled.** It is his field and his research.
+
+**What it does NOT block.** Whether the squircle is dashed or solid is a separate question from when it fires, and the dash row changes only the stroke. `OPEN.md`, MELODY'S CROSSING SQUIRCLE LOSES ITS DASH, proceeds.
+
+**What the desk can offer when he wants it, and has not built:** Ilya already holds every ingredient to count how often a crossing fires per declared voice type across the fixture set, so the rule could rest on measured frequency rather than on recollection. Offered 2026-11-24 00:3x; not started, and not started until he asks.
+
+**A consequence for INSIGHTS, not yet traced:** if the crossing over-reports for trebles, then every INSIGHTS comment and count resting on `crossing` inherits that. `advice-resolver.ts:131` and `:172` match on it, `watchlist.ts:125` weights it at 2, and `gates.ts:219` counts it. NOT ESTABLISHED whether any of them is voice-type aware.
+
+
+## A DESK TEST VOICE IS STILL THE ACTIVE PROFILE ON DANN'S BRANCH ALIAS. Found by the desk 2026-11-24 00:5x
+
+**What a singer sees.** MELODY's resonance-profile line on the branch alias reads "RESONANCE PROFILE: A MAP OF M0 TEST (DELETE AFTER)'S RESONANCES", and in French « PROFIL DE RÉSONANCES : UNE CARTE DES RÉSONANCES DE LA VOIX « M0 TEST (DELETE AFTER) » ». Seen on `ac52a225` while doing lane 85's owed legend look.
+
+**Whose it is: a desk's.** A previous desk created a test voice while walking a lane and the name was left behind as the active profile. `STATE.md`'s close of 2026-11-20 records the same shape of debris ("a test voice created and deleted, after which the desktop's active voice fell back"), and `DANN.md`'s D2 entry records another, `zz-desk-walk-delete-me`, which Dann renamed himself.
+
+**Not touched, and why.** Deleting or switching a stored voice is a change to Dann's own data, and it is irreversible. It goes to him as one line rather than being cleaned up by the desk.
+
+**The practice this asks for, DESK DEFAULT:** a desk that creates a voice to walk something names it and removes it in the same session, and says in its close which profile was active when it left.
