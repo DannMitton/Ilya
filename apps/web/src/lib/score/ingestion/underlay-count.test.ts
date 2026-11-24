@@ -15,7 +15,7 @@ const syl = (text: string): SyllableInfo => ({ id: `s-${text}`, text, type: 'who
 const note = (id: string, text?: string, extra: Partial<VocalLineEvent> = {}): VocalLineEvent =>
 	({ id, type: 'note', ...(text ? { syllable: syl(text) } : {}), ...extra }) as unknown as VocalLineEvent;
 const scoreOf = (...events: VocalLineEvent[]): ParsedScore => ({ vocalLine: events }) as unknown as ParsedScore;
-const count = (score: ParsedScore, extenders: string[] = []) => countUnderlay(foldVowelessSyllables(score), new Set(extenders));
+const count = (score: ParsedScore, extenders: string[] = []) => countUnderlay(foldVowelessSyllables(score, new Set(extenders)));
 
 describe('countUnderlay: hand-built', () => {
 	it('is equal where one syllable sits on each sung note: nothing to record', () => {
@@ -77,7 +77,7 @@ describe('countUnderlay: the kept fixtures, through the real parser', () => {
 	const counted = async (path: string) => {
 		const result = await new MusicXmlScoreParser().parse({ format: 'musicxml', data: parseXml(readFileSync(path, 'utf8')) as unknown as Document, sourcePath: 'x.musicxml' } as never);
 		const extenders = new Set(result.warnings.find((w) => w.code === 'extender-notes')?.eventIds ?? []);
-		return countUnderlay(foldVowelessSyllables(foldDictionMarks(result.score).score), extenders);
+		return countUnderlay(foldVowelessSyllables(foldDictionMarks(result.score).score, extenders));
 	};
 
 	it('the Finale copy as Finale printed it: 97 sung notes, 96 syllables, damage this lane cannot repair, the last note recorded', async () => {

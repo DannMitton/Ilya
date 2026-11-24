@@ -36,6 +36,8 @@ describe('the leftover is recorded (item 4)', () => {
 		expect(w).toBeDefined();
 		expect(w?.message).toMatch(/97 sung note\(s\), 96 syllable\(s\)/);
 		expect(w?.eventIds).toEqual(['m17-5-8']);
+		// Fix 1 (round 2): a vacated note is also a textless one, and is counted once.
+		expect(w?.message).toMatch(/; 1 note\(s\) with no syllable in bar\(s\) 18\./);
 		// The song's own bar number: the event id counts bars from 0 (`m17`), the print's number is 18.
 		expect(score.measures[17].number).toBe('18');
 		expect(w?.bars).toEqual([[18, 18]]);

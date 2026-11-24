@@ -42,9 +42,12 @@
  * DESK DEFAULTS, each marked, none Dann's yet:
  * - a token that holds an elision (U+203F) is the print's own mark for two syllables on one note; it is one unit and is not
  *   divided;
- * - a token with no letter at all (a mark alone: the `#` fold's, or a bare punctuation sign) is left where it is, as before;
+ * - a token with no Cyrillic letter (a mark alone: the `#` fold's, or a bare punctuation sign; or a Latin letter in a Cyrillic
+ *   verse) is neither a syllable nor a fragment: it stays on its own note, is not dealt, and is counted (`pinned`, round 2 fixes 2
+ *   and 3);
  * - a token of two vowels or more that is not one run of letters (a space, a hyphen, or a no-break space inside it) is not
- *   divided and is counted.
+ *   divided and is counted (`undivided`, why `shape`: the named call is never asked); where the call is asked and its pieces do
+ *   not serve, why is `engine`.
  *
  * WHERE THE TEXT GOES. The fused unit takes the host's own note (forward: the clitic's own note, so the tail closes up and the
  * page matches the print; backward: the fragment's own note, and the tail closes up onto it). A note left with no syllable at
@@ -62,7 +65,8 @@
 import { GraysonEngine } from '@ilya/phonology';
 import { modernisePreReform } from '@ilya/dictionary';
 import type { ParsedScore, SyllableInfo, VocalLineEvent } from '@ilya/score-parser';
-import { CYRILLIC_VOWEL } from '../vowel-resolver';
+import { VOWEL as CYRILLIC_VOWEL } from '$lib/omr/underlay-units';
+import { evidenceFor, scopeOf, type Evidence } from './melisma-evidence';
 
 const NBSP = ' ';
 const ELISION = '‿';
@@ -83,6 +87,8 @@ export interface Place {
 	eventId: string;
 	verse: number;
 	text: string;
+	/** Why the place is counted, where more than one reason is possible. */
+	why?: 'engine' | 'shape' | 'mark' | 'foreign';
 }
 
 /** What the re-deal did and left over in one Cyrillic verse. */
@@ -102,8 +108,12 @@ export interface VerseRedeal {
 	overflow: Place[];
 	/** Fragments with no host in the verse: they leave the notes. */
 	orphans: Place[];
-	/** Tokens of two vowels or more that the named call could not divide: they keep one note, and the place is counted. */
+	/** Tokens of two vowels or more that were not divided, and keep one note: `engine` where the named call could not divide them, `shape` where it was never asked (not one run of letters). */
 	undivided: Place[];
+	/** Tokens left on their own note, not dealt and not syllables: a mark alone, or a token with no Cyrillic letter. Counted. */
+	pinned: Place[];
+	/** The evidence this verse's deal read: its scope, the slur gate, and the notes the print holds. */
+	evidence: Evidence;
 }
 
 export interface VowellessFold {
@@ -185,21 +195,21 @@ function directionOf(text: string, type: Type): { forward: boolean; joiner: stri
 }
 
 /**
- * The pieces of a token of two vowels or more, or null where the named call cannot divide it. The pieces are cut from the
- * token itself, so the case and the punctuation on its ends survive, and they must rejoin to it character for character.
+ * The pieces of a token of two vowels or more, or why it cannot be divided: `shape` where the token is not one run of letters
+ * (the named call is never asked), `engine` where the named call is asked and its pieces do not serve. The pieces are cut from
+ * the token itself, so the case and the punctuation on its ends survive, and they must rejoin to it character for character.
  */
-function divide(text: string, type: Type, vowels: number): Unit[] | null {
+function divide(text: string, type: Type, vowels: number): Unit[] | 'shape' | 'engine' {
 	const nfc = text.normalize('NFC');
-	if (nfc.includes(ELISION)) return null;
 	const edges = nfc.match(EDGES);
-	if (!edges) return null;
+	if (!edges) return 'shape';
 	const [, lead, body, trail] = edges;
-	if (!LETTER_RUN.test(body)) return null;
+	if (!LETTER_RUN.test(body)) return 'shape';
 	const lower = body.toLowerCase();
-	if (lower.length !== body.length) return null;
+	if (lower.length !== body.length) return 'shape';
 	const pieces = GraysonEngine.syllabify(lower);
-	if (pieces.join('') !== lower || pieces.length !== vowels) return null;
-	if (pieces.some((piece) => vowelCount(piece) !== 1)) return null;
+	if (pieces.join('') !== lower || pieces.length !== vowels) return 'engine';
+	if (pieces.some((piece) => vowelCount(piece) !== 1)) return 'engine';
 	const out: Unit[] = [];
 	let at = 0;
 	pieces.forEach((piece, i) => {
@@ -213,27 +223,39 @@ function divide(text: string, type: Type, vowels: number): Unit[] | null {
 }
 
 /** The re-deal of one verse. `entries` are the notes that held text in it, in event order. */
-function redeal(verse: number, entries: Entry[], eventIds: readonly string[]): { units: Unit[]; stats: Omit<VerseRedeal, 'vacated' | 'overflow'> } {
+function redeal(verse: number, entries: Entry[], eventIds: readonly string[]) {
 	const units: Unit[] = [];
 	const orphans: Place[] = [];
 	const undivided: Place[] = [];
+	const pinned: Place[] = [];
+	/** Entries left on their own note, not dealt. */
+	const pins = new Set<number>();
+	/** Entries of fragments fused backward: the note each sat on, which a tie, an extender, or a slur under the gate may claim. */
+	const back: number[] = [];
 	let folded = 0;
 	let divided = 0;
 	let pending: { text: string; joiner: string; type: Type; from: number } | null = null;
-	const place = (k: number): Place => ({ eventId: eventIds[entries[k].eventIndex], verse, text: entries[k].text });
+	const place = (k: number, why?: Place['why']): Place => ({ eventId: eventIds[entries[k].eventIndex], verse, text: entries[k].text, ...(why ? { why } : {}) });
 
 	entries.forEach((e, k) => {
 		const nfc = e.text.normalize('NFC');
+		// A mark alone, or a token with no Cyrillic letter (a Latin letter in a Cyrillic verse), is not a syllable and not a fragment:
+		// it stays on its own note, is not dealt, and is counted.
+		if (!CYRILLIC.test(nfc)) {
+			pins.add(k);
+			pinned.push(place(k, hasLetter(nfc) ? 'foreign' : 'mark'));
+			return;
+		}
 		const v = vowelCount(nfc);
-		const isFragment = hasLetter(nfc) && v === 0;
-		if (!isFragment) {
+		if (v > 0) {
 			let these: Unit[] = [{ text: e.text, type: e.type, from: k }];
-			if (v >= 2) {
+			if (v >= 2 && !nfc.includes(ELISION)) {
 				const pieces = divide(e.text, e.type, v);
-				if (pieces) {
+				if (typeof pieces === 'string') undivided.push(place(k, pieces));
+				else {
 					these = pieces.map((p) => ({ ...p, from: k }));
 					divided++;
-				} else if (!nfc.includes(ELISION)) undivided.push(place(k));
+				}
 			}
 			if (pending) {
 				const first = these[0];
@@ -257,14 +279,22 @@ function redeal(verse: number, entries: Entry[], eventIds: readonly string[]): {
 			return;
 		}
 		units[units.length - 1] = { text: `${host.text}${joiner}${e.text}`, type: typeOf(beginsWord(host.type), endsWord(e.type)), from: host.from };
+		back.push(k);
 		folded++;
 	});
 	if (pending) orphans.push(place((pending as { from: number }).from));
-	return { units, stats: { verse, held: entries.length, syllables: units.length, folded, divided, orphans, undivided } };
+	return { units, pins, back, orphans, undivided, pinned, folded, divided };
 }
 
-/** Re-deal every Cyrillic verse of the score: fuse the fragments, divide the polyvowel tokens, deal the syllables back, count the rest. */
-export function foldVowelessSyllables(parsed: ParsedScore): VowellessFold {
+/**
+ * Re-deal every Cyrillic verse of the score: fuse the fragments, divide the polyvowel tokens, deal the syllables back, count the rest.
+ *
+ * `extenderIds` are the notes a printed extender sustains (`extender-notes`). AMENDMENT 10's EXCEPTION (round 2, blocker 2): a
+ * backward fusion closes the tail up onto the fragment's own note UNLESS a tie, an extender, or a slur under the gate claims that
+ * note. A claimed note is a continuation of the host the print holds, so it is skipped by the deal: the fragment's text goes onto
+ * the host, the note is left with no syllable (the print's own melisma), and every later syllable stays where the print put it.
+ */
+export function foldVowelessSyllables(parsed: ParsedScore, extenderIds: ReadonlySet<string> = new Set()): VowellessFold {
 	const verses = new Set<number>();
 	for (const ev of parsed.vocalLine) {
 		const syl = ev.syllable;
@@ -286,23 +316,38 @@ export function foldVowelessSyllables(parsed: ParsedScore): VowellessFold {
 		});
 		// Only a Cyrillic verse: an IPA verse is Latin letters, none of them a Cyrillic vowel, and is not under this rule's reading.
 		if (!entries.some((o) => CYRILLIC.test(o.text))) continue;
-		const { units, stats } = redeal(verse, entries, eventIds);
+		const dealt = redeal(verse, entries, eventIds);
+		const { units, pins } = dealt;
+		const evidence = evidenceFor(parsed.vocalLine, scopeOf(parsed, verse), units.length, extenderIds);
+		const claimed = (k: number): boolean => {
+			const ev = parsed.vocalLine[entries[k].eventIndex];
+			return ev.tied?.type === 'stop' || ev.tied?.type === 'continue' || evidence.held.has(ev.id);
+		};
+		const released = new Set(dealt.back.filter(claimed));
+		// The notes the units are dealt onto: those that held text, less the notes left on their own and the claimed fragments' notes.
+		const seats = entries.map((_, k) => k).filter((k) => !pins.has(k) && !released.has(k));
 		const vacated: Place[] = [];
 		const overflow: Place[] = [];
-		entries.forEach((e, k) => {
-			const unit = units[k];
-			const next = unit ? { text: unit.text, type: unit.type } : null;
-			if (!unit) vacated.push({ eventId: eventIds[e.eventIndex], verse, text: e.text });
-			if (next === null || next.text !== e.text || next.type !== e.type) {
+		const next = new Map<number, { text: string; type: Type } | null>();
+		released.forEach((k) => next.set(k, null));
+		seats.forEach((k, i) => {
+			const unit = units[i];
+			next.set(k, unit ? { text: unit.text, type: unit.type } : null);
+			if (!unit) vacated.push({ eventId: eventIds[entries[k].eventIndex], verse, text: entries[k].text });
+		});
+		for (const [k, value] of next) {
+			const e = entries[k];
+			if (value === null || value.text !== e.text || value.type !== e.type) {
 				const perEvent = changes.get(e.eventIndex) ?? new Map<number, { text: string; type: Type } | null>();
-				perEvent.set(verse, next);
+				perEvent.set(verse, value);
 				changes.set(e.eventIndex, perEvent);
 			}
-		});
-		for (let k = entries.length; k < units.length; k++) overflow.push({ eventId: eventIds[entries[entries.length - 1].eventIndex], verse, text: units[k].text });
-		results.push({ ...stats, vacated, overflow });
-		folded += stats.folded;
-		undrawn += stats.orphans.length + overflow.length;
+		}
+		const lastSeat = seats.length > 0 ? seats[seats.length - 1] : entries.length - 1;
+		for (let i = seats.length; i < units.length; i++) overflow.push({ eventId: eventIds[entries[lastSeat].eventIndex], verse, text: units[i].text });
+		results.push({ verse, held: entries.length, syllables: units.length, folded: dealt.folded, divided: dealt.divided, vacated, overflow, orphans: dealt.orphans, undivided: dealt.undivided, pinned: dealt.pinned, evidence });
+		folded += dealt.folded;
+		undrawn += dealt.orphans.length + overflow.length;
 	}
 	if (changes.size === 0) return { score: parsed, folded, undrawn, verses: results };
 	const vocalLine: VocalLineEvent[] = parsed.vocalLine.map((ev, eventIndex) => {

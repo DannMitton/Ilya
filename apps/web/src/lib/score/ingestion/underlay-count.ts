@@ -19,11 +19,10 @@
  * Pure. Reads the score the fold returned, never the file.
  */
 import type { ParsedScore } from '@ilya/score-parser';
-import { syllableTargetIds } from '../pairings';
-import { slurContinuationIds } from '../slur-seat';
+import { hasVerse, type SlurGate } from './melisma-evidence';
 import type { Place, VerseRedeal, VowellessFold } from './vowelless-fold';
 
-export type SlurGate = 'none' | 'passed' | 'failed';
+export type { SlurGate };
 
 export interface VerseCount {
 	verse: number;
@@ -44,6 +43,8 @@ export interface VerseCount {
 	overflow: Place[];
 	orphans: Place[];
 	undivided: Place[];
+	/** Marks alone and tokens with no Cyrillic letter, left on their own notes: counted, never read as syllables. */
+	pinned: Place[];
 	divided: number;
 }
 
@@ -55,44 +56,33 @@ export interface UnderlayCount {
 	damaged: boolean;
 }
 
-const hasText = (ev: ParsedScore['vocalLine'][number], verse: number): boolean => {
-	const syl = ev.syllable;
-	if (!syl) return false;
-	if (syl.versesInfo && syl.versesInfo.length > 0) return syl.versesInfo.some((v) => v.verseNumber === verse);
-	return syl.verseNumber === verse;
-};
-
-/** The count over the fold's own result: `fold.score` is the dealt score, `extenderIds` the notes a printed extender sustains. */
-export function countUnderlay(fold: VowellessFold, extenderIds: ReadonlySet<string> = new Set()): UnderlayCount {
+/** The count over the fold's own result: `fold.score` is the dealt score. The evidence (a printed extender, a tie, a slur under the gate) was read by the deal. */
+export function countUnderlay(fold: VowellessFold): UnderlayCount {
 	const events = fold.score.vocalLine;
-	const sung = syllableTargetIds(events);
-	const sungSet = new Set(sung);
-	const slurContinuations = slurContinuationIds(events);
 	const byId = new Map(events.map((e) => [e.id, e] as const));
 	const slursRead = events.some((ev) => (ev.slurs?.length ?? 0) > 0);
 	const verses: VerseCount[] = fold.verses.map((r: VerseRedeal) => {
-		const textless = sung.filter((id) => !hasText(byId.get(id)!, r.verse));
-		// The gate, as `observedTargets` takes it: the slur continuations among the sung notes, and the syllables come out even without them.
-		const observed = sung.filter((id) => slurContinuations.has(id));
-		const slurGate: SlurGate = observed.length === 0 ? 'none' : r.syllables === sung.length - observed.length ? 'passed' : 'failed';
-		const held = (id: string): boolean => extenderIds.has(id) || (slurGate === 'passed' && slurContinuations.has(id));
-		const evidenced = textless.filter(held);
-		const unexplained = textless.filter((id) => !held(id));
+		// The scope, the gate, and the held notes are the deal's own (`melisma-evidence.ts`): the verse is counted over the notes it owns.
+		const { scope, held, gate } = r.evidence;
+		const textless = scope.filter((id) => !hasVerse(byId.get(id)!, r.verse));
+		const evidenced = textless.filter((id) => held.has(id));
+		const unexplained = textless.filter((id) => !held.has(id));
 		return {
 			verse: r.verse,
-			sung: sungSet.size,
+			sung: scope.length,
 			syllables: r.syllables,
 			evidenced,
 			unexplained,
-			agrees: r.syllables === sungSet.size - evidenced.length,
-			slurGate,
+			agrees: r.syllables === scope.length - evidenced.length,
+			slurGate: gate,
 			vacated: r.vacated,
 			overflow: r.overflow,
 			orphans: r.orphans,
 			undivided: r.undivided,
+			pinned: r.pinned,
 			divided: r.divided,
 		};
 	});
-	const damaged = verses.some((v) => !v.agrees || v.vacated.length > 0 || v.overflow.length > 0 || v.orphans.length > 0 || v.undivided.length > 0);
+	const damaged = verses.some((v) => !v.agrees || v.vacated.length > 0 || v.overflow.length > 0 || v.orphans.length > 0 || v.undivided.length > 0 || v.pinned.length > 0);
 	return { verses, slursRead, damaged };
 }

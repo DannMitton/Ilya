@@ -372,11 +372,11 @@ function withDictionMarksFolded(result: ParseResult): ParseResult {
  */
 function withVowelPerNote(result: ParseResult): ParseResult {
 	if (!Array.isArray(result.score?.vocalLine)) return result;
-	const fold = foldVowelessSyllables(result.score);
+	const extenders = new Set(result.warnings.find((w) => w.code === 'extender-notes')?.eventIds ?? []);
+	const fold = foldVowelessSyllables(result.score, extenders);
 	if (fold.undrawn > 0) console.warn(`${fold.undrawn} syllable${fold.undrawn === 1 ? '' : 's'} with no note in the file's lyrics, not drawn (CONTRACT 0.1)`);
 	const dealt = fold.score === result.score ? result : { ...result, score: fold.score };
-	const extenders = new Set(result.warnings.find((w) => w.code === 'extender-notes')?.eventIds ?? []);
-	const count = countUnderlay(fold, extenders);
+	const count = countUnderlay(fold);
 	return count.damaged ? withUnderlayRecord(dealt, count) : dealt;
 }
 
@@ -407,13 +407,24 @@ function withUnderlayRecord(result: ParseResult, count: UnderlayCount): ParseRes
 	const said: string[] = [];
 	for (const v of count.verses) {
 		const parts: string[] = [];
-		const noteless = [...v.vacated.map((p) => p.eventId), ...v.unexplained];
+		// Fix 1: a vacated note is also a textless one, so the two lists are joined by note, each counted once.
+		const noteless = [...new Set([...v.vacated.map((p) => p.eventId), ...v.unexplained])];
 		for (const id of noteless) {
 			abstain.push({ eventId: id, verseNumber: v.verse });
 			ids.add(id);
 		}
 		if (noteless.length > 0) parts.push(`${noteless.length} note(s) with no syllable in bar(s) ${[...new Set(noteless.map(bar))].sort((a, b) => a - b).join(', ')}`);
-		for (const [label, places] of [['text with no note', [...v.overflow, ...v.orphans]], ['a token the engine could not divide', v.undivided]] as const) {
+		const engine = v.undivided.filter((p) => p.why === 'engine');
+		const shape = v.undivided.filter((p) => p.why === 'shape');
+		const marks = v.pinned.filter((p) => p.why === 'mark');
+		const foreign = v.pinned.filter((p) => p.why === 'foreign');
+		for (const [label, places] of [
+			['text with no note', [...v.overflow, ...v.orphans]],
+			['a token the engine could not divide', engine],
+			['a token of two vowels or more that is not one run of letters, not divided', shape],
+			['a mark alone on a note, not read as a syllable', marks],
+			['a token with no Cyrillic letter, left on its note', foreign],
+		] as const) {
 			if (places.length === 0) continue;
 			places.forEach((p) => ids.add(p.eventId));
 			parts.push(`${label}: ${places.map((p) => `«${p.text}» (bar ${bar(p.eventId)})`).join(', ')}`);
