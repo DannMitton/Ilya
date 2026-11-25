@@ -86,10 +86,24 @@ describe('the reader, through the ingestion that every MusicXML passes', () => {
 		expect(second?.eventIds).toEqual(first?.eventIds);
 	});
 
-	it('does not read an authored score\'s <extend>: no field, no warning', async () => {
+	// Was: "does not read an authored score's <extend>: no field, no warning". Superseded by item 1 of the arrival seam
+	// (cloud-lane-88): the parser now reads `<extend>` in every MusicXML file, because the print's mark for a held note is the
+	// print's, whoever wrote the file. The convention's field no longer gates the reading.
+	it('reads an authored score\'s <extend> too: the parser names the notes, with no field in the file', async () => {
 		const authored = writeLyrics(fixture, one(syl(2, 'Средь', true), syl(5, 'шум', false)));
 		expect(hasExtenders(authored)).toBe(false);
-		expect((await arrive(authored)).result.warnings.some((w) => w.code === 'extender-notes')).toBe(false);
+		expect((await arrive(authored)).result.warnings.some((w) => w.code === 'extender-notes')).toBe(true);
+	});
+
+	it('WHICH READING WINS where Ilya wrote the file: the parser\'s, and the two name the same notes', async () => {
+		// `withExtenders` returns at once where the parser has already warned (`ingest.ts`), so the parser's reading is the one the page gets.
+		// This pins that the convention reader, run on the same text, would have named the same notes.
+		for (const text of [written, markExtenders(writeLyrics(fixture, one(syl(0, 'Средь', true))))]) {
+			const ingested = await arrive(text);
+			const parsed = ingested.result.warnings.find((w) => w.code === 'extender-notes')?.eventIds;
+			const convention = extenderMelismaIds(text, ingested.result.score.vocalLine).ids;
+			expect(parsed).toEqual(convention);
+		}
 	});
 
 	it('marks nothing across a rest, and names no note a tie already continues', () => {

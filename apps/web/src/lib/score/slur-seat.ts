@@ -19,10 +19,9 @@
  */
 import type { ParseWarning, SlurEnd } from '@ilya/score-parser';
 import { mergeOnUpload, syllableTargetIds, type MergeResult, type Pairing, type PairingMap, type Slot, type TieAwareEvent } from './pairings';
+import { slurContinuationIds, type SlurAwareEvent } from './sung-notes';
+export { slurContinuationIds, type SlurAwareEvent };
 
-export interface SlurAwareEvent extends TieAwareEvent {
-	slurs?: readonly SlurEnd[];
-}
 
 export interface ObservedTargets {
 	/** The notes that may begin a syllable: today's, or today's less the slur continuations. */
@@ -31,26 +30,6 @@ export interface ObservedTargets {
 	marks: Record<string, Pairing>;
 }
 
-/**
- * Every note after the first under one printed slur, in document order. Only a
- * `start` end with a `partnerEventId` opens a span, and its span runs to the
- * partner, inclusive; a rest inside it is skipped and does not break the slur.
- * Overlapping or nested spans take the union; a note is counted once. The start
- * note is not a continuation.
- */
-export function slurContinuationIds(events: readonly SlurAwareEvent[]): Set<string> {
-	const indexOf = new Map(events.map((ev, i) => [ev.id, i] as const));
-	const out = new Set<string>();
-	events.forEach((ev, i) => {
-		for (const end of ev.slurs ?? []) {
-			if (end.type !== 'start' || end.partnerEventId === undefined) continue;
-			const to = indexOf.get(end.partnerEventId);
-			if (to === undefined || to <= i) continue;
-			for (let k = i + 1; k <= to; k++) if (events[k].type !== 'rest') out.add(events[k].id);
-		}
-	});
-	return out;
-}
 
 /**
  * The count gate (Dann's option 1). T is today's syllable targets and C the slur
@@ -101,10 +80,11 @@ export function mergeOnUploadObserving(
 /**
  * Row 181 step 1 (review amendment 1): the notes a scan's printed extender sustains become `{ kind: 'melisma' }` decisions on
  * the typed path, so the print's line is a continuation there as it is on the scan path (`isContinuation`,
- * `omr/underlay-seat.ts`). `ingest.ts` (`withExtenders`) names the notes in an `extender-notes` warning; the page calls this
- * once on the arrival path, after the merge and before any seating, on the map it holds. A note that already carries a
- * decision keeps it (`withObservedMelismas`). The map is returned as it was where the warning is absent, which is every
- * score but a scan read with its words.
+ * `omr/underlay-seat.ts`). The score parser names the notes in an `extender-notes` warning for ANY MusicXML file that prints an
+ * `<extend>` (item 1 of the arrival seam, cloud-lane-88; `ingest.ts`, `withExtenders`, keeps the convention reader for what the
+ * parser's pass did not find); the page calls this once on the arrival path, after the merge and before any seating, on the
+ * map it holds. A note that already carries a decision keeps it (`withObservedMelismas`). The map is returned as it was where the
+ * warning is absent, which is every score whose print holds no note on an extension line.
  */
 export function withExtenderMelismas(map: PairingMap, warnings: readonly ParseWarning[]): PairingMap {
 	const ids = warnings.find((w) => w.code === 'extender-notes')?.eventIds;

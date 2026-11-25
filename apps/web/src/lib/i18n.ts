@@ -16,7 +16,7 @@
    tree on 2026-11-02 (consistency batch 2). Paths are under `apps/web/src/`;
    a prefix is listed with the files that use it most and its key count.
 
-   This file holds 1,348 keys.
+   This file holds 1,349 keys.
 
    A key built at run time (`watch.key.letter.${letter}`, `comment.<register>.<part>`)
    has no literal reference, so a search for the whole key can come back empty
@@ -81,7 +81,7 @@
    toc.           85  the tables of contents: lib/components/Drawer/Drawer.svelte
    underlay.       1  read only by lib/names.ts, the record of names; no component reads it
    update.         4  routes/+page.svelte
-   upload.        50  lib/score/ScoreUploader.svelte, lib/score/format-label.ts, lib/score/ingestion/ingest.ts, lib/omr/scan.ts
+   upload.        51  lib/score/ScoreUploader.svelte, lib/score/format-label.ts, lib/score/ingestion/ingest.ts, lib/omr/scan.ts
    verify.         1  lib/components/Paper/WordStack.svelte
    voice.          2  lib/components/Drawer/bandState.ts, lib/components/Drawer/Drawer.svelte
    voiceIntake.   60  lib/voice/DescribeVoice.svelte, lib/voice/InsightsShares.svelte, lib/voice/IntakeScale.svelte, lib/voice/VoiceTypeIntake.svelte
@@ -1558,6 +1558,9 @@ const strings: Record<string, Record<Language, string>> = {
 	// scanNotice, only for a scan the reader read with the hidden switch on.
 	'upload.banner.wordsPartlyRead': { en: 'Ilya’s reading of printed words is still imperfect; it could not read the words in bars {bars}. Choose a bar to see your score’s print there and fill the missing words. Check every word against your score.', fr: 'Ilya lit encore imparfaitement les paroles imprimées et n’a pas pu lire celles des mesures {bars}. Choisissez une mesure pour voir l’imprimé de votre partition et compléter les paroles manquantes. Vérifiez chaque mot sur votre partition.' },
 	'upload.banner.wordsPartlyReadOne': { en: 'Ilya’s reading of printed words is still imperfect; it could not read the words in bar {bar}. Choose the bar to see your score’s print there and fill the missing words. Check every word against your score.', fr: 'Ilya lit encore imparfaitement les paroles imprimées et n’a pas pu lire celles de la mesure {bar}. Choisissez la mesure pour voir l’imprimé de votre partition et compléter les paroles manquantes. Vérifiez chaque mot sur votre partition.' },
+	// Cloud-lane-88, round 3. The record a verse carries when its slur gate failed: ONE sentence, the words RATIFIED by Dann 2026-11-24 21:43 in both languages.
+	// {n} is the verse's syllables and {m} its sung notes, the two counts a singer can make on her own page. Not a derived figure.
+	'upload.banner.slurEvidenceUnchecked': { en: 'This verse has {n} syllables for {m} sung notes, and its slurs do not account for the difference. Ilya has left the words where your score prints them rather than choose which notes carry a melisma. Check the melismas here.', fr: 'Ce couplet compte {n} syllabes pour {m} notes chantées, et ses liaisons de phrasé n’expliquent pas l’écart. Ilya laisse donc les paroles telles qu’imprimées dans votre partition, plutôt que de choisir quelles notes portent un mélisme. Vérifiez les mélismes ici.' },
 	// N.65 ship B. `station.syllables` IS DELETED. Dann ruled the SYLLABLES
 	// header away on 2026-08-21 and its text became the first element under
 	// SHIFT LYRICS. Checked before deleting, the way ship A checked its six:

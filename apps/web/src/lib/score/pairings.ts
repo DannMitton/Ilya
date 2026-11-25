@@ -38,6 +38,7 @@ import { applyReconstitution } from '$lib/reconstitution';
 import { reslicedSyllables } from '$lib/syllable-utils';
 import { foldVowellessPieces } from './slot-pieces';
 import { graftBreak } from '$lib/syntactic-break';
+import { syllableTargetIds, type TieAwareEvent } from './sung-notes';
 
 /**
  * The engine's stress mark, declared at `engine.ts:230` as `'stress'`.
@@ -254,57 +255,7 @@ export function buildSlotQueue(lines: readonly LineData[]): Slot[] {
 
 /* ── The first pass (R3) ────────────────────────────────────────── */
 
-/**
- * The minimal shape N.142's predicate needs from an event: enough to tell a
- * rest from a note and a tie's continuation from its onset. A local,
- * structural type rather than an import of `VocalLineEvent`, because this
- * file's own rule (above) is that it never touches `VocalLineEvent`; any
- * caller's real parsed or corrected events satisfy this shape without a cast.
- */
-export interface TieAwareEvent {
-	id: string;
-	type: 'note' | 'rest';
-	tied?: { type: 'start' | 'continue' | 'stop' | 'let-ring' };
-}
-
-/**
- * The ids of notes that may begin a NEW syllable, in document order.
- *
- * N.142, Dann 2026-09-15: "a note either begins a syllable or continues
- * one," and a tie's continuation is one note WRITTEN TWICE, not a new
- * sounded event, so it can never begin one. A rest is excluded as it always
- * was; a tie's continuation is now excluded the same way.
- *
- * READS THE PREVIOUS NOTE'S `tied.type`, NOT THE NOTE'S OWN. A hand
- * correction writes `tied: { type: 'start' }` (or deletes `tied`) only onto
- * the note the correction is keyed on (`correction.ts`'s `amend`); it never
- * writes `'continue'` or `'stop'` onto the note that follows. Deciding from
- * the note's own field would miss a tie the singer just added (the
- * following note carries no `tied` at all) and would wrongly still exclude
- * a note whose tie the singer just removed (the following note still
- * carries the reader's stale `'stop'`). Tracking the state forward, note by
- * note, reads correctly in both cases because it never consults the field
- * this walk is about to overwrite for the note in hand.
- *
- * A REST DOES NOT RESET THE TIE STATE. A tie cannot sound across a rest in
- * valid notation, so this only matters for malformed input, and the correct
- * behaviour for a walk is to skip over it rather than invent a rule for data
- * that should not exist.
- *
- * `let-ring` IS NOT A CONTINUATION (spec, "THE SHAPE OF THE FIX"): it is l.v.
- * notation, not a note written twice, and it neither excludes the note that
- * carries it nor propagates to the note after.
- */
-export function syllableTargetIds(events: readonly TieAwareEvent[]): string[] {
-	const out: string[] = [];
-	let continuesTie = false;
-	for (const ev of events) {
-		if (ev.type === 'rest') continue;
-		if (!continuesTie) out.push(ev.id);
-		continuesTie = ev.tied?.type === 'start' || ev.tied?.type === 'continue';
-	}
-	return out;
-}
+export { syllableTargetIds, type TieAwareEvent } from './sung-notes';
 
 /**
  * One slot per note, in document order, until one side runs out.

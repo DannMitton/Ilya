@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SOURCE: synthetic fixture written for cloud-lane-88 (item 1 of the arrival seam). Not a reading of any scan and not from any printed song; the words are plain Russian syllables chosen for their counts and carry no source.
+     Two bars of quarter notes. In bar 1 «Ночь» carries an extend element of type start and the next note carries only an extend element of type stop, so the print holds «Ночь» across it; «над» has a note after it with no mark at all. In bar 2 a tied note follows «Спи» under a printed extender (an extend element), then a rest ends the line. This file is NOT Ilya's own (it carries no ilya-extenders field), so only the parser's reading can find the held notes. -->
+<score-partwise version="3.1">
+  <part-list><score-part id="P1"><part-name>Voice</part-name></score-part></part-list>
+  <part id="P1">
+    <measure number="1">
+      <attributes><divisions>2</divisions><key><fifths>0</fifths></key><time><beats>4</beats><beat-type>4</beat-type></time><clef><sign>G</sign><line>2</line></clef></attributes>
+      <note><pitch><step>C</step><octave>4</octave></pitch><duration>2</duration><voice>1</voice><type>quarter</type><lyric number="1"><syllabic>single</syllabic><text>Ночь</text><extend type="start"/></lyric></note>
+      <note><pitch><step>D</step><octave>4</octave></pitch><duration>2</duration><voice>1</voice><type>quarter</type><lyric number="1"><extend type="stop"/></lyric></note>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>2</duration><voice>1</voice><type>quarter</type><lyric number="1"><syllabic>single</syllabic><text>над</text></lyric></note>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>2</duration><voice>1</voice><type>quarter</type></note>
+    </measure>
+    <measure number="2">
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>2</duration><voice>1</voice><type>quarter</type><tie type="start"/><lyric number="1"><syllabic>single</syllabic><text>Спи</text><extend type="start"/></lyric><notations><tied type="start"/></notations></note>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>2</duration><voice>1</voice><type>quarter</type><tie type="stop"/><notations><tied type="stop"/></notations></note>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>2</duration><voice>1</voice><type>quarter</type></note>
+      <note><rest/><duration>2</duration><voice>1</voice><type>quarter</type></note>
+    </measure>
+  </part>
+</score-partwise>

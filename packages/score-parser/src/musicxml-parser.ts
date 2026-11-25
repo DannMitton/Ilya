@@ -79,6 +79,7 @@ import type {
 import { adoptPickupMeter } from './pickup';
 import { pairSlurs, readNoteNotations } from './notations';
 import { markDoubleBars } from './barline-style';
+import { extendHoldsLine, extenderNotes } from './extender-span';
 import { graceField, keepGrace, type RawGrace } from './grace';
 
 // ── Minimal DOM surface the parser reads ───────────────────────────
@@ -390,7 +391,7 @@ export class MusicXmlScoreParser implements ScoreParser {
 		const vocalLine: VocalLineEvent[] = [];
 		const tieFlags = new Map<string, { start: boolean; stop: boolean }>();
 		const slurCarry: SlurEnd[] = [];
-		const graces: RawGrace[] = [];
+		const graces: RawGrace[] = []; const extendStarts = new Set<string>(); // the events whose printed <lyric> holds a line (`extender-span.ts`)
 
 		let divisions = readInitialDivisions(vocalPart) ?? readInitialDivisions(parts[0]);
 		if (!divisions || divisions <= 0) {
@@ -524,7 +525,7 @@ export class MusicXmlScoreParser implements ScoreParser {
 							verseToCanonical,
 							honourSuppliedIds: supplied.honour,
 							slurCarry,
-							graces,
+							graces, extendStarts,
 						});
 						break;
 					}
@@ -681,7 +682,7 @@ export class MusicXmlScoreParser implements ScoreParser {
 			...graceField(graces, vocalLine, warnings),
 		};
 
-		return { score, warnings, errors };
+		return { score, warnings: [...warnings, ...extenderNotes(vocalLine, extendStarts)], errors };
 	}
 
 	/** Read one `<note>` into the vocal line; return the advanced cursor. */
@@ -701,7 +702,7 @@ export class MusicXmlScoreParser implements ScoreParser {
 			honourSuppliedIds: boolean;
 			/** N.188 A.2a: slur starts read off dropped grace notes, waiting for the next kept note. */
 			slurCarry: SlurEnd[];
-			graces: RawGrace[];
+			graces: RawGrace[]; extendStarts: Set<string>;
 		},
 	): Fraction {
 		// N.187: a grace note takes no time, so it is kept in its own list (`grace.ts`) and the cursor stays.
@@ -810,7 +811,7 @@ export class MusicXmlScoreParser implements ScoreParser {
 				const text = elided ? segs.map((s) => s.text).join('‿') : segs[0].text; // U+203F undertie
 				const rawVerse = intAttr(ly, 'number') ?? 1;
 				const verseNumber = ctx.verseToCanonical.get(rawVerse) ?? rawVerse;
-				verseData.set(verseNumber, { text, type: segs[0].type });
+				verseData.set(verseNumber, { text, type: segs[0].type }); if (directChildren(ly, 'extend').some((x) => extendHoldsLine(x.getAttribute('type')))) ctx.extendStarts.add(eventId);
 				if (elided) {
 					ctx.warnings.push({
 						code: 'unrecognised-element',

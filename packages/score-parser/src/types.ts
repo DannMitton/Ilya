@@ -943,7 +943,7 @@ export interface ParseWarning {
   location?: ParseLocation;
   /** `words-partly-read` only: the song's bars, first and last, whose printed words were not read. */
   bars?: ReadonlyArray<readonly [number, number]>;
-  eventIds?: ReadonlyArray<string>; // `extender-notes` only: the sung notes a printed extender sustains
+  eventIds?: ReadonlyArray<string>; verse?: number; counts?: readonly [number, number]; // `slur-evidence-unchecked`: the verse, and its [syllables, sung notes]. Next, `eventIds`: `extender-notes` only: the sung notes a printed extender sustains
 }
 
 export interface ParseError {
@@ -989,7 +989,8 @@ export type ParseWarningCode =
    * others. `ParseWarning.bars` names the bars of the others.
    */
   | 'words-partly-read'
-  | 'extender-notes'; // row 181: set by the application's ingestion (a scan's printed extender); `eventIds` names the notes
+  | 'extender-notes' // a printed extender; `eventIds` names the sustained notes (the parser reads `<extend>`; ingestion reads a scan's)
+  | 'underlay-count' | 'slur-evidence-unchecked'; // cloud-lane-88, set by ingestion: syllables and sung notes do not come out even (`bars`, `eventIds`); or a verse's slur gate failed, one record per verse
 
 export type ParseErrorCode =
   | 'invalid-mnx-json'
