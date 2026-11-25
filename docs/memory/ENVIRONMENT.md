@@ -6133,3 +6133,20 @@ The desk typed a 6.5 kB brief into the Claude Code prompt box in Dann's Chrome w
 **A second consequence, and it is the expensive one:** the brief itself is normally committed and the prompt points at it. That only works when Dann has shipped it. A brief written during the session is untracked on his Mac and invisible to a cloud lane (see `A CLOUD CODE LANE CANNOT READ THE MAC`), so it has to be pasted whole, which is exactly when this trap fires.
 
 **If it fires:** do not send a correction telling the session to disregard its partial plan, until you have READ what it is doing. In this instance the session had already understood the whole brief and was on step 0; a correction would have stopped useful work to re-explain itself. Clear the box instead (`cmd+a`, then Backspace) and watch.
+
+
+## ESTIMATES BY KIND OF JOB, actuals from the 2026-11-24/25 desk
+
+Five helpers, every figure the harness's own count, not the agent's self-report.
+
+| kind of job | actual | cap | tool uses | minutes |
+|---|---|---|---|---|
+| Fable as-built DELTA read of a four-commit round on a lane it had read before, through the bridge | 189,958 | 260k | 23 | 6.1 |
+| Fable as-built DELTA read of a six-commit round, from a container clone plus the bridge for memory files | 161,740 | 200k | 19 | 4.1 |
+| **Sonnet eight-gate measure of one merge in the desk's own container** (fresh clone, merge, `pnpm install`, all eight gates once each) | 74,955 | 150k | 8 | **23.5** | 
+| **Fable N.204 unit read, unit j**, 29 files and 5,453 lines of source | **216,957** | 180k, **OVER by 37k** | 16 | 5.0 |
+| **Fable N.204 unit read, unit l**, 55 files and 13,106 lines of source | **630,541** | 560k, **OVER by 70k** | 53 | 11.6 |
+
+**THE MULTIPLIER FOR A UNIT READ IS ABOUT 4.5 TIMES THE SOURCE, NOT 3.3 TO 4.** Unit j's source is sized "about 45k" in the plan's table and cost 217k, 4.8 times. Unit l's is sized "about 140k" and cost 631k, 4.5 times. **Both caps were set from the plan's 3.3-to-4 figure and both were breached**, so the plan's range is low and a cap built on it will be breached again. **Quote 4.5 to 5 times the source and cap at the top of that.** On that multiplier the five remaining Fable units (c about 110k, i about 90k, k 113k, m about 100k, n about 140k, so 553k of source) cost about **2.5M to 2.8M Fable tokens**, which is the figure to put against his weekly allowance rather than the plan's.
+
+**The gate measure's shape is worth knowing: it is cheap in tokens and long in minutes.** 75k of tokens and 23.5 minutes, of which gate 4 alone was 722 seconds and hit the 600-second foreground tool timeout before moving to the background. Quote the minutes, not the tokens, when telling Dann how long the desk will be silent for one.

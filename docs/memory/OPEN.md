@@ -4750,6 +4750,18 @@ The names and goals of walks 1 to 4 are Dann's, 2026-10-31 14:14 (`OPEN.md:3823`
 
 **CONSEQUENCE, and it answers an open item of his own.** `DANN.md` D9 asks what he most wants colleagues to answer. His sentence above gives one of those questions its shape: the packet asks them where Ilya was hard, slow, or confusing, by name, rather than leaving it to be volunteered. Desk wording owed; the questions are his.
 
+### HOW A SCREENCAP IS FRAMED. Ruled by Dann 2026-11-25 00:33 and 00:39
+
+He proposed squircle screencaps; the desk disagreed and he took the alternative, adding the hue himself.
+
+**The frame is a plain rectangle** at the same corner radius Ilya's own surfaces use, so a screencap reads as Ilya without borrowing the mark.
+
+**The squircle goes INSIDE the screencap, as the callout**: the one thing on that screen the step is about. The GUIDE then teaches the mark by using it as the app uses it, which is "look at this one thing", and every QuickStart gains one visual verb for "here".
+
+**The callout squircle takes one of GUIDE's own hues** (Dann 00:39). His addition, and it settles something the desk had not: a callout in the GUIDE's hue belongs to the GUIDE, not to the pane it points at, so it cannot be misread as one of that pane's marks. The hue is fixed when the colour story's GUIDE family is read off `app.css`.
+
+**Why not a squircle frame, kept because the reasoning is the rule.** The squircle is a mark in Ilya, not a frame: it marks the syllable under the cursor, it is the crossing on MELODY, it is the one shape on a blank page, and a DASHED one means verification is necessary (his ruling 2026-11-24 00:33). A squircle round every screencap would make the shape wallpaper and set the dashed-versus-solid distinction fighting its own frame. Two smaller costs: a true squircle clips the corners, where the tab bar, the close control, and the drawer handle live, which is what a GUIDE picture exists to show; and the superellipse is costly to get right at arbitrary aspect ratios, where a radius is not.
+
 ### The coverage frame: each value once, never crossed
 
 Crossing every variable gives thousands of combinations. The frame is to name the dimensions and cover each value at least once across the five walks. Adopted from the field's practice; the assignment below is the desk's.
@@ -4799,3 +4811,15 @@ The first and third sentences are his ratified words of 21:43, unchanged. Only t
 Built from the file's own French: sentences one and three are his ratified French of 21:43, unchanged; « quelles notes portent un mélisme » is carried verbatim out of the struck sentence. **Agreements checked against their referents:** « notes chantées », feminine plural with « notes »; « n'expliquent pas » plural with « ses liaisons de phrasé »; « choisi » invariable, since the object of « a choisi » is the clause that follows and does not precede it; « un mélisme » masculine singular, from `loupe.melisma`. Apostrophes U+2019. No colon, semicolon, question mark, or exclamation mark, so no OQLF no-break space applies. **No term is coined here.** « liaisons de phrasé » is his ruling of 21:43 and is not reopened.
 
 **WHERE IT LANDS. DESK DEFAULT:** the string change rides in the wording lane with the other three text-batch items, AFTER lane 88 merges. It does not go into lane 88, whose eight gates are being measured as this is written and whose measure a late edit would void. Nothing shows this sentence to a singer yet, so nothing is lost by the order.
+
+### THE TEMPO CONTROL'S HINT. English RATIFIED by Dann 2026-11-25 00:56; the French stands unchanged
+
+**English, ratified** (*"I love it. ratified."*), replacing `tempo.hint`'s *"Your tempo. Every figure follows."*:
+
+> Your tempo. Everything Ilya reports follows it.
+
+**French: NO CHANGE AND NOTHING OWED TO HIM.** « Votre tempo. Tous les résultats en tiennent compte. » already names the effect and is what the new English was brought up to meet. **The finding behind that, and it is worth a later desk's attention:** the French said the plain thing and the English was the one that had gone cryptic. When a pair disagrees in plainness, read the French before rewriting the English.
+
+**How it was ruled.** He struck the old line himself at 00:46 (*"'Every figure follows' is cryptic, I hate it. It sounds like AI slop."*). The desk's first draft, "Ilya counts the seconds from it", he rejected at 00:55 on the ground that it makes time sound relative: seconds are seconds, and what a tempo changes is how many of them a note occupies. He offered "Your tempi. Ilya follows your pace." The desk critiqued two faults and kept one half: **"tempi" is plural where the control stores one `bpm` per song** (`apps/web/src/lib/tempo/singer-tempo.ts:28`, read 2026-11-25), and **"tempo" and "pace" are two terms for one concept in one sentence**, against his own house rule. "Follows" is his verb and it survives into the ratified line.
+
+**IT IS NOT TRUE YET, AND THE LANE THAT SEATS IT REPAIRS THAT.** Unit l's defect D2: the long-sustain test behind the cover, tracking, and turnover hazards reads the printed marking alone (`packages/score-parser/src/overlay-engine.ts:221-222`, and a private copy at `analysis/watchlist.ts:271-285`, `:434`), so the singer's tempo does not reach them. The sentence and the seam ship together, under his standing rule of 2026-11-18 that where his words and the build differ, the desk changes the build.
