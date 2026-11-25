@@ -221,7 +221,8 @@ describe('round 3, the ruling: a failed gate seats the verse as 5594904b seated 
 		const text = readFileSync(dir + f, 'utf8');
 		const parsed = await musicxmlParser.parse({ format: 'musicxml', data: text, sourcePath: f });
 		const extenders = new Set(parsed.warnings.find((w) => w.code === 'extender-notes')?.eventIds ?? []);
-		const failing = foldVowelessSyllables(parsed.score, extenders).verses.filter((v) => v.evidence.gate === 'failed').map((v) => v.verse);
+		// Round 4, step 1: a record is written only for a failed verse that has something to name.
+		const failing = countUnderlay(foldVowelessSyllables(parsed.score, extenders)).verses.filter((v) => v.slurGate === 'failed' && (v.unexplained.length > 0 || v.vacated.length > 0)).map((v) => v.verse);
 		const out = await ingestScoreFile(new File([text], f), deps);
 		if (!out.ok) throw new Error('ingest failed');
 		const records = out.ingested.result.warnings.filter((w) => w.code === 'slur-evidence-unchecked').map((w) => w.verse);
@@ -234,6 +235,18 @@ describe('round 3, the ruling: a failed gate seats the verse as 5594904b seated 
 			const parsed = await musicxmlParser.parse({ format: 'musicxml', data: readFileSync(dir + f, 'utf8'), sourcePath: f });
 			expect(foldVowelessSyllables(parsed.score).verses.map((v) => v.evidence.gate), f).toEqual(['failed', 'failed', 'failed']);
 		}
+	});
+
+	it('round 4, step 1: a clean verse with an ordinary phrasing slur fails the gate and carries no record (four notes, four syllables, one slur)', async () => {
+		const note = (step: string, word: string, slur?: string) => `<note><pitch><step>${step}</step><octave>4</octave></pitch><duration>2</duration><voice>1</voice><type>quarter</type>${slur ? `<notations><slur type="${slur}" number="1"/></notations>` : ''}<lyric number="1"><syllabic>single</syllabic><text>${word}</text></lyric></note>`;
+		const xml = `<?xml version="1.0" encoding="UTF-8"?><score-partwise version="3.1"><part-list><score-part id="P1"><part-name>Voice</part-name></score-part></part-list><part id="P1"><measure number="1"><attributes><divisions>2</divisions><key><fifths>0</fifths></key><time><beats>4</beats><beat-type>4</beat-type></time><clef><sign>G</sign><line>2</line></clef></attributes>${note('C', 'Ночь')}${note('D', 'над', 'start')}${note('E', 'мой', 'stop')}${note('G', 'дом')}</measure></part></score-partwise>`;
+		const parsed = await musicxmlParser.parse({ format: 'musicxml', data: xml, sourcePath: 'clean.musicxml' });
+		const v = countUnderlay(foldVowelessSyllables(parsed.score)).verses[0];
+		expect([v.slurGate, v.syllables, v.notes, v.unexplained.length, v.vacated.length]).toEqual(['failed', 4, 4, 0, 0]);
+		const out = await ingestScoreFile(new File([xml], 'clean.musicxml'), deps);
+		if (!out.ok) throw new Error('ingest failed');
+		expect(out.ingested.result.warnings.some((w) => w.code === 'slur-evidence-unchecked')).toBe(false);
+		expect(out.ingested.result.warnings.some((w) => w.code === 'underlay-count')).toBe(false);
 	});
 
 	it('where the gate does not fail, the per-note record stands as built in round 2: Tchaikovsky bars 58 and 93', async () => {

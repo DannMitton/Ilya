@@ -377,7 +377,7 @@ function withVowelPerNote(result: ParseResult): ParseResult {
 	if (fold.undrawn > 0) console.warn(`${fold.undrawn} syllable${fold.undrawn === 1 ? '' : 's'} with no note in the file's lyrics, not drawn (CONTRACT 0.1)`);
 	const dealt = fold.score === result.score ? result : { ...result, score: fold.score };
 	const count = countUnderlay(fold);
-	return count.damaged || count.unchecked.length > 0 ? withUnderlayRecord(dealt, count) : dealt;
+	return count.damaged ? withUnderlayRecord(dealt, count) : dealt;
 }
 
 /**
@@ -447,7 +447,9 @@ function withUnderlayRecord(result: ParseResult, count: UnderlayCount): ParseRes
 		if (parts.length === 0 && !v.agrees && !failed) parts.push('the notes and the syllables do not come out even');
 		if (parts.length > 0) said.push(`Verse ${v.verse}: ${v.sung} sung note(s), ${v.syllables} syllable(s); ${parts.join('; ')}.`);
 	}
-	const unchecked: ParseWarning[] = count.verses.filter((v) => v.slurGate === 'failed').map(slurUnchecked);
+	// Round 4, step 1: the notice speaks only where there was something to name. A failed gate over a verse with no unexplained note and no
+	// emptied one (a clean verse with an ordinary phrasing slur) has no difference to say its slurs do not account for, so no record is written.
+	const unchecked: ParseWarning[] = count.verses.filter((v) => v.slurGate === 'failed' && (v.unexplained.length > 0 || v.vacated.length > 0)).map(slurUnchecked);
 	const known = new Set((score.dictionMarks?.vacatedTailEventIds ?? []).map((t) => `${t.verseNumber}|${t.eventId}`));
 	const fresh = abstain.filter((t, i) => !known.has(`${t.verseNumber}|${t.eventId}`) && abstain.findIndex((u) => u.eventId === t.eventId && u.verseNumber === t.verseNumber) === i);
 	const dictionMarks = fresh.length === 0 ? score.dictionMarks : { breaks: score.dictionMarks?.breaks ?? [], vacatedTailEventIds: [...(score.dictionMarks?.vacatedTailEventIds ?? []), ...fresh] };
