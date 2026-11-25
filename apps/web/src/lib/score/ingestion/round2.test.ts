@@ -224,7 +224,7 @@ describe('round 3, the ruling: a failed gate seats the verse as 5594904b seated 
 		const failing = foldVowelessSyllables(parsed.score, extenders).verses.filter((v) => v.evidence.gate === 'failed').map((v) => v.verse);
 		const out = await ingestScoreFile(new File([text], f), deps);
 		if (!out.ok) throw new Error('ingest failed');
-		const records = out.ingested.result.warnings.filter((w) => w.code === 'slur-evidence-unchecked').map((w) => Number(/verse (\d+)/.exec(w.message)?.[1]));
+		const records = out.ingested.result.warnings.filter((w) => w.code === 'slur-evidence-unchecked').map((w) => w.verse);
 		expect(records).toEqual(failing);
 		for (const v of failing) expect(out.ingested.result.score.dictionMarks?.vacatedTailEventIds.filter((t) => t.verseNumber === v) ?? []).toEqual([]);
 	});

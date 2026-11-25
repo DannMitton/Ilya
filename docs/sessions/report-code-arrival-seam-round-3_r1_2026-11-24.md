@@ -77,3 +77,17 @@ Read, not run. The seam's gate is `melisma-evidence.ts:49-57` (`evidenceFor`). T
 2. The exact words of the sentence.
 3. The base snapshot comes from the old fold plus the current parser, not a full base checkout.
 4. "Bars it shows" for the base verse: a bar with no words at all counts as shown.
+
+## Addendum: the ratified sentence, seated and pinned (2026-11-25)
+
+**The two decisions are confirmed.** Text moves: a failed gate does not undo the re-deal, so a song with both a fusion and a failed gate seats its text by the re-deal. `n188-markings`: the sustained vowel across its two vacated tail notes is the right outcome. Neither needed a change; both were built that way.
+
+**The strings.** Dann's ratified English and French (2026-11-24 21:43) replace my draft word for word.
+
+- **Key: `upload.banner.slurEvidenceUnchecked`**, in `lib/i18n.ts`, after `upload.banner.wordsPartlyReadOne`. I chose the `upload.` prefix because it already lists `ingestion/ingest.ts`, so the key index needed only its two numbers moved (`upload.` 50 to 51; the file's total 1,348 to 1,349), and `i18n-index.test.ts` passes.
+- **The two counts:** `{n}` is the verse's syllables and `{m}` its sung notes. No derived figure. One detail: `{m}` is the verse's sung notes less any note the deal left on its own (a mark alone, or a token with no Cyrillic letter), because those come off the count before the gate. A note holding an extension line stays in `{m}`. Say if you want `{m}` to be every sung note of the verse instead.
+- **French:** every apostrophe is U+2019, and the text holds no punctuation that takes a no-break space, so the OQLF spacing rule has nothing to apply to it. A test checks that no straight apostrophe is present.
+- **Pin:** `ingestion/ratified-slur-line.test.ts`, character for character in both languages, in the manner of `insights/ratified-lines.test.ts`, plus a check that each language carries `{n}` and `{m}` and nothing else.
+- **The carrier now fills the English** (`ingest.ts`, `slurUnchecked`) and carries `verse` and `counts` on the `ParseWarning` (two optional fields, added on an existing line of `types.ts`, still 1000 lines), so Corrections can fill the French from the same key. My draft's `slurUncheckedText` is removed. The `n188-markings` test now checks the message against the key with its own counts.
+
+**Gate 4 whole: 6889 passed | 5 skipped (6894)**, against 6886 passed | 5 skipped (6891) before. Skip split unchanged: 4 `burg` tests skipped for want of `scipy` (not installed here), 1 `heic` test skipped for its own environment variable. The score-parser suite (913 passed, 5 skipped), ratchets, and `svelte-check` (0 errors, 12 warnings in the same five untouched files) pass. Build and Playwright were not run. Nothing was merged, nothing went to `Shane`, and `ilya-ship.sh` was not run.

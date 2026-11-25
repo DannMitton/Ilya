@@ -943,7 +943,7 @@ export interface ParseWarning {
   location?: ParseLocation;
   /** `words-partly-read` only: the song's bars, first and last, whose printed words were not read. */
   bars?: ReadonlyArray<readonly [number, number]>;
-  eventIds?: ReadonlyArray<string>; // `extender-notes` only: the sung notes a printed extender sustains
+  eventIds?: ReadonlyArray<string>; verse?: number; counts?: readonly [number, number]; // `slur-evidence-unchecked`: the verse, and its [syllables, sung notes]. Next, `eventIds`: `extender-notes` only: the sung notes a printed extender sustains
 }
 
 export interface ParseError {

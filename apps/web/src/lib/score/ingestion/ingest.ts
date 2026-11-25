@@ -394,10 +394,16 @@ function withVowelPerNote(result: ParseResult): ParseResult {
  * message with its bar and is never seated somewhere to be rid of it.
  */
 /**
- * THE ONE SENTENCE for Corrections when a verse's slur gate fails (round 3, Dann's ruling). DRAFT, OWED TO DANN FOR RATIFICATION,
- * and FLAGGED FOR A FRENCH DRAFT: Code writes no French. The carrier is a `ParseWarning`; nothing here puts it on a page.
+ * THE ONE SENTENCE for Corrections when a verse's slur gate fails (round 3, Dann's ruling). RATIFIED by Dann 2026-11-24 21:43, English
+ * and French together, at `upload.banner.slurEvidenceUnchecked`. `{n}` is the verse's syllables and `{m}` its sung notes. The carrier is a
+ * `ParseWarning` whose `verse` and `counts` let Corrections fill the French; the message is the English. Nothing here puts it on a page.
  */
-export const slurUncheckedText = (verse: number): string => `The slurs in verse ${verse} could not be checked against the number of syllables, so please check where this verse holds a note.`;
+const slurUnchecked = (v: { verse: number; syllables: number; sung: number }): ParseWarning => ({
+	code: 'slur-evidence-unchecked',
+	message: t('upload.banner.slurEvidenceUnchecked', 'en').replace('{n}', String(v.syllables)).replace('{m}', String(v.sung)),
+	verse: v.verse,
+	counts: [v.syllables, v.sung],
+});
 
 function withUnderlayRecord(result: ParseResult, count: UnderlayCount): ParseResult {
 	const score = result.score;
@@ -441,7 +447,7 @@ function withUnderlayRecord(result: ParseResult, count: UnderlayCount): ParseRes
 		if (parts.length === 0 && !v.agrees && !failed) parts.push('the notes and the syllables do not come out even');
 		if (parts.length > 0) said.push(`Verse ${v.verse}: ${v.sung} sung note(s), ${v.syllables} syllable(s); ${parts.join('; ')}.`);
 	}
-	const unchecked: ParseWarning[] = count.unchecked.map((verse) => ({ code: 'slur-evidence-unchecked', message: slurUncheckedText(verse) }));
+	const unchecked: ParseWarning[] = count.verses.filter((v) => v.slurGate === 'failed').map(slurUnchecked);
 	const known = new Set((score.dictionMarks?.vacatedTailEventIds ?? []).map((t) => `${t.verseNumber}|${t.eventId}`));
 	const fresh = abstain.filter((t, i) => !known.has(`${t.verseNumber}|${t.eventId}`) && abstain.findIndex((u) => u.eventId === t.eventId && u.verseNumber === t.verseNumber) === i);
 	const dictionMarks = fresh.length === 0 ? score.dictionMarks : { breaks: score.dictionMarks?.breaks ?? [], vacatedTailEventIds: [...(score.dictionMarks?.vacatedTailEventIds ?? []), ...fresh] };

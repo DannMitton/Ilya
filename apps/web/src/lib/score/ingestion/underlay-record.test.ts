@@ -12,6 +12,7 @@ import { parseXml } from './mini-dom';
 import { ingestScoreFile, type IngestDeps } from './ingest';
 import type { ScoreReader } from '$lib/reader/score-reader';
 import { buildUnderlayResolvers } from '$lib/score/vowel-resolver';
+import { t } from '$lib/i18n';
 
 const fixture = (name: string): string => readFileSync(fileURLToPath(new URL(`./fixtures/${name}`, import.meta.url)), 'utf8');
 const parserFixture = (name: string): string => readFileSync(fileURLToPath(new URL(`../../../../../../packages/score-parser/src/fixtures/${name}`, import.meta.url)), 'utf8');
@@ -70,7 +71,9 @@ describe('the leftover is recorded (item 4)', () => {
 		expect(texts).toContain('жизнь');
 		expect(texts).not.toContain('знь');
 		expect(warnings.filter((x) => x.code === 'slur-evidence-unchecked')).toHaveLength(1);
-		expect(warnings.find((x) => x.code === 'slur-evidence-unchecked')?.message).toBe('The slurs in verse 1 could not be checked against the number of syllables, so please check where this verse holds a note.');
+		const unchecked = warnings.find((x) => x.code === 'slur-evidence-unchecked')!;
+		expect(unchecked.verse).toBe(1);
+		expect(unchecked.message).toBe(t('upload.banner.slurEvidenceUnchecked', 'en').replace('{n}', String(unchecked.counts![0])).replace('{m}', String(unchecked.counts![1])));
 		expect(score.dictionMarks?.vacatedTailEventIds ?? []).toEqual([]);
 		expect(warnings.find((x) => x.code === 'underlay-count')?.eventIds ?? []).toEqual([]);
 	});
