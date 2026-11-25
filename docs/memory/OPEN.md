@@ -4586,7 +4586,7 @@ Transcribed as written, 2026-11-22 22:47: *"We decided conduit not tractus"*. **
 
 ## WHAT ILYA DOES FOR A SINGER: THE MODEL. Drafted by the desk 2026-11-23 21:0x from Dann's own words, corrected by him 21:18 and 21:22. N.204 step 2
 
-**What this is for.** It is the high-level model the code is compared against at step 5 of the governing plan, `../sessions/plan-code-audit-maintainability_r9_2026-11-23.md` (md5 `6d0cd1e1`). r7 and r8 are superseded and kept. Every one of the 552 source files lands in one of these boxes or lands nowhere, and where the code disagrees with Dann's own description of Ilya, that is the finding. **Its own test: if a real part of Ilya has no box, the model is wrong, not the code.**
+**What this is for.** It is the high-level model the code is compared against at step 5 of the governing plan, `../sessions/plan-code-audit-maintainability_r10_2026-11-24.md` (md5 `92e6caec`). r7, r8, and r9 are superseded and kept. Every one of the 552 source files lands in one of these boxes or lands nowhere, and where the code disagrees with Dann's own description of Ilya, that is the finding. **Its own test: if a real part of Ilya has no box, the model is wrong, not the code.**
 
 **Drafted on his instruction of 2026-11-23 21:07**, transcribed as written: *"My words already animate this entire app. We have en ough information in our Project files and in LEARN and GUIDE to answer this question. please draft an answer"*. **Awaiting his ruling. Nothing else is owed on it.**
 
@@ -4679,3 +4679,19 @@ He struck: "a decision about the work, not about a page: it is true whether or n
 **The desk's recommendation: 3**, because it keeps his gate, keeps Ilya from inventing a melisma, and still tells the singer the truth in one place instead of emptying her line. **NOT ESTABLISHED: how many of the tracked fixtures fail the gate.** That count is one probe and it should be measured before he rules.
 
 **Neither round-2 brief touches the gate.** Lane 88 round 2 is told to leave its shape alone; its fix 4 (taking extender-held notes off before the gate) is a correction inside the existing formula, not a change to it.
+
+### RULED by Dann, 2026-11-24 21:23: keep the gate whole, change what failing means
+
+**His words:** *"Keep the gate whole, change what failing means"* (reading 3 of the three above, after the desk put the measurements to him and changed its own recommendation from 3 to 2).
+
+**What this settles.** The count gate keeps its shape and its reach: one count, taken whole over the verse, as `observedTargets` takes it today (`apps/web/src/lib/score/slur-seat.ts:41-49`). Ilya does not go slur by slur. What changes is the consequence of a failure.
+
+**Before:** a failed gate made every slur continuation in the verse unexplained, so each lost its vowel and its IPA, and Corrections showed the singer a row of blanks. Measured on `strophic-repeat` and its three siblings: one note per verse lost for this reason alone, `m6-1-4`, the stop of a printed slur. A dash alone on a note and a Latin letter in a Cyrillic line each failed the gate for their whole verse the same way.
+
+**After:** when the gate fails for a verse, Ilya seats that verse exactly as `Shane` at `5594904b` seats it, writes no per-note abstention for it, and writes one record naming the verse and saying the slur evidence in it could not be checked against the syllable count. One thing for her to check, not many blanks. Where the gate passes, nothing changes: a textless note with no print evidence still gets its own record.
+
+**What it costs, named when he ruled:** the page then shows a seating Ilya cannot defend note by note, which is what the r5 rule was written against. He took that cost knowingly over the blanks.
+
+**Owed to him:** the one English sentence that record shows in Corrections, for ratification, and its French draft after.
+
+**Built in** lane 88 round 3, with Fable's fixes A and B and one desk default (a note pinned as a mark alone or as a token with no Cyrillic letter comes out of the note count before the gate, as extender-held notes now do, because a note that sings nothing was never a candidate).

@@ -1609,3 +1609,21 @@ The close of the 2026-11-21 evening desk and the close of the 2026-11-20/21 desk
 **LANE 87 IS BUILT, REVIEWED, AND READY TO MERGE AS A FAST-FORWARD.** `cloud-lane-87` at `a2642dde`, three items, one commit each: the VOIX comment (`07fc9c0b`), the two ratified GUIDE resonance paragraphs seated as bold run-in paragraphs with six pins (`21f8b319`), and Dann's ratified DRAWER-to-VOICE change of 2026-11-20 (`594de275`). **Fable as built: MERGE, no blockers** (`../sessions/review-fable-lane87-as-built_r1_2026-11-24.md`, ~110k tokens). **Expect gate 4 at `6810 passed | 1 skipped (6811)`**: six tests added, four that skip in Linux and run on the Mac. Arithmetic, not a measurement.
 
 **LANE 86 IS COMPLETE, READ AS BUILT, AND MERGED IN `5594904b`.** Four commits; the last, at 02:27, carries family 10, family 9's recapture with the symlink followed, the top-level manifest, and the whole report. **Fable's as-built read: `../sessions/review-fable-lane86-as-built_r1_2026-11-24.md`** (~175k tokens). **Dann's merge is the one thing owed on it.**
+
+## Moved from STATE.md 2026-11-24 evening (the overnight desk's closed items), verbatim
+
+**THE DETERMINISM PROOF HOLDS, AND FABLE REPRODUCED IT INDEPENDENTLY:** its own build in a separate container, stamp pinned to `b2869772` under a third timezone, gave the same list hash `a02a9461…`, 218 files, 478,881,059 bytes. **The stamp footprint explains 15 of its 16 files; the sixteenth (`DQNXc5L2.js`) changes minifier names with the stamp's value, so the footprint cannot be subtracted mechanically. Pinning the stamp at `apps/web/build-id.js:18` removes it, tested.**
+
+**THE TWO UNSTABLE FAMILIES NOW HAVE CAUSES, and the desk's first answer on family 5 was wrong.** Family 4 is the PDF Info dictionary, four fields (`/CreationDate`, `/ModDate`, `/Creator`, `/Producer`); masked, Fable's PDFs equalled the lane's byte for byte. **Family 5 is one random song id, but it is NOT minted at import**: it is minted when the library opens with no pointer (`apps/web/src/lib/library/index.ts:181`, `:71`), and seeding `ilya:activeSongId` made two runs byte-identical.
+
+**THE DONE-WHEN WORDING FABLE RECOMMENDS, and plan r10 is owed to carry it** (section 3 of its report has the full text): the baseline is re-captured in its own environment on a stamp-pinned build and compared byte for byte, with two standing rules, (a) PDFs compared after masking those four fields, `sheets.html` unmasked, and (b) the binder unpacked and compared member by member with the song id replaced by one placeholder in its four places, the archive's own bytes not compared.
+
+**AND ONE DONE-WHEN CANNOT BE MET AS WRITTEN: "both Playwright projects pass".** Eight tests fail in BOTH runs. **One test is unstable across the two runs, `time-signature-card.test.ts:37`: six seconds and a pass, then a 180-second hang.** Family 10 ran against `pnpm dev` rather than the build, and family 1 is English only.
+
+**STEP 0b's recommendation to capture beside Ilya's approval mechanisms rather than extend them: Fable agrees**, with the costs in its section 4.
+
+**ONE STRAY FILE BLOCKS THE NEXT SHIP.** Fable's `sed -i` left `docs/sessions/review-fable-lane86-as-built_r1_2026-11-24.md.tmp`, which neither it nor the desk can delete from the bridge; a copy of it sits in `~/Downloads/_desk-2026-11-24/`. **The next paste removes it.**
+
+**WAS: LANE 86 STILL RUNNING ITS LAST FAMILY** (`e02919ba`, unchanged since 00:4x). Families 1 to 9 and the three builds are on the branch and were read by the desk from a shallow clone. **The determinism repair Dann ruled in on 2026-11-19 is PROVED:** two builds of `b2869772`, two minutes apart under different clocks in separate clones, are byte for byte identical, 218 files and 478,881,059 bytes. **Families 4 and 5 are NOT byte-stable across runs of one build** (the printed PDFs, and the binder because Ilya mints a fresh song id at every import). **So done-when item 3's "equal byte for byte" needs a named exception for those two or it cries wolf on every later lane; that is the desk's to settle against Fable's as-built read.** One open question closed: the reader's model files do reach a cloud build, 213 MB.
+
+**BOTH WAIT ON LANE 86'S BASELINE** (plan r9 step 8: a tier 4 lane runs from the moment the baseline exists).

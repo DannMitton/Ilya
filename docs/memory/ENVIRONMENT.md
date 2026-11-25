@@ -6115,3 +6115,9 @@ Both Fable reads of 2026-11-24 did this, each at about 150,000 tokens, and both 
 ## `md5` IS NOT IN THE BRIDGE VM (2026-11-24)
 
 `md5 -q` is a Mac command. The bridge is Linux: use `md5sum`, which prints the hash first and the filename after it.
+
+## A CLOUD CODE LANE CANNOT READ THE MAC (2026-11-24, desk fault)
+
+The desk sent both lanes to read a Fable review "on the Mac". A cloud Code session has no bridge to the Mac: it sees its own branch and nothing else. Both lanes said so and worked from the desk's prose description instead, which happened to carry the substance, so nothing was lost; the next desk may not be so lucky.
+
+**The rule: anything a lane must read is on its branch, or it is quoted whole in the prompt.** A Fable review is written to the Mac, so it reaches a lane only after Dann ships it and the lane merges `origin/Shane`. Either ship first and tell the lane to merge, or paste the finding into the prompt in full. Saying "read the report at docs/sessions/..." without one of those is an instruction the lane cannot follow.
