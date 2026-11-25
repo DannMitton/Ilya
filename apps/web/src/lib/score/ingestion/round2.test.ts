@@ -249,6 +249,16 @@ describe('round 3, the ruling: a failed gate seats the verse as 5594904b seated 
 		expect(out.ingested.result.warnings.some((w) => w.code === 'underlay-count')).toBe(false);
 	});
 
+	it('round 4, step 3: one failed verse with a pinned note says the same number of sung notes in both of its records', async () => {
+		const note = (step: string, word: string | null, slur?: string) => `<note><pitch><step>${step}</step><octave>4</octave></pitch><duration>2</duration><voice>1</voice><type>quarter</type>${slur ? `<notations><slur type="${slur}" number="1"/></notations>` : ''}${word ? `<lyric number="1"><syllabic>single</syllabic><text>${word}</text></lyric>` : ''}</note>`;
+		const xml = `<?xml version="1.0" encoding="UTF-8"?><score-partwise version="3.1"><part-list><score-part id="P1"><part-name>Voice</part-name></score-part></part-list><part id="P1"><measure number="1"><attributes><divisions>2</divisions><key><fifths>0</fifths></key><time><beats>6</beats><beat-type>4</beat-type></time><clef><sign>G</sign><line>2</line></clef></attributes>${note('C', 'ты', 'start')}${note('D', null, 'stop')}${note('E', '—')}${note('F', 'мой')}${note('G', 'дом')}${note('A', null)}</measure></part></score-partwise>`;
+		const out = await ingestScoreFile(new File([xml], 'p.musicxml'), deps);
+		if (!out.ok) throw new Error('ingest failed');
+		const w = out.ingested.result.warnings;
+		expect(w.find((x) => x.code === 'underlay-count')?.message).toMatch(/Verse 1: 6 sung note\(s\)/);
+		expect(w.find((x) => x.code === 'slur-evidence-unchecked')?.message).toContain('for 6 sung notes');
+	});
+
 	it('where the gate does not fail, the per-note record stands as built in round 2: Tchaikovsky bars 58 and 93', async () => {
 		const text = readFileSync(fileURLToPath(new URL('./fixtures/tchaikovsky-op38-3-voice.musicxml', import.meta.url)), 'utf8');
 		const out = await ingestScoreFile(new File([text], 't.musicxml'), deps);

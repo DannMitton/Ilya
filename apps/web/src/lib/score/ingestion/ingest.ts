@@ -447,7 +447,7 @@ function withUnderlayRecord(result: ParseResult, count: UnderlayCount): ParseRes
 			parts.push(`${label}: ${places.map((p) => `«${p.text}» (bar ${bar(p.eventId)})`).join(', ')}`);
 		}
 		if (parts.length === 0 && !v.agrees && !failed) parts.push('the notes and the syllables do not come out even');
-		if (parts.length > 0) said.push(`Verse ${v.verse}: ${v.sung} sung note(s), ${v.syllables} syllable(s); ${parts.join('; ')}.`);
+		if (parts.length > 0) said.push(`Verse ${v.verse}: ${v.notes} sung note(s), ${v.syllables} syllable(s); ${parts.join('; ')}.`);
 	}
 	// Round 4, step 1: the notice speaks only where there was something to name. A failed gate over a verse with no unexplained note and no
 	// emptied one (a clean verse with an ordinary phrasing slur) has no difference to say its slurs do not account for, so no record is written.
