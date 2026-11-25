@@ -96,6 +96,8 @@ next session the same hour it cost the last one.
 | you are about to, or you are seeing | search for |
 |---|---|
 | a subagent leaves a `.bak` file in the tree that nothing can delete | `A SUBAGENT'S .bak CANNOT BE DELETED` |
+| you are about to check whether Ilya loads anything from outside, or to read the built output | `N.197'S SWEEP IS READ OFF THE RUNNING APP` |
+| you are about to treat `ilya.dannmitton.com` as current, or to walk a screen on it | `THE PRODUCTION ALIAS SERVES A SEPTEMBER BUILD OFF main` |
 | you are about to name a report file in a subagent's brief | `A REPORT PATH WAS ALREADY TAKEN` |
 | you are about to quote a cost for a Fable read of one audit unit | `ESTIMATES BY KIND OF JOB` |
 | you are about to quote a cost for a Fable review of a PLAN, or for a web-research pass | `ESTIMATES BY KIND OF JOB: THREE ACTUALS FROM 2026-11-23 EVENING` |
@@ -5290,6 +5292,7 @@ Quote the range; cap at its top; add each actual when it lands. Actuals from `ST
 | Fable review of one Code brief with nine string groups and a sibling lane to cross-check | 193,929 (cap 260k, 22 tool uses, 7.9 min, 2026-11-21, lane 77 r3, a 15.2 kB brief; DO NOT SEND, nine blockers, thirteen amendments) | 150k to 260k, and the 2026-11-21 actual sat below its middle |
 | Fable DELTA review of a brief revision (only what changed, plus whether its own earlier amendments survived) | 62,220 (lane 66 r2, 2026-11-17); 163,310 (lane 69 r4, cap 200k, 9 tool uses, 2.9 min, 2026-11-18) | 60k to 200k |
 | Fable as-built review of one small lane (5 code files, +270 -34, read from the tree, no gate run) | 167,541 (lane 69, cap 300k, 12 tool uses, 3.3 min, 2026-11-18) | 150k to 300k |
+| Fable review of one Code brief, small OMR lane, every citation verified at one commit | 169,138 (staff finder r1, cap 250k, 18 tool uses, 5.3 min, 2026-11-25; DO NOT SEND, two blockers, nineteen amendments; BELOW the 180k floor quoted for the geometry kind, so that floor is too high for a one-module brief) | 150k to 250k |
 | Fable review of one Code brief, small geometry lane, every citation verified at one commit | 189,874 (lane 79 r1, cap 250k, 27 tool uses, 6.4 min, 2026-11-21; DO NOT SEND, three blockers, fifteen amendments); 198,376 (lane 80 r1, cap 250k, 23 tool uses, 7.3 min, same night; DO NOT SEND, four blockers, eighteen amendments) | 180k to 250k |
 | Sonnet source census of three panes against one commit, thirteen measured items, no recommendations | 155,794 (cap 250k, 20 tool uses, 2.7 min, 2026-11-21, the three documents' differences) | 150k to 250k |
 | Fable as-built review of a two-commit lane (9 code files, the whole diff, two reports, three ruling files, two captures opened) | 188,824 (lane 79, cap 250k, 20 tool uses, 4.0 min, 2026-11-21; MERGE WITH AMENDMENTS, six) | 170k to 260k |
@@ -6176,3 +6179,24 @@ Five helpers, every figure the harness's own count, not the agent's self-report.
 **THE VOICE PEDAGOGY LIBRARY NEEDS ITS OWN FOLDER GRANT, AND THE FIRST REQUEST MAY BE REFUSED.** `device_request_folder_access` for `/Users/dannmitton/Documents/Voice Pedagogy Library` was denied once by the auto-mode classifier before Dann invited it; the second request, after he said to ask, was granted. On the bridge it mounts as `$HOME/mnt/Voice Pedagogy Library`, NOT under `mnt/Documents/`. It held 633 PDFs before 2026-11-25 and 652 after.
 
 **THE OPENSCORE LIEDER CORPUS HOLDS NO RUSSIAN COMPOSERS.** 1,350-odd CC0 scores, mirrored at `github.com/OpenScore/Lieder`, which the container can clone over HTTPS (the GitHub REST API is proxied and fails; `git ls-remote` and `git clone --filter=blob:none --no-checkout` work). The composer list was read in full: no Tchaikovsky, Mussorgsky, Glinka, Rachmaninoff, or any other Russian. Do not send a helper there for Russian repertoire again.
+
+
+## N.197'S SWEEP IS READ OFF THE RUNNING APP, NEVER OFF THE BUILD ON DISK (desk, 2026-11-25)
+
+The sweep's source half was done 2026-11-23 and came back same-origin. Its build half stalled, because `apps/web/build/` on disk was stale (2026-11-11), still named Google Fonts, and was not safe to read for anything. The bridge VM cannot build this tree, so there was no fresh build to read either.
+
+**The instrument that works: load the deployed build in Dann's Chrome and read its network requests** (`mcp__claude-in-chrome__read_network_requests`). It answers the question N.197 actually asks, which is what a visitor's browser does, and it needs no build.
+
+**Two traps in the tool.** Network tracking starts when the tool is first called, so a page loaded before that call returns nothing: call the tool once, then navigate, then read. And requests are cleared when the page navigates to a different domain, so read before moving on.
+
+**Filter on `https://`.** Dann's Chrome carries extensions that load a hundred `chrome-extension://` assets into every page. They are his browser, not Ilya, and they bury the answer.
+
+**The measurement, 2026-11-25, on `66dfb5f9` at `ilya-bj4qpusik-dannmittons-projects.vercel.app`:** eighteen https requests, every one same-origin. No `fonts.googleapis.com`, no `fonts.gstatic.com`, no `vercel.live`. `/.well-known/vercel/jwe` is Vercel's own same-origin protection check.
+
+## THE PRODUCTION ALIAS SERVES A SEPTEMBER BUILD OFF `main` (desk, 2026-11-25)
+
+`ilya.dannmitton.com` resolves to `dpl_J14bV1A9e4wvt9KFsdQbkpXhbCe7`, `target: production`, branch `main`, commit `2b980e7b` (N.153 stage 3b), created 2026-09-21. **It is the only deployment with a production target.** Every build since is a `Shane` preview.
+
+**So the alias is not a view of current Ilya, and nothing walked on it is evidence about the build.** Walk the newest READY `Shane` deployment instead; `mcp__Vercel__list_deployments` with `state: READY` and `slug: dannmittons-projects` names it, newest first.
+
+**Measured consequence, 2026-11-25:** the alias loads `fonts.googleapis.com` and six `fonts.gstatic.com` files on every visit, because it predates `app.html:46` and `static/fonts/google-families.css` (dated 2026-11-15), which serve the four families from Ilya's own origin. This is not an N.197 defect. It is the gap between `main` and `Shane`, and release day closes it (`SCHEDULE.md`, item 10).
