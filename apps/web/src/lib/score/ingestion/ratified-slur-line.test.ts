@@ -24,9 +24,9 @@ describe('ratified line: a verse whose slurs could not be checked against its sy
 		);
 		expect(fr).not.toContain("'");
 	});
-	it('{m} is every sung note in the verse, pinned ones included: a mark alone is still a notehead she counts (Dann, 2026-11-25)', () => {
+	it('{m} is every sung note in the verse, pinned ones included: a mark alone is still a note that can begin a syllable (a desk ruling, 2026-11-24, until Dann rules it)', () => {
 		const note = (id: string, text?: string, extra: Record<string, unknown> = {}) => ({ id, type: 'note', measureIndex: 0, ...(text ? { syllable: { id: `s-${id}`, text, type: 'whole', verseNumber: 1, wordContext: text } } : {}), ...extra }) as unknown as VocalLineEvent;
-		// Five noteheads: «ты» under a slur, its continuation, a mark alone, and «мой» «дом». The mark comes off the gate, never off {m}.
+		// Six sung notes: «ты» under a slur, its continuation, a mark alone, «мой», «дом», and a last note with no text. The mark comes off the gate, never off {m}.
 		const score = { vocalLine: [note('a', 'ты', { slurs: [{ type: 'start', number: 1, partnerEventId: 'b' }] }), note('b', undefined, { slurs: [{ type: 'stop', number: 1 }] }), note('c', '—'), note('d', 'мой'), note('e', 'дом'), note('f')] } as unknown as ParsedScore;
 		const v = countUnderlay(foldVowelessSyllables(score)).verses[0];
 		expect(v.slurGate).toBe('failed');

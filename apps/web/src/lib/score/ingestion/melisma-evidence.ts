@@ -3,7 +3,8 @@
  * to read the same way (cloud-lane-88, round 2).
  *
  * THE SCOPE OF A VERSE (blocker 1). A verse is counted over the sung notes it OWNS: the base verse (the first sung verse, as
- * `verseView` takes it) over every sung note; a later verse only over the bars where it has words of its own, because
+ * `verseView` takes it) over the bars it shows, which is every bar except one that carries words only on a later verse's line
+ * (`scopeOf`, round 3 fix A); a later verse only over the bars where it has words of its own, because
  * `verseView` shows the base verse's words in every other bar and the later verse is silent there. Counting a later verse over
  * the whole file would call every note the base verse owns "textless" and write an abstention that deletes real vowels.
  *
@@ -22,7 +23,10 @@ export type SlurGate = 'none' | 'passed' | 'failed';
 export interface Evidence {
 	/** The sung notes this verse owns, less the pinned ones. */
 	scope: string[];
-	/** EVERY sung note the verse owns, pinned ones included: the noteheads a singer counts on her own page (the ratified line's `{m}`). */
+	/**
+	 * EVERY sung note the verse owns, pinned ones included (the ratified line's `{m}`). What is counted is the notes that can begin a syllable in
+	 * the bars this verse shows: a note tied into the one before is not counted, and for a later verse only the bars where that verse has words of its own.
+	 */
 	notes: number;
 	gate: SlurGate;
 	/** Scope notes the print holds: under an extender, or a slur continuation when the gate passed. */

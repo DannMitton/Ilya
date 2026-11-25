@@ -1,6 +1,6 @@
 # Report: the arrival seam, round 3 (Code, cloud lane 88 continued), r1
 
-Written on `cloud-lane-88`, 2026-11-25. Round 3 builds Dann's ruling on the count gate, Fable's fixes A and B, and one DESK DEFAULT. **NOT ESTABLISHED: Fable's round 2 review.** `review-fable-lane88-round2_r1_2026-11-24.md` is on the Mac, not in the repository (I searched every remote branch), so I built fixes A and B from the wording in my orders. Nothing was merged, nothing went to `Shane`, `ilya-ship.sh` was not run, no French was written, and `slur-seat.ts`'s own formula is untouched. Paths are under `apps/web/src/lib/score/` unless they say otherwise.
+Written on `cloud-lane-88`, 2026-11-24. Round 3 builds Dann's ruling on the count gate, Fable's fixes A and B, and one DESK DEFAULT. **NOT ESTABLISHED: Fable's round 2 review.** `review-fable-lane88-round2_r1_2026-11-24.md` is on the Mac, not in the repository (I searched every remote branch), so I built fixes A and B from the wording in my orders. Nothing was merged, nothing went to `Shane`, `ilya-ship.sh` was not run, no French was written, and `slur-seat.ts`'s own formula is untouched. Paths are under `apps/web/src/lib/score/` unless they say otherwise.
 
 ## The ruling: a failed gate seats the verse as 5594904b seated it, with one record
 
@@ -42,7 +42,7 @@ Built, as ordered. `evidenceFor` takes the pinned notes (a mark alone, a token w
 
 ## Where the seam's gate and the seating gate differ
 
-Read, not run. The seam's gate is `melisma-evidence.ts:49-57` (`evidenceFor`). The seating gate is `observedTargets` at `slur-seat.ts:41-49`, whose formula I did not change. They differ in five ways:
+Read, not run. The seam's gate is `melisma-evidence.ts:73-80` (`evidenceFor`). The seating gate is `observedTargets` at `slur-seat.ts:41-49`, whose formula I did not change. They differ in five ways:
 
 | | Seam gate | Seating gate |
 |---|---|---|
@@ -78,7 +78,7 @@ Read, not run. The seam's gate is `melisma-evidence.ts:49-57` (`evidenceFor`). T
 3. The base snapshot comes from the old fold plus the current parser, not a full base checkout.
 4. "Bars it shows" for the base verse: a bar with no words at all counts as shown.
 
-## Addendum: the ratified sentence, seated and pinned (2026-11-25)
+## Addendum: the ratified sentence, seated and pinned (2026-11-24)
 
 **The two decisions are confirmed.** Text moves: a failed gate does not undo the re-deal, so a song with both a fusion and a failed gate seats its text by the re-deal. `n188-markings`: the sustained vowel across its two vacated tail notes is the right outcome. Neither needed a change; both were built that way.
 
@@ -92,4 +92,4 @@ Read, not run. The seam's gate is `melisma-evidence.ts:49-57` (`evidenceFor`). T
 
 **Gate 4 whole: 6889 passed | 5 skipped (6894)**, against 6886 passed | 5 skipped (6891) before. Skip split unchanged: 4 `burg` tests skipped for want of `scipy` (not installed here), 1 `heic` test skipped for its own environment variable. The score-parser suite (913 passed, 5 skipped), ratchets, and `svelte-check` (0 errors, 12 warnings in the same five untouched files) pass. Build and Playwright were not run. Nothing was merged, nothing went to `Shane`, and `ilya-ship.sh` was not run.
 
-**Addendum 2 (2026-11-25): `{m}` is every sung note in the verse, pinned ones included.** Per Dann's ruling: she counts noteheads, and a mark alone is still one. `{m}` now reads `Evidence.notes` (`melisma-evidence.ts`), the verse's whole scope before pinned notes come off the gate; `ingest.ts` `slurUnchecked` fills `{m}` and `counts` from it. The gate still takes pinned notes off its own count. `ratified-slur-line.test.ts` pins this with a verse holding a mark alone (3 syllables, 6 sung notes, the mark counted), so a later lane cannot narrow it. **Gate 4 whole: 6890 passed | 5 skipped (6895)**, skips unchanged (4 `burg` for want of `scipy`, 1 `heic`). Ratchets OK; `svelte-check` 0 errors, 12 warnings as before. Not merged, not pushed to `Shane`, `ilya-ship.sh` not run. The lane is finished.
+**Addendum 2 (2026-11-24): `{m}` is every sung note in the verse, pinned ones included.** Per Dann's ruling: she counts noteheads, and a mark alone is still one. `{m}` now reads `Evidence.notes` (`melisma-evidence.ts`), the verse's whole scope before pinned notes come off the gate; `ingest.ts` `slurUnchecked` fills `{m}` and `counts` from it. The gate still takes pinned notes off its own count. `ratified-slur-line.test.ts` pins this with a verse holding a mark alone (3 syllables, 6 sung notes, the mark counted), so a later lane cannot narrow it. **Gate 4 whole: 6890 passed | 5 skipped (6895)**, skips unchanged (4 `burg` for want of `scipy`, 1 `heic`). Ratchets OK; `svelte-check` 0 errors, 12 warnings as before. Not merged, not pushed to `Shane`, `ilya-ship.sh` not run. The lane is finished.
