@@ -395,14 +395,14 @@ function withVowelPerNote(result: ParseResult): ParseResult {
  */
 /**
  * THE ONE SENTENCE for Corrections when a verse's slur gate fails (round 3, Dann's ruling). RATIFIED by Dann 2026-11-24 21:43, English
- * and French together, at `upload.banner.slurEvidenceUnchecked`. `{n}` is the verse's syllables and `{m}` its sung notes. The carrier is a
+ * and French together, at `upload.banner.slurEvidenceUnchecked`. `{n}` is the verse's syllables and `{m}` EVERY sung note in the verse, pinned ones included (the noteheads she counts). The carrier is a
  * `ParseWarning` whose `verse` and `counts` let Corrections fill the French; the message is the English. Nothing here puts it on a page.
  */
-const slurUnchecked = (v: { verse: number; syllables: number; sung: number }): ParseWarning => ({
+export const slurUnchecked = (v: { verse: number; syllables: number; notes: number }): ParseWarning => ({
 	code: 'slur-evidence-unchecked',
-	message: t('upload.banner.slurEvidenceUnchecked', 'en').replace('{n}', String(v.syllables)).replace('{m}', String(v.sung)),
+	message: t('upload.banner.slurEvidenceUnchecked', 'en').replace('{n}', String(v.syllables)).replace('{m}', String(v.notes)),
 	verse: v.verse,
-	counts: [v.syllables, v.sung],
+	counts: [v.syllables, v.notes],
 });
 
 function withUnderlayRecord(result: ParseResult, count: UnderlayCount): ParseResult {

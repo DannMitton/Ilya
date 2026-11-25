@@ -5,7 +5,11 @@
  * The French apostrophes are U+2019.
  */
 import { describe, expect, it } from 'vitest';
+import type { ParsedScore, VocalLineEvent } from '@ilya/score-parser';
 import { t } from '$lib/i18n';
+import { slurUnchecked } from './ingest';
+import { foldVowelessSyllables } from './vowelless-fold';
+import { countUnderlay } from './underlay-count';
 
 describe('ratified line: a verse whose slurs could not be checked against its syllable count', () => {
 	it('English (21:43)', () => {
@@ -19,6 +23,18 @@ describe('ratified line: a verse whose slurs could not be checked against its sy
 			'Ce couplet compte {n} syllabes pour {m} notes chantées, et ses liaisons de phrasé n’expliquent pas l’écart. Ilya laisse donc les paroles telles qu’imprimées dans votre partition, plutôt que de choisir quelles notes portent un mélisme. Vérifiez les mélismes ici.',
 		);
 		expect(fr).not.toContain("'");
+	});
+	it('{m} is every sung note in the verse, pinned ones included: a mark alone is still a notehead she counts (Dann, 2026-11-25)', () => {
+		const note = (id: string, text?: string, extra: Record<string, unknown> = {}) => ({ id, type: 'note', measureIndex: 0, ...(text ? { syllable: { id: `s-${id}`, text, type: 'whole', verseNumber: 1, wordContext: text } } : {}), ...extra }) as unknown as VocalLineEvent;
+		// Five noteheads: «ты» under a slur, its continuation, a mark alone, and «мой» «дом». The mark comes off the gate, never off {m}.
+		const score = { vocalLine: [note('a', 'ты', { slurs: [{ type: 'start', number: 1, partnerEventId: 'b' }] }), note('b', undefined, { slurs: [{ type: 'stop', number: 1 }] }), note('c', '—'), note('d', 'мой'), note('e', 'дом'), note('f')] } as unknown as ParsedScore;
+		const v = countUnderlay(foldVowelessSyllables(score)).verses[0];
+		expect(v.slurGate).toBe('failed');
+		expect(v.sung).toBe(5);
+		expect(v.notes).toBe(6);
+		const w = slurUnchecked({ verse: v.verse, syllables: v.syllables, notes: v.notes });
+		expect(w.counts).toEqual([3, 6]);
+		expect(w.message).toContain('3 syllables for 6 sung notes');
 	});
 	it('both carry the two counts and no third', () => {
 		for (const l of ['en', 'fr'] as const) expect([...t('upload.banner.slurEvidenceUnchecked', l).matchAll(/\{(\w+)\}/g)].map((m) => m[1])).toEqual(['n', 'm']);

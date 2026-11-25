@@ -20,8 +20,10 @@ import { slurContinuationIds, syllableTargetIds } from '../sung-notes';
 export type SlurGate = 'none' | 'passed' | 'failed';
 
 export interface Evidence {
-	/** The sung notes this verse owns. */
+	/** The sung notes this verse owns, less the pinned ones. */
 	scope: string[];
+	/** EVERY sung note the verse owns, pinned ones included: the noteheads a singer counts on her own page (the ratified line's `{m}`). */
+	notes: number;
 	gate: SlurGate;
 	/** Scope notes the print holds: under an extender, or a slur continuation when the gate passed. */
 	held: Set<string>;
@@ -75,5 +77,5 @@ export function evidenceFor(events: readonly VocalLineEvent[], scope: readonly s
 	const continuations = slurContinuationIds(events);
 	const observed = rest.filter((id) => continuations.has(id));
 	const gate: SlurGate = observed.length === 0 ? 'none' : syllables === rest.length - observed.length ? 'passed' : 'failed';
-	return { scope: candidates, gate, held: new Set([...extenderHeld, ...(gate === 'passed' ? observed : [])]) };
+	return { scope: candidates, notes: scope.length, gate, held: new Set([...extenderHeld, ...(gate === 'passed' ? observed : [])]) };
 }

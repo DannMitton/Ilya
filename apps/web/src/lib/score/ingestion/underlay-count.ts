@@ -34,6 +34,8 @@ export interface VerseCount {
 	evidenced: string[];
 	/** Sung notes with no text in this verse and no evidence: they read as a melisma to every reader and the print did not say so. */
 	unexplained: string[];
+	/** Every sung note of the verse, pinned ones included: the `{m}` of the ratified slur line. */
+	notes: number;
 	/** Whether the syllables and the sung notes less the evidenced ones come out even. */
 	agrees: boolean;
 	/** `none`: the file carries no slur to read (an MNX file, or a MusicXML file with none). */
@@ -72,6 +74,7 @@ export function countUnderlay(fold: VowellessFold): UnderlayCount {
 		return {
 			verse: r.verse,
 			sung: scope.length,
+			notes: r.evidence.notes,
 			syllables: r.syllables,
 			evidenced,
 			unexplained,
