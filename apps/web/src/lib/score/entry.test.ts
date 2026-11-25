@@ -13,7 +13,6 @@
 
 import { describe, it, expect } from 'vitest';
 import type { NoteBase, Pitch, VocalLineEvent } from '@ilya/score-parser';
-import { firstOutsideRange } from '$lib/insights/singer-page';
 import { applyCorrections, durationFraction, orphanIds, settleAgainstRead, withCorrection, type CorrectionMap } from './correction';
 import {
 	applyTuplet,
@@ -624,28 +623,12 @@ describe('a verb that ends where the read began leaves no record (defect 4)', ()
 		expect(toNote.r).toMatchObject({ type: 'note', pitch: P('B', 4) });
 		const nudged = withCorrection(toNote, 'r', { pitch: P('A', 3) });
 		const toRest = toggleRest(nudged, applyCorrections(line, nudged), 'r', P('B', 4), line[1]);
+		// Record shape (round 3): her pitch is kept, and so is the type that makes the rest silent.
+		expect(toRest.r).toEqual({ type: 'rest', pitch: P('A', 3) });
 		expect(applyCorrections(line, toRest)[1].type).toBe('rest');
+		expect(applyCorrections(line, toRest)[1].pitch).toBeUndefined();
 		const back = toggleRest(toRest, applyCorrections(line, toRest), 'r', P('B', 4), line[1]);
 		expect(applyCorrections(line, back)[1]).toMatchObject({ type: 'note', pitch: P('A', 3) });
-	});
-	it('a rest carrying her remembered pitch is not a note: INSIGHTS names nothing, and the nudge still comes back (round 3)', () => {
-		const line = [ev('a', P('F', 3)), ev('r', undefined)];
-		const high = P('A', 4); // above the range below
-		const toNote = toggleRest({}, line, 'r', P('B', 3), line[1]);
-		const nudged = withCorrection(toNote, 'r', { pitch: high });
-		const toRest = toggleRest(nudged, applyCorrections(line, nudged), 'r', P('B', 3), line[1]);
-		// The record keeps her pitch and the type that makes the rest silent.
-		expect(toRest.r).toEqual({ type: 'rest', pitch: high });
-		const drawn = applyCorrections(line, toRest);
-		expect(drawn[1].type).toBe('rest');
-		expect(drawn[1].pitch).toBeUndefined();
-		const score = { vocalLine: drawn, graceNotes: [], measures: [] } as never;
-		const profile = { range: { lowest: P('C', 3), highest: P('G', 4) } } as never;
-		expect(firstOutsideRange(score, profile)).toBeNull();
-		// And the nudge, on the way back.
-		const back = toggleRest(toRest, drawn, 'r', P('B', 3), line[1]);
-		expect(applyCorrections(line, back)[1]).toMatchObject({ type: 'note', pitch: high });
-		expect(firstOutsideRange({ vocalLine: applyCorrections(line, back), graceNotes: [], measures: [{ index: 0, number: 1 }] } as never, profile)?.pitch).toEqual(high);
 	});
 	it('only the fields a verb wrote are settled: a tie press leaves an equal pitch alone', () => {
 		const map: CorrectionMap = { a: { pitch: P('F', 3), tied: 'none' } };

@@ -72,3 +72,14 @@ Written 2026-11-24, on Fable's MERGE WITH FIXES (its report is on the Mac and is
 **Gate 4: `6853 passed | 5 skipped (6858)`**, 367 files, Linux: round 2's 6852 plus the one new test. The five skips are the same five as in round 2 (four `burg.test.ts` tests without scipy, one HEIC test without `ILYA_HEIC_REAL`). Type check: 0 errors, 12 warnings.
 
 **Guess.** The repair keys on "read rest and record holds a pitch", as Fable recommended, so a read rest with a pitch record and no round trip (a pitch written some other way) also keeps its `type: 'rest'`; that is harmless, since it is what the parent's round trip left.
+
+## Round 4: the insights half of the round 3 test moves out of `score/`
+
+A move, not a change. Gate 8 refused because `score/entry.test.ts` imported `$lib/insights/singer-page`, and `score/` may not import `insights/`. `correction.ts` is untouched.
+
+- **`score/entry.test.ts`** no longer imports insights. The round 3 test is gone; its record-shape assertions (`{type: 'rest', pitch: A3}`, the drawn rest carries no pitch) are folded into the existing nudge test, "rest to note, nudged, to rest and to note again".
+- **`insights/rest-memory.test.ts`** is new. It builds the corrected line and asserts `firstOutsideRange`: `null` while the rest carries A4, and A4 named once it is a note again, both halves in one run.
+- **Proof.** With the `correction.ts:469` condition taken out, both the folded nudge test and the new insights test fail (2 failed, 75 passed in the two files); with it restored, both pass, and `git diff` on `correction.ts` is empty.
+- **Test count unchanged:** one test removed, one added.
+- **Gate 4: `6853 passed | 5 skipped (6858)`**, 368 files (one new file), Linux, the same split as round 3: four `burg.test.ts` tests without scipy, one HEIC test without `ILYA_HEIC_REAL`. Type check: 0 errors, 12 warnings.
+- **`node scripts/ratchets.mjs`:** `ratchets: OK.`, exit 0, 915 files. It lists the same eight lowerable ceilings as before; none was touched (Drawer.svelte 1990 to 1986, InspectorPanel.svelte 2432 to 2396, LearnContent.svelte 4099 to 4097, pipeline.ts 901 to 896, ScoreUploader.svelte 867 to 865, pairings.ts 1422 to 1421, CalibrationWizard.svelte 1126 to 1124, musicxml-parser.ts 1167 to 1166).
