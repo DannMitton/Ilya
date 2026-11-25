@@ -422,6 +422,76 @@ export function clearCorrection(map: CorrectionMap, id: string): CorrectionMap {
 	};
 }
 
+/**
+ * Take out of one note's record whatever the read already says, and the record
+ * itself if nothing is left (Corrections keeps what she did, defect 4).
+ *
+ * A VERB THAT ENDS WHERE THE READ BEGAN LEAVES NO CORRECTION BEHIND. A tie on
+ * and off, a dot on and off, a pitch nudged up and back, a length pressed that
+ * the note already had: each wrote a record equal to the read, which lit
+ * Restore and counted as a correction. `withCorrection` prunes an EMPTY record
+ * only; it cannot know the read, so this compares against it.
+ *
+ * `read` is the event as the reader read it. Without one (a note the singer
+ * entered, a grace stop) nothing is compared and the map comes back as given,
+ * because an entered record IS the entry and a grace note has no read event
+ * in the line.
+ *
+ * `fields` names the fields the verb wrote, and ONLY those are settled: a
+ * field the verb did not write is the singer's earlier decision and is not
+ * this function's to take. Without it every field is settled (the helper's
+ * own tests use that).
+ *
+ * THREE CASES ARE LEFT ALONE ON PURPOSE. A pitch on a note the singer made a
+ * rest is kept: it is the memory `toggleRest` returns to, and so is a pitch on
+ * a rest the reader found, which may be her nudge (Dann, 2026-11-24: keep it).
+ * A base or dots on a record that holds a tuplet is kept: the tuplet row wrote
+ * it as part of the definition. And NO PITCH IS SETTLED WHILE THE MAP HOLDS A
+ * KEY MARK: under a "notes follow" mark the key layer leaves a note alone when
+ * its record holds a pitch (`key-signature.ts`, `movable`), so a pitch equal to
+ * the read is then her pin and not an empty decision. Coarse on purpose, the
+ * cost being that a pitch nudged up and back leaves a record under a key mark;
+ * the exact alternative, comparing with what the note would draw after the key
+ * layer, was ruled too large a change at the centre of the model.
+ */
+export type SettleField = 'pitch' | 'base' | 'dots' | 'type' | 'tied';
+
+export function settleAgainstRead(
+	map: CorrectionMap,
+	id: string,
+	read: VocalLineEvent | undefined,
+	fields?: readonly SettleField[],
+): CorrectionMap {
+	const c = map[id];
+	if (!c || !read || c.entered) return map;
+	const mine = (f: SettleField): boolean => fields === undefined || fields.includes(f);
+	const next: NoteCorrection = { ...c };
+	/* A read rest whose record holds a pitch KEEPS `type: 'rest'`. The pitch is
+	   her nudge, kept on purpose, and only `type` makes `applyCorrections` drop
+	   a rest's pitch (`c.type === 'rest'`); without it the drawn rest carries the
+	   pitch and the readers with no type test (INSIGHTS, `firstOutsideRange`)
+	   name a rest as a note outside her range. */
+	if (mine('type') && next.type === read.type && !(read.type === 'rest' && next.pitch !== undefined)) delete next.type;
+	if (mine('pitch') && next.pitch !== undefined && !Object.values(map).some((m) => m.keySignature !== undefined)) {
+		const same =
+			read.pitch !== undefined &&
+			next.pitch.step === read.pitch.step &&
+			next.pitch.alter === read.pitch.alter &&
+			next.pitch.octave === read.pitch.octave;
+		const memory = next.type === 'rest' && read.type !== 'rest';
+		if (same && !memory) delete next.pitch;
+	}
+	if (next.tuplet === undefined) {
+		if (mine('base') && next.base === read.duration.base) delete next.base;
+		if (mine('dots') && next.dots === read.duration.dots) delete next.dots;
+	}
+	if (mine('tied') && next.tied !== undefined) {
+		const readTied = read.tied?.type === 'start' || read.tied?.type === 'continue';
+		if ((next.tied === 'start') === readTied) delete next.tied;
+	}
+	return withCorrection({ ...map, [id]: next }, id, {});
+}
+
 /** Whether a record says anything about the NOTE, beyond the bar's own marks. */
 export function amendsNote(c: NoteCorrection | undefined): boolean {
 	if (!c) return false;
@@ -554,8 +624,11 @@ export function applyCorrections(
 			// The entries hung off a deleted one still stand: the singer deleted
 			// the reader's note, not their own work, and re-anchoring them keeps
 			// them in the line where they were entered. A note made a grace note
-			// (N.187) is left out the same way, and its entries stand too.
+			// (N.187) is left out the same way, and its entries stand too, and so
+			// do the entries made after the read grace notes that leaned on it.
+			for (const g of readGraces.get(ev.id)?.before ?? []) emitEntered(g.id, stubAt(ev), 0);
 			emitEntered(ev.id, ev, 0);
+			for (const g of readGraces.get(ev.id)?.after ?? []) emitEntered(g.id, ev, 0);
 			continue;
 		}
 		out.push(amend(ev, c));

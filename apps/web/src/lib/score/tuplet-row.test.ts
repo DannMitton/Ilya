@@ -18,7 +18,10 @@ import type { UndoNote } from './undo-history.svelte';
 const ev = (id: string, measureIndex: number) => ({ id, measureIndex }) as VocalLineEvent;
 const LINE = [ev('a', 0), ev('b', 0), ev('c', 0), ev('d', 1)];
 
-function harness(opts: { selected?: string | null; inGap?: boolean } = {}) {
+/* Two measures of three, for the cases that step from one run to another. */
+const LINE2 = [ev('a', 0), ev('b', 0), ev('c', 0), ev('d', 1), ev('e', 1), ev('f', 1)];
+
+function harness(opts: { selected?: string | null; inGap?: boolean; line?: VocalLineEvent[] } = {}) {
 	let corrections: CorrectionMap = {};
 	let selected: string | null = opts.selected === undefined ? 'a' : opts.selected;
 	let inGap = opts.inGap ?? false;
@@ -30,7 +33,7 @@ function harness(opts: { selected?: string | null; inGap?: boolean } = {}) {
 			writes += 1;
 			corrections = next;
 		},
-		line: () => LINE,
+		line: () => opts.line ?? LINE,
 		selectedEventId: () => selected,
 		inGap: () => inGap,
 		pushUndo: (n) => pushed.push(n),
@@ -46,6 +49,10 @@ function harness(opts: { selected?: string | null; inGap?: boolean } = {}) {
 		},
 		select(id: string | null) {
 			selected = id;
+		},
+		/** The singer corrects something with the row still open. */
+		edit(id: string, record: CorrectionMap[string]) {
+			corrections = { ...corrections, [id]: record };
 		},
 		gap(v: boolean) {
 			inGap = v;
@@ -155,5 +162,72 @@ describe('TupletRow', () => {
 		// the first apply.
 		expect(afterFirst).toHaveProperty('c');
 		expect(h.corrections).not.toHaveProperty('c');
+	});
+
+	it('a second tuplet on another entry keeps the first, and what came between', () => {
+		const h = harness({ line: LINE2, selected: 'a' });
+		h.row.openRow();
+		h.row.apply(DEFAULT_TUPLET);
+		h.edit('f', { base: 'quarter' });
+		h.select('d');
+		h.row.apply(DEFAULT_TUPLET);
+		expect(Object.keys(h.corrections).sort()).toEqual(['a', 'b', 'c', 'd', 'e', 'f']);
+		expect(h.corrections.a).toMatchObject({ tuplet: { actualNotes: 3 } });
+		expect(h.corrections.f).toMatchObject({ base: 'eighth', tuplet: { actualNotes: 3 } });
+		// One undo step per definition: the second tuplet is its own step.
+		expect(h.pushed).toHaveLength(2);
+	});
+
+	it('stepping away and returning to the SAME entry keeps what came between', () => {
+		const h = harness({ line: LINE2, selected: 'a' });
+		h.row.openRow();
+		h.row.apply(DEFAULT_TUPLET);
+		h.select('d');
+		h.edit('e', { base: 'half' });
+		h.select('a');
+		h.row.apply({ ...DEFAULT_TUPLET, actualType: 'quarter' });
+		expect(h.corrections.e).toEqual({ base: 'half' });
+		expect(h.corrections.a).toMatchObject({ base: 'quarter' });
+		expect(h.pushed).toHaveLength(2);
+	});
+
+	it('nudges on the same entry with nothing between still make one undo step', () => {
+		const h = harness({ line: LINE2, selected: 'a' });
+		h.row.openRow();
+		h.row.apply(DEFAULT_TUPLET);
+		h.row.apply({ ...DEFAULT_TUPLET, actualType: 'quarter' });
+		h.row.apply({ ...DEFAULT_TUPLET, actualNotes: 2 });
+		expect(h.pushed).toHaveLength(1);
+	});
+
+	it('a second entry with nothing between still keeps the first tuplet (the base is keyed to the entry)', () => {
+		const h = harness({ line: LINE2, selected: 'a' });
+		h.row.openRow();
+		h.row.apply(DEFAULT_TUPLET);
+		h.select('d');
+		h.row.apply(DEFAULT_TUPLET);
+		expect(Object.keys(h.corrections).sort()).toEqual(['a', 'b', 'c', 'd', 'e', 'f']);
+		expect(h.pushed).toHaveLength(2);
+	});
+
+	it('a count made smaller after a correction elsewhere leaves no stranded member', () => {
+		const h = harness({ line: LINE2, selected: 'a' });
+		h.row.openRow();
+		h.row.apply(DEFAULT_TUPLET);
+		h.edit('f', { base: 'half' });
+		h.row.apply({ ...DEFAULT_TUPLET, actualNotes: 2 });
+		expect(h.corrections.a).toMatchObject({ tuplet: { actualNotes: 2 } });
+		expect(h.corrections.b).toMatchObject({ tuplet: { actualNotes: 2 } });
+		expect(h.corrections.c).toBeUndefined();
+		expect(h.corrections.f).toEqual({ base: 'half' });
+	});
+
+	it('taking the old run back keeps a pitch she set on a member since', () => {
+		const h = harness({ line: LINE2, selected: 'a' });
+		h.row.openRow();
+		h.row.apply(DEFAULT_TUPLET);
+		h.edit('c', { ...h.corrections.c, pitch: { step: 'A', octave: 3, alter: 0 } });
+		h.row.apply({ ...DEFAULT_TUPLET, actualNotes: 2 });
+		expect(h.corrections.c).toEqual({ pitch: { step: 'A', octave: 3, alter: 0 } });
 	});
 });

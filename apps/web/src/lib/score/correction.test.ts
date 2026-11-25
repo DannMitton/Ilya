@@ -593,3 +593,47 @@ describe('the barline and time signature marks (QUEUE row 138)', () => {
 		expect(amendsNote(undefined)).toBe(false);
 	});
 });
+
+describe('an entry made after a read grace note, when its principal is gone', () => {
+	/* a, b, c in one measure; `b~g1` is a read grace note leaning on b, and
+	   `hand:1` is a note the singer entered after it. */
+	const line = [note('a', P('C', 4)), note('b', P('D', 4)), note('c', P('E', 4))];
+	const graces = [{ id: 'b~g1', principalId: 'b', pitch: P('C', 4), base: 'eighth' as NoteBase }];
+	const entry = { entered: { after: 'b~g1' }, base: 'quarter' as NoteBase, pitch: P('F', 4) };
+	const ids = (l: VocalLineEvent[]) => l.map((e) => e.id);
+
+	// Characterization: these held before the repair and hold after it.
+	it('while the principal stands, the entry sits before it', () => {
+		expect(ids(applyCorrections(line, { 'hand:1': entry }, graces))).toEqual(['a', 'hand:1', 'b', 'c']);
+	});
+	it('a note entered after the principal itself still stands where the principal was, when the principal is deleted', () => {
+		const m: CorrectionMap = { b: { deleted: true }, 'hand:2': { entered: { after: 'b' }, base: 'quarter', pitch: P('G', 4) } };
+		expect(ids(applyCorrections(line, m, graces))).toEqual(['a', 'hand:2', 'c']);
+	});
+	it('with the grace note itself deleted, its entry is not drawn on either side of the repair', () => {
+		const m: CorrectionMap = { b: { deleted: true }, 'b~g1': { deleted: true }, 'hand:1': entry };
+		expect(ids(applyCorrections(line, m, graces))).toEqual(['a', 'c']);
+	});
+
+	// The defect: before the repair this read ['a', 'c'], with no orphan.
+	it('with the principal deleted, the entry still stands, and is not an orphan', () => {
+		const m: CorrectionMap = { b: { deleted: true }, 'hand:1': entry };
+		const out = applyCorrections(line, m, graces);
+		expect(ids(out)).toEqual(['a', 'hand:1', 'c']);
+		// `orphanIds` never reported it (a grace id is live); the line now draws it as well.
+		expect(orphanIds(out, m, ['b~g1'])).not.toContain('hand:1');
+	});
+	it('with the principal made a grace note, the entry still stands', () => {
+		const m: CorrectionMap = { b: { grace: { slash: true } }, 'hand:1': entry };
+		expect(ids(applyCorrections(line, m, graces))).toEqual(['a', 'hand:1', 'c']);
+	});
+	it('an after-grace entry stands after the entries that hang on a deleted principal', () => {
+		const after = [{ id: 'b~a1', principalId: 'b', after: true as const, pitch: P('A', 4), base: 'eighth' as NoteBase }];
+		const m: CorrectionMap = {
+			b: { deleted: true },
+			'hand:1': { entered: { after: 'b~a1' }, base: 'quarter', pitch: P('F', 4) },
+			'hand:2': { entered: { after: 'b' }, base: 'quarter', pitch: P('G', 4) }
+		};
+		expect(ids(applyCorrections(line, m, after))).toEqual(['a', 'hand:2', 'hand:1', 'c']);
+	});
+});

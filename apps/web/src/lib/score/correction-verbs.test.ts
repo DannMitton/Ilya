@@ -28,7 +28,7 @@ function note(id: string, pitch: Pitch, base: NoteBase = 'quarter'): VocalLineEv
 }
 
 /** A stand-in for the page: a doc, a cursor, and an undo log the class writes through. */
-function harness(opts: { line?: VocalLineEvent[]; cursor?: Cursor | null; corrections?: CorrectionMap } = {}) {
+function harness(opts: { line?: VocalLineEvent[]; readLine?: VocalLineEvent[]; cursor?: Cursor | null; corrections?: CorrectionMap } = {}) {
 	const line = opts.line ?? [note('a', P('C', 4)), note('b', P('E', 4)), note('c', P('E', 4))];
 	let corrections: CorrectionMap = opts.corrections ?? {};
 	let cursor: Cursor | null = opts.cursor === undefined ? { kind: 'entry', id: 'a' } : opts.cursor;
@@ -37,7 +37,7 @@ function harness(opts: { line?: VocalLineEvent[]; cursor?: Cursor | null; correc
 		corrections: () => corrections,
 		setCorrections: (next) => (corrections = next),
 		line: () => line,
-		readLine: () => line,
+		readLine: () => opts.readLine ?? line,
 		cursor: () => cursor,
 		inGap: () => cursor?.kind === 'gap',
 		selectedEventId: () => (cursor?.kind === 'entry' ? cursor.id : null),
@@ -241,6 +241,39 @@ describe('CorrectionVerbs, delete and restore', () => {
 		expect(last.cursor).toEqual({ kind: 'entry', id: 'b' });
 	});
 
+	/* The neighbour is looked for in the line AS DRAWN, for every entry. A note
+	   the singer entered is not in the line the reader read, so the old lookup
+	   found no neighbour for it and the selection went to null. */
+	it('deleting a hand-added note leaves the selection on its neighbour, forward first', () => {
+		const read = [note('a', P('C', 4)), note('b', P('E', 4))];
+		const drawn = [read[0], note('hand:1', P('D', 4)), read[1]];
+		const h = harness({ line: drawn, readLine: read, cursor: { kind: 'entry', id: 'hand:1' } });
+		h.verbs.handleDeleteNote();
+		expect(h.corrections['hand:1']?.deleted).toBe(true);
+		expect(h.cursor).toEqual({ kind: 'entry', id: 'b' });
+	});
+
+	it('deleting the last hand-added note falls back to the one before it', () => {
+		const read = [note('a', P('C', 4)), note('b', P('E', 4))];
+		const drawn = [...read, note('hand:1', P('D', 4))];
+		const h = harness({ line: drawn, readLine: read, cursor: { kind: 'entry', id: 'hand:1' } });
+		h.verbs.handleDeleteNote();
+		expect(h.cursor).toEqual({ kind: 'entry', id: 'b' });
+	});
+
+	/* Beside a grace stop: the drawn line carries each grace note as a stop of
+	   no length, and the arrow keys walk those stops. A note deleted just
+	   before a grace note therefore leaves the selection ON that grace stop,
+	   where the old lookup in the read line skipped it and landed on the
+	   principal. DESK DEFAULT, stated by the brief's amendment 3. */
+	it('deleting a note beside a grace stop leaves the selection on the grace stop, not past it', () => {
+		const read = [note('a', P('C', 4)), note('b', P('E', 4)), note('c', P('G', 4))];
+		const drawn = [read[0], read[1], note('c~g1', P('F', 4)), read[2]];
+		const h = harness({ line: drawn, readLine: read, cursor: { kind: 'entry', id: 'b' } });
+		h.verbs.handleDeleteNote();
+		expect(h.cursor).toEqual({ kind: 'entry', id: 'c~g1' });
+	});
+
 	it('restoreAvailable needs all four: not in a gap, a selection, a correction, and a read entry', () => {
 		const withCorr: CorrectionMap = { a: { pitch: P('D', 4) } } as CorrectionMap;
 		expect(harness({ corrections: withCorr }).verbs.restoreAvailable).toBe(true);
@@ -399,5 +432,74 @@ describe('CorrectionVerbs, Rebar the notes passes its flag to the layer (QUEUE r
 		verbs.handleTimeSignature({ beats: 3, beatType: 4 }, 'end');
 		verbs.handleTimeSignature({ beats: 3, beatType: 4 }, 'end', undefined, true);
 		expect(seen).toEqual([false, true]);
+	});
+});
+
+describe('CorrectionVerbs, a press that changes nothing leaves no correction (defect 4)', () => {
+	// Characterization: a press that DOES change something is recorded, as before.
+	it('a different length is recorded and offers Restore', () => {
+		const h = harness({ cursor: { kind: 'entry', id: 'b' } });
+		h.verbs.handleBase('half');
+		expect(h.corrections.b).toEqual({ base: 'half' });
+		expect(h.verbs.restoreAvailable).toBe(true);
+	});
+
+	it('tie on then off leaves nothing, and Restore stays dark', () => {
+		const h = harness({ cursor: { kind: 'entry', id: 'b' } });
+		h.verbs.handleTie();
+		expect(h.corrections).toEqual({ b: { tied: 'start' } });
+		h.verbs.handleTie();
+		expect(h.corrections).toEqual({});
+		expect(h.verbs.restoreAvailable).toBe(false);
+	});
+
+	it('rest on then off leaves nothing', () => {
+		const h = harness({ cursor: { kind: 'entry', id: 'b' } });
+		h.verbs.handleRest();
+		expect(h.corrections.b?.type).toBe('rest');
+		h.verbs.handleRest();
+		expect(h.corrections).toEqual({});
+	});
+
+	it('dot on then off leaves nothing', () => {
+		const h = harness({ cursor: { kind: 'entry', id: 'b' } });
+		h.verbs.handleDot();
+		expect(h.corrections.b).toEqual({ dots: 1 });
+		h.verbs.handleDot();
+		expect(h.corrections).toEqual({});
+	});
+
+	it('a pitch stepped up and back leaves nothing', () => {
+		const h = harness({ cursor: { kind: 'entry', id: 'b' } });
+		h.verbs.handleStep(1);
+		expect(h.corrections.b?.pitch).toEqual(P('F', 4));
+		h.verbs.handleStep(-1);
+		expect(h.corrections).toEqual({});
+	});
+
+	it('pressing the length the note already has writes nothing and pushes no undo step', () => {
+		const h = harness({ cursor: { kind: 'entry', id: 'b' } });
+		h.verbs.handleBase('quarter');
+		expect(h.corrections).toEqual({});
+		expect(h.pushed).toEqual([]);
+		expect(h.verbs.restoreAvailable).toBe(false);
+	});
+
+	it('a length changed and changed back leaves nothing', () => {
+		const h = harness({ cursor: { kind: 'entry', id: 'b' } });
+		h.verbs.handleBase('half');
+		h.verbs.handleBase('quarter');
+		expect(h.corrections).toEqual({});
+	});
+
+	it('a note the singer entered keeps its record whatever is pressed', () => {
+		const entered = { entered: { after: 'a' }, base: 'quarter', pitch: P('C', 4) } as CorrectionMap[string];
+		const h = harness({
+			line: [note('a', P('C', 4)), note('hand:1', P('C', 4))],
+			corrections: { 'hand:1': entered },
+			cursor: { kind: 'entry', id: 'hand:1' },
+		});
+		h.verbs.handleBase('quarter');
+		expect(h.corrections['hand:1']).toEqual(entered);
 	});
 });

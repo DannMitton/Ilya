@@ -8,6 +8,8 @@ import { engraveInKey, MusicXmlScoreParser, type ParsedScore } from '@ilya/score
 import { parseXml } from './ingestion/mini-dom';
 import { BarLayer } from './bar-layer';
 import { withCorrection, type CorrectionMap } from './correction';
+import { CorrectionVerbs } from './correction-verbs.svelte';
+import type { Cursor } from './entry';
 import { applyKeyLayer, heldKey, KEY_CHOICES, keyLabelKey, removeKey, setKey } from './key-signature';
 
 async function fixture(): Promise<ParsedScore> {
@@ -172,5 +174,122 @@ describe('the fifteen labels exist in both languages', () => {
 		}
 		expect(t('correct.keyFlats', 'fr').replace('%s', '3')).toBe('3 bémols');
 		expect(t('correct.keySharp', 'en')).toBe('1 sharp');
+	});
+});
+
+describe('a mark on a bar opener that leaves the line is carried, as the time signature is (defect 5)', () => {
+	const mark = { fifths: 2, through: 'next' as const, notes: 'follow' as const };
+	const SET = [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3];
+
+	// Characterization: these held before the repair and hold after it.
+	it('with the opener standing, the mark governs its own bar', async () => {
+		const s = await fixture();
+		expect(fifths(layer(s, { [opener(s, 4)]: { keySignature: mark } }).score!)).toEqual(SET);
+	});
+	it('deleting a note that carries no mark changes no key', async () => {
+		const s = await fixture();
+		expect(fifths(layer(s, { [opener(s, 4)]: { deleted: true } }).score!)).toEqual(fifths(s));
+	});
+	it('without the read score, a mark on an entry that left the line is not placed (the old answer, kept as the fallback)', async () => {
+		const s = await fixture();
+		const map: CorrectionMap = { [opener(s, 4)]: { deleted: true, keySignature: mark } };
+		const pre = layer(s, {}).line.filter((e) => e.id !== opener(s, 4));
+		expect(fifths(applyKeyLayer(s, pre, map).score)).toEqual(fifths(s));
+	});
+
+	// The defect: deleting the opener lost the change. Before the repair this read the reading's own keys.
+	it('a deleted opener passes its mark to the next note standing in the bar', async () => {
+		const s = await fixture();
+		const l = layer(s, { [opener(s, 4)]: { deleted: true, keySignature: mark } });
+		expect(fifths(l.score!)).toEqual(SET);
+		// The notes follow the key as they do when the opener stands.
+		expect(l.line.find((e) => e.id === 'm4-1-4')!.pitch).toMatchObject({ step: 'B', alter: 0 });
+	});
+	it('a note made a grace note passes its mark on the same way', async () => {
+		const s = await fixture();
+		const l = layer(s, { [opener(s, 4)]: { grace: { slash: true }, keySignature: mark } });
+		expect(fifths(l.score!)).toEqual(SET);
+	});
+	it('a standing note\'s own mark wins over one carried to it', async () => {
+		const s = await fixture();
+		const second = s.vocalLine.filter((e) => e.measureIndex === 4)[1].id;
+		const own = { fifths: 3, through: 'next' as const, notes: 'keep' as const };
+		const l = layer(s, { [opener(s, 4)]: { deleted: true, keySignature: mark }, [second]: { keySignature: own } });
+		expect(fifths(l.score!).slice(4, 8)).toEqual([3, 3, 3, 3]);
+	});
+	it('the card finds the carried mark, and setting a key in that bar replaces it', async () => {
+		const s = await fixture();
+		const map: CorrectionMap = { [opener(s, 4)]: { deleted: true, keySignature: mark } };
+		const line = layer(s, map).preLine;
+		const next = line.find((e) => e.measureIndex === 4)!.id;
+		expect(heldKey(s, line, map, next)).toMatchObject({ bar: 4, fifths: 2, mine: mark });
+		const replaced = setKey(s, line, map, next, { fifths: 1, through: 'next', notes: 'keep' })!;
+		expect(replaced[opener(s, 4)]?.keySignature).toBeUndefined();
+		expect(replaced[next]?.keySignature).toMatchObject({ fifths: 1 });
+	});
+});
+
+describe("a pitch the singer pinned against a key change survives a press that did not write it (round 2, Fable's table)", () => {
+	const mark = { fifths: 2, through: 'next' as const, notes: 'follow' as const };
+	const ID = 'm4-1-4';
+	const FLAT = { step: 'B' as const, octave: 4, alter: -1 };
+
+	/** A real BarLayer under the verbs, so what the page would draw after each press is what the test reads. */
+	function session(s: ParsedScore, start: CorrectionMap) {
+		let corrections = start;
+		let cursor: Cursor | null = { kind: 'entry', id: ID };
+		const bars = () => layer(s, corrections);
+		const verbs = new CorrectionVerbs({
+			corrections: () => corrections,
+			setCorrections: (n) => (corrections = n),
+			line: () => bars().line,
+			readLine: () => s.vocalLine,
+			cursor: () => cursor,
+			inGap: () => false,
+			selectedEventId: () => (cursor?.kind === 'entry' ? cursor.id : null),
+			setCursor: (n) => (cursor = n),
+			selectEntry: (id) => (cursor = id ? { kind: 'entry', id } : null),
+			keyOf: () => undefined,
+			clef: () => ({ sign: 'G' }),
+			label: () => '',
+			word: (k) => k,
+			pushUndo: () => {},
+		});
+		return { verbs, get map() { return corrections; }, drawn: () => bars().line.find((e) => e.id === ID)!.pitch! };
+	}
+
+	it('the read is a B flat and the mark draws it natural (the setting for the three rows)', async () => {
+		const s = await fixture();
+		expect(s.vocalLine.find((e) => e.id === ID)!.pitch).toMatchObject(FLAT);
+		expect(session(s, { [opener(s, 4)]: { keySignature: mark } }).drawn()).toMatchObject({ step: 'B', alter: 0 });
+	});
+	it('row 1: flat on the respelled B natural keeps the pitch record, and draws B flat', async () => {
+		const s = await fixture();
+		const h = session(s, { [opener(s, 4)]: { keySignature: mark } });
+		h.verbs.handleAccidental('flat');
+		expect(h.map[ID]).toEqual({ pitch: FLAT });
+		expect(h.drawn()).toMatchObject(FLAT);
+	});
+	it('row 2: a dot on a note pinned at B flat keeps the pin, and draws B flat', async () => {
+		const s = await fixture();
+		const h = session(s, { [opener(s, 4)]: { keySignature: mark }, [ID]: { pitch: FLAT } });
+		h.verbs.handleDot();
+		expect(h.map[ID]).toEqual({ pitch: FLAT, dots: 1 });
+		expect(h.drawn()).toMatchObject(FLAT);
+	});
+	it('row 3: a rest and back on a note pinned at B flat keeps the pin, and draws B flat', async () => {
+		const s = await fixture();
+		const h = session(s, { [opener(s, 4)]: { keySignature: mark }, [ID]: { pitch: FLAT } });
+		h.verbs.handleRest();
+		h.verbs.handleRest();
+		expect(h.map[ID]?.pitch).toEqual(FLAT);
+		expect(h.drawn()).toMatchObject(FLAT);
+	});
+	it('the tie press does not touch the pin either', async () => {
+		const s = await fixture();
+		const h = session(s, { [opener(s, 4)]: { keySignature: mark }, [ID]: { pitch: FLAT } });
+		h.verbs.handleTie();
+		h.verbs.handleTie();
+		expect(h.map[ID]?.pitch).toEqual(FLAT);
 	});
 });

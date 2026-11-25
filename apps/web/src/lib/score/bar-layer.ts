@@ -62,7 +62,7 @@ export class BarLayer {
 			// N.187: the corrected grace list, from the read list, the map, and the corrected line (`grace-layer.ts`).
 			const graces = correctedGraceNotes(score.graceNotes, map, score.vocalLine, r.line);
 			// N.192: the singer's key marks, after the bars are settled (`key-signature.ts`).
-			const k = applyKeyLayer(graces === r.score.graceNotes ? r.score : { ...r.score, graceNotes: graces }, r.line, map, graces);
+			const k = applyKeyLayer(graces === r.score.graceNotes ? r.score : { ...r.score, graceNotes: graces }, r.line, map, graces, score);
 			const keyed = k.graces === k.score.graceNotes ? k.score : { ...k.score, graceNotes: k.graces };
 			out = { pre, line: k.line, score: keyed, bars: r.bars };
 		}

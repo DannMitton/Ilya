@@ -41,6 +41,8 @@ import {
 	sharpPitch,
 	stepAllowed,
 	stepPitch,
+	settleAgainstRead,
+	type SettleField,
 	withCorrection,
 	type CorrectionMap,
 } from './correction';
@@ -261,7 +263,13 @@ export class CorrectionVerbs {
 	#correct(change: Parameters<typeof withCorrection>[2]): void {
 		const id = this.#d.selectedEventId();
 		if (!id) return;
-		this.#d.setCorrections(withCorrection(this.#d.corrections(), id, change));
+		const written = Object.keys(change).filter((k): k is SettleField => ['pitch', 'base', 'dots', 'type', 'tied'].includes(k));
+		this.#d.setCorrections(settleAgainstRead(withCorrection(this.#d.corrections(), id, change), id, this.#readOf(id), written));
+	}
+
+	/** The event as the reader read it, or undefined for a note the singer entered and for a grace stop. */
+	#readOf(id: string): VocalLineEvent | undefined {
+		return this.#d.readLine().find((e) => e.id === id);
 	}
 
 	handleStep = (direction: 1 | -1): void => {
@@ -352,11 +360,13 @@ export class CorrectionVerbs {
 		// Move the selection off the note before removing it, so the singer is
 		// left somewhere rather than nowhere. Forward first, then back, because
 		// a run of false positives is usually deleted left to right.
-		// A grace note is not in the read; its neighbour is found in the line with the grace notes in it.
-		const readLine = this.selectedIsGrace ? this.#d.line() : this.#d.readLine();
+		// The neighbour is found in the line as drawn, for every entry: a grace
+		// note and a note the singer entered are not in the read, and the stops
+		// the arrow keys walk are the drawn line's.
+		const drawn = this.#d.line();
 		const next =
-			neighbourId(readLine, this.#d.corrections(), id, 1) ??
-			neighbourId(readLine, this.#d.corrections(), id, -1);
+			neighbourId(drawn, this.#d.corrections(), id, 1) ??
+			neighbourId(drawn, this.#d.corrections(), id, -1);
 		this.#d.pushUndo({ kind: 'text', key: 'loupe.undo.deleted' });
 		this.#d.setCorrections(withCorrection(this.#d.corrections(), id, { deleted: true }));
 		this.#d.selectEntry(next);
@@ -461,7 +471,7 @@ export class CorrectionVerbs {
 		}
 		if (this.selectedIsGrace) return;
 		this.#d.pushUndo({ kind: 'text', key: 'loupe.undo.rest' });
-		this.#d.setCorrections(toggleRest(this.#d.corrections(), this.#d.line(), c.id, this.arrival));
+		this.#d.setCorrections(toggleRest(this.#d.corrections(), this.#d.line(), c.id, this.arrival, this.#readOf(c.id)));
 	};
 
 	/** Tie, on a note whose neighbour can legally take one. */
@@ -469,7 +479,7 @@ export class CorrectionVerbs {
 		const ev = this.selectedEvent;
 		if (!ev || !this.tieAvailable) return;
 		this.#d.pushUndo({ kind: 'text', key: 'loupe.undo.tie' });
-		this.#d.setCorrections(toggleTie(this.#d.corrections(), ev));
+		this.#d.setCorrections(toggleTie(this.#d.corrections(), ev, this.#readOf(ev.id)));
 	};
 
 	/** Barline: add one after the held note, or remove the one that follows it. One Undo step either way. */

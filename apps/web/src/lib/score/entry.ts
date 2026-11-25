@@ -22,7 +22,7 @@
  */
 
 import type { NoteBase, Pitch, TupletInfo, VocalLineEvent } from '@ilya/score-parser';
-import type { CorrectionMap, NoteCorrection } from './correction';
+import { settleAgainstRead, type CorrectionMap, type NoteCorrection } from './correction';
 
 /**
  * Where the insertion bar stands.
@@ -258,6 +258,8 @@ export function toggleRest(
 	line: readonly VocalLineEvent[],
 	id: string,
 	fallback: Pitch,
+	/** The event as the reader read it: with it, a conversion that ends where the read began leaves no record. */
+	read?: VocalLineEvent,
 ): CorrectionMap {
 	const ev = line.find((e) => e.id === id);
 	if (!ev) return map;
@@ -269,10 +271,10 @@ export function toggleRest(
 		   held a pitch of its own would have nothing to return to: MEASURED on
 		   the walk, a read G4 converted to a rest and back came back as D4,
 		   which was the arrival guess and not the note that was there. */
-		return { ...map, [id]: { ...map[id], type: 'rest', pitch: map[id]?.pitch ?? ev.pitch } };
+		return settleAgainstRead({ ...map, [id]: { ...map[id], type: 'rest', pitch: map[id]?.pitch ?? ev.pitch } }, id, read, ['type', 'pitch']);
 	}
 	const remembered = map[id]?.pitch ?? ev.pitch ?? fallback;
-	return { ...map, [id]: { ...map[id], type: 'note', pitch: remembered } };
+	return settleAgainstRead({ ...map, [id]: { ...map[id], type: 'note', pitch: remembered } }, id, read, ['type', 'pitch']);
 }
 
 /** Whether an entry currently carries a tie to the one after it. */
@@ -304,9 +306,9 @@ export function canTie(line: readonly VocalLineEvent[], map: CorrectionMap, id: 
 }
 
 /** Toggle the tie that starts at this entry. */
-export function toggleTie(map: CorrectionMap, ev: VocalLineEvent): CorrectionMap {
+export function toggleTie(map: CorrectionMap, ev: VocalLineEvent, read?: VocalLineEvent): CorrectionMap {
 	const on = currentTie(ev, map);
-	return { ...map, [ev.id]: { ...map[ev.id], tied: on ? 'none' : 'start' } };
+	return settleAgainstRead({ ...map, [ev.id]: { ...map[ev.id], tied: on ? 'none' : 'start' } }, ev.id, read, ['tied']);
 }
 
 /** The rhythmic sentence the definition row states. */
@@ -396,6 +398,32 @@ export function applyTuplet(
 	const next = { ...map };
 	for (const ev of run) {
 		next[ev.id] = { ...next[ev.id], base: def.actualType, dots: 0, tuplet };
+	}
+	return next;
+}
+
+/**
+ * Take the tuplet row's own write off the entries of its last run, back to what
+ * `to` held for them: `base`, `dots`, and `tuplet` only, so a pitch or a tie the
+ * singer set on a member since stays. A record left saying nothing is removed.
+ * Used when the row retakes its base for the SAME entry, so a smaller count does
+ * not leave the old run's last member holding the old count.
+ */
+export function unapplyTuplet(map: CorrectionMap, ids: readonly string[], to: CorrectionMap): CorrectionMap {
+	const next = { ...map };
+	for (const id of ids) {
+		const c = next[id];
+		if (!c || c.entered) continue;
+		const was = to[id];
+		const { base: _b, dots: _d, tuplet: _t, ...rest } = c;
+		const back: NoteCorrection = {
+			...rest,
+			...(was?.base !== undefined ? { base: was.base } : {}),
+			...(was?.dots !== undefined ? { dots: was.dots } : {}),
+			...(was?.tuplet !== undefined ? { tuplet: was.tuplet } : {}),
+		};
+		if (Object.values(back).some((v) => v !== undefined)) next[id] = back;
+		else delete next[id];
 	}
 	return next;
 }

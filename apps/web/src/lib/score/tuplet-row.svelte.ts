@@ -24,7 +24,7 @@
  */
 import type { VocalLineEvent } from '@ilya/score-parser';
 import type { CorrectionMap } from './correction';
-import { applyTuplet, DEFAULT_TUPLET, tupletRun, type TupletDefinition } from './entry';
+import { applyTuplet, DEFAULT_TUPLET, tupletRun, unapplyTuplet, type TupletDefinition } from './entry';
 import type { UndoNote } from './undo-history.svelte';
 
 export interface TupletRowDeps {
@@ -43,6 +43,12 @@ export class TupletRow {
 	def = $state<TupletDefinition>({ ...DEFAULT_TUPLET });
 
 	#base: CorrectionMap | null = null;
+	/** The entry the base was taken for. */
+	#baseId: string | null = null;
+	/** The map as the page held it right after the row last wrote. */
+	#written: CorrectionMap | null = null;
+	/** The ids the row's last write put a tuplet on. */
+	#run: string[] = [];
 	readonly #deps: TupletRowDeps;
 
 	constructor(deps: TupletRowDeps) {
@@ -59,13 +65,20 @@ export class TupletRow {
 
 	openRow = (): void => {
 		this.open = true;
-		this.#base = null;
+		this.#forget();
 	};
 
 	close = (): void => {
 		this.open = false;
-		this.#base = null;
+		this.#forget();
 	};
+
+	#forget(): void {
+		this.#base = null;
+		this.#baseId = null;
+		this.#written = null;
+		this.#run = [];
+	}
 
 	apply = (next: TupletDefinition): void => {
 		this.def = next;
@@ -73,10 +86,23 @@ export class TupletRow {
 		if (!id) return;
 		const line = this.#deps.line();
 		if (tupletRun(line, id, next.actualNotes).length === 0) return;
-		if (this.#base === null) {
-			this.#base = this.#deps.corrections();
+		/* A fresh base when the row has none, when the taken entry is not the one
+		   the base was for, or when the map is no longer the one the row last
+		   wrote (the singer corrected something between, or undid). Otherwise
+		   a re-apply would put back a map older than her work. */
+		if (this.#base === null || this.#baseId !== id || this.#deps.corrections() !== this.#written) {
+			/* For the SAME entry, the map now holds the row's own last write, and
+			   applying again only overlays: a smaller count would leave the old
+			   run's last member on the old count. Take that write back first. */
+			const again = this.#base !== null && this.#baseId === id;
+			this.#base = again ? unapplyTuplet(this.#deps.corrections(), this.#run, this.#base!) : this.#deps.corrections();
+			this.#baseId = id;
 			this.#deps.pushUndo({ kind: 'text', key: 'loupe.undo.tuplet' });
 		}
 		this.#deps.setCorrections(applyTuplet(this.#base, line, id, next));
+		/* Read back, not kept from `next`: the page's store may hand back a
+		   proxy of what it was given, and identity is what is compared. */
+		this.#written = this.#deps.corrections();
+		this.#run = tupletRun(line, id, next.actualNotes).map((e) => e.id);
 	};
 }
