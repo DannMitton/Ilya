@@ -52,6 +52,8 @@ export interface UnderlayCount {
 	verses: VerseCount[];
 	/** True where any event carries a printed slur end: false on an MNX file, so zero slurs there is not agreement. */
 	slursRead: boolean;
+	/** The verses whose slur gate failed: one count taken whole over the verse did not come out even with its slurs, so their slur evidence could not be checked (round 3). */
+	unchecked: number[];
 	/** True where any verse is damaged: counts disagree, or text has no note, or a note has no text. */
 	damaged: boolean;
 }
@@ -84,5 +86,5 @@ export function countUnderlay(fold: VowellessFold): UnderlayCount {
 		};
 	});
 	const damaged = verses.some((v) => !v.agrees || v.vacated.length > 0 || v.overflow.length > 0 || v.orphans.length > 0 || v.undivided.length > 0 || v.pinned.length > 0);
-	return { verses, slursRead, damaged };
+	return { verses, slursRead, damaged, unchecked: verses.filter((v) => v.slurGate === 'failed').map((v) => v.verse) };
 }

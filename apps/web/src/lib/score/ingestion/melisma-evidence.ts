@@ -35,22 +35,45 @@ export function hasVerse(ev: VocalLineEvent, verse: number): boolean {
 	return syl.verseNumber === verse;
 }
 
-/** The sung notes the verse owns: all of them for the base verse, else those in the bars where the verse has words. */
+/**
+ * The sung notes the verse owns, which is the notes of the bars the verse SHOWS (round 3, fix A). A later verse shows the bars
+ * where it has words of its own. The base verse shows every bar except one that carries words only on a later verse's line
+ * (a second ending lettered as verse 2): `verseView` shows the base verse's words in a bar only where no later verse has words
+ * and the base has none, or where the base has its own. Counting the base verse over a bar it does not show would call every note
+ * there textless, and a slurred melisma on a later verse's line would fail the base verse's gate.
+ */
 export function scopeOf(score: ParsedScore, verse: number): string[] {
 	const sung = syllableTargetIds(score.vocalLine);
-	const base = sungVerseNumbers(score)[0] ?? 1;
-	if (verse === base) return sung;
-	const bars = new Set(score.vocalLine.filter((ev) => hasVerse(ev, verse)).map((ev) => ev.measureIndex));
+	const verses = sungVerseNumbers(score);
+	const base = verses[0] ?? 1;
+	const withWords = new Map<number, Set<number>>();
+	for (const ev of score.vocalLine) {
+		for (const v of verses) {
+			if (!hasVerse(ev, v)) continue;
+			const set = withWords.get(ev.measureIndex) ?? new Set<number>();
+			set.add(v);
+			withWords.set(ev.measureIndex, set);
+		}
+	}
 	const barOf = new Map(score.vocalLine.map((ev) => [ev.id, ev.measureIndex] as const));
-	return sung.filter((id) => bars.has(barOf.get(id) ?? -1));
+	const shows = (bar: number): boolean => {
+		const set = withWords.get(bar);
+		return verse === base ? !set || set.has(base) : !!set && set.has(verse);
+	};
+	return sung.filter((id) => shows(barOf.get(id) ?? -1));
 }
 
-/** The evidence over a verse's scope, given the syllables the verse comes to. */
-export function evidenceFor(events: readonly VocalLineEvent[], scope: readonly string[], syllables: number, extenderIds: ReadonlySet<string>): Evidence {
-	const extenderHeld = scope.filter((id) => extenderIds.has(id));
-	const rest = scope.filter((id) => !extenderIds.has(id));
+/**
+ * The evidence over a verse's scope, given the syllables the verse comes to. `pinned` are the notes the deal left on their own
+ * (a mark alone, a token with no Cyrillic letter): a note that sings nothing was never a candidate, so it comes off the scope
+ * before the gate is taken, as the extender-held notes do (round 3, DESK DEFAULT). They stay counted as damage elsewhere.
+ */
+export function evidenceFor(events: readonly VocalLineEvent[], scope: readonly string[], syllables: number, extenderIds: ReadonlySet<string>, pinned: ReadonlySet<string> = new Set()): Evidence {
+	const candidates = scope.filter((id) => !pinned.has(id));
+	const extenderHeld = candidates.filter((id) => extenderIds.has(id));
+	const rest = candidates.filter((id) => !extenderIds.has(id));
 	const continuations = slurContinuationIds(events);
 	const observed = rest.filter((id) => continuations.has(id));
 	const gate: SlurGate = observed.length === 0 ? 'none' : syllables === rest.length - observed.length ? 'passed' : 'failed';
-	return { scope: [...scope], gate, held: new Set([...extenderHeld, ...(gate === 'passed' ? observed : [])]) };
+	return { scope: candidates, gate, held: new Set([...extenderHeld, ...(gate === 'passed' ? observed : [])]) };
 }

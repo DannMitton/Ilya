@@ -318,7 +318,7 @@ export function foldVowelessSyllables(parsed: ParsedScore, extenderIds: Readonly
 		if (!entries.some((o) => CYRILLIC.test(o.text))) continue;
 		const dealt = redeal(verse, entries, eventIds);
 		const { units, pins } = dealt;
-		const evidence = evidenceFor(parsed.vocalLine, scopeOf(parsed, verse), units.length, extenderIds);
+		const evidence = evidenceFor(parsed.vocalLine, scopeOf(parsed, verse), units.length, extenderIds, new Set([...pins].map((k) => eventIds[entries[k].eventIndex])));
 		const claimed = (k: number): boolean => {
 			const ev = parsed.vocalLine[entries[k].eventIndex];
 			return ev.tied?.type === 'stop' || ev.tied?.type === 'continue' || evidence.held.has(ev.id);

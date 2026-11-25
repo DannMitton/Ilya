@@ -377,7 +377,7 @@ function withVowelPerNote(result: ParseResult): ParseResult {
 	if (fold.undrawn > 0) console.warn(`${fold.undrawn} syllable${fold.undrawn === 1 ? '' : 's'} with no note in the file's lyrics, not drawn (CONTRACT 0.1)`);
 	const dealt = fold.score === result.score ? result : { ...result, score: fold.score };
 	const count = countUnderlay(fold);
-	return count.damaged ? withUnderlayRecord(dealt, count) : dealt;
+	return count.damaged || count.unchecked.length > 0 ? withUnderlayRecord(dealt, count) : dealt;
 }
 
 /**
@@ -393,6 +393,12 @@ function withVowelPerNote(result: ParseResult): ParseResult {
  * evidence of a held note. Text with no note (a syllable the cascade pushed off the end, a fragment with no host) is in the
  * message with its bar and is never seated somewhere to be rid of it.
  */
+/**
+ * THE ONE SENTENCE for Corrections when a verse's slur gate fails (round 3, Dann's ruling). DRAFT, OWED TO DANN FOR RATIFICATION,
+ * and FLAGGED FOR A FRENCH DRAFT: Code writes no French. The carrier is a `ParseWarning`; nothing here puts it on a page.
+ */
+export const slurUncheckedText = (verse: number): string => `The slurs in verse ${verse} could not be checked against the number of syllables, so please check where this verse holds a note.`;
+
 function withUnderlayRecord(result: ParseResult, count: UnderlayCount): ParseResult {
 	const score = result.score;
 	const barOf = new Map<string, number>();
@@ -408,7 +414,10 @@ function withUnderlayRecord(result: ParseResult, count: UnderlayCount): ParseRes
 	for (const v of count.verses) {
 		const parts: string[] = [];
 		// Fix 1: a vacated note is also a textless one, so the two lists are joined by note, each counted once.
-		const noteless = [...new Set([...v.vacated.map((p) => p.eventId), ...v.unexplained])];
+		// Round 3, Dann's ruling on the gate: where the verse's slur gate FAILED, Ilya seats the verse as it was seated before this seam, writes
+		// NO per-note abstention for it, and writes ONE record for the verse (below). One thing to check, not many blanks.
+		const failed = v.slurGate === 'failed';
+		const noteless = failed ? [] : [...new Set([...v.vacated.map((p) => p.eventId), ...v.unexplained])];
 		for (const id of noteless) {
 			abstain.push({ eventId: id, verseNumber: v.verse });
 			ids.add(id);
@@ -429,9 +438,10 @@ function withUnderlayRecord(result: ParseResult, count: UnderlayCount): ParseRes
 			places.forEach((p) => ids.add(p.eventId));
 			parts.push(`${label}: ${places.map((p) => `«${p.text}» (bar ${bar(p.eventId)})`).join(', ')}`);
 		}
-		if (parts.length === 0 && !v.agrees) parts.push('the notes and the syllables do not come out even');
+		if (parts.length === 0 && !v.agrees && !failed) parts.push('the notes and the syllables do not come out even');
 		if (parts.length > 0) said.push(`Verse ${v.verse}: ${v.sung} sung note(s), ${v.syllables} syllable(s); ${parts.join('; ')}.`);
 	}
+	const unchecked: ParseWarning[] = count.unchecked.map((verse) => ({ code: 'slur-evidence-unchecked', message: slurUncheckedText(verse) }));
 	const known = new Set((score.dictionMarks?.vacatedTailEventIds ?? []).map((t) => `${t.verseNumber}|${t.eventId}`));
 	const fresh = abstain.filter((t, i) => !known.has(`${t.verseNumber}|${t.eventId}`) && abstain.findIndex((u) => u.eventId === t.eventId && u.verseNumber === t.verseNumber) === i);
 	const dictionMarks = fresh.length === 0 ? score.dictionMarks : { breaks: score.dictionMarks?.breaks ?? [], vacatedTailEventIds: [...(score.dictionMarks?.vacatedTailEventIds ?? []), ...fresh] };
@@ -439,7 +449,7 @@ function withUnderlayRecord(result: ParseResult, count: UnderlayCount): ParseRes
 	return {
 		...result,
 		score: dictionMarks === score.dictionMarks ? score : { ...score, dictionMarks },
-		warnings: [...result.warnings, { code: 'underlay-count', message: said.join(' '), bars, eventIds: [...ids] }],
+		warnings: [...result.warnings, ...(said.length > 0 ? [{ code: 'underlay-count' as const, message: said.join(' '), bars, eventIds: [...ids] }] : []), ...unchecked],
 	};
 }
 

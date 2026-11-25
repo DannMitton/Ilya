@@ -105,7 +105,9 @@ describe('fixes 2, 3: a token with no Cyrillic letter, and a mark alone, stay on
 		const out = foldVowelessSyllables(scoreOf(note('a', 'ты'), note('b', '—'), note('c', 'дом')));
 		expect(out.verses[0].pinned).toMatchObject([{ eventId: 'b', why: 'mark' }]);
 		const c = countUnderlay(out);
-		expect(c.verses[0]).toMatchObject({ sung: 3, syllables: 2, agrees: false });
+		// Round 3: a note that sings nothing is off the note count, so the count comes out even and the damage is the pinned note itself.
+		expect(c.verses[0]).toMatchObject({ sung: 2, syllables: 2 });
+		expect(c.verses[0].pinned).toHaveLength(1);
 		expect(c.damaged).toBe(true);
 	});
 
@@ -146,5 +148,99 @@ describe('fix 5: the seam does not load the pipeline', () => {
 		const text = readFileSync(fileURLToPath(new URL(f, import.meta.url)), 'utf8');
 		const imports = [...text.matchAll(/^import[^;]*?from\s+'([^']+)'/gms)].map((m) => m[1]);
 		for (const spec of imports) expect(spec).not.toMatch(/pipeline|vowel-resolver|pairings|slur-seat/);
+	});
+});
+
+// ── Round 3 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+describe('round 3, fix A: the base verse is counted over the bars it shows', () => {
+	const dir = fileURLToPath(new URL('../../../../../../packages/score-parser/src/fixtures/', import.meta.url));
+	const musicxmlParser: ScoreParser = { canParse: () => true, parse: (i) => new MusicXmlScoreParser().parse({ ...i, data: parseXml(i.data as string) as unknown as Document }) };
+	const deps: IngestDeps = { scoreReader: { convert: async () => '', dispose: () => {} } as unknown as ScoreReader, musicxmlParser };
+
+	it('a second ending lettered as verse 2: verse 1 is counted over bars 1 to 3 only, and nothing is recorded for it', async () => {
+		const out = await ingestScoreFile(new File([readFileSync(dir + 'second-ending-verse-2.xml', 'utf8')], 'f.musicxml'), deps);
+		if (!out.ok) throw new Error('ingest failed');
+		const { score, warnings } = out.ingested.result;
+		expect(sungVerseNumbers(score)).toEqual([1, 2]);
+		// Before the fix: 16 sung notes counted for verse 1 against 12 syllables, the gate failed, and verse 1 recorded bar 4's four notes.
+		expect(score.dictionMarks?.vacatedTailEventIds.filter((t) => t.verseNumber === 1) ?? []).toEqual([]);
+		expect(warnings.some((w) => w.code === 'slur-evidence-unchecked')).toBe(false);
+		const fold = foldVowelessSyllables(score);
+		expect(fold.verses.map((v) => [v.verse, v.evidence.scope.length, v.syllables, v.evidence.gate])).toEqual([[1, 12, 12, 'none'], [2, 4, 3, 'passed']]);
+		const view = verseView(score, 2);
+		const slurred = view.vocalLine[13];
+		expect(slurred.syllable).toBeUndefined();
+		expect(buildUnderlayResolvers(view, 1).vowel(slurred)).toBeDefined();
+	});
+});
+
+describe('round 3, fix B: an extender claims the note, and the close-up does not happen there', () => {
+	it('a fragment on an extender-held note leaves the note with no syllable and the tail where the print put it', () => {
+		const events = scoreOf(note('a', 'жи', 'start'), note('b', 'знь', 'end'), note('c', 'мо'), note('d', 'ря'));
+		expect(texts(foldVowelessSyllables(events, new Set(['b'])).score)).toEqual(['жизнь', null, 'мо', 'ря']);
+		expect(texts(foldVowelessSyllables(events).score)).toEqual(['жизнь', 'мо', 'ря', null]);
+	});
+});
+
+describe('round 3, DESK DEFAULT: a pinned note comes off the count before the gate', () => {
+	it('a mark alone beside a slurred melisma does not fail the gate', () => {
+		const events = scoreOf(
+			note('a', 'ты', 'whole', { slurs: [{ type: 'start', number: 1, partnerEventId: 'b' }] }),
+			note('b', undefined, 'whole', { slurs: [{ type: 'stop', number: 1 }] }),
+			note('c', '—'),
+			note('d', 'дом'),
+		);
+		const c = countUnderlay(foldVowelessSyllables(events));
+		expect(c.verses[0]).toMatchObject({ slurGate: 'passed', sung: 3, syllables: 2, agrees: true, evidenced: ['b'] });
+		expect(c.damaged).toBe(true);
+		expect(c.unchecked).toEqual([]);
+	});
+});
+
+describe('round 3, the ruling: a failed gate seats the verse as 5594904b seated it, with one record', () => {
+	const dir = fileURLToPath(new URL('../../../../../../packages/score-parser/src/fixtures/', import.meta.url));
+	const base = JSON.parse(readFileSync(fileURLToPath(new URL('./fixtures/base-5594904b-strophic-seating.json', import.meta.url)), 'utf8')) as Record<string, Record<string, Array<[string, string | null, string | null]>>>;
+	const musicxmlParser: ScoreParser = { canParse: () => true, parse: (i) => new MusicXmlScoreParser().parse({ ...i, data: parseXml(i.data as string) as unknown as Document }) };
+	const deps: IngestDeps = { scoreReader: { convert: async () => '', dispose: () => {} } as unknown as ScoreReader, musicxmlParser };
+	const files = Object.keys(base);
+
+	it.each(files)('every verse keeps the vowels and the IPA that 5594904b gave it: %s', async (f) => {
+		const out = await ingestScoreFile(new File([readFileSync(dir + f, 'utf8')], f), deps);
+		if (!out.ok) throw new Error('ingest failed');
+		const score = out.ingested.result.score;
+		for (const verse of sungVerseNumbers(score)) {
+			const view = verseView(score, verse);
+			const r = buildUnderlayResolvers(view, 1);
+			const now = view.vocalLine.filter((e) => e.type === 'note').map((e) => [e.id, (r.vowel(e) as string | undefined) ?? null, (r.ipa(e) as string | undefined) ?? null]);
+			expect(now, `${f} verse ${verse}`).toEqual(base[f][String(verse)]);
+		}
+	});
+
+	it.each(files)('every verse whose gate fails carries exactly one record, and no per-note abstention: %s', async (f) => {
+		const text = readFileSync(dir + f, 'utf8');
+		const parsed = await musicxmlParser.parse({ format: 'musicxml', data: text, sourcePath: f });
+		const extenders = new Set(parsed.warnings.find((w) => w.code === 'extender-notes')?.eventIds ?? []);
+		const failing = foldVowelessSyllables(parsed.score, extenders).verses.filter((v) => v.evidence.gate === 'failed').map((v) => v.verse);
+		const out = await ingestScoreFile(new File([text], f), deps);
+		if (!out.ok) throw new Error('ingest failed');
+		const records = out.ingested.result.warnings.filter((w) => w.code === 'slur-evidence-unchecked').map((w) => Number(/verse (\d+)/.exec(w.message)?.[1]));
+		expect(records).toEqual(failing);
+		for (const v of failing) expect(out.ingested.result.score.dictionMarks?.vacatedTailEventIds.filter((t) => t.verseNumber === v) ?? []).toEqual([]);
+	});
+
+	it('the four repeat files do fail the gate in every verse, so the test above has something to hold', async () => {
+		for (const f of files.filter((x) => x.startsWith('strophic-repeat'))) {
+			const parsed = await musicxmlParser.parse({ format: 'musicxml', data: readFileSync(dir + f, 'utf8'), sourcePath: f });
+			expect(foldVowelessSyllables(parsed.score).verses.map((v) => v.evidence.gate), f).toEqual(['failed', 'failed', 'failed']);
+		}
+	});
+
+	it('where the gate does not fail, the per-note record stands as built in round 2: Tchaikovsky bars 58 and 93', async () => {
+		const text = readFileSync(fileURLToPath(new URL('./fixtures/tchaikovsky-op38-3-voice.musicxml', import.meta.url)), 'utf8');
+		const out = await ingestScoreFile(new File([text], 't.musicxml'), deps);
+		if (!out.ok) throw new Error('ingest failed');
+		expect(out.ingested.result.score.dictionMarks?.vacatedTailEventIds).toHaveLength(2);
+		expect(out.ingested.result.warnings.some((w) => w.code === 'slur-evidence-unchecked')).toBe(false);
 	});
 });

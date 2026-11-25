@@ -64,17 +64,15 @@ describe('the leftover is recorded (item 4)', () => {
 		expect(score.dictionMarks?.vacatedTailEventIds.filter((t) => t.verseNumber === 1) ?? []).toEqual([]);
 	});
 
-	it('n188-markings: «жи» + «знь» sing «жизнь» on «жи»\'s note, and the leftover at the end is recorded with the notes the slurs did not account for', async () => {
+	it('n188-markings: «жи» + «знь» sing «жизнь» on «жи»\'s note; its slur gate fails, so it carries ONE record and no per-note abstention (round 3, the ruling)', async () => {
 		const { score, warnings } = await arrive('n188.musicxml', parserFixture('n188-markings.musicxml'));
 		const texts = score.vocalLine.map((e) => e.syllable?.text ?? null);
 		expect(texts).toContain('жизнь');
 		expect(texts).not.toContain('знь');
-		const w = warnings.find((x) => x.code === 'underlay-count');
-		expect(w?.eventIds?.length).toBeGreaterThan(0);
-		for (const id of w!.eventIds!) {
-			const ev = score.vocalLine.find((e) => e.id === id)!;
-			expect(buildUnderlayResolvers(score, 1).vowel(ev)).toBeUndefined();
-		}
+		expect(warnings.filter((x) => x.code === 'slur-evidence-unchecked')).toHaveLength(1);
+		expect(warnings.find((x) => x.code === 'slur-evidence-unchecked')?.message).toBe('The slurs in verse 1 could not be checked against the number of syllables, so please check where this verse holds a note.');
+		expect(score.dictionMarks?.vacatedTailEventIds ?? []).toEqual([]);
+		expect(warnings.find((x) => x.code === 'underlay-count')?.eventIds ?? []).toEqual([]);
 	});
 
 	it('a file whose notes have gaps the print does not explain (underlay-gap.musicxml) is counted and recorded, not repaired and not read as a melisma', async () => {

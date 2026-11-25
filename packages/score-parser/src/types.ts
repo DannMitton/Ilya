@@ -990,7 +990,7 @@ export type ParseWarningCode =
    */
   | 'words-partly-read'
   | 'extender-notes' // a printed extender; `eventIds` names the sustained notes (the parser reads `<extend>`; ingestion reads a scan's)
-  | 'underlay-count'; // cloud-lane-88, set by ingestion: syllables and sung notes do not come out even; `bars` and `eventIds` name the damage
+  | 'underlay-count' | 'slur-evidence-unchecked'; // cloud-lane-88, set by ingestion: syllables and sung notes do not come out even (`bars`, `eventIds`); or a verse's slur gate failed, one record per verse
 
 export type ParseErrorCode =
   | 'invalid-mnx-json'
