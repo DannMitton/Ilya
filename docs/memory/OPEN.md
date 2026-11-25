@@ -4692,7 +4692,9 @@ He struck: "a decision about the work, not about a page: it is true whether or n
 
 **What it costs, named when he ruled:** the page then shows a seating Ilya cannot defend note by note, which is what the r5 rule was written against. He took that cost knowingly over the blanks.
 
-**Owed to him:** the one English sentence that record shows in Corrections, for ratification, and its French draft after.
+**Owed to him:** the one English sentence that record shows in Corrections, for ratification, and its French draft after. **CLOSED: ratified 2026-11-24 21:43 and superseded 2026-11-25 00:03; see the two sections at the foot of this file.**
+
+**AMENDED 2026-11-25 00:0x, by the desk, on Fable's delta read of lane 88 round 4, and brought to him in one line as this file's own rule requires.** The sentence above, "writes no per-note abstention for it", is the desk's settlement of his ruling and not his words; his were *"Keep the gate whole, change what failing means"*. **It is now too broad and the code departs from it deliberately.** Round 4 keeps the abstention for the notes ILYA ITSELF EMPTIED in a failed verse (`apps/web/src/lib/score/ingestion/ingest.ts:428`, read at `cc3775e`) and drops it only for the unexplained ones. Without that, an emptied note sustains the previous vowel (`vowel-resolver.ts:271-276`) unless a rest intervenes (`:265-267`), which puts a vowel on the page that no print asks for. **This neither restores nor breaks the `5594904b` seating:** at `5594904b` the fold left a fragment's note empty in place and moved no later syllable, so the emptied note he ruled on did not exist; the close-up is what departs from `5594904b`, and it predates round 4 and is his own rule in `CONTRACT.md` section 0.1. Fable ruled the departure sound in its round-4 read. **The four failing fixtures behind the snapshot have no emptied notes, so the seating does not move.** His to strike.
 
 **Built in** lane 88 round 3, with Fable's fixes A and B and one desk default (a note pinned as a mark alone or as a token with no Cyrillic letter comes out of the note count before the gate, as extender-held notes now do, because a note that sings nothing was never a candidate).
 
@@ -4713,3 +4715,87 @@ He struck: "a decision about the work, not about a page: it is true whether or n
 **The French is built from the file's own French:** « Couplet » from `markup.verseLabel` (ratified 2026-11-12), « Mélisme » from `loupe.melisma`, « telles qu'imprimées dans votre partition » from `loupe.printAlt`, « paroles » from `loupe.station.lyricTake`. Apostrophes U+2019, spacing per the file's OQLF convention.
 
 **« liaisons de phrasé » was the desk's flagged open choice and he ratified it as drafted.** The file already spends « liaison » on the TIE (`loupe.undo.tie`, « liaison modifiée »), so a bare « liaisons » would read as the ties. **The desk told him plainly it had not checked either candidate against a French musical-terminology authority this session, and he ruled anyway.** Not to be reopened by a later desk on the strength of that caveat alone.
+
+### A DESK FAULT DANN NAMED, 2026-11-24 22:26: the hour is not a reason
+
+**His words:** *"'Merging it at this hour to leave a tidy tree is the wrong trade.' How dare you? We write plans to follow them. What does the time of day have to do with it? Explain yourself."*
+
+**The sequence.** At 22:15 the desk proposed landing lane 88 in one more paste. **That proposal broke the rule:** N.204's plan has Fable as built on every lane before Dann's merge paste, and nobody had read lane 88 since `92c03cca`, after which it changed what a failed gate does, added fix A, changed what the gate counts, and seated his ratified strings. At 22:2x the desk reversed itself, which was right, **and gave the hour as the reason, which was wrong.** A rule stated as a judgement about fatigue reads as negotiable at a better time. It is not.
+
+**The habit under it, and it is a standing rule of his, not a slip.** The desk used the hour twice in the same thread: it told him the plan ruling was *"the wrong thing to answer tired at the end of a long one"*, and it signed off wishing him goodnight. **His rule: never usher him away, suggest he stop, or decide he is done** (ratified preferences, Tier 3 item 13). **His state is his to report, not the desk's to infer**, and here the desk was inferring it to dress up decisions that stood on their own.
+
+**What a later desk takes from this.** When a rule says no, say the rule. Never reach for the clock, his energy, or the length of the session as a reason for a decision, including a decision that is otherwise correct. If a step is being skipped to finish sooner, that is the thing to name out loud.
+
+## N.220: THE FIVE WALKS, THE GATE THEY ARE, AND THE QUICKSTARTS THEY BECOME. Opened by the desk 2026-11-24 23:0x on Dann's ruling of 22:49, under his grant of 23:09
+
+**The gate is his**, 2026-11-24 22:49, transcribed as written: *"The gate is being able to walk the four use cases successfully, and repeat with shifting variables that still work."* It replaces every earlier reading of what "accurate" means. He also ruled the standard around it the same minute: Ilya states nothing false as far as we can reach it; flaws, misleading quotations, and paradoxes found on the way are recorded with their context and dealt with methodically later, and they do not hold the gate. One hundred per cent fidelity of the read is wanted and is not available from OCR or OMR today, *"so we are happy with as faithful a read as we can manage. This is why we have created the Loupe with its controlrs for SYllables and Corrections: the user has the agency to compare input and adjut Ilya's data to align with reality post-synthesis."*
+
+**The four use cases are the four roads a text takes into Ilya**, ratified by him 23:02 from his own wording of 2026-11-23 21:18: typed Russian; a photographed poem; a `.musx` or MXL file; the words printed under the notes of a scanned score.
+
+**His grant for what follows**, 2026-11-24 23:09, transcribed as written: *"Aldd the cases you suggest, alter the ones on file until they match the tests we need. The point is to exercise Ilya's capabitl;ites and I take your point about Ilya's mistakes needing correction as a t4est, please build that."* So the amendments below are the desk's, his to strike.
+
+**One artifact, not two.** A QuickStart is titled by the task, because that is what a singer searches for, and storyboarded as the person's journey, because that is what teaches the work. The walks ARE the QuickStarts; they are written once.
+
+### The five walks
+
+The names and goals of walks 1 to 4 are Dann's, 2026-10-31 14:14 (`OPEN.md:3823`); every other detail there was a desk draft, and the amendments here are the desk's.
+
+1. **Ted**, a second-year undergraduate baritone. Phone, English. **Road in: typed Russian**, pasted from LiederNet. Resolves two VERIFY words, transposes, prints for his lesson. UNCHANGED from his 2026-10-31 goal. QuickStart title: transcribe a text.
+2. **James**, a bass-baritone in a community choir. Phone, English. **No score and no text.** Calibrates and builds a resonance profile from his own voice. UNCHANGED. QuickStart title: build your resonance profile.
+3. **Marie**, a studio teacher. Desktop, English. **AMENDED:** she creates the student's voice herself from a declared type, rather than importing a profile card, because the card is N.28 and N.29 and sits after the release behind N.27 and behind a question that is Dann's (whether formant values are personal information under Canadian privacy law, `OWED.md:702`). **Road in: a `.musx` or MXL file**, a strophic song, so two texts ride under one music. Reads MELODY and INSIGHTS. **Marie carries the eight declared voice types.** QuickStart title: read MELODY, and read INSIGHTS.
+4. **Maxime**, a doctoral student in musicology. Desktop, **French throughout**. **AMENDED: he carries the two remaining roads in.** He photographs a published poem and reads the words printed under the notes of a scanned score of the same text, then compares Marshak's published poem with Kabalevsky's lyrics. Prints in French. QuickStart title: compare a poem with a score's words.
+5. **NEW, and it is the walk Dann's own position rests on.** A deliberately rough scan, read badly on purpose. The singer finds what Ilya got wrong and brings it back to the page with the Loupe, Syllables, and Corrections. **Rationale, his, 22:49:** accepting that the read is not at 100 per cent is defensible only because the singer has the agency to correct it, and no other walk exercises that agency. Ted, on a phone, so the repair is tested where it is hardest. QuickStart title: fix what Ilya got wrong.
+
+**WHAT WALK 5 IS FOR, AND WHAT IT IS NOT FOR. Ruled by Dann 2026-11-24 23:12**, transcribed as written: *"Whether it was hard can be evaluated and reported by the colleagues who try ILya once we are ready for them to see it"*. He is right and it corrects the desk: friction is what outside eyes are for, and it reads better from a colleague than from him, because he cannot un-know his own app. **So walk 5 tests that the repair path COMPLETES, not that it is pleasant.** Can a person finish it, end to end, on a phone. Whether it was hard, slow, or hard to find is the colleagues' to report, and holding the gate for it would be the desk inventing a stopper. The one reason walk 5 still runs before they see it: a path that cannot be finished gives a colleague no data about anything downstream of it, so the review itself would come back thin.
+
+**CONSEQUENCE, and it answers an open item of his own.** `DANN.md` D9 asks what he most wants colleagues to answer. His sentence above gives one of those questions its shape: the packet asks them where Ilya was hard, slow, or confusing, by name, rather than leaving it to be volunteered. Desk wording owed; the questions are his.
+
+### The coverage frame: each value once, never crossed
+
+Crossing every variable gives thousands of combinations. The frame is to name the dimensions and cover each value at least once across the five walks. Adopted from the field's practice; the assignment below is the desk's.
+
+| dimension | values | where each is covered |
+|---|---|---|
+| road in | typed Russian · photographed poem · file · scanned underlay | Ted · Maxime · Marie · Maxime and walk 5 |
+| device | phone · desktop | Ted, James, walk 5 · Marie, Maxime |
+| language | English · French, start to finish | Ted, James, Marie, walk 5 · Maxime |
+| voice | measured from the singer · borrowed, all eight declared types · none | James · Marie · Ted at the start |
+| song shape | one verse · two texts under one music · two settings of one poem · transposed | Ted · Marie · Maxime · Ted |
+| read quality | clean · deliberately rough | walks 1 to 4 · walk 5 |
+| print | English · French | Ted · Maxime |
+
+**The eight declared types are held against ONE song.** What changes with voice type is the crossing, where that singer's vowel turns against this music's pitches. Eight songs gives eight results that cannot be compared; one song gives eight that lie side by side, so a wrong one shows itself. The eight, read from `apps/web/src/lib/voice/voiceTypes.ts:19-29` on 2026-11-24: soprano, mezzo-soprano, contralto, countertenor, tenor, baritone, bass-baritone, bass. The ninth entry, `not-sure`, takes no profile by his own design (row 167) and is walked as the ninth case. **Dann's list of 2026-11-24 23:02 omitted baritone, which is a published type with its own values and is Ted's own voice.**
+
+**No synthetic profiles are built.** Row 167 shipped on 2026-11-19: every declared type already carries a starting profile with its borrowing named on the page (contralto borrows mezzo-soprano, bass-baritone borrows bass, countertenor borrows the mezzo and tenor staff). The work is eight looks at one screen, not eight profiles to invent.
+
+### What makes it a gate rather than a demonstration
+
+Dann's eye walks each one once. Each is then written as a script with its expected result and pinned, so it runs on every later lane without him. Ilya holds both halves already: Playwright drives a real session, and the behaviour baseline captured by `cloud-lane-86` is a byte-for-byte record of what Ilya produces today. A lane that breaks a walk then says so before it reaches him.
+
+### What is recorded rather than fixed
+
+Flaws, misleading quotations, and paradoxes found on these walks go to the review packet's known-issues line (`SCHEDULE.md` item 8) with their context. Finding one is not a reason to hold the gate. His standing position, 22:49.
+
+### Carried, not lost
+
+The profile card (row 168, N.28, N.29) becomes its own walk when it lands, after the release. Marie's original 2026-10-31 goal is what that walk restores.
+
+### SUPERSEDED 2026-11-25 00:03: THE CORRECTIONS SENTENCE LOSES ITS CLAIM ABOUT THE PRINT
+
+**What changed and why.** The pair ratified 2026-11-24 21:43 (above) carried the clause *"Ilya has left the words where your score prints them"*. Fable's delta read of lane 88 round 4 found it untrue in half the cases it fires, and the desk confirmed it by reading the tree at `cc3775e`: `ingest.ts:454` writes the record when a failed verse has an unexplained note OR an emptied one, and `vowelless-fold.ts:333-336` fills `vacated` only when a fusion has already pulled the words forward. So on the emptied-note path the record appears BECAUSE the words moved, while telling her they did not; on the unexplained-note path the clause is true. **The build cannot be changed to make his words true, because the close-up is his own rule in `CONTRACT.md` section 0.1, so the sentence is what changes.**
+
+**His ratification of 21:43 stands for what it covered**, which was the two counts: he caught the derived `{m}` at 21:42 and the pair was rebuilt on numbers a singer can count. That question is closed and is not reopened. This is a second defect in the same sentence, found after, and it falls under his rule of 2026-11-01 12:13 that ratification is approval at that moment and never fossilization.
+
+**ENGLISH, RATIFIED by Dann 2026-11-25 00:03** (*"I ratify your fradt, thank you Claude"*, transcribed as written), on the desk's draft:
+
+> This verse has {n} syllables for {m} sung notes, and its slurs do not account for the difference. Ilya has not chosen which notes carry a melisma. Check the melismas here.
+
+The first and third sentences are his ratified words of 21:43, unchanged. Only the middle sentence changes, and it keeps the half that is always true.
+
+**FRENCH, RATIFIED by Dann 2026-11-25 00:05** (*"yes i ratify the French! Proceed"*, transcribed as written), on the desk's draft:
+
+> Ce couplet compte {n} syllabes pour {m} notes chantées, et ses liaisons de phrasé n'expliquent pas l'écart. Ilya n'a pas choisi quelles notes portent un mélisme. Vérifiez les mélismes ici.
+
+Built from the file's own French: sentences one and three are his ratified French of 21:43, unchanged; « quelles notes portent un mélisme » is carried verbatim out of the struck sentence. **Agreements checked against their referents:** « notes chantées », feminine plural with « notes »; « n'expliquent pas » plural with « ses liaisons de phrasé »; « choisi » invariable, since the object of « a choisi » is the clause that follows and does not precede it; « un mélisme » masculine singular, from `loupe.melisma`. Apostrophes U+2019. No colon, semicolon, question mark, or exclamation mark, so no OQLF no-break space applies. **No term is coined here.** « liaisons de phrasé » is his ruling of 21:43 and is not reopened.
+
+**WHERE IT LANDS. DESK DEFAULT:** the string change rides in the wording lane with the other three text-batch items, AFTER lane 88 merges. It does not go into lane 88, whose eight gates are being measured as this is written and whose measure a late edit would void. Nothing shows this sentence to a singer yet, so nothing is lost by the order.

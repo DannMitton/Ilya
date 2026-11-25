@@ -102,6 +102,7 @@ next session the same hour it cost the last one.
 | you are about to read Dann's usage page, or say how much Fable is left | `HOW TO READ THE FABLE BAR` |
 | a desk is about to cite "no vowel is ever blank" as Dann's ruling | `NO VOWEL IS EVER BLANK IS A GLOSS` |
 | you are about to cite one of Dann's rules as authority for your own convenience | `THE OPENING READ IS NOT A MENU` |
+| you are about to type a multi-paragraph prompt into Claude Code in Dann's Chrome | `A NEWLINE SENDS THE CODE PROMPT` |
 | you are about to cut a cloud lane and the composer says it will push to `Shane` | `THE CODE BRANCH PICKER DOES NOT CREATE BRANCHES` |
 | a lane reports gate failures it did not predict, on a Playwright run | `A STORED BROWSER STATE PINNED TO ONE PORT` |
 | you are about to skip part of the opening read, or write a partial `read:` line | `THE OPENING READ IS NOT A MENU` |
@@ -6121,3 +6122,14 @@ Both Fable reads of 2026-11-24 did this, each at about 150,000 tokens, and both 
 The desk sent both lanes to read a Fable review "on the Mac". A cloud Code session has no bridge to the Mac: it sees its own branch and nothing else. Both lanes said so and worked from the desk's prose description instead, which happened to carry the substance, so nothing was lost; the next desk may not be so lucky.
 
 **The rule: anything a lane must read is on its branch, or it is quoted whole in the prompt.** A Fable review is written to the Mac, so it reaches a lane only after Dann ships it and the lane merges `origin/Shane`. Either ship first and tell the lane to merge, or paste the finding into the prompt in full. Saying "read the report at docs/sessions/..." without one of those is an instruction the lane cannot follow.
+
+
+## A NEWLINE SENDS THE CODE PROMPT (2026-11-25, desk fault)
+
+The desk typed a 6.5 kB brief into the Claude Code prompt box in Dann's Chrome with `mcp__claude-in-chrome__computer` `type`. **Every newline in the text submitted the box**, so the brief arrived as roughly thirty separate messages and the session began acting on the first fragment before it had the rest. It recovered on its own, read the whole thing in order, caught that its checkout was behind the lane tip, and started correctly at step 0, so nothing was lost; the next desk may not be so lucky.
+
+**The rule: a prompt typed into the Code box is ONE paragraph with no newline characters in it.** Write the brief as continuous prose, with capitalised step labels (`STEP 0: ...`, `ONE: ...`) doing the work that line breaks would. Then press Return once, deliberately, as its own `key` action.
+
+**A second consequence, and it is the expensive one:** the brief itself is normally committed and the prompt points at it. That only works when Dann has shipped it. A brief written during the session is untracked on his Mac and invisible to a cloud lane (see `A CLOUD CODE LANE CANNOT READ THE MAC`), so it has to be pasted whole, which is exactly when this trap fires.
+
+**If it fires:** do not send a correction telling the session to disregard its partial plan, until you have READ what it is doing. In this instance the session had already understood the whole brief and was on step 0; a correction would have stopped useful work to re-explain itself. Clear the box instead (`cmd+a`, then Backspace) and watch.
