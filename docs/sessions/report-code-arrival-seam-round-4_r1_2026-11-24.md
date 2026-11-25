@@ -27,7 +27,7 @@ The gate fails, a `slur-evidence-unchecked` record is written, and its sentence 
 
 ### Probe B: `n188-markings.musicxml`
 
-The premise is **not shown by this file**. Observed output, as printed:
+The premise is confirmed by the control below. **This file does not show it**, because a rest ends the sustain (`vowel-resolver.ts:265-266`). Observed output, as printed:
 
 ```
 PROBE B warnings [{"code":"slur-evidence-unchecked","message":"This verse has 20 syllables for 26 sung notes, and its slurs do not account for the difference. Ilya has left the words where your score prints them rather than choose which notes carry a melisma. Check the melismas here.","verse":1,"counts":[20,26]}]
@@ -72,7 +72,7 @@ Read from that output:
 
 - The fold seats «жизнь» on `m0-0-1` and closes the tail up. Each syllable after it sits earlier than the print put it: «ра» moves from `m1-0-1` to `m0-3-4`, and «вас» from `m2-3-4` to `m2-0-1`, ahead of the two notes the print left empty. «ко» «нец» leave bar 7 and land on `m5-1-2` and `m5-3-4`.
 - Notes that end with a sustained vowel and no syllable of their own: `m0-1-4` and `m0-1-2` (ɨ), and `m2-1-4` and `m2-1-2` (ɑ). These are the print's own empty notes, so they read as melismas.
-- The two notes Ilya emptied, `m7-0-1` and `m7-1-2`, end with **no vowel at all**. A rest, `m6-0-1`, sits between them and the last sung note, and a melisma cannot cross a rest (`vowel-resolver.ts:265-266`). So n188 does not show Fable's harm. In this file the emptied notes happen to be safe.
+- The two notes Ilya emptied, `m7-0-1` and `m7-1-2`, end with **no vowel at all**. A rest, `m6-0-1`, sits between them and the last sung note, and a melisma cannot cross a rest (`vowel-resolver.ts:265-266`). So n188 is a wrong illustration of the premise, not a disproof of it. In this file the emptied notes happen to be safe.
 
 ### Probe B control (added by me, not in the brief)
 
@@ -100,7 +100,7 @@ I also measured the five failed-verse baseline fixtures behind the 5594904b seat
 
 ## Step 2: the notes Ilya emptied keep their abstention (`65d379e`)
 
-**DESK DEFAULT, and a reading call that is yours to confirm.** The brief says: if a probe disproves its premise, build nothing for that item. Probe B on n188 does disprove the harm for that file. The control shows the harm in general, and the baselines show it cannot touch the 5594904b seating, so I built the step on the control. If you read the rule literally, `git revert 65d379e` removes it whole, and nothing else depends on it. It departs from a desk default of the 2026-11-24 close, not from Dann's 21:23 ruling.
+**DESK DEFAULT. Ruled to stay by Dann.** The premise is that a failed verse writes no abstention, so a note Ilya itself emptied can sustain a vowel no print supports. The control confirms it. n188 was Fable's illustration and does not show it, because a rest ends the sustain (`vowel-resolver.ts:265-266`). The five failed-verse fixtures have no emptied notes, so the 5594904b seating does not move. The step repairs a real harm. It departs from a desk default of the 2026-11-24 close, not from Dann's 21:23 ruling.
 
 - `ingest.ts:427-428`: a failed verse now abstains for `v.vacated` and drops only `v.unexplained`. A verse that did not fail is unchanged.
 - `underlay-record.test.ts:78-79`: the n188 test now expects `vacatedTailEventIds` to be `m7-0-1` and `m7-1-2` for verse 1, and the `underlay-count` warning's `eventIds` to be the same two. The unexplained notes (`m0-1-4`, `m0-1-2`, `m2-1-4`, `m2-1-2`) stay un-abstained.
@@ -149,7 +149,4 @@ Gate 4's five skips are the round-3 split (4 `burg` for want of `scipy`, 1 `heic
 3. **Fable's delta read of `92c03cca..9c21c74e`** is not in the repository. I worked from the brief's account of it, and its items 1 and 2 I settled with the probes above.
 4. **Probe A is my own fixture.** No repository file has four notes with a phrasing slur over two of them.
 5. **A case step 1 may leave open.** With `count.damaged` restored at `ingest.ts:380`, a failed verse that has an unexplained note but whose count agrees would not reach the record. I did not construct such a case and could not show it exists.
-6. **Two claims in the round-3 report that this round's evidence contradicts or doubts, left unedited** because the brief limits that file to the dates and one citation:
-   - Its addendum (the paragraph under "the ratified sentence, seated and pinned") says "`n188-markings`: the sustained vowel across its two vacated tail notes is the right outcome." Probe B shows those two notes take **no** vowel, because of the rest at `m6-0-1`. The claim is wrong for the file as it stands.
-   - Its Addendum 2 (line 95) says "Per Dann's ruling" for `{m}`. The brief calls that a desk ruling. The test comment now says so; the report still credits Dann. Say the word and I will correct it.
-7. **Step 2 was built against a literal reading of "build nothing"** for the reason given above. That is yours to confirm or revert.
+6. **Two claims in the round-3 report, now corrected** at Dann's word, text only: the emptied-tail sustained vowel at its line 83, and the `{m}` attribution at its line 95, which is a desk ruling dated 2026-11-24.
