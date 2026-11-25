@@ -4695,3 +4695,21 @@ He struck: "a decision about the work, not about a page: it is true whether or n
 **Owed to him:** the one English sentence that record shows in Corrections, for ratification, and its French draft after.
 
 **Built in** lane 88 round 3, with Fable's fixes A and B and one desk default (a note pinned as a mark alone or as a token with no Cyrillic letter comes out of the note count before the gate, as extender-held notes now do, because a note that sings nothing was never a candidate).
+
+### RATIFIED by Dann, 2026-11-24 21:43: the Corrections sentence for the gate's new record, EN and FR
+
+**His words:** *"I ratify bnoth, this is good workl Claude thank you"* (transcribed as written), on the pair below, with the desk's caveat on the French term in front of him.
+
+**English, ratified:**
+
+> This verse has {n} syllables for {m} sung notes, and its slurs do not account for the difference. Ilya has left the words where your score prints them rather than choose which notes carry a melisma. Check the melismas here.
+
+**French, ratified:**
+
+> Ce couplet compte {n} syllabes pour {m} notes chantées, et ses liaisons de phrasé n'expliquent pas l'écart. Ilya laisse donc les paroles telles qu'imprimées dans votre partition, plutôt que de choisir quelles notes portent un mélisme. Vérifiez les mélismes ici.
+
+**The two counts are the ones she can count herself:** `{n}` the syllables in the verse, `{m}` the sung notes in it. **An earlier draft used a derived figure** (sung notes less the notes under a slur, so 31 where the repeat fixture's verse 1 has 32 notes and 30 syllables). **Dann caught it at 21:42** by asking what the variable was: that figure asks a singer to trust arithmetic she cannot check on her page, and it quietly treats the slurs as melismas, which is the one thing the record says Ilya could not establish. The ratified pair names only what she can count and says the slurs came up short without claiming what they mean.
+
+**The French is built from the file's own French:** « Couplet » from `markup.verseLabel` (ratified 2026-11-12), « Mélisme » from `loupe.melisma`, « telles qu'imprimées dans votre partition » from `loupe.printAlt`, « paroles » from `loupe.station.lyricTake`. Apostrophes U+2019, spacing per the file's OQLF convention.
+
+**« liaisons de phrasé » was the desk's flagged open choice and he ratified it as drafted.** The file already spends « liaison » on the TIE (`loupe.undo.tie`, « liaison modifiée »), so a bare « liaisons » would read as the ties. **The desk told him plainly it had not checked either candidate against a French musical-terminology authority this session, and he ruled anyway.** Not to be reopened by a later desk on the strength of that caveat alone.
