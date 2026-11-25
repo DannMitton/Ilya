@@ -420,10 +420,12 @@ function withUnderlayRecord(result: ParseResult, count: UnderlayCount): ParseRes
 	for (const v of count.verses) {
 		const parts: string[] = [];
 		// Fix 1: a vacated note is also a textless one, so the two lists are joined by note, each counted once.
-		// Round 3, Dann's ruling on the gate: where the verse's slur gate FAILED, Ilya seats the verse as it was seated before this seam, writes
-		// NO per-note abstention for it, and writes ONE record for the verse (below). One thing to check, not many blanks.
+		// Round 3, Dann's ruling on the gate: where the verse's slur gate FAILED, Ilya seats the verse as it was seated before this seam and
+		// writes ONE record for the verse (below), not a blank for every note it cannot defend.
+		// Round 4, step 2 (DESK DEFAULT): the notes Ilya ITSELF emptied (`v.vacated`, the close-up's tail) keep their abstention even then, so
+		// the resolver does not sustain a vowel onto a note no print supports. Only `v.unexplained` is dropped in a failed verse.
 		const failed = v.slurGate === 'failed';
-		const noteless = failed ? [] : [...new Set([...v.vacated.map((p) => p.eventId), ...v.unexplained])];
+		const noteless = [...new Set([...v.vacated.map((p) => p.eventId), ...(failed ? [] : v.unexplained)])];
 		for (const id of noteless) {
 			abstain.push({ eventId: id, verseNumber: v.verse });
 			ids.add(id);

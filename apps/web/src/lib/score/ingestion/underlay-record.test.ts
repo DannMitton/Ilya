@@ -65,7 +65,7 @@ describe('the leftover is recorded (item 4)', () => {
 		expect(score.dictionMarks?.vacatedTailEventIds.filter((t) => t.verseNumber === 1) ?? []).toEqual([]);
 	});
 
-	it('n188-markings: «жи» + «знь» sing «жизнь» on «жи»\'s note; its slur gate fails, so it carries ONE record and no per-note abstention (round 3, the ruling)', async () => {
+	it('n188-markings: «жи» + «знь» sing «жизнь» on «жи»\'s note; its slur gate fails, so it carries ONE record, and a per-note abstention only for the two notes Ilya emptied (round 3 ruling, round 4 step 2)', async () => {
 		const { score, warnings } = await arrive('n188.musicxml', parserFixture('n188-markings.musicxml'));
 		const texts = score.vocalLine.map((e) => e.syllable?.text ?? null);
 		expect(texts).toContain('жизнь');
@@ -74,8 +74,23 @@ describe('the leftover is recorded (item 4)', () => {
 		const unchecked = warnings.find((x) => x.code === 'slur-evidence-unchecked')!;
 		expect(unchecked.verse).toBe(1);
 		expect(unchecked.message).toBe(t('upload.banner.slurEvidenceUnchecked', 'en').replace('{n}', String(unchecked.counts![0])).replace('{m}', String(unchecked.counts![1])));
-		expect(score.dictionMarks?.vacatedTailEventIds ?? []).toEqual([]);
-		expect(warnings.find((x) => x.code === 'underlay-count')?.eventIds ?? []).toEqual([]);
+		// Round 4, step 2: the notes Ilya itself emptied keep their abstention; the unexplained ones (the print's own empty notes) do not.
+		expect(score.dictionMarks?.vacatedTailEventIds ?? []).toEqual([{ eventId: 'm7-0-1', verseNumber: 1 }, { eventId: 'm7-1-2', verseNumber: 1 }]);
+		expect(warnings.find((x) => x.code === 'underlay-count')?.eventIds).toEqual(['m7-0-1', 'm7-1-2']);
+	});
+
+	it('round 4, step 2: in a failed verse the note Ilya emptied takes no sustained vowel, and the print\'s own empty note still does (a fused «жи» + «знь», joined by U+00A0, no rest before the tail)', async () => {
+		const note = (step: string, word: string | null, slur?: string) => `<note><pitch><step>${step}</step><octave>4</octave></pitch><duration>2</duration><voice>1</voice><type>quarter</type>${slur ? `<notations><slur type="${slur}" number="1"/></notations>` : ''}${word ? `<lyric number="1"><syllabic>single</syllabic><text>${word}</text></lyric>` : ''}</note>`;
+		const xml = `<?xml version="1.0" encoding="UTF-8"?><score-partwise version="3.1"><part-list><score-part id="P1"><part-name>Voice</part-name></score-part></part-list><part id="P1"><measure number="1"><attributes><divisions>2</divisions><key><fifths>0</fifths></key><time><beats>5</beats><beat-type>4</beat-type></time><clef><sign>G</sign><line>2</line></clef></attributes>${note('C', 'жи', 'start')}${note('D', 'знь', 'stop')}${note('E', 'мо', 'start')}${note('F', 'ря', 'stop')}${note('G', 'дом')}</measure></part></score-partwise>`;
+		const { score, warnings } = await arrive('b2.musicxml', xml);
+		expect(score.vocalLine.map((e) => e.syllable?.text ?? null)).toEqual(['жи\u00a0знь', 'мо', 'ря', 'дом', null]);
+		expect(warnings.filter((x) => x.code === 'slur-evidence-unchecked')).toHaveLength(1);
+		const emptied = score.vocalLine[4];
+		expect(score.dictionMarks?.vacatedTailEventIds).toEqual([{ eventId: emptied.id, verseNumber: 1 }]);
+		expect(buildUnderlayResolvers(score, 1).vowel(emptied)).toBeUndefined();
+		// Control: the same score with the record taken off sustains «о» from «дом» onto the note Ilya emptied.
+		const bare = { ...score, dictionMarks: { breaks: [], vacatedTailEventIds: [] } };
+		expect(buildUnderlayResolvers(bare, 1).vowel(emptied)).toBeDefined();
 	});
 
 	it('a file whose notes have gaps the print does not explain (underlay-gap.musicxml) is counted and recorded, not repaired and not read as a melisma', async () => {
