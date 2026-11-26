@@ -3886,6 +3886,16 @@ DESK DEFAULTS, told to Dann 02:0x: "Ilya" upright in body text on the page (GoDa
 - **At each release** (items 4 and 5 of the ruling): the version's one line advances by a letter on the commit `main` moves to; a git tag and a GitHub release named for it on that commit (Dann's command; no agent writes git); `CITATION.cff` takes `date-released`; the announcement, drafted by the desk and ratified by Dann, goes out the same day. `SCHEDULE.md`, the Release line.
 - **Not in this item:** the six `package.json` versions (the five packages and `tools/e16-harness`) (npm's field cannot hold "2026b"); a mark for a development build; the images on dannmitton.com/ilya, which show the old sigil and are retaken after the release (already owed).
 
+
+### THE VERSION TOKEN LEAVES THE FOOTER'S SMALL CAPS. Ruled by Dann 2026-11-25 17:20
+
+**His words, transcribed as written:** *"exempt the version token from small caps so the footer prints `2026b`"*.
+
+**What is true today, read by the desk 2026-11-25 and seen on the rendered page.** `ILYA_VERSION` is `'2026b'` (`apps/web/src/lib/version.ts:10`), interpolated into `footer.attribution` at `components/Paper/PageFooter.svelte:59` and drawn through `{@html attribution}` at `:103`. The whole line carries `font-variant-caps: all-small-caps` (`:175`), which draws the lowercase b as a small capital. Selecting and copying still yields `2026b`, and the GUIDE's citation sentence shows the right form in body type, so the only reader misled is the one who reads the footer and types what she sees, which is what the GUIDE tells her to do.
+
+**The repair:** the version token alone is drawn with `font-variant-caps: normal`. **DESK DEFAULT on the seam, his to overrule:** do it in `PageFooter.svelte`, by wrapping the interpolated token, rather than in the i18n strings, because that changes no ratified text and no test pin. Condition: `tv` must pass the markup through unescaped; if it escapes it, the span goes in the component's own markup instead of through the variable.
+
+**He asked in the same breath whether the version belongs in the footer at all.** It does, by his ruling of 2026-11-15 13:31 (item 3 of this section): the footer is one of the four places the version shows. He did not reopen it.
 ## N.203. VOICE: THE INTAKE, ITS SUMMARY, AND ITS PLACE IN THE DRAWER. Opened by the desk 2026-11-15 18:3x on Dann's messages of 18:13 and 18:14; DESK DEFAULT number; NOTHING RULED
 - **His words:** `INBOX.md`, 2026-11-15 18:13 and 18:14, verbatim. What he asked: one readings table in place of two, the chart in the same view, the footnote kept; where the large symbol and the side-view drawings are; a timed pacer for a take along "a linear route"; a better organization of VOICE in the DRAWER, keeping the DRAWER for input and the page for display; a positive wording for the INSIGHTS sentence; a door to a profile from the voice type alone. He asked the desk to question him until it understands what he wants and why.
 - **What he did:** sang all ten himself on the recorder build (`cloud-lane-52`, `58b6f3eb`), 14:25 to 14:28 by the takes' stamps: 13 takes (i, e, ɛ, a, ɑ, o, u twice, ɨ twice, ɪ, ʌ twice). Saved by the desk 18:23 on his yes: `~/Downloads/ilya-captures-58b6f3eb-2026-11-15T23-23-04-830Z.zip` (3,168,467 bytes; each take is 2.5 s; `sung` is unstated in every sidecar; one ʌ sidecar is 780 bytes, NOT READ). These are 13 of N.200 Step 4's 30 right-vowel takes. The 15 wrong pairings are not sung.
@@ -4824,6 +4834,41 @@ Built from the file's own French: sentences one and three are his ratified Frenc
 
 **IT IS NOT TRUE YET, AND THE LANE THAT SEATS IT REPAIRS THAT.** Unit l's defect D2: the long-sustain test behind the cover, tracking, and turnover hazards reads the printed marking alone (`packages/score-parser/src/overlay-engine.ts:221-222`, and a private copy at `analysis/watchlist.ts:271-285`, `:434`), so the singer's tempo does not reach them. The sentence and the seam ship together, under his standing rule of 2026-11-18 that where his words and the build differ, the desk changes the build.
 
+**THE r1 BRIEF WAS REVIEWED AND REFUSED, 2026-11-26. DO NOT SEND; seven blockers, seventeen amendments** (`../sessions/brief-code-n94-ribbon-slider_r1_2026-11-26.md`, md5 `4490d962`; 221,492 tokens, 40 tool uses, 8.5 min). **The central fault, verified by the desk's own reads:** the brief described the rendering and left out the behaviour. `use()` (`transposition-ruler-state.svelte.ts:108-111`) is the ONLY write to `song().transposition`; `select()` (`:90-92`) previews; `close()` (`:112-114`) discards by construction, as the file's own comment at `:116-120` says. **Deleting the two pills removes the only commit path**, so every tap would revert on close while all but one done-when still passed. **Two holes that are Dann's, not the desk's:** (a) **node zero is itself a pair for prints of five, six or seven accidentals**, where the printed key's enharmonic twin lands at 0 semitones; his ruling and the brief both reasoned from two sharps, where it cannot occur; what node zero then reads, and whether a tap there restores the print or keeps a respelling, is unruled. (b) **The dock was never drawn**: thirteen nodes at 44 px is 572 px against a 390 px phone, and the dock selects by scroll settle (`TranspositionDock.svelte:113-123`), which is the same gesture as dragging a track, so a commit-on-select would commit on every scroll. **Both go to Dann as drawings (tether 18) before r2.** **Desk errors the review caught, all owned:** `cleanerTwin` runs only at opening (`transposition-ruler.ts:306`), so the brief's claim that it chooses the bold spelling at render is false; the style deletion range ran into the `@media print` rule at `:289-293` that keeps the ribbon off the page (`CONTRACT.md:175`); `DEFAULT_MAX_SEMITONES` is the watch list's window and the ruler never reads it, so OPEN ruling 1 carries that error too; the modeless gate is `printedKey` (`transposition-ruler.ts:49-51`), not `watchlist.ts`, and the brief's wording would have sent Code into lane A; and three `CONTRACT.md` line cites were wrong.
+
+## N.94 THE RIBBON IS A DETENTED SLIDER OF SEMITONES. Ruled by Dann 2026-11-26, 12:5x to 13:30
+
+**This supersedes parts of the design he ratified 2026-09-28 (drawing r4, brief §6).** What changes is named at the foot of this section. Mockups: `../sessions/mockup-transposition-ribbon_r2_2026-11-26.svg`, `mockup-ribbon-interval-names_r1`, `mockup-ribbon-no-buttons_r2`, `mockup-ribbon-drag_r1`, `mockup-ribbon-slider_r2` (md5 `4eb14b62`), `mockup-ribbon-enharmonics_r3` (md5 `14e1bebe`). The desk looked at the live ruler on his own score before drawing any of them (printed D major, transposed to C major), per `CONTRACT.md` §0.3.
+
+**THE REASONING THAT GOT THERE, and it is his.** (a) *“The purpose of the transposition ribbon is to transpose, not to attach a correct label”* — true, and the desk agreed. (b) Therefore **the key name was never load-bearing**; the face's job is to let her tell the stops apart and pick one. (c) Transposing needs only an interval, so a score that states no mode is not broken, it merely loses a courtesy. (d) *“Numbers on the ticks are not decimal designations on a number line. They are semitone counts on a transposition ribbon.”* That settles the August refusal (`claude/e31-late-rulings-and-the-transposition-control_2026-08-07.md` §4, §5): Newzik's labels were decimals because they counted in TONES, so half a tone made a fraction; count in semitones and no fraction exists. **No departure from §5 is recorded, because there is none.**
+
+**RULED.**
+1. **The ribbon is a detented slider of semitones, −6 to +6**, thirteen nodes, zero at the printed key. The window is already the code's (`DEFAULT_MAX_SEMITONES = 6`, `packages/score-parser/src/transposition.ts:37`).
+2. **Integers above the track, interval names below it** (his words 13:28: *“Can you sandwich the slider between the integer line and its interval labels?”*). The track, detent ticks, thumb, and a filled portion from zero to the thumb carry the slider reading.
+3. **The readout stays and is the thing he singled out** (13:30: *“I love the interval header, this is very good.”*). It names the interval in words and the key where there is one.
+4. **No standing buttons. Cancel and Use this key both go** (13:18). The tap is the commit; the paper redraws; verification is a readout plus Undo, never a gate. **Tapping away closes the ribbon** and the change stands, because the PIECE band already carries both the result and “As printed”.
+5. **The enharmonic twins collapse to one node.** Both spellings print under that node (his *“I love C”*, 13:24), and **the pair IS the switch**: the live spelling bold, the other faded, tap the faded half to swap. RULED 13:30: *“I agree A is elegant... I loive it. make this our new reality.”* He noted the tap targets are small and accepted it: *“a determined user will arrive there.”* **OWED, by his instruction: the transposition section of the Guide says this functionality exists.**
+8. **Node zero's label is `ORIG.` in both languages. RULED by Dann 2026-11-26 13:36** (*“WI choose ORIG.”*), over the desk's recommendation of `unison` / « unisson » and over `printed` / « imprimée ». His reason, 13:36: *“While correct, unison doesn't express the context.”* **The consequence, put to him before he ruled and accepted:** Ilya now has two terms for the printed key, `ORIG.` on the ribbon and « Tonalité imprimée » / “As printed” in the PIECE band (`key.band.backToPrinted`, `key.dock.asPrinted`, ratified 2026-09-28). A later desk is not to “correct” this to one term: the one-term-per-concept rule is departed from here on purpose, by him.
+9. **Snap and edges. RULED by Dann 2026-11-26 13:33 and 13:35.** The slider snaps to the nearest node on release. On an exact midpoint it snaps to the SMALLER interval, that is the node nearer zero; where the tie straddles zero that is the printed key, which agrees with the August recommendation to default to the print when the margin is small. The rule is total: adjacent nodes differ by one semitone, so two candidates never share an absolute value. **A drag past either end clamps to −6 or +6.** **A lift with the finger off the strip commits the node she was last over**, because the readout has been naming it throughout and cancelling would contradict what she was reading.
+10. **Restoring the printed key needs no new control.** Three routes already exist: slide back to node zero, which the grey home marker and the `ORIG.` label both mark; Undo, straight after a change; and “As printed” in the PIECE band, which works whether or not the ribbon is open.
+6. **Only reasonable respellings appear, and the data already enforces it.** The stops are built from fifths −7 to +7, so B♯ major at twelve sharps is never a stop and C/B♯ cannot arise. On a print in two sharps exactly three nodes carry a pair, at −3, −1 and +4, which matches the three bracketed pairs the desk counted on the live ruler.
+7. **A score with no mode changes nothing but the readout**, which drops the key name and keeps the interval.
+
+11. **REDUNDANCY IS SERVICE, NOT NOISE. Ruled by Dann 2026-11-26 13:59**, against the desk's critique that distance is stated four times (integer, abbreviation, readout, filled bar): *“I defend Four channels for one fact as multiple ways to serve users.”* And on keeping both the integers and the abbreviations: *“users need to be served in the way they speak, keeping the options costs us nothing as long as they message consistently with one another”*. **The clause is a constraint, not a flourish:** the integer, the abbreviation and the readout must agree in BOTH languages, so the French abbreviations are not free to differ in form from the French readout. A later desk does not “simplify” these channels away.
+12. **The grey home box goes. RULED 13:59** (*“Yes we don't need the grey box behind the 0 integer. Get rid of it. ORIG. woirks for our visually challenged users.”*). The ring on the track and the word `ORIG.` carry node zero, and his reason is the one the tint could not meet: a word reads aloud where a 1.19:1 tint does not read at all.
+13. **Detents are dots on the track, not dashes below it. RULED 13:56** (*“can they be those beautiful dots instead?”*, then *“I love it”*). Node zero's dot is a ring; dots inside the travelled stretch invert to white against the filled bar. `../sessions/mockup-ribbon-dots_r2_2026-11-26.svg` (md5 `db46730b`).
+14. **The spelling pair shows only on the node she is standing on. RULED 13:59** (*“Yes to your option 1, this is very good.”*). The other pair nodes stay quiet until she reaches them.
+15. **The phone keeps every stop by sliding the ribbon under the thumb, and the desktop never slides. RULED 13:52 and 13:55.** Thirteen nodes at the 44 px floor need 572 px against a 390 px phone, so seven are visible and the ribbon moves only when the thumb would leave the window; on desktop all thirteen fit, so the rule never fires and the control is the one he approved. He chose this over two stacked rows and over a vertical ribbon (*“a functioning c seems very good for mobile users, I like that they don't lose any choice with that idea”*). **DESK DEFAULT on the trigger, his to overrule: LATE**, the thumb roaming five of seven slots and the ribbon holding still through most moves, because the ends are a tritone away and a singer reaching one is deliberate rather than browsing. Drawings: `../sessions/mockup-ribbon-dock-390_r1_2026-11-26.svg`, `mockup-ribbon-dock-travel_r1_2026-11-26.svg`.
+16. **NODE ZERO KEEPS ITS RESPELLING. The desk ruled the opposite and REVERSED IT on Fable's challenge, 2026-11-26.** The desk's rule was that respelling the printed key means departing from the print while claiming to sit at it. **It would have deleted a shipped capability:** on a print in seven sharps, D♭ major is a real stop at 0 semitones (`packages/score-parser/src/transposition.ts:285-295`), `isHome` is false for it (`transposition-ruler.ts:79-81`), so `drawInKey` already respells, and a song stored that way would otherwise have shown at `ORIG.` with a dead swap, which is the very false claim the default set out to prevent. Node zero is a pair node on prints of five, six and seven accidentals, and both ends are pair nodes on prints of one flat, none, or one sharp.
+19. **The worded French tonic is confirmed, knowing the cost. RULED by Dann 2026-11-26 14:1x** on the desk's three options. **French already prints the GLYPH on the stop faces and the dock chips today**: `stopLabel` (`transposition-ruler.ts:84-87`) returns « do♯ » in both languages. So the same ribbon carries « do♯ » on a face and « do dièse » on the pair row. He ruled that acceptable because the two rows do different jobs: the face names a stop compactly, the pair row is where she reads before choosing. Offered and not taken: glyphs on both rows, and words on both. **A later desk does not unify them.** Note for the build: no exported function returns a worded tonic alone; `keyName` composes it privately and appends the mode (`lib/analysis/watchlist.ts:583-593`), so the lane adds a small helper beside `stopLabel` from the same i18n families.
+17. **THE SPELLING PAIR PRINTS ITS WORDS IN FULL, AND THE CARD IS PADDED SO THE ENDS CAN CENTRE. Ruled by Dann 2026-11-26 14:06 and 14:07.** The desk drew the French pair as overrunning its neighbours and was wrong: ruling 14 empties the spelling row for every node but the selected one, and the abbreviations sit a row above, so the row is hers alone. His words: *“There isn't conflicting text anywhere on the horizontal so I thin it works?”* **So French prints « ré bémol / do dièse » in full**, as `watch.key.tonic` spells it (`i18n.ts:2339`, with « bémol » `:1538` and « dièse » `:1540`), and no new glyph convention is introduced into Ilya's French. **At −6 and +6 a centred pair would run past the card's edge**, and those ends ARE pair nodes on prints of one flat, none, or one sharp. Offered: shift the pair inward and let it sit off-centre, or pad the card. **RULED: pad the card** (*“let the ribbon's card have a little more padding than the track needs, so the ends have room to centre properly”*). The clearance needed is half the longest pair: « sol bémol / fa dièse » is about 92 px at 9.5 px type, so about 46 px beyond the outermost node, against the card's present 14 px of padding (`TranspositionRuler.svelte:160`). The track does not grow; the card does.
+18. **The spelling tap regions are a band below the track, and the pair orders flats first. Ruled by Dann 2026-11-26 14:01** (*“Expand Db's tap region verticall to the left and expand C#'s tap region verticall yto the right. Do this for every pairing”*). Because ruling 14 leaves that row empty for every other node, the regions need not stay inside the node's own width: each half is about 96 × 46 px, past the 44 px floor rather than merely near it. They are invisible; he confirmed 14:06 that the tinted illustration is for his eye only. **The flat spelling sits left and the sharp right**, which follows his earlier reading that humans expect flats before sharps, and **departs from the tree's own order, which is sharp first** (`packages/score-parser/src/transposition.ts:296`). A later desk does not “correct” the order back.
+**DESK DEFAULT, his to overrule, both marked as such.** (a) The interval labels under the track are the abbreviations m2, M2, m3, M3, P4, TT; Ilya's own words shortened need 8.5 px type, below anything it ships, and die on the phone dock. The abbreviations are standard in theory writing but their use on a control is the desk's coinage. (b) **Drag to scrub** (`mockup-ribbon-drag_r1`): finger down, slide, the readout follows, land on lift, with the paper redrawing once per gesture rather than once per tick. Offered as the answer to his double-tap question and not ruled on; the desk advised against double-tap because the gesture is taken by browser zoom, is invisible, and guards a cheap reversible action.
+
+**WHAT THIS SUPERSEDES from 2026-09-28.** Key letters on the stop faces; the Cancel and Use this key buttons; the twins as two adjacent stops under a bracket. **WHAT IT KEEPS:** the printed key's home marker, the readout's form, the opening at Ilya's recommendation, and the double-accidental ruling of 21:41, which still decides which twin is bold.
+
+**FRENCH OWED, his to rule:** the swap label (“Spell it C♯ instead”), and whatever the Guide's new paragraph says.
+
 ## N.94 TRANSPOSITION ON DEMAND. Ruled by Dann 2026-11-25 01:45 and 01:54
 
 **The mode is not a gate.** Dann 01:45, transcribed as written: *"I wonder why major/minor is a gate to transposition? This modal quality shouldn't matter at all since Ilya can transpose by interval. / I agree Transposition should be available on demand for any musical notation."* And on INSIGHTS' "Try this key" dying at the same condition: *"Surely? Wow. That is an oversight. We need to fic this."*
@@ -4836,4 +4881,246 @@ Built from the file's own French: sentences one and three are his ratified Frenc
 
 **Plan and review.** `../sessions/plan-transposition-on-demand_r1_2026-11-25.md`; Fable's review `../sessions/review-fable-plan-transposition_r1_2026-11-25.md` (md5 `4d3bb0f3`, 256,261 tokens, 41 tool uses, 11.1 min, cap 320k), ADOPT WITH AMENDMENTS, four blockers, thirteen amendments, five enhancements. **It splits into two lanes:** lane A is the gate, the naming, the KEY row, and the INSIGHTS repair, which cannot be separated and which waits on Dann's ruling on the naming form and on the French; lane B is the tappable signature, which needs no new string and no ruling and goes second.
 
+**THE KEY ROW'S STRINGS ARE RULED, 2026-11-26 09:35.** Dann answered the desk's one open choice with one word, “transposed”, so the INPUT receipt's KEY row reads: `intake.key.label` KEY / « TONALITÉ »; `intake.key.printed` “printed” / « imprimée »; `intake.key.transposed` “transposed” / « transposée ». The `yours` form, parallel to `intake.tempo.yours`, was offered and not taken. **The feminine agreement is the trap the brief must carry:** the TEMPO row reads « imprimé » because *tempo* is masculine, and « tonalité » is feminine. The French noun is the file's own, 20 occurrences, nothing coined. **The Loupe arrows go with them, and the English noun is RULED too** (Dann 2026-11-26 09:36, transcribed as written: *“Sure, use bar in Engligh”*), so `bar` stays and the ruling governs these two keys only, not the app's noun at large: `loupe.checkPrev` and `loupe.checkNext` (`i18n.ts:738-739`) lose “to check” and « à vérifier » and keep everything else, because his 18:10 ruling makes those words false once the arrows walk every measure; the key names are left alone in that lane. Drafts and reasoning: `../sessions/strings-owed-key-row-and-arrows_r1_2026-11-25.md` (md5 `542aaf5b`). **The French of both sets stands as the desk's draft, his to rule; it blocks nothing, because neither Code brief is written.**
+
+**THE EIGHT NAMING PLACES ARE DRAFTED AND THE FRENCH TERM IS RULED, 2026-11-26.** Dann asked for the table before the research (*“go ahead and draft the eight naming forms”*), and the desk drafted it with every current string read from `i18n.ts` that session: `../sessions/strings-eight-naming-places_r1_2026-11-26.md` (md5 `133183a9`). **DRAFTING IS NOT ADOPTING: his ruling of 2026-11-25 02:16 that research precedes the form still stands, and the Sonnet research pass is still owed.** **THE FINDING, and it reached four ratified strings:** French keeps « tonalité » (a key) apart from « armure » (a key signature), and Ilya's own file does too (`loupe.keySignature` « Armure », `i18n.ts:575`; the Corrections card at `:576-589`). But every transposition string says « tonalité », and where no mode is stated the thing shown is an armure, so « Tonalité imprimée · 2♯ » names the wrong concept. The English has no such problem: “Key” covers both. **RULED by Dann 2026-11-26 on the desk's three routes and its recommendation: ROUTE 1**, « armure » only in the no-mode case. So `key.dock.asPrinted` (`:2391`), `key.band.asPrinted` (`:2362`), `key.band.transposed` (`:2364`) and `intake.key.label` each gain a no-mode twin; none is revised. Offered and not taken: keeping « tonalité » everywhere (cheap, loose on every modal song), and « armure » everywhere (loses the right word where the mode IS stated). **One of the eight needs nothing:** the INSIGHTS key line already falls back to the interval alone where `keyName` is null (`insights/key-lines.ts:153`). **Place 7 needs a new `key.page.header.noMode` string, not a phrase passed through `{key}`** (DESK DEFAULT: a phrase through `{key}` would read as a key name to a later developer). **STILL OPEN and being DRAWN, not asked (tether 18):** the ruler stop face for an empty signature, `0` against `♮`, at desktop and dock width.
+
 **OPEN, and it is Dann's: how Ilya names a key when the file states no mode.** The desk offered three forms and recommended one; Fable recommends the interval beside the signature, never a tonic, and never arithmetic on signatures, with the signature earning its place because it is the only thing that tells enharmonic twins apart when there is no tonic. Its table of all eight naming places is section 4 of the review. A sub-question is taste and is to be DRAWN rather than asked in words (tether 18): what a stop face reads when there is no tonic.
+
+
+## VERSES WRITTEN OUT AS THEIR OWN SYSTEMS. Ruled by Dann 2026-11-25 02:16; the design below is the desk's, his to strike
+
+**His ruling, transcribed as written:** *"I guess this is an oversight in my design? This is common and Ilya should be able to handle this. Please make it so."*
+
+**The occasion, and the desk looked at the page itself** (`CONTRACT.md` section 0.3): page 4 of `~/Downloads/IMSLP952372-PMLP60466-Nightingale.pdf`, Jurgenson's 1901 Alyabyev «Соловей», read by eye 2026-11-25. Ilya's strophic machinery is built on repeats and voltas; this print has neither.
+
+### What the page prints
+
+- **Sixteen staves, no piano.** A voice staff alone in every system.
+- **Seven verses, labelled.** «Купл. 1.» to «Купл. 7.» at the left of each verse's first system, with «Vers 1.» to «Vers 7.» beneath each.
+- **Verse 1 is four systems; verses 2 to 7 are two each.** Verse 1's two extra systems are marked «Allegro.» and carry their own words. That tail is the refrain.
+- **Each later verse ends with a short bracketed line set apart from the underlay:** «(Refrain wie bei Vers 1.)». It is not seated under notes.
+- **Two underlay lines per system,** Russian above and German below, throughout.
+
+### What Ilya does with it, and every clause rests on a ruling he has already made
+
+1. **The verse label is read and kept as that verse's ordinal.** The label is Cyrillic and readable; the Latin twin beneath it is not needed for the reading. The ordinal feeds the labels he ratified 2026-11-12 12:58: "Verse 2" / « Couplet 2 » above the verse's first system, "12 · verse 2" / « 12 · couplet 2 » beside later bar numbers.
+2. **Blocks carrying the same music become one music with numbered lyric lines.** A verse block is the run of systems from one label to the next. Where later blocks match the first block's opening music, that is one music, and each block's words are that music's verse N.
+3. **The unmatched tail of the first block is the refrain, and every verse gets it.** This is his ruling of 2026-11-12 13:41 applied: MELODY prints a strophic song in the order it is sung, one continuous line of music, and there are no print-once refrains (01:45, *"Let Ilya be of service to the user. If we try to get cute with notation conventions I believe we fail in that mission."*). So the unfolding is verse 1 body, refrain, verse 2 body, refrain, and so on to verse 7, each refrain pass carrying verse 1's refrain words, which are the only words printed for it.
+4. **What licenses step 3 is the mark, not the language.** A later block ends with a short printed line that is not underlay, set apart and bracketed. **Ilya reads that there IS such a mark and never parses its prose**, which on this page is German and on another page could be anything. The mark is the evidence that the first block's tail returns here. **Where no such mark stands, the tail is not a refrain**, and his ruling of 2026-11-15 02:44 (option A) governs: the tail prints once, after the last verse, and the lane's report lists every song where the case occurs.
+5. **The underlay follows his rulings of 02:16 and 02:22.** Ilya transcribes the line with the highest share of Cyrillic letters, draws every other line as the print draws it, and names to the singer which line it transcribed. On this page that is the Russian line, with the German drawn and untranscribed. Transliterated Russian is out of scope.
+6. **One vowel per note holds on every pass** (`CONTRACT.md` section 0.1). The unfolding writes text to notes, so the check that refuses a vowelless or many-vowelled syllable runs on each verse's seating, not only on verse 1's.
+
+### Why the mark and not the music alone
+
+A first block with a tail no later block has could be a refrain or a coda sung once. The music cannot tell them apart; the printed mark can. Reading the mark's existence and not its words keeps the rule evidence-driven (`CONTRACT.md` section 0.2) and keeps it working on a Russian, French, or English print. **Offered by the desk; Dann has not ruled on it and it is his to strike.**
+
+### NOT ESTABLISHED
+
+- A figure resembling «7» stands above the closing bars of verse 1's last system. The desk saw it and does not know what it marks. It is read before the lane is briefed.
+- Whether any other page in the project's sets prints verses this way. The lane's report lists what it finds.
+- Everything about how this page behaves in the reader, because nothing can be read from it until the staff finder lands (`brief-code-staff-finder-light-scan_r2_2026-11-25.md`). **The Code brief for this item is written after that lane's step 3 reports**, so its steps are measured against a page Ilya can see rather than against the desk's assumptions. DESK DEFAULT, 2026-11-25.
+
+
+## THE GREYED WORDS SAY WHAT ILYA COMPARED, NOT WHY. Reported by Dann 2026-11-25 17:25; all three repairs ruled in at 17:32
+
+**His report, transcribed as written:** *"This isn't true, Musorgsky did set all the greyed words. HOw is Ilya deciding the difference between the authoritative poem and the lyrics? We need to refine this, I think? At the moment Ilya is not telling the truth."*
+
+**His ruling, 17:32, transcribed as written:** *"Yes to your suggestions 1, 2, and 3. Thank you Claude, proiceed"*.
+
+### What is true today, read by the desk 2026-11-25
+
+`apps/web/src/lib/text/poem-compare.ts` aligns the published poem against the song's words by a longest common subsequence over folded tokens, and greys any poem word with no match (`:188`, `omitted`). `components/Drawer/IntakeViews.svelte:267-268` then draws `intake.view.omittedLine`, which reads «Greyed words are those left out of the song by the composer.» (`i18n.ts:892`). **The comparison knows only that a poem word has no match in the lyrics. The sentence names a cause the comparison cannot establish.**
+
+**Why it fired on this song.** The truth file read from Dann's own `Mussorgsky - Sunless 01 - Within four walls.musx` by Ilya's parser (`../sessions/truth-sunless-01-underlay_2026-10-29.json`) carries, at bar 4, «тень» whole, then **«не» whole**, then «про» starting a new word; and at bar 5 «тень» whole, **«без» whole**, «от» starting. So Ilya holds «не проглядная» and «без ответная», four words against the poem's two, and both poem words go unmatched. The hyphen binding the prefix to its word was never entered in the musx.
+
+**The injury is larger than the greying.** «проглядная» and «ответная» are not Russian words, so the dictionary lookup behind their transcription cannot succeed and the stress is guessed. The greying is the symptom.
+
+### The three repairs, all ruled in
+
+1. **The line says what Ilya compared.** It names the two texts and no cause. New singer-facing English and French, so the wording goes to Dann on its own and the French is his to rule (§7).
+2. **A broken word is not an omission.** Where an unmatched poem word equals adjacent lyrics tokens joined, the lyrics have the word in pieces; Ilya can see that from the alignment it already holds. It is treated as a word to repair, never as something the composer left out. **This is QUEUE row 111's near neighbour** (a score's word that fails the dictionary takes the poem's aligned word that passes, specified under N.135 STAGE 3 and never written), arriving on an engraved file rather than a scan.
+3. **The musx is repaired.** One hyphen in each of two places, in Dann's own Finale file. His, not the desk's.
+
+**The poem is what caught it**, which is the case stage 3's reconciliation was specified for. Dann named the risk himself on 2026-10-02: *"whether each of your engravings matches its scan in key and in edition, I can't say. HUman error in data entry is possible :)"*
+
+
+## THE VERSE LABEL SITS ON THE BAR-NUMBER LINE, AND ITS DISPLACEMENT PROTOCOL. Dann's placement 2026-11-25 17:35, ratified on a live preview; the protocol is the desk's, his to strike
+
+**His question, 17:34, transcribed as written:** *"Wht can't Verse n occupy the same horizontal as the barlines?"* **His ratification, 17:35:** *"Yes this looks perfect."* **His ask, same message:** *"What is the contingency to avoid collisions when there is musical content in the space thatthe Voerse n label would otherwise occupy? Can you develop a displacement protocol?"*
+
+### Why the line, and what it was before
+
+Measured by the desk on the rendered page (`66dfb5f9`, `strophic-repeat.musicxml`, staff space 5.5 px): the label's bottom stood **6.43 staff spaces** above the staff's top line, because `render-seam.ts:98` sets its baseline from the system box's top (`minY - 0.35 * fs`) and grows the box by `1.4 * fs` (`:99`). Nothing at all stood under it: the desk measured the label's own column and found no ink between it and the staff. The bar number shared those rows but sat far to the left, x 714 to 720 against the label's 893 to 936.
+
+Moved onto the bar number's baseline, one staff space to its right, the label sits **1.79 staff spaces** above the staff and costs the page no vertical space the bar numbers were not already spending. Dann ratified that on his own screen.
+
+**It also makes one treatment of two.** His ratified tag of 2026-11-12 12:58, "12 · verse 2", already rides on that line at later systems. Page 2 of the same file shows "7 · verse 2" and "Verse 3" sharing it.
+
+### The protocol
+
+**Terms.** "Displacement protocol" is Dann's. "The label's lane" is the desk's coinage for the shared horizontal above the staff; nothing else here is coined.
+
+**The lane** is the horizontal the bar numbers and verse tags already occupy.
+
+**Occupied is measured from the drawn system, never from the notation** (`CONTRACT.md` section 0.2). `musicInk` (`apps/web/src/lib/score/loupe-ink.ts:106`) already walks a system's paint order and returns its ink with x positions, and `textInk` (`:28`) measures a text box; the protocol needs no new survey. A quarter staff space of air on each side of the label's box counts as part of it.
+
+**The anchor.** The label's left edge begins at the left edge of the bar the verse starts in. Where that bar carries a printed number, the label begins one staff space to the right of it and the two move as one.
+
+**The steps, in order, stopping at the first that clears:**
+
+1. **Slide right, staying in the lane, inside the verse's own first bar**, to the first clear run wide enough to hold the label.
+2. **If that bar has no clear run, rise.** Lift the label half a staff space at a time until its box is clear, growing the system's headroom with it, and keep its x where step 0 put it.
+3. **Stop rising at three staff spaces above the lane.** A bar whose ink reaches that high is full to the top; the label stands there and the page has grown, which is the honest outcome.
+
+**Four things the protocol never does, and each is a meaning, not a preference:**
+
+- **Never slide left of the bar's start.** That puts the label over the previous bar, which belongs to the previous verse. A cosmetic fix that tells a singer the wrong thing is not a fix.
+- **Never descend into or below the staff.** The lane is above.
+- **Never shrink or re-face the label.** One size, so a singer reads it as the same thing every time.
+- **Never move the bar number to make room.** Its clearance is tuned to the staff and a singer looks for it in one place; the label is what gives way.
+
+**The mid-system case, named by the desk before it bites.** Dann's ruling of 2026-11-12 13:41 allows a verse to begin mid-system, and a mid-system bar usually carries no printed number. There the label stands alone in the lane above its own bar's left edge, and the steps above are unchanged.
+
+**What a singer sees.** The label is always in the same lane, always over the bar her verse starts in, always the same size. Where music is in the way it stands a little higher, never smaller and never somewhere else.
+
+### Owed
+
+**Wording, to Dann on its own.** Merging the first system's label into the bar-number line puts it beside the ratified "12 · verse 2" tag, and the two want to read as one family. A small table, English to ratify and French to rule.
+
+### NOT ESTABLISHED
+
+- Whether Gould sets a practice for a mark of this kind above the staff. The desk did not open her pages and claims nothing from them; Dann's photographs settle it before the lane is briefed.
+- Whether a system's box grows with its own ink or carries fixed headroom. The desk's measurement caught the legend graphics instead of the music systems and proved nothing. Settled by rendering a system with ledger lines above the staff and measuring the same two distances.
+
+
+## THE SCAN STRIP FITS THE BAR AND STAYS LEGIBLE. Ruled by Dann 2026-11-25 17:50
+
+**His words, transcribed as written:** *"The strip should not be drawn to fill the panel's width... thats unnecessary. It needs to be legible and one bar needs to fit in the Loupe"*.
+
+**His report that opened it, 17:47:** *"The detail from the finle is zoomed in, it looks monstrous. Can we settle on a proportion that works? It's my undertanding that the detail should be showing us one measure of the original with its text underlay. Why is this zoome in to rodiculousness?"* Seen on «Средь шумного бала», bar 8, a narrow bar, whose strip filled the panel with about three letters.
+
+**What is true today, read by the desk 2026-11-25.** `stripScale` (`apps/web/src/lib/score/loupe-print.svelte.ts:197-203`) returns `min(native, max(1, open * zoom * pinch))`. On a desktop `open` is 1, because the legibility floor at `:201` is gated on `o.phone`, so at rest the scale is 1 and `LoupePrintStrip.svelte:131` draws the image at `boxW * scale`, which is exactly the panel's width whatever the bar measures on paper. A narrow bar is therefore magnified by however narrow it is. `MIN_LETTER_PX = 18` (`:187`) and `LETTER_OF_SPACE = 0.8` (`:189`) are both marked JUDGEMENT, not measured.
+
+**The rule:**
+
+1. **The whole bar fits the Loupe's width.** That is the target, not the ceiling. The strip is no longer drawn to the panel's width.
+2. **Letters never fall below the legible floor, on every device.** The floor stops being phone-only. Its value is unmeasured and the lane measures it rather than inheriting 18 px on faith.
+3. **Never past the scan's own pixels** (`native`, unchanged): enlarging further stretches the picture rather than showing more.
+4. **Where fitting the bar would push the letters under the floor, the floor wins and the strip pans sideways**, which the panel already does. DESK DEFAULT, his to overrule: his two conditions cannot both hold on a very wide bar, and an illegible strip serves nobody.
+5. The singer's own zoom and pinch multiply from there, unchanged (JOINING item 14, one zoom for the strip and the notes).
+
+**THIRD REPORT, 2026-11-25 18:04, and it moves the fault off the scale entirely.** Dann, transcribed as written: *“is it possible that Ilya is trying to fit the hieght (y-axis) into Lourp when it really should be trying to accommodate the x-axis of the one-measuyre sample to the Loupe?”* **Read by the desk: Ilya already fits the x-axis.** `LoupePrintStrip.svelte:131` sets `width` and `:166-169` leaves `height: auto`, so width is the fitted axis and height follows. **So his hypothesis is answered no, and that is what matters:** fitting x is what already happens, and it is not the repair. **What the picture implies instead.** A whole measure fitted to the panel would show a measure of words; he is seeing two letters. So the CUT is a sliver, drawn at ordinary size, and the apparent explosion is aspect ratio: a cut two letters wide and five staff spaces tall (`stripRect`, `STRIP_MAX_SPACES = 5`) must grow very tall to span the panel and keep its proportions. **ESTABLISHED 2026-11-25 18:06, on Dann's question** (*“Is Ilya choosing a bar fragment instead of the entiure measure?”*): **yes, and the cause is that rests are dropped before a bar's edges are found.** The chain, read by the desk: `underlay-prepare.ts:211` takes the voice notes and filters with `!n.rest`, `:243` hands each system its share as `system.notes`, and `underlay-page.ts:416` passes those to `barExtents`. `barExtents` (`kept-bands.ts:61-71`) groups by bar, takes each bar's first surviving x, and sets `start = b.first - BAR_LEAD * space` (`:67`). **So a bar's left edge is one and a half spaces left of its first SOUNDING note, and an opening rest is outside the picture.** The right edge is the next bar's first note less the same lead (`:68`), so the cut is generous on the right and clipped on the left, which is why it reads as a zoom rather than a crop. **THE MIRROR FAILURE, same root:** a bar of nothing but rests contributes no x at all, never enters `byBar` (`:63-64`), gets no extent, and `stripRect` (`:117-121`) falls back to `b.x0`/`b.x1`, the whole band. **So a bar that opens with a rest shows almost nothing and a bar that is all rests shows the whole line.** **This supersedes the desk hypothesis below, which guessed the mechanism correctly but had not read the filter.**
+
+**DESK HYPOTHESIS, superseded by the line reads above and kept for the record:** a bar's edges come from its notes' x, widened by `BAR_LEAD = 1.5` spaces on the left (`kept-bands.ts:51`), so on a bar that opens with a rest the first note arrives late and everything before it falls outside the cut. Bar 19 of «Средь шумного бала» opens with an eighth rest. **Three numbers settle it and the lane prints them:** the cut's width in scan pixels, the panel's width, and the `x0` and `x1` the reading kept for that bar. **CONSEQUENCE FOR HIS RULING OF 17:50:** it stands and is not enough alone. Making the measure fit the Loupe does nothing while what reaches the Loupe is not the measure. Row 212 carries both. **DESK ERROR, owned to him at 18:04:** the desk told him at 17:49 that the strip is drawn to fill the panel's width, without naming the native-pixel ceiling that caps it, which sent them both to the zoom instead of the cut.
+
+**SECOND REPORT, 2026-11-25 18:01, and it is a different quantity from the scale he ruled.** Tapping a rest at m. 19 of «Средь шумного бала», transcribed as written: *“When I tap a rest to spawen the Loupe it looks CRAZY.”* Seen by the desk in his screenshot: the strip's box runs from under the LOUPE header to just above the «m. 19 · system 2 of 13» line, and the magnified score, which is the thing she is correcting, is left a sliver at the bottom. **His ruling of 17:50 governs the image's scale inside that box; it does not govern the box.** **DESK DEFAULT, his to overrule:** the strip takes at most a third of the Loupe's height and the magnified score keeps the rest, because the module's own header calls the strip the assistive witness of what Ilya replicated, and a witness does not outrank what it witnesses. The share is unmeasured; the lane measures it on a phone and a desktop before fixing it.
+
+**SUPERSEDED, and it was the desk's, not his:** the desk proposed at 17:49 that the print's staff space be drawn at the size of the drawn score's staff space, so the two could be compared at one scale. His ruling replaces it.
+
+**STILL OPEN, and it is the larger half of his report:** the strip is cut from the lyric band alone (`apps/web/src/lib/omr/kept-bands.ts`, first line: where each system's lyric band stood), so it shows the words and never the measure, which is what he expected to see. Its cost is that the reading stores the band's fractions and the staff space but not where the staff sat, so showing the measure needs either the reading to keep the staff's position or the Loupe to find the staff again on the stored scan. Its own row.
+
+
+## THE DENTAL-BEFORE-SOFT-Р BLURB NAMES THE TWO REGISTERS. English ratified and French ruled by Dann 2026-11-25 17:55 and 17:56
+
+**Where it lives:** `data/blurb-composer.json`, `processes/regressive-dental-dp-differs`, the only blurb that fires for this case. **Only the final sentence changes**; the first sentence and the citation `pp. 209–210 + D&P 1980, p. 79` stay as they are.
+
+**What it said:** EN «In everyday speech it often stays hard here.» FR «Dans la langue parlée courante, il reste souvent dur ici.»
+
+**Why it changed.** Dann walked «Средь» on 2026-11-25 17:44 and doubted Ilya's [sʲ], transcribed as written: *"Its my understanding that soft-r has no assimilative power, so it shouldn't be able to soften the S before it."* He was reading Derwing and Priestly's 3P restriction 2, read by the desk this session from his own scan: paired dentals are not palatalized either before рь, or before soft velars. Grayson states no limit on a soft trigger, sets lyric diction to Old Muscovite practice, and D&P themselves single out ТРь as the combination their investigators dispute most. **So the old sentence put D&P in the street when they are prescribing reading rules**, and the axis both sources use is Old Muscovite against contemporary standard Russian.
+
+**RATIFIED, English (his own wording of 17:55, with an article the desk added as a typo repair and he did not contest):**
+
+> Lyric diction for singing keeps the older Moscow reading here; in the contemporary standard for spoken Russian the dental stays hard, and this is the cluster the sources dispute most.
+
+**RULED, French (desk draft; he chose « norme » over « prononciation » at 17:56, transcribed as written: *"I like norme as you offered upthread :)"*):**
+
+> « La diction lyrique, celle du chant, conserve ici l’ancienne norme moscovite, alors que dans le russe parlé d’aujourd’hui la dentale reste dure, et c’est le groupe sur lequel les sources divergent le plus. »
+
+**Coined by the desk, none from a French source read this session:** « celle du chant » for his "for singing"; « le russe parlé d’aujourd’hui », chosen by Dann 2026-11-25 17:57 over the desk’s stacked calque « russe standard parlé contemporain » (transcribed as written: *“and « le russe parlé d’aujourd’hui » thank you Claude”*), so the ruled French drops « standard » where the English keeps it. **Adopted from the file's own French:** « se palatalise », « consonne dentale », « reste dur » from the sentence it replaces, and the typographic apostrophe. The English semicolon has no French twin because the OQLF rule (§7) takes no space before one.
+
+**Not changed, and recorded so it is not reopened:** the engine still follows Grayson for this cluster, which is the project's ruling (`truth-set-palatalization.test.ts:126-127`, *"Grayson p. 209/210 over D&P p. 79/80"*). Dann closed the question himself at 17:52: *"Ah: there is no problem. I see."*
+
+
+## THE INTERPALATAL 〈е〉 BLURB NAMES THE FRENCH EXAMPLE. Ratified by Dann 2026-11-25 18:01
+
+**His report, transcribed as written:** *“Giving IPA for a French example without giving the example is asinine. How about / think of the French <é> in été.”*
+
+**The finding, read by the desk 2026-11-25: the French already carried the example and the English had lost it.** `data/blurb-composer.json`, `implications/stressed-interpalatal:е/fr/template` and `:э/fr/template` both read « pensez au /e/ français de « été » »; the two English twins read only “think of the French /e/.” So this restores parity and **nothing is owed to Dann in French**.
+
+**TWO KEYS, identical English:** `implications/stressed-interpalatal:е/en/template` and `implications/stressed-interpalatal:э/en/template`.
+
+**RATIFIED, his wording:**
+
+> [{ipa}] is a brighter, more forward variant of /ɛ/; think of the French 〈é〉 in «été».
+
+**DESK DEFAULT, his to overrule:** «été» takes guillemets, because the English templates in the same file already cite a word that way («счастье» in `processes/lexical-exception/en/template`). His bare *été* stands if he says so.
+
+
+## ENGLISH AND FRENCH SAY THE SAME THING, AND A GATE HOLDS IT. Asked for by Dann 2026-11-25 18:02
+
+**His ask, transcribed as written:** *“Can you make sure our audit catches these disparities and remedies them?”*, on the desk's finding that the French of the interpalatal 〈е〉 blurb carried an example the English had lost.
+
+**What already exists, read by the desk 2026-11-25.** `packages/blurb/tests/french-parity.test.ts:46` compares each pair's placeholder set and its citation. **It could not have caught his case:** both sides carried the same placeholders and the same citation, and the English merely said less, which is a content judgement.
+
+**MEASURED by the desk across all 197 English/French pairs in `data/blurb-composer.json`, 2026-11-25:**
+
+- **0 citation mismatches.**
+- **5 pairs where the French runs one sentence longer than the English**, all consonant identity blurbs: `/identities/ж`, `/identities/ц`, `/identities/ч`, `/identities/ш`, `/identities/щ`. Same shape and same direction as 〈е〉. **NOT ESTABLISHED whether each is a loss or a legitimate difference of language; the reading is small and belongs to the audit.**
+- **13 placeholder mismatches**, led by the same five identities plus `/processes/j-glide:я`. **NOT ESTABLISHED whether any is real**, because the desk did not check them against what `french-parity.test.ts` already exempts.
+
+**RULED IN BY DANN 2026-11-25 18:04** (transcribed as written: *“Yes to your tewo things above. :)”*), both parts:
+
+1. **The gate grows a sentence-count check**, with an allow-list where each entry names why that pair differs on purpose and where an entry matching no live difference also fails, so the list cannot go stale. **That pattern is already in this tree:** `apps/web/src/lib/score/ingestion/fixture-rule.test.ts` uses it for the one-vowel-per-note fixtures.
+2. **N.204 takes the one-time read** that decides what belongs on the allow-list, rather than inventing a pass of its own.
+
+**Why a gate and not an audit alone:** an audit catches today's disparities once; a gate keeps tomorrow's out. The 〈е〉 case reached a singer and cost Dann his confidence in the page, which is the cost a gate exists to stop.
+
+**HOW IT ENTERS N.204, and the desk did not patch the plan to do it.** The plan is at r10 and its own history warns against patching (r7 was abandoned because a second patch left six sections describing a struck design). This becomes an item in r11, written as an addition and reviewed by Fable with the rest, never edited into r10 now.
+
+
+## THE LOUPE'S CUT RUNS BARLINE TO BARLINE, AND THE STEPPER WALKS MEASURES. Ruled by Dann 2026-11-25 18:08
+
+**His ruling, transcribed as written:** *“ion the Loupe;s score detail we should see the barlines that define the measure being examined.”*
+
+**Why it is also the cheapest repair.** The cut's two established failures both come from bars being measured by their notes (`OPEN.md`, THE SCAN STRIP FITS THE BAR AND STAYS LEGIBLE): a bar opening with a rest loses everything before its first sounding note, and a bar of only rests gets no extent and falls back to the whole band. **A cut taken from the barlines answers both at once, because a barline does not care whether what follows it sounds.**
+
+**His question of the same minute, transcribed as written:** *“I thought we also invented arrows left and right to quickly narigate to adjacent bars without leaving Loupe? What happened to that idea? Is this an old build?”*
+
+**Answered from the tree 2026-11-25: not an old build, and not lost. Built narrower.** `LoupePrintStrip.svelte:45-46` derives `prev` and `next` from `loupePrint.neighbour` (`loupe-print.svelte.ts:100-104`), which indexes **`toCheck()`, the bars the banner flagged**, and returns null at either end without wrapping. **On a bar outside that list both are null and no arrow is drawn**, which is what he met: he opened the Loupe by tapping m. 19 rather than by following the banner.
+
+**NOT ESTABLISHED:** whether a ruling exists for arrows across ALL adjacent bars. The desk searched `OPEN.md`, `INBOX.md`, and `PRODUCT.md` and found none. What the tree holds is the flagged-bar stepper above and a separate element stepper inside Corrections (`CorrectionSurface.svelte:601`, `:628`) that walks one note or rest at a time, which is the «← Rest · Eighth →» pair he has seen. **One search is not proof it never existed.**
+
+**RULED BY DANN 2026-11-25 18:10, and it closes the NOT ESTABLISHED above rather than answering it** (transcribed as written: *“Pardon my saying so, but I acted as many humans will. SO we need to accommodate my use, not try to force the user to adopt our expected path”*): **the arrows walk measures however the Loupe was opened**, and the flagged list is demoted to something the tag reports (« m. 14 · to check, 1 of 3 »). Whether an earlier ruling scoped the stepper to flagged bars no longer matters: tapping a measure is the ordinary way to open a Loupe on it, so a stepper absent on that route is missing, not mis-approached. **DESK FAULT, owned to him the same minute:** the desk had explained his missing arrows by the route he took, which is the status-quo defence tether 22 forbids. It is now `CONTRACT.md` section 3, tether 23.
+
+
+## THE LOUPE'S CLIP IS ONE MEASURE OF THE PRINT, MUSIC AND WORDS TOGETHER. Ruled by Dann 2026-11-25 18:14; it consolidates the cut, the clip, and the stepper into one lane
+
+**His ruling, transcribed as written:** *“We want to see both. / I want Ilya to reproduce the music and its text underlay as a one-meaure clip featured in Loupe so the user always sees the source material and can be vigilant against Ilya's reproduction in code”*.
+
+**His reason is the design, and it outranks the module's own framing.** `loupe-print.svelte.ts:6` calls the strip «the assistive witness of what Ilya replicated». He is stating something stronger: the clip is the SOURCE, standing beside Ilya's reproduction so a singer can catch Ilya. That makes the clip's completeness the point, not its economy.
+
+### The rectangle
+
+**Left edge, the measure's left bound in the print** (his ruling of 18:08 and its extension of 18:12, transcribed as written: *“the initial bar of a system will not feature a barline on the left, but rather the clef and key signature and sometimes a meter signature. If these are present in the target bar in the score, all these elements should be carried into the phoitographic sample”*):
+- a barline, in the ordinary case;
+- at a system's first measure, the clef with its key signature and its meter signature where printed;
+- **a key change or a meter change printed at a measure's head mid-system. Offered by the desk under his own reason** (a singer reading the sample without them reads the wrong key) **and RATIFIED by him 2026-11-25 18:15** (*“Yes!”*).
+
+**Right edge:** the next measure's left bound.
+
+**THE BOUNDS ARE LOOSE, AND A LITTLE OF THE NEIGHBOURS IS WANTED. Ruled by Dann 2026-11-25 18:15**, transcribed as written: *“The left and right bounds are loose, there is no need to clip them religiously, and showing a little of the preceding or following bar is a nice way of underpinning the fact that the measure ddoes not exisst in isolation”*. **This removes the lane's hardest requirement.** Precise edges would have meant locating each barline exactly and losing the clef wherever a cut landed a few pixels inside it. Loose bounds need only start before the measure and end after it, which an approximate barline satisfies, and at a system start the left simply runs to the staff's beginning. **His reason is also the better argument for what the clip is for:** a measure shown alone invites a check of one bar against one bar; a measure shown with its neighbours bleeding in shows that Ilya's reproduction has to hold across the join. **ONE BOUND ON THE LOOSENESS, derived by the desk from his own two sentences and his to strike: the target measure still dominates the clip.** On a narrow measure, the three-eight bars of «Средь шумного бала» being the case in hand, a generous fixed margin would swamp the subject. **So the margin is the smaller of a few staff spaces and a share of the measure's own width, both measured on real pages rather than chosen, and stated in staff spaces and not pixels** (his rule of 2026-11-04 10:26, proportions not fixed pixels; `CONTRACT.md` §0.2).
+
+**Top and bottom:** from above the staff down through the underlay rows, so the notes and the words beneath them arrive as one picture.
+
+### What this costs, and it is less than it looks
+
+**Ilya already finds what the left edge needs and throws it away.** `metre-windows.ts:344` `barLines` locates every bar-line stroke on a scanned system from the ink, and `:156` `extent` finds where each staff starts and stops. **CORRECTED 2026-11-25, caught by Fable's review of the brief and verified on the tree: they do not both run during the read, and the desk's original sentence here was false.** `extent` does run in the underlay read (`staffIn`, `underlay-prepare.ts:215`) and its `x0`/`x1` are dropped at `:229`. **`barLines` does not run there at all.** Its only non-test caller is `windowsOf` (`metre-windows.ts:360`); `windowsOf`'s only non-test caller is `readPageMetres` (`metre-model.ts:151`); that runs in `metre.worker.ts:42`. The underlay read runs in a different worker (`underlay.worker.ts:77`), and the tree says so itself at `underlay-prepare.ts:15`: neither reads the other's output. So keeping the bar-lines is not keeping something already measured; it is a NEW `barLines` call inside `prepareUnderlay` (`underlay-prepare.ts:224`), at a cost per page that is NOT ESTABLISHED, plumbed through four sites including `underlay-song.ts:105`, which copies fields by name and would silently drop a new one. What the reading KEEPS is the lyric band's fractions and a set of bar edges reconstructed from the notes (`kept-bands.ts:61-71`), which is why the cut became note-based and lost the rests. **The repair is to keep what is already measured.**
+
+**The five-space height cap goes.** `STRIP_MAX_SPACES = 5` (`kept-bands.ts:116`) says in its own comment that it was sized for two lines of words. A clip carrying music cannot use it: a treble clef reaches above and below the staff, ledger lines go higher, and a slur can arc above the notes. **The vertical range is measured from the system's own ink.**
+
+**Scans read before the lane have none of this geometry.** The lane states what happens to them: a re-read, or the Loupe finding the staff and the barlines again on the stored scan when it opens.
+
+### The lane carries all of it
+
+Rows 212, 213, and 217 are one lane, because the cut, the clip's content, and the stepper all change the same thing, which is what a stored scan keeps. Dann's rulings inside it: the clip is one measure of music and words (18:14); its left bound is the barline or the clef group (18:08, 18:12); the bar fits the Loupe and stays legible (17:50); the arrows walk measures however the Loupe was opened (18:10).

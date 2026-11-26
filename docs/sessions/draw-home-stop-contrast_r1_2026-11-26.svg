@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="420" viewBox="0 0 480 420" font-family="'Source Sans 3', system-ui, -apple-system, sans-serif">
+<rect width="480" height="420" fill="#F0EBE0"/>
+<text x="20" y="26" font-size="13" font-weight="600" fill="#1a1612">The home stop: three treatments against WCAG 1.4.11's 3:1 floor</text>
+<text x="20" y="42" font-size="10.5" fill="#6A655F">Each cell: the home stop (2♯), a neighbour, and a selected stop, so home can be judged against both.</text>
+
+<text x="140" y="64" font-size="10" font-weight="600" fill="#4a4540">DESKTOP · 34 px · card #FAF8F3</text>
+<text x="310" y="64" font-size="10" font-weight="600" fill="#4a4540">DOCK · 44 px · white</text>
+
+<text x="20" y="92" font-size="10.5" font-weight="600" fill="#1a1612">Today</text>
+<text x="20" y="105" font-size="9.5" fill="#6A655F">#e8e4dc</text>
+<text x="20" y="117" font-size="9.5" fill="#9b4a4a">1.19 : 1 · fails</text>
+<rect x="132" y="74" width="118" height="44" rx="4" fill="#FAF8F3"/>
+<rect x="136" y="79" width="34" height="34" rx="6" fill="#e8e4dc"/>
+<text x="153" y="101" font-size="12" fill="#1a1612" text-anchor="middle">2♯</text>
+<text x="195" y="101" font-size="12" fill="#6A655F" text-anchor="middle">1♯</text>
+<circle cx="237" cy="96" r="15" fill="#6C4D8C"/>
+<text x="237" y="101" font-size="12" fill="#ffffff" text-anchor="middle">0</text>
+<rect x="296" y="74" width="148" height="44" rx="4" fill="#ffffff"/>
+<rect x="300" y="74" width="44" height="44" rx="8" fill="#e8e4dc"/>
+<text x="322" y="101" font-size="13" fill="#1a1612" text-anchor="middle">2♯</text>
+<text x="374" y="101" font-size="13" fill="#6A655F" text-anchor="middle">1♯</text>
+<circle cx="426" cy="96" r="20" fill="#6C4D8C"/>
+<text x="426" y="101" font-size="13" font-weight="600" fill="#ffffff" text-anchor="middle">0</text>
+
+<text x="20" y="162" font-size="10.5" font-weight="600" fill="#1a1612">1 · darker tint</text>
+<text x="20" y="175" font-size="9.5" fill="#6A655F">#C9C1B4</text>
+<text x="20" y="187" font-size="9.5" fill="#9b4a4a">1.68 : 1 · still fails</text>
+<rect x="132" y="144" width="118" height="44" rx="4" fill="#FAF8F3"/>
+<rect x="136" y="149" width="34" height="34" rx="6" fill="#C9C1B4"/>
+<text x="153" y="171" font-size="12" fill="#1a1612" text-anchor="middle">2♯</text>
+<text x="195" y="171" font-size="12" fill="#6A655F" text-anchor="middle">1♯</text>
+<circle cx="237" cy="166" r="15" fill="#6C4D8C"/>
+<text x="237" y="171" font-size="12" fill="#ffffff" text-anchor="middle">0</text>
+<rect x="296" y="144" width="148" height="44" rx="4" fill="#ffffff"/>
+<rect x="300" y="144" width="44" height="44" rx="8" fill="#C9C1B4"/>
+<text x="322" y="171" font-size="13" fill="#1a1612" text-anchor="middle">2♯</text>
+<text x="374" y="171" font-size="13" fill="#6A655F" text-anchor="middle">1♯</text>
+<circle cx="426" cy="166" r="20" fill="#6C4D8C"/>
+<text x="426" y="171" font-size="13" font-weight="600" fill="#ffffff" text-anchor="middle">0</text>
+
+<text x="20" y="232" font-size="10.5" font-weight="600" fill="#1a1612">2 · ring, no fill</text>
+<text x="20" y="245" font-size="9.5" fill="#6A655F">--ink-tertiary</text>
+<text x="20" y="257" font-size="9.5" fill="#4a7a4a">5.4 : 1 · passes</text>
+<rect x="132" y="214" width="118" height="44" rx="4" fill="#FAF8F3"/>
+<rect x="136.75" y="219.75" width="32.5" height="32.5" rx="6" fill="none" stroke="#6A655F" stroke-width="1.5"/>
+<text x="153" y="241" font-size="12" fill="#1a1612" text-anchor="middle">2♯</text>
+<text x="195" y="241" font-size="12" fill="#6A655F" text-anchor="middle">1♯</text>
+<circle cx="237" cy="236" r="15" fill="#6C4D8C"/>
+<text x="237" y="241" font-size="12" fill="#ffffff" text-anchor="middle">0</text>
+<rect x="296" y="214" width="148" height="44" rx="4" fill="#ffffff"/>
+<rect x="300.75" y="214.75" width="42.5" height="42.5" rx="8" fill="none" stroke="#6A655F" stroke-width="1.5"/>
+<text x="322" y="241" font-size="13" fill="#1a1612" text-anchor="middle">2♯</text>
+<text x="374" y="241" font-size="13" fill="#6A655F" text-anchor="middle">1♯</text>
+<circle cx="426" cy="236" r="20" fill="#6C4D8C"/>
+<text x="426" y="241" font-size="13" font-weight="600" fill="#ffffff" text-anchor="middle">0</text>
+
+<text x="20" y="302" font-size="10.5" font-weight="600" fill="#1a1612">3 · tint + ring</text>
+<text x="20" y="315" font-size="9.5" fill="#6A655F">#e8e4dc + #8A8178</text>
+<text x="20" y="327" font-size="9.5" fill="#4a7a4a">3.6 : 1 · passes</text>
+<rect x="132" y="284" width="118" height="44" rx="4" fill="#FAF8F3"/>
+<rect x="136" y="289" width="34" height="34" rx="6" fill="#e8e4dc"/>
+<rect x="136.75" y="289.75" width="32.5" height="32.5" rx="6" fill="none" stroke="#8A8178" stroke-width="1.5"/>
+<text x="153" y="311" font-size="12" fill="#1a1612" text-anchor="middle">2♯</text>
+<text x="195" y="311" font-size="12" fill="#6A655F" text-anchor="middle">1♯</text>
+<circle cx="237" cy="306" r="15" fill="#6C4D8C"/>
+<text x="237" y="311" font-size="12" fill="#ffffff" text-anchor="middle">0</text>
+<rect x="296" y="284" width="148" height="44" rx="4" fill="#ffffff"/>
+<rect x="300" y="284" width="44" height="44" rx="8" fill="#e8e4dc"/>
+<rect x="300.75" y="284.75" width="42.5" height="42.5" rx="8" fill="none" stroke="#8A8178" stroke-width="1.5"/>
+<text x="322" y="311" font-size="13" fill="#1a1612" text-anchor="middle">2♯</text>
+<text x="374" y="311" font-size="13" fill="#6A655F" text-anchor="middle">1♯</text>
+<circle cx="426" cy="306" r="20" fill="#6C4D8C"/>
+<text x="426" y="311" font-size="13" font-weight="600" fill="#ffffff" text-anchor="middle">0</text>
+
+<line x1="20" y1="348" x2="460" y2="348" stroke="#E2DAEB" stroke-width="1"/>
+<text x="20" y="366" font-size="10" fill="#6A655F">Ratios are against each surface, computed from the shipped values. Dock ratios run slightly higher</text>
+<text x="20" y="379" font-size="10" fill="#6A655F">against white: 1.27, 1.78, 5.8, 3.8. In treatment 3 the ring also clears 3.0:1 against its own tint.</text>
+<text x="20" y="396" font-size="10" fill="#6A655F">Stop sizes, radii, type sizes, the selected circle and both surfaces are the shipped values. Gaps compressed.</text>
+</svg>

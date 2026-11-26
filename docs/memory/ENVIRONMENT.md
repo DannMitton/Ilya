@@ -96,6 +96,7 @@ next session the same hour it cost the last one.
 | you are about to, or you are seeing | search for |
 |---|---|
 | a subagent leaves a `.bak` file in the tree that nothing can delete | `A SUBAGENT'S .bak CANNOT BE DELETED` |
+| you are about to write memory-file prose that contains backticks or quotes | `WRITE MEMORY PROSE THROUGH A QUOTED HEREDOC, NEVER python3 -c` |
 | you are about to check whether Ilya loads anything from outside, or to read the built output | `N.197'S SWEEP IS READ OFF THE RUNNING APP` |
 | you are about to treat `ilya.dannmitton.com` as current, or to walk a screen on it | `THE PRODUCTION ALIAS SERVES A SEPTEMBER BUILD OFF main` |
 | you are about to name a report file in a subagent's brief | `A REPORT PATH WAS ALREADY TAKEN` |
@@ -5272,6 +5273,10 @@ Row 165 steps 5 to 8 and Dann's rulings of 2026-11-01 17:56 and 17:57 treated IN
 - 2026-11-05 08:0x (Opus desk): FABLE RUNS ON USAGE CREDITS once its weekly limit is at 100 percent; it is not blocked (Anthropic support, via Dann 08:03). The desk told Dann at 07:45 that Fable reviews wait for the reset; that was wrong. A Fable review costs credits like any other model and does not wait for Sunday.
 - 2026-11-05 08:1x (Opus desk): told Dann "Translator: there is no dropdown and no list of names" after a grep for a TRANSLATORS list came back empty; the Translator field is a SearchableSelect over POETS (`MetadataFields.svelte:147-155`), Marshak included (`composers-poets.ts:76`). Dann caught it. A failed search for a list is not an absence: read the component that draws the field.
 
+## THE TRANSPOSITION RULER ONLY OFFERS ITSELF AT THE PRINTED KEY
+
+Learned 2026-11-26 by opening it. **If you want to LOOK at the ruler on a song that is already transposed, you cannot reach it directly.** The PIECE band's key line is not a control: clicking it does nothing. The opener is the “Try another key” button, and that button only renders when the song sits at its printed key (`PieceKeyLine.svelte:31-35`); while transposed the band offers only “As printed”. **So the sequence is: click “As printed”, which reverts the song, then “Try another key”.** Put the singer's key back through the ruler itself before you leave, or you have silently un-transposed her score. The ruler lives on the MELODY tab and is covered by an open Loupe, so close the Loupe first. Occasion: the desk needed one look at a shipped control and spent five calls finding the door.
+
 ## ESTIMATES BY KIND OF JOB (desk, 2026-11-08 20:1x; `CONTRACT.md` §4, "Estimates come from actuals")
 
 Quote the range; cap at its top; add each actual when it lands. Actuals from `STATE.md` closes of 2026-11-02 to 2026-11-05.
@@ -5293,6 +5298,9 @@ Quote the range; cap at its top; add each actual when it lands. Actuals from `ST
 | Fable DELTA review of a brief revision (only what changed, plus whether its own earlier amendments survived) | 62,220 (lane 66 r2, 2026-11-17); 163,310 (lane 69 r4, cap 200k, 9 tool uses, 2.9 min, 2026-11-18) | 60k to 200k |
 | Fable as-built review of one small lane (5 code files, +270 -34, read from the tree, no gate run) | 167,541 (lane 69, cap 300k, 12 tool uses, 3.3 min, 2026-11-18) | 150k to 300k |
 | Fable review of one Code brief, small OMR lane, every citation verified at one commit | 169,138 (staff finder r1, cap 250k, 18 tool uses, 5.3 min, 2026-11-25; DO NOT SEND, two blockers, nineteen amendments; BELOW the 180k floor quoted for the geometry kind, so that floor is too high for a one-module brief) | 150k to 250k |
+| Fable review of one Code brief spanning two modules (OMR plus the score view) | 175,005 (Loupe clip r1, cap 250k, 27 tool uses, 6.6 min, 2026-11-25; DO NOT SEND, six blockers, twenty-eight amendments; it caught a false claim the desk had also written into `OPEN.md`, and found the user-visible cause the desk's brief would have shipped past) | 170k to 200k, two actuals |
+| Fable review of one Code brief for a UI lane, state and components traced through every caller | 221,492 (N.94 ribbon slider r1, cap 250k, 40 tool uses, 8.5 min, 2026-11-26; DO NOT SEND, seven blockers, seventeen amendments; it caught that the brief deleted the only commit path, which the desk had not traced) | 175k to 225k, three actuals |
+| Fable DELTA review of a brief revision, checking its own prior blockers and judging only what is new | 182,016 (N.94 ribbon slider r2, cap 250k, 39 tool uses, 8.1 min, 2026-11-26; SEND WITH AMENDMENTS, four blockers). **Not much cheaper than a full review**: it still opened every changed citation and re-traced the state file. Quote a delta at 0.9 of a full review, not half | 170k to 200k, first of its kind |
 | Fable review of one Code brief, small geometry lane, every citation verified at one commit | 189,874 (lane 79 r1, cap 250k, 27 tool uses, 6.4 min, 2026-11-21; DO NOT SEND, three blockers, fifteen amendments); 198,376 (lane 80 r1, cap 250k, 23 tool uses, 7.3 min, same night; DO NOT SEND, four blockers, eighteen amendments) | 180k to 250k |
 | Sonnet source census of three panes against one commit, thirteen measured items, no recommendations | 155,794 (cap 250k, 20 tool uses, 2.7 min, 2026-11-21, the three documents' differences) | 150k to 250k |
 | Fable as-built review of a two-commit lane (9 code files, the whole diff, two reports, three ruling files, two captures opened) | 188,824 (lane 79, cap 250k, 20 tool uses, 4.0 min, 2026-11-21; MERGE WITH AMENDMENTS, six) | 170k to 260k |
@@ -6200,3 +6208,12 @@ The sweep's source half was done 2026-11-23 and came back same-origin. Its build
 **So the alias is not a view of current Ilya, and nothing walked on it is evidence about the build.** Walk the newest READY `Shane` deployment instead; `mcp__Vercel__list_deployments` with `state: READY` and `slug: dannmittons-projects` names it, newest first.
 
 **Measured consequence, 2026-11-25:** the alias loads `fonts.googleapis.com` and six `fonts.gstatic.com` files on every visit, because it predates `app.html:46` and `static/fonts/google-families.css` (dated 2026-11-15), which serve the four families from Ilya's own origin. This is not an N.197 defect. It is the gap between `main` and `Shane`, and release day closes it (`SCHEDULE.md`, item 10).
+
+
+## WRITE MEMORY PROSE THROUGH A QUOTED HEREDOC, NEVER `python3 -c` (desk fault, 2026-11-25)
+
+The desk wrote three memory files with `python3 -I -c "…"`. The double quotes let the shell run every backticked `path:line` in the prose as a command substitution, so each one was replaced by nothing and the files landed with gaps where their citations had been. The shell also printed `Permission denied` for the paths it tried to execute, which is the signal.
+
+**The rule: prose destined for a memory file goes into a script written with a QUOTED heredoc (`cat > file.py <<'PYEOF'`), and the script is then run.** The quoted delimiter stops the shell touching anything inside. The desk already uses this for every other write; this one call did not.
+
+**If it fires:** the loss is silent in the prose and visible only as missing citations. Grep the file for the paths that should be there before moving on.
