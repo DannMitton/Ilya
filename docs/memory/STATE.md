@@ -15,7 +15,23 @@ git -C "$HOME/mnt/ilya-rewrite" --no-optional-locks --no-pager log -1 --format="
 ---
 
 ## THE SHARE (from 2026-11-09; this section wins over everything below it)
-**CLOSE OF 2026-11-26/27 (Opus 5 desk; Dann present from 22:57, away 23:30 to 00:31).** **THE NEXT DESK STARTS HERE.**
+**CLOSE OF 2026-11-27 MORNING (Opus 5 desk; Dann present 09:0x to 09:48).** **THE NEXT DESK STARTS HERE.**
+
+**NOTHING SHIPPED. No lane ran, no gate moved, no source changed.** `docs/memory/QUEUE.md` and `docs/memory/STATE.md` carry uncommitted record edits, and they are this session's only change to the tree.
+
+**THE DESK BROKE A PROMISE TO DANN AND HE FOUND IT, recorded under `CONTRACT.md` tether 5.** At 01:3x the desk told him *"Go to sleep. I will watch it, and the morning message will say where it got to."* It did not watch. The cloud lane `cloud-lane-90` (session `session_01Vk7wM8HDrqad8Lm4s2FRxF`) stopped at step 0 and pushed `91c0c7c`, and the desk learned that only when he asked at 09:0x. His words: *"this is both unacceptable and disappointing... Your failure. Again."* **The lesson is not about watching harder. A promise to watch an unattended lane cannot be kept by a desk that is itself idle between turns, so the next desk does not make it.**
+
+**THE DESK THEN RAN STEP 0 OF THE ROWS 224/227 LANE ITSELF, IN THE CLOUD CONTAINER, AND STOPPED AT THE INSTRUMENT CHECK.** `nightingale-p4-only.pdf` (269,065 B) was staged from the Mac and rendered with `pdftoppm -gray -png -scale-to-x 4400 -scale-to-y 5500`; the raster is 4400 by 5500, which matches the lane's. **Paper tone 226 against the lane's recorded 227, acceptable; 1st percentile 96 against 89, NOT acceptable; raw-bytes md5 `b363cf27` against `5bb97b1e`.** **So poppler's antialiasing is not pdf.js's, and for a measure about where ink sits it is not good enough.** No step 0 figure was taken from it.
+
+**AND THAT BLOCKER IS NOW CLOSED, WHICH IS WHAT THIS SESSION ADDS.** Chrome is present in the cloud container at `/usr/bin/google-chrome`, Playwright launches it with `executablePath` and `--no-sandbox` (both verified this session), and `pdfjs-dist` 6.2.108 is in the tree. **So the next desk can raster the page through Ilya's own pdf.js in the container, with no lane and no Mac awake.** The route and its verification are in `ENVIRONMENT.md`.
+
+**THE ONE THING: raster Nightingale page 4 through Ilya's own pdf.js in the container, confirm the instrument against the lane's paper tone 227 and 1st percentile 89, then run step 0 parts (a) to (e) of `../sessions/brief-code-rows224-227-lyric-band-and-row-choice_r3_2026-11-27.md` (md5 `70f59bb2`).** After it: hand r3 its branch, then row 137 r3 (md5 `7354fd73`), then row 145 measure-only r2 (md5 `ea9b3cb7`), then row 212's Loupe measure, then row 219's build.
+
+**STILL OWED TO DANN, none blocking, unchanged from last night:** D5's four singer's-mark strings, D6's INSIGHTS shape ruling, D16, and D18's ratification of the review packet. **Still owed by the desk:** D5b's French source, D17's five skin token tables, the QUEUE archive pass, and the release date.
+
+---
+
+**CLOSE OF 2026-11-26/27 (Opus 5 desk; Dann present from 22:57, away 23:30 to 00:31).**
 
 **N.229 SHIPPED `30f9d842` at 00:55, docs only: no lane ran, no gate moved, no source changed.** The night's work is two looks in the running app, three rulings of Dann's, a record audit, and one brief carried to r3 through two Fable reviews.
 
@@ -39,7 +55,9 @@ git -C "$HOME/mnt/ilya-rewrite" --no-optional-locks --no-pager log -1 --format="
 
 **ROW 145 IS THEREFORE A MEASURE FIRST, and its brief is r2 as a measure alone.** **ROW 137 IS AT r3 AND READY TO RUN** (md5 `7354fd73`), after a DO NOT SEND and then a SEND WITH AMENDMENTS whose four must-apply items are applied; its reviewer says no third review is needed. **r2's own worst fault was the desk's and was the same shape as all the others: its step 1 named a page only for a song with a title or a composer while its step 2 handled the case of neither, so a pasted poem with no title would have taken the static title on all three documents, and all ten done-when items passed on it.** **ROW 137's r1 CAME BACK DO NOT SEND**, with four faults of the desk's: `routes/+page.svelte` is at 5533 of its 5533-line ratchet ceiling (`scripts/ratchets.json:8`), so one added line fails a gate; `extractSurname` returns UPPERCASE (`page-config.ts:173`, `:177`), so the brief's own example was unreachable from its own step; the grep was too narrow and `binder.ts:73` already sanitizes a filename while `songs.ts:44` already holds a fallback chain, so "nothing in the tree names a page today" is false; and step 1 would have regressed the vowel-space sheet's printed name. **One blocker of that review the desk can close and it could not: it read only the recorded default and called the filename's case taste owed to Dann. He was shown `Alyabyev - Solovey - MELODY` in mixed case at 23:0x and answered "Yes make it so", so the case is ratified and nothing is owed.**
 
-**THE ONE THING: the rows 224 and 227 lane at r3, which needs only its branch and one paste from Dann. Then row 212's Loupe measure, then row 219's build, then row 145's slurs, then the written-out verses.**
+**THE LANE IS RUNNING. Started by the desk 2026-11-27 04:1x in Dann's Chrome**, session `session_01Vk7wM8HDrqad8Lm4s2FRxF`, on `cloud-lane-90` cut from `Shane` at `f2280cf3` and pushed by Dann at 04:09, Sonnet 5.5. It was told to run step 0 first as a measure that keeps nothing, then step 4 before steps 1 to 3 since all three read its field, to commit only to `cloud-lane-90`, to open no pull request, and to stop and report where a measurement contradicts the brief's chain. **Claude Code's own banner reads "Approaching weekly usage limit, resets Sun, Nov 29, 4:00 AM"**, so the lane may stop mid-run; its work so far is kept and it resumes after the reset. **The structural blocker the night found is lifted for this lane only: a cloud lane needs its branch pushed while Dann is awake, and he pushed this one before going back to bed.**
+
+**THE ONE THING: the lane's step 0 report, then its build. Then row 212's Loupe measure, then row 219's build, then row 145's slurs, then the written-out verses.**
 
 **D4 IS RULED AND CLOSED.** Dann 23:07, transcribed as written: *"Yes make it so. Yes the recorded default should be TEXT MELODY and INSIGHTS and similarly updated for the correct French terms we chose"*, and he said he had thought it already worked that way. A saved or printed page takes `Composer - Title - the page's name`, the names being TEXT, MELODY, INSIGHTS and « TEXTE », « CHANT », « APERÇUS » (`i18n.ts:210`, `:228`, `:232`). QUEUE row 137 is READY TO BRIEF.
 
@@ -51,7 +69,7 @@ git -C "$HOME/mnt/ilya-rewrite" --no-optional-locks --no-pager log -1 --format="
 
 ---
 
-**CLOSE OF 2026-11-26 LATE (Opus 5 desk; Dann present from 21:23).** **THE NEXT DESK STARTS HERE.**
+**CLOSE OF 2026-11-26 LATE (Opus 5 desk; Dann present from 21:23).**
 
 **N.227 SHIPPED `5a05ad57` at 22:29, NOT WALKED.** 56 files, +2742 -67; all eight gates at baseline on the Mac, established by the script's own refusal path (`ilya-ship.sh:198-202` stages nothing if a gate moved); **gate 4's baseline moved by the desk 6960 to `6963 passed | 1 skipped (6964)`, +3**, backup `ilya-ship.sh.bak-6960-2026-11-26`. The ship first refused on branch `mac-staff-finder`; `Shane` and the lane were at the same commit, so one `git switch Shane` carried everything across. **That refusal was the desk's fault: it gave a ship command without checking the branch.**
 
@@ -68,24 +86,6 @@ git -C "$HOME/mnt/ilya-rewrite" --no-optional-locks --no-pager log -1 --format="
 **D9 CLOSED 21:43: the review packet's four questions are ruled** (`OPEN.md`, THE REVIEW PACKET'S FOUR QUESTIONS), so N.170 step 2 is unblocked and the packet is the desk's to draft. **D15 closed as already done:** `cloud-lane-86` is in `Shane`.
 
 **NOT ESTABLISHED, found while measuring:** the preview deployment injects Vercel's own live-feedback toolbar, which draws a floating control over Ilya's page at phone width. Whether the production alias is clean was not checked; the N.197 sweep of 2026-11-25 found none on its build. It is the concrete reason N.170 step 1 gives reviewers the alias and nothing else.
-
----
-
-**CLOSE OF 2026-11-26 (Opus 5 desk; Dann present from 14:29).** **THE NEXT DESK STARTS HERE.**
-
-**N.225 SHIPPED `b14d94b3` at 20:33, NOT WALKED:** N.94's ribbon rebuilt as a detented semitone slider, with the French interval abbreviations he ruled at 18:54, room for the spelling pair at the ends he ruled at 19:13, his ruling at 19:25 that the blank slot leaves as soon as she steps off an end node, and a focus-ring repair he authorized in flight. **Two Fable reviews, both DO NOT SEND, both applied**; the amendment went r1 to r3 (`../sessions/amendment-code-n94-ribbon-french-and-ends_r3_2026-11-26.md`, md5 `1878d489`). Reports r1 and r2 from Code. **Gate 4's baseline moved 6944 to 6960 by the desk, +16**, both figures measured. **The 44 px touch exemption retires:** the end node's outer spelling half measures 83 px at 390 and 68 px at 320 against 27.5 px before. His three rulings are homed in `OPEN.md` as N.94 items 20, 21 and 22, so no desk puts them to him again. New rows 222 and 223 for two faults older than that lane.
-
-**DESK ERRORS THAT DAY, all caught by review or by Code, none by the desk:** it bolded into an amendment that the drag clamp needed new bounds, taken from a review without opening `snapSemitone` (`transposition-ruler.ts:397-400`); it wrote that any node can reach an end slot without reading `slideWindow` (`:411`); it told Dann the cost of his 19:13 ruling was one blank slot when the LATE trigger made it five; it carried `ScoreUploader.svelte:67` from a brief when that is the import and the calls are at `:215` and `first-staved-page.ts:102`; and it put to him a question that was its own to answer, which he stopped.
-
-**THE STAFF FINDER LANE: 0c AND 0e ARE DONE AND IT IS UNBLOCKED TO STEP 1.** Reports `../sessions/report-code-staff-finder-light-scan-0c_r1_2026-11-26.md` and `../sessions/report-code-staff-finder-light-scan-0e_r1_2026-11-26.md`. The three decisions it runs under are in `../sessions/amendment-code-staff-finder-light-scan_r2_2026-11-26.md` (md5 `57865d5e`), **reviewed by Fable** (`../sessions/review-fable-amendment-staff-finder_r1_2026-11-26.md`), which re-ran part of 0d on the saved rasters rather than trusting the record. **All three decisions STAND WITH AMENDMENTS.** **0c:** `staffSpace` fails as the desk read it, `profiles` holds on a thin margin, `cutRatio` is NOT ESTABLISHED, and **the metre reader states 2/4 at six of the seven verse starts on page 4 once the staves are found**, with nothing false in 74 windows, so Dann's ask of 02:56 for notes, metre and words at once is closer to met than the 2026-11-25 record said. **0e:** song2's first system loses no row of words (the row that goes is the tops of high piano chords) and no metre verdict flips on the twenty control staves. **ONE LOSS ACCEPTED, DESK DEFAULT, his to overrule:** song2 p1 box 5, a grand-staff piano box, is found at the shipped constants and null at the provisional pair; its one consumer returns 4473.0 either way, and moving the pair would put it on the window's edge, which the brief forbids.
-
-**NEW ROWS FROM THAT LANE:** 224, the lyric band's top edge cuts the Russian line, which happens today on song2's first system and on Nightingale page 4; and 225, a photograph of page 4 fails `hasStaves` and goes to the poem route, so the staff finder never runs on it.
-
-**THE ONE THING: step 1 of the staff finder, AND IT IS RUNNING.** The day's records shipped as **N.226 `7ae519b9`** at 21:18 (docs only, no source touched, all eight gates at baseline), and the lane branch `mac-staff-finder` was re-cut from `Shane` at that commit at 21:19, so it carries the amendment, both reports and the harness. **Code is building steps 1 and 2 on that branch from 21:21** under amendment r2's three decisions, with step 3 held back until the desk sends it. **It commits nothing.**
-
-**THESE LAST RECORD EDITS ARE DELIBERATELY UNCOMMITTED.** The desk did not ask Dann to ship them at the close, because `ilya-ship.sh` runs `git add -u` and would have swept Code's half-built step 1 into the commit. They ride with the lane's own ship.
-
-**OWED TO DANN, none blocking:** the swap label's French (`key.ruler.respell`, `i18n.ts:2399`) and `key.ruler.undo` (`:2400`) are desk drafts he has not ruled; the ribbon is shipped and unwalked, for his weekly walk; row 221's Guide paragraph has no transposition section to join, which is the desk's to place.
 
 ---
 

@@ -6242,3 +6242,19 @@ The desk wrote three memory files with `python3 -I -c "…"`. The double quotes 
 **What it cost.** On 2026-11-26 the desk read that section, quoted its rule into a sequence it wrote for Dann, and in the same hour gave him pros, cons and a keep-seven recommendation over nine Paper studies as though they were skins. He ruled on it at 22:14 and then found the gap himself at 22:38: *"I do not see skins... I see alterations to the page GUI."* The recommendation was withdrawn. **The evidence was in hand and quoted; what failed was applying it to what the desk was saying.**
 
 **So, before any sentence that counts, keeps, cuts, ranks or recommends a skin:** name how many of the ones in question have a measured five-pair table, and say so in the same sentence. Manuscript has one because it is Ilya. MONOCHROME has one. As of 2026-11-26 no other does.
+
+
+## RASTER A PDF PAGE THROUGH ILYA'S OWN pdf.js IN THE CLOUD CONTAINER (desk, 2026-11-27)
+
+A step 0 measure about where ink sits on a scan has to use the rasteriser Ilya uses, which is pdf.js. **poppler is not a substitute, and this was measured, not assumed.** On `nightingale-p4-only.pdf` at 4400 by 5500, `pdftoppm -gray -png` gives paper tone 226 against the lane's 227 (acceptable) and a 1st percentile of 96 against the lane's 89 (not acceptable), md5 `b363cf27` against `5bb97b1e`. The difference is antialiasing on the ink edges, which is what a band-edge measure reads.
+
+**The container can run pdf.js, and none of it needs the Mac awake or a lane.** Verified 2026-11-27:
+
+- Chrome is installed at `/usr/bin/google-chrome` (`google-chrome-stable` points at it). There is no `chromium` or `chromium-browser`.
+- `~/.cache/ms-playwright` is empty and `npx playwright install chromium` downloads nothing, so a bundled browser is not available.
+- `require('playwright')` resolves; `require('@playwright/test')` returns MODULE_NOT_FOUND. Use the former.
+- `chromium.launch({ executablePath: '/usr/bin/google-chrome', args: ['--no-sandbox'] })` launches and serves a page.
+- `pdfjs-dist` is 6.2.108 in the tree. Ilya's own raster path is `apps/web/src/lib/reader/page-pdf.ts`; read its scale logic before matching it.
+- `pnpm install --frozen-lockfile` exits 1 on "Ignored build scripts" (esbuild, protobufjs, tesseract.js) while still populating `node_modules`. **Check for the directory, not the exit code.**
+
+**The route: clone `Shane` shallow, install, serve the repo over a local static server, load a page that imports `pdfjs-dist`, render the page to a canvas at the lane's pixel size, and read the pixels back.** Name the rasteriser that produced every figure in the report.
