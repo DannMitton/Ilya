@@ -1,0 +1,104 @@
+probes written to /private/tmp/claude-502/-Users-dannmitton--claude-spares-spare-S50DqW/b5aabb2f-e51c-4a6a-a46b-d90613e07cea/scratchpad/step0c/gen
+
+== profiles, verse-start windows: columns with seat ink > 0.02 (uncovered's own test), as page x
+ box 0 <128 shipped: mark x 856,856  upper 807-812 (peak 0.19), 845-864 (peak 0.56) | lower 847-862 (peak 0.50)
+ box 0 <170 diagnostic: mark x 856,856  upper 805-814 (peak 0.25), 843-870 (peak 0.88) | lower 807-810 (peak 0.06), 843-866 (peak 0.81)
+ box 4 <128 shipped: mark x 852,852  upper 803-810 (peak 0.20), 839-845 (peak 0.27), 847-862 (peak 0.60) | lower 803-807 (peak 0.06), 841-859 (peak 0.53)
+ box 4 <170 diagnostic: mark x 852,852  upper 801-810 (peak 0.20), 839-866 (peak 0.80) | lower 803-810 (peak 0.18), 835-868 (peak 0.88), 887-893 (peak 0.06)
+ box 6 <128 shipped: mark x 854,852  upper 801-807 (peak 0.21), 845-864 (peak 0.71) | lower 843-860 (peak 0.71)
+ box 6 <170 diagnostic: mark x 854,852  upper 801-807 (peak 0.29), 843-868 (peak 1.00) | lower 801-807 (peak 0.24), 834-835 (peak 0.12), 839-866 (peak 1.00), 876-903 (peak 0.12)
+ box 8 <128 shipped: mark x 850,852  upper 801-807 (peak 0.25), 839-860 (peak 0.56) | lower 845-859 (peak 0.64)
+ box 8 <170 diagnostic: mark x 850,852  upper 799-810 (peak 0.25), 830-864 (peak 1.00) | lower 799-807 (peak 0.14), 837-862 (peak 1.00)
+ box 10 <128 shipped: mark x 845,848  upper 801-807 (peak 0.13), 834-855 (peak 0.53) | lower 843-855 (peak 0.63)
+ box 10 <170 diagnostic: mark x 845,848  upper 795-797 (peak 0.07), 799-810 (peak 0.33), 834-859 (peak 0.87) | lower 835-859 (peak 0.94)
+ box 12 <128 shipped: mark x 847,849  upper 801-803 (peak 0.20), 835-857 (peak 0.53) | lower 839-855 (peak 0.75)
+ box 12 <170 diagnostic: mark x 847,849  upper 795-807 (peak 0.27), 834-860 (peak 0.93) | lower 797-799 (peak 0.13), 807-810 (peak 0.06), 826-828 (peak 0.06), 834-859 (peak 0.94), 895-899 (peak 0.06)
+ box 14 <128 shipped: mark x 846,848  upper 801-803 (peak 0.29), 843-855 (peak 0.47) | lower 839-855 (peak 0.64)
+ box 14 <170 diagnostic: mark x 846,848  upper 795-807 (peak 0.29), 834-859 (peak 0.82) | lower 834-855 (peak 1.00)
+
+staff space of the staves found:  19.3 19.3 19.3 19.8 19.3 19.3 19.3 19.3 19.3 19.3 19.3 18.9 19.3 19.8 19.3 19.6
+
+== staffSpace and staff-line removal, every bar with notes: 129 note groups
+ level 140 (shipped; probe equals tree on 129/129): staffSpace values {null: 112, 11: 14, 19: 3}; non-null 17, within 1.5 px of the staff's space 3
+   line removal at returned space: groups with a five-line staff 0/17; long-row lines found median 0; share of ink pixels cut median 0.00
+   line removal handed the true space: groups with a five-line staff 0/129; lines found median 0
+   tuplet numbers read: 0
+ level 206 (diagnostic): staffSpace values {18: 79, 19: 49, 22: 1}; non-null 129, within 1.5 px of the staff's space 110
+   line removal at returned space: groups with a five-line staff 0/129; long-row lines found median 0; share of ink pixels cut median 0.04
+   line removal handed the true space: groups with a five-line staff 0/129; lines found median 0
+   tuplet numbers read: 0
+
+join asks the page about 1 bars, today (no staff, so no metre seen)
+
+== staffSpace and staff-line removal, bars the join asks about, today (no staff, so no metre seen): 1 note groups
+ level 140 (shipped; probe equals tree on 1/1): staffSpace values {null: 1}; non-null 0, within 1.5 px of the staff's space 0
+   line removal at returned space: groups with a five-line staff 0/0; long-row lines found median -; share of ink pixels cut median -
+   line removal handed the true space: groups with a five-line staff 0/1; lines found median 0
+   tuplet numbers read: 0
+ level 206 (diagnostic): staffSpace values {19: 1}; non-null 1, within 1.5 px of the staff's space 1
+   line removal at returned space: groups with a five-line staff 0/1; long-row lines found median 0; share of ink pixels cut median 0.02
+   line removal handed the true space: groups with a five-line staff 0/1; lines found median 0
+   tuplet numbers read: 0
+
+join asks the page about 7 bars, with the metres seen at the candidate staves
+
+== staffSpace and staff-line removal, bars the join asks about, with the metres seen at the candidate staves: 7 note groups
+ level 140 (shipped; probe equals tree on 7/7): staffSpace values {null: 7}; non-null 0, within 1.5 px of the staff's space 0
+   line removal at returned space: groups with a five-line staff 0/0; long-row lines found median -; share of ink pixels cut median -
+   line removal handed the true space: groups with a five-line staff 0/7; lines found median 0
+   tuplet numbers read: 0
+ level 206 (diagnostic): staffSpace values {19: 7}; non-null 7, within 1.5 px of the staff's space 7
+   line removal at returned space: groups with a five-line staff 0/7; long-row lines found median 0; share of ink pixels cut median 0.02
+   line removal handed the true space: groups with a five-line staff 0/7; lines found median 0
+   tuplet numbers read: 0
+
+== placed positions (4 a staff, middle line): staffSpace and the removal, page 4 beside controls
+ nightingale-p4 at 140: staves 16, space ~19.3; staffSpace right 0, wrong 0, null 16; removal finds the five lines 0/16; rule thickness (fives' th) median - px, removal cuts only <= 4 px
+ nightingale-p4 at 180: staves 16, space ~19.3; staffSpace right 13, wrong 3, null 0; removal finds the five lines 0/16; rule thickness (fives' th) median 15 px, removal cuts only <= 4 px
+ nightingale-p4 at 190: staves 16, space ~19.3; staffSpace right 13, wrong 3, null 0; removal finds the five lines 0/16; rule thickness (fives' th) median 8 px, removal cuts only <= 4 px
+ nightingale-p4 at 200: staves 16, space ~19.3; staffSpace right 13, wrong 3, null 0; removal finds the five lines 0/16; rule thickness (fives' th) median 8 px, removal cuts only <= 4 px
+ nightingale-p4 at 206: staves 16, space ~19.3; staffSpace right 14, wrong 2, null 0; removal finds the five lines 0/16; rule thickness (fives' th) median 8 px, removal cuts only <= 4 px
+ song1-p1 at 140: staves 4, space ~29.9; staffSpace right 4, wrong 0, null 0; removal finds the five lines 2/4; rule thickness (fives' th) median 5 px, removal cuts only <= 7 px
+ song2-p1 at 140: staves 3, space ~28.8; staffSpace right 3, wrong 0, null 0; removal finds the five lines 1/3; rule thickness (fives' th) median 3 px, removal cuts only <= 6 px
+ song3-p1 at 140: staves 1, space ~29.8; staffSpace right 1, wrong 0, null 0; removal finds the five lines 0/1; rule thickness (fives' th) median 3 px, removal cuts only <= 7 px
+ song4-p1 at 140: staves 2, space ~29.0; staffSpace right 2, wrong 0, null 0; removal finds the five lines 0/2; rule thickness (fives' th) median 8 px, removal cuts only <= 6 px
+ withoutsun-p4 at 140: staves 3, space ~29.8; staffSpace right 3, wrong 0, null 0; removal finds the five lines 3/3; rule thickness (fives' th) median 7 px, removal cuts only <= 7 px
+ withoutsun-p5 at 140: staves 3, space ~29.6; staffSpace right 3, wrong 0, null 0; removal finds the five lines 3/3; rule thickness (fives' th) median 6 px, removal cuts only <= 7 px
+ withoutsun-p6 at 140: staves 4, space ~29.8; staffSpace right 4, wrong 0, null 0; removal finds the five lines 3/4; rule thickness (fives' th) median 6 px, removal cuts only <= 7 px
+ nightingale-p2: the shipped finder returns no staff here, so no placed positions
+ nightingale-p3: the shipped finder returns no staff here, so no placed positions
+ nightingale-p5: the shipped finder returns no staff here, so no placed positions
+
+== inkProfile: voice notes 383, assigned 383, systems 16, with a band 16
+ staff 0: notes 22 band y 1074-1173 paper 225 ink < 165 share 5.8% lines over 2% 77 (peak 431 px of 88 needed) rows 2: 1075-1107 (1.7 sp), 1119-1162 (2.3 sp)
+ staff 1: notes 27 band y 1308-1452 paper 226 ink < 166 share 5.2% lines over 2% 111 (peak 542 px of 88 needed) rows 3: 1308-1347 (2.1 sp), 1348-1382 (1.8 sp), 1405-1437 (1.7 sp)
+ staff 2: notes 19 band y 1587-1683 paper 225 ink < 165 share 5.9% lines over 2% 92 (peak 407 px of 88 needed) rows 3: 1588-1618 (1.6 sp), 1619-1668 (2.6 sp), 1672-1682 (0.6 sp)
+ staff 3: notes 21 band y 1819-1916 paper 224 ink < 164 share 6.2% lines over 2% 73 (peak 463 px of 88 needed) rows 2: 1819-1851 (1.7 sp), 1863-1902 (2.0 sp)
+ staff 4: notes 22 band y 2051-2145 paper 225 ink < 165 share 6.5% lines over 2% 72 (peak 551 px of 88 needed) rows 2: 2051-2082 (1.7 sp), 2094-2133 (2.1 sp)
+ staff 5: notes 27 band y 2280-2413 paper 224 ink < 164 share 5.2% lines over 2% 97 (peak 491 px of 88 needed) rows 3: 2280-2309 (1.6 sp), 2321-2361 (2.1 sp), 2380-2408 (1.5 sp)
+ staff 6: notes 22 band y 2550-2644 paper 225 ink < 165 share 6.4% lines over 2% 79 (peak 464 px of 88 needed) rows 2: 2550-2581 (1.7 sp), 2593-2639 (2.4 sp)
+ staff 7: notes 27 band y 2779-2909 paper 226 ink < 166 share 5.1% lines over 2% 89 (peak 494 px of 88 needed) rows 3: 2779-2808 (1.6 sp), 2824-2859 (1.9 sp), 2882-2908 (1.4 sp)
+ staff 8: notes 22 band y 3047-3137 paper 226 ink < 166 share 6.7% lines over 2% 70 (peak 545 px of 88 needed) rows 2: 3047-3076 (1.6 sp), 3088-3127 (2.1 sp)
+ staff 9: notes 27 band y 3274-3406 paper 225 ink < 165 share 4.7% lines over 2% 91 (peak 477 px of 88 needed) rows 3: 3274-3303 (1.6 sp), 3319-3354 (1.9 sp), 3374-3398 (1.3 sp)
+ staff 10: notes 22 band y 3542-3635 paper 227 ink < 167 share 6.6% lines over 2% 70 (peak 498 px of 88 needed) rows 2: 3542-3574 (1.7 sp), 3586-3622 (1.9 sp)
+ staff 11: notes 27 band y 3769-3902 paper 227 ink < 167 share 5.1% lines over 2% 92 (peak 533 px of 88 needed) rows 3: 3769-3798 (1.6 sp), 3810-3849 (2.1 sp), 3872-3893 (1.2 sp)
+ staff 12: notes 22 band y 4037-4129 paper 226 ink < 166 share 6.8% lines over 2% 67 (peak 517 px of 88 needed) rows 2: 4037-4066 (1.6 sp), 4081-4117 (1.9 sp)
+ staff 13: notes 27 band y 4265-4399 paper 227 ink < 167 share 6.7% lines over 2% 102 (peak 752 px of 88 needed) rows 3: 4265-4297 (1.7 sp), 4309-4344 (1.8 sp), 4364-4396 (1.7 sp)
+ staff 14: notes 22 band y 4537-4625 paper 226 ink < 166 share 6.9% lines over 2% 76 (peak 569 px of 88 needed) rows 2: 4537-4568 (1.7 sp), 4576-4619 (2.3 sp)
+ staff 15: notes 27 band y 4763-5126 paper 227 ink < 167 share 3.2% lines over 2% 122 (peak 1007 px of 88 needed) rows 4: 4763-4781 (1.0 sp), 4785-4828 (2.2 sp), 4833-4854 (1.1 sp), 4873-4909 (1.9 sp)
+
+== detectStavesLight by darkThreshold (rowGate 0.4 unchanged)
+ 128 (shipped): staves false  rows over gate 0  max row fraction 0.107
+ 140: staves false  rows over gate 0  max row fraction 0.124
+ 150: staves false  rows over gate 0  max row fraction 0.161
+ 160: staves false  rows over gate 0  max row fraction 0.194
+ 170: staves false  rows over gate 0  max row fraction 0.365
+ 175: staves false  rows over gate 24  max row fraction 0.452
+ 180: staves true  rows over gate 89  max row fraction 0.551
+ 185: staves true  rows over gate 192  max row fraction 0.597
+ 190: staves true  rows over gate 271  max row fraction 0.681
+ 195: staves true  rows over gate 346  max row fraction 0.707
+ 200: staves true  rows over gate 461  max row fraction 0.712
+ 206: staves true  rows over gate 560  max row fraction 0.716
+ 210: staves true  rows over gate 675  max row fraction 0.816
+ 215: staves true  rows over gate 802  max row fraction 0.905

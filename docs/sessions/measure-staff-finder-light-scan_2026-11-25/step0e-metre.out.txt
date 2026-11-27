@@ -1,0 +1,7 @@
+song1-p1: voice boxes 0,2,4,6; repeated loop equals the tree's readPageMetres at shipped constants: true
+song2-p1: voice boxes 0,2,4; repeated loop equals the tree's readPageMetres at shipped constants: true
+song3-p1: voice boxes 3; repeated loop equals the tree's readPageMetres at shipped constants: true
+song4-p1: voice boxes 2,4; repeated loop equals the tree's readPageMetres at shipped constants: true
+withoutsun-p4: voice boxes 0,2,4; repeated loop equals the tree's readPageMetres at shipped constants: true
+withoutsun-p5: voice boxes 0,2,4; repeated loop equals the tree's readPageMetres at shipped constants: true
+withoutsun-p6: voice boxes 0,2,4,6; repeated loop equals the tree's readPageMetres at shipped constants: true

@@ -1,0 +1,7 @@
+song1-p1: level 229 (paper 255, anchor 81); boxes found before 0,1,2,3,4,5,6,7 after 0,1,2,3,4,5,6,7
+song2-p1: level 229 (paper 255, anchor 82); boxes found before 0,1,2,3,4,5 after 0,1,2,3,4
+song3-p1: level 233 (paper 255, anchor 106); boxes found before 0,1,2,3,4 after 0,1,2,3,4
+song4-p1: level 228 (paper 255, anchor 77); boxes found before 0,1,2,3,4,5 after 0,1,2,3,4,5
+withoutsun-p4: level 217 (paper 255, anchor 0); boxes found before 0,1,2,3,4,5 after 0,1,2,3,4,5
+withoutsun-p5: level 217 (paper 255, anchor 0); boxes found before 0,2,4,5 after 0,2,3,4,5
+withoutsun-p6: level 217 (paper 255, anchor 0); boxes found before 0,1,2,3,4,5,6 after 0,1,2,3,4,5,6,7

@@ -1,0 +1,7 @@
+song1-p1: fresh raster equals saved bytes true; homr ok true, boxes 8, equal to saved true
+song2-p1: fresh raster equals saved bytes true; homr ok true, boxes 6, equal to saved true
+song3-p1: fresh raster equals saved bytes true; homr ok true, boxes 5, equal to saved true
+song4-p1: fresh raster equals saved bytes true; homr ok true, boxes 6, equal to saved true
+withoutsun-p4: fresh raster equals saved bytes true; homr ok true, boxes 6, equal to saved true
+withoutsun-p5: fresh raster equals saved bytes true; homr ok true, boxes 6, equal to saved true
+withoutsun-p6: fresh raster equals saved bytes true; homr ok true, boxes 8, equal to saved true

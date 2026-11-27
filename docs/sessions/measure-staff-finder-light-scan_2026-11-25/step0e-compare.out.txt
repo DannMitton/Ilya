@@ -1,0 +1,47 @@
+== song1-p1: voice boxes [0, 2, 4, 6]; unfound 0 -> 0; small 0 -> 0; windows 15 -> 16
+  box 0: x 780-4017 -> 777-4106; bar lines [1331, 1886, 2691] -> [1331, 1886, 2691, 4102]
+  box 2: x 525-4062 -> 572-4065; bar lines [2060, 2977, 4060] -> [2059, 2977, 4060]
+  box 4: x 522-4026 -> 519-4029; bar lines [1820, 3181, 4025] -> [1820, 3181, 4027]
+  box 6: x 508-3754 -> 505-3758; bar lines [1855, 2867] -> [1855, 2867]
+  start window of box 2 moved 47 px: x 525 -> 572
+  ONLY AFTER box 0 bar x 4103-4121 courtesy True: nothing (a reading states nothing)
+  stated before: ['box 0 start x 780 4/4']
+  stated after: ['box 0 start x 777 4/4']
+== song2-p1: voice boxes [0, 2, 4]; unfound 0 -> 0; small 0 -> 0; windows 24 -> 26
+  box 0: x 609-3802 -> 605-3935; bar lines [1209, 1466, 2034, 2593, 3155, 3431] -> [1209, 1466, 2034, 2593, 3155, 3431, 3932]
+  box 2: x 461-3931 -> 456-3934; bar lines [1123, 1523, 1848, 2367, 2753, 3138, 3504, 3930] -> [1123, 1523, 1848, 2367, 2753, 3138, 3503, 3932]
+  box 4: x 470-3914 -> 464-3954; bar lines [1129, 1635, 1964, 2446, 2874, 3300, 3689] -> [1129, 1635, 1964, 2446, 2874, 3300, 3689, 3950]
+  ONLY AFTER box 0 bar x 3933-3949 courtesy True: nothing (a reading states nothing)
+  ONLY AFTER box 4 bar x 3951-3968 courtesy True: nothing (a reading states nothing)
+  stated before: ['box 0 start x 609 3/4']
+  stated after: ['box 0 start x 605 3/4']
+== song3-p1: voice boxes [3]; unfound 0 -> 0; small 0 -> 0; windows 2 -> 2
+  box 3: x 273-3869 -> 270-3871; bar lines [2242] -> [2242]
+  stated before: none
+  stated after: none
+== song4-p1: voice boxes [2, 4]; unfound 0 -> 0; small 0 -> 0; windows 6 -> 6
+  box 2: x 398-3904 -> 392-3908; bar lines [2347, 3903] -> [2347, 3905]
+  box 4: x 407-3922 -> 405-3924; bar lines [2307, 3921] -> [2307, 3921]
+  stated before: none
+  stated after: none
+== withoutsun-p4: voice boxes [0, 2, 4]; unfound 0 -> 0; small 0 -> 0; windows 9 -> 9
+  box 0: x 227-3491 -> 227-3492; bar lines [2023, 3490] -> [2023, 3491]
+  box 2: x 233-3502 -> 231-3502; bar lines [2333, 3501] -> [2333, 3501]
+  box 4: x 233-3518 -> 233-3518; bar lines [2291, 3517] -> [2291, 3517]
+  stated before: none
+  stated after: none
+== withoutsun-p5: voice boxes [0, 2, 4]; unfound 0 -> 0; small 0 -> 0; windows 13 -> 13
+  box 0: x 429-3509 -> 428-3509; bar lines [1017, 2641, 3508] -> [1017, 2641, 3508]
+  box 2: x 229-3510 -> 231-3510; bar lines [1166, 1731, 2859, 3509] -> [1166, 1731, 2859, 3509]
+  box 4: x 233-3511 -> 233-3512; bar lines [1056, 1827, 3510] -> [1056, 1827, 3511]
+  stated before: ['box 0 start x 429 C']
+  stated after: ['box 0 start x 428 C']
+== withoutsun-p6: voice boxes [0, 2, 4, 6]; unfound 0 -> 0; small 0 -> 0; windows 14 -> 13
+  box 0: x 227-3493 -> 226-3493; bar lines [1409, 2470, 3492] -> [1409, 2470, 3492]
+  box 2: x 229-3500 -> 229-3500; bar lines [1236, 2331, 3499] -> [1236, 2331, 3499]
+  box 4: x 230-3509 -> 230-3510; bar lines [1364, 2411] -> [1364, 2411]
+  box 6: x 231-3516 -> 231-3516; bar lines [2439, 3515] -> [2439]
+  ONLY BEFORE box 6 bar x 3516-3530: nothing (a reading states nothing)
+  stated before: none
+  stated after: none
+== totals: {'staves': 20, 'before': 83, 'after': 85, 'matched': 82, 'flips': 0, 'only_before': 1, 'only_after': 3, 'stated_before': 3, 'stated_after': 3, 'why': 0, 'courtesy': 0}

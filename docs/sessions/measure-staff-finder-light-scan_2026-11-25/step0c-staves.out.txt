@@ -1,0 +1,18 @@
+shipped constants (140, 0.45): staves found 0 / 16
+box 0: space 19.3 x 715-3607 lines@mid 968,988,1008,1027,1045 windows 5
+box 1: space 19.3 x 484-3607 lines@mid 1199,1221,1239,1258,1280 windows 4
+box 2: space 19.3 x 492-3607 lines@mid 1481,1500,1518,1538,1558 windows 5
+box 3: space 19.8 x 481-3607 lines@mid 1712,1731,1753,1771,1789 windows 8
+box 4: space 19.3 x 704-3581 lines@mid 1945,1965,1984,2002,2024 windows 5
+box 5: space 19.3 x 477-3607 lines@mid 2176,2194,2215,2233,2251 windows 6
+box 6: space 19.3 x 704-3563 lines@mid 2442,2462,2482,2501,2519 windows 4
+box 7: space 19.3 x 481-3604 lines@mid 2673,2691,2713,2732,2750 windows 5
+box 8: space 19.3 x 704-3552 lines@mid 2939,2959,2977,2998,3018 windows 4
+box 9: space 19.3 x 484-3604 lines@mid 3168,3186,3205,3227,3245 windows 3
+box 10: space 19.3 x 704-3604 lines@mid 3436,3454,3472,3494,3513 windows 3
+box 11: space 18.9 x 477-3607 lines@mid 3665,3683,3703,3722,3740 windows 5
+box 12: space 19.3 x 701-3552 lines@mid 3931,3949,3969,3989,4008 windows 4
+box 13: space 19.8 x 477-3505 lines@mid 4158,4178,4198,4217,4237 windows 4
+box 14: space 19.3 x 704-3611 lines@mid 4431,4451,4470,4490,4508 windows 3
+box 15: space 19.6 x 517-3611 lines@mid 4655,4675,4693,4712,4734 windows 6
+candidate pair (206, 0.65): staves found 16 / 16

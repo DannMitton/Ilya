@@ -1,0 +1,35 @@
+song2-p1: paper 255, 1st percentile 82, level 229; voice notes with a place 37
+
+== before: ink 140, ceiling 0.45; boxes found 0,1,2,3,4,5 of 6; systems 3
+ system 1 (box 0): voice staff x 609-3802, lines 1091.0 1120.0 1149.0 1178.0 1207.0, space 29.00, notes 3, topLineBelow 1607.5
+   band y 1250-1564 (10.8 sp), ink share 2.87%, rows 3
+   row 0: crop y 1250-1279, ink y 1250-1270 (0.72 sp)
+   row 1: crop y 1369-1432, ink y 1378-1423 (1.59 sp)
+   row 2: crop y 1483-1564, ink y 1492-1563 (2.48 sp)
+ system 2 (box 2): voice staff x 461-3931, lines 2554.0 2582.0 2610.5 2638.5 2666.5, space 28.13, notes 19, topLineBelow 3022.0
+   band y 2713-2979 (9.5 sp), ink share 5.08%, rows 3
+   row 0: crop y 2713-2865, ink y 2713-2856 (5.12 sp)
+   row 1: crop y 2892-2940, ink y 2901-2931 (1.10 sp)
+   row 2: crop y 2934-2979, ink y 2943-2978 (1.28 sp)
+ system 3 (box 4): voice staff x 470-3914, lines 4018.5 4047.0 4076.0 4105.0 4133.0, space 28.75, notes 15, topLineBelow 4476.5
+   band y 4176-4433 (8.9 sp), ink share 4.62%, rows 3
+   row 0: crop y 4176-4281, ink y 4176-4272 (3.37 sp)
+   row 1: crop y 4351-4384, ink y 4360-4375 (0.56 sp)
+   row 2: crop y 4389-4433, ink y 4398-4432 (1.22 sp)
+   check against the tree's prepareUnderlay: bands equal true, row tops equal true (9 rows)
+
+== after: ink 229, ceiling 0.65; boxes found 0,1,2,3,4 of 6; systems 3
+ system 1 (box 0): voice staff x 605-3935, lines 1087.5 1116.5 1145.5 1174.5 1203.5, space 29.00, notes 3, topLineBelow 1528.8
+   band y 1249-1485 (8.1 sp), ink share 2.65%, rows 2
+   row 0: crop y 1249-1279, ink y 1249-1270 (0.76 sp)
+   row 1: crop y 1369-1432, ink y 1378-1423 (1.59 sp)
+ system 2 (box 2): voice staff x 456-3934, lines 2554.5 2582.5 2610.5 2638.5 2666.5, space 28.13, notes 19, topLineBelow 3022.5
+   band y 2712-2980 (9.5 sp), ink share 5.07%, rows 3
+   row 0: crop y 2712-2865, ink y 2712-2856 (5.16 sp)
+   row 1: crop y 2892-2940, ink y 2901-2931 (1.10 sp)
+   row 2: crop y 2934-2980, ink y 2943-2979 (1.32 sp)
+ system 3 (box 4): voice staff x 464-3954, lines 4013.5 4043.0 4071.5 4100.5 4128.5, space 28.75, notes 15, topLineBelow 4473.0
+   band y 4176-4429 (8.8 sp), ink share 4.60%, rows 3
+   row 0: crop y 4176-4281, ink y 4176-4272 (3.37 sp)
+   row 1: crop y 4351-4384, ink y 4360-4375 (0.56 sp)
+   row 2: crop y 4389-4429, ink y 4398-4428 (1.08 sp)

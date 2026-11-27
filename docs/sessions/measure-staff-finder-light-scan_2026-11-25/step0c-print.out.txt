@@ -1,0 +1,36 @@
+== hasStaves (step0c-browser.mjs)
+  page 1: hasStaves False, rows over gate 0, max row fraction 0.294
+  page 2: hasStaves False, rows over gate 0, max row fraction 0.166
+  page 3: hasStaves False, rows over gate 0, max row fraction 0.306
+  page 4: hasStaves False, rows over gate 0, max row fraction 0.107
+  page 5: hasStaves False, rows over gate 0, max row fraction 0.112
+  page 6: hasStaves False, rows over gate 0, max row fraction 0.239
+  page saved p4 png: hasStaves False, rows over gate 0, max row fraction 0.107
+  routePdf: {'to': 'reader', 'stavesFound': False}
+== homr: 16 boxes, equal to step 0a's: True
+== metre reader (step0c-metre.mjs)
+  shipped readPageMetres: {'reads': 0, 'unfound': 16, 'small': 0}
+  candidate staves: windows 74, of which after a bar line 58, stating a signature 6
+  box 0 window 0 start: {'lab': '2/4'} readings ['2/4', '2/4', '2/4', '2/4', '2/4', '2/4', '2/4', '2/4', '2/4'] uncovered [[0, 0], [0, 0]] void False cutRatio [0, 0]
+  box 4 window 0 start: {'lab': '2/4'} readings ['2/4', '2/4', '2/4', '2/4', '2/4', '2/4', '2/4', '2/4', '2/4'] uncovered [[0, 0], [0, 0]] void False cutRatio [0, 0]
+  box 6 window 0 start: {'lab': '2/4'} readings ['2/4', '2/4', '2/4', '2/4', '2/4', '2/4', '2/4', '2/4', '2/4'] uncovered [[0, 0], [0, 0]] void False cutRatio [0, 0]
+  box 8 window 0 start: {'lab': '2/4'} readings ['2/4', '2/4', '2/4', '2/4', '2/4', '2/4', '2/4', '2/4', '2/4'] uncovered [[0, 0], [0, 0]] void False cutRatio [0, 0]
+  box 10 window 0 start: {'lab': None, 'why': 'a reading states nothing'} readings [None, None, None, '2/4', '2/4', '2/4', None, None, None] uncovered [[0, 0], [0, 0]] void False cutRatio [0, 0]
+  box 12 window 0 start: {'lab': '2/4'} readings ['2/4', '2/4', '2/4', '2/4', '2/4', '2/4', '2/4', '2/4', '2/4'] uncovered [[0, 0], [0, 0]] void False cutRatio [0, 0]
+  box 14 window 0 start: {'lab': '2/4'} readings ['2/4', '2/4', '2/4', '2/4', '2/4', '2/4', '2/4', '2/4', '2/4'] uncovered [[0, 0], [0, 0]] void False cutRatio [0, 0]
+== signature digits, page x 834 to 871, rows more than 5 px off a staff line
+  box 0 upper: pixels <128 132, <170 266, share 0.50, darkest 74, median of <170 130
+  box 0 lower: pixels <128 76, <170 178, share 0.43, darkest 87, median of <170 141
+  box 4 upper: pixels <128 147, <170 270, share 0.54, darkest 79, median of <170 122
+  box 4 lower: pixels <128 99, <170 247, share 0.40, darkest 63, median of <170 131
+  box 6 upper: pixels <128 134, <170 223, share 0.60, darkest 90, median of <170 123
+  box 6 lower: pixels <128 129, <170 226, share 0.57, darkest 70, median of <170 121
+  box 8 upper: pixels <128 148, <170 340, share 0.44, darkest 66, median of <170 130
+  box 8 lower: pixels <128 88, <170 222, share 0.40, darkest 84, median of <170 146
+  box 10 upper: pixels <128 142, <170 226, share 0.63, darkest 94, median of <170 124
+  box 10 lower: pixels <128 90, <170 172, share 0.52, darkest 77, median of <170 121
+  box 12 upper: pixels <128 138, <170 260, share 0.53, darkest 68, median of <170 125
+  box 12 lower: pixels <128 135, <170 269, share 0.50, darkest 84, median of <170 127
+  box 14 upper: pixels <128 92, <170 242, share 0.38, darkest 78, median of <170 133
+  box 14 lower: pixels <128 84, <170 215, share 0.39, darkest 72, median of <170 136
+  all seven: share of the <170 pixels that are also <128: 0.49
