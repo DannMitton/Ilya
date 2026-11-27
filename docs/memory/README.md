@@ -9,6 +9,7 @@ Whatever `STATE.md` says it is. Open that file and read its first section. Nothi
 ## Read order for a new session
 
 1. **`CONTRACT.md`**: how we work. The posture, the opening ritual, the tethers, the ceiling and git, style, French, and what not to do. Read it every time.
+1a. **LOOK, before the block and before any opinion.** Open the one thing in the running app and look at it. A record of someone else's look is not a look, and reading the source is not looking. What you saw goes on the block's `looked:` line (`CONTRACT.md` §2); if you could not open it, that line says so, says why, and says what opening it would cost. Added by the desk 2026-11-27 on Dann's ruling of 10:12 to 10:14, said three times.
 2. **`STATE.md`**: the one thing, the latest handover, and the tracker of open items. Then **`QUEUE.md`**: every Code brief that is open, or shipped and not walked.
 2a. **The ratified design of the one thing, before any opinion about it.** Grep `OPEN.md`, `PRODUCT.md`, and `INBOX.md` for the one thing's item numbers and subject words, and read every section that turns up, in full. This is not optional and not "when its moment comes": the 2026-11-02 desk skipped it and spent Dann's afternoon reasoning against designs he had already ratified (`ENVIRONMENT.md`, 2026-11-02 15:0x). Added by the desk 2026-11-02 15:1x, DESK DEFAULT.
 3. **`ENVIRONMENT.md`**: only when you are about to touch a tool, a path, or a gate. It opens with an index keyed by symptom; use the index.
@@ -57,7 +58,9 @@ Your first call is device_request_folder_access for
 Folder grants do not carry between sessions.
 
 Once the reads are done, emit the sequence-position block from CONTRACT.md §2.
-Nothing else happens before it.
+Nothing else happens before it. The block is invalid without a `looked:` line
+carrying a look you took this session, or COULD NOT OPEN with its reason and its
+cost. If you advise without one, I reply `0` and you stop, look, and re-emit.
 
 Then read the repository state yourself with read-only git (CONTRACT.md §4)
 and report it in one line. You do not write with git, ever.
