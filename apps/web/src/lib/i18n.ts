@@ -16,7 +16,7 @@
    tree on 2026-11-02 (consistency batch 2). Paths are under `apps/web/src/`;
    a prefix is listed with the files that use it most and its key count.
 
-   This file holds 1,349 keys.
+   This file holds 1,356 keys.
 
    A key built at run time (`watch.key.letter.${letter}`, `comment.<register>.<part>`)
    has no literal reference, so a search for the whole key can come back empty
@@ -47,7 +47,7 @@
    insights.     195  the INSIGHTS document: lib/insights/singer-blocks.ts, lib/insights/InsightsPane.svelte, lib/insights/tessituragram-layout.ts (LEGACY KEYS: `insights.fit.*`)
    inspector.     43  lib/components/Drawer/InspectorPanel.svelte, lib/components/Drawer/Drawer.svelte, lib/components/Drawer/GlossOffer.svelte
    intake.        54  lib/components/Drawer/IntakePanel.svelte, lib/components/Drawer/IntakeViews.svelte, lib/components/Drawer/PoemLibraryCard.svelte, lib/text/input-line.ts, lib/components/Drawer/bandState.ts
-   key.           23  the key ruler: lib/melody/transposition-ruler.ts, lib/melody/TranspositionDock.svelte, lib/melody/TranspositionRuler.svelte
+   key.           30  the key ruler: lib/melody/transposition-ruler.ts, lib/melody/TranspositionDock.svelte, lib/melody/TranspositionRuler.svelte
    legend.         7  the legends: lib/provenance.ts, lib/melody/MarkupPane.svelte, lib/tempo/TempoReceipt.svelte
    loupe.        129  lib/score/CorrectionSurface.svelte, lib/score/Loupe.svelte, lib/score/correction-verbs.svelte.ts, routes/+page.svelte
    lyrics.         3  lib/components/Drawer/IntakeViews.svelte (the receipt line and the tap note of the join of Poem to a scan's Lyrics)
@@ -2363,8 +2363,6 @@ const strings: Record<string, Record<Language, string>> = {
 	'key.band.try': { en: 'Try another key', fr: 'Essayer une autre tonalit\u00e9' },
 	'key.band.transposed': { en: 'Key: {key}, transposed', fr: 'Tonalit\u00e9\u00a0: {key}, apr\u00e8s transposition' },
 	'key.band.backToPrinted': { en: 'As printed', fr: 'Tonalit\u00e9 imprim\u00e9e' },
-	'key.ruler.cancel': { en: 'Cancel', fr: 'Annuler' },
-	'key.ruler.use': { en: 'Use this key', fr: 'Utiliser cette tonalit\u00e9' },
 	'key.ruler.readoutPick': { en: '{interval} \u00b7 {key} \u00b7 Ilya\u2019s recommendation', fr: '{interval} \u00b7 {key} \u00b7 recommandation d\u2019Ilya' },
 	'key.ruler.readout': { en: '{interval} \u00b7 {key}', fr: '{interval} \u00b7 {key}' },
 	'key.page.header': { en: 'Transposed {interval} from {key}, at the singer\u2019s choice.', fr: 'Transposition {interval} \u00e0 partir de {key}, au choix de l\u2019interpr\u00e8te.' },
@@ -2390,6 +2388,25 @@ const strings: Record<string, Record<Language, string>> = {
 	'key.ruler.doubleSharpMany': { en: 'Carries {n} double sharps', fr: 'Comporte {n} doubles di\u00e8ses' },
 	'key.dock.asPrinted': { en: 'As printed \u00b7 {tonic}', fr: 'Tonalit\u00e9 imprim\u00e9e \u00b7 {tonic}' },
 	'key.dock.pick': { en: 'Ilya\u2019s pick \u00b7 {tonic}', fr: 'Choix d\u2019Ilya \u00b7 {tonic}' },
+	// N.94, the ribbon as a semitone slider (brief-code-n94-ribbon-slider_r3_2026-11-26).
+	// `orig` is RULED by Dann 2026-11-26 13:36, the same in both languages, and is a
+	// deliberate second term for the printed key beside `key.band.backToPrinted`: do not
+	// unify them. `respell` is the faded spelling's accessible name, never visible; its
+	// {tonic} is `stopLabel`. Its French is the desk's DRAFT, not ruled. `undo` is adopted
+	// from `clitic.undo`. `short.*` are the interval labels. The English is a DESK DEFAULT.
+	// The French is RULED by Dann 2026-11-26 18:54, each two-part value with a no-break
+	// space: `2de` is the OQLF's form for « seconde »; `3ce` and `4te` are built by analogy
+	// with it, their use in French music writing not established; `J` for « juste » is the
+	// desk's coinage; `TT` is unchanged (`OPEN.md`, N.94, ruling 20).
+	'key.ruler.orig': { en: 'ORIG.', fr: 'ORIG.' },
+	'key.ruler.respell': { en: 'Spell it {tonic} instead', fr: '\u00c9crire plut\u00f4t {tonic}' },
+	'key.ruler.undo': { en: 'Undo', fr: 'Annuler' },
+	'key.ruler.short.1': { en: 'm2', fr: '2de\u00a0m' },
+	'key.ruler.short.2': { en: 'M2', fr: '2de\u00a0M' },
+	'key.ruler.short.3': { en: 'm3', fr: '3ce\u00a0m' },
+	'key.ruler.short.4': { en: 'M3', fr: '3ce\u00a0M' },
+	'key.ruler.short.5': { en: 'P4', fr: '4te\u00a0J' },
+	'key.ruler.short.6': { en: 'TT', fr: 'TT' },
 	'insights.tryKey': { en: 'Try this key', fr: 'Essayer cette tonalit\u00e9' },
 	// ── HOW ILYA SUGGESTS A KEY (N.182, row 71) ──────────────────────────
 	//    ENGLISH AND FRENCH RATIFIED by Dann 2026-11-05 11:52 to 11:59 (`docs/memory/OPEN.md`, "ROW 71 (N.182): THE 43

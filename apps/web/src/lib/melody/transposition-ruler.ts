@@ -1,16 +1,23 @@
 /**
  * transposition-ruler.ts — the words and the numbers of the Transposition ruler, N.94 slices 1 and 2.
  *
- * The design is `docs/sessions/drawing-key-ruler_r4_2026-09-28.html`, accepted
- * by Dann 2026-09-28. The engine is the package's (`transpositionRulerStops`,
- * `engraveInKey`); this file names what it returns in either language and
- * decides where the ruler opens. PURE, and out of the component on purpose,
- * the note-picker.ts discipline: every rule here runs under vitest's node
+ * The ruler is a detented slider of semitones, thirteen nodes from -6 to +6
+ * (`docs/memory/OPEN.md`, "N.94 THE RIBBON IS A DETENTED SLIDER OF
+ * SEMITONES", ruled by Dann 2026-11-26), which supersedes the stop faces, the
+ * buttons, and the bracketed twins of drawing r4
+ * (`docs/sessions/drawing-key-ruler_r4_2026-09-28.html`). What stays from r4
+ * is the readout, the Piece band, the page header, and the twins' ruling. The
+ * engine is the package's (`transpositionRulerStops`, `engraveInKey`); this
+ * file names what it returns in either language, decides where the ruler
+ * opens, and holds the ribbon's rules: nodes, what a tap lands on, the drag's
+ * snap, and the phone's window. PURE, and out of the component on purpose, the
+ * note-picker.ts discipline: every rule here runs under vitest's node
  * environment with no DOM.
  *
- * EVERY STRING IS RULED. The table is the brief's §6, ratified by Dann
- * 2026-09-28 19:28; key names are `watch.key.*` and the header's interval is
- * the watch band's adopted phrase. Nothing here composes a word of its own.
+ * THE STRINGS. The readout, band, and header are ratified (Dann 2026-09-28
+ * 19:28); key names are `watch.key.*` and the header's interval is the watch
+ * band's adopted phrase. The ribbon's own strings carry their status in
+ * `i18n.ts`: some French is a draft Dann has not ruled.
  */
 import {
 	doubleAccidentalsDrawn,
@@ -94,8 +101,8 @@ export function readoutInterval(semitones: number, language: Language): string {
 }
 
 /**
- * The line above the ruler. At the printed stop it is the key alone, which
- * composes nothing new: the grey box already says "as printed". DESK DEFAULT.
+ * The line above the ruler. At no move it is the key alone, which composes
+ * nothing new: node zero's `ORIG.` already says it. DESK DEFAULT.
  * "Ilya's recommendation" is said on that stop only, and nothing evaluative
  * is said anywhere else (ruling 10 and its §5 reading).
  */
@@ -140,11 +147,10 @@ export function pageHeader(choice: KeyChoice | null, printed: NamedKey, language
 }
 
 /**
- * Where the ruler opens (brief §3.3, DESK DEFAULT from ruling 10): on the
- * first candidate `suggestTranspositions` returns, with the second marked as
- * the runner-up. The candidate carries its target signature, so the stop is
+ * Ilya's pick and the runner-up: the first and second candidates
+ * `suggestTranspositions` returns. The candidate carries its target signature, so the stop is
  * found by both numbers, which is what keeps B major from opening on C flat.
- * With no candidates it opens on the printed key and marks no pick.
+ * With no candidates there is no pick and no runner-up.
  */
 export function openingStops(
 	printed: NamedKey,
@@ -250,7 +256,7 @@ export function countLines(count: DoubleAccidentalCount | undefined, language: L
 /**
  * The ruler's stop for a transposition the watch list suggested against the
  * page as drawn (`base`, the song's choice, or null as printed). Insights reads
- * the drawn key after "Use this key", so its suggestion is a move from there;
+ * the song in its chosen key, so its suggestion is a move from there;
  * the ruler's stops are moves from the printed key. The target signature is
  * the suggestion's own, which is what keeps B major from landing on C flat.
  * Null when the printed key offers no such stop.
@@ -281,10 +287,12 @@ export type RulerOpening = {
 };
 
 /**
- * Where the ruler opens, computed against the PRINTED key's sung order, so
+ * What an opening knows, computed against the PRINTED key's sung order, so
  * the pick is the same whatever the page was showing. The search is
  * `suggestTranspositions`, the watch band's own; with no resolver there is
- * nothing to search with and the ruler opens on the printed key.
+ * nothing to search with and there is no pick. `selected` here is the asked-for
+ * key, else the pick, else the print; the ruler's state keeps it only for an
+ * asked-for key, and otherwise opens on the song's own (`prepare`).
  *
  * ILYA'S PICK ALWAYS LANDS ON THE CLEANER TWIN (ruling 21:41): a candidate
  * that falls on a dimmed stop moves to its twin. So does the runner-up, and
@@ -307,4 +315,107 @@ export function rulerOpening(
 	const { pick, runnerUp } = openingStops(printed, found);
 	const selected = clean(requested) ?? clean(pick) ?? homeStop(printed);
 	return { selected, pick: clean(pick), runnerUp: clean(runnerUp), counts, dimmed };
+}
+
+// ── The ribbon (Dann 2026-11-26) ──
+
+/** True when both are the same stop, by both numbers. */
+export const sameKey = (a: KeyChoice | null, b: KeyChoice | null): boolean =>
+	!!a && !!b && a.semitones === b.semitones && a.fifths === b.fifths;
+
+/**
+ * One node of the ribbon: every stop at one move, so a pair of twins is one
+ * node. THE FLAT SPELLING COMES FIRST (ruled 14:01), which is the reverse of
+ * the engine's own sharp-first order; do not "correct" it.
+ */
+export type RibbonNode = { semitones: number; stops: KeyStop[] };
+
+/** The thirteen nodes, -6 to +6, lowest first. */
+export function ribbonNodes(printed: NamedKey): RibbonNode[] {
+	return stopGroups(stopsFor(printed)).map((group) => ({
+		semitones: group[0].semitones,
+		stops: [...group].sort((a, b) => a.fifths - b.fifths),
+	}));
+}
+
+/**
+ * The stop a tap, an arrow key, or a drag lands on when it names a node and no
+ * spelling: the bold half. The live spelling if the node is already selected.
+ * Else, on the node that holds the printed key, the print, because a tap on
+ * node zero restores it (`OPEN.md`, ruling 10). Else the twin that is not
+ * dimmed, and on a tie the flat spelling (DESK DEFAULT).
+ */
+export function commitStop(
+	node: RibbonNode,
+	selected: KeyChoice,
+	dimmed: ReadonlySet<string>,
+	printed: NamedKey,
+): KeyChoice {
+	const clean = node.stops.filter((s) => !dimmed.has(stopId(s)));
+	const stop =
+		node.stops.find((s) => sameKey(s, selected)) ??
+		node.stops.find((s) => isHome(s, printed)) ??
+		(clean.length === 1 ? clean[0] : node.stops[0]);
+	return { semitones: stop.semitones, fifths: stop.fifths };
+}
+
+/** The integer above the track: "-2" with a true minus sign, "0", "+3". */
+export function semitoneLabel(semitones: number): string {
+	return semitones < 0 ? `\u2212${-semitones}` : semitones > 0 ? `+${semitones}` : '0';
+}
+
+/** The label below the track: the interval's abbreviation, or `ORIG.` at no move. */
+export function shortInterval(semitones: number, language: Language): string {
+	return t(semitones === 0 ? 'key.ruler.orig' : `key.ruler.short.${Math.abs(semitones)}`, language);
+}
+
+/**
+ * The tonic as the spelling row prints it: "D\u266d" in English, as `stopLabel`
+ * does, and in words in French, « r\u00e9 b\u00e9mol » (ruled by Dann 2026-11-26; the
+ * faces and chips keep the glyph, so the two forms are not unified).
+ */
+export function wordedTonic(stop: KeyChoice, printed: NamedKey, language: Language): string {
+	if (language !== 'fr') return stopLabel(stop, printed, language);
+	const { letter: step, shift } = keyTonic(stopKey(stop, printed));
+	const letter = t(`watch.key.letter.${step}`, language);
+	return shift === 0
+		? letter
+		: fill(t('watch.key.tonic', language), {
+				letter,
+				accidental: t(shift < 0 ? 'notePicker.acc.flat' : 'notePicker.acc.sharp', language),
+			});
+}
+
+/** The ribbon's reach either side of the printed key. */
+const REACH = 6;
+
+/**
+ * The node a drag is on, from its position along the track in semitones
+ * (ruled 13:33 and 13:35): the nearest; on an exact midpoint the one nearer
+ * zero; past either end, that end.
+ */
+export function snapSemitone(position: number): number {
+	const n = Math.sign(position) * Math.ceil(Math.abs(position) - 0.5);
+	return Math.min(REACH, Math.max(-REACH, n)) || 0;
+}
+
+/** The slots in a phone's window: seven nodes, or six and a blank at an end. */
+export const WINDOW_SLOTS = 7;
+
+/**
+ * The phone's window rule (ruled 13:52 and 13:55): the node index at the
+ * window's first slot, moved from `first` by the least that keeps node `index`
+ * in slots two to six. DESK DEFAULT that the trigger is late.
+ *
+ * THE WINDOW TRAVELS ONE SLOT PAST EACH END (ruled by Dann 2026-11-26 19:13),
+ * so that -6 rests in slot two and +6 in slot six and their spelling pairs
+ * centre on the screen. The index is then -1, or one past the last full window,
+ * and the extra slot is empty track. DESK DEFAULT: only while that end node is
+ * the selected one, so the blank leaves as soon as the singer steps off it.
+ */
+export function slideWindow(first: number, index: number, count = 2 * REACH + 1): number {
+	const kept = Math.min(index - 1, Math.max(index - (WINDOW_SLOTS - 2), first));
+	const low = index === 0 ? -1 : 0;
+	const high = count - WINDOW_SLOTS + (index === count - 1 ? 1 : 0);
+	return Math.min(high, Math.max(low, kept));
 }

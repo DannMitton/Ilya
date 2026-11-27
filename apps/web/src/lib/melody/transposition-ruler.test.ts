@@ -3,9 +3,15 @@ import type { ParsedScore, Pitch, TranspositionCandidate, VocalLineEvent, VoiceP
 import {
 	bandLine,
 	cleanerTwin,
+	commitStop,
 	countLines,
 	dimmedStops,
+	ribbonNodes,
 	rulerOpening,
+	semitoneLabel,
+	shortInterval,
+	slideWindow,
+	snapSemitone,
 	stopForSuggestion,
 	stopId,
 	twinCounts,
@@ -17,6 +23,7 @@ import {
 	readout,
 	stopLabel,
 	stopsFor,
+	wordedTonic,
 	type NamedKey,
 } from './transposition-ruler';
 
@@ -184,5 +191,133 @@ describe('"Try this key" from Insights (slice 2)', () => {
 		expect(stopForSuggestion(D_MAJOR, null, 6, -4)).toEqual({ semitones: 6, fifths: -4 });
 		expect(stopForSuggestion(D_MAJOR, B_MAJOR, -3, -4)).toEqual({ semitones: -6, fifths: -4 });
 		expect(stopForSuggestion(D_MAJOR, null, -3, 4)).toBeNull();
+	});
+});
+
+describe('the ribbon: thirteen nodes (Dann 2026-11-26)', () => {
+	const faces = (printed: NamedKey) =>
+		ribbonNodes(printed).map((n) => n.stops.map((s) => stopLabel(s, printed, 'en')));
+	const pairs = (printed: NamedKey) =>
+		ribbonNodes(printed)
+			.filter((n) => n.stops.length > 1)
+			.map((n) => [n.semitones, n.stops.map((s) => stopLabel(s, printed, 'en')).join(' / ')]);
+
+	it('is one node per semitone, -6 to +6, with three pairs in D major, flats first', () => {
+		expect(ribbonNodes(D_MAJOR).map((n) => n.semitones)).toEqual([-6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6]);
+		expect(faces(D_MAJOR).flat()).toHaveLength(16);
+		expect(pairs(D_MAJOR)).toEqual([[-3, 'C♭ / B'], [-1, 'D♭ / C♯'], [4, 'G♭ / F♯']]);
+	});
+
+	it('pairs both ends on one flat, none, or one sharp, and node zero on five, six, or seven', () => {
+		for (const fifths of [-1, 0, 1]) {
+			const ends = pairs({ fifths, mode: 'major' }).map(([n]) => n);
+			expect(ends).toContain(-6);
+			expect(ends).toContain(6);
+		}
+		expect(pairs({ fifths: 5, mode: 'major' })).toContainEqual([0, 'C♭ / B']);
+		for (const fifths of [-7, -6, -5, 5, 6, 7]) {
+			expect(ribbonNodes({ fifths, mode: 'major' })[6].stops).toHaveLength(2);
+		}
+	});
+
+	it('labels the integers with a true minus sign and the intervals, ORIG. at no move', () => {
+		expect([-6, 0, 3].map(semitoneLabel)).toEqual(['\u22126', '0', '+3']);
+		expect([-6, -5, -4, -3, -2, -1, 0].map((n) => shortInterval(n, 'en'))).toEqual(['TT', 'P4', 'M3', 'm3', 'M2', 'm2', 'ORIG.']);
+		expect(shortInterval(0, 'fr')).toBe('ORIG.');
+		expect([-6, -5, -4, -3, -2, -1, 0].map((n) => shortInterval(n, 'fr'))).toEqual(['TT', '4te\u00a0J', '3ce\u00a0M', '3ce\u00a0m', '2de\u00a0M', '2de\u00a0m', 'ORIG.']);
+	});
+
+	it('spells the pair row in words in French and as the face does in English', () => {
+		const [flat, sharp] = ribbonNodes(D_MAJOR)[5].stops;
+		expect([flat, sharp].map((s) => wordedTonic(s, D_MAJOR, 'fr'))).toEqual(['ré bémol', 'do dièse']);
+		expect([flat, sharp].map((s) => wordedTonic(s, D_MAJOR, 'en'))).toEqual(['D♭', 'C♯']);
+		const C_MAJOR: NamedKey = { fifths: 0, mode: 'major' };
+		expect(ribbonNodes(C_MAJOR)[12].stops.map((s) => wordedTonic(s, C_MAJOR, 'fr'))).toEqual(['sol bémol', 'fa dièse']);
+		expect(wordedTonic({ semitones: 0, fifths: 0 }, C_MAJOR, 'fr')).toBe('do');
+	});
+});
+
+describe('what a tap on a node commits', () => {
+	const nodes = ribbonNodes(D_MAJOR);
+	const home = { semitones: 0, fifths: 2 };
+	const none = new Set<string>();
+
+	it('keeps the live spelling on the selected node', () => {
+		const sharp = { semitones: -1, fifths: 7 };
+		expect(commitStop(nodes[5], sharp, new Set([stopId(sharp)]), D_MAJOR)).toEqual(sharp);
+	});
+
+	it('takes the twin that is not dimmed, and the flat one on a tie', () => {
+		expect(commitStop(nodes[3], home, new Set([stopId(C_FLAT_MAJOR)]), D_MAJOR)).toEqual(B_MAJOR);
+		expect(commitStop(nodes[3], home, none, D_MAJOR)).toEqual(C_FLAT_MAJOR);
+		expect(commitStop(nodes[4], home, none, D_MAJOR)).toEqual({ semitones: -2, fifths: 0 });
+	});
+
+	it('restores the print on node zero, tie or dimmed, unless its twin is live', () => {
+		const B: NamedKey = { fifths: 5, mode: 'major' };
+		const zero = ribbonNodes(B)[6];
+		const print = { semitones: 0, fifths: 5 };
+		const twin = { semitones: 0, fifths: -7 };
+		const elsewhere = { semitones: -2, fifths: 3 };
+		expect(commitStop(zero, elsewhere, none, B)).toEqual(print);
+		expect(commitStop(zero, elsewhere, new Set([stopId(print)]), B)).toEqual(print);
+		expect(commitStop(zero, twin, none, B)).toEqual(twin);
+	});
+});
+
+describe('the drag snaps (Dann 2026-11-26 13:33 and 13:35)', () => {
+	it('to the nearest node', () => {
+		expect([-2.4, -1.6, -0.4, 0.4, 0.6, 3.49].map(snapSemitone)).toEqual([-2, -2, 0, 0, 1, 3]);
+	});
+
+	it('on an exact midpoint, to the node nearer zero', () => {
+		expect([-5.5, -1.5, 1.5, 5.5].map(snapSemitone)).toEqual([-5, -1, 1, 5]);
+	});
+
+	it('to the printed key from either midpoint beside it', () => {
+		expect(Object.is(snapSemitone(-0.5), 0)).toBe(true);
+		expect(Object.is(snapSemitone(0.5), 0)).toBe(true);
+		expect(Object.is(snapSemitone(-0.2), 0)).toBe(true);
+	});
+
+	it('and past either end, to that end', () => {
+		expect([-40, -6.5, 6.5, 40].map(snapSemitone)).toEqual([-6, -6, 6, 6]);
+	});
+});
+
+describe("the phone's window of seven (Dann 2026-11-26 13:52 and 13:55)", () => {
+	/* Node indexes run 0 (-6) to 12 (+6); 6 is the printed key. */
+	it('holds still while the thumb is in slots two to six', () => {
+		expect([4, 5, 6, 7, 8].map((i) => slideWindow(3, i))).toEqual([3, 3, 3, 3, 3]);
+	});
+
+	it('slides by the least that returns the thumb, as the drawing shows at -4', () => {
+		expect(slideWindow(3, 2)).toBe(1);
+		expect(slideWindow(3, 3)).toBe(2);
+		expect(slideWindow(3, 9)).toBe(4);
+	});
+
+	it('travels one slot past an end for the end node, and no farther for its neighbour', () => {
+		expect([slideWindow(3, 0), slideWindow(3, 1), slideWindow(3, 11), slideWindow(3, 12)]).toEqual([-1, 0, 6, 7]);
+	});
+
+	it('keeps the thumb in slots two to six for every node, from every window', () => {
+		for (let first = -1; first <= 7; first++) {
+			for (let i = 0; i <= 12; i++) {
+				const slot = i - slideWindow(first, i) + 1;
+				expect(slot).toBeGreaterThanOrEqual(2);
+				expect(slot).toBeLessThanOrEqual(6);
+			}
+		}
+	});
+
+	it('shows a blank slot only while an end node is selected', () => {
+		for (let first = -1; first <= 7; first++) {
+			for (let i = 0; i <= 12; i++) {
+				const next = slideWindow(first, i);
+				expect(next === -1).toBe(i === 0);
+				expect(next === 7).toBe(i === 12);
+			}
+		}
 	});
 });
