@@ -4502,7 +4502,7 @@ Each item was put to him in plain text, one per message, with what it is, whethe
 
 1. **N.135, the scan reader's words to 9 of 10: AFTER.** 19:22.
 2. **N.177, dynamics: AFTER.** 19:26, his correction *"2 after"*.
-3. **Row 145, the shape of printed slurs: AFTER.** 19:2x.
+3. **Row 145, the shape of printed slurs: MOVED TO BEFORE by Dann 2026-11-27 01:08**, transcribed as written: *"move row 145 before the release"*. He had placed it AFTER at 19:2x on 2026-11-22. **What moved it: he reported the same slur a second time**, at 2026-11-27 00:54 (*"I took a look at the way that Ilya is drawing slurs and it needs some refinement"*), having described it on 2026-10-20 15:49 as *"ludicrous: much too tall, much too arched"*. `CONTRACT.md` tether 22: he does not push twice. The desk looked at song 1's first system in the running app 2026-11-27 01:0x and saw the arc rise and fall almost vertically into a near-semicircle. **Nothing further is owed by him: his direction of 2026-10-20 16:06 and 16:07 and the sources memo already fix the design.**
 4. **N.191, ossias: AFTER.** 19:2x.
 5. **N.190, accidentals drawn as the print prints them: BEFORE.** 19:2x.
 6. **N.189, a system with no voice staff: AFTER.** 19:2x.
