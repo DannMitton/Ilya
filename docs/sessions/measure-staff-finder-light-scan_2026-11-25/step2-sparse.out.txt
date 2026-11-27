@@ -1,0 +1,35 @@
+only the kept staves
+   1 staves: grey under 190 0.47 per cent, 1st percentile 221, level 226, found 0 of 1
+   2 staves: grey under 190 1.12 per cent, 1st percentile 185, level 221, found 1 of 2
+   3 staves: grey under 190 1.75 per cent, 1st percentile 171, level 219, found 3 of 3
+   4 staves: grey under 190 2.39 per cent, 1st percentile 162, level 217, found 4 of 4
+   5 staves: grey under 190 3.01 per cent, 1st percentile 149, level 215, found 5 of 5
+   6 staves: grey under 190 3.68 per cent, 1st percentile 137, level 214, found 6 of 6
+   7 staves: grey under 190 4.31 per cent, 1st percentile 129, level 212, found 7 of 7
+   8 staves: grey under 190 4.92 per cent, 1st percentile 123, level 211, found 8 of 8
+   9 staves: grey under 190 5.53 per cent, 1st percentile 117, level 211, found 9 of 9
+  10 staves: grey under 190 6.12 per cent, 1st percentile 113, level 210, found 10 of 10
+  11 staves: grey under 190 6.69 per cent, 1st percentile 109, level 209, found 11 of 11
+  12 staves: grey under 190 7.23 per cent, 1st percentile 106, level 209, found 12 of 12
+  13 staves: grey under 190 7.83 per cent, 1st percentile 103, level 208, found 13 of 13
+  14 staves: grey under 190 8.44 per cent, 1st percentile 101, level 208, found 14 of 14
+  15 staves: grey under 190 9.06 per cent, 1st percentile 98, level 208, found 15 of 15
+  16 staves: grey under 190 9.67 per cent, 1st percentile 96, level 207, found 16 of 16
+
+with everything above the first staff left in
+   1 staves: grey under 190 1.43 per cent, 1st percentile 171, level 219, found 1 of 1
+   2 staves: grey under 190 2.08 per cent, 1st percentile 156, level 216, found 2 of 2
+   3 staves: grey under 190 2.71 per cent, 1st percentile 144, level 215, found 3 of 3
+   4 staves: grey under 190 3.34 per cent, 1st percentile 135, level 213, found 4 of 4
+   5 staves: grey under 190 3.96 per cent, 1st percentile 127, level 212, found 5 of 5
+   6 staves: grey under 190 4.64 per cent, 1st percentile 120, level 211, found 6 of 6
+   7 staves: grey under 190 5.26 per cent, 1st percentile 115, level 210, found 7 of 7
+   8 staves: grey under 190 5.88 per cent, 1st percentile 111, level 210, found 8 of 8
+   9 staves: grey under 190 6.49 per cent, 1st percentile 107, level 209, found 9 of 9
+  10 staves: grey under 190 7.08 per cent, 1st percentile 104, level 209, found 10 of 10
+  11 staves: grey under 190 7.65 per cent, 1st percentile 101, level 208, found 11 of 11
+  12 staves: grey under 190 8.19 per cent, 1st percentile 98, level 208, found 12 of 12
+  13 staves: grey under 190 8.79 per cent, 1st percentile 96, level 207, found 13 of 13
+  14 staves: grey under 190 9.40 per cent, 1st percentile 94, level 207, found 14 of 14
+  15 staves: grey under 190 10.02 per cent, 1st percentile 92, level 207, found 15 of 15
+  16 staves: grey under 190 10.63 per cent, 1st percentile 90, level 206, found 16 of 16

@@ -6,7 +6,7 @@
  */
 import { describe, expect, it } from 'vitest';
 import type { Grey } from './metre-windows';
-import { staffIn } from './metre-windows';
+import { inkLevels, staffIn } from './metre-windows';
 import { lyricBand, MARGIN, systemsOf, type PlacedStaff } from './underlay-band';
 import { SHARE, topFromColumns, topLineBelow } from './underlay-below';
 
@@ -36,7 +36,7 @@ describe('topLineBelow', () => {
 		draw(g, 400); // upper piano staff: top line 400
 		draw(g, 560); // lower: top line 560
 		const b = box(380, 650); // one box, about three staves tall, as homr gave
-		const top = topLineBelow(g, A, { box: b, staff: staffIn(g, b)! });
+		const top = topLineBelow(g, A, { box: b, staff: staffIn(g, b, inkLevels(g))! }, inkLevels(g));
 		expect(top).toBeGreaterThanOrEqual(399);
 		expect(top).toBeLessThanOrEqual(401);
 		const band = lyricBand(A, null, W, H, 0, top)!;
@@ -48,7 +48,7 @@ describe('topLineBelow', () => {
 		const g = blank();
 		draw(g, 400, 100, 600);
 		draw(g, 560, 600, 1100);
-		const top = topLineBelow(g, A, placed(380, 650))!;
+		const top = topLineBelow(g, A, placed(380, 650), inkLevels(g))!;
 		expect(Math.abs(top - 400)).toBeLessThanOrEqual(1);
 		// The rule it replaces, on the same strips: the median of all of them.
 		const all = [400, 400, 400, 400, 400, 560, 560, 560, 560, 560];
@@ -60,7 +60,7 @@ describe('topLineBelow', () => {
 		const g = blank();
 		draw(g, 400);
 		line(g, 400 - SP, 350, 520); // a third of the middle half of A's span (columns 350 to 850)
-		const top = topLineBelow(g, A, placed(380, 650))!;
+		const top = topLineBelow(g, A, placed(380, 650), inkLevels(g))!;
 		expect(Math.abs(top - 400)).toBeLessThanOrEqual(1);
 	});
 
@@ -68,28 +68,28 @@ describe('topLineBelow', () => {
 		const g = blank();
 		draw(g, 400);
 		const b = box(380, 500);
-		const placedB: PlacedStaff = { box: b, staff: staffIn(g, b)! };
-		expect(Math.abs(topLineBelow(g, A, placedB)! - placedB.staff.ls[0][0])).toBeLessThanOrEqual(1);
+		const placedB: PlacedStaff = { box: b, staff: staffIn(g, b, inkLevels(g))! };
+		expect(Math.abs(topLineBelow(g, A, placedB, inkLevels(g))! - placedB.staff.ls[0][0])).toBeLessThanOrEqual(1);
 	});
 
 	it('counts a group only at a space within 0.8 to 1.25 of A\'s', () => {
 		const g = blank();
 		draw(g, 400, 100, 1100, 40); // twice A's space
 		// Nothing counts, so the top of homr's box stands: 380.
-		expect(topLineBelow(g, A, placed(380, 650))).toBeCloseTo(380, 0);
+		expect(topLineBelow(g, A, placed(380, 650), inkLevels(g))).toBeCloseTo(380, 0);
 	});
 
 	it('falls back to the top of homr\'s next box where no group is found, and to null where there is no box', () => {
 		const g = blank();
-		expect(topLineBelow(g, A, placed(380, 650))).toBeCloseTo(380, 0);
-		expect(topLineBelow(g, A, null)).toBeNull();
+		expect(topLineBelow(g, A, placed(380, 650), inkLevels(g))).toBeCloseTo(380, 0);
+		expect(topLineBelow(g, A, null, inkLevels(g))).toBeNull();
 		expect(lyricBand(A, null, W, H, 0, null)!.y1).toBe(180 + 20 * SP);
 	});
 
 	it('searches into the next box, to its bottom, not to its top', () => {
 		const g = blank();
 		draw(g, 450); // inside a box that runs 380 to 650
-		expect(Math.abs(topLineBelow(g, A, placed(380, 650))! - 450)).toBeLessThanOrEqual(1);
+		expect(Math.abs(topLineBelow(g, A, placed(380, 650), inkLevels(g))! - 450)).toBeLessThanOrEqual(1);
 	});
 });
 

@@ -1,0 +1,13 @@
+== lineRows reads glyph: exit 1
+    FAIL  src/lib/omr/metre-windows.test.ts > the two ink levels > finds pale staff lines and their ends at the rule level, and reads the bar lines at the glyph level
+== extent reads glyph: exit 1
+    FAIL  src/lib/omr/metre-windows.test.ts > the two ink levels > finds pale staff lines and their ends at the rule level, and reads the bar lines at the glyph level
+== strokes reads rule: exit 1
+    FAIL  src/lib/omr/metre-windows.test.ts > the two ink levels > finds pale staff lines and their ends at the rule level, and reads the bar lines at the glyph level
+== meanInk reads rule: exit 1
+    FAIL  src/lib/omr/metre-windows.test.ts > the two ink levels > finds pale staff lines and their ends at the rule level, and reads the bar lines at the glyph level
+== levels swapped: exit 1
+    FAIL  src/lib/omr/metre-windows.test.ts > the two ink levels > finds pale staff lines and their ends at the rule level, and reads the bar lines at the glyph level
+    FAIL  src/lib/omr/metre-windows.test.ts > the two ink levels > gives 255, never NaN, on a blank page and on white paper under one per cent ink
+    FAIL  src/lib/omr/metre-windows.test.ts > the two ink levels > takes the staff lines’ level from the page and keeps the glyphs’ at 140
+restored True

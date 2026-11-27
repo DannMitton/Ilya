@@ -1,0 +1,31 @@
+── ilya-ship r2 ──────────────────────────────────────
+Modified, and these are what would be committed:
+    apps/web/src/lib/omr/metre-model.ts
+    apps/web/src/lib/omr/metre-windows.test.ts
+    apps/web/src/lib/omr/metre-windows.ts
+    apps/web/src/lib/omr/underlay-below.test.ts
+    apps/web/src/lib/omr/underlay-below.ts
+    apps/web/src/lib/omr/underlay-looks.ts
+    apps/web/src/lib/omr/underlay-prepare.ts
+    docs/memory/CONTRACT.md
+    docs/memory/DANN.md
+    docs/memory/INBOX.md
+    docs/memory/OPEN.md
+    docs/memory/QUEUE.md
+    docs/memory/README.md
+    docs/memory/SCHEDULE.md
+    docs/memory/STATE.md
+──────────────────────────────────────────────────────
+  1  phonology     OK    462 passed (462)
+  2  dictionary    OK    248 passed (248)
+  3  web-check     OK    found 0 errors and 12 warnings in 5 files
+  4  web-test      DEVIATED FROM BASELINE
+        expected: 6960 passed | 1 skipped (6961)
+        got:  Tests 6963 passed | 1 skipped (6964)
+  5  score-parser  OK    913 passed | 5 skipped (918)
+  6  blurb         OK    178 passed (178)
+  7  integration   OK    159 passed (159)
+  8  ratchets      OK    ratchets: OK.
+──────────────────────────────────────────────────────
+ONE OR MORE GATES MOVED. Nothing staged, nothing committed.
+Full logs: /var/folders/jr/9bv039vn1gd7slcz1y26y5440000gp/T/tmp.77yhcD1mDr

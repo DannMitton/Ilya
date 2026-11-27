@@ -44,7 +44,7 @@ export function lookWindow(y0: number, y1: number, space: number, height: number
 }
 
 /** The grey at `share` of the pixels, darkest first. */
-function toneAt(data: ArrayLike<number>, share: number): number {
+export function toneAt(data: ArrayLike<number>, share: number): number {
 	const bins = new Array<number>(256).fill(0);
 	for (let i = 0; i < data.length; i++) bins[data[i]]++;
 	const target = Math.max(1, Math.ceil(share * data.length));

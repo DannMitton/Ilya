@@ -1,0 +1,120 @@
+homr's page: 410 notes and rests in the first part, 383 notes, 383 notes with a place on the page
+
+--- console lines from the reader
+69.2s [info] [omr] underlay: page read in 6.2 s (worker 788 ms, reader 5431 ms, seating 29 ms): 41 rows in 16 systems, 230 syllables seated, 0 unseated; the dictionary-sewing fallback seated 1 system(s); counted: 0 folded clitic(s) the print gives a note of its own, 2 unit(s) of two vowels or more uncut, 0 many-vowels merge(s) refused (a second token on a note is unseated), 113 note(s) breaking one vowel per note over the sung notes (111 with no syllable); free notes against syllable units after the vowelless drop, by system (ties-only free, slur-aware free, units, the reading taken): 1: ties 21, slur-aware 14, units 15, ties; 2: ties 22, slur-aware 0, units 15, ties; 3: ties 19, slur-aware 0, units 16, ties; 4: ties 21, slur-aware 0, units 18, ties; 5: ties 21, slur-aware 0, units 12, ties; 6: ties 22, slur-aware 0, units 11, ties; 7: ties 21, slur-aware 0, units 16, ties; 8: ties 22, slur-aware 0, units 13, ties; 9: ties 21, slur-aware 0, units 17, ties; 10: ties 22, slur-aware 0, units 13, ties; 11: ties 21, slur-aware 0, units 13, ties; 12: ties 22, slur-aware 0, units 16, ties; 13: ties 21, slur-aware 0, units 11, ties; 14: ties 22, slur-aware 0, units 14, ties; 15: ties 21, slur-aware 0, units 14, ties; 16: ties 22, slur-aware 7, units 16, ties; extenders (arm off): 0 underscore, 65 hyphen, 76 long-dash token(s), 0 note(s) marked under one; ink bands (system, w written or u not: ink share/text-line candidates): 1w:0.0577/77 2w:0.0520/111 3w:0.0592/92 4w:0.0622/73 5w:0.0654/72 6w:0.0520/97 7w:0.0636/79 8w:0.0510/89 9w:0.0675/70 10w:0.0466/91 11w:0.0657/70 12w:0.0514/92 13w:0.0677/67 14w:0.0670/102 15w:0.0691/76 16w:0.0316/122; skipped notes: 42 grace, 0 chord (not skipped, counted: 0 cue, 0 voice 2); vowel boxes: 65 placed by the vowel's ink, fallbacks to the letter share: 0 token(s) whose letter boxes did not match, 0 piece(s) with no vowel
+69.2s [info] [omr] underlay: 230 syllables written on 1 of 1 pages
+94.8s [info] [omr] metre: page read in 31.8 s, 74 windows, 6 stating a signature
+94.9s [info] [omr] metre: bar 1 (page 1): 2/4 stated: 4 bars add up to 2/4
+94.9s [info] [omr] metre: bar 34 (page 1): 2/4 stated: 4 bars add up to 2/4
+94.9s [info] [omr] metre: bar 50 (page 1): 2/4 stated: 4 bars add up to 2/4
+94.9s [info] [omr] metre: bar 66 (page 1): 2/4 stated: 4 bars add up to 2/4
+94.9s [info] [omr] metre: bar 98 (page 1): 2/4 stated: 4 bars add up to 2/4
+94.9s [info] [omr] metre: bar 114 (page 1): 2/4 stated: 4 bars add up to 2/4
+94.9s [info] [omr] homr read 1 of 1 pages of nightingale-p4-only.pdf in 84521 ms on wasm (no WebGPU adapter (the browser granted no adapter))
+
+--- underlay answers: 1 layout, 0 looks; metre answers: 1; rows the reader answered: 41
+systems 16; staves unfound 0; voice notes assigned 383; rows cut at the first look 41; at second looks 0
+system 1: 22 notes, bars 1 to 8, band y 1074-1173, 2 rows
+    row y 1074: "со - ло - нен мо со ло - нен, го - лѳо - ене - тьын со - ло - вей!"
+    row y 1113: "Хисй - ёб - дай, е \"- ЖѣА - ѣ - ди!ѣ, сай - уев - ѳеб ейе Жасѣа - ёё - да!!! ."
+system 2: 27 notes, bars 9 to 16, band y 1308-1452, 3 rows
+    row y 1308: "ты ку - дѣ» ку - джѣ» де - тишьу гдъ цею ноч - ку дрѵ- \"- цо - ещьт. !"
+    row y 1342: "за де іійі? ит - йн аи ейзѣ,\" ѣо ги ии - Кйеѵ З сіі ."
+    row y 1399: "аневто. - т \""
+system 3: 19 notes, bars 17 to 24, band y 1587-1683, 3 rows
+    row y 1587: "сою. - ла - вен мон; ео. - ла - вену го - ла - Сис - тьн -Со. - лю - вей ! ."
+    row y 1613: "Лѣса \" ѵ - дий, ѵ-? даей - ѣо - уий; ія иу да й йа я И ."
+    row y 1666: "- — — -ъ- — -- — т- - -- -- |"
+system 4: 21 notes, bars 25 to 32, band y 1819-1916, 2 rows
+    row y 1819: "со - ло - вен мои, со - лою - вен, го — ло сие тьыи со - ло - внен. ."
+    row y 1857: "Хаеѣ ёё - дай, о \" ЖасА - ѣѣ - па!!, зѣёй - ѣ - ѵеѣ - ейе Хеѣ ѣѣ - оа!!!"
+system 5: 22 notes, bars 34 to 41, band y 2051-2145, 2 rows
+    row y 2051: "т кто та пъд-на чзь какъ » нечь шро -елу ша - етъ те - он, ."
+    row y 2088: "#ѵё - неноі іаи - зейе «й и«иа? ба»у іѳѣ - нѣг ѣѣ іу зѣѣ ѣеи АТано. І"
+system 6: 27 notes, bars 42 to 49, band y 2280-2413, 3 rows
+    row y 2280: "т не смы - ка н - \"чи о - Чен. ѵ - то - па - н» - чин въсле закът |"
+    row y 2315: "аа Я д ѓей «ѣе насѣ, . .. и ! нѵ - - зіен наа! ."
+    row y 2374: "ергаби аоте ѣег з ѣ) |"
+system 7: 22 notes, bars 50 to 57, band y 2550-2644, 2 rows
+    row y 2550: "пгы ле - ти, мон со лое - вен, хоть за три - де - вять ае - мель, І"
+    row y 2587: "Ѵ!іе - уе, уйѣ - де ЛХасй - ѣі - риіѣ, и«ѣё - Аги ѣ ѣеи и и ."
+system 8: 27 notes, bars 58 to 65, band y 2779-2909, 3 rows
+    row y 2779: "хоть ча си - ни - Ч мо пя. на чу - жа - е пе ——— -- ре -: га. ."
+    row y 2818: "ѣеу ЛМееек ииа ѣ - ѣек Аана, ѣ/ѣ зийі Ует - а«н, Ее - кен ѣйои. ."
+    row y 2876: "со (ЯеПнайа вьбе Веё Еза ѣ ."
+system 9: 22 notes, bars 66 to 73, band y 3047-3137, 2 rows
+    row y 3047: "иш пы наи ноа невхъ стри нахъ, нъде - ренв - няхъ и нъ г» пшоюо дахъ:"
+    row y 3082: "и и аи Фе еёй ека\" аи й аа зе ѣѳ! ѵсѣиегъ, І"
+system 10: 27 notes, bars 74 to 81, band y 3274-3406, 3 rows
+    row y 3274: ". не нан - ти те - \"оѣ ни -„ гди го - ре - мыч -нвъ - е —— - ме ня. |"
+    row y 3313: "и» дА . ие хо иѣ, сійѣё ѵи о! хѣо ѣи? \" гез ѣѵ2,"
+    row y 3368: "- сѳ ГЯеТоба шіе вѵ Ечы Е |"
+system 11: 22 notes, bars 82 to 89, band y 3542-3635, 2 rows
+    row y 3542: "- ме - ня ли у мла дон до - рогъ жем чугъ на гру - ди, І"
+    row y 3580: "Уииѳі носѣй Ѳено ѵѣ го! ѣ«ѵ Хизі!, и и ии « (Ее Ееиѵ!, ."
+system 12: 27 notes, bars 90 to 97, band y 3769-3902, 3 rows
+    row y 3769: "у ме - НЯя ли -у мла дои жаръ ко - чеч „ ке на - Иу - къ-. |"
+    row y 3804: "- ией йей Ѵен ѣ - ае! - ѣѣн и х(ойёс ат Еи - йёе тес». ."
+    row y 3866: "эд (ЕеГеаби шѵе Бес Рѣг» ѣ ) |"
+system 13: 22 notes, bars 98 to 105, band y 4037-4129, 2 rows
+    row y 4037: "» ме - ня ли . мла - дон въ серд шъ ми лень кин дру - жокъь: !"
+    row y 4075: "Елазё посѣё ѵѣе ѵ а нобѣй «ѵ» е - ѣе ѣйіѣ - ѣе ѣнз!,"
+system 14: 27 notes, bars 106 to 113, band y 4265-4399, 3 rows
+    row y 4265: "нъдень о - сен - нин -на гру - ди круп ныни жем чугъ но —— - тус.кнълъ."
+    row y 4303: "а и о!й»ѵѣ ніоАё тейе ина ебия Иеез ѣ! ии ."
+    row y 4358: "а\"ѵ\"а - . (Еебѳоби ше ѣей Ечо ѣ) |"
+system 15: 22 notes, bars 114 to 121, band y 4537-4625, 2 rows
+    row y 4537: "-- нъани ню ноч - ку на ру - къ, рас - ною - я - ле - сн коль - що; І"
+    row y 4570: "а \"яа \". я и и . іѳ«- Ина,"
+system 16: 27 notes, bars 122 to 129, band y 4763-5126, 4 rows
+    row y 4763: "сѣ а л п - -\" ш\"-!п писч» - пвчиит и аи — ита ти цпи тенъ — ветие п"
+    row y 4779: "я и ) айи я кеѳя? ѵА и пейи уин - . ѣеѣ беѣ; І"
+    row y 4827: "—- -г - -- СЯстаги ине ѣеѳ оя \") І"
+    row y 4867: "Посква, хочволено ценаѵвою !ѣ Декабри тѳонг, “бвббѳ Пиронѣя скоропечатни нотъ Э Ш Юресисоно нъ Мезки, |"
+
+--- metre windows by system (system by the nearest staff top line)
+windows 74, unfound 0, small 0
+system 1: start@715 2/4; bar@1251 - (a reading states nothing); bar@1584 - (a reading states nothing); bar@2912 - (a reading states nothing); bar@3322 - (a reading states nothing)
+system 2: start@484 - (a reading states nothing); bar@990 - (a reading states nothing); bar@1339 - (a reading states nothing); bar@3370 - (a reading states nothing)
+system 3: start@492 - (a reading states nothing); bar@1012 - (a reading states nothing); bar@1764 - (a reading states nothing); bar@2512 - (a reading states nothing); bar@2915 - (a reading states nothing)
+system 4: start@481 - (a reading states nothing); bar@983 - (a reading states nothing); bar@1302 - (a reading states nothing); bar@1661 - (a reading states nothing); bar@2420 - (a reading states nothing); bar@2761 - (a reading states nothing); bar@3102 - (a reading states nothing); bar@3359 - (a reading states nothing)
+system 5: start@704 2/4; bar@1247 - (a reading states nothing); bar@1577 - (a reading states nothing); bar@1944 - (a reading states nothing); bar@2563 - (a reading states nothing)
+system 6: start@477 - (a reading states nothing); bar@987 - (a reading states nothing); bar@2039 - (a reading states nothing); bar@2490 - (a reading states nothing); bar@2805 - (a reading states nothing); bar@3366 - (a reading states nothing)
+system 7: start@704 2/4; bar@1243 - (a reading states nothing); bar@1940 - (a reading states nothing); bar@3318 - (a reading states nothing)
+system 8: start@481 - (a reading states nothing); bar@987 - (a reading states nothing); bar@1331 - (a reading states nothing); bar@2486 - (a reading states nothing); bar@3366 - (a reading states nothing)
+system 9: start@704 2/4; bar@1572 - (a reading states nothing); bar@2215 - (a reading states nothing); bar@2560 - (a reading states nothing)
+system 10: start@484 - (a reading states nothing); bar@1331 - (a reading states nothing); bar@3604 - (a reading states nothing) courtesy
+system 11: start@704 - (a reading states nothing); bar@1240 - (a reading states nothing); bar@2904 - (a reading states nothing)
+system 12: start@477 - (a reading states nothing); bar@983 - (a reading states nothing); bar@1328 - (a reading states nothing); bar@1724 - (a reading states nothing); bar@3366 - (a reading states nothing)
+system 13: start@701 2/4; bar@1240 - (a reading states nothing); bar@1936 - (a reading states nothing); bar@3319 - (a reading states nothing)
+system 14: start@477 - (a reading states nothing); bar@1328 - (a reading states nothing); bar@1724 - (a reading states nothing); bar@3366 - (a reading states nothing)
+system 15: start@704 2/4; bar@1236 - (a reading states nothing); bar@3319 - (a reading states nothing)
+system 16: start@517 - (a reading states nothing); bar@979 - (a reading states nothing); bar@1324 - (a reading states nothing); bar@1720 - (a reading states nothing); bar@2483 - (a reading states nothing); bar@3366 - (a reading states nothing)
+
+--- the stored reading
+parts 1; measures 129; notes 409; lyric elements 230
+  measure 1: <time><beats>2</beats><beat-type>4</beat-type></time>
+  measure 34: <time><beats>2</beats><beat-type>4</beat-type></time>
+  measure 50: <time><beats>2</beats><beat-type>4</beat-type></time>
+  measure 66: <time><beats>2</beats><beat-type>4</beat-type></time>
+  measure 98: <time><beats>2</beats><beat-type>4</beat-type></time>
+  measure 114: <time><beats>2</beats><beat-type>4</beat-type></time>
+  system 1 lyrics: со ло нен мо со ло нен, го лѳо-е-не тьын со ло вей!
+  system 2 lyrics: ты ку-дѣ» ку-джѣ» де-ти-шьу це-ю ноч ку дрѵ-цо-ещьт.
+  system 3 lyrics: со-ю. ла вен мон; е-о. ла ве-ну го ла Сис-Со. лю-вей
+  system 4 lyrics: со ло вен мо-и, со ло-ю вен, го ло си-е тьы-и со-ло внен.
+  system 5 lyrics: кто та на какъ нечь шро-е-лу ша-етъ те он,
+  system 6 lyrics: не смы ка-"чи о-Чен. то па-чин въсле закът
+  system 7 lyrics: пгы ле-ти, мон со ло-е вен, хоть за три де-вять а-е-мель,
+  system 8 lyrics: хоть ча си ни мо пя. на чу жа-е пе ре га.
+  system 9 lyrics: и и а-и Фе е-ёй е-ка" а-и а-а зе ѣѳ! ѵсѣи-егъ,
+  system 10 lyrics: не нан ти те "оѣ ни гди го ре мыч-е-ме ня.
+  system 11 lyrics: ме-ня ли у мла дон до-рогъ жем чугъ на гру-ди,
+  system 12 lyrics: у ме НЯ-я ли-у мла до-и жаръ ко чеч ке на-И-у
+  system 13 lyrics: ме ня ли мла-дон въ серд ми лень кин дру жокъь:
+  system 14 lyrics: нъдень о-сен нин-на гру ди круп ны-ни жем чугъ но тус-
+  system 15 lyrics: нъа-ни ню ноч ку на ру-рас-но-ю я ле коль-що;
+  system 16 lyrics: сѣ а писч» пвчи-ит и а-и и-та ти цпи тенъ ве-ти-е
+
+--- the app's layout equals prepareUnderlay on step 0c's homr output: true
+systems whose first row starts on the band's top edge: 16 of 16

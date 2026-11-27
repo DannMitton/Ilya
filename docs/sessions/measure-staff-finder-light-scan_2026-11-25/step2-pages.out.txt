@@ -1,0 +1,17 @@
+song1-p2: 4400x5705; raster equals saved new; gray equals saved new; homr ok true, boxes 9, equal to saved new
+song2-p4: 4400x6172; raster equals saved new; gray equals saved new; homr ok true, boxes 8, equal to saved new
+song3-p6: 4400x5843; raster equals saved new; gray equals saved new; homr ok true, boxes 6, equal to saved new
+song4-p5: 4400x5840; raster equals saved new; gray equals saved new; homr ok true, boxes 7, equal to saved new
+nightingale-p2: 4400x5500; raster equals saved true; gray equals saved true; homr ok true, boxes 6, equal to saved true
+nightingale-p3: 4400x5500; raster equals saved true; gray equals saved true; homr ok true, boxes 7, equal to saved true
+nightingale-p5: 4400x5500; raster equals saved true; gray equals saved true; homr ok true, boxes 5, equal to saved true
+nightingale-p6: 4400x5500; raster equals saved true; gray equals saved new; homr ok false (not_music), boxes 0, equal to saved true
+withoutsun-p23: 3699x4920; raster equals saved new; gray equals saved new; homr ok true, boxes 6, equal to saved new
+withoutsun-p4: 3699x4920; raster equals saved true; gray equals saved true; homr ok true, boxes 6, equal to saved true
+withoutsun-p5: 3699x4920; raster equals saved true; gray equals saved true; homr ok true, boxes 6, equal to saved true
+withoutsun-p6: 3699x4920; raster equals saved true; gray equals saved true; homr ok true, boxes 8, equal to saved true
+song1-p1: 4400x5877; raster equals saved true; gray equals saved true; homr ok true, boxes 8, equal to saved true
+song2-p1: 4400x5617; raster equals saved true; gray equals saved true; homr ok true, boxes 6, equal to saved true
+song3-p1: 4400x5842; raster equals saved true; gray equals saved true; homr ok true, boxes 5, equal to saved true
+song4-p1: 4400x5823; raster equals saved true; gray equals saved true; homr ok true, boxes 6, equal to saved true
+nightingale-p4: 4400x5500; raster equals saved true; gray equals saved true; homr ok true, boxes 16, equal to saved true

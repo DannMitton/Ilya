@@ -1,0 +1,50 @@
+1. against step 0e's pair: 45 boxes on 7 pages, 0 differ
+2. against the sweep at (0.85, 0.65): 19 pages, 0 differ
+
+3. lyric rows, shipped and built
+  song1-p1: systems 4 shipped, 4 built; all the same within 6 px
+  withoutsun-p5: systems 3 shipped, 3 built; all the same within 6 px
+  song2-p1: systems 3 shipped, 3 built; differ:
+    box 0
+      shipped 3 notes, band 1250-1564, rows 1250-1279 1369-1432 1483-1564
+      built   3 notes, band 1249-1485, rows 1249-1279 1369-1432
+  song3-p1: systems 1 shipped, 1 built; all the same within 6 px
+  song4-p1: systems 2 shipped, 2 built; all the same within 6 px
+  withoutsun-p4: systems 3 shipped, 3 built; all the same within 6 px
+  withoutsun-p6: systems 4 shipped, 4 built; all the same within 6 px
+  song1-p2: systems 4 shipped, 4 built; differ:
+    box 0
+      shipped no system
+      built   21 notes, band 620-750, rows 620-708 691-750
+    box 1
+      shipped 21 notes, band 1310-1523, rows 1310-1406 1493-1523
+      built   no system
+  song2-p4: systems 3 shipped, 4 built; differ:
+    box 0
+      shipped no system
+      built   17 notes, band 748-869, rows 748-848 829-869
+    box 2
+      shipped 31 notes, band 1979-2211, rows 1979-2144 2128-2211
+      built   14 notes, band 1989-2219, rows 1989-2144 2128-2219
+    box 6
+      shipped 6 notes, band 4754-5032, rows 4783-4839 4904-4955 4946-5032
+      built   6 notes, band 4754-4894, rows 4783-4839
+  song3-p6: systems 5 shipped, 5 built; differ:
+    box 1
+      shipped 66 notes, band 1020-1124, rows 1020-1124
+      built   53 notes, band 1022-1125, rows 1022-1125
+    box 2
+      shipped 96 notes, band 2378-2831, rows 2378-2440 2423-2539 2522-2604 2607-2680 2733-2803 2786-2831
+      built   102 notes, band 2079-2237, rows 2079-2137 2120-2214 2197-2237
+    box 3
+      shipped 68 notes, band 3047-3194, rows 3047-3106 3089-3194
+      built   75 notes, band 3047-3187, rows 3047-3106 3089-3187
+    box 4
+      shipped 42 notes, band 3950-4110, rows 3950-4110
+      built   58 notes, band 3950-4106, rows 3950-4106
+    box 5
+      shipped 68 notes, band 4805-4987, rows 4805-4865 4848-4915 4898-4987
+      built   52 notes, band 5200-5761, rows 5200-5258 5239-5331 5332-5372 5726-5761
+  song4-p5: systems 3 shipped, 3 built; all the same within 6 px
+  withoutsun-p23: systems 2 shipped, 2 built; all the same within 6 px
+  song1-p1-first-system: systems 2 shipped, 2 built; all the same within 6 px

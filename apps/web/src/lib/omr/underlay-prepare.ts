@@ -26,7 +26,7 @@
  * decodes the image before it and encodes the framed rows after it.
  */
 import { placeOf } from './join-pages';
-import { staffIn, type Grey, type StaffBoxLike } from './metre-windows';
+import { inkLevels, staffIn, type Grey, type StaffBoxLike } from './metre-windows';
 import { systemsOf, type PlacedStaff } from './underlay-band';
 import { topLineBelow } from './underlay-below';
 import { frameRow, type FramedCrop } from './underlay-frame';
@@ -211,12 +211,13 @@ function systemsOfPage(page: Grey, musicXml: string, staves: readonly StaffBoxLi
 	const notes = voiceNotes(musicXml).filter((n) => !n.rest && n.at !== null);
 	const placed: PlacedStaff[] = [];
 	let unfound = 0;
+	const ink = inkLevels(page);
 	for (const box of staves) {
-		const staff = staffIn(page, box);
+		const staff = staffIn(page, box, ink);
 		if (staff) placed.push({ box, staff });
 		else unfound++;
 	}
-	const systems = systemsOf(notes.map((n) => n.at as { x: number; y: number }), placed, page.width, page.height, (a, b) => topLineBelow(page, a, b));
+	const systems = systemsOf(notes.map((n) => n.at as { x: number; y: number }), placed, page.width, page.height, (a, b) => topLineBelow(page, a, b, ink));
 	return { notes, placed, unfound, systems };
 }
 

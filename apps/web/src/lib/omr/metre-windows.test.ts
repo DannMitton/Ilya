@@ -4,7 +4,7 @@
  * of five lines 20 pixels apart, a bar line, and a stem with a notehead.
  */
 import { describe, expect, it } from 'vitest';
-import { bandOf, barLines, isCourtesyPlace, linesAt, placesOf, staffIn, windowsOf, type Grey } from './metre-windows';
+import { bandOf, barLines, inkLevels, isCourtesyPlace, linesAt, placesOf, staffIn, windowsOf, type Grey } from './metre-windows';
 import { halves, voiceBoxes } from './metre-model';
 
 const W = 1600;
@@ -30,7 +30,7 @@ const box = { cx: 800 / W, cy: (TOP + 2 * SPACE) / H, w: 1400 / W, h: (4.4 * SPA
 
 describe('staffIn', () => {
 	it('finds the five lines inside homr’s box, and the staff’s ends', () => {
-		const st = staffIn(page(), box)!;
+		const st = staffIn(page(), box, inkLevels(page()))!;
 		expect(st).not.toBeNull();
 		expect(st.space).toBeCloseTo(SPACE, 0);
 		// each line is two rows of ink, so its centre is half a row below its top
@@ -43,9 +43,9 @@ describe('staffIn', () => {
 describe('barLines and windowsOf', () => {
 	it('takes the bar line and leaves the stem', () => {
 		const g = page();
-		const st = staffIn(g, box)!;
-		expect(barLines(g, st)).toEqual([{ x0: 800, x1: 802 }]);
-		const ws = windowsOf(g, st, 0);
+		const st = staffIn(g, box, inkLevels(g))!;
+		expect(barLines(g, st, inkLevels(g))).toEqual([{ x0: 800, x1: 802 }]);
+		const ws = windowsOf(g, st, 0, inkLevels(g));
 		expect(ws.map((w) => [w.kind, w.x0, w.x1])).toEqual([
 			['start', 100, 400],
 			['bar', 803, 892],
@@ -54,14 +54,55 @@ describe('barLines and windowsOf', () => {
 	});
 });
 
+/**
+ * A light scan: paper 230, staff lines 180, glyph ink 60. Every other page in these tests is two greys, and on those the
+ * two levels read the same ink, so a reader handed the wrong one still passes. Here each of the four readers fails.
+ */
+function greyPage(): Grey {
+	const data = new Uint8Array(W * H).fill(230);
+	const fill = (grey: number, x0: number, x1: number, y0: number, y1: number) => {
+		for (let y = y0; y < y1; y++) for (let x = x0; x < x1; x++) data[y * W + x] = grey;
+	};
+	const bottom = TOP + 4 * SPACE + 2;
+	for (let k = 0; k < 5; k++) fill(180, 100, 1500, TOP + k * SPACE, TOP + k * SPACE + 2);
+	fill(60, 800, 803, TOP, bottom); // a bar line
+	fill(180, 795, 808, TOP - 18, TOP - 5); // pale ink above it: to the rule level, an overshoot that rules the bar line out
+	fill(180, 1100, 1103, TOP, bottom); // a pale stroke from line to line: to the rule level, a second bar line
+	return { width: W, height: H, data };
+}
+
+describe('the two ink levels', () => {
+	it('takes the staff lines’ level from the page and keeps the glyphs’ at 140', () => {
+		// anchor 180 (the staff lines are over one per cent of the page), paper 230: 180 + 0.85 × 50, rounded
+		expect(inkLevels(greyPage())).toEqual({ rule: 223, glyph: 140 });
+	});
+
+	it('finds pale staff lines and their ends at the rule level, and reads the bar lines at the glyph level', () => {
+		const g = greyPage();
+		const ink = inkLevels(g);
+		const st = staffIn(g, box, ink)!;
+		expect(st).not.toBeNull();
+		linesAt(st, 800).forEach((y, k) => expect(y).toBeCloseTo(TOP + k * SPACE + 0.5, 6));
+		expect([st.x0, st.x1]).toEqual([100, 1499]);
+		expect(barLines(g, st, ink)).toEqual([{ x0: 800, x1: 802 }]);
+	});
+
+	it('gives 255, never NaN, on a blank page and on white paper under one per cent ink', () => {
+		const data = new Uint8Array(W * H).fill(255);
+		expect(inkLevels({ width: W, height: H, data })).toEqual({ rule: 255, glyph: 140 });
+		data.fill(0, 0, Math.floor(W * H * 0.009));
+		expect(inkLevels({ width: W, height: H, data })).toEqual({ rule: 255, glyph: 140 });
+	});
+});
+
 describe('bandOf and placesOf', () => {
 	it('shrinks the staff to ten pixels a space, and places the seats on the second, middle, and fourth lines', () => {
 		const g = page();
-		const st = staffIn(g, box)!;
+		const st = staffIn(g, box, inkLevels(g))!;
 		const { band, y0, k } = bandOf(g, st);
 		expect(k).toBeCloseTo(0.5, 2);
 		expect(band.width).toBe(Math.trunc(W * k));
-		const { xs, seats } = placesOf(windowsOf(g, st, 0)[0], y0, k);
+		const { xs, seats } = placesOf(windowsOf(g, st, 0, inkLevels(g))[0], y0, k);
 		expect(xs.length).toBe(75);
 		const s = seats(xs[10]);
 		expect(s[1] - s[0]).toBeCloseTo(10, 0);

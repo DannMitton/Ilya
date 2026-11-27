@@ -64,9 +64,17 @@ and report it in one line. You do not write with git, ever.
 
 Then start on THE ONE THING in STATE.md. Do not bring me an engineering
 choice. Before any helper runs, tell me how long you will be silent.
+
+Before you suggest anything, do these three in order and say which you did.
+1. LOOK. Open the thing in the running app and look at it. Reading the source
+is not looking.
+2. READ. Search docs/sessions/ and the project for our prior work on the same
+question, and tell me what you searched and what came back, including when
+nothing did.
+3. THEN suggest. Not before, and not while you are still reading.
 ```
 
-If that prompt ever needs to grow, something has gone wrong in this folder instead. Its line on the repository state was changed by the desk at the close of 2026-10-20 at Dann's request of 12:32 (*"Can we change "Then ask me for the repository state in one line."? You can do this yourself without my invovlement, cant you?"*, transcribed as written). Its last line was changed by the desk at the close of 2026-10-05 under Dann's rule of 2026-10-04 22:27 (he says what he wants, the desk decides how), a DESK DEFAULT, his to overrule.
+If that prompt ever needs to grow, something has gone wrong in this folder instead. **Dann grew it himself on 2026-11-26 21:19**, with the three steps above, and that departure is his: *“I'd like you to update the standard opener with the follow-up instructions I gave you today about looking and reading.”* The rule they carry is homed in `CONTRACT.md` section 0.3; the opener repeats it because the folder did not make the desk do it. Its line on the repository state was changed by the desk at the close of 2026-10-20 at Dann's request of 12:32 (*"Can we change "Then ask me for the repository state in one line."? You can do this yourself without my invovlement, cant you?"*, transcribed as written). Its last line was changed by the desk at the close of 2026-10-05 under Dann's rule of 2026-10-04 22:27 (he says what he wants, the desk decides how), a DESK DEFAULT, his to overrule.
 
 ## Closing a session
 

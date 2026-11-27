@@ -1,0 +1,163 @@
+
+nightingale-p4  level 206 (paper 227, anchor 89)
+ box 0: S NULL
+        A x 715-3607 bars 7[1253,1583,2225,2570,2911,3325,3606] tlb 1202.5 
+        B x 715-3607 bars 4[1250,1583,2911,3321] tlb 1202.5 
+ box 1: S NULL
+        A x 484-3607 bars 8[993,1481,1734,2045,2493,2812,3373,3593] tlb 1481.0 
+        B x 484-3607 bars 3[989,1338,3369] tlb 1481.0 
+ box 2: S NULL
+        A x 492-3607 bars 10[678,920,1015,1363,1422,1767,2115,2914,3219,3303] tlb 1712.0 
+        B x 492-3607 bars 4[1011,1763,2511,2914] tlb 1712.0 
+ box 3: S NULL
+        A x 481-3607 bars 10[898,986,1301,1950,2423,2764,3024,3105,3362,3593] tlb 1946.0 
+        B x 481-3607 bars 7[982,1301,1660,2419,2760,3101,3358] tlb 1946.0 
+ box 4: S NULL
+        A x 704-3581 bars 6[1246,1580,1946,2218,2566,2907] tlb 2174.0 
+        B x 704-3581 bars 4[1246,1576,1943,2562] tlb 2174.0 
+ box 5: S NULL
+        A x 477-3607 bars 8[989,1162,1334,2042,2489,2808,3369,3606] tlb 2442.0 
+        B x 477-3607 bars 5[986,2038,2489,2804,3365] tlb 2442.0 
+ box 6: S NULL
+        A x 704-3563 bars 7[1246,1576,1943,2218,2562,2907,3318] tlb 2673.0 
+        B x 704-3563 bars 3[1242,1939,3317] tlb 2673.0 
+ box 7: S NULL
+        A x 481-3604 bars 8[986,1334,1558,1726,2489,2804,3365,3603] tlb 2938.5 
+        B x 481-3604 bars 4[986,1330,2485,3365] tlb 2938.5 
+ box 8: S NULL
+        A x 704-3552 bars 5[1242,1939,2218,2562,2907] tlb 3166.0 
+        B x 704-3552 bars 3[1571,2214,2559] tlb 3166.0 
+ box 9: S NULL
+        A x 484-3604 bars 7[1330,1726,2038,2489,2804,3365,3603] tlb 3435.5 
+        B x 484-3604 bars 2[1330,3603] tlb 3435.5 
+ box 10: S NULL
+        A x 704-3604 bars 8[1572,1939,2214,2562,2903,3318,3395,3603] tlb 3664.5 
+        B x 704-3604 bars 2[1239,2903] tlb 3664.5 
+ box 11: S NULL
+        A x 477-3607 bars 6[1554,1723,2485,2804,3365,3596] tlb 3930.5 
+        B x 477-3607 bars 4[982,1327,1723,3365] tlb 3930.5 
+ box 12: S NULL
+        A x 701-3552 bars 7[1239,1572,1939,2214,2559,2903,3318] tlb 4158.0 
+        B x 701-3552 bars 3[1239,1935,3318] tlb 4158.0 
+ box 13: S NULL
+        A x 477-3505 bars 8[982,1242,1330,1723,2034,2485,2804,3365] tlb 4429.0 
+        B x 477-3505 bars 3[1327,1723,3365] tlb 4429.0 
+ box 14: S NULL
+        A x 704-3611 bars 8[1239,1492,1935,2214,2559,2903,3318,3610] tlb 4654.5 
+        B x 704-3611 bars 2[1235,3318] tlb 4654.5 
+ box 15: S NULL
+        A x 517-3611 bars 10[982,1154,1327,1550,1723,2034,2485,2804,3369,3600] tlb - 
+        B x 517-3611 bars 5[978,1323,1719,2482,3365] tlb - 
+
+nightingale-p2  level 211 (paper 233, anchor 88)
+ box 0: S NULL
+        A x 1049-3827 bars 4[1730,2463,2870,3826] tlb 1762.0 
+        B x 1049-3827 bars 2[1726,2867] tlb 1762.0 
+ box 2: S NULL
+        A x 708-3813 bars 4[1385,2782,3364,3812] tlb 2955.0 
+        B x 708-3813 bars 5[1385,1829,2324,2782,3364] tlb 2955.0 
+ box 4: S NULL
+        A x 701-3798 bars 3[2504,2873,3786] tlb 4147.0 
+        B x 701-3798 bars 5[1983,2504,2869,3486,3797] tlb 4147.0 
+
+nightingale-p3  level 212 (paper 233, anchor 95)
+ box 0: S NULL
+        A x 539-3662 bars 6[1307,1740,2295,2720,3189,3661] tlb 1213.5 
+        B x 539-3662 bars 1[1307] tlb 1213.5 
+ box 2: S NULL
+        A x 543-3659 bars 4[1678,2217,2647,3658] tlb 2339.0 
+        B x 543-3659 bars 1[2213] tlb 2339.0 
+ box 4: S NULL
+        A x 543-3659 bars 5[1348,1854,2449,3035,3658] tlb 3501.5 
+        B x 543-3659 bars 0[] tlb 3501.5 
+
+nightingale-p5  level 209 (paper 229, anchor 94)
+ box 0: S NULL
+        A x 15-4315 bars 1[454] tlb 1052.0 
+        B x 15-4315 bars 0[] tlb 1052.0 
+ box 1: S NULL
+        A x 4-4227 bars 1[3189] tlb 1809.0 
+        B x 4-4227 bars 0[] tlb 1809.0 
+ box 2: S NULL
+        A x 125-3809 bars 0[] tlb 2213.0 
+        B x 125-3809 bars 1[1020] tlb 2213.0 
+ box 3: S NULL
+        A x 4-2889 bars 0[] tlb 2649.0 
+        B x 4-2889 bars 0[] tlb 2649.0 
+ box 4: S NULL
+        A x 4-4315 bars 1[2906] tlb - 
+        B x 4-4315 bars 0[] tlb - 
+
+song1-p1  level 229 (paper 255, anchor 81)
+ box 0: S x 780-4017 bars 3[1331,1886,2691] tlb 1669.8
+        A x 777-4106 bars 0[] tlb 1672.3 dx0 -3 dx1 89 dbars -3 dtlb 2.5
+        B x 777-4106 bars 4[1331,1886,2691,4102] tlb 1672.3 dx0 -3 dx1 89 dbars 1 dtlb 2.5
+ box 2: S x 525-4062 bars 3[2060,2977,4060] tlb 2662.0
+        A x 572-4065 bars 0[] tlb 2660.5 dx0 47 dx1 3 dbars -3 dtlb -1.5
+        B x 572-4065 bars 3[2059,2977,4060] tlb 2660.5 dx0 47 dx1 3 dbars 0 dtlb -1.5
+ box 4: S x 522-4026 bars 3[1820,3181,4025] tlb 3698.5
+        A x 519-4029 bars 2[3184,4028] tlb 3697.5 dx0 -3 dx1 3 dbars -1 dtlb -1.0
+        B x 519-4029 bars 3[1820,3181,4027] tlb 3697.5 dx0 -3 dx1 3 dbars 0 dtlb -1.0
+ box 6: S x 508-3754 bars 2[1855,2867] tlb 4888.0
+        A x 505-3758 bars 0[] tlb 4888.3 dx0 -3 dx1 4 dbars -2 dtlb 0.3
+        B x 505-3758 bars 2[1855,2867] tlb 4888.3 dx0 -3 dx1 4 dbars 0 dtlb 0.3
+
+song2-p1  level 229 (paper 255, anchor 82)
+ box 0: S x 609-3802 bars 6[1209,1466,2034,2593,3155,3431] tlb 1607.5
+        A x 605-3935 bars 1[1469] tlb 1528.8 dx0 -4 dx1 133 dbars -5 dtlb -78.8
+        B x 605-3935 bars 7[1209,1466,2034,2593,3155,3431,3932] tlb 1528.8 dx0 -4 dx1 133 dbars 1 dtlb -78.8
+ box 2: S x 461-3931 bars 8[1123,1523,1848,2367,2753,3138,3504,3930] tlb 3022.0
+        A x 456-3934 bars 8[1126,1525,1851,2370,2755,3141,3509,3933] tlb 3022.5 dx0 -5 dx1 3 dbars 0 dtlb 0.5
+        B x 456-3934 bars 8[1123,1523,1848,2367,2753,3138,3503,3932] tlb 3022.5 dx0 -5 dx1 3 dbars 0 dtlb 0.5
+ box 4: S x 470-3914 bars 7[1129,1635,1964,2446,2874,3300,3689] tlb 4476.5
+        A x 464-3954 bars 3[1966,2448,3303] tlb 4473.0 dx0 -6 dx1 40 dbars -4 dtlb -3.5
+        B x 464-3954 bars 8[1129,1635,1964,2446,2874,3300,3689,3950] tlb 4473.0 dx0 -6 dx1 40 dbars 1 dtlb -3.5
+
+song3-p1  level 233 (paper 255, anchor 106)
+ box 3: S x 273-3869 bars 1[2242] tlb 4777.0
+        A x 270-3871 bars 2[2246,3870] tlb 4776.8 dx0 -3 dx1 2 dbars 1 dtlb -0.3
+        B x 270-3871 bars 1[2242] tlb 4776.8 dx0 -3 dx1 2 dbars 0 dtlb -0.3
+
+song4-p1  level 228 (paper 255, anchor 77)
+ box 2: S x 398-3904 bars 2[2347,3903] tlb 3321.3
+        A x 392-3908 bars 0[] tlb 3321.5 dx0 -6 dx1 4 dbars -2 dtlb 0.3
+        B x 392-3908 bars 2[2347,3905] tlb 3321.5 dx0 -6 dx1 4 dbars 0 dtlb 0.3
+ box 4: S x 407-3922 bars 2[2307,3921] tlb 4611.0
+        A x 405-3924 bars 0[] tlb 4615.5 dx0 -2 dx1 2 dbars -2 dtlb 4.5
+        B x 405-3924 bars 2[2307,3921] tlb 4615.5 dx0 -2 dx1 2 dbars 0 dtlb 4.5
+
+withoutsun-p4  level 217 (paper 255, anchor 0)
+ box 0: S x 227-3491 bars 2[2023,3490] tlb 922.5
+        A x 227-3492 bars 2[2023,3491] tlb 922.5 dx0 0 dx1 1 dbars 0 dtlb 0.0
+        B x 227-3492 bars 2[2023,3491] tlb 922.5 dx0 0 dx1 1 dbars 0 dtlb 0.0
+ box 2: S x 233-3502 bars 2[2333,3501] tlb 2434.5
+        A x 231-3502 bars 2[2333,3501] tlb 2434.0 dx0 -2 dx1 0 dbars 0 dtlb -0.5
+        B x 231-3502 bars 2[2333,3501] tlb 2434.0 dx0 -2 dx1 0 dbars 0 dtlb -0.5
+ box 4: S x 233-3518 bars 2[2291,3517] tlb 3794.5
+        A x 233-3518 bars 2[2291,3517] tlb 3795.0 dx0 0 dx1 0 dbars 0 dtlb 0.5
+        B x 233-3518 bars 2[2291,3517] tlb 3795.0 dx0 0 dx1 0 dbars 0 dtlb 0.5
+
+withoutsun-p5  level 217 (paper 255, anchor 0)
+ box 0: S x 429-3509 bars 3[1017,2641,3508] tlb 1333.5
+        A x 428-3509 bars 3[1017,2641,3508] tlb 1333.5 dx0 -1 dx1 0 dbars 0 dtlb 0.0
+        B x 428-3509 bars 3[1017,2641,3508] tlb 1333.5 dx0 -1 dx1 0 dbars 0 dtlb 0.0
+ box 2: S x 229-3510 bars 4[1166,1731,2859,3509] tlb 2627.5
+        A x 231-3510 bars 4[1166,1731,2859,3509] tlb 2627.5 dx0 2 dx1 0 dbars 0 dtlb 0.0
+        B x 231-3510 bars 4[1166,1731,2859,3509] tlb 2627.5 dx0 2 dx1 0 dbars 0 dtlb 0.0
+ box 4: S x 233-3511 bars 3[1056,1827,3510] tlb 3969.0
+        A x 233-3512 bars 3[1056,1827,3511] tlb 3968.5 dx0 0 dx1 1 dbars 0 dtlb -0.5
+        B x 233-3512 bars 3[1056,1827,3511] tlb 3968.5 dx0 0 dx1 1 dbars 0 dtlb -0.5
+
+withoutsun-p6  level 217 (paper 255, anchor 0)
+ box 0: S x 227-3493 bars 3[1409,2470,3492] tlb 684.5
+        A x 226-3493 bars 3[1409,2470,3492] tlb 684.5 dx0 -1 dx1 0 dbars 0 dtlb 0.0
+        B x 226-3493 bars 3[1409,2470,3492] tlb 684.5 dx0 -1 dx1 0 dbars 0 dtlb 0.0
+ box 2: S x 229-3500 bars 3[1236,2331,3499] tlb 1821.5
+        A x 229-3500 bars 1[1237] tlb 1821.0 dx0 0 dx1 0 dbars -2 dtlb -0.5
+        B x 229-3500 bars 3[1236,2331,3499] tlb 1821.0 dx0 0 dx1 0 dbars 0 dtlb -0.5
+ box 4: S x 230-3509 bars 2[1364,2411] tlb 2928.5
+        A x 230-3510 bars 1[1364] tlb 2928.5 dx0 0 dx1 1 dbars -1 dtlb 0.0
+        B x 230-3510 bars 2[1364,2411] tlb 2928.5 dx0 0 dx1 1 dbars 0 dtlb 0.0
+ box 6: S x 231-3516 bars 2[2439,3515] tlb 4064.0
+        A x 231-3516 bars 1[2439] tlb 4064.0 dx0 0 dx1 0 dbars -1 dtlb 0.0
+        B x 231-3516 bars 1[2439] tlb 4064.0 dx0 0 dx1 0 dbars -1 dtlb 0.0

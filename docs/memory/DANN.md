@@ -12,20 +12,21 @@ r1, created by the desk 2026-11-22 20:2x at Dann's instruction, transcribed as w
 
 ## OPEN, in the order the desk offers them
 
+**Re-sequenced by the desk 2026-11-26 21:4x on Dann's instruction**, transcribed as written: *"Sequence the tasks in my list in a way that makes sense and optimizes (if one relied opn another make sure that one is accomplishe first), then bring them to me one at a time."* The order below runs the gate path first (N.220's five walks, then N.170's packet, then the frozen build), then the tracks that feed it, then taste. **One DESK DEFAULT inside it, his to overrule: the five walks run BEFORE N.204's phases 2 and 3**, departing from `SCHEDULE.md` item 4's order of 2026-11-16, which put the audit first so the walks would see final code. N.220's own design says each walk is written as a pinned script that runs on every later lane, so the walks are what makes the refactor safe to do, not the other way round.
+
 | # | What | Why it is his | What it unblocks |
 |---|---|---|---|
-| D4 | **Taste: the shape of the name a saved page takes.** Desk default, his to change: composer, title, the document's name. | Taste | QUEUE row 137's brief (item 18, ruled BEFORE) |
-| D5 | **The four singer's marks: ratify the English, rule the French.** Staccato, tenuto, fermata, breath, in Corrections. | His name on every string; French is his by the 2026-09-19 ruling | N.92's marks lane (item 8, ruled BEFORE) |
+| D5 | **The four singer's marks: ratify the English, rule the French.** Staccato, tenuto, fermata, breath, in Corrections. | His name on every string; French is his by the 2026-09-19 ruling | N.92's marks lane (item 8, ruled BEFORE); the lane cannot be briefed without the strings |
 | D6 | **The INSIGHTS redundancy strings**, once the desk drafts them from his design of 2026-11-22 03:31 to 03:46. | Same | The redundancy lane (item 11, ruled BEFORE) |
-| D7 | **Rule N.204's plan r10** (`../sessions/plan-code-audit-maintainability_r10_2026-11-24.md`, md5 `92e6caec`), in particular its ten-item done-when, before phases 2 and 3 start. r10 is r9 with done-when item 3 rewritten, after the baseline was built and showed two families that cannot be byte-stable; r9 and earlier are superseded and kept. | He rules the plan; the refactoring is large and he asked for it before the release | N.204 phases 2 and 3, which are the code track |
-| D8 | **The GUIDE and LEARN list: which parts are weak and get rewritten, which are only edited.** His ruling of 2026-11-22 19:13 makes the LIST the first deliverable, not a draft he reads. | His voice, his judgement of his own writing | The whole words track |
-| D9 | **The review packet's three or four questions:** what he most wants colleagues to answer. | His name, his colleagues | N.170 step 2, and therefore the gate |
-| D10 | **Merge and ship runs**, one paste per lane, as each lane lands. | The gates run on his Mac; `sh ~/Downloads/ilya-ship.sh` is his | Each lane |
-| D11 | **One walk session a week**, with that week's French drafts in the same sitting (his ruling 2026-11-22 19:14). | A singer's eye | The walk debt, which is listed under CARRIED below |
-| D12 | **At the gate: the frozen build, and sending it to colleagues.** | His call that Ilya is functional, which is the gate itself (his ruling 2026-11-22 19:55) | The release |
-| D15 | **Merge `cloud-lane-86`**, the behaviour baseline, once its as-built read lands. | The merge and the gates are his | Every tier 1 and tier 4 lane of N.204 |
-| D16 | **Taste: whether MONOCHROME joins the eight skins or displaces one**, and whether its bands keep the rule under each one. | Taste | The skin's own lane, after the release |
+| D4 | **Taste: the shape of the name a saved page takes.** Desk default, his to change: composer, title, the document's name. | Taste | QUEUE row 137's brief (item 18, ruled BEFORE) |
+| D11 | **One walk session a week**, with that week's French drafts in the same sitting (his ruling 2026-11-22 19:14). Carries N.225's unwalked ribbon and the walk debt under CARRIED below. | A singer's eye | The walk debt, and three of the five N.220 walks |
+| D8 | **The GUIDE and LEARN list: which parts are weak and get rewritten, which are only edited.** His ruling of 2026-11-22 19:13 makes the LIST the first deliverable, not a draft he reads. | His voice, his judgement of his own writing | The whole words track, and QUEUE row 221, which has no Guide section to live in |
+| D7 | **Rule N.204's plan r10** (`../sessions/plan-code-audit-maintainability_r10_2026-11-24.md`, md5 `92e6caec`), in particular its ten-item done-when, before phases 2 and 3 start. r10 is r9 with done-when item 3 rewritten, after the baseline was built and showed two families that cannot be byte-stable; r9 and earlier are superseded and kept. **Moved behind the walks by the desk default above.** | He rules the plan; the refactoring is large and he asked for it before the release | N.204 phases 2 and 3, which are the code track |
 | D14 | **Taste: what the reference ceiling becomes.** A fixed lower value, or one chosen from the declared voice type. `burg.py` is a checking tool outside the app, so nothing a singer meets changes either way. | Taste | Closes the N.200 Step 4 question for good |
+| D16 | **Taste: whether MONOCHROME joins the eight skins or displaces one**, and whether its bands keep the rule under each one. | Taste | The skin's own lane, after the release |
+| D12 | **At the gate: the frozen build, and sending it to colleagues.** Terminal: everything above feeds it. | His call that Ilya is functional, which is the gate itself (his ruling 2026-11-22 19:55) | The release |
+
+**Recurring, not sequenced:** D10, **merge and ship runs**, one paste per lane as each lane lands. The gates run on his Mac and `sh ~/Downloads/ilya-ship.sh` is his.
 
 ## CONDITIONAL, not yet his
 
@@ -41,6 +42,10 @@ Every INSIGHTS screen, held back until the WYSIWYG repair redrew them and not wa
 ---
 
 ## CLOSED
+
+- **D9, the review packet's four questions: DONE 2026-11-26 21:43.** Dann ruled all four of the desk's 21:41 set (*“Yes to all four”*). Homed in `OPEN.md`, THE REVIEW PACKET'S FOUR QUESTIONS. N.170 step 2 is unblocked and the packet is the desk's to draft.
+
+- **D15, merge `cloud-lane-86`, the behaviour baseline: CLOSED 2026-11-26 21:4x, already done.** `git branch --contains origin/cloud-lane-86` names `Shane`, so the baseline is in the tree and no merge is owed. The item was stale on this list, which is the desk's.
 
 - **D13, the French of the two GUIDE resonance paragraphs: DONE 2026-11-23.** Dann ruled paragraph 1 at 22:16 and paragraph 2 at 22:28, and he rewrote paragraph 1 himself in both languages and cut its final sentence. He also ratified « VOIX » as the drawer band's French name at 22:10. Record `../sessions/draft-french-guide-resonance_r2_2026-11-23.md`. What remains is the desk's: the brief that seats the two paragraphs, which is item 2 of `../sessions/brief-code-dash-voix-and-guide-seating_r4_2026-11-24.md`.
 

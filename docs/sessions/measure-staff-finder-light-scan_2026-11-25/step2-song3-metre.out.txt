@@ -1,0 +1,25 @@
+repeated loop equals the tree's readPageMetres on "step 1 (0.45)": true
+
+shipped: windows 8; unfound boxes []; small boxes []; signatures stated 0
+  box 0: start@844-1305 - (a reading states nothing); bar@2460-2597 - (a reading states nothing); bar@4067-4082 - (a reading states nothing) courtesy
+  box 1: start@640-1101 - (a reading states nothing)
+  box 2: start@985-1427 - (a reading states nothing)
+  box 3: start@593-1033 - (a reading states nothing)
+  box 4: start@624-1066 - (a reading states nothing)
+  box 5: start@645-1093 - (a reading states nothing)
+
+step 1 (0.45): windows 8; unfound boxes [2,5]; small boxes []; signatures stated 0
+  box 0: start@495-956 - (a reading states nothing); bar@2460-2597 - (a reading states nothing); bar@4067-4085 - (a reading states nothing) courtesy
+  box 1: start@506-967 - (a reading states nothing); bar@4081-4097 - (a reading states nothing) courtesy
+  box 2: unfound
+  box 3: start@591-1031 - (a reading states nothing)
+  box 4: start@621-1061 - (a reading states nothing); bar@4164-4179 - (a reading states nothing) courtesy
+  box 5: unfound
+
+pair (0.65): windows 10; unfound boxes []; small boxes []; signatures stated 0
+  box 0: start@495-954 - (a reading states nothing); bar@2460-2596 - (a reading states nothing); bar@4067-4085 - (a reading states nothing) courtesy
+  box 1: start@506-967 - (a reading states nothing); bar@4081-4097 - (a reading states nothing) courtesy
+  box 2: start@587-1033 - (a reading states nothing)
+  box 3: start@590-1030 - (a reading states nothing)
+  box 4: start@621-1063 - (a reading states nothing); bar@4164-4179 - (a reading states nothing) courtesy
+  box 5: start@749-1204 - (a reading states nothing)

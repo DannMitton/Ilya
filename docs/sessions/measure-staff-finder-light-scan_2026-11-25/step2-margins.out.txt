@@ -1,0 +1,76 @@
+pair u 0.85, ceiling 0.65. * marks the end of the grid (u 0.5 to 0.99, ceiling 0.3 to 1.2).
+nightingale-p4              u 0.76 to 0.93 at ceiling 0.65 (down 0.09, up 0.08) | ceiling 0.42 to 1.20* at u 0.85 (down 0.23, up 0.55)  needs 16 of 16
+song1-p1                    u 0.50* to 0.99* at ceiling 0.65 (down 0.35, up 0.14) | ceiling 0.30* to 1.20* at u 0.85 (down 0.35, up 0.55)  needs 4 of 4
+withoutsun-p5               u 0.50* to 0.99* at ceiling 0.65 (down 0.35, up 0.14) | ceiling 0.30* to 1.20* at u 0.85 (down 0.35, up 0.55)  needs 3 of 3
+nightingale-p2              u 0.64 to 0.96 at ceiling 0.65 (down 0.21, up 0.11) | ceiling 0.30* to 1.20* at u 0.85 (down 0.35, up 0.55)  needs 3 of 3
+nightingale-p3              u 0.63 to 0.98 at ceiling 0.65 (down 0.22, up 0.13) | ceiling 0.30* to 1.20* at u 0.85 (down 0.35, up 0.55)  needs 3 of 3
+nightingale-p5              u 0.65 to 0.95 at ceiling 0.65 (down 0.20, up 0.10) | ceiling 0.30* to 1.20* at u 0.85 (down 0.35, up 0.55)  needs 1 of 1
+nightingale-p6              no voice box to need
+song2-p1                    u 0.50* to 0.99* at ceiling 0.65 (down 0.35, up 0.14) | ceiling 0.30* to 1.20* at u 0.85 (down 0.35, up 0.55)  needs 3 of 3
+song3-p1                    u 0.50* to 0.99* at ceiling 0.65 (down 0.35, up 0.14) | ceiling 0.30* to 1.20* at u 0.85 (down 0.35, up 0.55)  needs 1 of 1
+song4-p1                    u 0.50* to 0.99* at ceiling 0.65 (down 0.35, up 0.14) | ceiling 0.35 to 1.20* at u 0.85 (down 0.30, up 0.55)  needs 2 of 2
+withoutsun-p4               u 0.50* to 0.99* at ceiling 0.65 (down 0.35, up 0.14) | ceiling 0.30* to 1.20* at u 0.85 (down 0.35, up 0.55)  needs 3 of 3
+withoutsun-p6               u 0.50* to 0.99* at ceiling 0.65 (down 0.35, up 0.14) | ceiling 0.30* to 1.20* at u 0.85 (down 0.35, up 0.55)  needs 4 of 4
+song1-p2                    u 0.50* to 0.99* at ceiling 0.65 (down 0.35, up 0.14) | ceiling 0.30* to 1.20* at u 0.85 (down 0.35, up 0.55)  needs 4 of 4
+song2-p4                    u 0.50* to 0.99* at ceiling 0.65 (down 0.35, up 0.14) | ceiling 0.30* to 1.20* at u 0.85 (down 0.35, up 0.55)  needs 4 of 4
+song3-p6                    u 0.83 to 0.90 at ceiling 0.65 (down 0.02, up 0.05) | ceiling 0.47 to 0.70 at u 0.85 (down 0.18, up 0.05)  needs 6 of 6
+song4-p5                    u 0.50* to 0.99* at ceiling 0.65 (down 0.35, up 0.14) | ceiling 0.37 to 1.20* at u 0.85 (down 0.28, up 0.55)  needs 3 of 3
+withoutsun-p23              u 0.50* to 0.99* at ceiling 0.65 (down 0.35, up 0.14) | ceiling 0.30* to 1.20* at u 0.85 (down 0.35, up 0.55)  needs 3 of 3
+song1-p1-first-system       u 0.50* to 0.99* at ceiling 0.65 (down 0.35, up 0.14) | ceiling 0.30* to 1.20* at u 0.85 (down 0.35, up 0.55)  needs 1 of 1
+nightingale-p4-one-staff    FAILS at the pair  needs 1 of 1, not found at the pair [0]
+
+ALL PAGES                   FAILS at the pair
+
+ALL BUT THE TWO CUTS        u 0.83 to 0.90 at ceiling 0.65 (down 0.02, up 0.05) | ceiling 0.47 to 0.70 at u 0.85 (down 0.18, up 0.05)
+  rectangles centred on the pair that pass everywhere, as (N in u, M in ceiling): (0.00, 0.05), (0.01, 0.02), (0.02, 0.01)
+  grid points passing everywhere: 536
+
+VOICE STAVES, NO CUTS       u 0.76 to 0.93 at ceiling 0.65 (down 0.09, up 0.08) | ceiling 0.42 to 1.20* at u 0.85 (down 0.23, up 0.55)
+  rectangles centred on the pair that pass everywhere, as (N in u, M in ceiling): (0.00, 0.23), (0.01, 0.10), (0.04, 0.09), (0.08, 0.07)
+  grid points passing everywhere: 1377
+
+VOICE STAVES, ONE-SYSTEM CUT u 0.76 to 0.93 at ceiling 0.65 (down 0.09, up 0.08) | ceiling 0.42 to 1.20* at u 0.85 (down 0.23, up 0.55)
+  rectangles centred on the pair that pass everywhere, as (N in u, M in ceiling): (0.00, 0.23), (0.01, 0.10), (0.04, 0.09), (0.08, 0.07)
+  grid points passing everywhere: 1377
+
+THE DESK'S FIRST ELEVEN     u 0.76 to 0.93 at ceiling 0.65 (down 0.09, up 0.08) | ceiling 0.42 to 1.20* at u 0.85 (down 0.23, up 0.55)
+  rectangles centred on the pair that pass everywhere, as (N in u, M in ceiling): (0.00, 0.23), (0.01, 0.10), (0.04, 0.09), (0.08, 0.07)
+  grid points passing everywhere: 1377
+
+=== at the shipped ceiling
+pair u 0.85, ceiling 0.45. * marks the end of the grid (u 0.5 to 0.99, ceiling 0.3 to 1.2).
+nightingale-p4              u 0.76 to 0.85 at ceiling 0.45 (down 0.09, up 0.00) | ceiling 0.42 to 1.20* at u 0.85 (down 0.03, up 0.75)  needs 16 of 16
+song1-p1                    u 0.50* to 0.99* at ceiling 0.45 (down 0.35, up 0.14) | ceiling 0.30* to 1.20* at u 0.85 (down 0.15, up 0.75)  needs 4 of 4
+withoutsun-p5               u 0.50* to 0.99* at ceiling 0.45 (down 0.35, up 0.14) | ceiling 0.30* to 1.20* at u 0.85 (down 0.15, up 0.75)  needs 3 of 3
+nightingale-p2              u 0.64 to 0.96 at ceiling 0.45 (down 0.21, up 0.11) | ceiling 0.30* to 1.20* at u 0.85 (down 0.15, up 0.75)  needs 3 of 3
+nightingale-p3              u 0.65 to 0.97 at ceiling 0.45 (down 0.20, up 0.12) | ceiling 0.30* to 1.20* at u 0.85 (down 0.15, up 0.75)  needs 3 of 3
+nightingale-p5              u 0.65 to 0.95 at ceiling 0.45 (down 0.20, up 0.10) | ceiling 0.30* to 1.20* at u 0.85 (down 0.15, up 0.75)  needs 1 of 1
+nightingale-p6              no voice box to need
+song2-p1                    u 0.50* to 0.99* at ceiling 0.45 (down 0.35, up 0.14) | ceiling 0.30* to 1.20* at u 0.85 (down 0.15, up 0.75)  needs 3 of 3
+song3-p1                    u 0.50* to 0.99* at ceiling 0.45 (down 0.35, up 0.14) | ceiling 0.30* to 1.20* at u 0.85 (down 0.15, up 0.75)  needs 1 of 1
+song4-p1                    u 0.50* to 0.99* at ceiling 0.45 (down 0.35, up 0.14) | ceiling 0.35 to 1.20* at u 0.85 (down 0.10, up 0.75)  needs 2 of 2
+withoutsun-p4               u 0.50* to 0.99* at ceiling 0.45 (down 0.35, up 0.14) | ceiling 0.30* to 1.20* at u 0.85 (down 0.15, up 0.75)  needs 3 of 3
+withoutsun-p6               u 0.50* to 0.99* at ceiling 0.45 (down 0.35, up 0.14) | ceiling 0.30* to 1.20* at u 0.85 (down 0.15, up 0.75)  needs 4 of 4
+song1-p2                    u 0.50* to 0.98 at ceiling 0.45 (down 0.35, up 0.13) | ceiling 0.30* to 1.20* at u 0.85 (down 0.15, up 0.75)  needs 4 of 4
+song2-p4                    u 0.50* to 0.99* at ceiling 0.45 (down 0.35, up 0.14) | ceiling 0.30* to 1.20* at u 0.85 (down 0.15, up 0.75)  needs 4 of 4
+song3-p6                    FAILS at the pair  needs 6 of 6, not found at the pair [2, 5]
+song4-p5                    u 0.50* to 0.95 at ceiling 0.45 (down 0.35, up 0.10) | ceiling 0.37 to 1.20* at u 0.85 (down 0.08, up 0.75)  needs 3 of 3
+withoutsun-p23              u 0.50* to 0.99* at ceiling 0.45 (down 0.35, up 0.14) | ceiling 0.30* to 1.20* at u 0.85 (down 0.15, up 0.75)  needs 3 of 3
+song1-p1-first-system       u 0.50* to 0.99* at ceiling 0.45 (down 0.35, up 0.14) | ceiling 0.30* to 1.20* at u 0.85 (down 0.15, up 0.75)  needs 1 of 1
+nightingale-p4-one-staff    FAILS at the pair  needs 1 of 1, not found at the pair [0]
+
+ALL PAGES                   FAILS at the pair
+
+ALL BUT THE TWO CUTS        FAILS at the pair
+
+VOICE STAVES, NO CUTS       u 0.76 to 0.85 at ceiling 0.45 (down 0.09, up 0.00) | ceiling 0.42 to 1.20* at u 0.85 (down 0.03, up 0.75)
+  rectangles centred on the pair that pass everywhere, as (N in u, M in ceiling): (0.00, 0.03)
+  grid points passing everywhere: 1377
+
+VOICE STAVES, ONE-SYSTEM CUT u 0.76 to 0.85 at ceiling 0.45 (down 0.09, up 0.00) | ceiling 0.42 to 1.20* at u 0.85 (down 0.03, up 0.75)
+  rectangles centred on the pair that pass everywhere, as (N in u, M in ceiling): (0.00, 0.03)
+  grid points passing everywhere: 1377
+
+THE DESK'S FIRST ELEVEN     u 0.76 to 0.85 at ceiling 0.45 (down 0.09, up 0.00) | ceiling 0.42 to 1.20* at u 0.85 (down 0.03, up 0.75)
+  rectangles centred on the pair that pass everywhere, as (N in u, M in ceiling): (0.00, 0.03)
+  grid points passing everywhere: 1377

@@ -1,0 +1,208 @@
+
+nightingale-p4 [named]  paper 227, 1st percentile 89, rule level 206
+  homr boxes 16; voice boxes [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]; voice staves found before 0 of 16, after 16 of 16; all boxes found before 0, after 16
+  state changes: box 0 (voice) gained; box 1 (voice) gained; box 2 (voice) gained; box 3 (voice) gained; box 4 (voice) gained; box 5 (voice) gained; box 6 (voice) gained; box 7 (voice) gained; box 8 (voice) gained; box 9 (voice) gained; box 10 (voice) gained; box 11 (voice) gained; box 12 (voice) gained; box 13 (voice) gained; box 14 (voice) gained; box 15 (voice) gained
+   box 0: before not found
+           after  x 715-3607 bars 4 [1250,1583,2911,3321] tlb 1202.5
+   box 1: before not found
+           after  x 484-3607 bars 3 [989,1338,3369] tlb 1481.0
+   box 2: before not found
+           after  x 492-3607 bars 4 [1011,1763,2511,2914] tlb 1712.0
+   box 3: before not found
+           after  x 481-3607 bars 7 [982,1301,1660,2419,2760,3101,3358] tlb 1946.0
+   box 4: before not found
+           after  x 704-3581 bars 4 [1246,1576,1943,2562] tlb 2174.0
+   box 5: before not found
+           after  x 477-3607 bars 5 [986,2038,2489,2804,3365] tlb 2442.0
+   box 6: before not found
+           after  x 704-3563 bars 3 [1242,1939,3317] tlb 2673.0
+   box 7: before not found
+           after  x 481-3604 bars 4 [986,1330,2485,3365] tlb 2938.5
+   box 8: before not found
+           after  x 704-3552 bars 3 [1571,2214,2559] tlb 3166.0
+   box 9: before not found
+           after  x 484-3604 bars 2 [1330,3603] tlb 3435.5
+   box 10: before not found
+           after  x 704-3604 bars 2 [1239,2903] tlb 3664.5
+   box 11: before not found
+           after  x 477-3607 bars 4 [982,1327,1723,3365] tlb 3930.5
+   box 12: before not found
+           after  x 701-3552 bars 3 [1239,1935,3318] tlb 4158.0
+   box 13: before not found
+           after  x 477-3505 bars 3 [1327,1723,3365] tlb 4429.0
+   box 14: before not found
+           after  x 704-3611 bars 2 [1235,3318] tlb 4654.5
+   box 15: before not found
+           after  x 517-3611 bars 5 [978,1323,1719,2482,3365] tlb -
+
+song1-p1 [named]  paper 255, 1st percentile 81, rule level 229
+  homr boxes 8; voice boxes [0,2,4,6]; voice staves found before 4 of 4, after 4 of 4; all boxes found before 8, after 8
+  state changes: none
+   box 0: before x 780-4017 bars 3 [1331,1886,2691] tlb 1669.8
+           after  x 777-4106 bars 4 [1331,1886,2691,4102] tlb 1672.3  | dx0 -3 dx1 89 dbars 1 dtlb 2.5
+   box 2: before x 525-4062 bars 3 [2060,2977,4060] tlb 2662.0
+           after  x 572-4065 bars 3 [2059,2977,4060] tlb 2660.5  | dx0 47 dx1 3 dbars 0 dtlb -1.5
+   box 4: before x 522-4026 bars 3 [1820,3181,4025] tlb 3698.5
+           after  x 519-4029 bars 3 [1820,3181,4027] tlb 3697.5  | dx0 -3 dx1 3 dbars 0 dtlb -1.0
+   box 6: before x 508-3754 bars 2 [1855,2867] tlb 4888.0
+           after  x 505-3758 bars 2 [1855,2867] tlb 4888.3  | dx0 -3 dx1 4 dbars 0 dtlb 0.3
+
+withoutsun-p5 [named]  paper 255, 1st percentile 0, rule level 217
+  homr boxes 6; voice boxes [0,2,4]; voice staves found before 3 of 3, after 3 of 3; all boxes found before 4, after 5
+  state changes: box 3 (not voice) gained
+   box 0: before x 429-3509 bars 3 [1017,2641,3508] tlb 1333.5
+           after  x 428-3509 bars 3 [1017,2641,3508] tlb 1333.5  | dx0 -1 dx1 0 dbars 0 dtlb 0.0
+   box 2: before x 229-3510 bars 4 [1166,1731,2859,3509] tlb 2627.5
+           after  x 231-3510 bars 4 [1166,1731,2859,3509] tlb 2627.5  | dx0 2 dx1 0 dbars 0 dtlb 0.0
+   box 4: before x 233-3511 bars 3 [1056,1827,3510] tlb 3969.0
+           after  x 233-3512 bars 3 [1056,1827,3511] tlb 3968.5  | dx0 0 dx1 1 dbars 0 dtlb -0.5
+
+nightingale-p2 [held out]  paper 233, 1st percentile 88, rule level 211
+  homr boxes 6; voice boxes [0,2,4]; voice staves found before 0 of 3, after 3 of 3; all boxes found before 0, after 6
+  state changes: box 0 (voice) gained; box 1 (not voice) gained; box 2 (voice) gained; box 3 (not voice) gained; box 4 (voice) gained; box 5 (not voice) gained
+   box 0: before not found
+           after  x 1049-3827 bars 2 [1726,2867] tlb 1762.0
+   box 2: before not found
+           after  x 708-3813 bars 5 [1385,1829,2324,2782,3364] tlb 2955.0
+   box 4: before not found
+           after  x 701-3798 bars 5 [1983,2504,2869,3486,3797] tlb 4147.0
+
+nightingale-p3 [held out]  paper 233, 1st percentile 95, rule level 212
+  homr boxes 7; voice boxes [0,2,4]; voice staves found before 0 of 3, after 3 of 3; all boxes found before 0, after 7
+  state changes: box 0 (voice) gained; box 1 (not voice) gained; box 2 (voice) gained; box 3 (not voice) gained; box 4 (voice) gained; box 5 (not voice) gained; box 6 (not voice) gained
+   box 0: before not found
+           after  x 539-3662 bars 1 [1307] tlb 1213.5
+   box 2: before not found
+           after  x 543-3659 bars 1 [2213] tlb 2339.0
+   box 4: before not found
+           after  x 543-3659 bars 0 [] tlb 3501.5
+
+nightingale-p5 [held out]  paper 229, 1st percentile 94, rule level 209
+  homr boxes 5; voice boxes [0]; voice staves found before 0 of 1, after 1 of 1; all boxes found before 0, after 5
+  state changes: box 0 (voice) gained; box 1 (not voice) gained; box 2 (not voice) gained; box 3 (not voice) gained; box 4 (not voice) gained
+   box 0: before not found
+           after  x 15-4315 bars 0 [] tlb 1052.0
+
+nightingale-p6 [held out]  paper 232, 1st percentile 91, rule level 211
+  homr boxes 0; voice boxes []; voice staves found before 0 of 0, after 0 of 0; all boxes found before 0, after 0
+  state changes: none
+
+song2-p1 [held out]  paper 255, 1st percentile 82, rule level 229
+  homr boxes 6; voice boxes [0,2,4]; voice staves found before 3 of 3, after 3 of 3; all boxes found before 6, after 5
+  state changes: box 5 (not voice) LOST
+   box 0: before x 609-3802 bars 6 [1209,1466,2034,2593,3155,3431] tlb 1607.5
+           after  x 605-3935 bars 7 [1209,1466,2034,2593,3155,3431,3932] tlb 1528.8  | dx0 -4 dx1 133 dbars 1 dtlb -78.8
+   box 2: before x 461-3931 bars 8 [1123,1523,1848,2367,2753,3138,3504,3930] tlb 3022.0
+           after  x 456-3934 bars 8 [1123,1523,1848,2367,2753,3138,3503,3932] tlb 3022.5  | dx0 -5 dx1 3 dbars 0 dtlb 0.5
+   box 4: before x 470-3914 bars 7 [1129,1635,1964,2446,2874,3300,3689] tlb 4476.5
+           after  x 464-3954 bars 8 [1129,1635,1964,2446,2874,3300,3689,3950] tlb 4473.0  | dx0 -6 dx1 40 dbars 1 dtlb -3.5
+
+song3-p1 [held out]  paper 255, 1st percentile 106, rule level 233
+  homr boxes 5; voice boxes [3]; voice staves found before 1 of 1, after 1 of 1; all boxes found before 5, after 5
+  state changes: none
+   box 3: before x 273-3869 bars 1 [2242] tlb 4777.0
+           after  x 270-3871 bars 1 [2242] tlb 4776.8  | dx0 -3 dx1 2 dbars 0 dtlb -0.3
+
+song4-p1 [held out]  paper 255, 1st percentile 77, rule level 228
+  homr boxes 6; voice boxes [2,4]; voice staves found before 2 of 2, after 2 of 2; all boxes found before 6, after 6
+  state changes: none
+   box 2: before x 398-3904 bars 2 [2347,3903] tlb 3321.3
+           after  x 392-3908 bars 2 [2347,3905] tlb 3321.5  | dx0 -6 dx1 4 dbars 0 dtlb 0.3
+   box 4: before x 407-3922 bars 2 [2307,3921] tlb 4611.0
+           after  x 405-3924 bars 2 [2307,3921] tlb 4615.5  | dx0 -2 dx1 2 dbars 0 dtlb 4.5
+
+withoutsun-p4 [held out]  paper 255, 1st percentile 0, rule level 217
+  homr boxes 6; voice boxes [0,2,4]; voice staves found before 3 of 3, after 3 of 3; all boxes found before 6, after 6
+  state changes: none
+   box 0: before x 227-3491 bars 2 [2023,3490] tlb 922.5
+           after  x 227-3492 bars 2 [2023,3491] tlb 922.5  | dx0 0 dx1 1 dbars 0 dtlb 0.0
+   box 2: before x 233-3502 bars 2 [2333,3501] tlb 2434.5
+           after  x 231-3502 bars 2 [2333,3501] tlb 2434.0  | dx0 -2 dx1 0 dbars 0 dtlb -0.5
+   box 4: before x 233-3518 bars 2 [2291,3517] tlb 3794.5
+           after  x 233-3518 bars 2 [2291,3517] tlb 3795.0  | dx0 0 dx1 0 dbars 0 dtlb 0.5
+
+withoutsun-p6 [held out]  paper 255, 1st percentile 0, rule level 217
+  homr boxes 8; voice boxes [0,2,4,6]; voice staves found before 4 of 4, after 4 of 4; all boxes found before 7, after 8
+  state changes: box 7 (not voice) gained
+   box 0: before x 227-3493 bars 3 [1409,2470,3492] tlb 684.5
+           after  x 226-3493 bars 3 [1409,2470,3492] tlb 684.5  | dx0 -1 dx1 0 dbars 0 dtlb 0.0
+   box 2: before x 229-3500 bars 3 [1236,2331,3499] tlb 1821.5
+           after  x 229-3500 bars 3 [1236,2331,3499] tlb 1821.0  | dx0 0 dx1 0 dbars 0 dtlb -0.5
+   box 4: before x 230-3509 bars 2 [1364,2411] tlb 2928.5
+           after  x 230-3510 bars 2 [1364,2411] tlb 2928.5  | dx0 0 dx1 1 dbars 0 dtlb 0.0
+   box 6: before x 231-3516 bars 2 [2439,3515] tlb 4064.0
+           after  x 231-3516 bars 1 [2439] tlb 4064.0  | dx0 0 dx1 0 dbars -1 dtlb 0.0
+
+song1-p2 [held out, last page]  paper 255, 1st percentile 61, rule level 226
+  homr boxes 9; voice boxes [0,2,4,6]; voice staves found before 3 of 4, after 4 of 4; all boxes found before 6, after 8
+  state changes: box 0 (voice) gained; box 1 (not voice) LOST; box 3 (not voice) gained; box 7 (not voice) gained
+   box 0: before not found
+           after  x 442-3955 bars 3 [1713,2841,3952] tlb 795.5
+   box 2: before x 453-3831 bars 2 [1844,3051] tlb 1898.8
+           after  x 450-3944 bars 3 [1844,3051,3942] tlb 1897.5  | dx0 -3 dx1 113 dbars 1 dtlb -1.3
+   box 4: before x 464-3932 bars 4 [1592,2154,2987,3931] tlb 3008.0
+           after  x 461-3934 bars 4 [1592,2154,2987,3932] tlb 3008.3  | dx0 -3 dx1 2 dbars 0 dtlb 0.3
+   box 6: before x 467-3937 bars 3 [1820,2846,3935] tlb 4035.0
+           after  x 465-3939 bars 3 [1820,2846,3935] tlb 4035.5  | dx0 -2 dx1 2 dbars 0 dtlb 0.5
+
+song2-p4 [held out, last page]  paper 255, 1st percentile 92, rule level 231
+  homr boxes 8; voice boxes [0,2,4,6]; voice staves found before 3 of 4, after 4 of 4; all boxes found before 4, after 6
+  state changes: box 0 (voice) gained; box 5 (not voice) gained
+   box 0: before not found
+           after  x 462-4092 bars 3 [1235,2062,4089] tlb 916.0
+   box 2: before x 879-4081 bars 6 [1322,1837,2354,2906,3542,4080] tlb 2258.0
+           after  x 449-4084 bars 6 [1322,1837,2354,2906,3542,4080] tlb 2266.5  | dx0 -430 dx1 3 dbars 0 dtlb 8.5
+   box 4: before x 440-4071 bars 6 [1288,1769,2332,2857,3679,4070] tlb 3640.0
+           after  x 437-4073 bars 6 [1288,1769,2332,2857,3679,4070] tlb 3640.0  | dx0 -3 dx1 2 dbars 0 dtlb 0.0
+   box 6: before x 418-4086 bars 7 [1165,1572,1967,2359,3206,3680,4085] tlb 5079.5
+           after  x 415-4089 bars 7 [1165,1572,1967,2359,3206,3680,4085] tlb 4942.0  | dx0 -3 dx1 3 dbars 0 dtlb -137.5
+
+song3-p6 [held out, last page]  paper 255, 1st percentile 77, rule level 228
+  homr boxes 6; voice boxes [0,1,2,3,4,5]; voice staves found before 6 of 6, after 6 of 6; all boxes found before 6, after 6
+  state changes: none
+   box 0: before x 844-4067 bars 2 [2459,4066] tlb 836.5
+           after  x 495-4070 bars 2 [2459,4066] tlb 855.0  | dx0 -349 dx1 3 dbars 0 dtlb 18.5
+   box 1: before x 640-4079 bars 0 [] tlb 1171.0
+           after  x 506-4082 bars 1 [4080] tlb 1171.8  | dx0 -134 dx1 3 dbars 1 dtlb 0.8
+   box 2: before x 985-4011 bars 0 [] tlb 2875.5
+           after  x 587-4099 bars 0 [] tlb 2282.3  | dx0 -398 dx1 88 dbars 0 dtlb -593.3
+   box 3: before x 593-4128 bars 0 [] tlb 3238.8
+           after  x 590-4130 bars 0 [] tlb 3231.5  | dx0 -3 dx1 2 dbars 0 dtlb -7.3
+   box 4: before x 624-4161 bars 0 [] tlb 4155.0
+           after  x 621-4165 bars 1 [4163] tlb 4150.5  | dx0 -3 dx1 4 dbars 1 dtlb -4.5
+   box 5: before x 645-4207 bars 0 [] tlb 5032.5
+           after  x 749-4226 bars 0 [] tlb -  | dx0 104 dx1 19 dbars 0 dtlb appears or goes
+
+song4-p5 [held out, last page]  paper 255, 1st percentile 57, rule level 225
+  homr boxes 7; voice boxes [0,2,4]; voice staves found before 3 of 3, after 3 of 3; all boxes found before 7, after 7
+  state changes: none
+   box 0: before x 523-3964 bars 3 [1703,2760,3905] tlb 886.0
+           after  x 465-3992 bars 3 [1703,2760,3905] tlb 885.0  | dx0 -58 dx1 28 dbars 0 dtlb -1.0
+   box 2: before x 481-3997 bars 3 [1943,2896,3996] tlb 2197.0
+           after  x 479-4000 bars 3 [1943,2896,3999] tlb 2197.0  | dx0 -2 dx1 3 dbars 0 dtlb 0.0
+   box 4: before x 488-4006 bars 4 [1664,2677,3535,4005] tlb 3487.3
+           after  x 486-4008 bars 4 [1664,2677,3535,4006] tlb 3486.5  | dx0 -2 dx1 2 dbars 0 dtlb -0.8
+
+withoutsun-p23 [held out, last page]  paper 255, 1st percentile 0, rule level 217
+  homr boxes 6; voice boxes [0,2,4]; voice staves found before 3 of 3, after 3 of 3; all boxes found before 6, after 6
+  state changes: none
+   box 0: before x 255-3523 bars 3 [1613,2545,3522] tlb 1006.0
+           after  x 254-3524 bars 3 [1613,2545,3522] tlb 1006.0  | dx0 -1 dx1 1 dbars 0 dtlb 0.0
+   box 2: before x 261-3521 bars 3 [1582,2527,3520] tlb 2334.5
+           after  x 319-3521 bars 3 [1582,2527,3520] tlb 2335.0  | dx0 58 dx1 0 dbars 0 dtlb 0.5
+   box 4: before x 261-3513 bars 4 [1464,2289,2982,3512] tlb 3598.5
+           after  x 260-3513 bars 4 [1464,2289,2982,3512] tlb 3598.5  | dx0 -1 dx1 0 dbars 0 dtlb 0.0
+
+song1-p1-first-system [held out, sparse cut]  paper 255, 1st percentile 109, rule level 233
+  homr boxes 2; voice boxes [0]; voice staves found before 1 of 1, after 1 of 1; all boxes found before 2, after 2
+  state changes: none
+   box 0: before x 780-4017 bars 3 [1331,1886,2691] tlb 1669.8
+           after  x 777-4084 bars 3 [1331,1887,2691] tlb 1673.5  | dx0 -3 dx1 67 dbars 0 dtlb 3.8
+
+nightingale-p4-one-staff [held out, sparse cut]  paper 227, 1st percentile 221, rule level 226
+  homr boxes 1; voice boxes [0]; voice staves found before 0 of 1, after 0 of 1; all boxes found before 0, after 0
+  state changes: none
+   box 0: before not found
+           after  not found
+
+ALL PAGES: voice boxes 65; found before 39, after 64; voice boxes found before and not after 0

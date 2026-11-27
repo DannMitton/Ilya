@@ -14,7 +14,7 @@
  * and WebGPU is homr's while a scan is read.
  */
 import { decide, readWindow, type Classify, type MetreSettings, type ShapeReference, type Verdict, CLASSES, CROP, FEAT } from './metre-reader';
-import { bandOf, isCourtesyPlace, placesOf, staffIn, windowsOf, type Grey, type MetreWindow, type Staff, type StaffBoxLike } from './metre-windows';
+import { bandOf, inkLevels, isCourtesyPlace, placesOf, staffIn, windowsOf, type Grey, type MetreWindow, type Staff, type StaffBoxLike } from './metre-windows';
 import { placeOf } from './join-pages';
 
 export const METRE_BASE = '/omr/models/metre/';
@@ -133,8 +133,9 @@ export async function readPageMetres(
 	let unfound = 0;
 	let small = 0;
 	const found: [number, Staff][] = [];
+	const ink = inkLevels(page);
 	for (const i of voiceBoxes(musicXml, staves, page.height)) {
-		const st = staffIn(page, staves[i]);
+		const st = staffIn(page, staves[i], ink);
 		if (st) found.push([i, st]);
 		else unfound++;
 	}
@@ -148,7 +149,7 @@ export async function readPageMetres(
 			continue;
 		}
 		const { band, y0, k } = bandOf(page, st);
-		for (const w of windowsOf(page, st, i)) {
+		for (const w of windowsOf(page, st, i, ink)) {
 			const { xs, seats, lines } = placesOf(w, y0, k);
 			if (xs.length === 0) continue;
 			const readings = await readWindow(band, xs, seats, net.classify);

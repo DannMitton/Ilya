@@ -28,7 +28,7 @@
  *
  * Reads pixels; the arithmetic is `topFromColumns`, pure.
  */
-import { fives, lineRows, type Grey } from './metre-windows';
+import { fives, lineRows, type Grey, type InkLevels } from './metre-windows';
 import { MARGIN, type PlacedStaff } from './underlay-band';
 
 /** A group counts at a space within these shares of A's. */
@@ -59,7 +59,7 @@ export function topFromColumns(tops: readonly number[], space: number): number |
  * The top line of the staff below voice staff `a`, in page pixels: found in the
  * ink, else the top of homr's box `b`, else null (no staff below).
  */
-export function topLineBelow(page: Grey, a: PlacedStaff, b: PlacedStaff | null): number | null {
+export function topLineBelow(page: Grey, a: PlacedStaff, b: PlacedStaff | null, ink: InkLevels): number | null {
 	const space = a.staff.space;
 	const bottom = a.staff.ls.reduce((m, l) => Math.max(m, l[4]), -Infinity);
 	const start = Math.max(0, Math.ceil(bottom + MARGIN * space));
@@ -72,7 +72,7 @@ export function topLineBelow(page: Grey, a: PlacedStaff, b: PlacedStaff | null):
 	const strip = Math.max(8, Math.trunc(2 * space));
 	const tops: number[] = [];
 	for (let x = from; x + strip <= to; x += Math.max(1, Math.trunc(strip / 2))) {
-		const group = fives(lineRows(page, x, x + strip, start, end, 0.5)).find((f) => f.s >= SPACE_MIN * space && f.s <= SPACE_MAX * space);
+		const group = fives(lineRows(page, x, x + strip, start, end, 0.5, ink)).find((f) => f.s >= SPACE_MIN * space && f.s <= SPACE_MAX * space);
 		if (group) tops.push(group.c[0]);
 	}
 	return topFromColumns(tops, space) ?? boxTop;

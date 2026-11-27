@@ -1,0 +1,15 @@
+
+shipped: x 261-3521, space 31.3
+  bar lines 3: 1579-1582, 2524-2527, 3516-3520
+  metre windows 4: start 261-729; bar 1583-1722; bar 2528-2667; bar 3521-3536
+  system: 3 notes, band 2054-2287, rows 2078-2131 2142-2219 2247-2287
+
+pair: x 319-3521, space 31.3
+  bar lines 3: 1579-1582, 2524-2527, 3516-3520
+  metre windows 4: start 319-787; bar 1583-1722; bar 2528-2667; bar 3521-3536
+  system: 3 notes, band 2054-2288, rows 2078-2131 2142-2219 2247-2288
+
+pair, left end put back: x 261-3521, space 31.3
+  bar lines 3: 1579-1582, 2524-2527, 3516-3520
+  metre windows 4: start 261-729; bar 1583-1722; bar 2528-2667; bar 3521-3536
+  system: 3 notes, band 2054-2288, rows 2078-2131 2142-2219 2247-2288

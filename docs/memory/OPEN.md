@@ -484,6 +484,23 @@ Questions 1 to 5 are optional and answered "secure", "mostly", or "still develop
 
 **Done when:** step 6 is ruled and every cluster is numbered or recorded as LATER.
 
+### THE REVIEW PACKET'S FOUR QUESTIONS. Offered by the desk 2026-11-26 21:41; RULED by Dann 2026-11-26 21:43 (*"Yes to all four"*)
+
+Step 2's candidate list is closed. The packet asks these four, in this order, and no desk puts the question to him again.
+
+1. Where was *Ilya* hard, slow, or confusing? Name the moment.
+2. How would you offer these controls to a singer meeting *Ilya* for the first time?
+3. What could be consolidated or streamlined without losing anything?
+4. Does the colour story work for you, on screen and on paper?
+
+**Where each came from.** Questions 2, 3, and 4 are his own words of 2026-09-24 15:54, turned into questions by the desk. Question 1 is the shape his reasoning of 2026-11-24 23:12 gave: friction is what outside eyes are for, and it reads better from a colleague than from him, because he cannot un-know his own app. It goes first for that reason.
+
+**Out of the packet, by the desk and not his to re-rule:** the code-segmentation question of the same 2026-09-24 message goes to N.170 step 5, the code-structure critique, rather than to singers.
+
+**DESK DEFAULT on the French, his to overrule:** the four questions are drafted and sent in English. If the packet goes to a francophone colleague, they take a French pass in his next weekly French sitting rather than holding the packet now. NOT ESTABLISHED: whether any reviewer on the list reads in French.
+
+
+
 
 **THE ADDRESS COLLEAGUES GET, RULED by Dann 2026-10-19 19:59** (*"1"*, on the desk's options put plainly at 19:58): `ilya.dannmitton.com`. On 2026-10-30 `main` is moved to that day's build (`ENVIRONMENT.md`, "HOW A RELEASE ACTUALLY GOES OUT": one push, live in about 90 seconds, the previous production build kept as a rollback), so every colleague tests the same version while `Shane` keeps moving; later work reaches them only when Dann moves `main` again. The option not taken: the `Shane` alias, which changes with every ship. Markup and Insights show on it, since `apps/web/.env` (tracked) sets `PUBLIC_INCLUDE_MARKUP_INSIGHTS=true`.
 

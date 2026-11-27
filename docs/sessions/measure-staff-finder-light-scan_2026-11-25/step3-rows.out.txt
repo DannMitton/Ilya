@@ -1,0 +1,58 @@
+whole page replayed: {"rows":41,"systems":16,"seated":230,"unseated":0,"russianRows":20,"fallback":1}
+system 1: 15 syllables seated, 1 Russian rows; seated from row 1 of 2 (y 1074)
+    1 russian  y 1074  со - ло - нен мо со ло - нен, го - лѳо - ене - тьын со - ло - вей!
+    2       -  y 1113  Хисй - ёб - дай, е "- ЖѣА - ѣ - ди!ѣ, сай - уев - ѳеб ейе Жасѣа - ёё - да!!! .
+system 2: 15 syllables seated, 2 Russian rows; seated from row 1 of 3 (y 1308)
+    1 russian  y 1308  ты ку - дѣ» ку - джѣ» де - тишьу гдъ цею ноч - ку дрѵ- "- цо - ещьт. !
+    2 russian  y 1342  за де іійі? ит - йн аи ейзѣ," ѣо ги ии - Кйеѵ З сіі .
+    3       -  y 1399  аневто. - т "
+system 3: 16 syllables seated, 2 Russian rows; seated from row 1 of 3 (y 1587)
+    1 russian  y 1587  сою. - ла - вен мон; ео. - ла - вену го - ла - Сис - тьн -Со. - лю - вей ! .
+    2 russian  y 1613  Лѣса " ѵ - дий, ѵ-? даей - ѣо - уий; ія иу да й йа я И .
+    3       -  y 1666  - — — -ъ- — -- — т- - -- -- |
+system 4: 18 syllables seated, 1 Russian rows; seated from row 1 of 2 (y 1819)
+    1 russian  y 1819  со - ло - вен мои, со - лою - вен, го — ло сие тьыи со - ло - внен. .
+    2       -  y 1857  Хаеѣ ёё - дай, о " ЖасА - ѣѣ - па!!, зѣёй - ѣ - ѵеѣ - ейе Хеѣ ѣѣ - оа!!!
+system 5: 12 syllables seated, 1 Russian rows; seated from row 1 of 2 (y 2051)
+    1 russian  y 2051  т кто та пъд-на чзь какъ » нечь шро -елу ша - етъ те - он, .
+    2       -  y 2088  #ѵё - неноі іаи - зейе «й и«иа? ба»у іѳѣ - нѣг ѣѣ іу зѣѣ ѣеи АТано. І
+system 6: 11 syllables seated, 1 Russian rows; seated from row 1 of 3 (y 2280)
+    1 russian  y 2280  т не смы - ка н - "чи о - Чен. ѵ - то - па - н» - чин въсле закът |
+    2       -  y 2315  аа Я д ѓей «ѣе насѣ, . .. и ! нѵ - - зіен наа! .
+    3       -  y 2374  ергаби аоте ѣег з ѣ) |
+system 7: 16 syllables seated, 1 Russian rows; seated from row 1 of 2 (y 2550)
+    1 russian  y 2550  пгы ле - ти, мон со лое - вен, хоть за три - де - вять ае - мель, І
+    2       -  y 2587  Ѵ!іе - уе, уйѣ - де ЛХасй - ѣі - риіѣ, и«ѣё - Аги ѣ ѣеи и и .
+system 8: 13 syllables seated, 1 Russian rows; seated from row 1 of 3 (y 2779)
+    1 russian  y 2779  хоть ча си - ни - Ч мо пя. на чу - жа - е пе ——— -- ре -: га. .
+    2       -  y 2818  ѣеу ЛМееек ииа ѣ - ѣек Аана, ѣ/ѣ зийі Ует - а«н, Ее - кен ѣйои. .
+    3       -  y 2876  со (ЯеПнайа вьбе Веё Еза ѣ .
+system 9: 17 syllables seated, 0 Russian rows, FALLBACK; seated from row 2 of 2 (y 3082)
+    1       -  y 3047  иш пы наи ноа невхъ стри нахъ, нъде - ренв - няхъ и нъ г» пшоюо дахъ:
+    2 sewable  y 3082  и и аи Фе еёй ека" аи й аа зе ѣѳ! ѵсѣиегъ, І
+system 10: 13 syllables seated, 2 Russian rows; seated from row 1 of 3 (y 3274)
+    1 russian  y 3274  . не нан - ти те - "оѣ ни -„ гди го - ре - мыч -нвъ - е —— - ме ня. |
+    2 russian  y 3313  и» дА . ие хо иѣ, сійѣё ѵи о! хѣо ѣи? " гез ѣѵ2,
+    3       -  y 3368  - сѳ ГЯеТоба шіе вѵ Ечы Е |
+system 11: 13 syllables seated, 2 Russian rows; seated from row 1 of 2 (y 3542)
+    1 russian  y 3542  - ме - ня ли у мла дон до - рогъ жем чугъ на гру - ди, І
+    2 russian  y 3580  Уииѳі носѣй Ѳено ѵѣ го! ѣ«ѵ Хизі!, и и ии « (Ее Ееиѵ!, .
+system 12: 16 syllables seated, 2 Russian rows; seated from row 1 of 3 (y 3769)
+    1 russian  y 3769  у ме - НЯя ли -у мла дои жаръ ко - чеч „ ке на - Иу - къ-. |
+    2 russian  y 3804  - ией йей Ѵен ѣ - ае! - ѣѣн и х(ойёс ат Еи - йёе тес». .
+    3       -  y 3866  эд (ЕеГеаби шѵе Бес Рѣг» ѣ ) |
+system 13: 11 syllables seated, 1 Russian rows; seated from row 1 of 2 (y 4037)
+    1 russian  y 4037  » ме - ня ли . мла - дон въ серд шъ ми лень кин дру - жокъь: !
+    2       -  y 4075  Елазё посѣё ѵѣе ѵ а нобѣй «ѵ» е - ѣе ѣйіѣ - ѣе ѣнз!,
+system 14: 14 syllables seated, 1 Russian rows; seated from row 1 of 3 (y 4265)
+    1 russian  y 4265  нъдень о - сен - нин -на гру - ди круп ныни жем чугъ но —— - тус.кнълъ.
+    2       -  y 4303  а и о!й»ѵѣ ніоАё тейе ина ебия Иеез ѣ! ии .
+    3       -  y 4358  а"ѵ"а - . (Еебѳоби ше ѣей Ечо ѣ) |
+system 15: 14 syllables seated, 1 Russian rows; seated from row 1 of 2 (y 4537)
+    1 russian  y 4537  -- нъани ню ноч - ку на ру - къ, рас - ною - я - ле - сн коль - що; І
+    2 sewable  y 4570  а "яа ". я и и . іѳ«- Ина,
+system 16: 16 syllables seated, 1 Russian rows; seated from row 1 of 4 (y 4763)
+    1 russian  y 4763  сѣ а л п - -" ш"-!п писч» - пвчиит и аи — ита ти цпи тенъ — ветие п
+    2       -  y 4779  я и ) айи я кеѳя? ѵА и пейи уин - . ѣеѣ беѣ; І
+    3       -  y 4827  —- -г - -- СЯстаги ине ѣеѳ оя ") І
+    4       -  y 4867  Посква, хочволено ценаѵвою !ѣ Декабри тѳонг, “бвббѳ Пиронѣя скоропечатни нотъ Э Ш Юресисон

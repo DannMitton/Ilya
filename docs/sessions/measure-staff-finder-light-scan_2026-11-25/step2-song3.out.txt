@@ -1,0 +1,42 @@
+
+shipped
+  box 0: found, x 844-4067, space 30.8, top line y 504 at its left sample, 3 windows
+  box 1: found, x 640-4079, space 30.8, top line y 878 at its left sample, 1 windows
+  box 2: found, x 985-4011, space 29.5, top line y 2243 at its left sample, 1 windows
+  box 3: found, x 593-4128, space 29.4, top line y 2915 at its left sample, 1 windows
+  box 4: found, x 624-4161, space 29.5, top line y 3833 at its left sample, 1 windows
+  box 5: found, x 645-4207, space 29.9, top line y 4685 at its left sample, 1 windows
+  systems systemsOf makes (voice notes of the single part), each with the topLineBelow it asked for:
+    on box 1: 66 notes; topLineBelow(below box 2) = 1171.0; band y 1020-1124
+    on box 2: 96 notes; topLineBelow(below box 3) = 2875.5; band y 2378-2831
+    on box 3: 68 notes; topLineBelow(below box 4) = 3238.8; band y 3047-3194
+    on box 4: 42 notes; topLineBelow(below box 5) = 4155.0; band y 3950-4110
+    on box 5: 68 notes; topLineBelow(below nothing) = 5032.5; band y 4805-4987
+
+step 1 (0.45)
+  box 0: found, x 495-4070, space 30.8, top line y 511 at its left sample, 3 windows
+  box 1: found, x 506-4082, space 30.8, top line y 878 at its left sample, 2 windows
+  box 2: NOT FOUND
+  box 3: found, x 591-4130, space 29.4, top line y 2915 at its left sample, 1 windows
+  box 4: found, x 621-4165, space 29.4, top line y 3823 at its left sample, 2 windows
+  box 5: NOT FOUND
+  systems systemsOf makes (voice notes of the single part), each with the topLineBelow it asked for:
+    on box 1: 79 notes; topLineBelow(below box 3) = 1171.8; band y 1022-1125
+    on box 3: 151 notes; topLineBelow(below box 4) = 3238.5; band y 3047-3194
+    on box 4: 110 notes; topLineBelow(below nothing) = 4150.5; band y 3949-4106
+
+pair (0.65)
+  box 0: found, x 495-4070, space 30.6, top line y 511 at its left sample, 3 windows
+  box 1: found, x 506-4082, space 30.8, top line y 878 at its left sample, 2 windows
+  box 2: found, x 587-4099, space 29.8, top line y 1932 at its left sample, 1 windows
+  box 3: found, x 590-4130, space 29.4, top line y 2915 at its left sample, 1 windows
+  box 4: found, x 621-4165, space 29.5, top line y 3829 at its left sample, 2 windows
+  box 5: found, x 749-4226, space 30.4, top line y 5059 at its left sample, 1 windows
+  systems systemsOf makes (voice notes of the single part), each with the topLineBelow it asked for:
+    on box 1: 53 notes; topLineBelow(below box 2) = 1171.8; band y 1022-1125
+    on box 2: 102 notes; topLineBelow(below box 3) = 2282.3; band y 2079-2237
+    on box 3: 75 notes; topLineBelow(below box 4) = 3231.5; band y 3047-3187
+    on box 4: 58 notes; topLineBelow(below box 5) = 4150.5; band y 3950-4106
+    on box 5: 52 notes; topLineBelow(below nothing) = null; band y 5200-5761
+
+voice boxes by the tree: [0,1,2,3,4,5]; notes of the first part with a place: 340

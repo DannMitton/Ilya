@@ -1,0 +1,16 @@
+repeated loop equals the tree's readPageMetres on "pair": true
+
+shipped: windows 13; unfound boxes []; small boxes []; signatures stated 0
+  box 0: start@255-725 - (a reading states nothing); bar@1614-1754 - (a reading states nothing); bar@2546-2686 - (a reading states nothing); bar@3523-3538 - (a reading states nothing) courtesy
+  box 2: start@261-729 - (a reading states nothing); bar@1583-1722 - (a reading states nothing); bar@2528-2667 - (a reading states nothing); bar@3521-3536 - (a reading states nothing) courtesy
+  box 4: start@261-735 - (a reading states nothing); bar@1465-1606 - (a reading states nothing); bar@2290-2431 - (a reading states nothing); bar@2983-3124 - (a reading states nothing); bar@3513-3528 - (a reading states nothing) courtesy
+
+pair: windows 13; unfound boxes []; small boxes []; signatures stated 0
+  box 0: start@254-724 - (a reading states nothing); bar@1614-1754 - (a reading states nothing); bar@2546-2686 - (a reading states nothing); bar@3523-3539 - (a reading states nothing) courtesy
+  box 2: start@319-787 - (a reading states nothing); bar@1583-1722 - (a reading states nothing); bar@2528-2667 - (a reading states nothing); bar@3521-3536 - (a reading states nothing) courtesy
+  box 4: start@260-734 - (a reading states nothing); bar@1465-1606 - (a reading states nothing); bar@2290-2431 - (a reading states nothing); bar@2983-3124 - (a reading states nothing); bar@3513-3528 - (a reading states nothing) courtesy
+
+pair, left end put back: windows 13; unfound boxes []; small boxes []; signatures stated 0
+  box 0: start@254-724 - (a reading states nothing); bar@1614-1754 - (a reading states nothing); bar@2546-2686 - (a reading states nothing); bar@3523-3539 - (a reading states nothing) courtesy
+  box 2: start@261-729 - (a reading states nothing); bar@1583-1722 - (a reading states nothing); bar@2528-2667 - (a reading states nothing); bar@3521-3536 - (a reading states nothing) courtesy
+  box 4: start@260-734 - (a reading states nothing); bar@1465-1606 - (a reading states nothing); bar@2290-2431 - (a reading states nothing); bar@2983-3124 - (a reading states nothing); bar@3513-3528 - (a reading states nothing) courtesy

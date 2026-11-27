@@ -24,6 +24,8 @@
  */
 import type { Band } from './metre-reader';
 import { SP } from './metre-reader';
+import { paperTone } from './underlay-frame';
+import { toneAt } from './underlay-looks';
 
 /** A page image, greyscale, 0 black and 255 white. */
 export interface Grey {
@@ -41,7 +43,36 @@ export interface StaffBoxLike {
 	index: number;
 }
 
-const INK = 140;
+/** The grey levels a page's ink is judged at: a pixel strictly under the level is ink. */
+export interface InkLevels {
+	/** The staff's lines, thin and often the palest ink on a scan: read by `lineRows` and `extent`. Taken from the page. */
+	rule: number;
+	/** Glyph ink, for the bar lines and the noteheads that rule them out: read by `strokes` and `meanInk`. */
+	glyph: number;
+}
+
+/**
+ * The staff lines' level stands this share of the way from the page's dark anchor, the grey at `ANCHOR_SHARE` of its
+ * pixels (darkest first), to its paper tone (`paperTone`). The staff finder lane's step 0b swept both
+ * (`docs/sessions/measure-staff-finder-light-scan_2026-11-25/`, `sweep2.mts`).
+ */
+const ANCHOR_SHARE = 0.01;
+const RULE_SHARE = 0.85;
+
+/**
+ * The glyph level is fixed. A level taken from the page, which the staff lines need, loses bar lines on clean pages,
+ * and 140 misses them on a light scan; the second repair is `docs/memory/QUEUE.md` row 218.
+ */
+const GLYPH_INK = 140;
+
+/**
+ * One page's ink levels, computed once for the page and handed to every reader. The comparison with a level is strict, so
+ * a page that is all one grey (a blank page, or one under one per cent ink on white, level 255) still divides.
+ */
+export function inkLevels(g: Grey): InkLevels {
+	const anchor = toneAt(g.data, ANCHOR_SHARE);
+	return { rule: Math.round(anchor + RULE_SHARE * (paperTone(g.data) - anchor)), glyph: GLYPH_INK };
+}
 
 /** A staff found in the ink: samples of its five lines along it, its space, and its ends. */
 export interface Staff {
@@ -64,18 +95,18 @@ export interface MetreWindow {
 	tail?: number;
 }
 
-function inkAt(g: Grey, x: number, y: number): boolean {
-	return g.data[y * g.width + x] < INK;
+function inkAt(g: Grey, x: number, y: number, level: number): boolean {
+	return g.data[y * g.width + x] < level;
 }
 
-/** Rows of ink across a strip: (centre, thickness) of each run of rows at least `frac` ink. */
-export function lineRows(g: Grey, x0: number, x1: number, y0: number, y1: number, frac: number): [number, number][] {
+/** Rows of ink across a strip: (centre, thickness) of each run of rows at least `frac` ink, at the rule level. */
+export function lineRows(g: Grey, x0: number, x1: number, y0: number, y1: number, frac: number, ink: InkLevels): [number, number][] {
 	const rows: [number, number][] = [];
 	const n = y1 - y0;
 	const on = new Uint8Array(n);
 	for (let y = 0; y < n; y++) {
 		let c = 0;
-		for (let x = x0; x < x1; x++) if (inkAt(g, x, y0 + y)) c++;
+		for (let x = x0; x < x1; x++) if (inkAt(g, x, y0 + y, ink.rule)) c++;
 		on[y] = c / (x1 - x0) >= frac ? 1 : 0;
 	}
 	let y = 0;
@@ -90,6 +121,17 @@ export function lineRows(g: Grey, x0: number, x1: number, y0: number, y1: number
 	return rows;
 }
 
+/**
+ * Five rows of ink are a staff only where the thickest of them is at most this share of the staff space. A thicker row
+ * is a beam, a notehead, or a rest lying along a line, or a light scan's own line at the rule level. Set by the staff
+ * finder lane's step 2 sweep (`docs/sessions/measure-staff-finder-light-scan_2026-11-25/step2-sweep.mts`, 2026-11-26),
+ * at the rule level above. At 0.45, the number before it, Nightingale page 4 stood on the edge: all 16 staves were
+ * found at shares of the level (`RULE_SHARE`) up to 0.85 and no higher. At 0.65 they are found up to 0.93, and at 0.85
+ * every voice staff on the swept pages (the two made-up sparse pages aside) is found with the ceiling anywhere from
+ * 0.42 to 1.20, the end of the sweep.
+ */
+const LINE_CEILING = 0.65;
+
 /** Five evenly spaced rows: each found staff as (line heights, space, thickness). */
 export function fives(rows: [number, number][]): { c: number[]; s: number; th: number }[] {
 	const out: { c: number[]; s: number; th: number }[] = [];
@@ -102,7 +144,7 @@ export function fives(rows: [number, number][]): { c: number[]; s: number; th: n
 		if (s < 8 || s > 60) continue;
 		if (gaps.every((d) => Math.abs(d - s) <= 0.18 * s)) {
 			const th = Math.max(...[0, 1, 2, 3, 4].map((k) => rows[i + k][1]));
-			if (th > 0.45 * s) continue;
+			if (th > LINE_CEILING * s) continue;
 			out.push({ c, s, th });
 			for (let k = 0; k < 5; k++) used.add(i + k);
 		}
@@ -152,15 +194,15 @@ export function linesBeyond(st: Staff, x: number): number[] {
 	});
 }
 
-/** The staff's left and right ends: where all five lines stop being ink. */
-function extent(g: Grey, st: Staff): void {
+/** The staff's left and right ends: where all five lines stop being ink, at the rule level. */
+function extent(g: Grey, st: Staff, ink: InkLevels): void {
 	const ok = (x: number) => {
 		let hit = 0;
 		for (const y of linesBeyond(st, x)) {
 			const yi = Math.round(y);
 			if (yi < 0 || yi >= g.height) continue;
 			let any = false;
-			for (let yy = Math.max(0, yi - 1); yy < Math.min(g.height, yi + 2); yy++) if (inkAt(g, x, yy)) any = true;
+			for (let yy = Math.max(0, yi - 1); yy < Math.min(g.height, yi + 2); yy++) if (inkAt(g, x, yy, ink.rule)) any = true;
 			if (any) hit++;
 		}
 		return hit >= 5;
@@ -196,7 +238,7 @@ const STRIP_SPACES = 2;
  * staff.find_staves does a page, kept to the rows of the box and a quarter of
  * its height either side; or null.
  */
-export function staffIn(g: Grey, box: StaffBoxLike): Staff | null {
+export function staffIn(g: Grey, box: StaffBoxLike, ink: InkLevels): Staff | null {
 	const bx0 = Math.max(0, Math.floor((box.cx - box.w / 2) * g.width));
 	const bx1 = Math.min(g.width, Math.ceil((box.cx + box.w / 2) * g.width));
 	const pad = (box.h * g.height) / 4;
@@ -205,7 +247,7 @@ export function staffIn(g: Grey, box: StaffBoxLike): Staff | null {
 	const W = bx1 - bx0;
 	const sp: number[] = [];
 	for (let x = bx0 + Math.trunc(W / 4); x < bx0 + Math.trunc((3 * W) / 4); x += Math.max(1, Math.trunc(W / 20))) {
-		for (const f of fives(lineRows(g, x, Math.min(bx1, x + Math.max(8, Math.trunc(W / 40))), y0, y1, 0.5))) sp.push(f.s);
+		for (const f of fives(lineRows(g, x, Math.min(bx1, x + Math.max(8, Math.trunc(W / 40))), y0, y1, 0.5, ink))) sp.push(f.s);
 	}
 	if (sp.length === 0) return null;
 	const space = median(sp);
@@ -213,7 +255,7 @@ export function staffIn(g: Grey, box: StaffBoxLike): Staff | null {
 	const per: { xc: number; c: number[]; s: number }[] = [];
 	for (let x = bx0; x < bx1 - Math.trunc(strip / 2); x += Math.trunc(strip / 2)) {
 		const xe = Math.min(bx1, x + strip);
-		for (const f of fives(lineRows(g, x, xe, y0, y1, 0.5))) per.push({ xc: (x + xe) / 2, c: f.c, s: f.s });
+		for (const f of fives(lineRows(g, x, xe, y0, y1, 0.5, ink))) per.push({ xc: (x + xe) / 2, c: f.c, s: f.s });
 	}
 	// homr's box holds one staff, so its staff is the line most candidates
 	// fall on: a Theil-Sen line through their middle lines, and the candidates
@@ -239,7 +281,7 @@ export function staffIn(g: Grey, box: StaffBoxLike): Staff | null {
 	const sm = [...keep.values()].sort((a, b) => a.xc - b.xc);
 	if (sm.length < 4) return null;
 	const best: Staff = { xs: sm.map((p) => p.xc), ls: sm.map((p) => p.c), space: median(sm.map((p) => p.s)), x0: 0, x1: 0 };
-	extent(g, best);
+	extent(g, best, ink);
 	return best;
 }
 
@@ -253,14 +295,14 @@ interface BarStroke {
 	headBot: number;
 }
 
-function meanInk(g: Grey, ya: number, yb: number, xa: number, xb: number): number {
+function meanInk(g: Grey, ya: number, yb: number, xa: number, xb: number, ink: InkLevels): number {
 	ya = Math.max(0, ya);
 	yb = Math.min(g.height, yb);
 	xa = Math.max(0, xa);
 	xb = Math.min(g.width, xb);
 	if (yb <= ya || xb <= xa) return NaN;
 	let n = 0;
-	for (let y = ya; y < yb; y++) for (let x = xa; x < xb; x++) if (inkAt(g, x, y)) n++;
+	for (let y = ya; y < yb; y++) for (let x = xa; x < xb; x++) if (inkAt(g, x, y, ink.glyph)) n++;
 	return n / ((yb - ya) * (xb - xa));
 }
 
@@ -278,7 +320,7 @@ function slopeAt(st: Staff, x: number): number {
  * pixels wide, and the slope is known to about a pixel over a staff's
  * height). On a level page a stroke is still the column, a pixel either side.
  */
-export function strokes(g: Grey, st: Staff, minFrac = 0.97): BarStroke[] {
+export function strokes(g: Grey, st: Staff, ink: InkLevels, minFrac = 0.97): BarStroke[] {
 	const sp = st.space;
 	const cols: number[] = [];
 	for (let x = st.x0; x <= st.x1; x++) {
@@ -291,7 +333,7 @@ export function strokes(g: Grey, st: Staff, minFrac = 0.97): BarStroke[] {
 			const xx = Math.round(x - (y - L[2]) * s);
 			if (y < 0 || y >= g.height) continue;
 			for (let d = -1; d <= 1; d++) {
-				if (xx + d >= 0 && xx + d < g.width && inkAt(g, xx + d, y)) {
+				if (xx + d >= 0 && xx + d < g.width && inkAt(g, xx + d, y, ink.glyph)) {
 					n++;
 					break;
 				}
@@ -319,14 +361,14 @@ export function strokes(g: Grey, st: Staff, minFrac = 0.97): BarStroke[] {
 		const at = (y: number) => Math.round(-(y - L[2]) * s);
 		const ya = t - 0.575 * sp;
 		const yb = bo + 0.575 * sp;
-		const above = t - sp > 0 ? meanInk(g, Math.trunc(t - 0.9 * sp), Math.trunc(t - 0.25 * sp), a + at(ya), b + 1 + at(ya)) : 0;
-		const below = bo + sp < g.height ? meanInk(g, Math.trunc(bo + 0.25 * sp), Math.trunc(bo + 0.9 * sp), a + at(yb), b + 1 + at(yb)) : 0;
+		const above = t - sp > 0 ? meanInk(g, Math.trunc(t - 0.9 * sp), Math.trunc(t - 0.25 * sp), a + at(ya), b + 1 + at(ya), ink) : 0;
+		const below = bo + sp < g.height ? meanInk(g, Math.trunc(bo + 0.25 * sp), Math.trunc(bo + 0.9 * sp), a + at(yb), b + 1 + at(yb), ink) : 0;
 		const head = (y: number) => {
 			const ya = Math.trunc(y - 0.5 * sp);
 			const yb = Math.trunc(y + 0.5 * sp);
 			const d = at(y);
-			const l = meanInk(g, ya, yb, Math.max(0, a + d - Math.trunc(1.2 * sp)), a + d - 1);
-			const r = meanInk(g, ya, yb, b + d + 2, b + d + Math.trunc(1.2 * sp));
+			const l = meanInk(g, ya, yb, Math.max(0, a + d - Math.trunc(1.2 * sp)), a + d - 1, ink);
+			const r = meanInk(g, ya, yb, b + d + 2, b + d + Math.trunc(1.2 * sp), ink);
 			// Python's max(l, r): r only when r > l, so an empty side (NaN) on the left wins, as in staff.py
 			return r > l ? r : l;
 		};
@@ -341,10 +383,10 @@ export function isBar(b: BarStroke, sp: number): boolean {
 }
 
 /** The bar lines of a staff, past the system's opening line, a double bar line's strokes as one (its right edge). */
-export function barLines(g: Grey, st: Staff): { x0: number; x1: number }[] {
+export function barLines(g: Grey, st: Staff, ink: InkLevels): { x0: number; x1: number }[] {
 	const sp = st.space;
 	const merged: { x0: number; x1: number }[] = [];
-	for (const b of strokes(g, st)) {
+	for (const b of strokes(g, st, ink)) {
 		if (!isBar(b, sp) || b.x0 <= st.x0 + 1.5 * sp) continue;
 		const last = merged[merged.length - 1];
 		if (last && b.x0 - last.x1 <= 1.2 * sp) merged[merged.length - 1] = { x0: last.x0, x1: b.x1 };
@@ -354,10 +396,10 @@ export function barLines(g: Grey, st: Staff): { x0: number; x1: number }[] {
 }
 
 /** The windows of one voice staff: its start, and after each bar line. */
-export function windowsOf(g: Grey, st: Staff, box: number): MetreWindow[] {
+export function windowsOf(g: Grey, st: Staff, box: number, ink: InkLevels): MetreWindow[] {
 	const sp = st.space;
 	const out: MetreWindow[] = [{ staff: st, box, kind: 'start', x0: Math.trunc(st.x0), x1: Math.trunc(st.x0 + 15 * sp) }];
-	const bars = barLines(g, st);
+	const bars = barLines(g, st, ink);
 	bars.forEach((b, j) => {
 		out.push({
 			staff: st,
