@@ -1086,3 +1086,29 @@ Found while resolving a different contradiction (whether batch 3 closes `BAND_ID
 **Not touched, and why.** Deleting or switching a stored voice is a change to Dann's own data, and it is irreversible. It goes to him as one line rather than being cleaned up by the desk.
 
 **The practice this asks for, DESK DEFAULT:** a desk that creates a voice to walk something names it and removes it in the same session, and says in its close which profile was active when it left.
+
+
+---
+
+## THE FRENCH OF THE FOUR SINGER'S MARKS HAS NO NAMED SOURCE. Desk debt, opened 2026-11-26
+
+Staccato, tenuto, fermata, and breath need French before the marks lane can be briefed, and `DANN.md` D5b holds his
+ruling on it. **The desk cannot draft it yet, and that is the debt.** `apps/web/src/lib/i18n.ts` holds no French for
+any of the four: a search of the whole file this session returns only `capture.part.breathe` « Respiration »
+(`:2605`), which names the act of breathing during a take and not the printed mark. **Roberge's *Guide des difficultés
+de rédaction en musique*, the source behind the pitch-naming ruling of 2026-10-11, has no section on articulation
+signs**: its plan (`https://roberge.mus.ulaval.ca/gdrm/00-plan.htm`, read 2026-11-26) offers "Ornements mélodiques"
+and "Indications de tempo et de dynamique" under `04-notes.htm`, neither of which covers these. **NOT ESTABLISHED:
+which source governs French articulation-mark names for this project.** The desk's next step is the OQLF's *Grand
+dictionnaire terminologique*, already the ruled authority for Ilya's French typography (`CONTRACT.md` section 7).
+Drafts ride in the weekly walk sitting (his ruling 2026-11-22 19:14).
+
+## WHETHER THE CYRILLIC-SHARE RULE IS BUILT ON THE MUSICXML PATH. Unsettled, opened 2026-11-26
+
+Dann's ruling of 2026-11-25 02:16 (`OPEN.md`, VERSES WRITTEN OUT item 5) says Ilya transcribes the line with the
+highest share of Cyrillic letters. On the scan path that measure decides nothing, because the reader is Cyrillic only
+(`apps/web/src/lib/omr/underlay-recognize.ts:31`, used `:120`) and all 41 rows of Nightingale page 4 come back 100 per
+cent Cyrillic. **Where it does discriminate is a file whose lyrics carry real Latin text.** A grep of
+`apps/web/src/lib/score/ingestion` and `packages/score-parser/src` for a lyric-line chooser by Cyrillic share found
+none (Fable, 2026-11-26). **NOT ESTABLISHED whether anything implements his ruling on that path**, and the desk settles
+it before the written-out-verses lane is briefed, since that lane rests on the ruling.

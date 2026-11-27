@@ -16,14 +16,15 @@ r1, created by the desk 2026-11-22 20:2x at Dann's instruction, transcribed as w
 
 | # | What | Why it is his | What it unblocks |
 |---|---|---|---|
-| D5 | **The four singer's marks: ratify the English, rule the French.** Staccato, tenuto, fermata, breath, in Corrections. | His name on every string; French is his by the 2026-09-19 ruling | N.92's marks lane (item 8, ruled BEFORE); the lane cannot be briefed without the strings |
+| D5 | **The four singer's marks: ratify the English.** Staccato, tenuto, fermata, breath, in Corrections. **Drafted 2026-11-26, `../sessions/strings-owed-four-singers-marks_r1_2026-11-26.md` (md5 `95cdeb27`), put to him 23:2x.** Was blocked on the desk, which had never drafted them. | His name on every string | N.92's marks lane (item 8, ruled BEFORE); the lane cannot be briefed without the strings |
+| D5b | **Rule the French of the four marks.** Rides in the walk sitting (his ruling 2026-11-22 19:14). **Blocked on the desk, not on him:** `i18n.ts` holds no French for any of the four, and Roberge's GDRM has no section on articulation signs (read 2026-11-26), so the source is NOT ESTABLISHED and the desk names one first. | French is his by the 2026-09-19 ruling | The same lane |
 | D6 | **The INSIGHTS redundancy strings**, once the desk drafts them from his design of 2026-11-22 03:31 to 03:46. | Same | The redundancy lane (item 11, ruled BEFORE) |
-| D4 | **Taste: the shape of the name a saved page takes.** Desk default, his to change: composer, title, the document's name. | Taste | QUEUE row 137's brief (item 18, ruled BEFORE) |
 | D11 | **One walk session a week**, with that week's French drafts in the same sitting (his ruling 2026-11-22 19:14). Carries N.225's unwalked ribbon and the walk debt under CARRIED below. | A singer's eye | The walk debt, and three of the five N.220 walks |
 | D8 | **The GUIDE and LEARN list: which parts are weak and get rewritten, which are only edited.** His ruling of 2026-11-22 19:13 makes the LIST the first deliverable, not a draft he reads. | His voice, his judgement of his own writing | The whole words track, and QUEUE row 221, which has no Guide section to live in |
 | D7 | **Rule N.204's plan r10** (`../sessions/plan-code-audit-maintainability_r10_2026-11-24.md`, md5 `92e6caec`), in particular its ten-item done-when, before phases 2 and 3 start. r10 is r9 with done-when item 3 rewritten, after the baseline was built and showed two families that cannot be byte-stable; r9 and earlier are superseded and kept. **Moved behind the walks by the desk default above.** | He rules the plan; the refactoring is large and he asked for it before the release | N.204 phases 2 and 3, which are the code track |
 | D14 | **Taste: what the reference ceiling becomes.** A fixed lower value, or one chosen from the declared voice type. `burg.py` is a checking tool outside the app, so nothing a singer meets changes either way. | Taste | Closes the N.200 Step 4 question for good |
-| D16 | **Taste: whether MONOCHROME joins the eight skins or displaces one**, and whether its bands keep the rule under each one. | Taste | The skin's own lane, after the release |
+| D16 | **Taste: which gloss colour Atelier takes**, one of six on the board (https://claude.ai/artifact/WDMFnw8dRx2YeEYMYyi78s). Ready now. | Taste | Atelier's token table |
+| D17 | **Taste: which skins ship.** NOT OFFERABLE YET and it is the desk's fault that it looks ready: a skin is two complete token tables, and only Manuscript and MONOCHROME have one. The seven settled on at 22:14 stand as candidates alone, and nothing about a skin is counted, kept, cut, or recommended again until its five head-and-ink pairs are measured. About six hours of desk work stands first. | Taste | `SCHEDULE.md` item 9c, the skins lane |
 | D12 | **At the gate: the frozen build, and sending it to colleagues.** Terminal: everything above feeds it. | His call that Ilya is functional, which is the gate itself (his ruling 2026-11-22 19:55) | The release |
 
 **Recurring, not sequenced:** D10, **merge and ship runs**, one paste per lane as each lane lands. The gates run on his Mac and `sh ~/Downloads/ilya-ship.sh` is his.
@@ -42,6 +43,8 @@ Every INSIGHTS screen, held back until the WYSIWYG repair redrew them and not wa
 ---
 
 ## CLOSED
+
+- **D4, the shape of the name a saved page takes: DONE 2026-11-26 23:07.** Dann ruled the desk default, transcribed as written: *"Yes make it so. Yes the recorded default should be TEXT MELODY and INSIGHTS and similarly updated for the correct French terms we chose"*. The name is `Composer - Title - the page's name`, the page's name being TEXT, MELODY, or INSIGHTS in English and « TEXTE », « CHANT », or « APERÇUS » in French (`apps/web/src/lib/i18n.ts:210`, `:228`, `:232`, read 2026-11-26). He also reported that he had thought it already worked that way. QUEUE row 137 carries the ruling and is READY TO BRIEF.
 
 - **D9, the review packet's four questions: DONE 2026-11-26 21:43.** Dann ruled all four of the desk's 21:41 set (*“Yes to all four”*). Homed in `OPEN.md`, THE REVIEW PACKET'S FOUR QUESTIONS. N.170 step 2 is unblocked and the packet is the desk's to draft.
 
