@@ -4998,6 +4998,8 @@ A "Download this file" link inside IMSLP's collapsed "N more" list does not fire
 
 
 ### THE CLAUDE APP CANNOT BE DRIVEN. Learned 2026-10-15
+- **CORRECTED AND WIDENED 2026-11-27 01:3x: the blocker is the GRANT, not the app.** `computer_list_granted_applications` returns `allowedApps: []`, and a grant needs `computer_request_access`, which shows Dann an approval dialog. **So computer use on the Mac is unavailable whenever he is not at the keyboard**, whatever the resolve call now returns. A desk working while he sleeps cannot drive any Mac app, Terminal and the Claude desktop app included.
+- **AND THE CLOUD IS NOT A WAY ROUND IT WHILE HE SLEEPS. Learned 2026-11-27 01:3x, looked at in his Chrome.** A new session at `claude.ai/code` offers a branch picker that lists only branches that ALREADY EXIST: typing `cloud-lane-90` returns "No matching branches" and Return creates nothing. The footer reads "Claude will push directly to" with a `Branch: cloud-lane-88` button, so an unattended session would commit onto an already-merged lane branch, from that branch's stale tip rather than from `Shane`. **Creating the branch would be a push, which `CONTRACT.md` section 4 forbids an agent.** So a cloud lane needs its branch to exist BEFORE Dann goes to bed. **The practice this asks for: when a night of building is wanted, the branch is cut while he is still awake, in the same sitting as the ship.**
 - `computer_resolve_access` with `["Claude"]` returned `apps: []` ("No requested app could be resolved"), listing Chrome and Terminal under `willHide`. The desk cannot type into the Code tab of the Claude desktop app. Terminal is click-tier only. A Mac-lane row is started by Dann pasting one prompt.
 - A long prompt typed into claude.ai/code by `computer` `type` (45,076 characters) froze the tab's renderer for over a minute and then SENT the prompt whole, without an Enter from the desk (session `01JFfuUPLHQi5LBSE6DZH7nz`, 2026-10-15 about 09:12). Read the box or the page after any long type before typing again.
 - The cloud workspace restarted overnight 2026-10-14 to 15; background agents had finished and their files in `/mnt/user-data/outputs/` and the scratchpad survived, but the desk lost about eight hours. Copy every agent output to the Mac (`device_commit_files`) as soon as it lands.
@@ -5277,6 +5279,15 @@ Row 165 steps 5 to 8 and Dann's rulings of 2026-11-01 17:56 and 17:57 treated IN
 ## THE TRANSPOSITION RULER ONLY OFFERS ITSELF AT THE PRINTED KEY
 
 Learned 2026-11-26 by opening it. **If you want to LOOK at the ruler on a song that is already transposed, you cannot reach it directly.** The PIECE band's key line is not a control: clicking it does nothing. The opener is the “Try another key” button, and that button only renders when the song sits at its printed key (`PieceKeyLine.svelte:31-35`); while transposed the band offers only “As printed”. **So the sequence is: click “As printed”, which reverts the song, then “Try another key”.** Put the singer's key back through the ruler itself before you leave, or you have silently un-transposed her score. The ruler lives on the MELODY tab and is covered by an open Loupe, so close the Loupe first. Occasion: the desk needed one look at a shipped control and spent five calls finding the door.
+
+### `routes/+page.svelte` IS AT ITS RATCHET CEILING. Learned 2026-11-27 (Fable, on row 137's brief)
+- `scripts/ratchets.json:8` sets the ceiling at 5533 and `wc -l` returns 5533 on `79d6d18e`. **One added line fails the gate.** Any brief that puts logic in that file must say which lines it gives up to pay for the ones it adds, or put the logic in a tested `.ts` file instead. The tree's own precedent is `lib/score/bar-layer.ts:7`: "`+page.svelte` is at its line ceiling and a line of logic in a `.svelte` file has no test".
+
+### THE TREE ALREADY NAMES FILES FROM SONGS. Learned 2026-11-27 (Fable, on row 137's brief)
+- `lib/library/binder.ts:73` `binderFileName` already sanitizes a name for a file system: it replaces `\ / : * ? " < > |` and control characters, collapses whitespace, strips a leading dot, and caps at 180 BYTES because Cyrillic is two apiece (`:74-85`). `lib/library/songs.ts:44` `proposeName` already holds a fallback chain for a song with no title. **A desk proposing to name a file searches these first.** The desk's row 137 brief r1 searched `document.title` and `window.print` alone and wrote "nothing in the tree names a page today", which was false.
+
+### `extractSurname` RETURNS UPPERCASE. Learned 2026-11-27
+- `lib/page-config.ts:169-178`, both branches (`:173`, `:177`), as its own comment says at `:167`. A filename that wants `Alyabyev` cannot be built by calling it. The running header depends on the uppercase, so a mixed-case name takes a sibling function, never an edit.
 
 ## ESTIMATES BY KIND OF JOB (desk, 2026-11-08 20:1x; `CONTRACT.md` §4, "Estimates come from actuals")
 
