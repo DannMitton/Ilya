@@ -104,6 +104,7 @@ next session the same hour it cost the last one.
 | you are about to quote a cost for a Fable review of a PLAN, or for a web-research pass | `ESTIMATES BY KIND OF JOB: THREE ACTUALS FROM 2026-11-23 EVENING` |
 | you are about to read Dann's usage page, or say how much Fable is left | `HOW TO READ THE FABLE BAR` |
 | a desk is about to cite "no vowel is ever blank" as Dann's ruling | `NO VOWEL IS EVER BLANK IS A GLOSS` |
+| you are about to call a skin plate, mockup or Paper study a skin | `A PAPER STUDY IS NOT A SKIN` |
 | you are about to cite one of Dann's rules as authority for your own convenience | `THE OPENING READ IS NOT A MENU` |
 | you are about to type a multi-paragraph prompt into Claude Code in Dann's Chrome | `A NEWLINE SENDS THE CODE PROMPT` |
 | you are about to cut a cloud lane and the composer says it will push to `Shane` | `THE CODE BRANCH PICKER DOES NOT CREATE BRANCHES` |
@@ -6217,3 +6218,13 @@ The desk wrote three memory files with `python3 -I -c "…"`. The double quotes 
 **The rule: prose destined for a memory file goes into a script written with a QUOTED heredoc (`cat > file.py <<'PYEOF'`), and the script is then run.** The quoted delimiter stops the shell touching anything inside. The desk already uses this for every other write; this one call did not.
 
 **If it fires:** the loss is silent in the prose and visible only as missing citations. Grep the file for the paths that should be there before moving on.
+
+## A PAPER STUDY IS NOT A SKIN (desk, 2026-11-26 22:4x, after Dann caught it)
+
+**The nine plates on the skins canvas draw one sheet on one desk. No drawer, no header, no tab bar, no buttons.** A skin is two complete token tables, screen and print, over the five families at six steps each plus the inks and the three surfaces (`app.css:28-81`). The Paper consumes a handful of those tokens.
+
+**The test that decides whether a skin is possible at all is the drawer**, not the page: five head-and-ink pairs inside 4.8 to 5.7:1, none white on a solid bar (`OPEN.md`, THE DRAWER IS THE HARDEST TEST A SKIN FACES). **Run it before anything else about that skin is said out loud.**
+
+**What it cost.** On 2026-11-26 the desk read that section, quoted its rule into a sequence it wrote for Dann, and in the same hour gave him pros, cons and a keep-seven recommendation over nine Paper studies as though they were skins. He ruled on it at 22:14 and then found the gap himself at 22:38: *"I do not see skins... I see alterations to the page GUI."* The recommendation was withdrawn. **The evidence was in hand and quoted; what failed was applying it to what the desk was saying.**
+
+**So, before any sentence that counts, keeps, cuts, ranks or recommends a skin:** name how many of the ones in question have a measured five-pair table, and say so in the same sentence. Manuscript has one because it is Ilya. MONOCHROME has one. As of 2026-11-26 no other does.

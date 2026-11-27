@@ -4295,6 +4295,27 @@ Built by lane 74, item 4 (`../sessions/brief-code-lane74-voice-type-followup_r2_
 
 **Not yet ruled either: whether MONOCHROME joins the eight of 2026-11-21 21:16 or displaces one.**
 
+
+## SKINS: WHAT ACTUALLY EXISTS, AND THE TABLE GAP. Desk record, 2026-11-26 22:4x, written after Dann caught the desk misrepresenting it
+
+**Dann ruled skins into this release 2026-11-26 21:48** (`SCHEDULE.md` item 9c; `INBOX.md`). This section is the honest state, and it corrects what the desk told him between 21:53 and 22:38.
+
+**A SKIN IS TWO COMPLETE TOKEN TABLES, SCREEN AND PRINT** (his ruling 2026-11-21 21:18), over `app.css`'s five families at six steps each (band, desk, head, wash, jewel, ink: 30 tokens, `app.css:33-71`), plus `--ink-primary`, `--ink-secondary`, `--ink-tertiary`, `--ink-stave` (`:28-31`) and the three surfaces `--paper-cream`, `--drawer-bg`, `--desk-surface` (`:78-81`). **The gate on every table is the drawer:** five head-and-ink pairs inside 4.8 to 5.7:1, none white on a solid bar (THE DRAWER IS THE HARDEST TEST A SKIN FACES, above). The Paper consumes a handful of those tokens.
+
+**WHAT EXISTS, counted 2026-11-26.** **Nine PAPER STUDIES** on the canvas (https://claude.ai/artifact/QgCfFoMhJbKZRa4C2S6HQJ): each draws one sheet on one desk, with no drawer, header, tab bar or buttons. **One complete table, Manuscript, which is not a skin: it is Ilya, live in the tree.** **One designed skin, MONOCHROME**, whose board carries the six-step table for all five families with its five pairs measured at 5.20, 5.23, 5.19, 5.20 and 4.84 (https://claude.ai/artifact/GHwEqn9eQT7QyaGrG3wkjz). **Nothing of any skin is built:** the only `skin` in `apps/web/src` is a comment at `CorrectionSurface.svelte:391` (desk grep 2026-11-26).
+
+**THE DESK'S FAILURE, recorded so the next desk does not repeat it.** The desk read the DRAWER IS THE HARDEST TEST section on 2026-11-26, quoted its rule into its own sequence, and still presented the nine Paper studies to Dann as nine skins, with pros, cons and a keep-seven recommendation. **He accepted that recommendation at 22:14 on that false footing, and it is withdrawn.** No skin may be recommended, kept or cut again until its table has been built and its five pairs measured.
+
+**THE SEVEN DANN SETTLED ON 2026-11-26 22:14, and what each still needs.** Manuscript: nothing, it ships. MONOCHROME: designed, table on file. **Lectern: Manuscript's table with size, spacing and measure changed, and his own ruling of 22:2x keeps Ilya's faces** (no evidence supports the sans; `research-skins_r1_2026-11-21.md` section 3 grades it NOT ESTABLISHED). **Clarion, Atelier, Night View, Mir iskusstva: a full table each, none built.** Russian Ballet was let go on the same false footing and may be revisited. **Constructivism is NOT RULED and is his.**
+
+**DESK ESTIMATE, from the shape of the work rather than from an actual:** about an hour of desk arithmetic per table for the four, a half hour for Lectern, and an extra hour for Night View's print table, so **about six hours of desk work, no helpers and no Fable**, then one Code lane for the mechanism and the drawer gate test. First of its kind, so the range is wide.
+
+**RULED TONIGHT AND NOT TO BE RE-ASKED.** (1) **Lectern keeps Ilya's own faces** and changes size, spacing and measure only; the gloss going upright rather than italic is the desk's, his to strike. (2) **Night View's notehead is RATIFIED** by Dann 22:34 (*"I agree with you oin your choice for Night View, the second visual is best"*): staff `#B9B2A4` to `#6F6A60` (3.33:1 on the sheet `#191714`), notehead `#BCA3D6` to `#E0CEF7` (3.67:1 against the staff, 12.22:1 against the sheet). Today's pair reads 1.07:1 against each other, and lifting the notehead alone cannot reach 3:1, since pure white is 2.11:1 against today's staff line.
+
+**STILL OPEN AND HIS, after the tables exist:** which gloss colour Atelier's gloss row takes, since today it is `#5E5E5E`, the same grey as its own metadata and footer. Six candidates measured on the board https://claude.ai/artifact/WDMFnw8dRx2YeEYMYyi78s. **A finding that bears on it:** slate indigo `#4C5C7E` sits inside Ilya's slate family, which names LEARN, and beside cobalt, whose ink `#1D4BA7` is Atelier's own rule and sigil; deep teal `#2A6E6B` belongs to no family.
+
+**COLLISIONS AND LEGIBILITY THREATS FOUND BY LOOKING, 2026-11-26, and they survive the correction because they were seen rather than inferred.** Mir iskusstva's corner vignettes cross the inner border rules at all four corners, neither line breaking (Dann saw this himself and asked). Atelier's gloss is the page's own furniture grey. Night View's notehead reads 1.07:1 against its staff line. MONOCHROME pairs its two least distinct band rules, thin solid and medium solid, with its two closest bands, TEXT and MELODY at 1.30 to 1; inverting the assignment costs nothing. MONOCHROME's LEARN label sits at 4.84 with 0.04 above the floor, and all five of its group buttons are identical, so the button carries no family signal.
+
 ## THE DRAWER IS THE HARDEST TEST A SKIN FACES. Desk finding, 2026-11-21 21:1x, read from the tree on `ac4bc6d8`
 
 Dann asked the desk to read the Drawer before specifying skins. What it found, from `components/Drawer/Drawer.svelte`:
